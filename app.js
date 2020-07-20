@@ -1,3 +1,5 @@
+import envConfig from './constant/env-config';
+
 //app.js
 App({
   onLaunch: function () {
@@ -34,6 +36,7 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    apiBaseObj:envConfig,
   }
 })
