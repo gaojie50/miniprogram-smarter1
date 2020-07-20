@@ -10,7 +10,7 @@
 * components
   * 通用组件 
 * static
-  * 静态文件存放
+  * 静态文件(如：图片等)存放
 * constant
   * 常用配置数据   
 
