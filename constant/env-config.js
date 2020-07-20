@@ -3,17 +3,20 @@ const ENV = "prod"; // 手动切换环境服务地址 (提交审核时，务必�
 const ApiBaseSet = {
     //开发环境
     dev: {
-      API_BASE: 'https://dev.com/',
+      apiBase: 'https://dev.com',
+      keeper: 'http://keeper.movie.st.sankuai.com',
     },
 
     //测试环境
     test: {
-      API_BASE: 'https://test.com/',
+      apiBase: 'https://test.com',
+      keeper: 'http://keeper.movie.st.sankuai.com',
     },
 
     //生产环境
     prod: {
-      API_BASE: 'https://prod.com/',
+      apiBase: 'https://prod.com',
+      keeper: 'https://keeper.maoyan.com',
     }
 
   }

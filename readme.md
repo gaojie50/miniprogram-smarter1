@@ -3,15 +3,20 @@
 * flex布局
 
 ## 文件结构
-* pages
-  * 页面路径列表  
-* utils
-  * 工具/通用函数   
-* components
+
+### pages
+* 页面路径列表  
+
+### utils
+* 工具/通用函数   
+
+### components
   * 通用组件 
-* static
+
+### static
   * 静态文件(如：图片等)存放
-* constant
+
+### constant
   * 常用配置数据   
 
 ## 业务待确认部分
