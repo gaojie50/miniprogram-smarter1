@@ -1,3 +1,10 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText":"影片市场情报",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "backgroundTextStyle": "light",
+  "usingComponents": {
+    "wux-steps": "../../components/third/steps/index",
+    "wux-step": "../../components/third/step/index"
+}
 }

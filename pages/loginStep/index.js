@@ -1,11 +1,34 @@
-// pages/loginStep/index.js
+const order = ['demo1', 'demo2', 'demo3']
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
+    open:false,
+    checked:false,
+  },
 
+  openModal:function(){
+    this.setData({ open:true })
+  },
+
+  closeModal:function(){
+    this.setData({ open:false })
+  },
+
+  bindRadio:function(){
+    this.setData({
+      checked:!this.data.checked
+    });
+  },
+
+  onShareAppMessage() {
+    return {
+      title: 'scroll-view',
+      path: 'page/component/pages/scroll-view/scroll-view'
+    }
+  },
+
+  data: {
+    toView: 'green'
   },
 
   /**

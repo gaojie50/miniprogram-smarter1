@@ -1,4 +1,3 @@
-<!--pages/welcome/index.wxml-->
 <view class="container">
   <image class="home-bg" src="../../static/welcome/home-bg.png"></image>
   <view class="btn-wrap">

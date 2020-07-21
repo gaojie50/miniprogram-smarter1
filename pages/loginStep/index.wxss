@@ -1,1 +1,69 @@
-/* pages/loginStep/index.wxss */
+/* 滚动样式 */
+.page-section-spacing {
+  margin-top: 60rpx;
+}
+
+.scroll-view_H {
+  white-space: nowrap;
+}
+
+.scroll-view-item {
+  height: 300rpx;
+}
+
+.scroll-view-item_H {
+  display: inline-block;
+  width: 100%;
+  height: 300rpx;
+}
+
+/* modal框样式 */
+.mask {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 999;
+  background: rgba(0, 0, 0, .8);
+}
+
+.modal {
+  width: 70%;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: #ffffff;
+  border-radius: 16px;
+  color: #666666;
+  padding: 88px 40px 32px 40px;
+}
+
+.modal .head{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 48px 16px 32px 16px;
+}
+.modal .close{
+  width: 32px;
+  height: 32px;
+  float: right;
+  position: relative;
+  bottom: 30px;
+  left: 0;
+}
+.modal .title{
+  text-align: center;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 28px;
+  color: #333333;
+}
+
+.modal .weight-font{
+  color: #000000;
+}
