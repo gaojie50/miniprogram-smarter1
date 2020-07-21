@@ -1,5 +1,8 @@
-import {apiBase} from '../constant/env-config';
-import {errorHandle} from './util';
+import envConfig from './../constant/env-config';
+import  util from './util';
+
+const {keeper,apiBase} = envConfig;
+const {errorHandle} = util;
 
 const Token = wx.getStorageSync('token');
 const DefaultHeader = {
@@ -13,19 +16,19 @@ const DefaultConfig = {
 
 const isHttpSuccess = status => status >= 200 && status < 300 || status === 304;
 
-export default function reqPacking(config = DefaultConfig) {
+export default function reqPacking(config = DefaultConfig,source) {
   return new Promise((resolve, reject) => {
     return wx.request(
       Object.assign({
         header: DefaultHeader,
         ...config,
       }, {
-        url: `${apiBase}/${config.url}`,
+        url: `${source == 'keeper' ?keeper: apiBase}/${config.url}`,
         success(r) {
           isHttpSuccess(r.statusCode) ? resolve(r.data) : reject(r, 'ServerError');
         },
         fail: reject,
       })
-    ).catch(errorHandle)
-  })
+    )
+  }).catch(errorHandle)
 }
