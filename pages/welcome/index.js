@@ -1,11 +1,18 @@
-// pages/welcome/index.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
+    isLogin:wx.getStorageSync('token')
+  },
 
+  goLogin: function() {
+    wx.navigateTo({
+      url: '../loginStep/index'
+    })
+  },
+
+  goList: function(){
+    wx.reLaunch({
+      url:'../list/index'
+    })
   },
 
   /**
