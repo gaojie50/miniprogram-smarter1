@@ -1,15 +1,13 @@
 <view class="container">
 	<view class='title'>为了让您的账户更安全，请设置常用的联系方式</view>
 
-	<wux-steps>
-		<!-- <wux-step status="finish" title="Finished" content="This is description"></wux-step> -->
-		<wux-step status="process" title="微信授权"></wux-step>
-		<wux-step status="wait" title="短信验证"></wux-step>
+	<wux-steps current="{{ step }}">
+		<wux-step title="微信授权"></wux-step>
+		<wux-step title="短信验证"></wux-step>
 	</wux-steps>
-
 	<view class="page-section">
 		<label class="checkbox">
-			<checkbox checked="{{checked}}" bindtap="bindRadio"/>
+			<checkbox checked="{{checked}}" bindtap="bindRadio" />
 		</label>
 		阅读并同意
 		<text bindtap="openModal">《猫眼智多星平台服务协议》</text>
@@ -120,5 +118,5 @@
 			</scroll-view>
 		</view>
 	</view>
-	<button disabled="{{!checked}}">获取微信授权</button>
+	<button open-type="getUserInfo" bindgetuserinfo="getUserInfo" disabled="{{!checked}}">获取微信授权</button>
 </view>

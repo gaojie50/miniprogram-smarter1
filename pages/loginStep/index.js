@@ -1,22 +1,29 @@
-const order = ['demo1', 'demo2', 'demo3']
+const app = getApp();
+const jumpWaitTime = 2e3;
 
 Page({
   data: {
-    open:false,
-    checked:false,
+    open: false,
+    checked: false,
+    step: 0,
+
   },
 
-  openModal:function(){
-    this.setData({ open:true })
-  },
-
-  closeModal:function(){
-    this.setData({ open:false })
-  },
-
-  bindRadio:function(){
+  openModal: function () {
     this.setData({
-      checked:!this.data.checked
+      open: true
+    })
+  },
+
+  closeModal: function () {
+    this.setData({
+      open: false
+    })
+  },
+
+  bindRadio: function () {
+    this.setData({
+      checked: !this.data.checked
     });
   },
 
@@ -27,8 +34,21 @@ Page({
     }
   },
 
-  data: {
-    toView: 'green'
+  getUserInfo: function (e) {
+    app.globalData.userInfo = e.detail;
+    this.setData({step:1});
+
+    wx.showToast({
+      title: '正在进入手机验证页面...',
+      icon: 'loading',
+      duration: jumpWaitTime
+    });
+
+    setTimeout(()=>{
+      wx.navigateTo({
+        url:'/pages/verifyPhoneNum/index'
+      },)
+    },jumpWaitTime)
   },
 
   /**
