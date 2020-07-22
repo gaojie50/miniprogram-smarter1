@@ -1,3 +1,5 @@
+import keepLogin from '../../utils/keepLogin';
+
 const app = getApp();
 const jumpWaitTime = 2e3;
 
@@ -35,75 +37,33 @@ Page({
   },
 
   getUserInfo: function (e) {
-    app.globalData.userInfo = e.detail;
-    this.setData({step:1});
+    if (e.detail.userInfo) {
+      app.globalData.userInfo = e.detail;
+      this.setData({
+        step: 1
+      });
 
-    wx.showToast({
-      title: '正在进入手机验证页面...',
-      icon: 'loading',
-      duration: jumpWaitTime
-    });
+      return wx.showToast({
+        title: '已经授权，进入短信验证页...',
+        icon: 'loading',
+        duration: jumpWaitTime,
+        success: function () {
+          setTimeout(() => {
+            const {code ,userInfo } = app.globalData;
+            const {iv,encryptedData} = userInfo;
 
-    setTimeout(()=>{
-      wx.navigateTo({
-        url:'/pages/verifyPhoneNum/index'
-      },)
-    },jumpWaitTime)
+            keepLogin({
+              code,iv,encryptedData
+            })
+   
+          }, jumpWaitTime)
+        }
+      });
+    }
+
+    wx.showModal({
+      title: '警告',
+      content: '您点击了拒绝授权，将无法正常使用通告单。请重新授权，或者删除小程序重新进入。',
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

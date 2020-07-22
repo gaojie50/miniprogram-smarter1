@@ -2,13 +2,13 @@
   "pages":[
     "pages/welcome/index",
     "pages/loginStep/index",
-    "pages/verifyPhoneNum/index",
     "pages/search/index",
     "pages/searchCompany/index",
     "pages/news/index",
     "pages/inputInfo/index",
     "pages/projectDetail/index",
-    "pages/list/index"
+    "pages/list/index",
+    "pages/webview/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

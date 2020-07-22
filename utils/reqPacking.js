@@ -1,8 +1,8 @@
 import envConfig from './../constant/env-config';
-import  util from './util';
+import  utils from './index';
 
 const {keeper,apiBase} = envConfig;
-const {errorHandle} = util;
+const {errorHandle} = utils;
 
 const Token = wx.getStorageSync('token');
 const DefaultHeader = {
@@ -25,7 +25,7 @@ export default function reqPacking(config = DefaultConfig,source) {
       }, {
         url: `${source == 'keeper' ?keeper: apiBase}/${config.url}`,
         success(r) {
-          isHttpSuccess(r.statusCode) ? resolve(r.data) : reject(r, 'ServerError');
+          isHttpSuccess(r.statusCode) ? resolve(r.data) : reject(r);
         },
         fail: reject,
       })
