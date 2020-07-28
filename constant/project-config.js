@@ -1,5 +1,5 @@
 const appkey = 'com.sankuai.movie.fe.smarter';
-const weixinAppTypeEnum = 3;
+const weixinAppTypeEnum = 5;
 
 export default {
   appkey,

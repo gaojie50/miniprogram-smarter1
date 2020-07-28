@@ -1,15 +1,13 @@
 {
   "pages":[
-    "pages/list/index",
-    "pages/projectDetail/index",
-    "pages/inputInfo/index",
-    
     "pages/welcome/index",
+    "pages/list/index",
     "pages/loginStep/index",
-    "pages/verifyPhoneNum/index",
     "pages/search/index",
     "pages/searchCompany/index",
-    "pages/news/index"
+    "pages/inputInfo/index",
+    "pages/projectDetail/index",
+    "pages/webview/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

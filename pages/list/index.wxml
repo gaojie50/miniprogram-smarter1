@@ -1,5 +1,5 @@
-
-<view class="list">
+<view wx:if="{{curPagePermission}}">
+  <view class="list">
   <view class="listFilter">
     <view class="listFilter-item" style="width: 189rpx">
       <text class="listFilter-item-text">时间范围</text>
@@ -24,4 +24,9 @@
   <view class="listItem">
 
   </view>
+</view>
+</view>
+
+<view wx:if="{{!curPagePermission}}">
+  无权限
 </view>
