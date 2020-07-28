@@ -26,9 +26,9 @@ Page({
       const {code ,userInfo } = app.globalData;
       const {iv,encryptedData} = userInfo;
 
-      return keepLogin({
-        code,iv,encryptedData
-      })
+      if(this.data.isLogin) return wx.redirectTo({url: `/pages/list/index`});
+
+      return keepLogin({ code,iv,encryptedData})
     }
 
     wx.showModal({

@@ -16,17 +16,20 @@ Page({
       success,
       data
     }) => {
-      if(success &&
-        data && 
-        data.authIds && 
-        data.authIds.length > 0 &&
-        data.authIds.includes(95110)
-      ){
-        //用户有权限
-        this.setData({
-          curPagePermission:true,
-        })
+      if(success){
+        app.globalData.authinfo = data;
+        if(data && 
+          data.authIds && 
+          data.authIds.length > 0 &&
+          data.authIds.includes(95110)
+        ){
+          //用户有权限
+          this.setData({
+            curPagePermission:true,
+          })
+        }
       }
     })
   },
+
 })

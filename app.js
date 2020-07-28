@@ -9,6 +9,7 @@ App({
         if(res.code) this.globalData.code = res.code;
       }
     })
+
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -26,6 +27,8 @@ App({
         }
       }
     })
+
+    console.log('app launch');
   },
   globalData: {
     userInfo: null,
