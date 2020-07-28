@@ -6,5 +6,5 @@
   "usingComponents": {
     "wux-steps": "../../components/third/steps/index",
     "wux-step": "../../components/third/step/index"
-}
+ }
 }

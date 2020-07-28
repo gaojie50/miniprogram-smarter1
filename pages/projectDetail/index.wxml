@@ -1,2 +1,123 @@
-<!--pages/projectDetail/index.wxml-->
-<text>pages/projectDetail/index.wxml</text>
+<!--项目详情-->
+<view class="project-detail">
+  <view class="detail">
+    <view class="detail-header">
+      <text style="font-size: 35rpx">阿凡达2</text>
+      <text class="detail-maoyan">猫眼主出</text>
+    </view>
+    <view>电影、动作/科幻</view>
+    <view>片源地：美国</view>
+    <view>改编源：小说</view>
+    <view>导演：卡梅隆</view>
+    <view>主演：西格妮</view>
+    <view>片源地：美国</view>
+  </view>
+
+  <view class="detail-line"></view>
+
+  <view class="productionInfo">
+    <view class="productionInfo-header">
+      <text>制作信息</text>
+      <text bindtap="extend">></text>
+    </view>
+    <view class="{{extend ? '':'hidden'}}">
+      <view>
+        <text>合作类型</text>
+        <text>宣发</text>
+      </view>
+      <view>
+        <text>开机时间</text>
+        <text>宣发</text>
+      </view>
+      <view>
+        <text>杀青时间</text>
+        <text>宣发</text>
+      </view>
+      <view>
+        <text>出品方</text>
+        <text>宣发</text>
+      </view>
+      <view>
+        <text>发行方</text>
+        <text>宣发</text>
+      </view>
+      <view>
+        <text>制作方</text>
+        <text>宣发</text>
+      </view>
+      <view>
+        <text>监制</text>
+        <text>宣发</text>
+      </view>
+      <view>
+        <text>编剧</text>
+        <text>宣发</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="marketIntel">
+    <view class="marketIntel-header">
+      <text style="font-size: 30rpx">市场情报</text>
+      <text>编辑</text>
+    </view>
+    <view class="marketIntel-items">
+      <view class="marketIntel-item">
+        <view>预估票房</view>
+        <view>30亿</view>
+      </view>
+      <view class="marketIntel-item">
+        <view>预估评分</view>
+        <view>30亿</view>
+      </view>
+      <view class="marketIntel-item">
+        <view>项目状态</view>
+        <view>30亿</view>
+      </view>
+      <view class="marketIntel-item">
+        <view>上映时间</view>
+        <view>30亿</view>
+        <view>非常确定</view>
+      </view>
+    </view>
+    <view class="marketIntel-items">
+      <view class="marketIntel-item">
+        <view>制作成本</view>
+        <view>30亿</view>
+      </view>
+      <view class="marketIntel-item">
+        <view>宣发费用</view>
+        <view>30亿</view>
+      </view>
+      <view class="marketIntel-item">
+        <view>猫眼份额</view>
+        <view>30亿</view>
+      </view>
+      <view class="marketIntel-item">
+        <view>猫眼投资成本</view>
+        <view>30亿</view>
+      </view>
+    </view>
+    <view class="marketIntel-bottom">
+      <text>主出品</text>
+      <text>30亿</text>
+    </view>
+    <view class="marketIntel-bottom">
+      <text>主发行</text>
+      <text>30亿</text>
+    </view>
+    <view class="marketIntel-bottom">
+      <text>备注</text>
+      <text>30亿</text>
+    </view>
+  </view>
+
+  <view class="creator">
+    <text><img src=""/></text>
+    <text>李洪刚</text>
+    <text>创建于……</text>
+  </view>
+  <view class="weui-btn-area">
+    <button class="weui-btn" type="primary" bindtap="submitForm">编辑情报信息</button>
+  </view>
+</view>

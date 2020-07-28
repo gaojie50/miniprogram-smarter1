@@ -2,14 +2,14 @@
   <image class="home-bg" src="../../static/welcome/home-bg.png"></image>
   <view class="btn-wrap">
     <button 
-      wx:if="{{!isLogin}}" 
+      wx:if="{{!isLogin}}"
       type="primary"
       bindtap="goLogin" 
       plain="true">登录</button>
     <button 
-      wx:if="{{isLogin}}" 
+      wx:if="{{isLogin}}"
       type="primary" 
-      bindtap="goList" 
+      bindtap="goList"
       plain="true">查看情报</button>
   </view>
 </view>

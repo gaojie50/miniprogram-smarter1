@@ -1,1 +1,65 @@
-/* pages/projectDetail/index.wxss */
+/* pages/project-detail/project-detail.wxss */
+.project-detail {
+  font-size: 24rpx;
+}
+.detail {
+  padding: 15rpx;
+}
+.detail-header {
+  display: flex;
+  align-items: center;
+  height: 60rpx;
+  line-height: 60rpx;
+  /* border:1px solid red; */
+}
+.detail-maoyan{
+  display: inline-block;
+  background-color: darksalmon;
+  height: 30rpx;
+  line-height: 30rpx;
+  font-size: 20rpx;
+  margin-left: 10rpx;
+}
+.detail-line {
+  height: 1rpx;
+  width: 90%;
+  background-color: dimgray;
+  margin: 0 auto;
+}
+.productionInfo {
+  padding: 15rpx;
+}
+.hidden {
+  display: none;
+}
+.productionInfo-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.marketIntel{
+  background-color: rgb(203, 204, 206);
+  padding: 15rpx;
+}
+.marketIntel-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  /* border:1px solid red;  */
+}
+.marketIntel-items {
+  display: flex;
+  flex-direction: row;
+}
+.marketIntel-item {
+  width: 40%;
+}
+.marketIntel-bottom {
+  height: 50rpx;
+  line-height: 50rpx;
+}
+.creator {
+  margin: 20rpx auto;
+  text-align: center;
+}
