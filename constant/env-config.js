@@ -3,22 +3,24 @@ const ENV = "dev"; // 手动切换环境服务地址 (提交审核时，务必�
 const ApiBaseSet = {
     //开发环境
     dev: {
-      apiBase: 'https://dev.com',
+      server: "http://10.59.74.226:8080",
+  	  passport: 'http://10.59.86.166:8080',
       keeper: 'http://keeper.movie.st.sankuai.com',
     },
 
     //测试环境
-    test: {
-      apiBase: 'https://test.com',
+    staging: {
+      server: "http://10.59.74.226:8080",
+  	  passport: 'http://10.59.86.166:8080',
       keeper: 'http://keeper.movie.st.sankuai.com',
     },
 
     //生产环境
     prod: {
-      apiBase: 'https://prod.com',
+      server: "https://scweb-movie.sankuai.com",
+	    passport: 'https://scauthweb-movie.sankuai.com',
       keeper: 'https://keeper.maoyan.com',
     }
-
   }
 
   export default {

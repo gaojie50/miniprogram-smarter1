@@ -1,6 +1,11 @@
+import keepLogin from '../../utils/keepLogin';
+
+const app = getApp();
+const jumpWaitTime = 2e3;
+
 Page({
   data: {
-    isLogin:wx.getStorageSync('token')
+    isLogin: wx.getStorageSync('token')
   },
 
   goLogin: function() {
@@ -15,59 +20,21 @@ Page({
     })
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  getUserInfo: function (e) {
+    if (e.detail.userInfo) {
+      app.globalData.userInfo = e.detail;
 
+      const {code ,userInfo } = app.globalData;
+      const {iv,encryptedData} = userInfo;
+
+      return keepLogin({
+        code,iv,encryptedData
+      })
+    }
+
+    wx.showModal({
+      title: '警告',
+      content: '您点击了拒绝授权，将无法正常使用智多星。请重新授权，或者删除小程序重新进入。',
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

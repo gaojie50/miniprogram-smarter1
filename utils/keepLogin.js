@@ -20,7 +20,7 @@ export default function keepLogin(params) {
       const { accessToken, hasBindMobile } = data;
 
       wx.setStorageSync('token', accessToken);
-      if(hasBindMobile) return wx.redirectTo({url: `/pages/welcome/index`});
+      if(hasBindMobile) return wx.redirectTo({url: `/pages/list/index`});
 
       if (wx.canIUse('web-view')) {
         const verifyPhoneNumUrl = `${keeper}/business/bindphone?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=%2Fpages%2Fwelcome%2Findex`

@@ -1,2 +1,28 @@
-<!--pages/list/index.wxml-->
-<text>pages/list/index.wxml</text>
+<view>
+  <view class="release-num">
+    <view>
+      <text class="title">本月上映</text>
+      <text class="number">6
+        <text class="unit">部</text>
+      </text>
+    </view>
+    <view>
+      <text class="title">本月上映</text>
+      <text class="number">6
+        <text class="unit">部</text>
+      </text>
+    </view>
+    <view>
+      <text class="title">本月上映</text>
+      <text class="number">6
+        <text class="unit">部</text>
+      </text>
+    </view>
+    <view>
+      <text class="title">本月上映</text>
+      <text class="number">6
+        <text class="unit">部</text>
+      </text>
+    </view>
+  </view>
+</view>

@@ -30,6 +30,6 @@ App({
   globalData: {
     userInfo: null,
     code:null,
-    apiBaseObj:envConfig,
+    APISet:envConfig,
   }
 })
