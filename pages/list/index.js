@@ -1,66 +1,32 @@
-// pages/list/index.js
+const app = getApp();
+const {
+  reqPacking
+} = app.globalData;
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    curPagePermission:false,
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  onLoad: function () {
+    // 判断用户是否有权限
+    reqPacking({
+      url: '/api/user/authinfo',
+    }, 'passport').then(({
+      success,
+      data
+    }) => {
+      if(success &&
+        data && 
+        data.authIds && 
+        data.authIds.length > 0 &&
+        data.authIds.includes(95110)
+      ){
+        //用户有权限
+        this.setData({
+          curPagePermission:true,
+        })
+      }
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

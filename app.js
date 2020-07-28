@@ -1,6 +1,6 @@
 import envConfig from './constant/env-config';
+import reqPacking from './utils/reqPacking';
 
-//app.js
 App({
   onLaunch: function () {
     // 登录
@@ -31,5 +31,6 @@ App({
     userInfo: null,
     code:null,
     APISet:envConfig,
+    reqPacking,
   }
 })

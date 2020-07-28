@@ -1,7 +1,6 @@
 import keepLogin from '../../utils/keepLogin';
 
 const app = getApp();
-const jumpWaitTime = 2e3;
 
 Page({
   data: {
