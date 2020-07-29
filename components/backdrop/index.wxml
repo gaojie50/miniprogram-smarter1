@@ -1,0 +1,2 @@
+<!-- 背景蒙层 -->
+<view class="backdrop" wx:if="{{show.length!=0}}"></view>

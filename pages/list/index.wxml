@@ -1,33 +1,35 @@
 <view wx:if="{{curPagePermission}}">
   <view class="list">
-  <view class="listFilter">
-    <view class="listFilter-item" style="width: 189rpx">
-      <text class="listFilter-item-text">时间范围</text>
-      <image src="../../static/arrow-down.png" ></image>
+    <view class="listFilter">
+      <view class="listFilter-item" style="width: 189rpx">
+        <text class="listFilter-item-text">时间范围</text>
+        <image src="../../static/arrow-down.png" ></image>
+      </view>
+      <view class="listFilter-item">
+        <text data-num="1" class="listFilter-item-text {{filterActive==1 ? 'filterActive' : ''}}" bindtap="tapFilterItem">预估票房</text>
+        <image src="../../static/{{filterActive==1 ? 'arrow-down-active' : 'arrow-down'}}.png" ></image>
+      </view>
+      <view class="listFilter-item">
+        <text data-num="2" class="listFilter-item-text {{filterActive==2 ? 'filterActive' : ''}}" bindtap="tapFilterItem">项目状态</text>
+        <image src="../../static/{{filterActive==2 ? 'arrow-down-active' : 'arrow-down'}}.png" ></image>
+      </view>
+      <view class="listFilter-item">
+        <text data-num="3" class="listFilter-item-text {{filterActive==3 ? 'filterActive' : ''}}" bindtap="tapFilterItem">筛选</text>
+        <image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png" ></image>
+      </view>
     </view>
-    <view class="listFilter-item">
-      <text class="listFilter-item-text">预估票房</text>
-      <image src="../../static/arrow-down.png" ></image>
+    <backdrop show="{{filterActive}}"></backdrop>
+    <filterPanel filterShow="{{filterActive}}"></filterPanel>
+    <view class="listDerict">
+      <view class="listDerict-item" style="margin-left: 30rpx">只看猫眼参与</view>
+      <view class="listDerict-item">只看阿里参与</view>
+      <view class="listDerict-item">暑期国庆档</view>
+      <view class="listDerict-item">票房1亿以上</view>
     </view>
-    <view class="listFilter-item">
-      <text class="listFilter-item-text">项目状态</text>
-      <image src="../../static/arrow-down.png" ></image>
-    </view>
-    <view class="listFilter-item">
-      <text class="listFilter-item-text">筛选</text>
-      <image src="../../static/arrow-down.png" ></image>
+    <view class="listItem">
+     
     </view>
   </view>
-  <view class="listDerict">
-    <view class="listDerict-item">只看猫眼参与</view>
-    <view class="listDerict-item">只看阿里参与</view>
-    <view class="listDerict-item">暑期国庆档</view>
-    <view class="listDerict-item">票房1亿以上</view>
-  </view>
-  <view class="listItem">
-
-  </view>
-</view>
 </view>
 
 <view wx:if="{{!curPagePermission}}">

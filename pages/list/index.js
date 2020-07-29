@@ -6,6 +6,7 @@ const {
 Page({
   data: {
     curPagePermission:false,
+    filterActive: '',
   },
 
   onLoad: function () {
@@ -29,4 +30,9 @@ Page({
       }
     })
   },
+  tapFilterItem: function (e){
+    this.setData({
+      filterActive: e.target.dataset.num
+    })
+  }
 })

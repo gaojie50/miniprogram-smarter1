@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-  
+    "backdrop": "../../components/backdrop/index",
+    "filterPanel": "../../components/filterPanel/index"
   }
 }

@@ -44,4 +44,8 @@ page {
   background: rgba(242,243,248,1);
   border-radius: 10px;
   margin-left: 10rpx;
+  white-space: nowrap;
+}
+.filterActive {
+  color:rgba(24,144,255,1);
 }
