@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "backdrop": "../../components/backdrop/index",
-    "filterPanel": "../../components/filterPanel/index"
+    "filterPanel": "../../components/filterPanel/index",
+    "maoyanSign": "../../components/maoyanSign/index"
   }
 }

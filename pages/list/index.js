@@ -5,8 +5,12 @@ const {
 
 Page({
   data: {
-    curPagePermission:false,
+    curPagePermission:true,
     filterActive: '',
+    derictFilterActive1: false,
+    derictFilterActive2: false,
+    derictFilterActive3: false,
+    derictFilterActive4: false,
   },
 
   onLoad: function () {
@@ -33,6 +37,14 @@ Page({
   tapFilterItem: function (e){
     this.setData({
       filterActive: e.target.dataset.num
+    })
+  },
+  tapDerictFilter: function (e){
+    const num = e.target.dataset.num;
+    const derictFilterWrap = this.data;
+    derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[`derictFilterActive${num}`];
+    this.setData({
+      ...derictFilterWrap
     })
   }
 })

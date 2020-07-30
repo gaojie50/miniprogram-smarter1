@@ -21,13 +21,51 @@
     <backdrop show="{{filterActive}}"></backdrop>
     <filterPanel filterShow="{{filterActive}}"></filterPanel>
     <view class="listDerict">
-      <view class="listDerict-item" style="margin-left: 30rpx">只看猫眼参与</view>
-      <view class="listDerict-item">只看阿里参与</view>
-      <view class="listDerict-item">暑期国庆档</view>
-      <view class="listDerict-item">票房1亿以上</view>
+      <view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
+      <view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">只看阿里参与</view>
+      <view data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">暑期国庆档</view>
+      <view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
     </view>
-    <view class="listItem">
-     
+    <view class="listTable">
+      <scroll-view scroll-x>
+        <view class="listTr">
+          <view style="font-size: 28rpx;font-weight: 600;" class="listTd listNowrap">187部影片</view>
+          <view class="listTd listNowrap">上映时间</view>
+          <view class="listTd listNowrap">制作成本</view>
+          <view class="listTd listNowrap">预估票房</view>
+          <view class="listTd listNowrap">预估评分</view>
+          <view class="listTd listNowrap">主出品</view>
+          <view class="listTd listNowrap">主发行</view>
+          <view class="listTd listNowrap">类型</view>
+          <view class="listTd listNowrap">导演</view>
+          <view class="listTd listNowrap">项目状态</view>
+          <view class="listTd listNowrap">合作状态</view>
+          <view class="listTd listNowrap">跟进人</view>
+          <view class="listTd listNowrap">映前想看人数</view>
+        </view>
+        <block>
+          <view class="listTr">
+            <view style="font-size: 28rpx;font-weight: 600;" class="listTd listNowrap">
+              <view>
+                <view>城市岛屿</view>
+                <maoyanSign signContent="猫眼主出"></maoyanSign>
+              </view>
+            </view>
+            <view class="listTd ">上映时间</view>
+            <view class="listTd ">制作成本</view>
+            <view class="listTd ">预估票房</view>
+            <view class="listTd ">预估评分</view>
+            <view class="listTd ">主出品</view>
+            <view class="listTd ">主发行</view>
+            <view class="listTd ">类型</view>
+            <view class="listTd ">导演</view>
+            <view class="listTd ">项目状态</view>
+            <view class="listTd ">合作状态</view>
+            <view class="listTd ">跟进人</view>
+            <view class="listTd ">映前想看人数</view>
+          </view>
+        </block>
+      </scroll-view>
     </view>
   </view>
 </view>

@@ -1,7 +1,8 @@
 {
   "pages":[
-    "pages/welcome/index",
     "pages/list/index",
+    "pages/welcome/index",
+   
     "pages/loginStep/index",
     "pages/search/index",
     "pages/searchCompany/index",
