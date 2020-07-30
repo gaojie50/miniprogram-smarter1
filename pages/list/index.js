@@ -8,7 +8,12 @@ Page({
     curPagePermission:false,
   },
 
-  onLoad: function () {
+  onLoad: function (option) {
+    const eventChannel = this.getOpenerEventChannel()
+
+    eventChannel.on('acceptDataFromOpenerPage', function(data) {
+      const {companyChecked} = data;
+    })
     // 判断用户是否有权限
     reqPacking({
       url: '/api/user/authinfo',

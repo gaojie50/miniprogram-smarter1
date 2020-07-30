@@ -1,0 +1,16 @@
+<view class="search-box">
+	<view class="search-bar">
+		<label>
+			<icon type="search" size="20"></icon>
+			<input auto-focus bindinput="bindKeyInput" />
+		</label>
+	</view>
+</view>
+
+<scroll-view class="search-list" bindtap="touchCheckEvent">
+	<view class="{{item.checked}}" wx:for="{{list}}" wx:key="id" data-name="{{item.name}}" data-id="{{item.id}}">
+    <image src="../../static/icon/checked.png"/>
+  {{item.name}}</view>
+</scroll-view>
+
+<view class="finish" ontap="jumpList">完成{{ checked.length > 0 ? (' (' + checked.length + ')') : '' }}</view>
