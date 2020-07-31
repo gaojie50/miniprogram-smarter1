@@ -35,9 +35,17 @@ Page({
     })
   },
   tapFilterItem: function (e){
-    this.setData({
-      filterActive: e.target.dataset.num
-    })
+    const num = e.target.dataset.num;
+    const { filterActive } = this.data;
+    if (num == filterActive) {
+      this.setData({
+        filterActive: ''
+      })
+    } else {
+      this.setData({
+        filterActive: e.target.dataset.num
+      })
+    }
   },
   tapDerictFilter: function (e){
     const num = e.target.dataset.num;

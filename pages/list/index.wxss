@@ -1,6 +1,6 @@
 /* pages/list/index.wxss */
 page {
-  height:5024rpx;
+  height: 100%;
   background:linear-gradient(135deg,rgba(121,140,186,1) 0%,rgba(49,68,115,1) 100%);
 }
 .list {
@@ -63,10 +63,13 @@ page {
 .list .listTable {
   width: 100%;
 }
+
+.list .listTable .tdPadding {
+  padding: 20rpx 0;
+}
 .list .listTable .listTr {
   display: flex;
   min-height: 70rpx;
-
 }
 .list .listTable .listTr .listTd {
   min-width: 218rpx;
@@ -76,6 +79,10 @@ page {
   align-items: center;
   padding-left: 30rpx;
   background:rgba(247,247,247,1);
+}
+.list .listTable .listTr .shadow {
+  box-shadow: 6rpx 0 6rpx -4rpx #000000;
+  z-index: 10;
 }
 .listNowrap {
   white-space: nowrap;

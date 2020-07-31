@@ -1,0 +1,9 @@
+<!-- 档期类型（已定档、非常确定、可能、内部建议、待映、重映） -->
+<view class="scheduleType">
+  <text class="scheduleDone" wx:if="{{signContent == '已定档'}}">{{signContent}}</text>
+  <text class="scheduleDetermine" wx:if="{{signContent == '非常确定'}}">{{signContent}}</text>
+  <text class="scheduleMay" wx:if="{{signContent == '可能'}}">{{signContent}}</text>
+  <text class="scheduleInner" wx:if="{{signContent == '内部建议'}}">{{signContent}}</text>
+  <text class="scheduleNext" wx:if="{{signContent == '待定'}}">{{signContent}}</text>
+  <text class="scheduleRemake" wx:if="{{signContent == '重映'}}">{{signContent}}</text>
+</view>
