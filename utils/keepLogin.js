@@ -29,7 +29,7 @@ export default function keepLogin(params) {
       }
       return;
     }
-    wx.redirectTo({url: `/pages/list/index`});
+ 
     errorHandle(error);
   })
 }

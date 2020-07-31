@@ -48,7 +48,12 @@ const throttle = function (func, wait, options) {
   };
 };
 
+const rpxTopx = function(rpx){
+  return rpx / 750 * wx.getSystemInfoSync().windowWidth;
+};
+
 export default {
   errorHandle,
   throttle,
+  rpxTopx,
 }

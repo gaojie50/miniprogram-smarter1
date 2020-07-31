@@ -35,5 +35,7 @@ App({
     code:null,
     APISet:envConfig,
     reqPacking,
+    capsuleLocation : wx.getMenuButtonBoundingClientRect(),
+    barHeight : wx.getSystemInfoSync().statusBarHeight,
   }
 })

@@ -2,9 +2,11 @@ import keepLogin from '../../utils/keepLogin';
 
 const app = getApp();
 
+const {capsuleLocation,barHeight} = app.globalData;
+
 Page({
   data: {
-    isLogin: wx.getStorageSync('token')
+    titleHeight: Math.floor(capsuleLocation.bottom + capsuleLocation.top - barHeight),
   },
 
   goLogin: function() {

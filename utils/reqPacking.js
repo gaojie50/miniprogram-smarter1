@@ -19,7 +19,7 @@ export default function reqPacking(config = DefaultConfig,source='server') {
       {
         source:'smarter',
         // token: Token ? Token : '',
-        token:'keeper_eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTYwNzkwOTksIm5iZiI6MTU5NjA3OTA5OSwiZXhwIjoxNjAxMjYzMDk5LCJhY2NvdW50SWQiOjEwMDAwMDAwMTIzMTg1LCJzYWx0IjoidmwwbnFrIiwiaXNUZXN0IjpmYWxzZSwiYnVzaW5lc3NJZCI6MCwidmVyc2lvbiI6IjEuNyJ9.lUoQ9E7WKAxS5mkHpzkyIewBWi8FhKFFKaEzDKtMUDc',
+        token:'keeper_eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTYxNzkyMjEsIm5iZiI6MTU5NjE3OTIyMSwiZXhwIjoxNjAxMzYzMjIxLCJhY2NvdW50SWQiOjEwMDAwMDAwMTIzMTg1LCJzYWx0IjoiZDNuZ2thIiwiaXNUZXN0IjpmYWxzZSwiYnVzaW5lc3NJZCI6MCwidmVyc2lvbiI6IjEuNyJ9.VXjPluOf62AUgZeUzrX5IneREyHZ6YhkZxOx9GnHHJo',
       }
     ),
     ...(config.header||{})

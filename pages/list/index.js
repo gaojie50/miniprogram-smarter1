@@ -1,19 +1,30 @@
+import utils from './../../utils/index';
+
+const { rpxTopx } = utils;
 const app = getApp();
 const {
-  reqPacking
+  reqPacking,
+  capsuleLocation,
+  barHeight,
 } = app.globalData;
 
 Page({
   data: {
-    curPagePermission:false,
+    curPagePermission: false,
+    barHeight,
+    titleHeight: Math.floor(capsuleLocation.bottom + capsuleLocation.top - barHeight),
+    showIcon:false,
   },
 
   onLoad: function (option) {
-    const eventChannel = this.getOpenerEventChannel()
+    const eventChannel = this.getOpenerEventChannel();
 
-    eventChannel.on('acceptDataFromOpenerPage', function(data) {
-      const {companyChecked} = data;
+    eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', function (data) {
+      const {
+        companyChecked
+      } = data;
     })
+
     // 判断用户是否有权限
     reqPacking({
       url: '/api/user/authinfo',
@@ -21,20 +32,34 @@ Page({
       success,
       data
     }) => {
-      if(success){
+      if (success) {
         app.globalData.authinfo = data;
-        if(data && 
-          data.authIds && 
+        if (data &&
+          data.authIds &&
           data.authIds.length > 0 &&
           data.authIds.includes(95110)
-        ){
+        ) {
           //用户有权限
           this.setData({
-            curPagePermission:true,
+            curPagePermission: true,
           })
         }
       }
     })
   },
 
+  scroll(e) {
+    if (e.detail.scrollTop > rpxTopx(80)) {
+      this.setData({ showIcon:true })
+    } else {
+      this.setData({ showIcon:false })
+    }
+
+  },
+
+  jumpToSearch(){
+    wx.navigateTo({
+      url:'/pages/search/index'
+    })
+  }
 })

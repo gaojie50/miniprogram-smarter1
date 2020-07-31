@@ -1,14 +1,8 @@
-<view class="container">
-  <image class="home-bg" src="../../static/welcome/home-bg.png"></image>
-  <view class="btn-wrap">
-      <button 
-        wx:if="{{!isLogin}}" 
-        open-type="getUserInfo" 
-        bindgetuserinfo="getUserInfo">开始使用</button>
-    <button 
-      wx:if="{{isLogin}}" 
-      type="primary" 
-      bindtap="goList" 
-      plain="true">查看情报</button>
-  </view>
+<view>
+	<view style="margin-top:{{titleHeight}}px">
+		<image class="logo" src="../../static/welcome/logo.png" />
+		<image class="slogan" src="../../static/welcome/slogan.png" />
+		<image class="show" src="../../static/welcome/show.png" />
+	</view>
+	<view class="login-btn" bindtap="goList">立即登录</view>
 </view>
