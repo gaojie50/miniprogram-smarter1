@@ -59,6 +59,22 @@ Component({
       this.setData({
         ...cooperWrap
       })
+    },
+    filterReset: function (){
+      const { filterShow } = this.data;
+      const allData = this.data;
+       if(filterShow == '1'){
+         for(let i=1; i<7; i++){
+          allData[`estimateBoxActive${i}`] = false;
+         }
+       } else if(filterShow == '2') {
+
+       }else if(filterShow == '3'){
+        
+       }
+       this.setData({
+         ...allData
+       })
     }
   }
 })
