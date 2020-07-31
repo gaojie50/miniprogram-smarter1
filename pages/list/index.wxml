@@ -1,4 +1,4 @@
-<!-- <view wx:if="{{curPagePermission}}"> -->
+<!-- <view wx:if="{{curPagePermission}}">
 	<view class="header">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
 			<view class="header-inner" style='line-height:{{titleHeight - barHeight}}px;padding-top:{{barHeight}}px;'>
@@ -12,16 +12,28 @@
 				<view class="search-bar">
 					<label>
 						<icon type="search" size="20"></icon>
-						<input placeholder="搜索项目" disabled="true" placeholder-style="input-ph" bindtap="jumpToSearch"/>
+						<input placeholder="搜索项目" disabled="true" placeholder-style="input-ph" bindtap="jumpToSearch" />
 					</label>
 				</view>
 				<view style="height:2000px"></view>
 			</view>
 		</scroll-view>
 	</view>
-<!-- </view> -->
+</view> -->
 
 
-<view wx:if="{{!curPagePermission}}">
-	无权限
+<!-- <view wx:if="{{!curPagePermission}}"> -->
+<view class="no-access">
+	<view class="header-bar" style="height:{{titleHeight}}px;">
+		<view class="header-inner" style='line-height:{{titleHeight - barHeight}}px;padding-top:{{barHeight}}px;'>
+			<text>影片市场情报</text>
+		</view>
+	</view>
+	
+	<image src="../../static/list/no-access.png"/>
+
+	<view class="title">暂无权限查看相关数据</view>
+	<view class="content">申请开通请联系zhiduoxing@maoyan.com</view>
+	<view class="btn" bindtap="copyMail">复制邮箱</view>
 </view>
+<!-- </view> -->

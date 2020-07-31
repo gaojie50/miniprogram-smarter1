@@ -5,8 +5,8 @@
 }
 
 /* 通用 header  start*/
-.header{
-  background:linear-gradient(135deg,rgba(121,140,186,1) 0%,rgba(49,68,115,1) 100%);
+.header {
+  background: linear-gradient(135deg, rgba(121, 140, 186, 1) 0%, rgba(49, 68, 115, 1) 100%);
   position: fixed;
   top: 0;
   width: 100%;
@@ -35,18 +35,19 @@
 .header-inner text {
   height: 60rpx;
   font-size: 36rpx;
-  font-family:PingFangSC-Medium,PingFang SC;
+  font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
   color: #fff;
 }
+
 /* 通用 header  end*/
 
 .search-bar {
   width: 690rpx;
   border-radius: 35rpx;
-  height:70rpx;
-  background:#fff;
-  box-shadow:0px 10px 60px 0px rgba(25,35,59,0.12);
+  height: 70rpx;
+  background: #fff;
+  box-shadow: 0px 10px 60px 0px rgba(25, 35, 59, 0.12);
   margin: 10rpx auto 0;
   position: relative;
 }
@@ -61,7 +62,7 @@
   color: #bbb;
 }
 
-.search-bar input.input-ph{
+.search-bar input.input-ph {
   color: #bbb;
 }
 
@@ -72,6 +73,56 @@
   margin-left: 30rpx;
 }
 
-.header .main{
+.header .main {
   height: 100%;
+}
+
+/* 无权限 */
+.no-access {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(135deg, rgba(121, 140, 186, 1) 0%, rgba(49, 68, 115, 1) 100%);
+}
+
+.no-access image {
+  width: 284rpx;
+  height: 386rpx;
+  margin: 220rpx auto 0;
+  display: block;
+}
+
+.no-access .title {
+  height: 36rpx;
+  font-size: 34rpx;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 1);
+  line-height: 36rpx;
+  margin-top: 40rpx;
+  text-align: center;
+}
+
+.no-access .content {
+  height: 34px;
+  font-size: 24rpx;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 1);
+  line-height: 34px;
+  margin-top: 20rpx;
+  text-align: center;
+}
+
+.no-access .btn {
+  width: 600rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  background: rgba(24, 144, 255, 1);
+  border-radius: 10rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 1);
+  text-align: center;
+  margin: 0 auto;
 }

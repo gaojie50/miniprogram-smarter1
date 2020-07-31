@@ -61,5 +61,11 @@ Page({
     wx.navigateTo({
       url:'/pages/search/index'
     })
+  },
+
+  copyMail(){
+    wx.setClipboardData({
+      data:'zhiduoxing@maoyan.com'
+    })
   }
 })
