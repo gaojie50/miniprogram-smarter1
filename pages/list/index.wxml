@@ -49,6 +49,7 @@
               <view>
                 <view>城市岛屿</view>
                 <maoyanSign signContent="猫眼主出"></maoyanSign>
+                <maoyanSign signContent="宣发"></maoyanSign>
               </view>
             </view>
             <view class="listTd ">上映时间</view>
