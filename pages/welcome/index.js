@@ -6,13 +6,8 @@ const {capsuleLocation,barHeight} = app.globalData;
 
 Page({
   data: {
+    isLogin: wx.getStorageSync('token'),
     titleHeight: Math.floor(capsuleLocation.bottom + capsuleLocation.top - barHeight),
-  },
-
-  goLogin: function() {
-    wx.navigateTo({
-      url: '../loginStep/index'
-    })
   },
 
   goList: function(){

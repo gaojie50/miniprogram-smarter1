@@ -17,6 +17,7 @@ Page({
   },
 
   onLoad: function (option) {
+    console.log(option);
     const eventChannel = this.getOpenerEventChannel();
 
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', function (data) {
