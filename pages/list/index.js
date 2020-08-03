@@ -10,7 +10,6 @@ const {
 
 Page({
   data: {
-
     curPagePermission: false,
     filterActive: '',
     backdropShow: false,
@@ -23,12 +22,13 @@ Page({
     projectStatus: [],
     cost: [],
     cooperStatus: [],
-    pcId: []
-
+    pcId: [],
+    list:[]
   },
 
-  onLoad: function (option) {
-    console.log(option);
+  onLoad: function ({token}) {
+  
+    if(token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
 
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', function (data) {
@@ -64,7 +64,10 @@ Page({
   _fetchData:function(param={}){
     reqPacking({
       url: '/api/management/list',
-      data: param,
+      data: {
+        endDate: 1628006399999,
+        startDate: 1596470400000
+      },
       method:'POST'
     }).then(({
       success,
