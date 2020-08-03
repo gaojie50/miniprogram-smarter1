@@ -7,6 +7,5 @@
     "costumListItem": "../../components/costomListItem/index"
   },
   "navigationStyle": "custom",
-  "navigationBarTextStyle":"white",
-  "usingComponents": {}
+  "navigationBarTextStyle":"white"
 }
