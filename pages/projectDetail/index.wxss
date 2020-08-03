@@ -1,65 +1,106 @@
-/* pages/project-detail/project-detail.wxss */
+page {
+  background-color: #F7F7F7;
+}
+
 .project-detail {
-  font-size: 24rpx;
+  background: #798CBA;
+  height: 220rpx;
+  width: 100%;
+  position: relative;
 }
-.detail {
-  padding: 15rpx;
+
+.project-detail::after {
+  content: '';
+  display: block;
+  width: 100%;
+  background-image: linear-gradient(0deg, #F7F7F7 0%, rgba(255, 255, 255, 0) 90%);
+  height: 120rpx;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
-.detail-header {
-  display: flex;
-  align-items: center;
-  height: 60rpx;
-  line-height: 60rpx;
-  /* border:1px solid red; */
+
+.project-detail .header {
+  font-weight: 500;
+  font-family: PingFangSC-Medium;
+  font-size: 40rpx;
+  height: 40rpx;
+  line-height: 40rpx;
+  color: #FFFFFF;
+  margin: 0 30rpx;
+  position: absolute;
+  bottom: 150rpx;
 }
-.detail-maoyan{
+
+.project-detail .header text.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 220rpx;
+}
+
+.project-detail .header text.sign {
+  vertical-align: middle;
+  font-weight: 400;
+  font-size: 22rpx;
+  color: #F1303D;
+  line-height: 24rpx;
+  padding: 6rpx 10rpx;
+  border: 1px solid #F1303D;
+  border-radius: 4rpx;
   display: inline-block;
-  background-color: darksalmon;
-  height: 30rpx;
-  line-height: 30rpx;
-  font-size: 20rpx;
   margin-left: 10rpx;
 }
-.detail-line {
-  height: 1rpx;
-  width: 90%;
-  background-color: dimgray;
-  margin: 0 auto;
+
+.detail {
+  margin: 0 30rpx;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border-radius: 20px;
+  position: relative;
+  top: -120rpx;
+  padding: 30rpx;
 }
-.productionInfo {
-  padding: 15rpx;
+
+.detail .title {
+  font-weight: 500;
+  font-size: 32rpx;
+  color: #333333;
+  line-height: 36rpx;
 }
-.hidden {
-  display: none;
+
+.detail .type .special {
+  display: inline-block;
+  padding: 3rpx 6rpx;
+  font-size: 22rpx;
+  background-color: rgba(51, 51, 51, .1);
+  line-height: 24rpx;
+  border-radius: 4rpx;
+  color: #2FC25B;
 }
-.productionInfo-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+
+.detail .type {
+  font-weight: 400;
+  font-size: 26rpx;
+  color: #333333;
+  line-height: 36rpx;
+  margin-top: 30rpx;
 }
-.marketIntel{
-  background-color: rgb(203, 204, 206);
-  padding: 15rpx;
+
+.detail .info {
+  position: relative;
+  margin-top: 20rpx;
+  font-weight: 400;
+  font-size: 26rpx;
+  color: #333333;
+  line-height: 36rpx;
+  padding-left: 170rpx;
 }
-.marketIntel-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  /* border:1px solid red;  */
-}
-.marketIntel-items {
-  display: flex;
-  flex-direction: row;
-}
-.marketIntel-item {
-  width: 40%;
-}
-.marketIntel-bottom {
-  height: 50rpx;
-  line-height: 50rpx;
-}
-.creator {
-  margin: 20rpx auto;
-  text-align: center;
+
+.detail .info .left {
+  position: absolute;
+  width: 144rpx;
+  color: #999;
+  left: 0;
+  text-align:justify;
 }

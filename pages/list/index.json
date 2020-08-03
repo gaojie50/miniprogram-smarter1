@@ -6,6 +6,5 @@
     "scheduleType": "../../components/scheduleType/index",
     "costumListItem": "../../components/costomListItem/index"
   },
-  "navigationStyle": "custom",
-  "navigationBarTextStyle":"white"
+  "navigationStyle": "custom"
 }
