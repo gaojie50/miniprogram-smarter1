@@ -27,9 +27,7 @@ Page({
     const eventChannel = this.getOpenerEventChannel();
 
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', function (data) {
-      const {
-        companyChecked
-      } = data;
+      const { companyChecked } = data;
     })
 
     // 判断用户是否有权限
@@ -50,10 +48,33 @@ Page({
           this.setData({
             curPagePermission: true,
           })
+          this._fetchData();
         }
       }
     })
+
+
   },
+
+  _fetchData:function(param={}){
+    reqPacking({
+      url: '/api/management/list',
+      data: param,
+      method:'POST'
+    }).then(({
+      success,
+      data
+    }) => {
+      if (success && data && data.length > 0) {
+        return this.setData({ 
+          list: data 
+        })
+      }
+  
+      this.setData({ list: [] })
+    })
+  },
+
   tapFilterItem: function (e){
     const num = e.target.dataset.num;
     const { filterActive } = this.data;

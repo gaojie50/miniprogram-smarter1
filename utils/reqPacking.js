@@ -17,8 +17,8 @@ export default function reqPacking(config = DefaultConfig,source='server') {
       {} : 
       {
         source:'smarter',
-        token: wx.getStorageSync('token'),
-        // token:'keeper_eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTYxNzkyMjEsIm5iZiI6MTU5NjE3OTIyMSwiZXhwIjoxNjAxMzYzMjIxLCJhY2NvdW50SWQiOjEwMDAwMDAwMTIzMTg1LCJzYWx0IjoiZDNuZ2thIiwiaXNUZXN0IjpmYWxzZSwiYnVzaW5lc3NJZCI6MCwidmVyc2lvbiI6IjEuNyJ9.VXjPluOf62AUgZeUzrX5IneREyHZ6YhkZxOx9GnHHJo',
+        // token: wx.getStorageSync('token'),
+        token:'keeper_eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTY0MjkxMDAsIm5iZiI6MTU5NjQyOTEwMCwiZXhwIjoxNjAxNjEzMTAwLCJhY2NvdW50SWQiOjEwMDAwMDAwMTIzMTg1LCJzYWx0IjoicXpsM2FtIiwiaXNUZXN0IjpmYWxzZSwiYnVzaW5lc3NJZCI6MCwidmVyc2lvbiI6IjEuNyJ9.v48ThWsuK2OjkywkbGB9mPURtsN_eEbxcMHIoFr207s',
       }
     ),
     ...(config.header||{})
