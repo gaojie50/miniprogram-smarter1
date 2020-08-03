@@ -1,0 +1,149 @@
+
+.filterPanelWrap {
+  height: 100%;
+  overflow: hidden;
+}
+.filterPanel{
+  width:100%;
+  max-height:887rpx;
+  padding: 30rpx 28rpx 30rpx 30rpx;
+  border-top: 1rpx solid rgba(238,238,238,1);
+  background-color: #ffffff;
+  position: absolute;
+  z-index: 50;
+  overflow: hidden;
+}
+.estimateBox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.estimateBox .estimateBox-item {
+  width: 216rpx;
+  height: 80rpx;
+  text-align: center;
+  line-height: 80rpx;
+  background:rgba(242,243,248,1);
+  border-radius: 10rpx;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+.filterButton {
+  display: flex;
+  flex-direction: row;
+  font-size: 32rpx;
+  margin-top: 40rpx;
+}
+.lastFilterButton {
+  position: absolute;
+  bottom: 20rpx;
+  display: flex;
+  flex-direction: row;
+  font-size: 32rpx;
+  z-index: 55;
+}
+.filterButton-reset {
+  width: 335rpx;
+  height: 80rpx;
+  color:rgba(51,51,51,1);
+  background:rgba(255,255,255,1);
+  border-radius: 10rpx;
+  border: 1rpx solid rgba(204,204,204,1);
+  margin-right: 20rpx;
+  text-align: center;
+  line-height: 80rpx;
+}
+.filterButton-determine {
+  width: 335rpx;
+  height: 80rpx;
+  background:rgba(24,144,255,1);
+  color:rgba(255,255,255,1);
+  border-radius: 10rpx;
+  text-align: center;
+  line-height: 80rpx;
+}
+.projectStatus {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.projectStatus .projectStatus-item {
+  width: 158rpx;
+  height: 80rpx;
+  background:rgba(242,243,248,1);
+  border-radius: 10rpx;
+  text-align: center;
+  line-height: 80rpx;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+.filter {
+  /* border:1px solid red; */
+}
+.filter .title {
+  font-weight:600;
+  color:rgba(51,51,51,1);
+}
+.cost-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 20rpx;
+  margin-bottom: 40rpx;
+}
+.cost-wrap  .cost-wrap-item {
+  width: 216rpx;
+  height: 80rpx;
+  background:rgba(242,243,248,1);
+  border-radius: 10rpx;
+  text-align: center;
+  line-height: 80rpx;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+.cooper-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 20rpx;
+  margin-bottom: 40rpx;
+}
+.cooper-wrap .cooper-wrap-item {
+  width: 158rpx;
+  height: 80rpx;
+  background:rgba(242,243,248,1);
+  border-radius: 10rpx;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 80rpx;
+  box-sizing: border-box;
+}
+.filterPanelActive {
+  background:rgba(24,144,255,0.1) !important;
+  border-radius:10px;
+  border:1px solid rgba(24,144,255,1);
+  color:rgba(24,144,255,1);
+  line-height: 78rpx !important;
+}
+.company {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 80rpx;
+}
+.company .company-item {
+  width: 335rpx;
+  height: 80rpx;
+  margin-top: 20rpx;
+  margin-right: 22rpx;
+  padding: 0 20rpx;
+  border-radius: 10rpx;
+  line-height: 80rpx;
+  text-align: center;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  line-clamp: 3;
+  background: rgba(242,243,248,1);
+  box-sizing: border-box;
+}

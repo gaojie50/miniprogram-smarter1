@@ -1,0 +1,23 @@
+<!-- 自定义列表指标 -->
+<view class="costomListItem" wx:if="{{costomShow}}">
+  <view class="listTitle">
+    <text style="font-size: 32rpx; font-weight: 500;">指标自定义</text>
+    <text style="color:rgba(153,153,153,1);margin-left: 10rpx;">至少保留4项</text>
+    <image bindtap="tapClose" class="closeImg" src="../../static/close.png" />
+  </view>
+  <view class="listWrap">
+    <view data-num="1" bindtap="tapCostom" class="listWrapItem {{costom1? 'costomActive':''}}">上映时间</view>
+    <view data-num="2" bindtap="tapCostom" class="listWrapItem {{costom2? 'costomActive':''}}">制作成本</view>
+    <view data-num="3" bindtap="tapCostom" class="listWrapItem {{costom3? 'costomActive':''}}" style="margin-right: 0;">预估票房</view>
+    <view data-num="4" bindtap="tapCostom" class="listWrapItem {{costom4? 'costomActive':''}}">预估评分</view>
+    <view data-num="5" bindtap="tapCostom" class="listWrapItem {{costom5? 'costomActive':''}}">主出品</view>
+    <view data-num="6" bindtap="tapCostom" class="listWrapItem {{costom6? 'costomActive':''}}" style="margin-right: 0;">主发行</view>
+    <view data-num="7" bindtap="tapCostom" class="listWrapItem {{costom7? 'costomActive':''}}">类型</view>
+    <view data-num="8" bindtap="tapCostom" class="listWrapItem {{costom8? 'costomActive':''}}">导演</view>
+    <view data-num="9" bindtap="tapCostom" class="listWrapItem {{costom9? 'costomActive':''}}" style="margin-right: 0;"> 项目状态</view>
+    <view data-num="10" bindtap="tapCostom" class="listWrapItem {{costom10? 'costomActive':''}}">合作状态</view>
+    <view data-num="11" bindtap="tapCostom" class="listWrapItem {{costom11? 'costomActive':''}}">跟进人</view>
+    <view data-num="12" bindtap="tapCostom" class="listWrapItem {{costom12? 'costomActive':''}}">映前想看人数</view>
+  </view>
+  <view class="confirm">确定</view>
+</view>

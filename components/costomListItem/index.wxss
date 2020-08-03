@@ -1,0 +1,53 @@
+.costomListItem {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 774rpx;
+  padding: 40rpx 30rpx 20rpx;
+  box-sizing: border-box;
+  border-radius: 20rpx 20rpx 0 0;
+  font-size: 26rpx;
+  font-family: PingFangSC-Regular,PingFang SC;
+  font-weight: 400;
+  background: rgba(255,255,255,1);
+  z-index: 99;
+}
+.costomListItem .listTitle .closeImg {
+  display: inline-block;
+  width: 28.41rpx;
+  height: 28.41rpx;
+  margin-left: 326rpx;
+}
+.costomListItem .listWrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 40rpx 0;
+}
+.costomListItem .listWrap .listWrapItem {
+  width: 216rpx;
+  height: 80rpx;
+  margin-right: 20rpx;
+  margin-bottom: 20rpx;
+  text-align: center;
+  line-height: 80rpx;
+  box-sizing: border-box;
+  background: rgba(242,243,248,1);
+  border-radius: 10rpx;
+}
+.confirm {
+  width: 689rpx;
+  height: 80rpx;
+  font-size: 32rpx;
+  text-align: center;
+  line-height: 80rpx;
+  color:rgba(255,255,255,1);
+  background:rgba(24,144,255,1);
+  border-radius: 10rpx;
+}
+.costomActive {
+  line-height: 78rpx !important;
+  background: rgba(24,144,255,0.1) !important;
+  color: rgba(24,144,255,1);
+  border: 1rpx solid rgba(24,144,255,1);
+}

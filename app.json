@@ -1,8 +1,9 @@
 {
   "pages":[
     "pages/welcome/index",
-    "pages/search/index",
     "pages/list/index",
+    
+    "pages/search/index",
     "pages/inputInfo/index",
     "pages/projectDetail/index",
     "pages/searchCompany/index",
@@ -15,5 +16,8 @@
     "navigationBarTextStyle":"black"
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "useExtendedLib": {
+    "weui": true
+  }
 }

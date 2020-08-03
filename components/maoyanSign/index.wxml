@@ -1,0 +1,5 @@
+<!-- 主出 主发 联出 联发 -->
+<text class="mainOutput" wx:if="{{signContent == '猫眼主出'}}">{{signContent}}</text>
+<text class="mainPublish" wx:if="{{signContent == '主发'}}">{{signContent}}</text>
+<text class="xuanfa" wx:if="{{signContent == '宣发'}}">{{signContent}}</text>
+<text class="unionPublish" wx:if="{{signContent == '联发'}}">{{signContent}}</text>
