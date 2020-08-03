@@ -18,7 +18,6 @@ Component({
     tapClose: function (){
       const costomWrap = this.data;
       costomWrap.costomShow = false;
-
       this.setData({
         ...costomWrap
       })

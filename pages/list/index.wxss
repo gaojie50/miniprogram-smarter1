@@ -142,6 +142,7 @@ page {
   margin-bottom: 10rpx;
   position: sticky;
   top:0;
+  background:rgba(255,255,255,1);
 }
 .list .listFilter .listFilter-item {
   width: 187rpx;
@@ -209,8 +210,6 @@ page {
   white-space: nowrap;
 }
 .extends {
-  top: 180rpx;
-  right: 0;
   display: flex;
   align-items: center;
   z-index: 15;

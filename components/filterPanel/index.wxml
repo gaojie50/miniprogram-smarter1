@@ -42,27 +42,18 @@
         </view>
         <view class="last-title">
           <text class="title">片方</text>
-          <text style="margin-left: 567rpx" class="add">添加 ></text>
+          <text style="margin-left: 567rpx" bindtap="movieAdd" class="add">添加 ></text>
         </view>
         <view class="company">
-          <view class="company-item">北京猫眼北京猫眼北京猫眼北京猫眼</view>
-          <view class="company-item">天津猫眼</view>
-          <view class="company-item">霍尔果斯猫眼</view>
-          <view class="company-item">阿里巴巴影业</view>
-          <view class="company-item">阿里巴巴（娱乐宝）</view>
-          <view class="company-item">阿里巴巴（娱乐宝）</view>
-          <view class="company-item">阿里巴巴（娱乐宝）</view>
-          <view class="company-item">阿里巴巴（娱乐宝）</view>
-          <view class="company-item">阿里巴巴（娱乐宝）</view>
-          <view class="company-item">阿里巴巴（娱乐宝）</view>
-          <view class="company-item">阿里巴巴（娱乐宝）</view>
-          <view class="company-item">阿里巴巴（娱乐宝）</view>
+          <block wx:for="{{companyList}}">
+            <view data-num="{{index}}" class="company-item `{{company? 'filterPanelActive':''}}`" bindtap="tapCompany">{{item.name}}</view>
+          </block>
         </view>
       </scroll-view>
     </view>
     <view class="{{filterShow=='3'? 'lastFilterButton':'filterButton'}}">
       <view bindtap="filterReset" class="filterButton-reset">重置</view>
-      <view class="filterButton-determine">确定</view>
+      <view bindtap="filterDefined" class="filterButton-determine">确定</view>
     </view>
   </view>
 </view>

@@ -35,7 +35,7 @@
 					</view>
 				</view>
 				<backdrop backdropShow="{{backdropShow}}"></backdrop>
-				<filterPanel filterShow="{{filterActive}}"></filterPanel>
+				<filterPanel bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 				<view class="listDerict">
 					<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
 					<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">只看阿里参与</view>

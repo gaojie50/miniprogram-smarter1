@@ -19,6 +19,11 @@ Page({
     titleHeight: Math.floor(capsuleLocation.bottom + capsuleLocation.top - barHeight),
     gapHeight:Math.floor(capsuleLocation.top - barHeight),
     showIcon:false,
+    dimension: [],
+    projectStatus: [],
+    cost: [],
+    cooperStatus: [],
+    pcId: []
 
   },
 
@@ -99,14 +104,42 @@ Page({
     })
   },
   tapExtend: function (){
+    const dataList = this.data;
+    dataList.backdropShow = true;
+    dataList.costomShow = true;
     this.setData({
-      costomShow: true,
-      backdropShow: true
+      ...dataList
     })
   },
   ongetBackdropShow: function (e){
+    const dataList = this.data;
+    dataList.backdropShow = false;
+    dataList.costomShow = false;
     this.setData({
-      backdropShow: false
+      ...dataList
+    })
+  },
+  ongetFilterShow: function (e){
+    const dataList = this.data;
+    dataList.backdropShow = false;
+    dataList.filterActive = '';
+    dataList.dimension = e.detail.dimension;
+    dataList.projectStatus = e.detail.projectStatus;
+    dataList.cost = e.detail.cost;
+    dataList.cooperStatus = e.detail.cooperStatus;
+    dataList.pcId = e.detail.pcId;
+    this.setData({
+      ...dataList,
+    },()=>{
+      const { dimension,projectStatus,cost,cooperStatus,pcId } = this.data;
+      const param = {
+        dimension,
+        projectStatus,
+        cost,
+        cooperStatus,
+        pcId
+      }
+      this._fetchData(param);
     })
   },
   scroll(e) {

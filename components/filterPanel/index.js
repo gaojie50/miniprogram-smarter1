@@ -7,7 +7,33 @@ Component({
     }
   },
   data: {
-
+    companyList: [
+      {
+        name: "北京猫眼",
+        pcId: 123
+      },
+      {
+        name: "天津猫眼",
+        pcId: 123
+      },
+      {
+        name: "霍尔果斯猫眼",
+        pcId: 123
+      },
+      {
+        name: "阿里巴巴影业",
+        pcId: 123
+      },
+      {
+        name: "阿里巴巴（娱乐宝）",
+        pcId: 123
+      }
+    ],
+    dimension: [],
+    projectStatus: [],
+    cost: [],
+    cooperStatus: [],
+    pcId: []
   },
   methods:{
     tapEstimateBox: function (e){
@@ -42,6 +68,14 @@ Component({
         ...cooperWrap
       })
     },
+    tapCompany: function(e){
+      const num = e.target.dataset.num;
+      const CompanyWrap = this.data;
+      CompanyWrap[`company${num+1}`] = !CompanyWrap[`company${num+1}`];
+      this.setData({
+        ...CompanyWrap
+      })
+    },
     filterReset: function (){
       const { filterShow } = this.data;
       const allData = this.data;
@@ -59,6 +93,47 @@ Component({
        this.setData({
          ...allData
        })
+    },
+    filterDefined: function (){
+      const { filterShow } = this.data;
+      if(filterShow == 1){
+        for(let i = 1; i < 7; i++){
+          if(this.data[`estimateBoxActive${i}`] && this.data.dimension.indexOf(i) == -1){
+              this.data.dimension.push(i)
+          }
+        }
+       const { dimension,projectStatus,cost,cooperStatus,pcId } = this.data;
+       const myEventDetail = {
+            dimension,
+            projectStatus,
+            cost,
+            cooperStatus,
+            pcId
+       }
+        this.triggerEvent('myevent', myEventDetail)
+      }else if(filterShow == 2){
+        for(let i = 1; i < 8; i++){
+          if(this.data[`projectStatusActive${i}`] && this.data.projectStatus.indexOf(i) == -1){
+            this.data.projectStatus.push(i)
+          }
+        }
+        const { dimension,projectStatus,cost,cooperStatus,pcId } = this.data;
+        const myEventDetail = {
+              dimension,
+              projectStatus,
+              cost,
+              cooperStatus,
+              pcId
+        }
+        this.triggerEvent('myevent', myEventDetail)
+      }else if(filterShow == 3){
+
+      }
+    },
+    movieAdd: function (){
+      wx.navigateTo({
+        url: '/pages/searchCompany/index',
+      })
     }
   }
 })
