@@ -1,6 +1,6 @@
 /* pages/list/index.wxss */
 page {
-  height: 100%;
+  height: 5534px;
   background:linear-gradient(135deg,rgba(121,140,186,1) 0%,rgba(49,68,115,1) 100%);
 }
 .list {
@@ -72,18 +72,32 @@ page {
   min-height: 70rpx;
 }
 .list .listTable .listTr .listTd {
-  min-width: 218rpx;
+  min-width: 175rpx;
   min-height: 70rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding-left: 30rpx;
   background:rgba(247,247,247,1);
+  box-sizing: border-box;
 }
 .list .listTable .listTr .shadow {
-  box-shadow: 6rpx 0 6rpx -4rpx #000000;
+  box-shadow: 14rpx 0 12rpx -6rpx rgba(153,153,153,0.1);
   z-index: 10;
 }
 .listNowrap {
   white-space: nowrap;
+}
+.extends {
+  top: 180rpx;
+  right: 0;
+  display: flex;
+  align-items: center;
+  z-index: 15;
+  width: 118rpx;
+  height: 70rpx;
+  background:linear-gradient(90deg,rgba(247,247,247,0) 0%,rgba(247,247,247,1) 100%);
+}
+.listFiexd {
+  position: fixed;
 }

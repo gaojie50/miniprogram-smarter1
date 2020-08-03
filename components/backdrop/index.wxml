@@ -1,2 +1,2 @@
 <!-- 背景蒙层 -->
-<view class="backdrop" wx:if="{{show.length!=0}}"></view>
+<view class="backdrop" bindtap="tapBackdrop" wx:if="{{backdropShow}}"></view>

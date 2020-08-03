@@ -50,7 +50,9 @@ Component({
           allData[`estimateBoxActive${i}`] = false;
          }
        } else if(filterShow == '2') {
-
+          for(let i=1; i<8; i++){
+            allData[`projectStatusActive${i}`] = false;
+          }
        }else if(filterShow == '3'){
         
        }

@@ -5,12 +5,10 @@ const {
 
 Page({
   data: {
-    curPagePermission:true,
+    curPagePermission: true,
     filterActive: '',
-    derictFilterActive1: false,
-    derictFilterActive2: false,
-    derictFilterActive3: false,
-    derictFilterActive4: false,
+    backdropShow: false,
+    costomShow: false
   },
 
   onLoad: function () {
@@ -39,11 +37,13 @@ Page({
     const { filterActive } = this.data;
     if (num == filterActive) {
       this.setData({
-        filterActive: ''
+        filterActive: '',
+        backdropShow: false
       })
     } else {
       this.setData({
-        filterActive: e.target.dataset.num
+        filterActive: e.target.dataset.num,
+        backdropShow: true
       })
     }
   },
@@ -53,6 +53,17 @@ Page({
     derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[`derictFilterActive${num}`];
     this.setData({
       ...derictFilterWrap
+    })
+  },
+  tapExtend: function (){
+    this.setData({
+      costomShow: true,
+      backdropShow: true
+    })
+  },
+  ongetBackdropShow: function (e){
+    this.setData({
+      backdropShow: false
     })
   }
 })

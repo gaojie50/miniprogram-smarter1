@@ -3,6 +3,7 @@
     "backdrop": "../../components/backdrop/index",
     "filterPanel": "../../components/filterPanel/index",
     "maoyanSign": "../../components/maoyanSign/index",
-    "scheduleType": "../../components/scheduleType/index"
+    "scheduleType": "../../components/scheduleType/index",
+    "costumListItem": "../../components/costomListItem/index"
   }
 }

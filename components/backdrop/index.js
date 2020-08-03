@@ -1,8 +1,8 @@
 
 Component({
   properties: {
-    show: {
-      type: String,
+    backdropShow: {
+      type: Boolean,
       value: ''
     }
   }

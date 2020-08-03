@@ -18,7 +18,7 @@
         <image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png" ></image>
       </view>
     </view>
-    <backdrop show="{{filterActive}}"></backdrop>
+    <backdrop backdropShow="{{backdropShow}}"></backdrop>
     <filterPanel filterShow="{{filterActive}}"></filterPanel>
     <view class="listDerict">
       <view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
@@ -27,10 +27,10 @@
       <view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
     </view>
     <view class="listTable">
-      <scroll-view scroll-x>
+      <scroll-view scroll-x="true">
         <view class="listTr">
-          <view style="font-size: 28rpx;font-weight: 600;" class="listTd listNowrap shadow">187部影片</view>
-          <view class="listTd listNowrap">上映时间</view>
+          <view style="font-size: 28rpx;font-weight: 600;width: 218rpx" class="listTd listNowrap shadow listFiexd">187部影片</view>
+          <view class="listTd listNowrap" style="margin-left: 218rpx">上映时间</view>
           <view class="listTd listNowrap">制作成本</view>
           <view class="listTd listNowrap">预估票房</view>
           <view class="listTd listNowrap">预估评分</view>
@@ -42,17 +42,20 @@
           <view class="listTd listNowrap">合作状态</view>
           <view class="listTd listNowrap">跟进人</view>
           <view class="listTd listNowrap">映前想看人数</view>
+        </view>  
+        <view class="extends listFiexd" bindtap="tapExtend" catchtouchmove="doNothing">
+          <image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
         </view>
         <block>
           <view class="listTr">
-            <view style="font-size: 28rpx;font-weight: 600;" class="listTd tdPadding">
+            <view style="font-size: 28rpx;font-weight: 600;width: 218rpx;" class="listTd tdPadding shadow listFiexd">
               <view>
                 <view>城市岛屿</view>
                 <maoyanSign signContent="猫眼主出"></maoyanSign>
                 <maoyanSign signContent="宣发"></maoyanSign>
               </view>
             </view>
-            <view class="listTd tdPadding ">
+            <view class="listTd tdPadding" style="margin-left: 218rpx">
               <view>
                 <view>07.23</view>
                 <view>（国庆档）</view>
@@ -74,6 +77,9 @@
         </block>
       </scroll-view>
     </view>
+  </view>
+  <view class="customListItem">
+    <costumListItem bind:myevent="ongetBackdropShow" costomShow="{{costomShow}}"></costumListItem>
   </view>
 </view>
 
