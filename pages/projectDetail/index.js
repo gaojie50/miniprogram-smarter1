@@ -1,19 +1,11 @@
-// pages/project-detail/project-detail.js
 Page({
   data: {
-    extend:false,
+    item:{}
   },
 
-  extend: function () {
-    this.setData({
-      extend: !this.data.extend
-    })
-  }
+  onLoad: function (options) {
+    const eventChannel = this.getOpenerEventChannel();
 
- 
-
-  
-
-
-
+    eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => this.setData(data))
+  },
 })

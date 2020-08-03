@@ -2,9 +2,11 @@ import keepLogin from '../../utils/keepLogin';
 
 const app = getApp();
 
+const {capsuleLocation,barHeight} = app.globalData;
+
 Page({
   data: {
-    isLogin: wx.getStorageSync('token')
+    titleHeight: Math.floor(capsuleLocation.bottom + capsuleLocation.top - barHeight),
   },
 
   goLogin: function() {
@@ -26,9 +28,9 @@ Page({
       const {code ,userInfo } = app.globalData;
       const {iv,encryptedData} = userInfo;
 
-      return keepLogin({
-        code,iv,encryptedData
-      })
+      if(this.data.isLogin) return wx.redirectTo({url: `/pages/list/index`});
+
+      return keepLogin({ code,iv,encryptedData})
     }
 
     wx.showModal({

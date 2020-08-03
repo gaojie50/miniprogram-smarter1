@@ -9,6 +9,7 @@ App({
         if(res.code) this.globalData.code = res.code;
       }
     })
+
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -26,11 +27,15 @@ App({
         }
       }
     })
+
+    console.log('app launch');
   },
   globalData: {
     userInfo: null,
     code:null,
     APISet:envConfig,
     reqPacking,
+    capsuleLocation : wx.getMenuButtonBoundingClientRect(),
+    barHeight : wx.getSystemInfoSync().statusBarHeight,
   }
 })

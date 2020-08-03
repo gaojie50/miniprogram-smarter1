@@ -10,15 +10,16 @@ export default function reqPacking(config = DefaultConfig,source='server') {
   const header = {
     ...{
       method: 'GET',
-      dataType: 'json',
-      'content-type': 'application/json',
+      // dataType: 'json',
+      // 'content-type': 'application/json',
     },
     ...(
       source === 'keeper' ? 
       {} : 
       {
         source:'smarter',
-        token: Token ? Token : 'keeper_eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTU4NDM3MzksIm5iZiI6MTU5NTg0MzczOSwiZXhwIjoxNjAxMDI3NzM5LCJhY2NvdW50SWQiOjEwMDAwMDAwMTIzMTg1LCJzYWx0IjoiZnpyZzE5IiwiaXNUZXN0IjpmYWxzZSwiYnVzaW5lc3NJZCI6MCwidmVyc2lvbiI6IjEuNyJ9.nsGQ2koJYW0DCqK3nQGu685qIfmPEID8gPmi0mQTdEc',
+        // token: Token ? Token : '',
+        token:'keeper_eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTYxNzkyMjEsIm5iZiI6MTU5NjE3OTIyMSwiZXhwIjoxNjAxMzYzMjIxLCJhY2NvdW50SWQiOjEwMDAwMDAwMTIzMTg1LCJzYWx0IjoiZDNuZ2thIiwiaXNUZXN0IjpmYWxzZSwiYnVzaW5lc3NJZCI6MCwidmVyc2lvbiI6IjEuNyJ9.VXjPluOf62AUgZeUzrX5IneREyHZ6YhkZxOx9GnHHJo',
       }
     ),
     ...(config.header||{})

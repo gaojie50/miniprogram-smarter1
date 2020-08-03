@@ -13,3 +13,11 @@
       plain="true">查看情报</button>
   </view>
 </view>
+<view>
+	<view style="margin-top:{{titleHeight}}px">
+		<image class="logo" src="../../static/welcome/logo.png" />
+		<image class="slogan" src="../../static/welcome/slogan.png" />
+		<image class="show" src="../../static/welcome/show.png" />
+	</view>
+	<view class="login-btn" bindtap="goList">立即登录</view>
+</view>

@@ -1,66 +1,57 @@
-// pages/search/index.js
+import reqPacking from '../../utils/reqPacking';
+import utils from '../../utils/index';
+import projectConfig from '../../constant/project-config';
+
+const {throttle} = utils;
+const {getScheduleType} = projectConfig;
+
+function fn(e) {
+  const { value } = e.detail;
+
+  if(value.trim() == '') return this.setData({list:[]})
+
+  reqPacking({
+    url: '/api/management/list',
+    data: { name: value },
+    method:'POST'
+  }).then(({
+    success,
+    data
+  }) => {
+    if (success && data && data.length > 0) {
+      return this.setData({ 
+        list: data.map(item =>{
+          item.scheduleObj = getScheduleType(item.scheduleType);
+          item.pic = item.pic ? `${item.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
+
+          return item;
+        }) 
+      })
+    }
+
+    this.setData({ list: [] })
+  })
+};
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    inputValue: '',
+    list: [],
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  bindKeyInput: throttle(fn,500),
 
-  },
+  jumpDetail:function(e){
+    const {id} = e.currentTarget.dataset;
+    const {list} = this.data;
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+    wx.navigateTo({
+      url:`/pages/projectDetail/index`,
+      success: function(res) {
+        res.eventChannel.emit('acceptDataFromOpenerPage', { 
+          item:list.filter(item => item.maoyanId == id)[0]
+         })
+      }
+    })
   }
 })

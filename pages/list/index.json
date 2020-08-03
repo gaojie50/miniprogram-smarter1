@@ -5,5 +5,8 @@
     "maoyanSign": "../../components/maoyanSign/index",
     "scheduleType": "../../components/scheduleType/index",
     "costumListItem": "../../components/costomListItem/index"
-  }
+  },
+  "navigationStyle": "custom",
+  "navigationBarTextStyle":"white",
+  "usingComponents": {}
 }

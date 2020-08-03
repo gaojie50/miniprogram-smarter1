@@ -1,4 +1,7 @@
 {
-  "navigationBarTitleText":"影片市场情报",
+  "navigationBarTitleText":"",
+  "navigationStyle": "custom",
+  "navigationBarTextStyle":"white",
+  "disableScroll":true,
   "usingComponents": {}
 }

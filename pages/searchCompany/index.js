@@ -1,66 +1,80 @@
-// pages/searchCompany/index.js
+import reqPacking from '../../utils/reqPacking';
+import utils from './../../utils/index';
+
+const {throttle} = utils;
+
+function fn(e) {
+  const { value } = e.detail;
+
+  if(value.trim() == '') return this.setData({list:[]})
+
+  reqPacking({
+    url: '/api/company/search',
+    data: {
+      keyword: value,
+    }
+  }).then(({
+    success,
+    data
+  }) => {
+    if (success && data.respList && data.respList.length > 0) {
+      return this.setData({
+        list: data.respList.map(item=>{
+          item.checked='';
+          return item;
+        })
+      })
+    }
+
+    this.setData({ list: [] })
+  })
+};
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    inputValue: '',
+    list: [],
+    checked:[],
+    hadItem:function(checked,id){
+      return checked.some(item => item.id == id);
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  bindKeyInput: throttle(fn,500),
+  
+  touchCheckEvent:function(e) {
+    const {name,id} = e.target.dataset;
+    const {checked,list} = this.data;
+    
+    if(checked.some(item => item.id == id)){
+      return this.setData({
+        checked:checked.filter(item => item.id != id),
+        list:list.map(item => {
+          if(id == item.id) item.checked ='';
+          return item;
+        })
+      })
+    }
 
+    checked.push({ id,name })
+    this.setData({ 
+      checked,
+      list:list.map(item => {
+        if(id == item.id) item.checked='checked';
+        return item;
+      })
+     })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
+  jumpList:function(){
+    const {checked} = this.data;
 
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+    wx.navigateTo({
+      url:`/pages/list/index`,
+      success: function(res) {
+        //向list页面传递数据
+        res.eventChannel.emit('acceptDataFromOpenerPage', { companyChecked : checked })
+      }
+    })
   }
 })
