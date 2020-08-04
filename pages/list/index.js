@@ -2,7 +2,7 @@ import utils from './../../utils/index';
 import projectConfig from '../../constant/project-config';
 const { getMaoyanSignLabel } = projectConfig;
 
-const { rpxTopx, formatReleaseDate } = utils;
+const { rpxTopx, formatReleaseDate, formatNumber, formatDirector } = utils;
 const app = getApp();
 const {
   reqPacking,
@@ -26,7 +26,29 @@ Page({
     cooperStatus: [],
     pcId: [],
     list:[],
-    filterItemHidden:[]
+    filterItemHidden:[],
+    latestSchedule: [],
+    scheduleType: {
+      1: "已定档",
+      2: "非常确定",
+      3: "可能",
+      4: "内部建议",
+      5: "待定",
+    },
+    projectStatus: {
+      1: "筹备",
+      2: "拍摄",
+      3: "后期",
+      4: "待过审",
+      5: "已过审",
+    },
+    cooperStatus: {
+      1: "评估中",
+      2: "跟进中",
+      3: "未合作",
+      4: "开发中",
+      5: "投资中",
+    }
   },
 
   onLoad: function ({token}) {
@@ -79,6 +101,18 @@ Page({
 
   _fetchData:function(param={}){
     reqPacking({
+      url: '/api/applet/management/latestSchedule',
+    }).then(({
+      success,
+      data
+    }) => {
+      if (success && data && data.length > 0) {
+        this.setData({
+          latestSchedule: data
+        })
+      }
+    })
+    reqPacking({
       url: '/api/management/list',
       data: {
         endDate: 1628006399999,
@@ -92,7 +126,7 @@ Page({
       if (success && data && data.length > 0) {
         
         data.map(item =>{
-          
+          console.log(item.producer)
           if(item.maoyanSign && item.maoyanSign.length>0){
             item.maoyanSignLabel =  getMaoyanSignLabel(item.maoyanSign);
            } 
@@ -104,7 +138,11 @@ Page({
             const formatEndDate = formatReleaseDate(item.releaseDate.endDate);
             item.releaseDate.endDate = formatEndDate;
           }
+          item.estimateBox = formatNumber(item.estimateBox);
+          item.director = formatDirector(item.director);
+          item.movieType = item.movieType.replace(/,/g,'/')
         })
+        console.log(data)
         return this.setData({ 
           list: data 
         })

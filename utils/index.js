@@ -141,21 +141,32 @@ const formatNumber = (value, sign) => {
 };
 
 //上映时间处理
-const formatReleaseDate = (date) => {
+const formatReleaseDate = date => {
   const time = new Date(date);
   var y = time.getFullYear();
-  var m = time.getMonth()+1;
-  var d = time.getDate();
+  var m = ("0" + (time.getMonth()+1)).slice(-2);
+  var d = ("0" + time.getDate()).slice(-2);
   var result = `${m}.${d}`;
   return result
-// const value = time.toLocaleString();
-// const t = formatDate(1000083546565765)
 }
+//处理导演顿号
+const formatDirector = director => {
+  if(director !== null){
+    let str = '';
+    for(let i=0; i<director.length; i++){
+      str = str + director[i] + '、';
+    }
+    const result = str.substring(0, str.length-1);
+    return result
+  }
+}
+
 
 export default {
   errorHandle,
   throttle,
   rpxTopx,
   formatNumber,
-  formatReleaseDate
+  formatReleaseDate,
+  formatDirector
 }
