@@ -193,6 +193,12 @@ Page({
     dataList.cost = e.detail.cost;
     dataList.cooperStatus = e.detail.cooperStatus;
     dataList.pcId = e.detail.pcId;
+    const dateValue = e.detail.dateSet.filter(item=> item.checked=='checked')[0].value;
+    
+    if(e.detail.dateSet.filter(item=> item.checked=='checked')[0].value != 'custom'){
+      dataList.dateSelect = getFutureTimePeriod(dateValue);
+    }
+
     this.setData({
       ...dataList,
     }, () => {
@@ -201,14 +207,16 @@ Page({
         projectStatus,
         cost,
         cooperStatus,
-        pcId
+        pcId,
+        dateSelect,
       } = this.data;
       const param = {
         dimension,
         projectStatus,
         cost,
         cooperStatus,
-        pcId
+        pcId,
+        ...dateSelect
       }
       this._fetchData(param);
     })

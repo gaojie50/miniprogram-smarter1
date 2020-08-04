@@ -187,6 +187,7 @@ Component({
           projectStatus,
           cost,
           cooperStatus,
+          dateSet,
           pcId
         } = this.data;
         const myEventDetail = {
@@ -194,6 +195,7 @@ Component({
           projectStatus,
           cost,
           cooperStatus,
+          dateSet,
           pcId
         }
         this.triggerEvent('myevent', myEventDetail)
@@ -217,6 +219,7 @@ Component({
           projectStatus,
           cost,
           cooperStatus,
+          dateSet,
           pcId
         } = this.data;
         const myEventDetail = {
@@ -224,6 +227,7 @@ Component({
           projectStatus,
           cost,
           cooperStatus,
+          dateSet,
           pcId
         }
         this.triggerEvent('myevent', myEventDetail)
@@ -338,6 +342,7 @@ Component({
           projectStatus,
           cost,
           cooperStatus,
+          dateSet,
           pcId
         } = this.data;
         const myEventDetail = {
@@ -345,10 +350,30 @@ Component({
           projectStatus,
           cost,
           cooperStatus,
+          dateSet,
           pcId
         }
         this.triggerEvent('myevent', myEventDetail)
       }
+    },
+    filterDefinedDate:function(){
+      const {
+        dimension,
+        projectStatus,
+        cost,
+        cooperStatus,
+        pcId,
+        dateSet,
+      } = this.data;
+      this.triggerEvent('myevent', {
+        dimension,
+        projectStatus,
+        cost,
+        cooperStatus,
+        pcId,
+        dateSet,
+      })
+
     },
     movieAdd: function () {
       wx.navigateTo({

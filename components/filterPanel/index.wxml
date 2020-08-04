@@ -60,7 +60,8 @@
 		</view>
 		<view class="{{filterShow=='3'? 'lastFilterButton':'filterButton'}}">
 			<view wx:if="{{filterShow != 4}}" bindtap="filterReset" class="filterButton-reset">重置</view>
-			<view bindtap="filterDefined" class="{{filterShow=='4'?'filterButton-date-determine':'filterButton-determine'}}">确定</view>
+			<view wx:if="{{filterShow != 4}}" bindtap="filterDefined" class="filterButton-determine">确定</view>
+			<view wx:if="{{filterShow == 4}}" bindtap="filterDefinedDate" class="filterButton-date-determine">确定</view>
 		</view>
 
 	</view>
