@@ -196,7 +196,6 @@ page {
 .list .listTable {
   width: 100%;
   position: relative;
-  padding-left: 218rpx;
 }
 
 .list .listTable .tdPadding {
@@ -286,6 +285,10 @@ page {
   position: absolute;
   left: 0;
   top: 0;
+}
+.listTable .table-right {
+  margin-left: 218rpx;
+  width: auto;
 }
 
 .filterPanel {
