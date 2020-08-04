@@ -37,6 +37,9 @@ Component({
     company: {}
   },
   methods:{
+    tapEstimateBox:function(e){
+      console.log(e);
+    },
     tapEstimateBox: function (e){
       const num = e.target.dataset.num;
       const estimateBoxActiveWrap = this.data;

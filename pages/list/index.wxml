@@ -8,7 +8,8 @@
 			</view>
 		</view>
 
-		<scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper">
+		<!-- <scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper"> -->
+		<scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)">
 			<view id="scroll-cont">
 				<!-- <view class="search-bar">
 				<label>
@@ -34,8 +35,8 @@
 							<text data-num="3" class="listFilter-item-text {{filterActive==3 ? 'filterActive' : ''}}" bindtap="tapFilterItem">筛选</text>
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
-						<backdrop class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
-						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
+						<backdrop wx:if="{{backdropShow}}" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
+						<filterPanel wx:if="{{filterActive!=''}}" class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					</view>
 					<view class="listDerict">
 						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
