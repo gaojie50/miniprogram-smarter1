@@ -18,8 +18,8 @@
 				<view class="list">
 					<view class="listFilter">
 						<view class="listFilter-item" style="width: 189rpx">
-							<text class="listFilter-item-text">时间范围</text>
-							<image src="../../static/arrow-down.png"></image>
+							<text data-num="4" class="listFilter-item-text {{filterActive==4 ? 'filterActive' : ''}}" bindtap="tapFilterItem">时间范围</text>
+							<image src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<view class="listFilter-item">
 							<text data-num="1" class="listFilter-item-text {{filterActive==1 ? 'filterActive' : ''}}" bindtap="tapFilterItem">预估票房</text>
@@ -33,9 +33,9 @@
 							<text data-num="3" class="listFilter-item-text {{filterActive==3 ? 'filterActive' : ''}}" bindtap="tapFilterItem">筛选</text>
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
+						<backdrop class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
+						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					</view>
-					<backdrop backdropShow="{{backdropShow}}"></backdrop>
-					<filterPanel bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					<view class="listDerict">
 						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
 						<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">只看阿里参与</view>
