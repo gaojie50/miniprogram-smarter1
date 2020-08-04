@@ -2,7 +2,7 @@ import utils from './../../utils/index';
 import projectConfig from '../../constant/project-config';
 const { getMaoyanSignLabel } = projectConfig;
 
-const { rpxTopx } = utils;
+const { rpxTopx, formatReleaseDate } = utils;
 const app = getApp();
 const {
   reqPacking,
@@ -30,7 +30,6 @@ Page({
   },
 
   onLoad: function ({token}) {
-
     if(token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
 
@@ -81,10 +80,16 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
+        
         data.map(item =>{
+          
           if(item.maoyanSign && item.maoyanSign.length>0){
             item.maoyanSignLabel =  getMaoyanSignLabel(item.maoyanSign);
            } 
+          if(item.releaseDate.startDate != null || item.releaseDate.endDate != null){
+            const { formatStartDate, formatEndDate } = formatReleaseDate(item.releaseDate.startDate, null);
+            console.log(formatStartDate, formatEndDate)
+          }
         })
         return this.setData({ 
           list: data 

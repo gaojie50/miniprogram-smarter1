@@ -9,8 +9,6 @@ export default function reqPacking(config = DefaultConfig,source='server') {
   const header = {
     ...{
       method: 'GET',
-      // dataType: 'json',
-      // 'content-type': 'application/json',
     },
     ...(
       source === 'keeper' ? 

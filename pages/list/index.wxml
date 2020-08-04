@@ -1,110 +1,119 @@
-<!-- <view wx:if="{{curPagePermission}}"> -->
-<view class="header">
-	<view class="header-bar" style="height:{{titleHeight}}px;">
-		<view class="header-inner" style='line-height:{{titleHeight - barHeight}}px;padding-top:{{barHeight}}px;'>
-			<image bindtap="jumpToSearch" class="search" style="top:calc( {{( titleHeight + barHeight ) / 2}}px -  22rpx)" src="../../static/icon/search-white.png" />
-			<text>猫眼项目情报</text>
+<view wx:if="{{curPagePermission}}">
+	<view class="header">
+		<view class="header-bar" style="height:{{titleHeight}}px;">
+			<view class="header-inner" style='line-height:{{titleHeight - barHeight}}px;padding-top:{{barHeight}}px;'>
+				<image bindtap="jumpToSearch" class="search" style="top:calc( {{( titleHeight + barHeight ) / 2}}px -  22rpx)" src="../../static/icon/search-white.png" />
+				<text>猫眼项目情报</text>
+			</view>
 		</view>
-	</view>
 
-	<scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper">
-		<view id="scroll-cont">
-			<!-- <view class="search-bar">
+		<scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper">
+			<view id="scroll-cont">
+				<!-- <view class="search-bar">
 				<label>
 					<icon type="search" size="20"></icon>
 					<input placeholder="搜索项目" disabled="true" placeholder-style="input-ph" bindtap="jumpToSearch" />
 				</label>
 			</view> -->
-			<view class="list">
-				<view class="listFilter">
-					<view class="listFilter-item" style="width: 189rpx">
-						<text class="listFilter-item-text">时间范围</text>
-						<image src="../../static/arrow-down.png"></image>
-					</view>
-					<view class="listFilter-item">
-						<text data-num="1" class="listFilter-item-text {{filterActive==1 ? 'filterActive' : ''}}" bindtap="tapFilterItem">预估票房</text>
-						<image src="../../static/{{filterActive==1 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
-					</view>
-					<view class="listFilter-item">
-						<text data-num="2" class="listFilter-item-text {{filterActive==2 ? 'filterActive' : ''}}" bindtap="tapFilterItem">项目状态</text>
-						<image src="../../static/{{filterActive==2 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
-					</view>
-					<view class="listFilter-item">
-						<text data-num="3" class="listFilter-item-text {{filterActive==3 ? 'filterActive' : ''}}" bindtap="tapFilterItem">筛选</text>
-						<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
-					</view>
-				</view>
-				<backdrop backdropShow="{{backdropShow}}" ></backdrop>
-				<filterPanel bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
-				<view class="listDerict">
-					<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
-					<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">只看阿里参与</view>
-					<view data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">暑期国庆档</view>
-					<view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
-				</view>
-				<view class="listTable">
-					<scroll-view scroll-x="true">
-						<view class="listTr">
-							<view style="font-size: 28rpx;font-weight: 600;width: 218rpx" class="listTd listNowrap shadow listFiexd">187部影片</view>
-							<view class="listTd listNowrap {{filterItemHidden1? 'itemHidden':''}}">上映时间</view>
-							<view class="listTd listNowrap {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
-							<view class="listTd listNowrap {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
-							<view class="listTd listNowrap {{filterItemHidden4? 'itemHidden':''}}">预估评分</view>
-							<view class="listTd listNowrap {{filterItemHidden5? 'itemHidden':''}}">主出品</view>
-							<view class="listTd listNowrap {{filterItemHidden6? 'itemHidden':''}}">主发行</view>
-							<view class="listTd listNowrap {{filterItemHidden7? 'itemHidden':''}}">类型</view>
-							<view class="listTd listNowrap {{filterItemHidden8? 'itemHidden':''}}">导演</view>
-							<view class="listTd listNowrap {{filterItemHidden9? 'itemHidden':''}}">项目状态</view>
-							<view class="listTd listNowrap {{filterItemHidden10? 'itemHidden':''}}">合作状态</view>
-							<view class="listTd listNowrap {{filterItemHidden11? 'itemHidden':''}}">跟进人</view>
-							<view class="listTd listNowrap {{filterItemHidden12? 'itemHidden':''}}">映前想看人数</view>
+				<view class="list">
+					<view class="listFilter">
+						<view class="listFilter-item" style="width: 189rpx">
+							<text class="listFilter-item-text">时间范围</text>
+							<image src="../../static/arrow-down.png"></image>
 						</view>
+						<view class="listFilter-item">
+							<text data-num="1" class="listFilter-item-text {{filterActive==1 ? 'filterActive' : ''}}" bindtap="tapFilterItem">预估票房</text>
+							<image src="../../static/{{filterActive==1 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
+						</view>
+						<view class="listFilter-item">
+							<text data-num="2" class="listFilter-item-text {{filterActive==2 ? 'filterActive' : ''}}" bindtap="tapFilterItem">项目状态</text>
+							<image src="../../static/{{filterActive==2 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
+						</view>
+						<view class="listFilter-item">
+							<text data-num="3" class="listFilter-item-text {{filterActive==3 ? 'filterActive' : ''}}" bindtap="tapFilterItem">筛选</text>
+							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
+						</view>
+					</view>
+					<backdrop backdropShow="{{backdropShow}}"></backdrop>
+					<filterPanel bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
+					<view class="listDerict">
+						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
+						<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">只看阿里参与</view>
+						<view data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">暑期国庆档</view>
+						<view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
+					</view>
+					<view class="listTable">
+						<view class="table-left">
+							<view class="listTr">
+								<view style="" class="listTd listNowrap shadow">187部影片</view>
+							</view>
+
+							<block wx:for="{{list}}" wx:key="maoyanId">
+								<view class="listTr">
+									<view style="font-size: 28rpx;font-weight: 600;width: 218rpx;height: 160rpx" class="listTd tdPadding shadow">
+										<view>
+											<view>{{item.name}}</view>
+											<maoyanSign wx:for="{{data.maoyanSignLabel||[]}}" signContent="{{item}}">{{item}}</maoyanSign>
+										</view>
+									</view>
+								</view>
+							</block>
+						</view>
+						<scroll-view class="table-right" scroll-x>
+							<view class="listTr">
+								<view class="listTd listNowrap {{filterItemHidden1? 'itemHidden':''}}">上映时间</view>
+								<view class="listTd listNowrap {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
+								<view class="listTd listNowrap {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
+								<view class="listTd listNowrap {{filterItemHidden4? 'itemHidden':''}}">预估评分</view>
+								<view class="listTd listNowrap {{filterItemHidden5? 'itemHidden':''}}">主出品</view>
+								<view class="listTd listNowrap {{filterItemHidden6? 'itemHidden':''}}">主发行</view>
+								<view class="listTd listNowrap {{filterItemHidden7? 'itemHidden':''}}">类型</view>
+								<view class="listTd listNowrap {{filterItemHidden8? 'itemHidden':''}}">导演</view>
+								<view class="listTd listNowrap {{filterItemHidden9? 'itemHidden':''}}">项目状态</view>
+								<view class="listTd listNowrap {{filterItemHidden10? 'itemHidden':''}}">合作状态</view>
+								<view class="listTd listNowrap {{filterItemHidden11? 'itemHidden':''}}">跟进人</view>
+								<view class="listTd listNowrap {{filterItemHidden12? 'itemHidden':''}}">映前想看人数</view>
+							</view>
+							<block wx:for="{{list}}" wx:key="maoyanId">
+								<view class="listTr">
+									<view class="listTd tdPadding vheight {{filterItemHidden1? 'itemHidden':''}}">
+										<view>
+											<view>{{111}}</view>
+											<text>（国庆档）</text>
+											<scheduleType signContent="已定档"></scheduleType>
+										</view>
+									</view>
+									<view class="listTd tdPadding {{filterItemHidden2? 'itemHidden':''}}">5000.5万</view>
+									<view class="listTd tdPadding {{filterItemHidden3? 'itemHidden':''}}">1.5亿</view>
+									<view class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">8.4</view>
+									<view class="listTd tdPadding {{filterItemHidden5? 'itemHidden':''}}">北京光线传媒有限公司</view>
+									<view class="listTd tdPadding {{filterItemHidden6? 'itemHidden':''}}">华纳兄弟娱乐公司</view>
+									<view class="listTd tdPadding {{filterItemHidden7? 'itemHidden':''}}">{{item.movieType}}</view>
+									<view class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">张艺谋</view>
+									<view class="listTd tdPadding {{filterItemHidden9? 'itemHidden':''}}">筹备</view>
+									<view class="listTd tdPadding {{filterItemHidden10? 'itemHidden':''}}">-</view>
+									<view class="listTd tdPadding {{filterItemHidden11? 'itemHidden':''}}">张赫</view>
+									<view class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">89.3万</view>
+								</view>
+							</block>
+						</scroll-view>
+
 						<view class="extends listFiexd" bindtap="tapExtend" catchtouchmove="doNothing">
 							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
 						</view>
-						<block wx:for="{{list}}">
-							<view class="listTr">
-								<view style="font-size: 28rpx;font-weight: 600;width: 218rpx;" class="listTd tdPadding shadow listFiexd">
-									<view>
-										<view>{{item.name}}</view>
-										<maoyanSign wx:for="{{data.maoyanSignLabel||[]}}" signContent="{{item}}">{{item}}</maoyanSign>
-									</view>
-								</view>
-								<view class="listTd tdPadding vheight {{filterItemHidden1? 'itemHidden':''}}" >
-									<view>
-										<view>{{item.name}}</view>
-										<text>（国庆档）</text>
-										<scheduleType signContent="已定档"></scheduleType>
-									</view>
-								</view>
-								<view class="listTd tdPadding {{filterItemHidden2? 'itemHidden':''}}">5000.5万</view>
-								<view class="listTd tdPadding {{filterItemHidden3? 'itemHidden':''}}">1.5亿</view>
-								<view class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">8.4</view>
-								<view class="listTd tdPadding {{filterItemHidden5? 'itemHidden':''}}">北京光线传媒有限公司</view>
-								<view class="listTd tdPadding {{filterItemHidden6? 'itemHidden':''}}">华纳兄弟娱乐公司</view>
-								<view class="listTd tdPadding {{filterItemHidden7? 'itemHidden':''}}">{{item.movieType}}</view>
-								<view class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">张艺谋</view>
-								<view class="listTd tdPadding {{filterItemHidden9? 'itemHidden':''}}">筹备</view>
-								<view class="listTd tdPadding {{filterItemHidden10? 'itemHidden':''}}">-</view>
-								<view class="listTd tdPadding {{filterItemHidden11? 'itemHidden':''}}">张赫</view>
-								<view class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">89.3万</view>
-							</view>
-						</block>
-            <view style="height:3000px"></view>
-					</scroll-view>
+					</view>
 				</view>
 			</view>
-		</view>
-	</scroll-view>
-</view>
+		</scroll-view>
+	</view>
 
-<view class="customListItem">
-	<costumListItem bind:myevent="ongetCostom" costomShow="{{costomShow}}"></costumListItem>
+	<view class="customListItem">
+		<costumListItem bind:myevent="ongetCostom" costomShow="{{costomShow}}"></costumListItem>
+	</view>
 </view>
-<!-- </view> -->
 
 <!-- 无权限页面 -->
-<!-- <view wx:if="{{!curPagePermission}}">
+<view wx:if="{{!curPagePermission}}">
 	<view class="no-access">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
 			<view class="header-inner" style='line-height:{{titleHeight - barHeight}}px;padding-top:{{barHeight}}px;'>
@@ -118,4 +127,4 @@
 		<view class="content">申请开通请联系zhiduoxing@maoyan.com</view>
 		<view class="btn" bindtap="copyMail">复制邮箱</view>
 	</view>
-</view> -->
+</view>

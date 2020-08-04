@@ -184,6 +184,8 @@ page {
 }
 .list .listTable {
   width: 100%;
+  position: relative;
+  padding-left: 218rpx;
 }
 .list .listTable .tdPadding {
   padding: 20rpx 0;
@@ -192,18 +194,47 @@ page {
   display: flex;
   min-height: 70rpx;
 }
-.list .listTable .listTr view:nth-child(2){
-  margin-left: 218rpx
-}
-.list .listTable .listTr .listTd {
-  min-width: 175rpx;
-  min-height: 70rpx;
+.list .listTable .table-left .listTr .listTd {
+  width: 218rpx;
+  height: 70rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding-left: 30rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+.list .listTable .table-left .listTr:nth-child(odd) .listTd{
+  background:rgba(247,247,247,1);
+  /* border: 1px solid red; */
+}
+.list .listTable .table-left .listTr:nth-child(even) .listTd{
+  background:rgba(255,255,255,1);
+  /* border: 1px solid red; */
+}
+.list .listTable .table-right .listTr:nth-child(1) .listTd{
+  min-width: 175rpx;
+  height: 70rpx;
+  padding-left: 30rpx;
+  line-height: 70rpx;
   background:rgba(247,247,247,1);
   box-sizing: border-box;
+}
+.list .listTable .table-right .listTr:not(:first-child) .listTd{
+  min-width: 175rpx;
+  height: 160rpx;
+  display: flex; 
+  flex-direction: row;
+  align-items: center; 
+  padding-left: 30rpx;
+  box-sizing: border-box;
+}
+.list .listTable .table-right .listTr:nth-child(odd) .listTd{
+  background:rgba(247,247,247,1);
+}
+.list .listTable .table-right .listTr:nth-child(even) .listTd{
+  background:rgba(255,255,255,1);
 }
 .list .listTable .listTr .shadow {
   box-shadow: 14rpx 0 12rpx -6rpx rgba(153,153,153,0.1);
@@ -233,4 +264,10 @@ page {
   width: 0;
   height: 0;
   color: transparent;
+}
+
+.listTable .table-left{
+  position: absolute;
+  left: 0;
+  top: 0;
 }
