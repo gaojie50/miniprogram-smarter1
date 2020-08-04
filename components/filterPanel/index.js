@@ -1,4 +1,3 @@
-
 Component({
   properties: {
     filterShow: {
@@ -7,8 +6,7 @@ Component({
     }
   },
   data: {
-    companyList: [
-      {
+    companyList: [{
         name: "北京猫眼",
         pcId: 1231
       },
@@ -34,13 +32,45 @@ Component({
     cost: [],
     cooperStatus: [],
     pcId: [],
-    company: {}
+    company: {},
+    dateSet: [{
+        label: "未来30天",
+        checked: "",
+        value: 30,
+      },
+      {
+        label: "未来90天",
+        checked: "",
+        value: 90,
+      },
+      {
+        label: "未来1年",
+        checked: "checked",
+        value: 365,
+      },
+      {
+        label: "自定义",
+        checked: "",
+        value: 'custom',
+      },
+    ]
   },
-  methods:{
-    tapEstimateBox:function(e){
-      console.log(e);
+  methods: {
+    dateSelectEvent: function (e) {
+      const { value } = e.target.dataset;
+      const { dateSet } = this.data;
+
+      if(dateSet.some(item => item.value == value && item.checked=="checked" )) return;
+
+      this.setData({
+        dateSet:dateSet.map(item =>{
+          item.checked = '';
+          if(item.value == value) item.checked = "checked";
+          return item;
+        })
+      })
     },
-    tapEstimateBox: function (e){
+    tapEstimateBox: function (e) {
       const num = e.target.dataset.num;
       const estimateBoxActiveWrap = this.data;
       estimateBoxActiveWrap[`estimateBoxActive${num}`] = !estimateBoxActiveWrap[`estimateBoxActive${num}`];
@@ -48,7 +78,7 @@ Component({
         ...estimateBoxActiveWrap
       })
     },
-    tapProjectStatus: function (e){
+    tapProjectStatus: function (e) {
       const num = e.target.dataset.num;
       const projectStatusActiveWrap = this.data;
       projectStatusActiveWrap[`projectStatusActive${num}`] = !projectStatusActiveWrap[`projectStatusActive${num}`];
@@ -56,7 +86,7 @@ Component({
         ...projectStatusActiveWrap
       })
     },
-    tapCost: function (e){
+    tapCost: function (e) {
       const num = e.target.dataset.num;
       const costWrap = this.data;
       costWrap[`cost${num}`] = !costWrap[`cost${num}`];
@@ -64,7 +94,7 @@ Component({
         ...costWrap
       })
     },
-    tapCooper: function (e){
+    tapCooper: function (e) {
       const num = e.target.dataset.num;
       const cooperWrap = this.data;
       cooperWrap[`cooper${num}`] = !cooperWrap[`cooper${num}`];
@@ -72,19 +102,21 @@ Component({
         ...cooperWrap
       })
     },
-    tapCompany: function(e){
+    tapCompany: function (e) {
       const num = e.target.dataset.num;
-      const { companyList } = this.data;
+      const {
+        companyList
+      } = this.data;
       const dataList = this.data;
-      if(JSON.stringify(dataList.company) == "{}"){
-        for(let m=0;m < companyList.length; m++){
+      if (JSON.stringify(dataList.company) == "{}") {
+        for (let m = 0; m < companyList.length; m++) {
           dataList.company[m] = ''
         }
       }
-      if(num != null){
-        if(dataList.company[num] == ''){
+      if (num != null) {
+        if (dataList.company[num] == '') {
           dataList.company[num] = 'active';
-        }else{
+        } else {
           dataList.company[num] = '';
         }
       }
@@ -92,205 +124,233 @@ Component({
         ...dataList
       })
     },
-    filterReset: function (){
-      const { filterShow } = this.data;
+    filterReset: function () {
+      const {
+        filterShow
+      } = this.data;
       const allData = this.data;
-       if(filterShow == '1'){
-         for(let i=1; i<7; i++){
+      if (filterShow == '1') {
+        for (let i = 1; i < 7; i++) {
           allData[`estimateBoxActive${i}`] = false;
-         }
-       } else if(filterShow == '2') {
-        for(let i=1; i<8; i++){
+        }
+      } else if (filterShow == '2') {
+        for (let i = 1; i < 8; i++) {
           allData[`projectStatusActive${i}`] = false;
         }
-       }else if(filterShow == '3'){
-          const { companyList } = this.data;
-          const dataList = this.data;
-          if(companyList.length > 6){
-            for(let j=1; j < companyList.length; j++){
-              dataList[`cost${j}`] = false;
-              dataList[`cooper${j}`] = false;
-              dataList.company[j-1] = '';
-            }
-          }else{
-            for(let j=1; j < 7; j++){
-              dataList[`cost${j}`] = false;
-              dataList[`cooper${j}`] = false;
-              dataList.company[j-1] = '';
-            }
+      } else if (filterShow == '3') {
+        const {
+          companyList
+        } = this.data;
+        const dataList = this.data;
+        if (companyList.length > 6) {
+          for (let j = 1; j < companyList.length; j++) {
+            dataList[`cost${j}`] = false;
+            dataList[`cooper${j}`] = false;
+            dataList.company[j - 1] = '';
           }
-          this.setData({
-            ...dataList
-          })
-       }
-       this.setData({
-         ...allData
-       })
-    },
-    filterDefined: function (){
-      const { filterShow } = this.data;
-      if(filterShow == 1){
-        for(let i = 1; i < 7; i++){
-          if(this.data[`estimateBoxActive${i}`] && this.data.dimension.indexOf(i) == -1){
-              this.data.dimension.push(i)
+        } else {
+          for (let j = 1; j < 7; j++) {
+            dataList[`cost${j}`] = false;
+            dataList[`cooper${j}`] = false;
+            dataList.company[j - 1] = '';
           }
         }
-        for(let j =0; j < 7; j++){
+        this.setData({
+          ...dataList
+        })
+      }
+      this.setData({
+        ...allData
+      })
+    },
+    filterDefined: function () {
+      const {
+        filterShow
+      } = this.data;
+      if (filterShow == 1) {
+        for (let i = 1; i < 7; i++) {
+          if (this.data[`estimateBoxActive${i}`] && this.data.dimension.indexOf(i) == -1) {
+            this.data.dimension.push(i)
+          }
+        }
+        for (let j = 0; j < 7; j++) {
           const index = this.data.dimension[0];
-          if(!this.data[`estimateBoxActive${index}`]){
+          if (!this.data[`estimateBoxActive${index}`]) {
             const i = this.data.dimension.indexOf(index);
-            if(i != -1){
+            if (i != -1) {
               this.data.dimension.splice(i, 1)
             }
           }
         }
-       const { dimension,projectStatus,cost,cooperStatus,pcId } = this.data;
-       const myEventDetail = {
-            dimension,
-            projectStatus,
-            cost,
-            cooperStatus,
-            pcId
-       }
+        const {
+          dimension,
+          projectStatus,
+          cost,
+          cooperStatus,
+          pcId
+        } = this.data;
+        const myEventDetail = {
+          dimension,
+          projectStatus,
+          cost,
+          cooperStatus,
+          pcId
+        }
         this.triggerEvent('myevent', myEventDetail)
-      }else if(filterShow == 2){
-        for(let i = 1; i < 8; i++){
-          if(this.data[`projectStatusActive${i}`] && this.data.projectStatus.indexOf(i) == -1){
+      } else if (filterShow == 2) {
+        for (let i = 1; i < 8; i++) {
+          if (this.data[`projectStatusActive${i}`] && this.data.projectStatus.indexOf(i) == -1) {
             this.data.projectStatus.push(i)
           }
         }
-        for(let j =0; j < 8; j++){
+        for (let j = 0; j < 8; j++) {
           const index = this.data.projectStatus[0];
-          if(!this.data[`projectStatusActive${index}`]){
+          if (!this.data[`projectStatusActive${index}`]) {
             const i = this.data.projectStatus.indexOf(index);
-            if(i != -1){
+            if (i != -1) {
               this.data.projectStatus.splice(i, 1)
             }
           }
         }
-        const { dimension,projectStatus,cost,cooperStatus,pcId } = this.data;
+        const {
+          dimension,
+          projectStatus,
+          cost,
+          cooperStatus,
+          pcId
+        } = this.data;
         const myEventDetail = {
-              dimension,
-              projectStatus,
-              cost,
-              cooperStatus,
-              pcId
+          dimension,
+          projectStatus,
+          cost,
+          cooperStatus,
+          pcId
         }
         this.triggerEvent('myevent', myEventDetail)
-      }else if(filterShow == 3){
-          const { companyList } = this.data;
-          if(companyList.length > 6){
-            for(let j=1; j < companyList.length; j++){
-              if(this.data[`cost${j}`] && this.data.cost.indexOf(j) == -1){
-                this.data.cost.push(j)
-              }
-              if(this.data[`cooper${j}`] && this.data.cooperStatus.indexOf(j) == -1){
-                this.data.cooperStatus.push(j)
-              }
-              if(this.data.company[j-1] == 'active'){
-                if(this.data.pcId.length != 0){
-                  let add = true;
-                  this.data.pcId.map(item => {
-                    if(item.pcId == companyList[j-1].pcId){
-                      add = false
-                    }
-                  })
-                  if(add){
-                    this.data.pcId.push(companyList[j-1])
+      } else if (filterShow == 3) {
+        const {
+          companyList
+        } = this.data;
+        if (companyList.length > 6) {
+          for (let j = 1; j < companyList.length; j++) {
+            if (this.data[`cost${j}`] && this.data.cost.indexOf(j) == -1) {
+              this.data.cost.push(j)
+            }
+            if (this.data[`cooper${j}`] && this.data.cooperStatus.indexOf(j) == -1) {
+              this.data.cooperStatus.push(j)
+            }
+            if (this.data.company[j - 1] == 'active') {
+              if (this.data.pcId.length != 0) {
+                let add = true;
+                this.data.pcId.map(item => {
+                  if (item.pcId == companyList[j - 1].pcId) {
+                    add = false
                   }
-                }else{
-                  this.data.pcId.push(companyList[j-1])
+                })
+                if (add) {
+                  this.data.pcId.push(companyList[j - 1])
                 }
-              }
-            }
-            for(let n =0; n < companyList.length; n++){
-              const index1 = this.data.cost[n];
-              const index2 = this.data.cooperStatus[n];
-              if(!this.data[`cost${index1}`]){
-                const i = this.data.cost.indexOf(index1);
-                if(i != -1){
-                  this.data.cost.splice(i, 1)
-                }
-              }
-              if(!this.data[`cooper${index2}`]){
-                const i = this.data.cooperStatus.indexOf(index2);
-                if(i != -1){
-                  this.data.cooperStatus.splice(i, 1)
-                }
-              }
-              if(this.data.company[n] != 'active'){
-                if(companyList[n] && this.data.pcId.length != 0 ){
-                  this.data.pcId.map((item, index) => {
-                    if(item.pcId == companyList[n].pcId){
-                      this.data.pcId.splice(index, 1)
-                    }
-                  })
-                }
-              }
-            }
-          }else{
-            const { companyList } = this.data;
-            for(let j=1; j < 7; j++){
-              if(this.data[`cost${j}`] && this.data.cost.indexOf(j) == -1){
-                this.data.cost.push(j)
-              }
-              if(this.data[`cooper${j}`] && this.data.cooperStatus.indexOf(j) == -1){
-                this.data.cooperStatus.push(j)
-              }
-              if(this.data.company[j-1] == 'active'){
-                if(this.data.pcId.length != 0){
-                  let add = true;
-                  this.data.pcId.map(item => {
-                    if(item.pcId == companyList[j-1].pcId){
-                      add = false
-                    }
-                  })
-                  if(add){
-                    this.data.pcId.push(companyList[j-1])
-                  }
-                }else{
-                  this.data.pcId.push(companyList[j-1])
-                }
-              }
-            }
-            for(let n =0; n < 7; n++){
-              const index1 = this.data.cost[0];
-              const index2 = this.data.cooperStatus[0];
-              if(!this.data[`cost${index1}`]){
-                const i = this.data.cost.indexOf(index1);
-                if(i != -1){
-                  this.data.cost.splice(i, 1)
-                }
-              }
-              if(!this.data[`cooper${index2}`]){
-                const i = this.data.cooperStatus.indexOf(index2);
-                if(i != -1){
-                  this.data.cooperStatus.splice(i, 1)
-                }
-              }
-              if(this.data.company[n] != 'active'){
-                if(companyList[n] && this.data.pcId.length != 0 ){
-                  this.data.pcId.map((item, index) => {
-                    if(item.pcId == companyList[n].pcId){
-                      this.data.pcId.splice(index, 1)
-                    }
-                  })
-                }
+              } else {
+                this.data.pcId.push(companyList[j - 1])
               }
             }
           }
-          const { dimension,projectStatus,cost,cooperStatus,pcId } = this.data;
-          const myEventDetail = {
-                dimension,
-                projectStatus,
-                cost,
-                cooperStatus,
-                pcId
+          for (let n = 0; n < companyList.length; n++) {
+            const index1 = this.data.cost[n];
+            const index2 = this.data.cooperStatus[n];
+            if (!this.data[`cost${index1}`]) {
+              const i = this.data.cost.indexOf(index1);
+              if (i != -1) {
+                this.data.cost.splice(i, 1)
+              }
+            }
+            if (!this.data[`cooper${index2}`]) {
+              const i = this.data.cooperStatus.indexOf(index2);
+              if (i != -1) {
+                this.data.cooperStatus.splice(i, 1)
+              }
+            }
+            if (this.data.company[n] != 'active') {
+              if (companyList[n] && this.data.pcId.length != 0) {
+                this.data.pcId.map((item, index) => {
+                  if (item.pcId == companyList[n].pcId) {
+                    this.data.pcId.splice(index, 1)
+                  }
+                })
+              }
+            }
           }
-          this.triggerEvent('myevent', myEventDetail)
+        } else {
+          const {
+            companyList
+          } = this.data;
+          for (let j = 1; j < 7; j++) {
+            if (this.data[`cost${j}`] && this.data.cost.indexOf(j) == -1) {
+              this.data.cost.push(j)
+            }
+            if (this.data[`cooper${j}`] && this.data.cooperStatus.indexOf(j) == -1) {
+              this.data.cooperStatus.push(j)
+            }
+            if (this.data.company[j - 1] == 'active') {
+              if (this.data.pcId.length != 0) {
+                let add = true;
+                this.data.pcId.map(item => {
+                  if (item.pcId == companyList[j - 1].pcId) {
+                    add = false
+                  }
+                })
+                if (add) {
+                  this.data.pcId.push(companyList[j - 1])
+                }
+              } else {
+                this.data.pcId.push(companyList[j - 1])
+              }
+            }
+          }
+          for (let n = 0; n < 7; n++) {
+            const index1 = this.data.cost[0];
+            const index2 = this.data.cooperStatus[0];
+            if (!this.data[`cost${index1}`]) {
+              const i = this.data.cost.indexOf(index1);
+              if (i != -1) {
+                this.data.cost.splice(i, 1)
+              }
+            }
+            if (!this.data[`cooper${index2}`]) {
+              const i = this.data.cooperStatus.indexOf(index2);
+              if (i != -1) {
+                this.data.cooperStatus.splice(i, 1)
+              }
+            }
+            if (this.data.company[n] != 'active') {
+              if (companyList[n] && this.data.pcId.length != 0) {
+                this.data.pcId.map((item, index) => {
+                  if (item.pcId == companyList[n].pcId) {
+                    this.data.pcId.splice(index, 1)
+                  }
+                })
+              }
+            }
+          }
+        }
+        const {
+          dimension,
+          projectStatus,
+          cost,
+          cooperStatus,
+          pcId
+        } = this.data;
+        const myEventDetail = {
+          dimension,
+          projectStatus,
+          cost,
+          cooperStatus,
+          pcId
+        }
+        this.triggerEvent('myevent', myEventDetail)
       }
     },
-    movieAdd: function (){
+    movieAdd: function () {
       wx.navigateTo({
         url: '/pages/searchCompany/index',
       })

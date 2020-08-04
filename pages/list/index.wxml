@@ -54,7 +54,7 @@
 									<view style="font-size: 28rpx;font-weight: 600;width: 218rpx;height: 160rpx" class="listTd tdPadding shadow">
 										<view>
 											<view>{{item.name}}</view>
-											<maoyanSign wx:for="{{data.maoyanSignLabel||[]}}" signContent="{{item}}">{{item}}</maoyanSign>
+											<maoyanSign wx:for="{{data.maoyanSignLabel||[]}}" wx:key="index" signContent="{{item}}">{{item}}</maoyanSign>
 										</view>
 									</view>
 								</view>

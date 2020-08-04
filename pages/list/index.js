@@ -1,8 +1,14 @@
 import utils from './../../utils/index';
 import projectConfig from '../../constant/project-config';
-const { getMaoyanSignLabel } = projectConfig;
+const {
+  getMaoyanSignLabel
+} = projectConfig;
 
-const { rpxTopx, formatReleaseDate } = utils;
+const {
+  rpxTopx,
+  formatReleaseDate,
+  getFutureTimePeriod,
+} = utils;
 const app = getApp();
 const {
   reqPacking,
@@ -15,36 +21,41 @@ Page({
     curPagePermission: false,
     filterActive: '',
     backdropShow: false,
-    costomShow: false, 
+    costomShow: false,
     barHeight,
     titleHeight: Math.floor(capsuleLocation.bottom + capsuleLocation.top - barHeight),
-    gapHeight:Math.floor(capsuleLocation.top - barHeight),
-    showIcon:false,
+    gapHeight: Math.floor(capsuleLocation.top - barHeight),
+    showIcon: false,
     dimension: [],
     projectStatus: [],
     cost: [],
     cooperStatus: [],
     pcId: [],
-    list:[],
-    filterItemHidden:[]
+    list: [],
+    filterItemHidden: [],
+    dateSelect: getFutureTimePeriod(),
   },
 
-  onLoad: function ({token}) {
-    if(token) wx.setStorageSync('token', token);
+  onLoad: function ({
+    token
+  }) {
+    if (token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
 
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', function (data) {
-      const { companyChecked } = data;
+      const {
+        companyChecked
+      } = data;
     })
 
     // 判断用户是否有权限
-    if(wx.getStorageSync('listPermission')){
+    if (wx.getStorageSync('listPermission')) {
       this.setData({
         curPagePermission: true,
       });
 
-      this._fetchData();
-    }else{
+      this._fetchData(this.data.dateSelect);
+    } else {
       reqPacking({
         url: '/api/user/authinfo',
       }, 'passport').then(({
@@ -63,59 +74,60 @@ Page({
             this.setData({
               curPagePermission: true,
             })
-            this._fetchData();
+            this._fetchData(this.data.dateSelect);
           }
         }
       })
     }
 
     //获取上映时间的高度
-    var obj=wx.createSelectorQuery();
+    var obj = wx.createSelectorQuery();
     obj.select('.vheight').boundingClientRect();
     obj.exec(function (rect) {
-        console.log(rect)
+      console.log(rect)
     });
   },
 
-  _fetchData:function(param={}){
+  _fetchData: function (param = {}) {
     reqPacking({
       url: '/api/management/list',
-      data: {
-        endDate: 1628006399999,
-        startDate: 1596470400000
-      },
-      method:'POST'
+      data: param,
+      method: 'POST'
     }).then(({
       success,
       data
     }) => {
       if (success && data && data.length > 0) {
-        
-        data.map(item =>{
-          
-          if(item.maoyanSign && item.maoyanSign.length>0){
-            item.maoyanSignLabel =  getMaoyanSignLabel(item.maoyanSign);
-           } 
-          if(item.releaseDate.startDate != null){
-            const formatStartDate = formatReleaseDate(item.releaseDate.startDate);
-            console.log(formatStartDate)
+
+        data.map(item => {
+
+          if (item.maoyanSign && item.maoyanSign.length > 0) {
+            item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
           }
-          if(item.releaseDate.endDate != null){
+          if (item.releaseDate.startDate != null) {
+            const formatStartDate = formatReleaseDate(item.releaseDate.startDate);
+
+          }
+          if (item.releaseDate.endDate != null) {
             const formatEndDate = formatReleaseDate(item.releaseDate.endDate);
-            console.log(formatEndDate)
+
           }
         })
-        return this.setData({ 
-          list: data 
+        return this.setData({
+          list: data
         })
       }
-      this.setData({ list: [] })
+      this.setData({
+        list: []
+      })
     })
   },
 
-  tapFilterItem: function (e){
+  tapFilterItem: function (e) {
     const num = e.target.dataset.num;
-    const { filterActive } = this.data;
+    const {
+      filterActive
+    } = this.data;
     if (num == filterActive) {
       this.setData({
         filterActive: '',
@@ -128,7 +140,7 @@ Page({
       })
     }
   },
-  tapDerictFilter: function (e){
+  tapDerictFilter: function (e) {
     const num = e.target.dataset.num;
     const derictFilterWrap = this.data;
     derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[`derictFilterActive${num}`];
@@ -136,7 +148,7 @@ Page({
       ...derictFilterWrap
     })
   },
-  tapExtend: function (){
+  tapExtend: function () {
     const dataList = this.data;
     dataList.backdropShow = true;
     dataList.costomShow = true;
@@ -144,27 +156,27 @@ Page({
       ...dataList
     })
   },
-  ongetCostom: function (e){
+  ongetCostom: function (e) {
     console.log(e.detail)
     const dataList = this.data;
     dataList.backdropShow = false;
     dataList.costomShow = false;
-    if(Array.isArray(e.detail)){
+    if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail;
       this.setData({
         ...dataList
-      },()=>{
+      }, () => {
         this.fetchFilterShow()
       })
-    }else{
+    } else {
       this.setData({
         ...dataList
       })
-    } 
+    }
   },
-  fetchFilterShow: function (){
+  fetchFilterShow: function () {
     const dataList = this.data;
-    for(let j=0; j<dataList.filterItemHidden.length; j++){
+    for (let j = 0; j < dataList.filterItemHidden.length; j++) {
       const num = dataList.filterItemHidden[j];
       dataList[`filterItemHidden${num}`] = true;
     }
@@ -172,7 +184,7 @@ Page({
       ...dataList
     })
   },
-  ongetFilterShow: function (e){
+  ongetFilterShow: function (e) {
     const dataList = this.data;
     dataList.backdropShow = false;
     dataList.filterActive = '';
@@ -183,8 +195,14 @@ Page({
     dataList.pcId = e.detail.pcId;
     this.setData({
       ...dataList,
-    },()=>{
-      const { dimension,projectStatus,cost,cooperStatus,pcId } = this.data;
+    }, () => {
+      const {
+        dimension,
+        projectStatus,
+        cost,
+        cooperStatus,
+        pcId
+      } = this.data;
       const param = {
         dimension,
         projectStatus,
@@ -197,22 +215,26 @@ Page({
   },
   scroll(e) {
     if (e.detail.scrollTop > rpxTopx(80)) {
-      this.setData({ showIcon:true })
+      this.setData({
+        showIcon: true
+      })
     } else {
-      this.setData({ showIcon:false })
+      this.setData({
+        showIcon: false
+      })
     }
 
   },
 
-  jumpToSearch(){
+  jumpToSearch() {
     wx.navigateTo({
-      url:'/pages/search/index'
+      url: '/pages/search/index'
     })
   },
 
-  copyMail(){
+  copyMail() {
     wx.setClipboardData({
-      data:'zhiduoxing@maoyan.com'
+      data: 'zhiduoxing@maoyan.com'
     })
   }
 })

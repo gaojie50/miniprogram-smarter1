@@ -154,10 +154,21 @@ const formatReleaseDate = (date) => {
 
 }
 
+const getFutureTimePeriod = (long = 365) =>{
+  const curDayBeginDate = new Date(new Date().setHours(0, 0, 0, 0));
+  const curDayEndDate = new Date(new Date().setHours(23,59,59,999));
+
+  return {
+    startDate: curDayBeginDate.setDate(curDayBeginDate.getDate() + 1),
+    endDate: curDayEndDate.setDate(curDayEndDate.getDate() + long),
+  } 
+}
+
 export default {
   errorHandle,
   throttle,
   rpxTopx,
   formatNumber,
-  formatReleaseDate
+  formatReleaseDate,
+  getFutureTimePeriod,
 }
