@@ -46,7 +46,7 @@
         </view>
         <view class="company">
           <block wx:for="{{companyList}}">
-            <view data-num="{{index}}" class="company-item `{{company? 'filterPanelActive':''}}`" bindtap="tapCompany">{{item.name}}</view>
+            <view data-num="{{index}}" class="company-item {{company[index]=='active' ? 'filterPanelActive':''}}" bindtap="tapCompany">{{item.name}}</view>
           </block>
         </view>
       </scroll-view>

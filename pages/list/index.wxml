@@ -71,7 +71,7 @@
 										<maoyanSign signContent="宣发"></maoyanSign>
 									</view>
 								</view>
-								<view class="listTd tdPadding" style="margin-left: 218rpx">
+								<view class="listTd tdPadding vheight" style="margin-left: 218rpx">
 									<view>
 										<view>{{item.name}}</view>
 										<view>（国庆档）</view>

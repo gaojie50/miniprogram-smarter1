@@ -185,7 +185,6 @@ page {
 .list .listTable {
   width: 100%;
 }
-
 .list .listTable .tdPadding {
   padding: 20rpx 0;
 }
@@ -212,6 +211,8 @@ page {
 }
 .extends {
   display: flex;
+  right: 0;
+  top: 300rpx;
   align-items: center;
   z-index: 15;
   width: 118rpx;

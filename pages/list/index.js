@@ -27,7 +27,7 @@ Page({
   },
 
   onLoad: function ({token}) {
-  
+
     if(token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
 
@@ -57,8 +57,12 @@ Page({
         }
       }
     })
-
-
+    //获取上映时间的高度
+    var obj=wx.createSelectorQuery();
+    obj.select('.vheight').boundingClientRect();
+    obj.exec(function (rect) {
+        console.log(rect)
+    });
   },
 
   _fetchData:function(param={}){
