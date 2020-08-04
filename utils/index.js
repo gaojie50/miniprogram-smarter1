@@ -1,8 +1,10 @@
+//错误处理
 const errorHandle = (err) => {
   console.warn(err);
   return err;
 };
 
+//防抖
 const throttle = function (func, wait, options) {
   let context, args, result;
   let timeout = null;
@@ -48,6 +50,7 @@ const throttle = function (func, wait, options) {
   };
 };
 
+
 const rpxTopx = function(rpx){
   return rpx / 750 * wx.getSystemInfoSync().windowWidth;
 };
@@ -56,6 +59,7 @@ const calcValue = (paramValue, digits) => {
   return Math.floor(paramValue * Math.pow(10, digits)) / Math.pow(10, digits);
 };
 
+//四舍五入
 const formatNumber = (value, sign) => {
   if (value === 0) {
     return {
@@ -136,9 +140,24 @@ const formatNumber = (value, sign) => {
   }
 };
 
+//上映时间处理
+const formatReleaseDate = (date) => {
+
+    const time = new Date(date);
+    var y = time.getFullYear();
+    var m = time.getMonth()+1;
+    var d = time.getDate();
+    var result = `${m}.${d}`;
+    return result
+  // const value = time.toLocaleString();
+  // const t = formatDate(1000083546565765)
+
+}
+
 export default {
   errorHandle,
   throttle,
   rpxTopx,
   formatNumber,
+  formatReleaseDate
 }

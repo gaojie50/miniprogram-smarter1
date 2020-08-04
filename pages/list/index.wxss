@@ -207,16 +207,45 @@ page {
   display: flex;
   min-height: 70rpx;
 }
-
-.list .listTable .listTr .listTd {
-  min-width: 175rpx;
-  min-height: 70rpx;
+.list .listTable .table-left .listTr .listTd {
+  width: 218rpx;
+  height: 70rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding-left: 30rpx;
-  background: rgba(247, 247, 247, 1);
+  font-size: 28rpx;
+  font-weight: 600;
   box-sizing: border-box;
+}
+.list .listTable .table-left .listTr:nth-child(odd) .listTd{
+  background:rgba(247,247,247,1);
+}
+.list .listTable .table-left .listTr:nth-child(even) .listTd{
+  background:rgba(255,255,255,1);
+}
+.list .listTable .table-right .listTr:nth-child(1) .listTd{
+  min-width: 175rpx;
+  height: 70rpx;
+  padding-left: 30rpx;
+  line-height: 70rpx;
+  background:rgba(247,247,247,1);
+  box-sizing: border-box;
+}
+.list .listTable .table-right .listTr:not(:first-child) .listTd{
+  min-width: 175rpx;
+  height: 160rpx;
+  display: flex; 
+  flex-direction: row;
+  align-items: center; 
+  padding-left: 30rpx;
+  box-sizing: border-box;
+}
+.list .listTable .table-right .listTr:nth-child(odd) .listTd{
+  background:rgba(247,247,247,1);
+}
+.list .listTable .table-right .listTr:nth-child(even) .listTd{
+  background:rgba(255,255,255,1);
 }
 
 .list .listTable .listTr .shadow {
@@ -244,7 +273,7 @@ page {
 }
 
 .itemHidden {
-  display: none !important;
+  display: none;
 }
 
 ::-webkit-scrollbar {
@@ -274,3 +303,4 @@ page {
   top: 90rpx;
   left: 0;
 }
+
