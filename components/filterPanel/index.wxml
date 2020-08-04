@@ -1,6 +1,10 @@
 <!-- 筛选弹出框 -->
 <view wx:if="{{filterShow.length!=0}}" class="{{filterShow.length!=0? 'filterPanelWrap':''}}">
   <view class="filterPanel">
+     <!-- 时间筛选 -->
+    <view class="estimateBox" wx:if="{{filterShow=='4'}}">
+      <view data-num="1" bindtap="tapEstimateBox" class="estimateBox-item {{estimateBoxActive1? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">未来30天</view>
+    </view>
     <!-- 预估票房 -->
     <view class="estimateBox" wx:if="{{filterShow=='1'}}">
       <view data-num="1" bindtap="tapEstimateBox" class="estimateBox-item {{estimateBoxActive1? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">10亿以上</view>
