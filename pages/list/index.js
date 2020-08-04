@@ -66,10 +66,6 @@ Page({
     obj.exec(function (rect) {
         console.log(rect)
     });
-
-    //获取maoyanSign
-    
- 
   },
 
   _fetchData:function(param={}){
@@ -85,11 +81,15 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
+        data.map(item =>{
+          if(item.maoyanSign && item.maoyanSign.length>0){
+            item.maoyanSignLabel =  getMaoyanSignLabel(item.maoyanSign);
+           } 
+        })
         return this.setData({ 
           list: data 
         })
       }
-  
       this.setData({ list: [] })
     })
   },

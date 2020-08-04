@@ -67,14 +67,13 @@
 								<view style="font-size: 28rpx;font-weight: 600;width: 218rpx;" class="listTd tdPadding shadow listFiexd">
 									<view>
 										<view>{{item.name}}</view>
-										<maoyanSign signContent="猫眼主出"></maoyanSign>
-										<maoyanSign signContent="宣发"></maoyanSign>
+										<maoyanSign wx:for="{{data.maoyanSignLabel||[]}}" signContent="{{item}}">{{item}}</maoyanSign>
 									</view>
 								</view>
 								<view class="listTd tdPadding vheight {{filterItemHidden1? 'itemHidden':''}}" >
 									<view>
 										<view>{{item.name}}</view>
-										<view>（国庆档）</view>
+										<text>（国庆档）</text>
 										<scheduleType signContent="已定档"></scheduleType>
 									</view>
 								</view>

@@ -226,7 +226,7 @@ page {
   position: fixed;
 }
 .itemHidden {
-  display: none !important;
+  display: none;
 }
 
 ::-webkit-scrollbar {
