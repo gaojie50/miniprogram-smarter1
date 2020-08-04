@@ -1,4 +1,6 @@
 import utils from './../../utils/index';
+import projectConfig from '../../constant/project-config';
+const { getMaoyanSignLabel } = projectConfig;
 
 const { rpxTopx } = utils;
 const app = getApp();
@@ -23,7 +25,8 @@ Page({
     cost: [],
     cooperStatus: [],
     pcId: [],
-    list:[]
+    list:[],
+    filterItemHidden:[]
   },
 
   onLoad: function ({token}) {
@@ -63,6 +66,10 @@ Page({
     obj.exec(function (rect) {
         console.log(rect)
     });
+
+    //获取maoyanSign
+    
+ 
   },
 
   _fetchData:function(param={}){
@@ -118,10 +125,30 @@ Page({
       ...dataList
     })
   },
-  ongetBackdropShow: function (e){
+  ongetCostom: function (e){
+    console.log(e.detail)
     const dataList = this.data;
     dataList.backdropShow = false;
     dataList.costomShow = false;
+    if(Array.isArray(e.detail)){
+      dataList.filterItemHidden = e.detail;
+      this.setData({
+        ...dataList
+      },()=>{
+        this.fetchFilterShow()
+      })
+    }else{
+      this.setData({
+        ...dataList
+      })
+    } 
+  },
+  fetchFilterShow: function (){
+    const dataList = this.data;
+    for(let j=0; j<dataList.filterItemHidden.length; j++){
+      const num = dataList.filterItemHidden[j];
+      dataList[`filterItemHidden${num}`] = true;
+    }
     this.setData({
       ...dataList
     })

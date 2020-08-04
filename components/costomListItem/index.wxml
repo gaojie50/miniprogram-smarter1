@@ -19,5 +19,5 @@
     <view data-num="11" bindtap="tapCostom" class="listWrapItem {{costom11? 'costomActive':''}}">跟进人</view>
     <view data-num="12" bindtap="tapCostom" class="listWrapItem {{costom12? 'costomActive':''}}">映前想看人数</view>
   </view>
-  <view class="confirm">确定</view>
+  <view bindtap="tapDefined" class="confirm">确定</view>
 </view>

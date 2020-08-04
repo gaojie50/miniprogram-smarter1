@@ -192,6 +192,9 @@ page {
   display: flex;
   min-height: 70rpx;
 }
+.list .listTable .listTr view:nth-child(2){
+  margin-left: 218rpx
+}
 .list .listTable .listTr .listTd {
   min-width: 175rpx;
   min-height: 70rpx;
@@ -221,6 +224,9 @@ page {
 }
 .listFiexd {
   position: fixed;
+}
+.itemHidden {
+  display: none !important;
 }
 
 ::-webkit-scrollbar {
