@@ -285,7 +285,6 @@ Component({
                 pcId
           }
           this.triggerEvent('myevent', myEventDetail)
-          console.log(myEventDetail)
       }
     },
     movieAdd: function (){

@@ -25,6 +25,17 @@ Component({
         backdropShow: false
       }
       this.triggerEvent('myevent', myEventDetail)
+    },
+    tapDefined: function (){
+      const costomList = [];
+      for(let i=1; i<13; i++){
+        if(this.data[`costom${i}`]){
+          costomList.push(i)
+        }
+      }
+      if(costomList.length < 9){
+        this.triggerEvent('myevent', costomList)
+      }
     }
   }
 })
