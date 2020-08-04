@@ -38,27 +38,37 @@ Page({
     })
 
     // 判断用户是否有权限
-    reqPacking({
-      url: '/api/user/authinfo',
-    }, 'passport').then(({
-      success,
-      data
-    }) => {
-      if (success) {
-        app.globalData.authinfo = data;
-        if (data &&
-          data.authIds &&
-          data.authIds.length > 0 &&
-          data.authIds.includes(95110)
-        ) {
-          //用户有权限
-          this.setData({
-            curPagePermission: true,
-          })
-          this._fetchData();
+    if(wx.getStorageSync('listPermission')){
+      this.setData({
+        curPagePermission: true,
+      });
+
+      this._fetchData();
+    }else{
+      reqPacking({
+        url: '/api/user/authinfo',
+      }, 'passport').then(({
+        success,
+        data
+      }) => {
+        if (success) {
+          app.globalData.authinfo = data;
+          if (data &&
+            data.authIds &&
+            data.authIds.length > 0 &&
+            data.authIds.includes(95110)
+          ) {
+            //用户有权限
+            wx.setStorageSync('listPermission', true);
+            this.setData({
+              curPagePermission: true,
+            })
+            this._fetchData();
+          }
         }
-      }
-    })
+      })
+    }
+
     //获取上映时间的高度
     var obj=wx.createSelectorQuery();
     obj.select('.vheight').boundingClientRect();
@@ -86,9 +96,13 @@ Page({
           if(item.maoyanSign && item.maoyanSign.length>0){
             item.maoyanSignLabel =  getMaoyanSignLabel(item.maoyanSign);
            } 
-          if(item.releaseDate.startDate != null || item.releaseDate.endDate != null){
-            const { formatStartDate, formatEndDate } = formatReleaseDate(item.releaseDate.startDate, null);
-            console.log(formatStartDate, formatEndDate)
+          if(item.releaseDate.startDate != null){
+            const formatStartDate = formatReleaseDate(item.releaseDate.startDate);
+            console.log(formatStartDate)
+          }
+          if(item.releaseDate.endDate != null){
+            const formatEndDate = formatReleaseDate(item.releaseDate.endDate);
+            console.log(formatEndDate)
           }
         })
         return this.setData({ 
