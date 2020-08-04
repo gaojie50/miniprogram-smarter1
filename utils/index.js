@@ -142,16 +142,14 @@ const formatNumber = (value, sign) => {
 
 //上映时间处理
 const formatReleaseDate = (date) => {
-
-    const time = new Date(date);
-    var y = time.getFullYear();
-    var m = time.getMonth()+1;
-    var d = time.getDate();
-    var result = `${m}.${d}`;
-    return result
-  // const value = time.toLocaleString();
-  // const t = formatDate(1000083546565765)
-
+  const time = new Date(date);
+  var y = time.getFullYear();
+  var m = time.getMonth()+1;
+  var d = time.getDate();
+  var result = `${m}.${d}`;
+  return result
+// const value = time.toLocaleString();
+// const t = formatDate(1000083546565765)
 }
 
 export default {

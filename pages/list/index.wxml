@@ -1,3 +1,4 @@
+
 <view wx:if="{{curPagePermission}}">
 	<view class="header">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
@@ -78,8 +79,11 @@
 								<view class="listTr">
 									<view class="listTd tdPadding vheight {{filterItemHidden1? 'itemHidden':''}}">
 										<view>
-											<view>{{111}}</view>
-											<text>（国庆档）</text>
+											<view>
+												<text>{{item.releaseDate.startDate}}</text>
+												<text>~{{item.releaseDate.endDate}}</text>
+											</view>
+											<text>{{item.alias}}</text>
 											<scheduleType signContent="已定档"></scheduleType>
 										</view>
 									</view>

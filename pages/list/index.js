@@ -98,11 +98,11 @@ Page({
            } 
           if(item.releaseDate.startDate != null){
             const formatStartDate = formatReleaseDate(item.releaseDate.startDate);
-            console.log(formatStartDate)
+            item.releaseDate.startDate = formatStartDate;
           }
           if(item.releaseDate.endDate != null){
             const formatEndDate = formatReleaseDate(item.releaseDate.endDate);
-            console.log(formatEndDate)
+            item.releaseDate.endDate = formatEndDate;
           }
         })
         return this.setData({ 
