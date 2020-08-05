@@ -103,24 +103,34 @@ Component({
   methods: {
     dateSelect: function (e) {
       const val = e.detail.value;
-      const {dateShowFirstActive} = this.data;
-      const timeStamp = new Date(`${years[val[0]]}-${months[val[1]]}-${days[val[2]]}`);
-
+      const {dateShowFirstActive,years,months,days,customEndDate,customStartDate} = this.data;
+      let timeStamp = +new Date(`${years[val[0]]}-${months[val[1]]}-${days[val[2]]}`);
+      let obj={};
       if(dateShowFirstActive){
-        return this.setData({
-          customStartDate:{
-            value:formartDate(timeStamp),
-            week:calcWeek(timeStamp),
-          }
-        })
+        //开始时间大于结束时间 
+        if(timeStamp > +new Date(customEndDate.value)){
+          timeStamp = +new Date(customEndDate.value);
+          obj.dateValue = dateValueCommon(customEndDate.value);
+        }
+        obj['customStartDate'] = {
+          value:formartDate(timeStamp),
+          week:calcWeek(timeStamp),
+        }
+
+        return this.setData(obj);
       }
 
-      this.setData({
-        customEndDate:{
-            value:formartDate(timeStamp),
-            week:calcWeek(timeStamp),
-          }
-      })
+      //结束时间小于开始时间
+      if(timeStamp < +new Date(customStartDate.value)){
+        timeStamp = +new Date(customStartDate.value);
+        obj.dateValue = dateValueCommon(customStartDate.value);
+      }
+      obj['customEndDate'] = {
+        value:formartDate(timeStamp),
+        week:calcWeek(timeStamp),
+      }
+
+      this.setData(obj);
     },
 
     switchDate:function(e){
