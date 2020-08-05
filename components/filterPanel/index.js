@@ -1,3 +1,19 @@
+const date = new Date()
+const years = []
+const months = []
+const days = []
+
+for (let i = 1990; i <= date.getFullYear(); i++) {
+  years.push(i)
+}
+
+for (let i = 1; i <= 12; i++) {
+  months.push(i)
+}
+
+for (let i = 1; i <= 31; i++) {
+  days.push(i)
+}
 Component({
   properties: {
     filterShow: {
@@ -36,9 +52,51 @@ Component({
         checked: "",
         value: 'custom',
       },
-    ]
+    ],
+    dimension: [],
+    projectStatus: [],
+    cost: [],
+    cooperStatus: [],
+    pcId: [],
+    company: {},
+    dateSet: [{
+        label: "未来30天",
+        checked: "",
+        value: 30,
+      },
+      {
+        label: "未来90天",
+        checked: "",
+        value: 90,
+      },
+      {
+        label: "未来1年",
+        checked: "checked",
+        value: 365,
+      },
+      {
+        label: "自定义",
+        checked: "",
+        value: 'custom',
+      },
+    ],
+    years: years,
+    year: date.getFullYear(),
+    months: months,
+    month: 2,
+    days: days,
+    day: 2,
+    value: [9999, 1, 1],
   },
   methods: {
+    bindChange: function (e) {
+      const val = e.detail.value
+      this.setData({
+        year: this.data.years[val[0]],
+        month: this.data.months[val[1]],
+        day: this.data.days[val[2]]
+      })
+    },
     dateSelectEvent: function (e) {
       const { value } = e.target.dataset;
       const { dateSet } = this.data;
@@ -138,7 +196,7 @@ Component({
             dataList.company[j - 1] = '';
           }
         }
-        
+
         this.setData({
           ...dataList
         })
@@ -220,7 +278,7 @@ Component({
           companyList
         } = this.data;
         if (companyList.length > 6) {
-          
+
           for (let j = 1; j < companyList.length; j++) {
             if (this.data[`cost${j}`] && this.data.cost.indexOf(j) == -1) {
               this.data.cost.push(j)
@@ -233,6 +291,7 @@ Component({
                 let add = true;
                 this.data.pcId.map(item => {
                   if (item.id == companyList[j - 1].id) {
+
                     add = false
                   }
                 })
@@ -263,6 +322,7 @@ Component({
               if (companyList[n] && this.data.pcId.length != 0) {
                 this.data.pcId.map((item, index) => {
                   if (item.id == companyList[n].id) {
+
                     this.data.pcId.splice(index, 1)
                   }
                 })
@@ -273,7 +333,7 @@ Component({
           const {
             companyList
           } = this.data;
-         
+
           for (let j = 1; j < 7; j++) {
             if (this.data[`cost${j}`] && this.data.cost.indexOf(j) == -1) {
               this.data.cost.push(j)
@@ -286,6 +346,7 @@ Component({
                 let add = true;
                 this.data.pcId.map(item => {
                   if (item.id == companyList[j - 1].id) {
+
                     add = false
                   }
                 })

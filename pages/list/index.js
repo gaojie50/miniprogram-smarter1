@@ -4,13 +4,7 @@ const {
   getMaoyanSignLabel
 } = projectConfig;
 
-
-const { rpxTopx, formatReleaseDate, formatNumber, formatDirector } = utils;
-
-const {
-  getFutureTimePeriod,
-} = utils;
-
+const { rpxTopx, formatReleaseDate, formatNumber, formatDirector ,getFutureTimePeriod} = utils;
 const app = getApp();
 const {
   reqPacking,
@@ -106,7 +100,7 @@ Page({
       this.setData({
         curPagePermission: true,
       });
-
+      this.fetchSchedule();
       this._fetchData(this.data.dateSelect);
     } else {
       reqPacking({
@@ -127,6 +121,7 @@ Page({
             this.setData({
               curPagePermission: true,
             })
+            this.fetchSchedule();
             this._fetchData(this.data.dateSelect);
           }
         }
@@ -140,9 +135,7 @@ Page({
       console.log(rect)
     });
   },
-
-  _fetchData: function (param = {}) {
-    console.log(param)
+  fetchSchedule: function (){
     reqPacking({
       url: '/api/applet/management/latestSchedule',
     }).then(({
@@ -155,6 +148,8 @@ Page({
         })
       }
     })
+  },
+  _fetchData: function (param = {}) {
     reqPacking({
       url: '/api/management/list',
       data: param,

@@ -197,7 +197,6 @@ const getFutureTimePeriod = (long = 365) =>{
   } 
 }
 
-
 export default {
   errorHandle,
   throttle,
