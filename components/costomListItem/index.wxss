@@ -37,6 +37,9 @@
   border-radius: 10rpx;
   border: 1rpx solid rgba(24,144,255,1);
 }
+.costomListItem .listWrap .listWrapItem:nth-child(3n){
+  margin-right: 0 !important;
+}
 .confirm {
   width: 689rpx;
   height: 80rpx;

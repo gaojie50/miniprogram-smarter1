@@ -141,18 +141,51 @@ const formatNumber = (value, sign) => {
 };
 
 //上映时间处理
-const formatReleaseDate = (date) => {
-
-    const time = new Date(date);
-    var y = time.getFullYear();
-    var m = time.getMonth()+1;
-    var d = time.getDate();
-    var result = `${m}.${d}`;
-    return result
-  // const value = time.toLocaleString();
-  // const t = formatDate(1000083546565765)
-
+const formatReleaseDate = date => {
+  if(date === null) {
+    return '-'
+  } else {
+    const formateDate = function (t){
+      const time = new Date(t);
+      const y = time.getFullYear();
+      const m = ("0" + (time.getMonth()+1)).slice(-2);
+      const d = ("0" + time.getDate()).slice(-2);
+      const result = `${m}.${d}`;
+      return result
+    }
+    if(date.startDate === null && date.endDate !==null){
+      const startDate = formateDate(date.startDate);
+      return startDate
+    }
+    if(date.endDate === null && date.startDate !==null){
+      const endDate = formateDate(date.endDate);
+      return endDate
+    }
+    if(date.endDate !== null && date.startDate !==null){
+      const startDate = formateDate(date.startDate);
+      const endDate = formateDate(date.endDate);
+      if(startDate === endDate){
+        return startDate
+      } else {
+        return `${startDate}~${endDate}`
+      }
+    }
+   
+  }
 }
+
+//处理导演顿号
+const formatDirector = director => {
+  if(director !== null){
+    let str = '';
+    for(let i=0; i<director.length; i++){
+      str = str + director[i] + '、';
+    }
+    const result = str.substring(0, str.length-1);
+    return result
+  }
+}
+
 
 const getFutureTimePeriod = (long = 365) =>{
   const curDayBeginDate = new Date(new Date().setHours(0, 0, 0, 0));
@@ -172,6 +205,7 @@ export default {
   rpxTopx,
   formatNumber,
   formatReleaseDate,
+  formatDirector,
   getFutureTimePeriod,
   calcWeek,
 }

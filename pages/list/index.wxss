@@ -208,7 +208,6 @@ page {
 }
 .list .listTable .table-left .listTr .listTd {
   width: 218rpx;
-  height: 70rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -224,7 +223,7 @@ page {
   background:rgba(255,255,255,1);
 }
 .list .listTable .table-right .listTr:nth-child(1) .listTd{
-  min-width: 175rpx;
+  min-width: 195rpx;
   height: 70rpx;
   padding-left: 30rpx;
   line-height: 70rpx;
@@ -232,13 +231,19 @@ page {
   box-sizing: border-box;
 }
 .list .listTable .table-right .listTr:not(:first-child) .listTd{
-  min-width: 175rpx;
+  min-width: 195rpx;
   height: 160rpx;
-  display: flex; 
+  display: inline-flex; 
   flex-direction: row;
   align-items: center; 
   padding-left: 30rpx;
   box-sizing: border-box;
+}
+.list .listTable .table-right .listTr:not(:first-child) .listTd:nth-child(5) text {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 3;
 }
 .list .listTable .table-right .listTr:nth-child(odd) .listTd{
   background:rgba(247,247,247,1);
@@ -272,7 +277,7 @@ page {
 }
 
 .itemHidden {
-  display: none;
+  display: none !important;
 }
 
 ::-webkit-scrollbar {

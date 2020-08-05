@@ -4,11 +4,7 @@ const {
   getMaoyanSignLabel
 } = projectConfig;
 
-const {
-  rpxTopx,
-  formatReleaseDate,
-  getFutureTimePeriod,
-} = utils;
+const { rpxTopx, formatReleaseDate, formatNumber, formatDirector ,getFutureTimePeriod} = utils;
 const app = getApp();
 const {
   reqPacking,
@@ -31,7 +27,52 @@ Page({
     cost: [],
     cooperStatus: [],
     pcId: [],
-    list: [],
+    list:[],
+    subList: [],
+    filterItemHidden:[],
+    latestSchedule: {},
+    companyList: [{
+      id: 1231,
+      name: "北京猫眼"
+      },
+      {
+        id: 1231,
+        name: "天津猫眼",
+      },
+      {
+        id: 1231,
+        name: "霍尔果斯猫眼",
+      },
+      {
+        id: 1231,
+        name: "阿里巴巴影业",
+      },
+      {
+        id: 1231,
+        name: "阿里巴巴（娱乐宝）",
+      }
+    ],
+    scheduleType: {
+      1: "已定档",
+      2: "非常确定",
+      3: "可能",
+      4: "内部建议",
+      5: "待定",
+    },
+    project: {
+      1: "筹备",
+      2: "拍摄",
+      3: "后期",
+      4: "待过审",
+      5: "已过审",
+    },
+    cooper: {
+      1: "评估中",
+      2: "跟进中",
+      3: "未合作",
+      4: "开发中",
+      5: "投资中",
+    },
     filterItemHidden: [],
     dateSelect: getFutureTimePeriod(),
   },
@@ -42,18 +83,24 @@ Page({
     if (token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
 
-    eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', function (data) {
+    eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => {
       const {
         companyChecked
       } = data;
+      if(companyChecked.length !== 0){
+        const newCompanyList = this.data.companyList.concat(companyChecked)
+        this.setData({
+          companyList: newCompanyList
+        })
+      }
     })
-
+    
     // 判断用户是否有权限
     if (wx.getStorageSync('listPermission')) {
       this.setData({
         curPagePermission: true,
       });
-
+      this.fetchSchedule();
       this._fetchData(this.data.dateSelect);
     } else {
       reqPacking({
@@ -74,6 +121,7 @@ Page({
             this.setData({
               curPagePermission: true,
             })
+            this.fetchSchedule();
             this._fetchData(this.data.dateSelect);
           }
         }
@@ -87,7 +135,20 @@ Page({
       console.log(rect)
     });
   },
-
+  fetchSchedule: function (){
+    reqPacking({
+      url: '/api/applet/management/latestSchedule',
+    }).then(({
+      success,
+      data
+    }) => {
+      if (success && data) {
+        this.setData({
+          latestSchedule: data
+        })
+      }
+    })
+  },
   _fetchData: function (param = {}) {
     reqPacking({
       url: '/api/management/list',
@@ -98,31 +159,26 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
-
         data.map(item => {
-
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
           }
-          if (item.releaseDate.startDate != null) {
-            const formatStartDate = formatReleaseDate(item.releaseDate.startDate);
-
-          }
-          if (item.releaseDate.endDate != null) {
-            const formatEndDate = formatReleaseDate(item.releaseDate.endDate);
-
-          }
+          item.releaseDate = formatReleaseDate(item.releaseDate);
+          item.estimateBox2 = formatNumber(item.estimateBox);
+          item.director = formatDirector(item.director);
+          item.movieType = item.movieType.replace(/,/g,'/');
         })
         return this.setData({
-          list: data
+          list: data,
+          subList: data
         })
       }
       this.setData({
-        list: []
+        list: [],
+        subList: []
       })
     })
   },
-
   tapFilterItem: function (e) {
     const num = e.target.dataset.num;
     const {
@@ -142,11 +198,97 @@ Page({
   },
   tapDerictFilter: function (e) {
     const num = e.target.dataset.num;
-    const derictFilterWrap = this.data;
+    const  derictFilterWrap  = this.data;
+    const { list, subList, latestSchedule } = this.data;
+    const newDataList = [];
     derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[`derictFilterActive${num}`];
     this.setData({
       ...derictFilterWrap
     })
+    const { derictFilterActive1,derictFilterActive2,derictFilterActive3,derictFilterActive4 } = this.data;
+    if(num == 1 || num == 2){
+      
+      const mapList = (arr, mapNum) => {
+        if(mapNum === 1){
+          arr.map(item => {
+            if(item.company.indexOf(1) !== -1){
+              newDataList.push(item)
+            }
+          })
+          this.setData({
+            list: newDataList,
+          })
+        }
+        if(mapNum === 2){
+          arr.map(item => {
+            if(item.company.indexOf(2) !== -1){
+              newDataList.push(item)
+            }
+          })
+          this.setData({
+            list: newDataList,
+          })
+        }
+      }
+      if(num == 1 && derictFilterActive1){
+        mapList(list, 1)
+      }
+      if(num == 1 && !derictFilterActive1){
+        if(derictFilterActive2){
+          mapList(subList, 2)
+        }
+        if(!derictFilterActive2){
+          this.setData({
+            list: subList
+          })
+        }
+      }
+      if(num == 2 && derictFilterActive2){
+        mapList(list, 2)
+      }
+      if(num == 2 && !derictFilterActive2){
+        if(derictFilterActive1){
+          mapList(subList, 1)
+        }
+        if(!derictFilterActive1){
+          this.setData({
+            list: subList
+          })
+        }
+      }
+    }
+    if(num == 3) {
+      if(derictFilterActive3){
+        list.map(item => {
+          if(item.alias.indexOf(latestSchedule.name) !== -1){
+            newDataList.push(item)
+          }
+        })
+        this.setData({
+          list: newDataList
+        })
+      } else {
+        this.setData({
+          list: subList
+        })
+      }
+    }
+    if(num == 4){
+      if(derictFilterActive4){
+        list.map(item => {
+          if(item.estimateBox && item.estimateBox > 100000000){
+            newDataList.push(item)
+          }
+          this.setData({
+            list: newDataList
+          })
+        })
+      } else {
+        this.setData({
+          list: subList
+        })
+      }
+    }
   },
   tapExtend: function () {
     const dataList = this.data;
@@ -157,7 +299,6 @@ Page({
     })
   },
   ongetCostom: function (e) {
-    console.log(e.detail)
     const dataList = this.data;
     dataList.backdropShow = false;
     dataList.costomShow = false;
@@ -227,6 +368,15 @@ Page({
         pcId,
         ...dateSelect
       }
+
+      Object.keys(param).forEach(key => {
+        if(param[key].length === 0){
+          delete(param[key])
+        }
+        if(param[key] == 'pcId'){
+          param[key] = param[key].id
+        }
+      })
       this._fetchData(param);
     })
   },
