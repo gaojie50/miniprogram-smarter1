@@ -196,7 +196,6 @@ page {
 .list .listTable {
   width: 100%;
   position: relative;
-  padding-left: 218rpx;
 }
 
 .list .listTable .tdPadding {
@@ -239,7 +238,12 @@ page {
   align-items: center; 
   padding-left: 30rpx;
   box-sizing: border-box;
+}
+.list .listTable .table-right .listTr:not(:first-child) .listTd:nth-child(5) text {
+  display: -webkit-box;
   overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 3;
 }
 .list .listTable .table-right .listTr:nth-child(odd) .listTd{
   background:rgba(247,247,247,1);
@@ -286,6 +290,10 @@ page {
   position: absolute;
   left: 0;
   top: 0;
+}
+.listTable .table-right {
+  margin-left: 218rpx;
+  width: auto;
 }
 
 .filterPanel {

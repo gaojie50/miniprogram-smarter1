@@ -142,13 +142,38 @@ const formatNumber = (value, sign) => {
 
 //上映时间处理
 const formatReleaseDate = date => {
-  const time = new Date(date);
-  var y = time.getFullYear();
-  var m = ("0" + (time.getMonth()+1)).slice(-2);
-  var d = ("0" + time.getDate()).slice(-2);
-  var result = `${m}.${d}`;
-  return result
+  if(date === null) {
+    return '-'
+  } else {
+    const formateDate = function (t){
+      const time = new Date(t);
+      const y = time.getFullYear();
+      const m = ("0" + (time.getMonth()+1)).slice(-2);
+      const d = ("0" + time.getDate()).slice(-2);
+      const result = `${m}.${d}`;
+      return result
+    }
+    if(date.startDate === null && date.endDate !==null){
+      const startDate = formateDate(date.startDate);
+      return startDate
+    }
+    if(date.endDate === null && date.startDate !==null){
+      const endDate = formateDate(date.endDate);
+      return endDate
+    }
+    if(date.endDate !== null && date.startDate !==null){
+      const startDate = formateDate(date.startDate);
+      const endDate = formateDate(date.endDate);
+      if(startDate === endDate){
+        return startDate
+      } else {
+        return `${startDate}~${endDate}`
+      }
+    }
+   
+  }
 }
+
 //处理导演顿号
 const formatDirector = director => {
   if(director !== null){
@@ -162,11 +187,23 @@ const formatDirector = director => {
 }
 
 
+const getFutureTimePeriod = (long = 365) =>{
+  const curDayBeginDate = new Date(new Date().setHours(0, 0, 0, 0));
+  const curDayEndDate = new Date(new Date().setHours(23,59,59,999));
+
+  return {
+    startDate: curDayBeginDate.setDate(curDayBeginDate.getDate() + 1),
+    endDate: curDayEndDate.setDate(curDayEndDate.getDate() + long),
+  } 
+}
+
+
 export default {
   errorHandle,
   throttle,
   rpxTopx,
   formatNumber,
   formatReleaseDate,
-  formatDirector
+  formatDirector,
+  getFutureTimePeriod,
 }
