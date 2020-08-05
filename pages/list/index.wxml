@@ -1,6 +1,3 @@
-const scheduleType = {
-	1: "已定档"
-}
 <view wx:if="{{curPagePermission}}">
 	<view class="header">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
@@ -38,12 +35,12 @@ const scheduleType = {
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<backdrop wx:if="{{backdropShow}}" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
-						<filterPanel wx:if="{{filterActive!=''}}" class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
+						<filterPanel wx:if="{{filterActive!=''}}" class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}" companyList="{{companyList}}"></filterPanel>
 					</view>
 					<view class="listDerict">
 						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
 						<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">只看阿里参与</view>
-						<view wx:if="{{latestSchedule.length !==0}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.length==0?'':latestSchedule[0].name}}</view>
+						<view wx:if="{{latestSchedule.length !==0}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.name}}</view>
 						<view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
 					</view>
 					<view class="listTable">
@@ -83,7 +80,6 @@ const scheduleType = {
 										<view>
 											<view>
 												<text>{{item.releaseDate}}</text>
-												<!-- <text>~{{item.releaseDate.endDate}}</text> -->
 											</view>
 											<text>{{item.alias[0]}}</text>
 											<scheduleType signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
@@ -94,7 +90,7 @@ const scheduleType = {
 										<text wx:if="{{item.cost!==null}}">{{item.cost}}万</text>
 									</view>
 									<view class="listTd tdPadding {{filterItemHidden3? 'itemHidden':''}}">
-										<text>{{item.estimateBox.text}}</text>
+										<text>{{item.estimateBox2.text}}</text>
 									</view>
 									<view class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">{{item.estimateScore === null ? '-': item.estimateScore}}</view>
 									<view class="listTd tdPadding {{filterItemHidden5? 'itemHidden':''}}">

@@ -36,7 +36,28 @@ Page({
     list:[],
     subList: [],
     filterItemHidden:[],
-    latestSchedule: [],
+    latestSchedule: {},
+    companyList: [{
+      id: 1231,
+      name: "北京猫眼"
+      },
+      {
+        id: 1231,
+        name: "天津猫眼",
+      },
+      {
+        id: 1231,
+        name: "霍尔果斯猫眼",
+      },
+      {
+        id: 1231,
+        name: "阿里巴巴影业",
+      },
+      {
+        id: 1231,
+        name: "阿里巴巴（娱乐宝）",
+      }
+    ],
     scheduleType: {
       1: "已定档",
       2: "非常确定",
@@ -68,12 +89,19 @@ Page({
     if (token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
 
-    eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', function (data) {
+    eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => {
       const {
         companyChecked
       } = data;
+      console.log(companyChecked)
+      if(companyChecked.length !== 0){
+        const newCompanyList = this.data.companyList.concat(companyChecked)
+        this.setData({
+          companyList: newCompanyList
+        })
+      }
     })
-
+    
     // 判断用户是否有权限
     if (wx.getStorageSync('listPermission')) {
       this.setData({
@@ -115,14 +143,14 @@ Page({
   },
 
   _fetchData: function (param = {}) {
+    console.log(param)
     reqPacking({
       url: '/api/applet/management/latestSchedule',
     }).then(({
       success,
       data
     }) => {
-
-      if (success && data && data.length > 0) {
+      if (success && data) {
         this.setData({
           latestSchedule: data
         })
@@ -142,7 +170,7 @@ Page({
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
           }
           item.releaseDate = formatReleaseDate(item.releaseDate)
-          item.estimateBox = formatNumber(item.estimateBox);
+          item.estimateBox2 = formatNumber(item.estimateBox);
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
         })
@@ -178,30 +206,43 @@ Page({
   tapDerictFilter: function (e) {
     const num = e.target.dataset.num;
     const  derictFilterWrap  = this.data;
-    const { list, subList } = this.data;
+    const { list, subList, latestSchedule } = this.data;
     const newDataList = [];
     derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[`derictFilterActive${num}`];
     this.setData({
       ...derictFilterWrap
     })
+    const { derictFilterActive1,derictFilterActive2,derictFilterActive3,derictFilterActive4 } = this.data;
     if(num == 1 || num == 2){
-      const { derictFilterActive1,derictFilterActive2,derictFilterActive3,derictFilterActive4 } = this.data;
+      
+      const mapList = (arr, mapNum) => {
+        if(mapNum === 1){
+          arr.map(item => {
+            if(item.company.indexOf(1) !== -1){
+              newDataList.push(item)
+            }
+          })
+          this.setData({
+            list: newDataList,
+          })
+        }
+        if(mapNum === 2){
+          arr.map(item => {
+            if(item.company.indexOf(2) !== -1){
+              newDataList.push(item)
+            }
+          })
+          this.setData({
+            list: newDataList,
+          })
+        }
+      }
       if(num == 1 && derictFilterActive1){
-        list.map(item => {
-          if(item.company.indexOf(1) !== -1){
-            newDataList.push(item)
-          }
-        })
-        this.setData({
-          list: newDataList,
-          maoyanList: newDataList
-        })
+        mapList(list, 1)
       }
       if(num == 1 && !derictFilterActive1){
         if(derictFilterActive2){
-          this.setData({
-            list: this.data.aliList
-          })
+          mapList(subList, 2)
         }
         if(!derictFilterActive2){
           this.setData({
@@ -210,27 +251,49 @@ Page({
         }
       }
       if(num == 2 && derictFilterActive2){
-        list.map(item => {
-          if(item.company.indexOf(2) !== -1){
-            newDataList.push(item)
-          }
-        })
-        this.setData({
-          list: newDataList,
-          aliList: newDataList
-        })
+        mapList(list, 2)
       }
       if(num == 2 && !derictFilterActive2){
         if(derictFilterActive1){
-          this.setData({
-            list: this.data.maoyanList
-          })
+          mapList(subList, 1)
         }
         if(!derictFilterActive1){
           this.setData({
             list: subList
           })
         }
+      }
+    }
+    if(num == 3) {
+      if(derictFilterActive3){
+        list.map(item => {
+          if(item.alias.indexOf(latestSchedule.name) !== -1){
+            newDataList.push(item)
+          }
+        })
+        this.setData({
+          list: newDataList
+        })
+      } else {
+        this.setData({
+          list: subList
+        })
+      }
+    }
+    if(num == 4){
+      if(derictFilterActive4){
+        list.map(item => {
+          if(item.estimateBox && item.estimateBox > 100000000){
+            newDataList.push(item)
+          }
+          this.setData({
+            list: newDataList
+          })
+        })
+      } else {
+        this.setData({
+          list: subList
+        })
       }
     }
   },
@@ -270,6 +333,7 @@ Page({
     })
   },
   ongetFilterShow: function (e) {
+    console.log(e.detail)
     const dataList = this.data;
     dataList.backdropShow = false;
     dataList.filterActive = '';
@@ -303,6 +367,15 @@ Page({
         pcId,
         ...dateSelect
       }
+
+      Object.keys(param).forEach(key => {
+        if(param[key].length === 0){
+          delete(param[key])
+        }
+        if(param[key] == 'pcId'){
+          param[key] = param[key].id
+        }
+      })
       this._fetchData(param);
     })
   },

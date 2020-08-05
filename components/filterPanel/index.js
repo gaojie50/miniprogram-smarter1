@@ -3,30 +3,13 @@ Component({
     filterShow: {
       type: String,
       value: ''
+    },
+    companyList: {
+      type: Array,
+      value: []
     }
   },
   data: {
-    companyList: [{
-        name: "北京猫眼",
-        pcId: 1231
-      },
-      {
-        name: "天津猫眼",
-        pcId: 1232
-      },
-      {
-        name: "霍尔果斯猫眼",
-        pcId: 1233
-      },
-      {
-        name: "阿里巴巴影业",
-        pcId: 1234
-      },
-      {
-        name: "阿里巴巴（娱乐宝）",
-        pcId: 1235
-      }
-    ],
     dimension: [],
     projectStatus: [],
     cost: [],
@@ -236,6 +219,7 @@ Component({
           companyList
         } = this.data;
         if (companyList.length > 6) {
+          
           for (let j = 1; j < companyList.length; j++) {
             if (this.data[`cost${j}`] && this.data.cost.indexOf(j) == -1) {
               this.data.cost.push(j)
@@ -247,7 +231,7 @@ Component({
               if (this.data.pcId.length != 0) {
                 let add = true;
                 this.data.pcId.map(item => {
-                  if (item.pcId == companyList[j - 1].pcId) {
+                  if (item.id == companyList[j - 1].id) {
                     add = false
                   }
                 })
@@ -277,7 +261,7 @@ Component({
             if (this.data.company[n] != 'active') {
               if (companyList[n] && this.data.pcId.length != 0) {
                 this.data.pcId.map((item, index) => {
-                  if (item.pcId == companyList[n].pcId) {
+                  if (item.id == companyList[n].id) {
                     this.data.pcId.splice(index, 1)
                   }
                 })
@@ -288,6 +272,7 @@ Component({
           const {
             companyList
           } = this.data;
+         
           for (let j = 1; j < 7; j++) {
             if (this.data[`cost${j}`] && this.data.cost.indexOf(j) == -1) {
               this.data.cost.push(j)
@@ -299,7 +284,7 @@ Component({
               if (this.data.pcId.length != 0) {
                 let add = true;
                 this.data.pcId.map(item => {
-                  if (item.pcId == companyList[j - 1].pcId) {
+                  if (item.id == companyList[j - 1].id) {
                     add = false
                   }
                 })
@@ -329,7 +314,7 @@ Component({
             if (this.data.company[n] != 'active') {
               if (companyList[n] && this.data.pcId.length != 0) {
                 this.data.pcId.map((item, index) => {
-                  if (item.pcId == companyList[n].pcId) {
+                  if (item.id == companyList[n].id) {
                     this.data.pcId.splice(index, 1)
                   }
                 })
