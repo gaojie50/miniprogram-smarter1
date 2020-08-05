@@ -165,16 +165,16 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
+        console.log(this.data)
         data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
           }
-          item.releaseDate = formatReleaseDate(item.releaseDate)
+          item.releaseDate = formatReleaseDate(item.releaseDate);
           item.estimateBox2 = formatNumber(item.estimateBox);
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
         })
-
         return this.setData({
           list: data,
           subList: data
