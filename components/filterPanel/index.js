@@ -138,6 +138,7 @@ Component({
             dataList.company[j - 1] = '';
           }
         }
+        
         this.setData({
           ...dataList
         })

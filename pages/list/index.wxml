@@ -110,12 +110,12 @@
 									<view class="listTd tdPadding {{filterItemHidden7? 'itemHidden':''}}">{{item.movieType}}</view>
 									<view class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">{{item.director !== undefined?item.director:'-'}}</view>
 									<view class="listTd tdPadding {{filterItemHidden9? 'itemHidden':''}}">
-										<text wx:if="{{(item.projectStatus > 0)}}">{{projectStatus[item.projectStatus]}}</text>
+										<text wx:if="{{(item.projectStatus > 0)}}">{{project[item.projectStatus]}}</text>
 										<text wx:if="{{item.projectStatus == 0}}">-</text>
 										<text wx:if="{{item.projectStatus == null}}">-</text>
 									</view>
 									<view class="listTd tdPadding {{filterItemHidden10? 'itemHidden':''}}">
-										<text wx:if="item.cooperStatus != null">{{cooperStatus[item.cooperStatus]}}</text>
+										<text wx:if="item.cooperStatus != null">{{cooper[item.cooperStatus]}}</text>
 										<text wx:if="item.cooperStatus == 0">-</text>
 									</view>
 									<view class="listTd tdPadding {{filterItemHidden11? 'itemHidden':''}}">

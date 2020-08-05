@@ -65,14 +65,14 @@ Page({
       4: "内部建议",
       5: "待定",
     },
-    projectStatus: {
+    project: {
       1: "筹备",
       2: "拍摄",
       3: "后期",
       4: "待过审",
       5: "已过审",
     },
-    cooperStatus: {
+    cooper: {
       1: "评估中",
       2: "跟进中",
       3: "未合作",
@@ -93,7 +93,6 @@ Page({
       const {
         companyChecked
       } = data;
-      console.log(companyChecked)
       if(companyChecked.length !== 0){
         const newCompanyList = this.data.companyList.concat(companyChecked)
         this.setData({
@@ -165,7 +164,6 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
-        console.log(this.data)
         data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
@@ -333,7 +331,6 @@ Page({
     })
   },
   ongetFilterShow: function (e) {
-    console.log(e.detail)
     const dataList = this.data;
     dataList.backdropShow = false;
     dataList.filterActive = '';
