@@ -186,6 +186,7 @@ Page({
   },
   ongetFilterShow: function (e) {
     const dataList = this.data;
+    const {customStartDate,customEndDate,} = e.detail;
     dataList.backdropShow = false;
     dataList.filterActive = '';
     dataList.dimension = e.detail.dimension;
@@ -193,10 +194,18 @@ Page({
     dataList.cost = e.detail.cost;
     dataList.cooperStatus = e.detail.cooperStatus;
     dataList.pcId = e.detail.pcId;
+    dataList.customStartDate = customStartDate;
+    dataList.customEndDate = customEndDate;
     const dateValue = e.detail.dateSet.filter(item=> item.checked=='checked')[0].value;
     
     if(e.detail.dateSet.filter(item=> item.checked=='checked')[0].value != 'custom'){
       dataList.dateSelect = getFutureTimePeriod(dateValue);
+    }else{
+      //时间为自定义
+      dataList.dateSelect ={
+        startDate: +new Date(new Date(customStartDate.value).setHours(0, 0, 0, 0)),
+        endDate: +new Date(new Date(customEndDate.value).setHours(23,59,59,999))
+      }
     }
 
     this.setData({

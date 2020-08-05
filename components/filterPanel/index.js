@@ -460,6 +460,8 @@ Component({
         cooperStatus,
         pcId,
         dateSet,
+        customStartDate,
+        customEndDate,
       } = this.data;
       this.triggerEvent('myevent', {
         dimension,
@@ -468,6 +470,8 @@ Component({
         cooperStatus,
         pcId,
         dateSet,
+        customStartDate,
+        customEndDate,
       })
 
     },
