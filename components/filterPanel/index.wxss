@@ -95,10 +95,6 @@
   box-sizing: border-box;
 }
 
-.filter {
-  /* border:1px solid red; */
-}
-
 .filter .title {
   font-weight: 600;
   color: rgba(51, 51, 51, 1);
@@ -223,7 +219,7 @@
 }
 
 .date-show .left .week {
-  float:left;
+  float: left;
 }
 
 .date-show .right .week {
@@ -237,7 +233,7 @@
   margin-top: 10rpx;
 }
 
-.date-show .active{
+.date-show .active {
   color: #1791FF;
 }
 
@@ -264,4 +260,6 @@
 .date-box {
   width: 100%;
   height: 336rpx;
+  position: relative;
+  left: -30rpx;
 }

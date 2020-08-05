@@ -5,5 +5,5 @@ Component({
       type: String,
       value: ''
     }
-  }
+  },
 })

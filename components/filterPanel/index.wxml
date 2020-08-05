@@ -20,15 +20,15 @@
 							<text class="week">周五</text>
 						</view>
 					</view>
-					<picker-view indicator-style="height: 50px;" value="{{value}}" bindchange="bindChange" class="date-box">
+					<picker-view indicator-style="height: 60rpx;" value="{{value}}" bindchange="bindChange" class="date-box">
 						<picker-view-column>
-							<view wx:for="{{years}}" style="line-height: 50px">{{item}}年</view>
+							<view wx:for="{{years}}" wx:key="{{item}}" style="line-height: 60rpx;text-align:right;">{{item}}年</view>
 						</picker-view-column>
 						<picker-view-column>
-							<view wx:for="{{months}}" style="line-height: 50px">{{item}}月</view>
+							<view wx:for="{{months}}" wx:key="{{item}}" style="line-height: 60rpx;text-align:center;">{{item}}月</view>
 						</picker-view-column>
 						<picker-view-column>
-							<view wx:for="{{days}}" style="line-height: 50px">{{item}}日</view>
+							<view wx:for="{{days}}" wx:key="{{item}}" style="line-height: 60rpx;text-align:left;">{{item}}日</view>
 						</picker-view-column>
 					</picker-view>
 				</view>
