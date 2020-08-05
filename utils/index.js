@@ -164,6 +164,8 @@ const getFutureTimePeriod = (long = 365) =>{
   } 
 }
 
+const calcWeek = timeStamp =>`周${['日', '一', '二', '三', '四', '五', '六'][new Date(timeStamp).getDay()]}`;
+
 export default {
   errorHandle,
   throttle,
@@ -171,4 +173,5 @@ export default {
   formatNumber,
   formatReleaseDate,
   getFutureTimePeriod,
+  calcWeek,
 }

@@ -10,25 +10,25 @@
 				</view>
 				<view wx:if="{{item.value == 'custom' && item.checked == 'checked'}}" class="custom-box">
 					<view class="date-show">
-						<view class="left active">
-							<view class="detail">2020.07.22</view>
-							<text class="week">周四</text>
+						<view class="left {{dateShowFirstActive ? 'active' : ''}}" data-sign="begin" bindtap="switchDate">
+							<view class="detail">{{customStartDate.value}}</view>
+							<text class="week">{{customStartDate.week}}</text>
 						</view>
 						<text>至</text>
-						<view class="right">
-							<view class="detail">2020.07.22</view>
-							<text class="week">周五</text>
+						<view class="right {{!dateShowFirstActive ? 'active' : ''}}" bindtap="switchDate">
+							<view class="detail">{{customEndDate.value}}</view>
+							<text class="week">{{customEndDate.week}}</text>
 						</view>
 					</view>
-					<picker-view indicator-style="height: 60rpx;" value="{{value}}" bindchange="bindChange" class="date-box">
+					<picker-view indicator-style="height: 60rpx;" value="{{dateValue}}" bindchange="dateSelect" class="date-box">
 						<picker-view-column>
-							<view wx:for="{{years}}" wx:key="{{item}}" style="line-height: 60rpx;text-align:right;">{{item}}年</view>
+							<view wx:for="{{years}}" wx:key="item" style="line-height: 60rpx;text-align:right;">{{item}}年</view>
 						</picker-view-column>
 						<picker-view-column>
-							<view wx:for="{{months}}" wx:key="{{item}}" style="line-height: 60rpx;text-align:center;">{{item}}月</view>
+							<view wx:for="{{months}}" wx:key="item" style="line-height: 60rpx;text-align:center;">{{item}}月</view>
 						</picker-view-column>
 						<picker-view-column>
-							<view wx:for="{{days}}" wx:key="{{item}}" style="line-height: 60rpx;text-align:left;">{{item}}日</view>
+							<view wx:for="{{days}}" wx:key="item" style="line-height: 60rpx;text-align:left;">{{item}}日</view>
 						</picker-view-column>
 					</picker-view>
 				</view>

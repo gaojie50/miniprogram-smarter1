@@ -1,19 +1,34 @@
-const date = new Date()
-const years = []
-const months = []
-const days = []
+import utils from "./../../utils/index";
 
-for (let i = 1990; i <= date.getFullYear(); i++) {
-  years.push(i)
+const {getFutureTimePeriod,calcWeek,} = utils;
+const  defaultCustomDate = getFutureTimePeriod();
+const date = new Date();
+let years = [];
+let months = [];
+let days = [];
+
+function formartDate(stamp){
+  const dateObj = new Date(stamp);
+  const yearStr = dateObj.getFullYear();
+  const monthInner = dateObj.getMonth()+1;
+  const dayInner = dateObj.getDate();
+  const monthStr = monthInner < 10 ? `0${monthInner}` : monthInner;
+  const dayStr = dayInner< 10 ? `0${dayInner}`: dayInner;
+
+  return `${yearStr}.${monthStr}.${dayStr}`;
 }
 
-for (let i = 1; i <= 12; i++) {
-  months.push(i)
+function dateValueCommon(timeStamp){
+  return [
+    years.indexOf(new Date(timeStamp).getFullYear()), 
+    months.indexOf(new Date(timeStamp).getMonth()+1), 
+    days.indexOf(new Date(timeStamp).getDate()),
+  ]
 }
 
-for (let i = 1; i <= 31; i++) {
-  days.push(i)
-}
+for (let i = 2019; i <= date.getFullYear()+30; i++) years.push(i);
+for (let i = 1; i <= 12; i++) months.push(i);
+for (let i = 1; i <= 31; i++) days.push(i);
 
 Component({
   properties: {
@@ -71,23 +86,62 @@ Component({
         value: 'custom',
       },
     ],
-    years: years,
-    year: date.getFullYear(),
-    months: months,
-    month: 2,
-    days: days,
-    day: 2,
-    value: [9999, 1, 1],
+    years,
+    months,
+    days,
+    dateValue: dateValueCommon(defaultCustomDate.startDate),
+    customStartDate:{
+      value:formartDate(defaultCustomDate.startDate),
+      week:calcWeek(defaultCustomDate.startDate),
+    },
+    customEndDate:{
+      value:formartDate(defaultCustomDate.endDate),
+      week:calcWeek(defaultCustomDate.endDate),
+    },
+    dateShowFirstActive:true,
   },
   methods: {
-    bindChange: function (e) {
-      const val = e.detail.value
+    dateSelect: function (e) {
+      const val = e.detail.value;
+      const {dateShowFirstActive} = this.data;
+      const timeStamp = new Date(`${years[val[0]]}-${months[val[1]]}-${days[val[2]]}`);
+
+      if(dateShowFirstActive){
+        return this.setData({
+          customStartDate:{
+            value:formartDate(timeStamp),
+            week:calcWeek(timeStamp),
+          }
+        })
+      }
+
       this.setData({
-        year: this.data.years[val[0]],
-        month: this.data.months[val[1]],
-        day: this.data.days[val[2]]
+        customEndDate:{
+            value:formartDate(timeStamp),
+            week:calcWeek(timeStamp),
+          }
       })
     },
+
+    switchDate:function(e){
+      const {sign} = e.currentTarget.dataset;
+      const {dateShowFirstActive,customStartDate,customEndDate} = this.data;
+      
+      if((dateShowFirstActive && sign =="begin")||(!dateShowFirstActive && sign != "begin") ) return;
+
+      if(sign == 'begin'){
+        return this.setData({
+          dateShowFirstActive:true,
+          dateValue:dateValueCommon(customStartDate.value)
+        })
+      };
+
+      this.setData({ 
+        dateShowFirstActive:false,
+        dateValue:dateValueCommon(customEndDate.value)
+      });
+    },
+
     dateSelectEvent: function (e) {
       const { value } = e.target.dataset;
       const { dateSet } = this.data;

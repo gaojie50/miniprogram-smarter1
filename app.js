@@ -27,8 +27,6 @@ App({
         }
       }
     })
-
-    console.log('app launch');
   },
   globalData: {
     userInfo: null,
