@@ -75,6 +75,8 @@ Page({
     },
     filterItemHidden: [],
     dateSelect: getFutureTimePeriod(),
+    estimateBoxStr: '',
+    projectBoxStr: '',
   },
 
   onLoad: function ({
@@ -332,7 +334,8 @@ Page({
       cost,
       cooperStatus,
       pcId,
-      estimateBox
+      estimateBox,
+      projectBox,
      } = e.detail;
 
     const dateValue = e.detail.dateSet.filter(item=> item.checked=='checked')[0].value;
@@ -345,18 +348,25 @@ Page({
       let newStr = '';
       if(arr.length !== 0 ){
         arr.map((item, index) => {
-          newStr= newStr + item.value
+          if(item.active){
+            newStr= newStr + item.value + ',';
+          
+          }
         })
       }
+      return newStr
     }
-
+    const estimateBoxStr = formateFilterStr(estimateBox);
+    const projectBoxStr = formateFilterStr(projectBox);
+    
     this.setData({
       dimension,
       projectStatus,
       cost,
       cooperStatus,
       pcId,
-      estimateBox,
+      estimateBoxStr,
+      projectBoxStr,
       backdropShow: false,
       filterActive: ''
     }, () => {

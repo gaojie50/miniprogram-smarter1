@@ -23,11 +23,11 @@
 							<image src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<view class="listFilter-item">
-							<text data-num="1" class="listFilter-item-text {{filterActive==1 ? 'filterActive' : ''}}" bindtap="tapFilterItem">预估票房</text>
+							<text data-num="1" class="listFilter-item-text {{filterActive==1 ? 'filterActive' : ''}}" bindtap="tapFilterItem">{{estimateBoxStr === ''? '预估票房': estimateBoxStr}}</text>
 							<image src="../../static/{{filterActive==1 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<view class="listFilter-item">
-							<text data-num="2" class="listFilter-item-text {{filterActive==2 ? 'filterActive' : ''}}" bindtap="tapFilterItem">项目状态</text>
+							<text data-num="2" class="listFilter-item-text {{filterActive==2 ? 'filterActive' : ''}}" bindtap="tapFilterItem">{{projectBoxStr === ''? '项目状态': projectBoxStr}}</text>
 							<image src="../../static/{{filterActive==2 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<view class="listFilter-item">

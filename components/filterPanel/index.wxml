@@ -40,33 +40,18 @@
 		</view>
 		<!-- 项目状态 -->
 		<view class="projectStatus" wx:if="{{filterShow=='2'}}">
-			<view data-num="1" bindtap="tapProjectStatus" class="projectStatus-item {{projectStatusActive1? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">筹备</view>
-			<view data-num="2" bindtap="tapProjectStatus" class="projectStatus-item {{projectStatusActive2? 'filterPanelActive':''}}" style="margin-right: 20rpx">拍摄</view>
-			<view data-num="3" bindtap="tapProjectStatus" class="projectStatus-item {{projectStatusActive3? 'filterPanelActive':''}}" style="margin-right: 20rpx">后期</view>
-			<view data-num="4" bindtap="tapProjectStatus" class="projectStatus-item {{projectStatusActive4? 'filterPanelActive':''}}">待过审</view>
-			<view data-num="5" bindtap="tapProjectStatus" class="projectStatus-item {{projectStatusActive5? 'filterPanelActive':''}}" style="margin-right: 20rpx">已过审</view>
-			<view data-num="6" bindtap="tapProjectStatus" class="projectStatus-item {{projectStatusActive6? 'filterPanelActive':''}}" style="margin-right: 20rpx">已上映</view>
-			<view data-num="7" bindtap="tapProjectStatus" class="projectStatus-item {{projectStatusActive7? 'filterPanelActive':''}}">未知</view>
+			<view wx:for="{{projectBox}}" data-num="{{index}}" bindtap="tapProjectStatus" class="projectStatus-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
 		</view>
 		<!-- 筛选 -->
 		<view class="filter" wx:if="{{filterShow=='3'}}">
 			<scroll-view scroll-y="true" class="scroll-area" style="height: 887rpx">
 				<text class="title">制作成本</text>
 				<view class="cost-wrap">
-					<view data-num="1" bindtap="tapCost" class="cost-wrap-item {{cost1? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">8000万以上</view>
-					<view data-num="2" bindtap="tapCost" class="cost-wrap-item {{cost2? 'filterPanelActive':''}}" style="margin-right: 20rpx">5000万-8000万</view>
-					<view data-num="3" bindtap="tapCost" class="cost-wrap-item {{cost3? 'filterPanelActive':''}}">1000万-5000万</view>
-					<view data-num="4" bindtap="tapCost" class="cost-wrap-item {{cost4? 'filterPanelActive':''}}" style="margin-right: 20rpx">1000万以下</view>
-					<view data-num="5" bindtap="tapCost" class="cost-wrap-item {{cost5? 'filterPanelActive':''}}">未知</view>
+					<view wx:for="{{costBox}}" data-num="{{index}}" bindtap="tapCost" class="cost-wrap-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
 				</view>
 				<text class="title">合作状态</text>
 				<view class="cooper-wrap">
-					<view data-num="1" bindtap="tapCooper" class="cooper-wrap-item {{cooper1? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">评估中</view>
-					<view data-num="2" bindtap="tapCooper" class="cooper-wrap-item {{cooper2? 'filterPanelActive':''}}" style="margin-right: 20rpx">跟进中</view>
-					<view data-num="3" bindtap="tapCooper" class="cooper-wrap-item {{cooper3? 'filterPanelActive':''}}" style="margin-right: 20rpx">未合作</view>
-					<view data-num="4" bindtap="tapCooper" class="cooper-wrap-item {{cooper4? 'filterPanelActive':''}}">开发中</view>
-					<view data-num="5" bindtap="tapCooper" class="cooper-wrap-item {{cooper5? 'filterPanelActive':''}}" style="margin-right: 20rpx">投资中</view>
-					<view data-num="6" bindtap="tapCooper" class="cooper-wrap-item {{cooper6? 'filterPanelActive':''}}">未知</view>
+					<view wx:for="{{cooperBox}}" data-num="{{index}}" bindtap="tapCooper" class="cooper-wrap-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
 				</view>
 				<view class="last-title">
 					<text class="title">片方</text>

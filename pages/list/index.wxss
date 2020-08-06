@@ -159,6 +159,9 @@ page {
 
 .listFilter-item-text {
   margin-right: 8rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:ellipsis;
 }
 
 .list .listFilter image {
