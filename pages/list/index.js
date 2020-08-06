@@ -34,24 +34,12 @@ Page({
     filterItemHidden:[],
     latestSchedule: {},
     companyList: [{
-      id: 1231,
-      name: "北京猫眼"
+      id: 37786,
+      name: "上海猫眼影业有限公司"
       },
       {
-        id: 1232,
-        name: "天津猫眼",
-      },
-      {
-        id: 1233,
-        name: "霍尔果斯猫眼",
-      },
-      {
-        id: 1234,
-        name: "阿里巴巴影业",
-      },
-      {
-        id: 1235,
-        name: "阿里巴巴（娱乐宝）",
+        id: 1230,
+        name: "天津猫眼微影文化传媒有限公司",
       }
     ],
     scheduleType: {
@@ -93,6 +81,7 @@ Page({
       const {
         companyChecked
       } = data;
+      console.log(companyChecked)
       if(companyChecked.length !== 0){
         const newCompanyList = this.data.companyList.concat(companyChecked)
         this.setData({
@@ -376,7 +365,7 @@ Page({
       if(!arr) return ;
       let newStr = '';
       if(arr.length !== 0 ){
-        arr.map((item, index) => {
+        arr && arr.map((item, index) => {
           if(item.active){
             newStr= newStr + item.value + ',';
           
@@ -389,28 +378,31 @@ Page({
       const newCost = [];
       const newCooper = [];
       const newPcId = [];
-      cost.map(item => {
+      cost && cost.map(item => {
         if(item.active){
           newCost.push(item)
         }
       })
-      cooper.map(item => {
+      cooper && cooper.map(item => {
         if(item.active){
           newCooper.push(item)
         }
       })
-      Object.keys(company).forEach(item => {
-        if(company[item] === 'active') {
-          newPcId.push(pcId[item])
-        }
-      })
+      if(company){
+        Object.keys(company).forEach(item => {
+          if(company[item] === 'active') {
+            newPcId.push(pcId[item])
+          }
+        })
+      }
+      
       const result = newCost.length + newCooper.length + newPcId.length;
       return result
     }
     const estimateBoxStr = formateFilterStr(estimateBox);
     const projectBoxStr = formateFilterStr(projectBox);
     const lastFilterLength = formateFilterLength(costBox, cooperBox, company)
-    
+    console.log(lastFilterLength)
     this.setData({
       dimension,
       projectStatus,

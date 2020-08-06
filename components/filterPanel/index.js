@@ -320,9 +320,15 @@ Component({
         estimateBox.map(item => {
           item.active = false
         })
+        this.setData({
+          estimateBox
+        })
       } else if (filterShow == '2') {
         projectBox.map(item => {
           item.active = false
+        })
+        this.setData({
+          projectBox
         })
       } else if (filterShow == '3') {
         const dataList = this.data;
@@ -400,7 +406,6 @@ Component({
             cooperStatus.splice(i, 1)
           }
         })
-        // console.log(this.data)
         companyList.map((item, index) => {
           if(company[index] === 'active'){
             if (pcId.length !== 0) {
