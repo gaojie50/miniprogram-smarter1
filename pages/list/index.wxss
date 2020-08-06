@@ -158,12 +158,25 @@ page {
   align-items: center;
   justify-content: center;
 }
+.list .listFilter .listFilter-item text:nth-child(2){
+  margin-right: 10rpx;
+  border: 1px solid rgba(24,144,255,1);
+  border-radius: 28rpx;
+  width: 28rpx;
+  height: 28rpx;
+  text-align: center;
+  line-height: 28rpx;
+  color:rgba(24,144,255,1);
+  background:rgba(24,144,255,0.1);
+}
 
 .listFilter-item-text {
+  width: 104rpx;
   margin-right: 8rpx;
+  text-align: right;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
 }
 
 .list .listFilter image {

@@ -27,15 +27,16 @@
 							<image src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<view class="listFilter-item">
-							<text data-num="1" class="listFilter-item-text {{filterActive==1 ? 'filterActive' : ''}}" bindtap="tapFilterItem">{{estimateBoxStr === ''? '预估票房': estimateBoxStr}}</text>
+							<text data-num="1" class="listFilter-item-text {{(filterActive==1 || estimateBoxStr !== '') ? 'filterActive' : ''}}" bindtap="tapFilterItem">{{estimateBoxStr === ''? '预估票房': estimateBoxStr}}</text>
 							<image src="../../static/{{filterActive==1 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<view class="listFilter-item">
-							<text data-num="2" class="listFilter-item-text {{filterActive==2 ? 'filterActive' : ''}}" bindtap="tapFilterItem">{{projectBoxStr === ''? '项目状态': projectBoxStr}}</text>
+							<text data-num="2" class="listFilter-item-text {{(filterActive==2 || projectBoxStr !== '' )? 'filterActive' : ''}}" bindtap="tapFilterItem">{{projectBoxStr === ''? '项目状态': projectBoxStr}}</text>
 							<image src="../../static/{{filterActive==2 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<view class="listFilter-item">
-							<text data-num="3" class="listFilter-item-text {{filterActive==3 ? 'filterActive' : ''}}" bindtap="tapFilterItem">筛选</text>
+							<text data-num="3" class="listFilter-item-text {{(filterActive==3 || lastFilterLength > 0 ) ? 'filterActive' : ''}}" bindtap="tapFilterItem">筛选</text>
+							<text wx:if="{{lastFilterLength > 0}}">{{lastFilterLength}}</text>
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<backdrop wx:if="{{backdropShow}}" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
@@ -44,7 +45,7 @@
 					<view class="listDerict">
 						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
 						<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">只看阿里参与</view>
-						<view wx:if="{{latestSchedule.length !==0}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.name}}</view>
+						<view wx:if="{{latestSchedule.name}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.name}}</view>
 						<view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
 					</view>
 					<view wx:if="{{loading}}" class="list-loading">

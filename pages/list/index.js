@@ -18,7 +18,7 @@ Page({
     loading:true,
     curPagePermission: false,
     filterActive: '',
-    backdropShow: false,
+    backdropShow: '',
     costomShow: false,
     barHeight,
     titleHeight: Math.floor(capsuleLocation.bottom + capsuleLocation.top - barHeight),
@@ -79,6 +79,7 @@ Page({
     dateSelect: getFutureTimePeriod(),
     estimateBoxStr: '',
     projectBoxStr: '',
+    lastFilterLength: 0,
     dateText:'未来1年'
   },
 
@@ -201,12 +202,12 @@ Page({
     if (num == filterActive) {
       this.setData({
         filterActive: '',
-        backdropShow: false
+        backdropShow: ''
       })
     } else {
       this.setData({
         filterActive: e.target.dataset.num,
-        backdropShow: true
+        backdropShow: 'filter'
       })
     }
   },
@@ -306,7 +307,7 @@ Page({
   },
   tapExtend: function () {
     const dataList = this.data;
-    dataList.backdropShow = true;
+    dataList.backdropShow = 'costom';
     dataList.costomShow = true;
     this.setData({
       ...dataList
@@ -314,7 +315,7 @@ Page({
   },
   ongetCostom: function (e) {
     const dataList = this.data;
-    dataList.backdropShow = false;
+    dataList.backdropShow = '';
     dataList.costomShow = false;
     if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail;
@@ -348,6 +349,9 @@ Page({
       pcId,
       estimateBox,
       projectBox,
+      costBox,
+      cooperBox,
+      company,
       customStartDate,
       customEndDate,
      } = e.detail;
@@ -381,8 +385,31 @@ Page({
       }
       return newStr
     }
+    const formateFilterLength = function (cost, cooper, company){
+      const newCost = [];
+      const newCooper = [];
+      const newPcId = [];
+      cost.map(item => {
+        if(item.active){
+          newCost.push(item)
+        }
+      })
+      cooper.map(item => {
+        if(item.active){
+          newCooper.push(item)
+        }
+      })
+      Object.keys(company).forEach(item => {
+        if(company[item] === 'active') {
+          newPcId.push(pcId[item])
+        }
+      })
+      const result = newCost.length + newCooper.length + newPcId.length;
+      return result
+    }
     const estimateBoxStr = formateFilterStr(estimateBox);
     const projectBoxStr = formateFilterStr(projectBox);
+    const lastFilterLength = formateFilterLength(costBox, cooperBox, company)
     
     this.setData({
       dimension,
@@ -392,7 +419,8 @@ Page({
       pcId,
       estimateBoxStr,
       projectBoxStr,
-      backdropShow: false,
+      lastFilterLength,
+      backdropShow: '',
       filterActive: '',
       dateText,
       dateSelect,
