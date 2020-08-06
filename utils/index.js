@@ -168,7 +168,10 @@ const formatReleaseDate = date => {
     if(date.endDate !== null && date.startDate !==null){
       const startDate = formateDate(date.startDate);
       const endDate = formateDate(date.endDate);
-      if(startDate.y !== endDate.y){
+      const nowDate = new Date();
+      const nowYear = nowDate.getFullYear();
+
+      if(startDate.y !== nowYear){
         return startDate.y
       } 
       else {
@@ -177,6 +180,9 @@ const formatReleaseDate = date => {
           const d1 = ("0" + startDate.d).slice(-2);
           return `${m1}.${d1}`
         } else {
+          if(startDate.m === 1 && startDate.d === 1 && endDate.m === 12 && endDate.d === 31){
+            return startDate.y
+          }
           const m2 = ("0" + startDate.m).slice(-2);
           const d2 = ("0" + startDate.d).slice(-2);
           const m3 = ("0" + endDate.m).slice(-2);

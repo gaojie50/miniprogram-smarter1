@@ -165,11 +165,14 @@ Page({
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
           }
+          if(item.estimateBox){
+            item.estimateBox2 = formatNumber(item.estimateBox/100);
+          }
           item.releaseDate = formatReleaseDate(item.releaseDate);
-          item.estimateBox2 = formatNumber(item.estimateBox);
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
         })
+        
         return this.setData({
           list: data,
           subList: data,
@@ -264,7 +267,7 @@ Page({
     if(num == 3) {
       if(derictFilterActive3){
         list.map(item => {
-          if(item.alias.indexOf(latestSchedule.name) !== -1){
+          if((item.alias.indexOf(latestSchedule.name) !== -1) && (item.alias[0] === latestSchedule.name)){
             newDataList.push(item)
           }
         })
@@ -308,7 +311,6 @@ Page({
     dataList.costomShow = false;
     if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail;
-      // console.log(dataList.filterItemHidden)
       this.setData({
         ...dataList
       }, () => {
@@ -374,7 +376,6 @@ Page({
         arr && arr.map((item, index) => {
           if(item.active){
             newStr= newStr + item.value + ',';
-          
           }
         })
       }
@@ -403,15 +404,23 @@ Page({
       const result = newCost.length + newCooper.length + newPcId.length;
       return result
     }
+    const handlePcId = function (pcId) {
+      const pcIdArr = [];
+      pcId&&pcId.map(item => {
+        pcIdArr.push(item.id)
+      })
+      return pcIdArr
+    }
     const estimateBoxStr = formateFilterStr(estimateBox);
     const projectBoxStr = formateFilterStr(projectBox);
-    const lastFilterLength = formateFilterLength(costBox, cooperBox, company)
+    const lastFilterLength = formateFilterLength(costBox, cooperBox, company);
+    const pcIdRequest = handlePcId(pcId);
     this.setData({
       dimension,
       projectStatus,
       cost,
       cooperStatus,
-      pcId,
+      pcId: pcIdRequest,
       estimateBoxStr,
       projectBoxStr,
       lastFilterLength,
