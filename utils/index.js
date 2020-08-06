@@ -148,26 +148,41 @@ const formatReleaseDate = date => {
     const formateDate = function (t){
       const time = new Date(t);
       const y = time.getFullYear();
-      const m = ("0" + (time.getMonth()+1)).slice(-2);
-      const d = ("0" + time.getDate()).slice(-2);
-      const result = `${m}.${d}`;
-      return result
+      const m = time.getMonth() + 1;
+      const d = time.getDate();
+      return {
+        y,
+        m,
+        d
+      }
     }
+    
     if(date.startDate === null && date.endDate !==null){
       const startDate = formateDate(date.startDate);
-      return startDate
+      return `${startDate.m}.${startDate.d}`
     }
     if(date.endDate === null && date.startDate !==null){
       const endDate = formateDate(date.endDate);
-      return endDate
+      return `${endDate.m}.${endDate.d}`
     }
     if(date.endDate !== null && date.startDate !==null){
       const startDate = formateDate(date.startDate);
       const endDate = formateDate(date.endDate);
-      if(startDate === endDate){
-        return startDate
-      } else {
-        return `${startDate}~${endDate}`
+      if(startDate.y !== endDate.y){
+        return startDate.y
+      } 
+      else {
+        if((startDate.m === endDate.m) && (startDate.d === endDate.d)){
+          const m1 = ("0" + startDate.m).slice(-2);
+          const d1 = ("0" + startDate.d).slice(-2);
+          return `${m1}.${d1}`
+        } else {
+          const m2 = ("0" + startDate.m).slice(-2);
+          const d2 = ("0" + startDate.d).slice(-2);
+          const m3 = ("0" + endDate.m).slice(-2);
+          const d3 = ("0" + endDate.d).slice(-2);
+          return `${m2}.${d2}~${m3}.${d3}`
+        }
       }
     }
    

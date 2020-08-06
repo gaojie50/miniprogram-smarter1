@@ -34,24 +34,12 @@ Page({
     filterItemHidden:[],
     latestSchedule: {},
     companyList: [{
-      id: 1231,
-      name: "北京猫眼"
+      id: 37786,
+      name: "上海猫眼影业有限公司"
       },
       {
-        id: 1232,
-        name: "天津猫眼",
-      },
-      {
-        id: 1233,
-        name: "霍尔果斯猫眼",
-      },
-      {
-        id: 1234,
-        name: "阿里巴巴影业",
-      },
-      {
-        id: 1235,
-        name: "阿里巴巴（娱乐宝）",
+        id: 1230,
+        name: "天津猫眼微影文化传媒有限公司",
       }
     ],
     scheduleType: {
@@ -93,6 +81,7 @@ Page({
       const {
         companyChecked
       } = data;
+      console.log(companyChecked)
       if(companyChecked.length !== 0){
         const newCompanyList = this.data.companyList.concat(companyChecked)
         this.setData({
@@ -376,7 +365,7 @@ Page({
       if(!arr) return ;
       let newStr = '';
       if(arr.length !== 0 ){
-        arr.map((item, index) => {
+        arr && arr.map((item, index) => {
           if(item.active){
             newStr= newStr + item.value + ',';
           
@@ -410,7 +399,6 @@ Page({
     const estimateBoxStr = formateFilterStr(estimateBox);
     const projectBoxStr = formateFilterStr(projectBox);
     const lastFilterLength = formateFilterLength(costBox, cooperBox, company)
-    
     this.setData({
       dimension,
       projectStatus,

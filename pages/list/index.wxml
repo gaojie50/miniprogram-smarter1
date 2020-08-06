@@ -23,7 +23,7 @@
 				<view class="list">
 					<view class="listFilter">
 						<view class="listFilter-item" style="width: 189rpx">
-							<text data-num="4" class="listFilter-item-text {{filterActive==4 ? 'filterActive' : ''}}" bindtap="tapFilterItem">{{dateText}}</text>
+							<text data-num="4" class="listFilter-item-text filterActive}}" bindtap="tapFilterItem">{{dateText}}</text>
 							<image src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<view class="listFilter-item">
