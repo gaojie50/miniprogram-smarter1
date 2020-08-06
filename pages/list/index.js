@@ -338,25 +338,27 @@ Page({
       estimateBox,
       projectBox,
       customStartDate,
-      customEndDate
+      customEndDate,
      } = e.detail;
     
     const checkedDate = e.detail.dateSet.filter(item=> item.checked=='checked')[0];
     const dateValue = checkedDate.value;
+    let {dateText,dateSelect,} = this.data;    
 
-    if(e.detail.dateSet.filter(item=> item.checked=='checked')[0].value != 'custom'){
-      this.data.dateSelect = getFutureTimePeriod(dateValue);
-      this.data.dateText = checkedDate.label;
+    if(checkedDate.value != 'custom'){
+      dateSelect = getFutureTimePeriod(dateValue);
+      dateText = checkedDate.label;
     }else{
       //时间为自定义
-      this.data.dateSelect ={
+      dateSelect ={
         startDate: +new Date(new Date(customStartDate.value).setHours(0, 0, 0, 0)),
         endDate: +new Date(new Date(customEndDate.value).setHours(23,59,59,999))
       }
-      this.data.dateText = `${checkedDate.label}时间`;
+      dateText = `${checkedDate.label}时间`;
     }
     
     const formateFilterStr = function (arr){
+      if(!arr) return ;
       let newStr = '';
       if(arr.length !== 0 ){
         arr.map((item, index) => {
@@ -380,7 +382,9 @@ Page({
       estimateBoxStr,
       projectBoxStr,
       backdropShow: false,
-      filterActive: ''
+      filterActive: '',
+      dateText,
+      dateSelect,
     }, () => {
       const {
         dimension,
