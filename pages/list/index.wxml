@@ -116,8 +116,12 @@
 											<text >{{item.issuer[0]}}</text>
 										</view>
 									</view>
-									<view class="listTd tdPadding {{filterItemHidden7? 'itemHidden':''}}">{{item.movieType}}</view>
-									<view class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">{{item.director !== undefined?item.director:'-'}}</view>
+									<view class="listTd tdPadding {{filterItemHidden7? 'itemHidden':''}}">
+										<text>{{item.movieType}}</text>
+									</view>
+									<view class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">
+										<text>{{item.director !== undefined?item.director:'-'}}</text>
+									</view>
 									<view class="listTd tdPadding {{filterItemHidden9? 'itemHidden':''}}">
 										<text wx:if="{{(item.projectStatus > 0)}}">{{project[item.projectStatus]}}</text>
 										<text wx:if="{{item.projectStatus == 0}}">-</text>
