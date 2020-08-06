@@ -405,8 +405,8 @@ Component({
           if(company[index] === 'active'){
             if (pcId.length !== 0) {
               let add = true;
-              pcId.map(item => {
-                if (item.id == companyList[index].id) {
+              pcId.map(item1 => {
+                if (item1.id == companyList[index].id) {
                   add = false
                 }
               })
@@ -418,12 +418,11 @@ Component({
             }
           }
           if(company[index] !== 'active'){
-            const newPcId = JSON.stringify(pcId[index]);
-            const newCompanyList = JSON.stringify(companyList[index]);
-            if(newPcId.indexOf(newCompanyList) !== -1){
-              const i = newPcId.indexOf(newCompanyList);
-              pcId.splice(i, 1);
-            }
+           pcId.map((item2, i) => {
+             if(item2.id === companyList[index].id){
+               pcId.splice(i, 1)
+             }
+           })
           }
         })
     }
@@ -450,7 +449,6 @@ Component({
         cooperBox,
         company
       }
-      console.log(pcId)
       this.triggerEvent('myevent', myEventDetail)
     },
     filterDefinedDate:function(){

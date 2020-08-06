@@ -2,7 +2,7 @@
 Component({
   properties: {
     backdropShow: {
-      type: Boolean,
+      type: String,
       value: ''
     }
   }
