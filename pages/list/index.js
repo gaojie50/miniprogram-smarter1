@@ -14,7 +14,7 @@ const {
 
 Page({
   data: {
-    curPagePermission: false,
+    curPagePermission: true,
     filterActive: '',
     backdropShow: false,
     costomShow: false,
@@ -36,19 +36,19 @@ Page({
       name: "北京猫眼"
       },
       {
-        id: 1231,
+        id: 1232,
         name: "天津猫眼",
       },
       {
-        id: 1231,
+        id: 1233,
         name: "霍尔果斯猫眼",
       },
       {
-        id: 1231,
+        id: 1234,
         name: "阿里巴巴影业",
       },
       {
-        id: 1231,
+        id: 1235,
         name: "阿里巴巴（娱乐宝）",
       }
     ],
@@ -75,6 +75,8 @@ Page({
     },
     filterItemHidden: [],
     dateSelect: getFutureTimePeriod(),
+    estimateBoxStr: '',
+    projectBoxStr: '',
     dateText:'未来1年'
   },
 
@@ -327,34 +329,58 @@ Page({
     })
   },
   ongetFilterShow: function (e) {
-    const dataList = this.data;
-    const {customStartDate,customEndDate,} = e.detail;
-    dataList.backdropShow = false;
-    dataList.filterActive = '';
-    dataList.dimension = e.detail.dimension;
-    dataList.projectStatus = e.detail.projectStatus;
-    dataList.cost = e.detail.cost;
-    dataList.cooperStatus = e.detail.cooperStatus;
-    dataList.pcId = e.detail.pcId;
-    dataList.customStartDate = customStartDate;
-    dataList.customEndDate = customEndDate;
+    const { 
+      dimension,
+      projectStatus,
+      cost,
+      cooperStatus,
+      pcId,
+      estimateBox,
+      projectBox,
+      customStartDate,
+      customEndDate
+     } = e.detail;
+    
     const checkedDate = e.detail.dateSet.filter(item=> item.checked=='checked')[0];
     const dateValue = checkedDate.value;
 
     if(e.detail.dateSet.filter(item=> item.checked=='checked')[0].value != 'custom'){
-      dataList.dateSelect = getFutureTimePeriod(dateValue);
-      dataList.dateText = checkedDate.label;
+      this.data.dateSelect = getFutureTimePeriod(dateValue);
+      this.data.dateText = checkedDate.label;
     }else{
       //时间为自定义
-      dataList.dateSelect ={
+      this.data.dateSelect ={
         startDate: +new Date(new Date(customStartDate.value).setHours(0, 0, 0, 0)),
         endDate: +new Date(new Date(customEndDate.value).setHours(23,59,59,999))
       }
-      dataList.dateText = `${checkedDate.label}时间`;
+      this.data.dateText = `${checkedDate.label}时间`;
     }
-
+    
+    const formateFilterStr = function (arr){
+      let newStr = '';
+      if(arr.length !== 0 ){
+        arr.map((item, index) => {
+          if(item.active){
+            newStr= newStr + item.value + ',';
+          
+          }
+        })
+      }
+      return newStr
+    }
+    const estimateBoxStr = formateFilterStr(estimateBox);
+    const projectBoxStr = formateFilterStr(projectBox);
+    
     this.setData({
-      ...dataList,
+      dimension,
+      projectStatus,
+      cost,
+      cooperStatus,
+      pcId,
+      estimateBoxStr,
+      projectBoxStr,
+      backdropShow: false,
+      filterActive: ''
     }, () => {
       const {
         dimension,
@@ -394,7 +420,6 @@ Page({
         showIcon: false
       })
     }
-
   },
 
   jumpToSearch() {
