@@ -389,12 +389,12 @@ Page({
       const newCost = [];
       const newCooper = [];
       const newPcId = [];
-      cost.map(item => {
+      cost&&cost.map(item => {
         if(item.active){
           newCost.push(item)
         }
       })
-      cooper.map(item => {
+      cooper&&cooper.map(item => {
         if(item.active){
           newCooper.push(item)
         }
