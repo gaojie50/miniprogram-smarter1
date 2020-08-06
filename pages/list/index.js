@@ -308,6 +308,7 @@ Page({
     dataList.costomShow = false;
     if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail;
+      // console.log(dataList.filterItemHidden)
       this.setData({
         ...dataList
       }, () => {
@@ -321,9 +322,13 @@ Page({
   },
   fetchFilterShow: function () {
     const dataList = this.data;
-    for (let j = 0; j < dataList.filterItemHidden.length; j++) {
-      const num = dataList.filterItemHidden[j];
-      dataList[`filterItemHidden${num}`] = true;
+    dataList.filterItemHidden.map((item, index) => {
+      dataList[`filterItemHidden${item}`] = true;
+    })
+    for(let i = 1; i < 13; i++){
+      if(dataList.filterItemHidden.indexOf(i) === -1){
+        dataList[`filterItemHidden${i}`] = false;
+      }
     }
     this.setData({
       ...dataList
@@ -388,13 +393,12 @@ Page({
           newCooper.push(item)
         }
       })
-      if(company){
-        Object.keys(company).forEach(item => {
-          if(company[item] === 'active') {
-            newPcId.push(pcId[item])
-          }
-        })
-      }
+     
+      Object.keys(company).forEach(item => {
+        if(company[item] === 'active') {
+          newPcId.push(pcId[item])
+        }
+      })
       
       const result = newCost.length + newCooper.length + newPcId.length;
       return result
