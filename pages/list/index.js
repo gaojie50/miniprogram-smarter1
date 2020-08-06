@@ -378,12 +378,12 @@ Page({
       const newCost = [];
       const newCooper = [];
       const newPcId = [];
-      cost && cost.map(item => {
+      cost&&cost.map(item => {
         if(item.active){
           newCost.push(item)
         }
       })
-      cooper && cooper.map(item => {
+      cooper&&cooper.map(item => {
         if(item.active){
           newCooper.push(item)
         }
@@ -402,7 +402,6 @@ Page({
     const estimateBoxStr = formateFilterStr(estimateBox);
     const projectBoxStr = formateFilterStr(projectBox);
     const lastFilterLength = formateFilterLength(costBox, cooperBox, company)
-    console.log(lastFilterLength)
     this.setData({
       dimension,
       projectStatus,
