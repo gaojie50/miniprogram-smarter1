@@ -36,12 +36,7 @@
 		</view>
 		<!-- 预估票房 -->
 		<view class="estimateBox" wx:if="{{filterShow=='1'}}">
-			<view data-num="1" bindtap="tapEstimateBox" class="estimateBox-item {{estimateBoxActive1? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">10亿以上</view>
-			<view data-num="2" bindtap="tapEstimateBox" class="estimateBox-item {{estimateBoxActive2? 'filterPanelActive':''}}" style="margin-right: 20rpx">5亿～10亿</view>
-			<view data-num="3" bindtap="tapEstimateBox" class="estimateBox-item {{estimateBoxActive3? 'filterPanelActive':''}}">1亿～5亿</view>
-			<view data-num="4" bindtap="tapEstimateBox" class="estimateBox-item {{estimateBoxActive4? 'filterPanelActive':''}}" style="margin-right: 20rpx">5000万～1亿</view>
-			<view data-num="5" bindtap="tapEstimateBox" class="estimateBox-item {{estimateBoxActive5? 'filterPanelActive':''}}" style="margin-right: 20rpx">5000万以下</view>
-			<view data-num="6" bindtap="tapEstimateBox" class="estimateBox-item {{estimateBoxActive6? 'filterPanelActive':''}}">未知</view>
+			<view wx:for="{{estimateBox}}" data-num="{{index}}" bindtap="tapEstimateBox" class="estimateBox-item {{item.active ? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
 		</view>
 		<!-- 项目状态 -->
 		<view class="projectStatus" wx:if="{{filterShow=='2'}}">

@@ -35,7 +35,7 @@
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<backdrop wx:if="{{backdropShow}}" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
-						<filterPanel wx:if="{{filterActive!=''}}" class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}" companyList="{{companyList}}"></filterPanel>
+						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}" companyList="{{companyList}}"></filterPanel>
 					</view>
 					<view class="listDerict">
 						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>

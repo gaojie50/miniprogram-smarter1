@@ -14,7 +14,7 @@ const {
 
 Page({
   data: {
-    curPagePermission: false,
+    curPagePermission: true,
     filterActive: '',
     backdropShow: false,
     costomShow: false,
@@ -36,19 +36,19 @@ Page({
       name: "北京猫眼"
       },
       {
-        id: 1231,
+        id: 1232,
         name: "天津猫眼",
       },
       {
-        id: 1231,
+        id: 1233,
         name: "霍尔果斯猫眼",
       },
       {
-        id: 1231,
+        id: 1234,
         name: "阿里巴巴影业",
       },
       {
-        id: 1231,
+        id: 1235,
         name: "阿里巴巴（娱乐宝）",
       }
     ],
@@ -326,22 +326,39 @@ Page({
     })
   },
   ongetFilterShow: function (e) {
-    const dataList = this.data;
-    dataList.backdropShow = false;
-    dataList.filterActive = '';
-    dataList.dimension = e.detail.dimension;
-    dataList.projectStatus = e.detail.projectStatus;
-    dataList.cost = e.detail.cost;
-    dataList.cooperStatus = e.detail.cooperStatus;
-    dataList.pcId = e.detail.pcId;
+    const { 
+      dimension,
+      projectStatus,
+      cost,
+      cooperStatus,
+      pcId,
+      estimateBox
+     } = e.detail;
+
     const dateValue = e.detail.dateSet.filter(item=> item.checked=='checked')[0].value;
     
     if(e.detail.dateSet.filter(item=> item.checked=='checked')[0].value != 'custom'){
-      dataList.dateSelect = getFutureTimePeriod(dateValue);
+      this.data.dateSelect = getFutureTimePeriod(dateValue);
+    }
+    
+    const formateFilterStr = function (arr){
+      let newStr = '';
+      if(arr.length !== 0 ){
+        arr.map((item, index) => {
+          newStr= newStr + item.value
+        })
+      }
     }
 
     this.setData({
-      ...dataList,
+      dimension,
+      projectStatus,
+      cost,
+      cooperStatus,
+      pcId,
+      estimateBox,
+      backdropShow: false,
+      filterActive: ''
     }, () => {
       const {
         dimension,
@@ -381,7 +398,6 @@ Page({
         showIcon: false
       })
     }
-
   },
 
   jumpToSearch() {

@@ -53,32 +53,31 @@ Component({
         value: 'custom',
       },
     ],
-    dimension: [],
-    projectStatus: [],
-    cost: [],
-    cooperStatus: [],
-    pcId: [],
-    company: {},
-    dateSet: [{
-        label: "未来30天",
-        checked: "",
-        value: 30,
+    estimateBox: [
+      {
+        value: '10亿以上',
+        active: false,
       },
       {
-        label: "未来90天",
-        checked: "",
-        value: 90,
+        value: '5亿～10亿',
+        active: false,
       },
       {
-        label: "未来1年",
-        checked: "checked",
-        value: 365,
+        value: '1亿～5亿',
+        active: false,
       },
       {
-        label: "自定义",
-        checked: "",
-        value: 'custom',
+        value: '5000万～1亿',
+        active: false,
       },
+      {
+        value: '5000万以下',
+        active: false,
+      },
+      {
+        value: '未知',
+        active: false,
+      }
     ],
     years: years,
     year: date.getFullYear(),
@@ -87,6 +86,9 @@ Component({
     days: days,
     day: 2,
     value: [9999, 1, 1],
+  },
+  onLoad: function (){
+    console.log(111)
   },
   methods: {
     bindChange: function (e) {
@@ -113,10 +115,12 @@ Component({
     },
     tapEstimateBox: function (e) {
       const num = e.target.dataset.num;
-      const estimateBoxActiveWrap = this.data;
-      estimateBoxActiveWrap[`estimateBoxActive${num}`] = !estimateBoxActiveWrap[`estimateBoxActive${num}`];
+      const newEstimateBox  = this.data.estimateBox;
+      newEstimateBox[num].active = !newEstimateBox[num].active;
       this.setData({
-        ...estimateBoxActiveWrap
+        estimateBox: newEstimateBox
+      },()=>{
+        console.log(this.data)
       })
     },
     tapProjectStatus: function (e) {
@@ -167,13 +171,14 @@ Component({
     },
     filterReset: function () {
       const {
-        filterShow
+        filterShow,
+        estimateBox,
       } = this.data;
       const allData = this.data;
       if (filterShow == '1') {
-        for (let i = 1; i < 7; i++) {
-          allData[`estimateBoxActive${i}`] = false;
-        }
+        estimateBox.map(item => {
+          item.active = false
+        })
       } else if (filterShow == '2') {
         for (let i = 1; i < 8; i++) {
           allData[`projectStatusActive${i}`] = false;
@@ -207,40 +212,22 @@ Component({
     },
     filterDefined: function () {
       const {
-        filterShow
+        filterShow,
+        estimateBox,
       } = this.data;
       if (filterShow == 1) {
-        for (let i = 1; i < 7; i++) {
-          if (this.data[`estimateBoxActive${i}`] && this.data.dimension.indexOf(i) == -1) {
-            this.data.dimension.push(i)
-          }
-        }
-        for (let j = 0; j < 7; j++) {
-          const index = this.data.dimension[0];
-          if (!this.data[`estimateBoxActive${index}`]) {
-            const i = this.data.dimension.indexOf(index);
-            if (i != -1) {
-              this.data.dimension.splice(i, 1)
-            }
-          }
-        }
-        const {
+        const { 
           dimension,
-          projectStatus,
-          cost,
-          cooperStatus,
-          dateSet,
-          pcId
         } = this.data;
-        const myEventDetail = {
-          dimension,
-          projectStatus,
-          cost,
-          cooperStatus,
-          dateSet,
-          pcId
-        }
-        this.triggerEvent('myevent', myEventDetail)
+        estimateBox.map((item, index) => {
+          if(item.active && dimension.indexOf(index + 1) === -1){
+            dimension.push(index + 1);
+          }
+          if(!item.active && dimension.indexOf(index + 1) !== -1){
+            const i = dimension.indexOf(index + 1);
+            dimension.splice(i, 1)
+          }
+        })
       } else if (filterShow == 2) {
         for (let i = 1; i < 8; i++) {
           if (this.data[`projectStatusActive${i}`] && this.data.projectStatus.indexOf(i) == -1) {
@@ -278,7 +265,6 @@ Component({
           companyList
         } = this.data;
         if (companyList.length > 6) {
-
           for (let j = 1; j < companyList.length; j++) {
             if (this.data[`cost${j}`] && this.data.cost.indexOf(j) == -1) {
               this.data.cost.push(j)
@@ -291,7 +277,6 @@ Component({
                 let add = true;
                 this.data.pcId.map(item => {
                   if (item.id == companyList[j - 1].id) {
-
                     add = false
                   }
                 })
@@ -346,7 +331,6 @@ Component({
                 let add = true;
                 this.data.pcId.map(item => {
                   if (item.id == companyList[j - 1].id) {
-
                     add = false
                   }
                 })
@@ -400,8 +384,29 @@ Component({
           dateSet,
           pcId
         }
+        console.log(this.data)
         this.triggerEvent('myevent', myEventDetail)
       }
+    
+      const {
+        dimension,
+        projectStatus,
+        cost,
+        cooperStatus,
+        dateSet,
+        pcId
+      } = this.data;
+      const myEventDetail = {
+        dimension,
+        projectStatus,
+        cost,
+        cooperStatus,
+        dateSet,
+        pcId,
+        estimateBox,
+      }
+      console.log(dimension)
+      this.triggerEvent('myevent', myEventDetail)
     },
     filterDefinedDate:function(){
       const {
