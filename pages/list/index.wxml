@@ -1,9 +1,13 @@
-<view wx:if="{{curPagePermission}}">
+<view wx:if="{{initLoading}}" class="init-loading">
+	<mp-loading type="circle" show="{{true}}" animated="{{true}}" duration="{{900}}" tips=""></mp-loading>
+</view>
+
+<view wx:if="{{curPagePermission && !initLoading}}">
 	<view class="header">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
 			<view class="header-inner" style='line-height:{{titleHeight - barHeight}}px;padding-top:{{barHeight}}px;'>
 				<image bindtap="jumpToSearch" class="search" style="top:calc( {{( titleHeight + barHeight ) / 2}}px -  22rpx)" src="../../static/icon/search-white.png" />
-				<text>猫眼项目情报</text>
+				<text>影片市场情报</text>
 			</view>
 		</view>
 
@@ -19,7 +23,7 @@
 				<view class="list">
 					<view class="listFilter">
 						<view class="listFilter-item" style="width: 189rpx">
-							<text data-num="4" class="listFilter-item-text filterActive" bindtap="tapFilterItem">{{dateText}}</text>
+							<text data-num="4" class="listFilter-item-text {{filterActive==4 ? 'filterActive' : ''}}" bindtap="tapFilterItem">{{dateText}}</text>
 							<image src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<view class="listFilter-item">
@@ -43,7 +47,10 @@
 						<view wx:if="{{latestSchedule.length !==0}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.name}}</view>
 						<view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
 					</view>
-					<view class="listTable">
+					<view wx:if="{{loading}}" class="list-loading">
+						<mp-loading type="circle" show="{{true}}" tips=""></mp-loading>
+					</view>
+					<view class="listTable"  wx:if="{{!loading}}">
 						<view class="table-left">
 							<view class="listTr">
 								<view style="" class="listTd listNowrap shadow">{{list.length}}部影片</view>
@@ -121,13 +128,15 @@
 									<view class="listTd tdPadding {{filterItemHidden11? 'itemHidden':''}}">
 										<text wx:if="{{item.principal !== null}}" wx:for="{{item.principal}}" wx:key="index">{{item}}</text>
 										<text wx:if="{{item.principal == null}}">-</text>
-									
+
 									</view>
 									<view class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">89.3万</view>
 								</view>
 							</block>
 						</scroll-view>
-
+						<view wx:if="{{list.length == 0}}" class="no-data">
+							暂无数据
+						</view>
 						<view class="extends listFiexd" bindtap="tapExtend" catchtouchmove="doNothing">
 							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
 						</view>
@@ -136,14 +145,14 @@
 			</view>
 		</scroll-view>
 	</view>
-	
+
 	<view class="customListItem">
 		<costumListItem bind:myevent="ongetCostom" costomShow="{{costomShow}}"></costumListItem>
 	</view>
 </view>
 
 <!-- 无权限页面 -->
-<view wx:if="{{!curPagePermission}}">
+<view wx:if="{{!curPagePermission && !initLoading}}">
 	<view class="no-access">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
 			<view class="header-inner" style='line-height:{{titleHeight - barHeight}}px;padding-top:{{barHeight}}px;'>

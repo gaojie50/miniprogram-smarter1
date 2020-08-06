@@ -36,29 +36,29 @@
 		</view>
 		<!-- 预估票房 -->
 		<view class="estimateBox" wx:if="{{filterShow=='1'}}">
-			<view wx:for="{{estimateBox}}" data-num="{{index}}" bindtap="tapEstimateBox" class="estimateBox-item {{item.active ? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
+			<view wx:for="{{estimateBox}}" wx:key="index" data-num="{{index}}" bindtap="tapEstimateBox" class="estimateBox-item {{item.active ? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
 		</view>
 		<!-- 项目状态 -->
 		<view class="projectStatus" wx:if="{{filterShow=='2'}}">
-			<view wx:for="{{projectBox}}" data-num="{{index}}" bindtap="tapProjectStatus" class="projectStatus-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
+			<view wx:for="{{projectBox}}"  wx:key="index" data-num="{{index}}" bindtap="tapProjectStatus" class="projectStatus-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
 		</view>
 		<!-- 筛选 -->
 		<view class="filter" wx:if="{{filterShow=='3'}}">
 			<scroll-view scroll-y="true" class="scroll-area" style="height: 887rpx">
 				<text class="title">制作成本</text>
 				<view class="cost-wrap">
-					<view wx:for="{{costBox}}" data-num="{{index}}" bindtap="tapCost" class="cost-wrap-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
+					<view wx:for="{{costBox}}"  wx:key="index" data-num="{{index}}" bindtap="tapCost" class="cost-wrap-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
 				</view>
 				<text class="title">合作状态</text>
 				<view class="cooper-wrap">
-					<view wx:for="{{cooperBox}}" data-num="{{index}}" bindtap="tapCooper" class="cooper-wrap-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
+					<view wx:for="{{cooperBox}}"  wx:key="index" data-num="{{index}}" bindtap="tapCooper" class="cooper-wrap-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
 				</view>
 				<view class="last-title">
 					<text class="title">片方</text>
 					<text style="margin-left: 567rpx" bindtap="movieAdd" class="add">添加 ></text>
 				</view>
 				<view class="company">
-					<block wx:for="{{companyList}}">
+					<block wx:for="{{companyList}}"  wx:key="index">
 						<view data-num="{{index}}" class="company-item {{company[index]=='active' ? 'filterPanelActive':''}}" bindtap="tapCompany">{{item.name}}</view>
 					</block>
 				</view>

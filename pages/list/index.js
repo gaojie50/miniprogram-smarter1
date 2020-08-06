@@ -14,7 +14,9 @@ const {
 
 Page({
   data: {
-    curPagePermission: true,
+    initLoading:true,
+    loading:true,
+    curPagePermission: false,
     filterActive: '',
     backdropShow: false,
     costomShow: false,
@@ -102,9 +104,11 @@ Page({
     if (wx.getStorageSync('listPermission')) {
       this.setData({
         curPagePermission: true,
+        initLoading:false,
       });
       this.fetchSchedule();
-      this._fetchData(this.data.dateSelect);
+      this.setData(
+        {loading:true},()=>this._fetchData(this.data.dateSelect));
     } else {
       reqPacking({
         url: '/api/user/authinfo',
@@ -123,9 +127,14 @@ Page({
             wx.setStorageSync('listPermission', true);
             this.setData({
               curPagePermission: true,
+              initLoading:false,
             })
-            this.fetchSchedule();
-            this._fetchData(this.data.dateSelect);
+            this.setData({
+              loading:true
+            },()=>{
+              this.fetchSchedule();
+              this._fetchData(this.data.dateSelect);
+            })
           }
         }
       })
@@ -173,12 +182,14 @@ Page({
         })
         return this.setData({
           list: data,
-          subList: data
+          subList: data,
+          loading:false,
         })
       }
       this.setData({
         list: [],
-        subList: []
+        subList: [],
+        loading:false,
       })
     })
   },
@@ -411,7 +422,9 @@ Page({
           param[key] = param[key].id
         }
       })
-      this._fetchData(param);
+      this.setData({
+        loading:true,
+      },()=>this._fetchData(param));
     })
   },
   scroll(e) {
