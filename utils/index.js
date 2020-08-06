@@ -214,6 +214,32 @@ const getFutureTimePeriod = (long = 365) =>{
 
 const calcWeek = timeStamp =>`周${['日', '一', '二', '三', '四', '五', '六'][new Date(timeStamp).getDay()]}`;
 
+function checkDataType(param) {
+  return Object.prototype.toString.call(param).replace(/^\[object (.+)\]$/, '$1').toLowerCase();
+}
+
+function isObject(param) { return checkDataType(param) === "object" };
+
+function isArray(param) { return checkDataType(param) === "array" };
+
+const assignDeep = (...objects) => {
+  return objects.reduce((accumulator, currentValue) => {
+      Object.keys(currentValue).forEach(key => {
+          const pVal = accumulator[key];
+          const oVal = currentValue[key];
+
+          if (isArray(pVal) && isArray(oVal)) {
+              accumulator[key] = pVal.concat(...oVal);
+          } else if (isObject(pVal) && isObject(oVal)) {
+              accumulator[key] = assignDeep(pVal, oVal);
+          } else {
+              accumulator[key] = oVal;
+          }
+      });
+
+      return accumulator;
+  }, {});
+}
 export default {
   errorHandle,
   throttle,
@@ -223,4 +249,6 @@ export default {
   formatDirector,
   getFutureTimePeriod,
   calcWeek,
+  assignDeep,
+  checkDataType,
 }

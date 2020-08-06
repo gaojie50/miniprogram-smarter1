@@ -1,14 +1,18 @@
 import utils from "./../../utils/index";
 
-const {getFutureTimePeriod,calcWeek,} = utils;
+const {getFutureTimePeriod,calcWeek,assignDeep,checkDataType} = utils;
 const  defaultCustomDate = getFutureTimePeriod();
 const date = new Date();
 let years = [];
 let months = [];
 let days = [];
 
+for (let i = 2019; i <= date.getFullYear()+30; i++) years.push(i);
+for (let i = 1; i <= 12; i++) months.push(i);
+for (let i = 1; i <= 31; i++) days.push(i);
+
 function formartDate(stamp){
-  const dateObj = new Date(stamp);
+  const dateObj = handleNewDate(stamp);
   const yearStr = dateObj.getFullYear();
   const monthInner = dateObj.getMonth()+1;
   const dayInner = dateObj.getDate();
@@ -17,18 +21,19 @@ function formartDate(stamp){
 
   return `${yearStr}.${monthStr}.${dayStr}`;
 }
-
+function handleNewDate(param){
+  return new Date(checkDataType(param) == 'string' ? 
+  param.replace(/\.|\-/g, '/') : param);
+}
 function dateValueCommon(timeStamp){
+  const innerTimeStamp = handleNewDate(timeStamp);
+
   return [
-    years.indexOf(new Date(timeStamp).getFullYear()), 
-    months.indexOf(new Date(timeStamp).getMonth()+1), 
-    days.indexOf(new Date(timeStamp).getDate()),
+    years.indexOf(innerTimeStamp.getFullYear()), 
+    months.indexOf(innerTimeStamp.getMonth()+1), 
+    days.indexOf(innerTimeStamp.getDate()),
   ]
 }
-
-for (let i = 2019; i <= date.getFullYear()+30; i++) years.push(i);
-for (let i = 1; i <= 12; i++) months.push(i);
-for (let i = 1; i <= 31; i++) days.push(i);
 
 Component({
   properties: {
@@ -187,19 +192,16 @@ Component({
     },
     dateShowFirstActive:true,
   },
-  onLoad: function (){
-    console.log(111)
-  },
   methods: {
     dateSelect: function (e) {
       const val = e.detail.value;
       const {dateShowFirstActive,years,months,days,customEndDate,customStartDate} = this.data;
-      let timeStamp = +new Date(`${years[val[0]]}-${months[val[1]]}-${days[val[2]]}`);
+      let timeStamp = +new Date(`${years[val[0]]}/${months[val[1]]}/${days[val[2]]}`);
       let obj={};
       if(dateShowFirstActive){
         //开始时间大于结束时间 
-        if(timeStamp > +new Date(customEndDate.value)){
-          timeStamp = +new Date(customEndDate.value);
+        if(timeStamp > +handleNewDate(customEndDate.value)){
+          timeStamp = +handleNewDate(customEndDate.value);
           obj.dateValue = dateValueCommon(customEndDate.value);
         }
         obj['customStartDate'] = {
@@ -211,8 +213,8 @@ Component({
       }
 
       //结束时间小于开始时间
-      if(timeStamp < +new Date(customStartDate.value)){
-        timeStamp = +new Date(customStartDate.value);
+      if(timeStamp < +handleNewDate(customStartDate.value)){
+        timeStamp = +handleNewDate(customStartDate.value);
         obj.dateValue = dateValueCommon(customStartDate.value);
       }
       obj['customEndDate'] = {
@@ -225,8 +227,8 @@ Component({
 
     switchDate:function(e){
       const {sign} = e.currentTarget.dataset;
-      const {dateShowFirstActive,customStartDate,customEndDate} = this.data;
-      
+      const {dateShowFirstActive,customStartDate,customEndDate} = assignDeep(this.data);
+   
       if((dateShowFirstActive && sign =="begin")||(!dateShowFirstActive && sign != "begin") ) return;
 
       if(sign == 'begin'){
@@ -235,7 +237,7 @@ Component({
           dateValue:dateValueCommon(customStartDate.value)
         })
       };
-
+      
       this.setData({ 
         dateShowFirstActive:false,
         dateValue:dateValueCommon(customEndDate.value)
@@ -439,7 +441,9 @@ Component({
         cooperStatus,
         dateSet,
         pcId,
-        company
+        company,
+        customStartDate,
+        customEndDate,
       } = this.data;
       const myEventDetail = {
         dimension,
@@ -452,7 +456,9 @@ Component({
         projectBox,
         costBox,
         cooperBox,
-        company
+        company,      
+        customStartDate,
+        customEndDate,
       }
       this.triggerEvent('myevent', myEventDetail)
     },
