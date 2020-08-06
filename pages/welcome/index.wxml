@@ -5,6 +5,6 @@
 		<image class="show" src="../../static/welcome/show.png" />
 	</view>
 
-	<button class="login-btn" hover-class="login-btn" wx:if="{{!isLogin}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">立即登录</button>
-	<button class="login-btn" hover-class="login-btn" wx:if="{{isLogin}}" type="primary" bindtap="goList" plain="true">查看情报</button>
+	<button class="login-btn" hover-class="login-btn-hover" wx:if="{{!isLogin}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">立即登录</button>
+	<button class="login-btn" hover-class="login-btn-hover" wx:if="{{isLogin}}" type="primary" bindtap="goList" plain="true">查看情报</button>
 </view>

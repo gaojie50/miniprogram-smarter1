@@ -358,7 +358,7 @@ Page({
         startDate: +new Date(new Date(customStartDate.value).setHours(0, 0, 0, 0)),
         endDate: +new Date(new Date(customEndDate.value).setHours(23,59,59,999))
       }
-      dateText = `${checkedDate.label}时间`;
+      dateText = `${customStartDate.value}-${customEndDate.value}`;
     }
     
     const formateFilterStr = function (arr){
