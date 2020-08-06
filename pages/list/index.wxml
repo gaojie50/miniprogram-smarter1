@@ -98,6 +98,7 @@
 										<text wx:if="{{item.cost!==null}}">{{item.cost}}万</text>
 									</view>
 									<view class="listTd tdPadding {{filterItemHidden3? 'itemHidden':''}}">
+										<text wx:if="{{item.estimateBox === null}}">-</text>
 										<text>{{item.estimateBox2.text}}</text>
 									</view>
 									<view class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">{{item.estimateScore === null ? '-': item.estimateScore}}</view>
