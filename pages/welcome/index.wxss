@@ -43,3 +43,8 @@ view.welcome button.login-btn {
   padding: 0;
   border: none;
 }
+
+view.welcome button.login-btn-hover{
+  background: rgba(24, 144, 255, 1);
+  color: rgba(255, 255, 255, 1);
+}

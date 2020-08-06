@@ -363,7 +363,7 @@ Page({
         startDate: +new Date(new Date(customStartDate.value).setHours(0, 0, 0, 0)),
         endDate: +new Date(new Date(customEndDate.value).setHours(23,59,59,999))
       }
-      dateText = `${checkedDate.label}时间`;
+      dateText = `${customStartDate.value}-${customEndDate.value}`;
     }
     
     const formateFilterStr = function (arr){
@@ -393,13 +393,12 @@ Page({
           newCooper.push(item)
         }
       })
-     
-      Object.keys(company).forEach(item => {
+      Object.keys(company||{}).forEach(item => {
         if(company[item] === 'active') {
           newPcId.push(pcId[item])
         }
       })
-      
+
       const result = newCost.length + newCooper.length + newPcId.length;
       return result
     }
