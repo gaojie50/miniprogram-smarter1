@@ -77,6 +77,7 @@ Page({
     dateSelect: getFutureTimePeriod(),
     estimateBoxStr: '',
     projectBoxStr: '',
+    dateText:'未来1年'
   },
 
   onLoad: function ({
@@ -336,12 +337,23 @@ Page({
       pcId,
       estimateBox,
       projectBox,
+      customStartDate,
+      customEndDate
      } = e.detail;
-
-    const dateValue = e.detail.dateSet.filter(item=> item.checked=='checked')[0].value;
     
+    const checkedDate = e.detail.dateSet.filter(item=> item.checked=='checked')[0];
+    const dateValue = checkedDate.value;
+
     if(e.detail.dateSet.filter(item=> item.checked=='checked')[0].value != 'custom'){
       this.data.dateSelect = getFutureTimePeriod(dateValue);
+      this.data.dateText = checkedDate.label;
+    }else{
+      //时间为自定义
+      this.data.dateSelect ={
+        startDate: +new Date(new Date(customStartDate.value).setHours(0, 0, 0, 0)),
+        endDate: +new Date(new Date(customEndDate.value).setHours(23,59,59,999))
+      }
+      this.data.dateText = `${checkedDate.label}时间`;
     }
     
     const formateFilterStr = function (arr){
