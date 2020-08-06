@@ -399,7 +399,7 @@ Page({
           newCooper.push(item)
         }
       })
-      Object.keys(company).forEach(item => {
+      Object.keys(company||{}).forEach(item => {
         if(company[item] === 'active') {
           newPcId.push(pcId[item])
         }
