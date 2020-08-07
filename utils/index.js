@@ -207,16 +207,6 @@ const formatDirector = director => {
   }
 }
 
-//想看人数万人以上处理
-const formateWishNum = wishNum => {
-  if(wishNum >= 10000) {
-    const newWishNum = (wishNum/10000).toFixed(1);
-    return `${newWishNum}万`
-  } else {
-    return wishNum
-  }
-}
-
 const getFutureTimePeriod = (long = 365) =>{
   const curDayBeginDate = new Date(new Date().setHours(0, 0, 0, 0));
   const curDayEndDate = new Date(new Date().setHours(23,59,59,999));
@@ -265,6 +255,5 @@ export default {
   getFutureTimePeriod,
   calcWeek,
   assignDeep,
-  checkDataType,
-  formateWishNum
+  checkDataType
 }
