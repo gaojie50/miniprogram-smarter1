@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText":"",
-  "usingComponents": {}
+  "usingComponents": {},
+  "disableScroll": true
 }
