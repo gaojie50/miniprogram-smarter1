@@ -81,7 +81,7 @@ Page({
       const {
         companyChecked
       } = data;
-      console.log(companyChecked)
+
       if(companyChecked.length !== 0){
         const newCompanyList = this.data.companyList.concat(companyChecked)
         this.setData({
@@ -104,7 +104,7 @@ Page({
         url: '/api/user/authinfo',
       }, 'passport').then(({
         success,
-        data
+        data,
       }) => {
         if (success) {
           app.globalData.authinfo = data;
@@ -115,18 +115,25 @@ Page({
           ) {
             //用户有权限
             wx.setStorageSync('listPermission', true);
+
             this.setData({
+              loading:true,
               curPagePermission: true,
               initLoading:false,
-            })
-            this.setData({
-              loading:true
             },()=>{
               this.fetchSchedule();
               this._fetchData(this.data.dateSelect);
             })
           }
+
+          this.setData({
+            initLoading:false,
+          })
         }
+
+        this.setData({
+          initLoading:false,
+        });
       })
     }
 
@@ -151,6 +158,7 @@ Page({
       }
     })
   },
+  
   _fetchData: function (param = {}) {
     reqPacking({
       url: '/api/management/list',
