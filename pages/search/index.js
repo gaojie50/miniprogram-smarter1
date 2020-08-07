@@ -7,36 +7,46 @@ const {getScheduleType} = projectConfig;
 
 function fn(e) {
   const { value } = e.detail;
-
-  if(value.trim() == '') return this.setData({list:[]})
-
-  reqPacking({
-    url: '/api/management/list',
-    data: { name: value },
-    method:'POST'
-  }).then(({
-    success,
-    data
-  }) => {
-    if (success && data && data.length > 0) {
-      return this.setData({ 
-        list: data.map(item =>{
-          item.scheduleObj = getScheduleType(item.scheduleType);
-          item.pic = item.pic ? `${item.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
-
-          return item;
-        }) 
-      })
-    }
-
-    this.setData({ list: [] })
+  const innerVal = value.trim();
+  
+  if(innerVal == '') return this.setData({
+    inputVal:'',
+    list:[],
+  })
+  this.setData({
+    loading:true
+  },()=>{
+    reqPacking({
+      url: '/api/management/list',
+      data: { name: innerVal },
+      method:'POST'
+    }).then(({ success,data}) => {
+      if (success && data && data.length > 0) {
+        return this.setData({ 
+          inputVal:innerVal,
+          loading:false,
+          list: data.map(item =>{
+            item.scheduleObj = getScheduleType(item.scheduleType);
+            item.pic = item.pic ? `${item.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
+  
+            return item;
+          }) 
+        })
+      }
+  
+      this.setData({ 
+        inputVal:innerVal,
+        loading:false,
+        list: [] })
+    })
   })
 };
 
 Page({
   data: {
-    inputValue: '',
+    inputVal: '',
     list: [],
+    loading:false,
   },
 
   bindKeyInput: throttle(fn,500),

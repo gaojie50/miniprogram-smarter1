@@ -1,5 +1,7 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "mp-loading": "../../miniprogram_npm/weui-miniprogram/loading/loading"
+  },
   "navigationBarTitleText":"搜索项目",
   "navigationBarBackgroundColor": "#fff",
   "navigationBarTextStyle":"black"

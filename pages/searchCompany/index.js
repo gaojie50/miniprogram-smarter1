@@ -5,34 +5,48 @@ const {throttle} = utils;
 
 function fn(e) {
   const { value } = e.detail;
+  const innerVal = value.trim();
+  if(innerVal == '') return this.setData({
+    inputVal:'',
+    list:[]
+  })
 
-  if(value.trim() == '') return this.setData({list:[]})
-
-  reqPacking({
-    url: '/api/company/search',
-    data: {
-      keyword: value,
-    }
-  }).then(({
-    success,
-    data
-  }) => {
-    if (success && data.respList && data.respList.length > 0) {
-      return this.setData({
-        list: data.respList.map(item=>{
-          item.checked='';
-          return item;
+  this.setData({
+    loading:true
+  },()=>{
+    reqPacking({
+      url: '/api/company/search',
+      data: {
+        keyword: innerVal,
+      }
+    }).then(({
+      success,
+      data
+    }) => {
+      if (success && data.respList && data.respList.length > 0) {
+        return this.setData({
+          inputVal:innerVal,
+          loading:false,
+          list: data.respList.map(item=>{
+            item.checked='';
+            return item;
+          })
         })
+      }
+  
+      this.setData({ 
+        inputVal:innerVal,
+        loading:false,
+        list: [] 
       })
-    }
-
-    this.setData({ list: [] })
+    })
   })
 };
 
 Page({
   data: {
-    inputValue: '',
+    loading:false,
+    inputVal: '',
     list: [],
     checked:[],
     hadItem:function(checked,id){

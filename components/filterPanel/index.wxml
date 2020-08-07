@@ -15,7 +15,7 @@
 							<text class="week">{{customStartDate.week}}</text>
 						</view>
 						<text>至</text>
-						<view class="right {{!dateShowFirstActive ? 'active' : ''}}" bindtap="switchDate">
+						<view class="right {{!dateShowFirstActive ? 'active' : ''}}" data-sign="end" bindtap="switchDate">
 							<view class="detail">{{customEndDate.value}}</view>
 							<text class="week">{{customEndDate.week}}</text>
 						</view>

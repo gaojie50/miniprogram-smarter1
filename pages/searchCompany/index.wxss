@@ -82,3 +82,14 @@ view.finish {
   transform: translate(-50%);
   z-index: 1;
 }
+
+.list-loading{
+  margin-top: 100rpx;
+}
+
+.no-data{
+  margin-top: 100rpx;
+  text-align: center;
+  font-size:34rpx;
+  line-height: 200rpx;
+}

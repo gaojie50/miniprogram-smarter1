@@ -6,8 +6,13 @@
 		</label>
 	</view>
 </view>
-
-<scroll-view class="search-list" bindtap="touchCheckEvent">
+<view wx:if="{{loading}}" class="list-loading">
+	<mp-loading type="circle" show="{{true}}" tips=""></mp-loading>
+</view>
+<view wx:if="{{inputVal !='' && list.length == 0 && !loading}}" class="no-data">
+	暂无数据
+</view>
+<scroll-view class="search-list" bindtap="touchCheckEvent"  wx:if="{{!loading}}">
 	<view class="{{item.checked}}" wx:for="{{list}}" wx:key="id" data-name="{{item.name}}" data-id="{{item.id}}">
     <image src="../../static/icon/checked.png"/>
   {{item.name}}</view>
