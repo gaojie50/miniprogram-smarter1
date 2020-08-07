@@ -34,9 +34,9 @@
 							<text data-num="2" class="listFilter-item-text {{(filterActive==2 || projectBoxStr !== '' )? 'filterActive' : ''}}" bindtap="tapFilterItem">{{projectBoxStr === ''? '项目状态': projectBoxStr}}</text>
 							<image src="../../static/{{filterActive==2 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
-						<view class="listFilter-item">
-							<text data-num="3" class="listFilter-item-text {{(filterActive==3 || lastFilterLength > 0 ) ? 'filterActive' : ''}}" bindtap="tapFilterItem">筛选</text>
-							<text wx:if="{{lastFilterLength > 0}}">{{lastFilterLength}}</text>
+						<view class="listFilter-item" >
+							<text data-num="3" bindtap="tapFilterItem"  class="listFilter-item-text {{(filterActive==3 || lastFilterLength > 0 ) ? 'filterActive' : ''}}" >筛选</text>
+							<text data-num="3" bindtap="tapFilterItem"  wx:if="{{lastFilterLength > 0}}">{{lastFilterLength}}</text>
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<backdrop wx:if="{{backdropShow}}" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>

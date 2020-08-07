@@ -39,7 +39,7 @@ Component({
     companyList: {
       type: Array,
       value: []
-    }
+    },
   },
   data: {
     dimension: [],
@@ -166,10 +166,6 @@ Component({
       },
       {
         value: '投资中',
-        active: false,
-      },
-      {
-        value: '未知',
         active: false,
       }
     ],

@@ -68,7 +68,7 @@ Page({
     estimateBoxStr: '',
     projectBoxStr: '',
     lastFilterLength: 0,
-    dateText:'未来1年'
+    dateText:'未来1年',
   },
 
   onLoad: function ({
@@ -281,35 +281,21 @@ Page({
       }
     }
     if(num == 4){
-      this.setData({
-        dimension: [1, 2, 3]
-      },() => {
-        const {
-          dimension,
-          projectStatus,
-          cost,
-          cooperStatus,
-          pcId,
-          dateSelect,
-        } = this.data;
-        const param = {
-          dimension,
-          projectStatus,
-          cost,
-          cooperStatus,
-          pcId,
-          ...dateSelect
-        }
-  
-        Object.keys(param).forEach(key => {
-          if(param[key].length === 0){
-            delete(param[key])
+      console.log(list)
+      if(derictFilterActive4){
+        list.map(item => {
+          if(item.estimateBox/100 >= 100000000) {
+            newDataList.push(item)
           }
         })
         this.setData({
-          loading:true,
-        },()=>this._fetchData(param));
-      })
+          list: newDataList
+        })
+      } else {
+        this.setData({
+          list: subList
+        })
+      }
     }
   },
   tapExtend: function () {
