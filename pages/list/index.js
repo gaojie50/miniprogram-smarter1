@@ -105,7 +105,7 @@ Page({
         {loading:true},()=>this._fetchData(this.data.dateSelect));
     } else {
       reqPacking({
-        url: '/api/user/authinfo',
+        url: 'api/user/authinfo',
       }, 'passport').then(({
         success,
         data,
@@ -150,7 +150,7 @@ Page({
   },
   fetchSchedule: function (){
     reqPacking({
-      url: '/api/applet/management/latestSchedule',
+      url: 'api/applet/management/latestSchedule',
     }).then(({
       success,
       data
@@ -165,7 +165,7 @@ Page({
   
   _fetchData: function (param = {}) {
     reqPacking({
-      url: '/api/management/list',
+      url: 'api/management/list',
       data: param,
       method: 'POST'
     }).then(({
