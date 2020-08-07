@@ -20,7 +20,7 @@
 					<input placeholder="搜索项目" disabled="true" placeholder-style="input-ph" bindtap="jumpToSearch" />
 				</label>
 			</view> -->
-				<view class="list">
+				<view style="min-height: calc({{screenHeight}}px)" class="list">
 					<view class="listFilter">
 						<view class="listFilter-item" style="width: 189rpx">
 							<text data-num="4" class="listFilter-item-text filterActive}}" bindtap="tapFilterItem">{{dateText}}</text>
@@ -136,7 +136,12 @@
 										<text wx:if="{{item.principal == null}}">-</text>
 
 									</view>
-									<view class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">89.3万</view>
+									<view class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">
+										<view>
+											<text>{{item.wishNum}}</text>
+											<view wx:if="{{item.sevenDayIncreaseWish}}">近七日新增 {{item.sevenDayIncreaseWish}}</view>
+										</view>
+									</view>
 								</view>
 							</block>
 						</scroll-view>

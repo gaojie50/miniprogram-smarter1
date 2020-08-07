@@ -121,7 +121,6 @@
 }
 
 page {
-  /* border: 1rpx solid red; */
   height: 100%;
   background: linear-gradient(135deg, rgba(121, 140, 186, 1) 0%, rgba(49, 68, 115, 1) 100%);
 }
@@ -264,6 +263,12 @@ page {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.list .listTable .table-right .listTr .listTd:nth-child(12) {
+  min-width: 253rpx !important;
+}
+.list .listTable .table-right .listTr:not(:first-child) .listTd:nth-child(12)  view view {
+  color: #8B94A6;
 }
 .list .listTable .table-right .listTr:nth-child(odd) .listTd{
   background:rgba(247,247,247,1);
