@@ -174,7 +174,6 @@ const formatDirector = director => {
   }
 }
 
-
 const getFutureTimePeriod = (long = 365) =>{
   const curDayBeginDate = new Date(new Date().setHours(0, 0, 0, 0));
   const curDayEndDate = new Date(new Date().setHours(23,59,59,999));
@@ -223,5 +222,5 @@ export default {
   getFutureTimePeriod,
   calcWeek,
   assignDeep,
-  checkDataType,
+  checkDataType
 }
