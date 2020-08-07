@@ -4,7 +4,7 @@ const {
   getMaoyanSignLabel
 } = projectConfig;
 
-const { rpxTopx, formatReleaseDate, formatNumber, formatDirector ,getFutureTimePeriod} = utils;
+const { rpxTopx, formatReleaseDate, formatNumber, formatDirector ,getFutureTimePeriod, formateWishNum} = utils;
 const app = getApp();
 const {
   reqPacking,
@@ -175,6 +175,7 @@ Page({
           item.releaseDate = formatReleaseDate(item.releaseDate);
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
+          item.wishNum = formateWishNum(item.wishNum);
         })
         
         return this.setData({
