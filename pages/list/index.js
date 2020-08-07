@@ -281,20 +281,35 @@ Page({
       }
     }
     if(num == 4){
-      if(derictFilterActive4){
-        list.map(item => {
-          if(item.estimateBox && item.estimateBox > 100000000){
-            newDataList.push(item)
+      this.setData({
+        dimension: [1, 2, 3]
+      },() => {
+        const {
+          dimension,
+          projectStatus,
+          cost,
+          cooperStatus,
+          pcId,
+          dateSelect,
+        } = this.data;
+        const param = {
+          dimension,
+          projectStatus,
+          cost,
+          cooperStatus,
+          pcId,
+          ...dateSelect
+        }
+  
+        Object.keys(param).forEach(key => {
+          if(param[key].length === 0){
+            delete(param[key])
           }
-          this.setData({
-            list: newDataList
-          })
         })
-      } else {
         this.setData({
-          list: subList
-        })
-      }
+          loading:true,
+        },()=>this._fetchData(param));
+      })
     }
   },
   tapExtend: function () {
@@ -449,9 +464,6 @@ Page({
       Object.keys(param).forEach(key => {
         if(param[key].length === 0){
           delete(param[key])
-        }
-        if(param[key] == 'pcId'){
-          param[key] = param[key].id
         }
       })
       this.setData({
