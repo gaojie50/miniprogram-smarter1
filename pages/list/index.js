@@ -69,6 +69,7 @@ Page({
     projectBoxStr: '',
     lastFilterLength: 0,
     dateText:'未来1年',
+    screenHeight: ''
   },
 
   onLoad: function ({
@@ -76,7 +77,10 @@ Page({
   }) {
     if (token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
-
+    this.setData({
+      screenHeight: wx.getSystemInfoSync().windowHeight
+    })
+    console.log(wx.getSystemInfoSync().windowHeight)
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => {
       const {
         companyChecked
