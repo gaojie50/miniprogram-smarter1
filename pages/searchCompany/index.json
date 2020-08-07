@@ -2,5 +2,7 @@
   "usingComponents": {
     "mp-loading": "../../miniprogram_npm/weui-miniprogram/loading/loading"
   },
-  "navigationBarTitleText":"搜索片方"
+  "navigationBarTitleText":"搜索片方",
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTextStyle":"black"
 }
