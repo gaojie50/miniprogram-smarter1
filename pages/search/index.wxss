@@ -84,3 +84,13 @@
   border-radius:4rpx;
   margin-left: 10rpx;
 }
+
+.list-loading{
+  margin-top: 100rpx;
+}
+.no-data{
+  margin-top: 100rpx;
+  text-align: center;
+  font-size:34rpx;
+  line-height: 200rpx;
+}
