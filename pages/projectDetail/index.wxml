@@ -29,7 +29,7 @@
 	</view>
 	<view class="info">
 		<view class="left">主出品：</view>
-		<view class="right">{{data.producer||"-"}}</view>
+		<view class="right">{{data.producer && data.producer[ 0 ] || '-'}}</view>
 	</view>
 	<view class="info">
 		<view class="left">主发行：</view>

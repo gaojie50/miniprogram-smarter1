@@ -25,6 +25,13 @@ function handleNewDate(param){
   return new Date(checkDataType(param) == 'string' ? 
   param.replace(/\.|\-/g, '/') : param);
 }
+function handleDays(day,long,sign='add'){
+  const date = handleNewDate(day);
+
+  if(sign == 'add') return date.setDate(date.getDate() + Number(long));
+
+  return  date.setDate(date.getDate() - Number(long));
+}
 function dateValueCommon(timeStamp){
   const innerTimeStamp = handleNewDate(timeStamp);
 
@@ -204,6 +211,18 @@ Component({
           timeStamp = +handleNewDate(customEndDate.value);
           obj.dateValue = dateValueCommon(customEndDate.value);
         }
+        //一年时间限制 限制开始日期
+        const minimumTimeStamp =  +handleDays(customEndDate.value,365,'subtract');
+        if(timeStamp < minimumTimeStamp ){
+          timeStamp = minimumTimeStamp;
+          obj.dateValue = dateValueCommon(minimumTimeStamp);
+
+          wx.showToast({
+            title: '时间范围限制为1年',
+            icon:'none',
+          })
+        }
+
         obj['customStartDate'] = {
           value:formartDate(timeStamp),
           week:calcWeek(timeStamp),
@@ -217,6 +236,19 @@ Component({
         timeStamp = +handleNewDate(customStartDate.value);
         obj.dateValue = dateValueCommon(customStartDate.value);
       }
+
+      //一年时间限制 限制结束日期
+      const maxTimeStamp =  +handleDays(customStartDate.value,365);
+      if(timeStamp > maxTimeStamp ){
+        timeStamp = maxTimeStamp;
+        obj.dateValue = dateValueCommon(maxTimeStamp);
+
+        wx.showToast({
+          title: '时间范围限制为1年',
+          icon:'none',
+        })
+      }
+
       obj['customEndDate'] = {
         value:formartDate(timeStamp),
         week:calcWeek(timeStamp),
