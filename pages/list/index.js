@@ -63,6 +63,24 @@ Page({
       4: "开发中",
       5: "投资中",
     },
+    directFilterList: [
+      {
+        name: 'maoyan',
+        active: false,
+      },
+      {
+        name: 'ali',
+        active: false,
+      },
+      {
+        name: 'latestSchedule',
+        active: false,
+      },
+      {
+        name: 'superOneMillonEstimateBox',
+        active: false,
+      }
+    ],
     filterItemHidden: [],
     dateSelect: getFutureTimePeriod(),
     estimateBoxStr: '',
@@ -80,7 +98,6 @@ Page({
     this.setData({
       screenHeight: wx.getSystemInfoSync().windowHeight
     })
-    console.log(wx.getSystemInfoSync().windowHeight)
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => {
       const {
         companyChecked
@@ -199,7 +216,7 @@ Page({
     if (num == filterActive) {
       this.setData({
         filterActive: '',
-        backdropShow: ''
+        backdropShow: '',
       })
     } else {
       this.setData({
@@ -210,98 +227,86 @@ Page({
   },
   tapDerictFilter: function (e) {
     const num = e.target.dataset.num;
-    const  derictFilterWrap  = this.data;
-    const { list, subList, latestSchedule } = this.data;
-    const newDataList = [];
+    const derictFilterWrap = this.data;
+    let newDataList = [];
     derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[`derictFilterActive${num}`];
     this.setData({
       ...derictFilterWrap
+    }, () => {
+      const { subList, latestSchedule, directFilterList } = this.data;
+      const list = subList;
+      directFilterList.map((item, index) => {
+        if(num == index+1){
+          item.active = !item.active;
+        }
+      })
+
+      //只看猫眼参与
+      if(directFilterList[0].active){
+        list.map(item => {
+          if(item.company.indexOf(1) !== -1){
+            newDataList.push(item)
+          }
+        })
+        
+      }
+
+      //只看阿里参与
+      if(directFilterList[1].active){
+        list.map(item => {
+          if(item.company.indexOf(2) !== -1){
+            newDataList.push(item)
+          }
+        })
+      }
+
+      //最新档期筛选
+      if(directFilterList[2].active){
+        if(newDataList.length === 0){
+          list.map(item => {
+            if((item.alias.indexOf(latestSchedule.name) !== -1) && (item.alias[0] === latestSchedule.name)){
+              newDataList.push(item)
+            }
+          })
+        } else {
+          const arr = [];
+          newDataList.map(item => {
+            if(item.alias[0] === latestSchedule.name){
+              arr.push(item)
+            }
+          })
+          newDataList = arr;
+        } 
+      }
+
+      //票房超过1亿筛选
+      if(directFilterList[3].active){
+        if(newDataList.length === 0){
+          list.map(item => {
+            if(item.estimateBox/100 >= 100000000) {
+              newDataList.push(item)
+            }
+          })
+        } else {
+          const arr2 = [];
+          newDataList.map(item => {
+            if(item.estimateBox/100 >= 100000000) {
+              arr2.push(item)
+            }
+          })
+          newDataList = arr2;
+        }
+      }
+      this.setData({
+        list: newDataList
+      }) 
+
+        if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[2].active && !directFilterList[3].active){
+          this.setData({
+            list: subList
+          })
+        }
     })
-    const { derictFilterActive1,derictFilterActive2,derictFilterActive3,derictFilterActive4 } = this.data;
-    if(num == 1 || num == 2){
-      
-      const mapList = (arr, mapNum) => {
-        if(mapNum === 1){
-          arr.map(item => {
-            if(item.company.indexOf(1) !== -1){
-              newDataList.push(item)
-            }
-          })
-          this.setData({
-            list: newDataList,
-          })
-        }
-        if(mapNum === 2){
-          arr.map(item => {
-            if(item.company.indexOf(2) !== -1){
-              newDataList.push(item)
-            }
-          })
-          this.setData({
-            list: newDataList,
-          })
-        }
-      }
-      if(num == 1 && derictFilterActive1){
-        mapList(list, 1)
-      }
-      if(num == 1 && !derictFilterActive1){
-        if(derictFilterActive2){
-          mapList(subList, 2)
-        }
-        if(!derictFilterActive2){
-          this.setData({
-            list: subList
-          })
-        }
-      }
-      if(num == 2 && derictFilterActive2){
-        mapList(list, 2)
-      }
-      if(num == 2 && !derictFilterActive2){
-        if(derictFilterActive1){
-          mapList(subList, 1)
-        }
-        if(!derictFilterActive1){
-          this.setData({
-            list: subList
-          })
-        }
-      }
-    }
-    if(num == 3) {
-      if(derictFilterActive3){
-        list.map(item => {
-          if((item.alias.indexOf(latestSchedule.name) !== -1) && (item.alias[0] === latestSchedule.name)){
-            newDataList.push(item)
-          }
-        })
-        this.setData({
-          list: newDataList
-        })
-      } else {
-        this.setData({
-          list: subList
-        })
-      }
-    }
-    if(num == 4){
-      console.log(list)
-      if(derictFilterActive4){
-        list.map(item => {
-          if(item.estimateBox/100 >= 100000000) {
-            newDataList.push(item)
-          }
-        })
-        this.setData({
-          list: newDataList
-        })
-      } else {
-        this.setData({
-          list: subList
-        })
-      }
-    }
   },
   tapExtend: function () {
     const dataList = this.data;
@@ -422,6 +427,10 @@ Page({
     const lastFilterLength = formateFilterLength(costBox, cooperBox, company);
     const pcIdRequest = handlePcId(pcId);
     this.setData({
+      derictFilterActive1: false,
+      derictFilterActive2: false,
+      derictFilterActive3: false,
+      derictFilterActive4: false,
       dimension,
       projectStatus,
       cost,

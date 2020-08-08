@@ -138,7 +138,7 @@
 									</view>
 									<view class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">
 										<view>
-											<text>{{item.wishNum.text}}</text>
+											<text>{{item.wishNum.text || '-'}}</text>
 											<view wx:if="{{item.sevenDayIncreaseWish}}">近七日新增 {{item.sevenDayIncreaseWish}}</view>
 										</view>
 									</view>
