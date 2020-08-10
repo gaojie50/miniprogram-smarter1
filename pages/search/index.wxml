@@ -16,9 +16,9 @@
 	<view class="item" wx:for="{{list}}" wx:key="id" data-Id="{{item.maoyanId}}" bindtap="jumpDetail">
 		<image src="{{item.pic}}" />
 		<view class="name">{{item.name}}</view>
-		<view class="director">导演：{{item.director}}</view>
+		<view class="director">导演：{{item.director ? item.director :'-'}}</view>
 		<view class="release">
-			<text>{{item.releaseDesc}}</text>
+			<text>{{item.releaseDesc ? item.releaseDesc : ''}}</text>
 			<text class="schedule-label" wx:if="{{item.movieStatus == 1 && item.reRelease}}" style="background-color:rgba(19,194,194,0.1); color:rgba(19,194,194,1)">重映</text>
       <text class="schedule-label" wx:if="{{item.movieStatus == 1 && !item.reRelease}}" style="background-color:{{item.scheduleObj.bgColor}};color:{{item.scheduleObj.color}}">{{item.scheduleObj.label}}</text>
 		</view>

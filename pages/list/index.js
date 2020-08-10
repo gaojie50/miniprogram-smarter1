@@ -108,7 +108,7 @@ Page({
     })
     
     // 判断用户是否有权限
-    if (wx.getStorageSync('listPermission')) {
+    if (wx.getStorageSync('listPermission') > +new Date()) {
       this.setData({
         curPagePermission: true,
         initLoading:false,
@@ -127,11 +127,12 @@ Page({
           app.globalData.authinfo = data;
           if (data &&
             data.authIds &&
-            data.authIds.length > 0 &&
-            data.authIds.includes(95110)
+            (data.authIds.length > 0) &&
+            data.authIds.includes(95110) &&
+            (data.authEndTime > +new Date())
           ) {
             //用户有权限
-            wx.setStorageSync('listPermission', true);
+            wx.setStorageSync('listPermission', data.authEndTime );
 
             this.setData({
               loading:true,
