@@ -2,7 +2,7 @@ import reqPacking from '../../utils/reqPacking';
 import utils from '../../utils/index';
 import projectConfig from '../../constant/project-config';
 
-const {throttle} = utils;
+const {debounce,} = utils;
 const {getScheduleType} = projectConfig;
 
 function fn(e) {
@@ -17,7 +17,7 @@ function fn(e) {
     loading:true
   },()=>{
     reqPacking({
-      url: '/api/management/list',
+      url: 'api/management/list',
       data: { name: innerVal },
       method:'POST'
     }).then(({ success,data}) => {
@@ -49,17 +49,18 @@ Page({
     loading:false,
   },
 
-  bindKeyInput: throttle(fn,500),
+  bindKeyInput: debounce(fn,500),
 
   jumpDetail:function(e){
     const {id} = e.currentTarget.dataset;
     const {list} = this.data;
+    const filterList = JSON.parse(JSON.stringify(list)).filter(item => item.maoyanId == id)[0];
 
     wx.navigateTo({
       url:`/pages/projectDetail/index`,
       success: function(res) {
         res.eventChannel.emit('acceptDataFromOpenerPage', { 
-          item:list.filter(item => item.maoyanId == id)[0]
+          item:filterList
          })
       }
     })

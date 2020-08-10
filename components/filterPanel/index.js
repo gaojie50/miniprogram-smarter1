@@ -194,6 +194,7 @@ Component({
       week:calcWeek(defaultCustomDate.endDate),
     },
     dateShowFirstActive:true,
+    showDateSureBtn:false,
   },
   methods: {
     dateSelect: function (e) {
@@ -274,16 +275,26 @@ Component({
 
     dateSelectEvent: function (e) {
       const { value } = e.target.dataset;
-      const { dateSet } = this.data;
-
+      let { dateSet,showDateSureBtn} = this.data;
+    
       if(dateSet.some(item => item.value == value && item.checked=="checked" )) return;
 
+      const dateSetVar = dateSet.map(item =>{
+        item.checked = '';
+        if(item.value == value) {
+          item.checked = "checked";
+          showDateSureBtn = item.label =='自定义'; 
+        };
+        return item;
+      });
+
       this.setData({
-        dateSet:dateSet.map(item =>{
-          item.checked = '';
-          if(item.value == value) item.checked = "checked";
-          return item;
-        })
+        dateSet:dateSetVar,
+        showDateSureBtn,
+      },()=>{
+        const {showDateSureBtn} = this.data;
+
+        if(!showDateSureBtn) this.filterDefinedDate();
       })
     },
     tapEstimateBox: function (e) {

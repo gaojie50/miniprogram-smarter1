@@ -1,7 +1,7 @@
 import reqPacking from '../../utils/reqPacking';
 import utils from './../../utils/index';
 
-const {throttle} = utils;
+const {debounce} = utils;
 
 function fn(e) {
   const { value } = e.detail;
@@ -15,7 +15,7 @@ function fn(e) {
     loading:true
   },()=>{
     reqPacking({
-      url: '/api/company/search',
+      url: 'api/company/search',
       data: {
         keyword: innerVal,
       }
@@ -54,7 +54,7 @@ Page({
     }
   },
 
-  bindKeyInput: throttle(fn,500),
+  bindKeyInput: debounce(fn,500),
   
   touchCheckEvent:function(e) {
     const {name,id} = e.target.dataset;

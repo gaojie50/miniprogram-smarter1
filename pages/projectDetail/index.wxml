@@ -33,7 +33,7 @@
 	</view>
 	<view class="info">
 		<view class="left">主发行：</view>
-		<view class="right">{{data.issuer||"-"}}</view>
+		<view class="right">{{data.issuer && data.issuer[ 0 ] || '-'}}</view>
 	</view>
 	<view class="info">
 		<view class="left">导演：</view>

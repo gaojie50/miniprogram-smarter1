@@ -33,7 +33,7 @@ view.welcome button.login-btn {
   background: rgba(24, 144, 255, 1);
   border-radius: 10rpx;
   position: fixed;
-  bottom: 150rpx;
+  bottom: 50rpx;
   left: 50%;
   transform: translate(-50%, 0);
   font-size: 32rpx;

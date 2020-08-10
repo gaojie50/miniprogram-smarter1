@@ -4,51 +4,18 @@ const errorHandle = (err) => {
   return err;
 };
 
-//防抖
-const throttle = function (func, wait, options) {
-  let context, args, result;
-  let timeout = null;
-  let previous = 0;
-
-  if (!options) options = {};
-
-  const later = function () {
-    previous = options.leading === false ? 0 : +new Date;
-    timeout = null;
-
-    result = func.apply(context, args);
-
-    if (!timeout)
-      context = args = null;
-  };
-
+function debounce(fn, interval) {
+  let timer;
+  let gapTime = interval || 1000;
   return function () {
-    let now = +new Date;
-
-    if (!previous && options.leading === false)
-      previous = now;
-
-    let remaining = wait - (now - previous);
-    context = this;
-    args = arguments;
-
-    if (remaining <= 0 || remaining > wait) {
-      if (timeout) {
-        clearTimeout(timeout);
-
-        timeout = null;
-      }
-      previous = now;
-      result = func.apply(context, args);
-
-      if (!timeout) context = args = null;
-    } else if (!timeout && options.trailing !== false) {
-      timeout = setTimeout(later, remaining);
-    }
-
-    return result;
+    clearTimeout(timer);
+    let context = this;
+    let args = arguments[0];
+    timer = setTimeout(function () {
+      fn.call(context, args);
+    }, gapTime);
   };
-};
+}
 
 
 const rpxTopx = function(rpx){
@@ -247,7 +214,7 @@ const assignDeep = (...objects) => {
 }
 export default {
   errorHandle,
-  throttle,
+  debounce,
   rpxTopx,
   formatNumber,
   formatReleaseDate,
