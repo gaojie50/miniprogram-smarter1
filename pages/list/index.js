@@ -129,6 +129,10 @@ Page({
       }) => {
         if (success) {
           app.globalData.authinfo = data;
+
+          console.log({ 
+            token:wx.getStorageSync('token'),
+            authinfoData:data,})
           if (data &&
             data.authIds &&
             (data.authIds.length > 0) &&
@@ -163,7 +167,7 @@ Page({
     var obj = wx.createSelectorQuery();
     obj.select('.vheight').boundingClientRect();
     obj.exec(function (rect) {
-      console.log(rect)
+
     });
   },
   fetchSchedule: function (){
