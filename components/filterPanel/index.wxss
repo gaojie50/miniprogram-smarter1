@@ -1,5 +1,6 @@
 .filterPanelWrap {
-  height: 100%;
+  width: 100%;
+  max-height: 1059rpx;
   overflow: hidden;
 }
 
@@ -39,12 +40,11 @@
 }
 
 .lastFilterButton {
-  position: absolute;
+  position: relative;
   bottom: 20rpx;
   display: flex;
   flex-direction: row;
   font-size: 32rpx;
-  z-index: 55;
 }
 
 .filterButton-reset {

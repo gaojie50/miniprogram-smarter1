@@ -202,6 +202,7 @@ Page({
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
           item.wishNum = formatNumber(item.wishNum);
+          item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
         })
         
         return this.setData({

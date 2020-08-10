@@ -192,10 +192,14 @@ page {
 }
 
 .list .listDerict .listDerict-item {
-  padding: 12rpx 18rpx;
+  width: 188rpx;
+  height: 60rpx;
+  text-align: center;
+  line-height: 60rpx;
   background: rgba(242, 243, 248, 1);
   border-radius: 10rpx;
   margin-left: 10rpx;
+  overflow: hidden;
   white-space: nowrap;
   box-sizing: border-box;
 }
@@ -205,10 +209,10 @@ page {
 }
 
 .derictFilterActive {
+  line-height: 58rpx !important;
   background-color: rgba(24, 144, 255, 0.1) !important;
   border: 1px solid rgba(24, 144, 255, 1);
   color: rgba(24, 144, 255, 1);
-  padding: 11rpx 17rpx !important;
 }
 
 .list .listTable {

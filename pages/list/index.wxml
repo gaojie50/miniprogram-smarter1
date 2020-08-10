@@ -72,7 +72,7 @@
 						</view>
 						<scroll-view class="table-right" scroll-x>
 							<view class="listTr">
-								<view class="listTd {{filterItemHidden1? 'itemHidden':''}}">上映时间</view>
+								<view class="listTd {{filterItemHidden1? 'itemHidden':''}}">上映日期</view>
 								<view class="listTd {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
 								<view class="listTd {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
 								<view class="listTd {{filterItemHidden4? 'itemHidden':''}}">预估评分</view>
@@ -142,7 +142,7 @@
 									<view class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">
 										<view>
 											<text>{{item.wishNum.text || '-'}}</text>
-											<view wx:if="{{item.sevenDayIncreaseWish}}">近七日新增 {{item.sevenDayIncreaseWish}}</view>
+											<view wx:if="{{item.sevenDayIncreaseWish}}">近七日新增 {{item.sevenDayIncreaseWish.text}}</view>
 										</view>
 									</view>
 								</view>
