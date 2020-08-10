@@ -55,12 +55,20 @@
 				</view>
 				<view class="last-title">
 					<text class="title">片方</text>
-					<text style="margin-left: 567rpx" bindtap="movieAdd" class="add">添加 ></text>
+					<text bindtap="movieAdd" class="add">添加</text>
+					<image bindtap="movieAdd" src="../../static/arrow.png" style="height: 20rpx;width: 11rpx" alt="" />
 				</view>
 				<view class="company">
-					<block wx:for="{{companyList}}"  wx:key="index">
-						<view data-num="{{index}}" class="company-item {{company[index]=='active' ? 'filterPanelActive':''}}" bindtap="tapCompany">{{item.name}}</view>
-					</block>
+						<view class="company-left">
+							<view wx:for="{{companyList}}" wx:if="{{index%2 === 0}}" data-num="{{index}}" bindtap="tapCompany" wx:key="index" class="company-item {{company[index]=='active' ? 'companyActive':''}}">
+								<text data-num="{{index}}"  bindtap="tapCompanyText" >{{item.name}}</text>
+							</view>
+						</view>
+						<view  class="company-right">
+							<view wx:for="{{companyList}}" bindtap="tapCompany"  wx:key="index" wx:if="{{index%2 !== 0}}" data-num="{{index}}" class="company-item {{company[index]=='active' ? 'companyActive':''}}">
+								<text data-num="{{index}}" bindtap="tapCompanyText">{{item.name}}</text>
+							</view>
+						</view>
 				</view>
 			</scroll-view>
 		</view>
