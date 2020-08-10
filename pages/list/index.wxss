@@ -287,7 +287,7 @@ page {
   position: absolute;
   display: flex;
   right: 0;
-  top: 180rpx;
+  top: 0;
   align-items: center;
   z-index: 15;
   width: 118rpx;

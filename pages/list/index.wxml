@@ -51,9 +51,6 @@
 					<view wx:if="{{loading}}" class="list-loading">
 						<mp-loading type="circle" show="{{true}}" tips=""></mp-loading>
 					</view>
-					<view class="extends" bindtap="tapExtend">
-							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
-					</view>
 					<view class="listTable"  wx:if="{{!loading}}">
 						<view class="table-left">
 							<view class="listTr">
@@ -69,6 +66,9 @@
 									</view>
 								</view>
 							</block>
+						</view>
+						<view class="extends" bindtap="tapExtend">
+							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
 						</view>
 						<scroll-view class="table-right" scroll-x>
 							<view class="listTr">
