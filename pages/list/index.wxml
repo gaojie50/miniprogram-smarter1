@@ -43,8 +43,8 @@
 						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}" companyList="{{companyList}}"></filterPanel>
 					</view>
 					<view class="listDerict">
-						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">只看猫眼参与</view>
-						<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">只看阿里参与</view>
+						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">猫眼参与</view>
+						<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">阿里参与</view>
 						<view wx:if="{{latestSchedule.name}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.name}}</view>
 						<view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
 					</view>

@@ -204,7 +204,7 @@ Page({
           item.wishNum = formatNumber(item.wishNum);
           item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
         })
-        
+        console.log(data)
         return this.setData({
           list: data,
           subList: data,
@@ -260,16 +260,25 @@ Page({
       if(directFilterList[0].active){
         list.map(item => {
           if(item.company.indexOf(1) !== -1){
+            for(let i=0; i<newDataList.length; i++){
+              if(newDataList[i].maoyanId == item.maoyanId){
+                newDataList.splice(i, 1);
+              }
+            }
             newDataList.push(item)
           }
         })
-        
       }
 
       //只看阿里参与
       if(directFilterList[1].active){
         list.map(item => {
           if(item.company.indexOf(2) !== -1){
+            for(let i=0; i<newDataList.length; i++){
+              if(newDataList[i].maoyanId == item.maoyanId){
+                newDataList.splice(i, 1);
+              }
+            }
             newDataList.push(item)
           }
         })
@@ -312,6 +321,7 @@ Page({
           newDataList = arr2;
         }
       }
+      console.log(newDataList)
       this.setData({
         list: newDataList
       })
