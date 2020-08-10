@@ -250,7 +250,7 @@ page {
 }
 .list .listTable .table-right .listTr:not(:first-child) .listTd{
   min-width: 195rpx;
-  /* height: 160rpx; */
+  height: 160rpx;
   display: inline-flex; 
   flex-direction: row;
   align-items: center; 
