@@ -87,7 +87,6 @@ Page({
     projectBoxStr: '',
     lastFilterLength: 0,
     dateText:'未来1年',
-    screenHeight: ''
   },
   onLoad: function ({
     token
@@ -393,7 +392,7 @@ Page({
         const [year,month,day] = str.split('.');
         return year == `${new Date().getFullYear()}` ? `${month}.${day}` : str;
       }
-      
+
       dateText = `${abbrCurYear(customStartDate.value)}-${abbrCurYear(customEndDate.value)}`;
     }
     
