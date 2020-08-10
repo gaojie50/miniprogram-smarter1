@@ -12,7 +12,7 @@ const ApiBaseSet = {
     staging: {
       server: 'https://starcloud.movie.st.sankuai.com',
   	  passport: 'https://starcloud-user.movie.st.sankuai.com',
-      keeper: 'https://keeper.maoyan.com',
+      keeper: 'https://keeper.movie.st.sankuai.com',
     },
 
     //生产环境
