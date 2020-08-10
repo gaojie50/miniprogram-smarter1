@@ -2,7 +2,7 @@ import reqPacking from '../../utils/reqPacking';
 import utils from '../../utils/index';
 import projectConfig from '../../constant/project-config';
 
-const {debounce} = utils;
+const {debounce,} = utils;
 const {getScheduleType} = projectConfig;
 
 function fn(e) {
@@ -54,12 +54,13 @@ Page({
   jumpDetail:function(e){
     const {id} = e.currentTarget.dataset;
     const {list} = this.data;
+    const filterList = JSON.parse(JSON.stringify(list)).filter(item => item.maoyanId == id)[0];
 
     wx.navigateTo({
       url:`/pages/projectDetail/index`,
       success: function(res) {
         res.eventChannel.emit('acceptDataFromOpenerPage', { 
-          item:list.filter(item => item.maoyanId == id)[0]
+          item:filterList
          })
       }
     })
