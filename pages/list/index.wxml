@@ -39,7 +39,7 @@
 							<text data-num="3" bindtap="tapFilterItem"  wx:if="{{lastFilterLength > 0}}">{{lastFilterLength}}</text>
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
-						<backdrop wx:if="{{backdropShow}}" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
+						<backdrop wx:if="{{backdropShow}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
 						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}" companyList="{{companyList}}"></filterPanel>
 					</view>
 					<view class="listDerict">
@@ -51,10 +51,13 @@
 					<view wx:if="{{loading}}" class="list-loading">
 						<mp-loading type="circle" show="{{true}}" tips=""></mp-loading>
 					</view>
+					<view class="extends" bindtap="tapExtend">
+							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
+					</view>
 					<view class="listTable"  wx:if="{{!loading}}">
 						<view class="table-left">
 							<view class="listTr">
-								<view style="" class="listTd listNowrap shadow">{{list.length}}部影片</view>
+								<view style="" class="listTd shadow">{{list.length}}部影片</view>
 							</view>
 							<block wx:for="{{list}}" wx:key="maoyanId">
 								<view class="listTr">
@@ -69,21 +72,21 @@
 						</view>
 						<scroll-view class="table-right" scroll-x>
 							<view class="listTr">
-								<view class="listTd listNowrap {{filterItemHidden1? 'itemHidden':''}}">上映时间</view>
-								<view class="listTd listNowrap {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
-								<view class="listTd listNowrap {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
-								<view class="listTd listNowrap {{filterItemHidden4? 'itemHidden':''}}">预估评分</view>
-								<view class="listTd listNowrap {{filterItemHidden5? 'itemHidden':''}}">主出品</view>
-								<view class="listTd listNowrap {{filterItemHidden6? 'itemHidden':''}}">主发行</view>
-								<view class="listTd listNowrap {{filterItemHidden7? 'itemHidden':''}}">类型</view>
-								<view class="listTd listNowrap {{filterItemHidden8? 'itemHidden':''}}">导演</view>
-								<view class="listTd listNowrap {{filterItemHidden9? 'itemHidden':''}}">项目状态</view>
-								<view class="listTd listNowrap {{filterItemHidden10? 'itemHidden':''}}">合作状态</view>
-								<view class="listTd listNowrap {{filterItemHidden11? 'itemHidden':''}}">跟进人</view>
-								<view class="listTd listNowrap {{filterItemHidden12? 'itemHidden':''}}">映前想看人数</view>
+								<view class="listTd {{filterItemHidden1? 'itemHidden':''}}">上映时间</view>
+								<view class="listTd {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
+								<view class="listTd {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
+								<view class="listTd {{filterItemHidden4? 'itemHidden':''}}">预估评分</view>
+								<view class="listTd {{filterItemHidden5? 'itemHidden':''}}">主出品</view>
+								<view class="listTd {{filterItemHidden6? 'itemHidden':''}}">主发行</view>
+								<view class="listTd {{filterItemHidden7? 'itemHidden':''}}">类型</view>
+								<view class="listTd {{filterItemHidden8? 'itemHidden':''}}">导演</view>
+								<view class="listTd {{filterItemHidden9? 'itemHidden':''}}">项目状态</view>
+								<view class="listTd {{filterItemHidden10? 'itemHidden':''}}">合作状态</view>
+								<view class="listTd {{filterItemHidden11? 'itemHidden':''}}">跟进人</view>
+								<view class="listTd {{filterItemHidden12? 'itemHidden':''}}">映前想看人数</view>
 							</view>
 							<block wx:for="{{list}}" wx:key="maoyanId">
-								<view class="listTr">
+								<view class="listTr rightTableHeight">
 									<view class="listTd tdPadding vheight {{filterItemHidden1? 'itemHidden':''}}">
 										<view>
 											<view>
@@ -148,9 +151,7 @@
 						<view wx:if="{{list.length == 0}}" class="no-data">
 							暂无数据
 						</view>
-						<view class="extends listFiexd" bindtap="tapExtend" catchtouchmove="doNothing">
-							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
-						</view>
+						
 					</view>
 				</view>
 			</view>

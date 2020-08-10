@@ -250,7 +250,7 @@ page {
 }
 .list .listTable .table-right .listTr:not(:first-child) .listTd{
   min-width: 195rpx;
-  height: 160rpx;
+  /* height: 160rpx; */
   display: inline-flex; 
   flex-direction: row;
   align-items: center; 
@@ -282,23 +282,17 @@ page {
   z-index: 10;
 }
 
-.listNowrap {
-  white-space: nowrap;
-}
 
 .extends {
+  position: absolute;
   display: flex;
   right: 0;
-  top: 300rpx;
+  top: 180rpx;
   align-items: center;
   z-index: 15;
   width: 118rpx;
   height: 70rpx;
   background: linear-gradient(90deg, rgba(247, 247, 247, 0) 0%, rgba(247, 247, 247, 1) 100%);
-}
-
-.listFiexd {
-  position: fixed;
 }
 
 .itemHidden {

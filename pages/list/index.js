@@ -89,15 +89,22 @@ Page({
     dateText:'未来1年',
     screenHeight: ''
   },
-
+  // onReady: function (){
+  //   var query = wx.createSelectorQuery();
+  //   query.select('.rightTableHeight').boundingClientRect().exec(rect => {
+  //     console.log(rect)
+  //     console.log(111)
+  //   });
+  // },
   onLoad: function ({
     token
   }) {
     if (token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
-    this.setData({
-      screenHeight: wx.getSystemInfoSync().windowHeight
-    })
+    // this.setData({
+    //   screenHeight: wx.getSystemInfoSync().windowHeight
+    // })
+    
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => {
       const {
         companyChecked
@@ -241,7 +248,12 @@ Page({
         }
       })
 
-      //只看猫眼参与
+      if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[2].active && !directFilterList[3].active){
+        this.setData({
+          list: subList
+        })
+      } else {
+        //只看猫眼参与
       if(directFilterList[0].active){
         list.map(item => {
           if(item.company.indexOf(1) !== -1){
@@ -299,13 +311,8 @@ Page({
       }
       this.setData({
         list: newDataList
-      }) 
-
-        if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[2].active && !directFilterList[3].active){
-          this.setData({
-            list: subList
-          })
-        }
+      })
+      }
     })
   },
   tapExtend: function () {
@@ -314,6 +321,13 @@ Page({
     dataList.costomShow = true;
     this.setData({
       ...dataList
+    })
+  },
+  ongetBackDrop: function (e) {
+    this.setData({
+      backdropShow: '',
+      filterActive: '',
+      costomShow: false,
     })
   },
   ongetCostom: function (e) {
