@@ -173,16 +173,17 @@
   font-size: 30rpx;
   color: #333;
   min-height: 92rpx;
-  padding: 0 57rpx;
+  padding: 0 27rpx;
   word-break: break-all;
   display: flex;
   align-items: center;
-  width: 200rpx;
 }
 
-.dateBox .checked {
+.dateBox .item.checked {
   color: #1791FF;
-  padding-left: 18rpx;
+  position: relative;
+  left: -12rpx;
+  padding-left: 0;
 }
 
 .dateBox .checked .pic {
@@ -203,7 +204,6 @@
 .date-show {
   height: 162rpx;
   margin-right: 60rpx;
-  margin-bottom: 40rpx;
   border-top: 1rpx solid #E5E5E5;
   position: relative;
   text-align: center;
@@ -242,7 +242,7 @@
   top: 40rpx;
   width: 320rpx;
   border-bottom: 1px solid #E5E5E5;
-  height: 162rpx;
+  height: 122rpx;
   text-align: left;
 }
 
@@ -252,7 +252,7 @@
   top: 40rpx;
   width: 320rpx;
   border-bottom: 1px solid #E5E5E5;
-  height: 162rpx;
+  height: 122rpx;
   text-align: right;
 }
 
@@ -261,4 +261,5 @@
   height: 336rpx;
   position: relative;
   left: -30rpx;
+  font-size: 40rpx;
 }

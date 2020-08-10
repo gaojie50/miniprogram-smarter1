@@ -89,21 +89,11 @@ Page({
     dateText:'未来1年',
     screenHeight: ''
   },
-  // onReady: function (){
-  //   var query = wx.createSelectorQuery();
-  //   query.select('.rightTableHeight').boundingClientRect().exec(rect => {
-  //     console.log(rect)
-  //     console.log(111)
-  //   });
-  // },
   onLoad: function ({
     token
   }) {
     if (token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
-    // this.setData({
-    //   screenHeight: wx.getSystemInfoSync().windowHeight
-    // })
     
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => {
       const {
@@ -394,12 +384,17 @@ Page({
       dateText = checkedDate.label;
     }else{
       //时间为自定义
-      console.log(customStartDate);
       dateSelect ={
         startDate: +new Date(new Date(customStartDate.value).setHours(0, 0, 0, 0)),
         endDate: +new Date(new Date(customEndDate.value).setHours(23,59,59,999))
       }
-      dateText = `${customStartDate.value}-${customEndDate.value}`;
+
+      function abbrCurYear(str){
+        const [year,month,day] = str.split('.');
+        return year == `${new Date().getFullYear()}` ? `${month}.${day}` : str;
+      }
+      
+      dateText = `${abbrCurYear(customStartDate.value)}-${abbrCurYear(customEndDate.value)}`;
     }
     
     const formateFilterStr = function (arr){
