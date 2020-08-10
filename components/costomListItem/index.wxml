@@ -3,7 +3,9 @@
   <view class="listTitle">
     <text style="font-size: 32rpx; font-weight: 500;">指标自定义</text>
     <text style="color:rgba(153,153,153,1);margin-left: 10rpx;">至少保留4项</text>
-    <image bindtap="tapClose" class="closeImg" src="../../static/close.png" />
+    <view bindtap="tapClose" class="closeImg">
+      <image  src="../../static/close.png" />
+    </view>
   </view>
   <view class="listWrap">
     <view data-num="1" bindtap="tapCostom" class="listWrapItem {{costom1? 'costomActive':''}}">上映时间</view>

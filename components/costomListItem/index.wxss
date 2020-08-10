@@ -2,7 +2,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 774rpx;
+  height: 694rpx;
   padding: 40rpx 30rpx 20rpx;
   box-sizing: border-box;
   border-radius: 20rpx 20rpx 0 0;
@@ -14,15 +14,20 @@
 }
 .costomListItem .listTitle .closeImg {
   display: inline-block;
-  width: 28.41rpx;
-  height: 28.41rpx;
-  margin-left: 326rpx;
+  width: 40rpx;
+  height: 40rpx;
+  text-align: center;
+  margin-left: 331rpx;
+}
+.costomListItem .listTitle .closeImg image {
+  width: 29rpx;
+  height: 29rpx;
 }
 .costomListItem .listWrap {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 40rpx 0;
+  margin: 38rpx 0;
 }
 .costomListItem .listWrap .listWrapItem {
   width: 216rpx;

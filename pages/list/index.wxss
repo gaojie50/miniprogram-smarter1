@@ -180,8 +180,8 @@ page {
 }
 
 .list .listFilter image {
-  width: 12rpx;
-  height: 7.5rpx;
+  width: 14rpx;
+  height: 9.5rpx;
 }
 
 .list .listDerict {
@@ -192,7 +192,7 @@ page {
 }
 
 .list .listDerict .listDerict-item {
-  padding: 12rpx 16rpx;
+  padding: 12rpx 18rpx;
   background: rgba(242, 243, 248, 1);
   border-radius: 10rpx;
   margin-left: 10rpx;
@@ -208,7 +208,7 @@ page {
   background-color: rgba(24, 144, 255, 0.1) !important;
   border: 1px solid rgba(24, 144, 255, 1);
   color: rgba(24, 144, 255, 1);
-  padding: 11rpx 15rpx !important;
+  padding: 11rpx 17rpx !important;
 }
 
 .list .listTable {
@@ -282,23 +282,17 @@ page {
   z-index: 10;
 }
 
-.listNowrap {
-  white-space: nowrap;
-}
 
 .extends {
+  position: absolute;
   display: flex;
   right: 0;
-  top: 300rpx;
+  top: 0;
   align-items: center;
   z-index: 15;
   width: 118rpx;
   height: 70rpx;
   background: linear-gradient(90deg, rgba(247, 247, 247, 0) 0%, rgba(247, 247, 247, 1) 100%);
-}
-
-.listFiexd {
-  position: fixed;
 }
 
 .itemHidden {
