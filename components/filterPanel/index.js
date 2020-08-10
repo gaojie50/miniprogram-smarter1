@@ -351,6 +351,28 @@ Component({
         ...dataList
       })
     },
+    tapCompanyText: function (e) {
+      const num = e.target.dataset.num;
+      const {
+        companyList
+      } = this.data;
+      const dataList = this.data;
+      if (JSON.stringify(dataList.company) == "{}") {
+        for (let m = 0; m < companyList.length; m++) {
+          dataList.company[m] = ''
+        }
+      }
+      if (num != null) {
+        if (dataList.company[num] !== '') {
+          dataList.company[num] = 'active';
+        } else {
+          dataList.company[num] = '';
+        }
+      }
+      this.setData({
+        ...dataList
+      })
+    },
     filterReset: function () {
       const {
         filterShow,

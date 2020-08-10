@@ -33,7 +33,8 @@ Page({
     subList: [],
     filterItemHidden:[],
     latestSchedule: {},
-    companyList: [{
+    companyList: [
+      {
       id: 37786,
       name: "上海猫眼影业有限公司"
       },
@@ -93,7 +94,10 @@ Page({
   }) {
     if (token) wx.setStorageSync('token', token);
     const eventChannel = this.getOpenerEventChannel();
-    
+    this.setData({
+      screenHeight: wx.getSystemInfoSync().windowHeight
+    })
+
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => {
       const {
         companyChecked
