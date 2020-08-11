@@ -88,7 +88,13 @@
 							<block wx:for="{{list}}" wx:key="maoyanId">
 								<view class="listTr rightTableHeight">
 									<view class="listTd tdPadding vheight {{filterItemHidden1? 'itemHidden':''}}">
-										<view>
+										<view wx:if="{{item.reRelease}}">
+											<view>
+												<text>{{item.releaseDate}}</text>
+											</view>
+											<view style="color: rgb(19, 194, 194);">重映</view>
+										</view>
+										<view wx:if="{{!item.reRelease}}">
 											<view>
 												<text>{{item.releaseDate}}</text>
 											</view>
