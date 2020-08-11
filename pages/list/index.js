@@ -165,7 +165,7 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
-      
+      console.log(data)
         data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
@@ -173,16 +173,18 @@ Page({
           if(item.estimateBox){
             item.estimateBox2 = formatNumber(item.estimateBox/100);
           }
-          // if(item.name.length>6 && item.maoyanSignLabel !== 0){
-          //   item.trHeight = 160;
-          // } else if(item.releaseDate !== 0 && item.scheduleType !== 0 && item.alias.length !== 0) {
-          //   item.trHeight = 160;
-          // } else if(item.producer[0].length >10 || item.issuer[0].length > 10){
-          //   item.trHeight = 160;
-          // }
-          // else {
-          //   item.trHeight = 120;
-          // }
+          if(item.name.length>6 && item.maoyanSign.length !== 0){
+            item.trHeight = 160;
+          } else if(item.releaseDate !== 0 && item.scheduleType !== 0 && item.alias.length !== 0) {
+            item.trHeight = 160;
+          } else if((item.producer && item.producer[0].length >12) || (item.issuer && item.issuer[0].length > 12)){
+            item.trHeight = 160;
+          } else if((item.director && item.director.length > 11) || (item.movieType && item.movieType.length > 14)){
+            item.trHeight = 160;
+          }
+          else {
+            item.trHeight = 120;
+          }
           item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc);
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
