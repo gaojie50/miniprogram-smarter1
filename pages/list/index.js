@@ -88,7 +88,6 @@ Page({
     projectBoxStr: '',
     lastFilterLength: 0,
     dateText:'未来1年',
-    screenHeight: ''
   },
   onLoad: function ({
     token
@@ -113,7 +112,7 @@ Page({
     })
     
     // 判断用户是否有权限
-    if (wx.getStorageSync('listPermission')) {
+    if (wx.getStorageSync('listPermission') > +new Date()) {
       this.setData({
         curPagePermission: true,
         initLoading:false,
@@ -130,13 +129,18 @@ Page({
       }) => {
         if (success) {
           app.globalData.authinfo = data;
+
+          console.log({ 
+            token:wx.getStorageSync('token'),
+            authinfoData:data,})
           if (data &&
             data.authIds &&
-            data.authIds.length > 0 &&
-            data.authIds.includes(95110)
+            (data.authIds.length > 0) &&
+            data.authIds.includes(95110) &&
+            (data.authEndTime > +new Date())
           ) {
             //用户有权限
-            wx.setStorageSync('listPermission', true);
+            wx.setStorageSync('listPermission', data.authEndTime );
 
             this.setData({
               loading:true,
@@ -163,7 +167,7 @@ Page({
     var obj = wx.createSelectorQuery();
     obj.select('.vheight').boundingClientRect();
     obj.exec(function (rect) {
-      console.log(rect)
+
     });
   },
   fetchSchedule: function (){
@@ -408,7 +412,7 @@ Page({
         const [year,month,day] = str.split('.');
         return year == `${new Date().getFullYear()}` ? `${month}.${day}` : str;
       }
-      
+
       dateText = `${abbrCurYear(customStartDate.value)}-${abbrCurYear(customEndDate.value)}`;
     }
     

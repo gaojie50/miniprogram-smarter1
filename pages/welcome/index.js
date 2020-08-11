@@ -8,6 +8,7 @@ Page({
   data: {
     isLogin: wx.getStorageSync('token'),
     titleHeight: Math.floor(capsuleLocation.bottom + capsuleLocation.top - barHeight),
+    code:null,
   },
 
   goList: function(){
@@ -18,14 +19,11 @@ Page({
 
   getUserInfo: function (e) {
     if (e.detail.userInfo) {
-      app.globalData.userInfo = e.detail;
-
-      const {code ,userInfo } = app.globalData;
-      const {iv,encryptedData} = userInfo;
+      const {iv,encryptedData} = e.detail.userInfo;
 
       if(this.data.isLogin) return wx.redirectTo({url: `/pages/list/index`});
-
-      return keepLogin({ code,iv,encryptedData})
+   
+      return keepLogin({ iv,encryptedData});
     }
 
     wx.showModal({

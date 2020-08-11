@@ -20,7 +20,7 @@
 					<input placeholder="搜索项目" disabled="true" placeholder-style="input-ph" bindtap="jumpToSearch" />
 				</label>
 			</view> -->
-				<view style="min-height: calc({{screenHeight}}px)" class="list">
+				<view style="min-height: calc(100vh - {{titleHeight}}px)" class="list">
 					<view class="listFilter">
 						<view class="listFilter-item" style="width: 189rpx">
 							<text data-num="4" class="listFilter-item-text filterActive}}" bindtap="tapFilterItem">{{dateText}}</text>
