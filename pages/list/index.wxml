@@ -1,7 +1,7 @@
 <view wx:if="{{initLoading}}" class="init-loading">
 	<mp-loading type="circle" show="{{true}}" animated="{{true}}" duration="{{900}}" tips=""></mp-loading>
 </view>
-
+	<backdrop wx:if="{{backdropShow}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
 <view wx:if="{{curPagePermission && !initLoading}}">
 	<view class="header">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
@@ -92,7 +92,7 @@
 											<view>
 												<text>{{item.releaseDate}}</text>
 											</view>
-											<text>{{item.alias[0]}}</text>
+											<text wx:if="{{item.releaseDate.length ===4 && item.releaseDate.toString().indexOf('.') === -1}}">{{item.alias[0]}}</text>
 											<scheduleType signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
 										</view>
 									</view>

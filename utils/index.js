@@ -126,11 +126,11 @@ const formatReleaseDate = date => {
     
     if(date.startDate === null && date.endDate !==null){
       const startDate = formateDate(date.startDate);
-      return `${startDate.m}.${startDate.d}`
+      return `${endDate.m}.${endDate.d}`
     }
     if(date.endDate === null && date.startDate !==null){
       const endDate = formateDate(date.endDate);
-      return `${endDate.m}.${endDate.d}`
+      return `${startDate.m}.${startDate.d}`
     }
     if(date.endDate !== null && date.startDate !==null){
       const startDate = formateDate(date.startDate);
@@ -149,12 +149,17 @@ const formatReleaseDate = date => {
         } else {
           if(startDate.m === 1 && startDate.d === 1 && endDate.m === 12 && endDate.d === 31){
             return startDate.y
+          } else if (startDate.m === endDate.m && startDate.d === 1 && endDate.d === 31){
+            const clurM = ("0" + startDate.m).slice(-2);
+            return `${startDate.y}.${clurM}`
           }
-          const m2 = ("0" + startDate.m).slice(-2);
-          const d2 = ("0" + startDate.d).slice(-2);
-          const m3 = ("0" + endDate.m).slice(-2);
-          const d3 = ("0" + endDate.d).slice(-2);
-          return `${m2}.${d2}~${m3}.${d3}`
+          else {
+            const m2 = ("0" + startDate.m).slice(-2);
+            const d2 = ("0" + startDate.d).slice(-2);
+            const m3 = ("0" + endDate.m).slice(-2);
+            const d3 = ("0" + endDate.d).slice(-2);
+            return `${m2}.${d2}~${m3}.${d3}`
+          }
         }
       }
     }
