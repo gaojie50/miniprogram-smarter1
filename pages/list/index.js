@@ -195,7 +195,7 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
-        data.map(item => {
+        data.map((item,index) => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
           }
@@ -207,8 +207,10 @@ Page({
           item.movieType = item.movieType.replace(/,/g,'/');
           item.wishNum = formatNumber(item.wishNum);
           item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
+          item.releaseDateLength = JSON.stringify(item.releaseDate).length;
         })
         console.log(data)
+  
         return this.setData({
           list: data,
           subList: data,

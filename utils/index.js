@@ -139,7 +139,7 @@ const formatReleaseDate = date => {
       const nowYear = nowDate.getFullYear();
 
       if(startDate.y !== nowYear){
-        return startDate.y
+        return `${startDate.y}`
       } 
       else {
         if((startDate.m === endDate.m) && (startDate.d === endDate.d)){
