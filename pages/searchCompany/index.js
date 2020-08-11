@@ -82,12 +82,12 @@ Page({
 
   jumpList:function(){
     const {checked} = this.data;
+    const eventChannel = this.getOpenerEventChannel();
 
-    wx.navigateTo({
-      url:`/pages/list/index`,
+    wx.navigateBack({
       success: function(res) {
         //向list页面传递数据
-        res.eventChannel.emit('acceptDataFromOpenerPage', { companyChecked : checked })
+        eventChannel.emit('searchPCFinish', { companyChecked : checked })
       }
     })
   }

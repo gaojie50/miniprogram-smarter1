@@ -33,16 +33,6 @@ Page({
     subList: [],
     filterItemHidden:[],
     latestSchedule: {},
-    companyList: [
-      {
-      id: 37786,
-      name: "上海猫眼影业有限公司"
-      },
-      {
-        id: 1230,
-        name: "天津猫眼微影文化传媒有限公司",
-      }
-    ],
     scheduleType: {
       1: "已定档",
       2: "非常确定",
@@ -88,38 +78,14 @@ Page({
     projectBoxStr: '',
     lastFilterLength: 0,
     dateText:'未来1年',
-    filterPanelData: {}
   },
   onLoad: function ({
     token
   }) {
     if (token) wx.setStorageSync('token', token);
-    const eventChannel = this.getOpenerEventChannel();
+
     this.setData({
       screenHeight: wx.getSystemInfoSync().windowHeight
-    })
-
-    eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => {
-      const {
-        companyChecked, 
-        filterPanelData
-      } = data;
-
-      if(companyChecked.length !== 0){
-        const newCompanyList = this.data.companyList.concat(companyChecked)
-        this.setData({
-          companyList: newCompanyList,
-          filterPanelData,
-          filterActive: '3',
-          backdropShow: 'filter'
-        })
-      } else {
-        this.setData({
-          filterPanelData,
-          filterActive: '3',
-          backdropShow: 'filter'
-        })
-      }
     })
     
     // 判断用户是否有权限
@@ -173,13 +139,6 @@ Page({
         });
       })
     }
-
-    //获取上映时间的高度
-    var obj = wx.createSelectorQuery();
-    obj.select('.vheight').boundingClientRect();
-    obj.exec(function (rect) {
-
-    });
   },
   fetchSchedule: function (){
     reqPacking({
@@ -206,6 +165,7 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
+      
         data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
@@ -213,13 +173,22 @@ Page({
           if(item.estimateBox){
             item.estimateBox2 = formatNumber(item.estimateBox/100);
           }
+          // if(item.name.length>6 && item.maoyanSignLabel !== 0){
+          //   item.trHeight = 160;
+          // } else if(item.releaseDate !== 0 && item.scheduleType !== 0 && item.alias.length !== 0) {
+          //   item.trHeight = 160;
+          // } else if(item.producer[0].length >10 || item.issuer[0].length > 10){
+          //   item.trHeight = 160;
+          // }
+          // else {
+          //   item.trHeight = 120;
+          // }
           item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc);
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
           item.wishNum = formatNumber(item.wishNum);
           item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
         })
-        console.log(data)
   
         return this.setData({
           list: data,

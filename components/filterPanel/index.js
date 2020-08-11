@@ -47,11 +47,7 @@ Component({
     filterShow: {
       type: String,
       value: ''
-    },
-    companyList: {
-      type: Array,
-      value: []
-    },
+    }
   },
   data: {
     dimension: [],
@@ -60,6 +56,16 @@ Component({
     cooperStatus: [],
     pcId: [],
     company: {},
+    companyList: [
+      {
+      id: 37786,
+      name: "上海猫眼影业有限公司"
+      },
+      {
+        id: 1230,
+        name: "天津猫眼微影文化传媒有限公司",
+      }
+    ],
     dateSet: [{
         label: "未来30天",
         checked: "",
@@ -549,6 +555,33 @@ Component({
     movieAdd: function () {
       wx.navigateTo({
         url: '/pages/searchCompany/index',
+        events: {
+          searchPCFinish: data => {
+              const {
+                companyChecked, 
+              } = data;
+              const { companyList } = this.data;
+              console.log(111);
+              if(companyChecked.length !== 0){
+                const newCompanyChecked = [];
+                let add = true;
+                companyChecked.map((item, index) => {
+                  for(let i=0;i<companyList.length;i++){
+                    if(companyList[i].id === item.id){
+                      add = false
+                    }
+                }
+                if(add) {
+                  newCompanyChecked.push(item);
+                }
+              })
+              const newCompanyList = this.data.companyList.concat(newCompanyChecked)
+              this.setData({
+                companyList: newCompanyList,
+              })
+            }
+          }
+        }
       })
     }
   }

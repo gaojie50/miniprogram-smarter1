@@ -40,7 +40,7 @@
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<backdrop wx:if="{{backdropShow}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
-						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}" companyList="{{companyList}}"></filterPanel>
+						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					</view>
 					<view class="listDerict">
 						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">猫眼参与</view>
@@ -54,7 +54,7 @@
 					<view class="listTable"  wx:if="{{!loading}}">
 						<view class="table-left">
 							<view class="listTr">
-								<view style="" class="listTd shadow">{{list.length}}部影片</view>
+								<view style="height: {{item.trHeight}}" class="listTd shadow">{{list.length}}部影片</view>
 							</view>
 							<block wx:for="{{list}}" wx:key="maoyanId">
 								<view class="listTr">
@@ -87,7 +87,7 @@
 							</view>
 							<block wx:for="{{list}}" wx:key="maoyanId">
 								<view class="listTr rightTableHeight">
-									<view class="listTd tdPadding vheight {{filterItemHidden1? 'itemHidden':''}}">
+									<view class="listTd tdPadding {{filterItemHidden1? 'itemHidden':''}}">
 										<view wx:if="{{item.reRelease}}">
 											<view>
 												<text>{{item.releaseDate}}</text>

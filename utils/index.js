@@ -132,7 +132,6 @@ const handleReleaseDesc = (showType, date) => {
    else {
     return date
   }
-
 }
 
 //上映时间处理
