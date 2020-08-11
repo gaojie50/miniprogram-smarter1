@@ -417,16 +417,22 @@ Component({
     },
     filterDefined: function () {
       const {
-        filterShow,
         estimateBox,
         projectBox,
         costBox,
         cooperBox,
+        dimension,
+        projectStatus,
+        cost,
+        cooperStatus,
+        dateSet,
+        pcId,
+        company,
+        companyList,
+        customStartDate,
+        customEndDate,
       } = this.data;
-      if (filterShow == 1) {
-        const { 
-          dimension,
-        } = this.data;
+      //处理预估票房
         estimateBox.map((item, index) => {
           if(item.active && dimension.indexOf(index + 1) === -1){
             dimension.push(index + 1);
@@ -436,10 +442,7 @@ Component({
             dimension.splice(i, 1)
           }
         })
-      } else if (filterShow == 2) {
-        const { 
-          projectStatus,
-        } = this.data;
+      //处理项目状态
         projectBox.map((item, index) => {
           if(item.active && projectStatus.indexOf(index + 1) === -1){
             projectStatus.push(index + 1);
@@ -449,14 +452,7 @@ Component({
             projectStatus.splice(i, 1)
           }
         })
-      } else if (filterShow == 3) {
-        const {
-          companyList,
-          cost,
-          cooperStatus,
-          company,
-          pcId
-        } = this.data;
+      //处理筛选
         costBox.map((item, index) => {
           if(item.active && cost.indexOf(index + 1) === -1){
             cost.push(index + 1);
@@ -499,19 +495,7 @@ Component({
            })
           }
         })
-    }
     
-      const {
-        dimension,
-        projectStatus,
-        cost,
-        cooperStatus,
-        dateSet,
-        pcId,
-        company,
-        customStartDate,
-        customEndDate,
-      } = this.data;
       const myEventDetail = {
         dimension,
         projectStatus,
@@ -527,6 +511,7 @@ Component({
         customStartDate,
         customEndDate,
       }
+      console.log(myEventDetail)
       this.triggerEvent('myevent', myEventDetail)
     },
     filterDefinedDate:function(){
