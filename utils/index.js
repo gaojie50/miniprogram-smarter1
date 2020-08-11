@@ -107,6 +107,34 @@ const formatNumber = (value, sign) => {
   }
 };
 
+const handleReleaseDesc = (showType, date) => {
+  if(showType === 1) {
+    const newDate = date.slice(5,10);
+    const result = newDate.replace(/-/g, ".");
+    return result
+  } else if (showType === 2){
+    const newDate = date.slice(5,7);
+    if(newDate[0] === '0'){
+      const result = newDate.slice(1);
+      return `${result}月`
+    } else {
+      return `${newDate}月`
+    }
+  } else if(showType === 3){
+    const startTime = date.slice(5, 10).replace(/-/g, ".");
+    const endTime = date.slice(16, 21).replace(/-/g, ".");
+    return `${startTime}~${endTime}`
+  }
+  else if(showType === 4){
+    const newDate = date.slice(0, 4);
+    return newDate
+  }
+   else {
+    return date
+  }
+
+}
+
 //上映时间处理
 const formatReleaseDate = date => {
   if(date === null) {
@@ -139,8 +167,8 @@ const formatReleaseDate = date => {
       const nowYear = nowDate.getFullYear();
 
       if(startDate.y !== nowYear){
-        return `${startDate.y}`
-      } 
+        return startDate.y
+      }
       else {
         if((startDate.m === endDate.m) && (startDate.d === endDate.d)){
           const m1 = ("0" + startDate.m).slice(-2);
@@ -227,5 +255,6 @@ export default {
   getFutureTimePeriod,
   calcWeek,
   assignDeep,
-  checkDataType
+  checkDataType,
+  handleReleaseDesc
 }

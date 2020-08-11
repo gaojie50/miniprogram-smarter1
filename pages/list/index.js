@@ -4,7 +4,7 @@ const {
   getMaoyanSignLabel
 } = projectConfig;
 
-const { rpxTopx, formatReleaseDate, formatNumber, formatDirector ,getFutureTimePeriod } = utils;
+const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc } = utils;
 const app = getApp();
 const {
   reqPacking,
@@ -88,6 +88,7 @@ Page({
     projectBoxStr: '',
     lastFilterLength: 0,
     dateText:'未来1年',
+    filterPanelData: {}
   },
   onLoad: function ({
     token
@@ -100,13 +101,23 @@ Page({
 
     eventChannel.on && eventChannel.on('acceptDataFromOpenerPage', data => {
       const {
-        companyChecked
+        companyChecked, 
+        filterPanelData
       } = data;
 
       if(companyChecked.length !== 0){
         const newCompanyList = this.data.companyList.concat(companyChecked)
         this.setData({
-          companyList: newCompanyList
+          companyList: newCompanyList,
+          filterPanelData,
+          filterActive: '3',
+          backdropShow: 'filter'
+        })
+      } else {
+        this.setData({
+          filterPanelData,
+          filterActive: '3',
+          backdropShow: 'filter'
         })
       }
     })
@@ -195,19 +206,18 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
-        data.map((item,index) => {
+        data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
           }
           if(item.estimateBox){
             item.estimateBox2 = formatNumber(item.estimateBox/100);
           }
-          item.releaseDate = formatReleaseDate(item.releaseDate);
+          item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc);
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
           item.wishNum = formatNumber(item.wishNum);
           item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
-          item.releaseDateLength = JSON.stringify(item.releaseDate).length;
         })
         console.log(data)
   

@@ -98,7 +98,7 @@
 											<view>
 												<text>{{item.releaseDate}}</text>
 											</view>
-											<text wx:if="{{item.releaseDateLength != 4}}">{{item.alias[0]}}</text>
+											<text wx:if="{{item.releaseDate.length !== 4}}">{{item.alias[0]}}</text>
 											<scheduleType signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
 										</view>
 									</view>
