@@ -4,7 +4,7 @@ const {
   getMaoyanSignLabel
 } = projectConfig;
 
-const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc } = utils;
+const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc,handleNewDate, } = utils;
 const app = getApp();
 const {
   reqPacking,
@@ -379,8 +379,8 @@ Page({
     }else{
       //时间为自定义
       dateSelect ={
-        startDate: +new Date(new Date(customStartDate.value).setHours(0, 0, 0, 0)),
-        endDate: +new Date(new Date(customEndDate.value).setHours(23,59,59,999))
+        startDate: +new Date(handleNewDate(customStartDate.value).setHours(0, 0, 0, 0)),
+        endDate: +new Date(handleNewDate(customEndDate.value).setHours(23,59,59,999)),
       }
 
       function abbrCurYear(str){

@@ -1,6 +1,6 @@
 import utils from "./../../utils/index";
 
-const {getFutureTimePeriod,calcWeek,assignDeep,checkDataType} = utils;
+const {getFutureTimePeriod,calcWeek,assignDeep,handleNewDate,} = utils;
 const  defaultCustomDate = getFutureTimePeriod(180);
 const date = new Date();
 let years = [];
@@ -21,10 +21,7 @@ function formartDate(stamp){
 
   return `${yearStr}.${monthStr}.${dayStr}`;
 }
-function handleNewDate(param){
-  return new Date(checkDataType(param) == 'string' ? 
-  param.replace(/\.|\-/g, '/') : param);
-}
+
 function handleDays(day,long,sign='add'){
   const date = handleNewDate(day);
 
