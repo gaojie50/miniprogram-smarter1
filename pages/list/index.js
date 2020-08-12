@@ -243,10 +243,9 @@ Page({
           list: subList
         })
       } else {
-        //只看猫眼参与
-      if(directFilterList[0].active){
         list.map(item => {
-          if(item.company.indexOf(1) !== -1){
+          //只看猫眼参与
+          if(directFilterList[0].active && item.company.indexOf(1) !== -1){
             for(let i=0; i<newDataList.length; i++){
               if(newDataList[i].maoyanId == item.maoyanId){
                 newDataList.splice(i, 1);
@@ -254,13 +253,9 @@ Page({
             }
             newDataList.push(item)
           }
-        })
-      }
 
-      //只看阿里参与
-      if(directFilterList[1].active){
-        list.map(item => {
-          if(item.company.indexOf(2) !== -1){
+          //只看阿里参与
+          if(directFilterList[1].active && item.company.indexOf(2) !== -1){
             for(let i=0; i<newDataList.length; i++){
               if(newDataList[i].maoyanId == item.maoyanId){
                 newDataList.splice(i, 1);
@@ -269,7 +264,6 @@ Page({
             newDataList.push(item)
           }
         })
-      }
 
       //最新档期筛选
       if(directFilterList[2].active){
