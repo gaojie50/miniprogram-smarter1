@@ -239,6 +239,13 @@ page {
   font-weight: 600;
   box-sizing: border-box;
 }
+.list .listTable .table-left .listTr .listTd  .movieName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 .list .listTable .table-left .listTr:nth-child(odd) .listTd{
   background:rgba(247,247,247,1);
 }
