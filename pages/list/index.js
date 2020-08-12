@@ -165,7 +165,6 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
-      console.log(data)
         data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
