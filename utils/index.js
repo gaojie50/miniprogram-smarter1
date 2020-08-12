@@ -244,6 +244,12 @@ const assignDeep = (...objects) => {
       return accumulator;
   }, {});
 }
+
+function handleNewDate(param){
+  return new Date(checkDataType(param) == 'string' ? 
+  param.replace(/\.|\-/g, '/') : param);
+}
+
 export default {
   errorHandle,
   debounce,
@@ -255,5 +261,6 @@ export default {
   calcWeek,
   assignDeep,
   checkDataType,
-  handleReleaseDesc
+  handleReleaseDesc,
+  handleNewDate,
 }

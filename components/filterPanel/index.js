@@ -1,7 +1,7 @@
 import utils from "./../../utils/index";
 
-const {getFutureTimePeriod,calcWeek,assignDeep,checkDataType} = utils;
-const  defaultCustomDate = getFutureTimePeriod();
+const {getFutureTimePeriod,calcWeek,assignDeep,handleNewDate,} = utils;
+const  defaultCustomDate = getFutureTimePeriod(180);
 const date = new Date();
 let years = [];
 let months = [];
@@ -21,10 +21,7 @@ function formartDate(stamp){
 
   return `${yearStr}.${monthStr}.${dayStr}`;
 }
-function handleNewDate(param){
-  return new Date(checkDataType(param) == 'string' ? 
-  param.replace(/\.|\-/g, '/') : param);
-}
+
 function handleDays(day,long,sign='add'){
   const date = handleNewDate(day);
 
@@ -211,45 +208,49 @@ Component({
       if(dateShowFirstActive){
         //开始时间大于结束时间 
         if(timeStamp > +handleNewDate(customEndDate.value)){
-          timeStamp = +handleNewDate(customEndDate.value);
-          obj.dateValue = dateValueCommon(customEndDate.value);
+          obj.customEndDate = {
+            value:formartDate(timeStamp),
+            week:calcWeek(timeStamp),
+          }
         }
         //一年时间限制 限制开始日期
-        const minimumTimeStamp =  +handleDays(customEndDate.value,365,'subtract');
+        const minimumTimeStamp =  +handleDays(customEndDate.value,180,'subtract');
+        
         if(timeStamp < minimumTimeStamp ){
-          timeStamp = minimumTimeStamp;
-          obj.dateValue = dateValueCommon(minimumTimeStamp);
+          const endStamp = +handleDays(timeStamp,180);
 
-          wx.showToast({
-            title: '时间范围限制为1年',
-            icon:'none',
-          })
+          obj.customEndDate = {
+            value:formartDate(endStamp),
+            week:calcWeek(endStamp),
+          }
+
         }
 
         obj['customStartDate'] = {
           value:formartDate(timeStamp),
           week:calcWeek(timeStamp),
         }
-
+        obj.dateValue = dateValueCommon(timeStamp);
         return this.setData(obj);
       }
 
       //结束时间小于开始时间
       if(timeStamp < +handleNewDate(customStartDate.value)){
-        timeStamp = +handleNewDate(customStartDate.value);
-        obj.dateValue = dateValueCommon(customStartDate.value);
+        obj.customStartDate = {
+          value:formartDate(timeStamp),
+          week:calcWeek(timeStamp),
+        }
       }
 
       //一年时间限制 限制结束日期
-      const maxTimeStamp =  +handleDays(customStartDate.value,365);
+      const maxTimeStamp =  +handleDays(customStartDate.value,180);
       if(timeStamp > maxTimeStamp ){
-        timeStamp = maxTimeStamp;
-        obj.dateValue = dateValueCommon(maxTimeStamp);
+        const startStamp = +handleDays(timeStamp,180,'subtract');
 
-        wx.showToast({
-          title: '时间范围限制为1年',
-          icon:'none',
-        })
+        obj.customStartDate = {
+          value:formartDate(startStamp),
+          week:calcWeek(startStamp),
+        }
       }
 
       obj['customEndDate'] = {
@@ -257,6 +258,7 @@ Component({
         week:calcWeek(timeStamp),
       }
 
+      obj.dateValue = dateValueCommon(timeStamp);
       this.setData(obj);
     },
 
@@ -511,7 +513,7 @@ Component({
         customStartDate,
         customEndDate,
       }
-      console.log(myEventDetail)
+
       this.triggerEvent('myevent', myEventDetail)
     },
     filterDefinedDate:function(){
