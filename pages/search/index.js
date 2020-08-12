@@ -54,7 +54,7 @@ Page({
   jumpDetail:function(e){
     const {id} = e.currentTarget.dataset;
     const {list} = this.data;
-    const filterList = JSON.parse(JSON.stringify(list)).filter(item => item.maoyanId == id)[0];
+    const filterList = JSON.parse(JSON.stringify(list)).filter(({maoyanId,projectId}) => `${maoyanId}-${projectId}` == id)[0];
 
     wx.navigateTo({
       url:`/pages/projectDetail/index`,
