@@ -1,7 +1,7 @@
 import utils from "./../../utils/index";
 
 const {getFutureTimePeriod,calcWeek,assignDeep,checkDataType} = utils;
-const  defaultCustomDate = getFutureTimePeriod();
+const  defaultCustomDate = getFutureTimePeriod(180);
 const date = new Date();
 let years = [];
 let months = [];
@@ -215,13 +215,13 @@ Component({
           obj.dateValue = dateValueCommon(customEndDate.value);
         }
         //一年时间限制 限制开始日期
-        const minimumTimeStamp =  +handleDays(customEndDate.value,365,'subtract');
+        const minimumTimeStamp =  +handleDays(customEndDate.value,180,'subtract');
         if(timeStamp < minimumTimeStamp ){
           timeStamp = minimumTimeStamp;
           obj.dateValue = dateValueCommon(minimumTimeStamp);
 
           wx.showToast({
-            title: '时间范围限制为1年',
+            title: '时间范围限制为180天',
             icon:'none',
           })
         }
@@ -241,13 +241,13 @@ Component({
       }
 
       //一年时间限制 限制结束日期
-      const maxTimeStamp =  +handleDays(customStartDate.value,365);
+      const maxTimeStamp =  +handleDays(customStartDate.value,180);
       if(timeStamp > maxTimeStamp ){
         timeStamp = maxTimeStamp;
         obj.dateValue = dateValueCommon(maxTimeStamp);
 
         wx.showToast({
-          title: '时间范围限制为1年',
+          title: '时间范围限制为180天',
           icon:'none',
         })
       }
@@ -511,7 +511,7 @@ Component({
         customStartDate,
         customEndDate,
       }
-      console.log(myEventDetail)
+
       this.triggerEvent('myevent', myEventDetail)
     },
     filterDefinedDate:function(){
