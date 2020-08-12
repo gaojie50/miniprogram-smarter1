@@ -302,7 +302,6 @@ Page({
           newDataList = arr2;
         }
       }
-      console.log(newDataList)
       this.setData({
         list: newDataList
       })
