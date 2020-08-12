@@ -231,6 +231,7 @@ Page({
     }, () => {
       const { subList, latestSchedule, directFilterList } = this.data;
       const list = subList;
+  
       directFilterList.map((item, index) => {
         if(num == index+1){
           item.active = !item.active;
@@ -443,6 +444,9 @@ Page({
     const projectBoxStr = formateFilterStr(projectBox);
     const lastFilterLength = formateFilterLength(costBox, cooperBox, company);
     const pcIdRequest = handlePcId(pcId);
+    this.data.directFilterList.map(item => {
+        item.active = false;
+    })
     this.setData({
       derictFilterActive1: false,
       derictFilterActive2: false,

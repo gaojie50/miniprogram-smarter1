@@ -7,6 +7,5 @@
     "costumListItem": "../../components/costomListItem/index",
     "mp-loading": "../../miniprogram_npm/weui-miniprogram/loading/loading"
   },
-  "navigationStyle": "custom",
-  "disableScroll":true
+  "navigationStyle": "custom"
 }
