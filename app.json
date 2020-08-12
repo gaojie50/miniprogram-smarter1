@@ -18,5 +18,6 @@
   "sitemapLocation": "sitemap.json",
   "useExtendedLib": {
     "weui": true
-  }
+  },
+  "disableScroll":true
 }

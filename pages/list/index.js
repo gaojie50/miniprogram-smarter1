@@ -266,12 +266,15 @@ Page({
 
       //最新档期筛选
       if(directFilterList[2].active){
+        console.log(newDataList)
         if(newDataList.length === 0){
-          list.map(item => {
-            if((item.alias.indexOf(latestSchedule.name) !== -1) && (item.alias[0] === latestSchedule.name)){
-              newDataList.push(item)
-            }
-          })
+          if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[3].active){
+            list.map(item => {
+              if((item.alias.indexOf(latestSchedule.name) !== -1) && (item.alias[0] === latestSchedule.name)){
+                newDataList.push(item)
+              }
+            })
+          }
         } else {
           const arr = [];
           newDataList.map(item => {
@@ -285,21 +288,24 @@ Page({
 
       //票房超过1亿筛选
       if(directFilterList[3].active){
-        if(newDataList.length === 0){
-          list.map(item => {
-            if(item.estimateBox/100 >= 100000000) {
-              newDataList.push(item)
+          if(newDataList.length === 0){
+            if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[2].active){
+              list.map(item => {
+                if(item.estimateBox/100 >= 100000000) {
+                  newDataList.push(item)
+                }
+              })
             }
-          })
-        } else {
-          const arr2 = [];
-          newDataList.map(item => {
-            if(item.estimateBox/100 >= 100000000) {
-              arr2.push(item)
-            }
-          })
-          newDataList = arr2;
-        }
+          } else {
+            const arr2 = [];
+            newDataList.map(item => {
+              if(item.estimateBox/100 >= 100000000) {
+                arr2.push(item)
+              }
+            })
+            newDataList = arr2;
+          }
+
       }
       this.setData({
         list: newDataList
