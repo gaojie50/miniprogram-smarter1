@@ -233,7 +233,7 @@ Component({
           value:formartDate(timeStamp),
           week:calcWeek(timeStamp),
         }
-
+        obj.dateValue = dateValueCommon(timeStamp);
         return this.setData(obj);
       }
 
@@ -261,6 +261,7 @@ Component({
         week:calcWeek(timeStamp),
       }
 
+      obj.dateValue = dateValueCommon(timeStamp);
       this.setData(obj);
     },
 
