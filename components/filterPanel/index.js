@@ -211,19 +211,22 @@ Component({
       if(dateShowFirstActive){
         //开始时间大于结束时间 
         if(timeStamp > +handleNewDate(customEndDate.value)){
-          timeStamp = +handleNewDate(customEndDate.value);
-          obj.dateValue = dateValueCommon(customEndDate.value);
+          obj.customEndDate = {
+            value:formartDate(timeStamp),
+            week:calcWeek(timeStamp),
+          }
         }
         //一年时间限制 限制开始日期
         const minimumTimeStamp =  +handleDays(customEndDate.value,180,'subtract');
+        
         if(timeStamp < minimumTimeStamp ){
-          timeStamp = minimumTimeStamp;
-          obj.dateValue = dateValueCommon(minimumTimeStamp);
+          const endStamp = +handleDays(timeStamp,180);
 
-          wx.showToast({
-            title: '时间范围限制为180天',
-            icon:'none',
-          })
+          obj.customEndDate = {
+            value:formartDate(endStamp),
+            week:calcWeek(endStamp),
+          }
+
         }
 
         obj['customStartDate'] = {
@@ -236,20 +239,21 @@ Component({
 
       //结束时间小于开始时间
       if(timeStamp < +handleNewDate(customStartDate.value)){
-        timeStamp = +handleNewDate(customStartDate.value);
-        obj.dateValue = dateValueCommon(customStartDate.value);
+        obj.customStartDate = {
+          value:formartDate(timeStamp),
+          week:calcWeek(timeStamp),
+        }
       }
 
       //一年时间限制 限制结束日期
       const maxTimeStamp =  +handleDays(customStartDate.value,180);
       if(timeStamp > maxTimeStamp ){
-        timeStamp = maxTimeStamp;
-        obj.dateValue = dateValueCommon(maxTimeStamp);
+        const startStamp = +handleDays(timeStamp,180,'subtract');
 
-        wx.showToast({
-          title: '时间范围限制为180天',
-          icon:'none',
-        })
+        obj.customStartDate = {
+          value:formartDate(startStamp),
+          week:calcWeek(startStamp),
+        }
       }
 
       obj['customEndDate'] = {
