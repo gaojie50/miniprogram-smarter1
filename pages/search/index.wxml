@@ -13,7 +13,7 @@
 	暂无数据
 </view>
 <scroll-view class="search-list" wx:if="{{inputVal !='' && !loading}}">
-	<view class="item" wx:for="{{list}}" wx:key="id" data-Id="{{item.maoyanId}}" bindtap="jumpDetail">
+	<view class="item" wx:for="{{list}}" wx:key="id" data-Id="{{item.maoyanId}}-{{item.projectId}}" bindtap="jumpDetail">
 		<image src="{{item.pic}}" />
 		<view class="name">{{item.name}}</view>
 		<view class="director">导演：{{item.director ? item.director :'-'}}</view>
