@@ -77,7 +77,7 @@ Page({
     estimateBoxStr: '',
     projectBoxStr: '',
     lastFilterLength: 0,
-    dateText:'未来1年',
+    dateText:'未来1年'
   },
   onLoad: function ({
     token
@@ -165,6 +165,7 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
+        console.log(data)
         data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
@@ -176,9 +177,9 @@ Page({
             item.trHeight = 160;
           } else if(item.releaseDate !== 0 && item.scheduleType !== 0 && item.alias.length !== 0) {
             item.trHeight = 160;
-          } else if((item.producer && item.producer[0].length >12) || (item.issuer && item.issuer[0].length > 12)){
+          } else if((item.producer && item.producer[0].length >16) || (item.issuer && item.issuer[0].length > 16)){
             item.trHeight = 160;
-          } else if((item.director && item.director.length > 11) || (item.movieType && item.movieType.length > 14)){
+          } else if(item.movieType && item.movieType.length > 14){
             item.trHeight = 160;
           }
           else {
@@ -187,7 +188,7 @@ Page({
           item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc);
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
-          item.wishNum = formatNumber(item.wishNum);
+          item.wishNum = formatNumber(item.wishNum).text;
           item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
         })
   
@@ -509,10 +510,25 @@ Page({
       url: '/pages/search/index'
     })
   },
+  jumpToDetail:function(e){
+    const { id } = e.currentTarget.dataset;
+    const { list } = this.data;
+    const filterList = JSON.parse(JSON.stringify(list)).filter(({maoyanId,projectId}) => maoyanId == id)[0];
+
+    wx.navigateTo({
+      url:`/pages/projectDetail/index`,
+      success: function(res) {
+        res.eventChannel.emit('acceptDataFromListPage', { 
+          item:filterList
+         })
+      }
+    })
+  },
 
   copyMail() {
     wx.setClipboardData({
       data: 'zhiduoxing@maoyan.com'
     })
-  }
+  },
+  
 })

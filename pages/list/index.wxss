@@ -257,6 +257,17 @@ page {
 .list .listTable .table-left .listTr:nth-child(even) .listTd{
   background:rgba(255,255,255,1);
 }
+.list .listTable .table-right .listTr .listTd:nth-child(5),.listTd:nth-child(6),.listTd:nth-child(8) {
+  min-width: 250rpx !important;
+}
+.list .listTable .table-right .listTr .listTd:nth-child(8) view{
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display:  -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 .list .listTable .table-right .listTr:nth-child(1) .listTd{
   min-width: 195rpx;
   height: 70rpx;
@@ -285,7 +296,7 @@ page {
   min-width: 253rpx !important;
 }
 .list .listTable .table-right .listTr:not(:first-child) .listTd:nth-child(12)  view view {
-  color: #8B94A6;
+  color: #333333;
 }
 .list .listTable .table-right .listTr:nth-child(odd) .listTd{
   background:rgba(247,247,247,1);

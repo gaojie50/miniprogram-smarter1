@@ -23,5 +23,14 @@ Page({
       item.cooperStatus = getCooperStatus(item.cooperStatus).label;
       this.setData({data:item});
     })
+
+    eventChannel.on && eventChannel.on('acceptDataFromListPage', ({item={}}) => {
+      if(item.maoyanSign && item.maoyanSign.length>0){
+        item.maoyanSignLabel =  getMaoyanSignLabel(item.maoyanSign);
+       }
+      this.setData({
+        data: item
+      })
+    })
   },
 })

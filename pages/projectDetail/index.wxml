@@ -17,11 +17,11 @@
 	</view>
 	<view class="info">
 		<view class="left">制作成本：</view>
-		<view class="right">{{data.cost}}</view>
+		<view wx:if="{{data.cost}}" class="right">{{data.cost || "-"}}</view>
 	</view>
 	<view class="info">
 		<view class="left">预估票房：</view>
-		<view class="right">{{data.estimateBox}}</view>
+		<view class="right">{{data.estimateBox || "-"}}</view>
 	</view>
 	<view class="info">
 		<view class="left">预估评分：</view>
