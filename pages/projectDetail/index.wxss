@@ -43,10 +43,10 @@ page {
   vertical-align: middle;
   font-weight: 400;
   font-size: 22rpx;
-  color: #F1303D;
+  color: #FFFFFF;
   line-height: 24rpx;
   padding: 6rpx 10rpx;
-  border: 1px solid #F1303D;
+  border: 1px solid #FFFFFF;
   border-radius: 4rpx;
   display: inline-block;
   margin-left: 10rpx;
@@ -76,7 +76,7 @@ page {
   background-color: rgba(51, 51, 51, .1);
   line-height: 24rpx;
   border-radius: 4rpx;
-  color: #2FC25B;
+  color: #333333;
 }
 
 .detail .type {
