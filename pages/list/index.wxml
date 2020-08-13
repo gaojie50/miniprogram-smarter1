@@ -86,13 +86,14 @@
 								<view class="listTd {{filterItemHidden12? 'itemHidden':''}}">映前想看人数</view>
 							</view>
 							<block wx:for="{{list}}" wx:key="maoyanId">
-								<view class="listTr rightTableHeight">
+								<view data-id="{{item.maoyanId}}" bindtap="jumpToDetail" class="listTr rightTableHeight">
 									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden1? 'itemHidden':''}}">
 										<view wx:if="{{item.reRelease}}">
 											<view>
 												<text>{{item.releaseDate}}</text>
 											</view>
-											<view style="color: rgb(19, 194, 194);">重映</view>
+											<text wx:if="{{item.releaseDate.length !== 4}}">{{item.alias[0]}}</text>
+											<scheduleType signContent="重映"></scheduleType>
 										</view>
 										<view wx:if="{{!item.reRelease}}">
 											<view>
@@ -112,7 +113,7 @@
 									</view>
 									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">{{item.estimateScore === null ? '-': item.estimateScore}}</view>
 									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden5? 'itemHidden':''}}">
-										<view>
+										<view style="">
 											<text wx:if="{{item.producer === null || item.producer.length === 0}}">-</text>
 											<!-- <text wx:for="{{item.producer}}">{{item}}</text> -->
 											<text >{{item.producer[0]}}</text>
@@ -129,7 +130,7 @@
 										<text>{{item.movieType}}</text>
 									</view>
 									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">
-										<text>{{item.director !== undefined?item.director:'-'}}</text>
+										<view>{{item.director !== undefined?item.director:'-'}}</view>
 									</view>
 									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden9? 'itemHidden':''}}">
 										<text wx:if="{{(item.projectStatus > 0)}}">{{project[item.projectStatus]}}</text>
@@ -147,7 +148,7 @@
 									</view>
 									<view  style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">
 										<view>
-											<text>{{item.wishNum.text || '-'}}</text>
+											<text>{{item.wishNum || '-'}}</text>
 											<view wx:if="{{item.sevenDayIncreaseWish}}">近七日新增 {{item.sevenDayIncreaseWish.text}}</view>
 										</view>
 									</view>
