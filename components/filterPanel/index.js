@@ -548,21 +548,15 @@ Component({
                 companyChecked, 
               } = data;
               const { companyList } = this.data;
-              console.log(111);
               if(companyChecked.length !== 0){
-                const newCompanyChecked = [];
-                let add = true;
                 companyChecked.map((item, index) => {
                   for(let i=0;i<companyList.length;i++){
                     if(companyList[i].id === item.id){
-                      add = false
+                      companyChecked.splice(index, 1);
                     }
                 }
-                if(add) {
-                  newCompanyChecked.push(item);
-                }
               })
-              const newCompanyList = this.data.companyList.concat(newCompanyChecked)
+              const newCompanyList = this.data.companyList.concat(companyChecked)
               this.setData({
                 companyList: newCompanyList,
               })
