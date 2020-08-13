@@ -6,6 +6,10 @@ Component({
       value: ''
     }
   },
+  data: {
+    costom10: true,
+    costom11: true,
+  },
   methods: {
     tapCostom: function (e) {
       const num = e.target.dataset.num;
