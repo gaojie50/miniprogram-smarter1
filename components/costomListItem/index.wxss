@@ -61,3 +61,7 @@
   border: 0 !important;
   color: rgba(51,51,51,1) !important;
 }
+.toptips {
+  border: 1px solid red;
+  font-size: 12rpx;
+}

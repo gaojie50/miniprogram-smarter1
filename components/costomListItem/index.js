@@ -1,4 +1,3 @@
-
 Component({
   properties: {
     costomShow: {
@@ -39,6 +38,12 @@ Component({
       }
       if(costomList.length < 9){
         this.triggerEvent('myevent', costomList)
+      } else {
+        wx.showToast({
+          title: '至少保留4项！',
+          icon: 'none',
+          duration: 2000
+        })
       }
     }
   }
