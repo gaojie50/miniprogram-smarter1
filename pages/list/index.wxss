@@ -227,7 +227,6 @@ page {
 
 .list .listTable {
   width: 100%;
-  border-bottom:1px solid rgba(238,238,238,1);
   position: relative;
 }
 
@@ -304,6 +303,9 @@ page {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.list .listTable .table-left,.table-right .listTr:last-child {
+  border-bottom:1px solid rgba(238,238,238,1);
 }
 .list .listTable .table-right .listTr .listTd:nth-child(12) {
   min-width: 253rpx !important;
@@ -390,6 +392,8 @@ page {
   height: 100%;
 }
 .no-data{
+  min-height: 100%;
+  border: none;
   text-align: center;
   font-size:26rpx;
   line-height: 200rpx;
