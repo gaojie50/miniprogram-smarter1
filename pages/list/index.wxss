@@ -156,22 +156,22 @@ page {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
 }
 .list .listFilter .listFilter-item text:nth-child(2){
-  margin-right: 10rpx;
+  margin-right: 8rpx;
   border: 1px solid rgba(24,144,255,1);
-  border-radius: 28rpx;
-  width: 28rpx;
-  height: 28rpx;
+  border-radius: 25rpx;
+  width: 25rpx;
+  height: 25rpx;
   text-align: center;
-  line-height: 28rpx;
+  font-size: 20rpx;
+  line-height: 24rpx;
   color:rgba(24,144,255,1);
   background:rgba(24,144,255,0.1);
 }
 
 .listFilter-item-text {
-  width: 104rpx;
+  width: 126rpx;
   margin-right: 8rpx;
   text-align: right;
   overflow: hidden;
@@ -227,6 +227,7 @@ page {
 
 .list .listTable {
   width: 100%;
+  border-bottom:1px solid rgba(238,238,238,1);
   position: relative;
 }
 
@@ -238,6 +239,14 @@ page {
   display: flex;
   min-height: 70rpx;
 }
+
+/* .tableLeftTitleFixed {
+  position: sticky;
+  top: 85rpx;
+  box-shadow: 14rpx 0 12rpx -6rpx rgba(153, 153, 153, 0.1);
+  z-index: 56;
+} */
+
 .list .listTable .table-left .listTr .listTd {
   width: 218rpx;
   display: flex;
@@ -309,11 +318,16 @@ page {
   background:rgba(255,255,255,1);
 }
 
+/* .tableRightTitleFixed {
+  position: absolute;
+  top: 0;
+  z-index: 14;
+} */
+
 .list .listTable .listTr .shadow {
   box-shadow: 14rpx 0 12rpx -6rpx rgba(153, 153, 153, 0.1);
-  z-index: 10;
+  z-index: 14;
 }
-
 
 .extends {
   position: absolute;
@@ -324,7 +338,7 @@ page {
   z-index: 15;
   width: 118rpx;
   height: 70rpx;
-  background: linear-gradient(90deg, rgba(247, 247, 247, 0) 0%, rgba(247, 247, 247, 1) 100%);
+  background: linear-gradient(90deg, rgba(247, 247, 247, 0) 0%, rgba(247, 247, 247, 1) 75%);
 }
 
 .itemHidden {
@@ -377,6 +391,7 @@ page {
 }
 .no-data{
   text-align: center;
-  font-size:34rpx;
+  font-size:30rpx;
   line-height: 200rpx;
+  color: #999999;
 }

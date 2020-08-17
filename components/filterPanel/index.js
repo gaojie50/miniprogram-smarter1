@@ -526,6 +526,11 @@ Component({
         dateSet,
         customStartDate,
         customEndDate,
+        estimateBox,
+        projectBox,
+        costBox,
+        cooperBox,
+        company,      
       } = this.data;
       this.triggerEvent('myevent', {
         dimension,
@@ -536,6 +541,11 @@ Component({
         dateSet,
         customStartDate,
         customEndDate,
+        estimateBox,
+        projectBox,
+        costBox,
+        cooperBox,
+        company,      
       })
     },
     movieAdd: function () {
@@ -560,6 +570,10 @@ Component({
                 }
               }  
               toastStr = toastStr.substring(0, toastStr.length-1);
+              if(toastStr.length > 40){
+                toastStr = toastStr.substring(0, 40);
+                toastStr = toastStr + '...'
+              }
               wx.showToast({
                 title: `${toastStr}已存在`,
                 icon: 'none',

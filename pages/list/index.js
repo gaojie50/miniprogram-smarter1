@@ -84,6 +84,7 @@ Page({
   onLoad: function ({
     token
   }) {
+   
     if (token) wx.setStorageSync('token', token);
 
     this.setData({
@@ -206,6 +207,9 @@ Page({
       })
     })
   },
+  tableRightScroll: function (e){
+    console.log(e)
+  },
   tapFilterItem: function (e) {
     const num = e.target.dataset.num;
     const {
@@ -269,7 +273,6 @@ Page({
 
       //最新档期筛选
       if(directFilterList[2].active){
-        console.log(newDataList)
         if(newDataList.length === 0){
           if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[3].active){
             list.map(item => {

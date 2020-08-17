@@ -13,10 +13,29 @@ Component({
     tapCostom: function (e) {
       const num = e.target.dataset.num;
       const costomWrap = this.data;
+      const costomActiveList = [];
       costomWrap[`costom${num}`] = !costomWrap[`costom${num}`];
-      this.setData({
-        ...costomWrap
-      })
+      for(let i=1; i<13; i++){
+        if(costomWrap[`costom${i}`]){
+          costomActiveList.push(costomWrap[`costom${i}`])
+        }
+      }
+      if(costomActiveList.length > 8){
+        costomWrap[`costom${num}`] = false;
+        wx.showToast({
+          title: '至少保留4项！',
+          icon: 'none',
+          duration: 2000
+        })
+        this.setData({
+          ...costomWrap
+        })
+      } else {
+        this.setData({
+          ...costomWrap
+        })
+      }
+      
     },
     tapClose: function (){
       const costomWrap = this.data;
@@ -38,12 +57,6 @@ Component({
       }
       if(costomList.length < 9){
         this.triggerEvent('myevent', costomList)
-      } else {
-        wx.showToast({
-          title: '至少保留4项！',
-          icon: 'none',
-          duration: 2000
-        })
       }
     }
   }

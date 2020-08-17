@@ -12,7 +12,7 @@
 		</view>
 
 		<!-- <scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper"> -->
-		<scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)">
+		<scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="listTitleScroll">
 			<view id="scroll-cont">
 				<!-- <view class="search-bar">
 				<label>
@@ -34,7 +34,7 @@
 							<text data-num="2" class="listFilter-item-text {{(filterActive==2 || projectBoxStr !== '' )? 'filterActive' : ''}}" bindtap="tapFilterItem">{{projectBoxStr === ''? '项目状态': projectBoxStr}}</text>
 							<image src="../../static/{{filterActive==2 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
-						<view class="listFilter-item" >
+						<view class="listFilter-item">
 							<text data-num="3" bindtap="tapFilterItem"  class="listFilter-item-text {{(filterActive==3 || lastFilterLength > 0 ) ? 'filterActive' : ''}}" >筛选</text>
 							<text data-num="3" bindtap="tapFilterItem"  wx:if="{{lastFilterLength > 0}}">{{lastFilterLength}}</text>
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
@@ -57,7 +57,7 @@
 					</view>
 					<view class="listTable"  wx:if="{{!loading}}">
 						<view class="table-left">
-							<view class="listTr">
+							<view class="listTr tableLeftTitleFixed">
 								<view class="listTd shadow">{{list.length}}部影片</view>
 							</view>
 							<block wx:for="{{list}}" wx:key="maoyanId">
@@ -71,11 +71,11 @@
 								</view>
 							</block>
 						</view>
-						<view class="extends" bindtap="tapExtend">
+						<view class="extends " bindtap="tapExtend">
 							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
 						</view>
-						<scroll-view class="table-right" scroll-x>
-							<view class="listTr">
+						<scroll-view class="table-right" scroll-x bindscroll="tableRightScroll">
+							<view class="listTr tableRightTitleFixed">
 								<view class="listTd {{filterItemHidden1? 'itemHidden':''}}">上映日期</view>
 								<view class="listTd {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
 								<view class="listTd {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
