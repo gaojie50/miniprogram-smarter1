@@ -391,7 +391,7 @@ page {
 }
 .no-data{
   text-align: center;
-  font-size:30rpx;
+  font-size:26rpx;
   line-height: 200rpx;
-  color: #999999;
+  color: #999;
 }
