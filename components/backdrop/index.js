@@ -20,6 +20,6 @@ Component({
         costomShow: false,
       }
       this.triggerEvent('myevent', cancelPanel)
-    }
+    },
   }
 })

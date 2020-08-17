@@ -570,15 +570,19 @@ Component({
                 }
               }  
               toastStr = toastStr.substring(0, toastStr.length-1);
-              if(toastStr.length > 30){
-                toastStr = toastStr.substring(0, 30);
-                toastStr = toastStr + '...'
+              if(toastStr.length !== 0){
+                if(toastStr.length > 30){
+                  toastStr = toastStr.substring(0, 30);
+                  toastStr = toastStr + '...';
+                }
+                wx.showToast({
+                  title: `${toastStr}已存在`,
+                  icon: 'none',
+                  duration: 4000
+                })
               }
-              wx.showToast({
-                title: `${toastStr}已存在`,
-                icon: 'none',
-                duration: 4000
-              })
+              
+              
               const newCompanyList = companyList.concat(companyChecked);
               this.setData({
                 companyList: newCompanyList,
