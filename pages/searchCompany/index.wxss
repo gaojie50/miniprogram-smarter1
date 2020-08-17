@@ -37,7 +37,7 @@
 }
 
 .search-list {
-  margin-top: 115rpx;
+  margin-top: 114rpx;
 }
 
 .search-list view {
@@ -49,11 +49,12 @@
   word-break: break-all;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .search-list view.checked {
   color: #1791FF;
-  padding-left: 18rpx;
+  /* padding-left: 18rpx; */
 }
 
 .search-list view image {
@@ -64,7 +65,8 @@
   display: block;
   width: 21rpx;
   height: 18rpx;
-  margin-right: 18rpx;
+  position: absolute;
+  left: 20rpx;
 }
 
 view.finish {
