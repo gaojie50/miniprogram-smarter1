@@ -77,7 +77,9 @@ Page({
     estimateBoxStr: '',
     projectBoxStr: '',
     lastFilterLength: 0,
-    dateText:'未来1年'
+    dateText:'未来1年',
+    filterItemHidden10: true,
+    filterItemHidden11: true
   },
   onLoad: function ({
     token
@@ -165,7 +167,6 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
-        console.log(data)
         data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
@@ -409,6 +410,7 @@ Page({
           }
         })
       }
+      newStr = newStr.substring(0, newStr.length-1);
       return newStr
     }
     const formateFilterLength = function (cost, cooper, company){

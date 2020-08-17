@@ -537,7 +537,6 @@ Component({
         customStartDate,
         customEndDate,
       })
-
     },
     movieAdd: function () {
       wx.navigateTo({
@@ -548,24 +547,29 @@ Component({
                 companyChecked, 
               } = data;
               const { companyList } = this.data;
-              console.log(111);
+
               if(companyChecked.length !== 0){
-                const newCompanyChecked = [];
-                let add = true;
-                companyChecked.map((item, index) => {
-                  for(let i=0;i<companyList.length;i++){
-                    if(companyList[i].id === item.id){
-                      add = false
+                let toastStr = '';
+                for(let j=0; j<companyList.length; j++){
+                  for(let i=0;i<companyChecked.length;i++){
+                    if(companyList[j].id === companyChecked[i].id){
+                      toastStr = toastStr + companyChecked[i].name + '、';
+                      companyChecked.splice(i, 1);
+                      i--;
                     }
                 }
-                if(add) {
-                  newCompanyChecked.push(item);
-                }
+              }  
+              toastStr = toastStr.substring(0, toastStr.length-1);
+              wx.showToast({
+                title: `${toastStr}已存在`,
+                icon: 'none',
+                duration: 4000
               })
-              const newCompanyList = this.data.companyList.concat(newCompanyChecked)
+              const newCompanyList = companyList.concat(companyChecked);
               this.setData({
                 companyList: newCompanyList,
               })
+              
             }
           }
         }

@@ -42,12 +42,16 @@
 						<backdrop wx:if="{{backdropShow}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
 						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					</view>
-					<view class="listDerict">
-						<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">猫眼参与</view>
-						<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">阿里参与</view>
-						<view wx:if="{{latestSchedule.name}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.name}}</view>
-						<view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
-					</view>
+					
+					<scroll-view class="derictFilter" scroll-x>
+						<view class="listDerict">
+							<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">猫眼参与</view>
+							<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">阿里参与</view>
+							<view wx:if="{{latestSchedule.name}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.name}}</view>
+							<view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
+						</view>
+					</scroll-view>
+					
 					<view wx:if="{{loading}}" class="list-loading">
 						<mp-loading type="circle" show="{{true}}" tips=""></mp-loading>
 					</view>
@@ -100,7 +104,8 @@
 												<text>{{item.releaseDate}}</text>
 											</view>
 											<text wx:if="{{item.releaseDate.length !== 4}}">{{item.alias[0]}}</text>
-											<scheduleType signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
+											<scheduleType wx:if="{{item.movieStatus==2 && item.scheduleType==5}}" signContent=""></scheduleType>
+												<scheduleType wx:else signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
 										</view>
 									</view>
 									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden2? 'itemHidden':''}}">

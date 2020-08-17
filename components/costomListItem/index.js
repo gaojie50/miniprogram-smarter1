@@ -1,10 +1,13 @@
-
 Component({
   properties: {
     costomShow: {
       type: Boolean,
       value: ''
     }
+  },
+  data: {
+    costom10: true,
+    costom11: true,
   },
   methods: {
     tapCostom: function (e) {
@@ -35,6 +38,12 @@ Component({
       }
       if(costomList.length < 9){
         this.triggerEvent('myevent', costomList)
+      } else {
+        wx.showToast({
+          title: '至少保留4项！',
+          icon: 'none',
+          duration: 2000
+        })
       }
     }
   }

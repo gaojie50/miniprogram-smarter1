@@ -183,26 +183,30 @@ page {
   width: 14rpx;
   height: 9.5rpx;
 }
+.list .derictFilter {
+  height: 64rpx;
+  margin-bottom: 20rpx;
+  padding-right: 30rpx;
+}
 
-.list .listDerict {
+.list .derictFilter .listDerict {
+  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
-  width: 100%;
   height: 64rpx;
-  margin-bottom: 20rpx;
 }
 
 .list .listDerict .listDerict-item {
-  width: 188rpx;
+  min-width: 188rpx;
   height: 60rpx;
   margin-right: 10rpx;
   background: rgba(242, 243, 248, 1);
   border-radius: 10rpx;
-  white-space: nowrap;
-  overflow: hidden;
+  white-space: nowrap; 
+  overflow: hidden; 
   text-overflow: ellipsis;
   text-align: center;
   line-height: 60rpx;
