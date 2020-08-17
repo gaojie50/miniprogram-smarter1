@@ -17,8 +17,8 @@ const ApiBaseSet = {
 
     //生产环境
     prod: {
-      server: 'https://scweb-movie.sankuai.com',
-	    passport: 'https://scauthweb-movie.sankuai.com',
+      server: 'https://scweb-movie.maoyan.com',
+	    passport: 'https://scauthweb-movie.maoyan.com',
       keeper: 'https://keeper.maoyan.com',
     }
   }
