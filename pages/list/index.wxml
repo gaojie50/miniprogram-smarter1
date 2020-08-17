@@ -161,7 +161,7 @@
 							</block>
 						</scroll-view>
 					</view>
-					<view wx:if="{{list.length == 0}}" class="no-data">
+					<view wx:if="{{!loading && list.length == 0}}" class="no-data">
 						暂无数据
 					</view>
 				</view>
