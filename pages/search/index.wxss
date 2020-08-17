@@ -4,6 +4,7 @@
   position: fixed;
   top: 0;
   padding-top: 30rpx;
+  padding-bottom: 20rpx;
   background-color: #fff;
   z-index: 2;
 }
@@ -28,10 +29,8 @@
 }
 
 .search-bar icon {
-  padding-top: 30rpx;
+  padding-top: 15rpx;
   position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
   margin-left: 30rpx;
 }
 
