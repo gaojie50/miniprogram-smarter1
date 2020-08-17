@@ -1,6 +1,6 @@
 <!-- 筛选弹出框 -->
 <view wx:if="{{filterShow.length!=0}}" class="{{filterShow.length!=0? 'filterPanelWrap':''}}">
-	<view class="filterPanel">
+	<view class="filterPanel {{filterShow=='4' ? 'date':''}}">
 		<!-- 时间筛选 -->
 		<view class="dateBox" wx:if="{{filterShow=='4'}}">
 			<block wx:for="{{dateSet}}" wx:key="value">
