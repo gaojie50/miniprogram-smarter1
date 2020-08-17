@@ -570,8 +570,8 @@ Component({
                 }
               }  
               toastStr = toastStr.substring(0, toastStr.length-1);
-              if(toastStr.length > 40){
-                toastStr = toastStr.substring(0, 40);
+              if(toastStr.length > 33){
+                toastStr = toastStr.substring(0, 33);
                 toastStr = toastStr + '...'
               }
               wx.showToast({
