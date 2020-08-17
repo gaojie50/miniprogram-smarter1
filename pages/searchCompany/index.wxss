@@ -4,6 +4,7 @@
   position: fixed;
   top: 0;
   padding-top: 30rpx;
+  padding-bottom: 20rpx;
   background-color: #fff;
   z-index: 2;
 }
@@ -14,7 +15,7 @@
   border-radius: 35rpx;
   background-color: #f7f7f7;
   margin: 0 auto;
-
+  position: relative;
 }
 
 .search-bar input {
@@ -27,12 +28,12 @@
   color: #333;
 }
 
-.search-bar icon {
-  padding-top: 30rpx;
+.search-bar image.searchIco{
+  width: 30rpx;
+  height: 30rpx;
+  top: 20rpx;
+  left: 30rpx;
   position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  margin-left: 30rpx;
 }
 
 .search-list {

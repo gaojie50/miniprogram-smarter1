@@ -1,7 +1,7 @@
 <view class="search-box">
 	<view class="search-bar">
 		<label>
-			<icon type="search" size="20"></icon>
+			<image class="searchIco" src="./../../static/icon/search.png" />
 			<input auto-focus bindinput="bindKeyInput" />
 		</label>
 	</view>

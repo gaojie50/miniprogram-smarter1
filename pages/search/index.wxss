@@ -15,7 +15,15 @@
   border-radius: 35rpx;
   background-color: #f7f7f7;
   margin: 0 auto;
+  position: relative;
 
+}
+.search-bar image.searchIco{
+  width: 30rpx;
+  height: 30rpx;
+  top: 20rpx;
+  left: 30rpx;
+  position: absolute;
 }
 
 .search-bar input {
@@ -79,7 +87,7 @@
   line-height: 28rpx;
   font-size: 22rpx;
   font-weight: 400;
-  padding: 0 6px;
+  padding: 0 6rpx;
   border-radius:4rpx;
   margin-left: 10rpx;
 }
