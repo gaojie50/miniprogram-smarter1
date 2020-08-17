@@ -258,8 +258,9 @@
   margin-top: 10rpx;
 }
 
-.date-show .active {
+.date-show view.active {
   color: #1791FF;
+  border-bottom: 1px solid #1791FF;
 }
 
 .date-show .left {
