@@ -79,7 +79,7 @@ Page({
     lastFilterLength: 0,
     dateText:'未来1年',
     filterItemHidden10: true,
-    filterItemHidden11: true
+    filterItemHidden11: true,
   },
   onLoad: function ({
     token
@@ -206,9 +206,6 @@ Page({
         loading:false,
       })
     })
-  },
-  tableRightScroll: function (e){
-    console.log(e)
   },
   tapFilterItem: function (e) {
     const num = e.target.dataset.num;
