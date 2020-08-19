@@ -239,12 +239,12 @@ page {
   min-height: 70rpx;
 }
 
-/* .tableLeftTitleFixed {
+.tableLeftTitleFixed {
   position: sticky;
-  top: 85rpx;
+  top: 90rpx;
   box-shadow: 14rpx 0 12rpx -6rpx rgba(153, 153, 153, 0.1);
   z-index: 56;
-} */
+}
 
 .list .listTable .table-left .listTr .listTd {
   width: 218rpx;
@@ -320,11 +320,11 @@ page {
   background:rgba(255,255,255,1);
 }
 
-/* .tableRightTitleFixed {
+.tableRightTitleFixed {
   position: sticky;
-  top: 0;
+  top: 90rpx;
   z-index: 14;
-} */
+}
 
 .list .listTable .listTr .shadow {
   box-shadow: 14rpx 0 12rpx -6rpx rgba(153, 153, 153, 0.1);

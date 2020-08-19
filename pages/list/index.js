@@ -6,13 +6,21 @@ const {
   getMaoyanSignLabel
 } = projectConfig;
 
-const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc, handleNewDate, formatWeekDate } = utils;
+
+const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc, handleNewDate, formatWeekDate, throttle } = utils;
+
 const app = getApp();
 const {
   reqPacking,
   capsuleLocation,
   barHeight,
 } = app.globalData;
+
+function rContScrollEvt({detail}){
+  this.setData({
+    rightContScrollLeft: detail.scrollLeft,
+  })
+}
 
 Page({
   data: {
@@ -562,6 +570,7 @@ Page({
       data: 'zhiduoxing@maoyan.com'
     })
   },
+  rightContScroll:throttle(rContScrollEvt,100),
 
   tapfilmBox(){
     this.setData({
