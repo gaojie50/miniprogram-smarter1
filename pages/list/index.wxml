@@ -1,7 +1,7 @@
 <view wx:if="{{initLoading}}" class="init-loading">
 	<mp-loading type="circle" show="{{true}}" animated="{{true}}" duration="{{900}}" tips=""></mp-loading>
 </view>
-	<backdrop wx:if="{{backdropShow}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
+<backdrop catchtouchmove="{{false}}" wx:if="{{backdropShow === 'costom'}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
 <view wx:if="{{curPagePermission && !initLoading}}">
 	<view class="header">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
@@ -13,7 +13,7 @@
 	
 
 		<!-- <scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper"> -->
-		<scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)">
+		<scroll-view scroll-y="{{scrollY}}" class="main" style="height:calc(100vh - {{titleHeight}}px)">
 			<view id="scroll-cont">
 				<!-- <view class="search-bar">
 				<label>
@@ -34,10 +34,10 @@
 								<view class="schedule">中秋档、国庆档</view>
 								<view class="time">09.28-10.04</view>
 								<view class="filmBox">
-									<view>
+									<view bindtap="tapfilmBox">
 										<text>15</text>
 										<text>部</text>
-										<!-- <image src="" alt="" /> -->
+										<image src="../../static/film.svg" alt=""></image>
 									</view>
 									<view>哈利波特与魔法师姐</view>
 									<view>刺猬索尼克</view>
@@ -48,10 +48,38 @@
 								<view class="schedule">中秋档、国庆档</view>
 								<view class="time">09.28-10.04</view>
 								<view class="filmBox">
-									<view>
+									<view bindtap="tapfilmBox">
 										<text>15</text>
 										<text>部</text>
-										<!-- <image src="" alt="" /> -->
+										<image src="../../static/film.svg" alt=""></image>
+									</view>
+									<view>哈利波特与魔法师姐</view>
+									<view>刺猬索尼克</view>
+									<view>多利特的奇幻冒险家</view>
+								</view>
+							</view>
+							<view class="filmItem">
+								<view class="schedule">中秋档、国庆档</view>
+								<view class="time">09.28-10.04</view>
+								<view class="filmBox">
+									<view bindtap="tapfilmBox">
+										<text>15</text>
+										<text>部</text>
+										<image src="../../static/film.svg" alt=""></image>
+									</view>
+									<view>哈利波特与魔法师姐</view>
+									<view>刺猬索尼克</view>
+									<view>多利特的奇幻冒险家</view>
+								</view>
+							</view>
+							<view class="filmItem">
+								<view class="schedule">中秋档、国庆档</view>
+								<view class="time">09.28-10.04</view>
+								<view class="filmBox">
+									<view bindtap="tapfilmBox">
+										<text>15</text>
+										<text>部</text>
+										<image src="../../static/film.svg" alt=""></image>
 									</view>
 									<view>哈利波特与魔法师姐</view>
 									<view>刺猬索尼克</view>
@@ -61,6 +89,7 @@
 						</view>
 					</scroll-view>
 				</view>
+
 
 				<view style="min-height: calc(100vh - {{titleHeight}}px)" class="list">
 					<view class="listFilter">
@@ -81,7 +110,7 @@
 							<text data-num="3" bindtap="tapFilterItem"  wx:if="{{lastFilterLength > 0}}">{{lastFilterLength}}</text>
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
-						<backdrop wx:if="{{backdropShow}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
+						<backdrop wx:if="{{backdropShow === 'filter'}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
 						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					</view>
 					
@@ -214,6 +243,7 @@
 	<view class="customListItem">
 		<costumListItem bind:myevent="ongetCostom" costomShow="{{costomShow}}"></costumListItem>
 	</view>
+	<filmDetailList bind:myevent="ongetCostom"  show="{{filmDetailList}}"></filmDetailList>
 </view>
 
 <!-- 无权限页面 -->

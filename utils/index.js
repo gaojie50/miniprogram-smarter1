@@ -250,6 +250,26 @@ function handleNewDate(param){
   param.replace(/\.|\-/g, '/') : param);
 }
 
+const formateDate = function (t){
+  const time = new Date(t);
+  const y = time.getFullYear();
+  const m = time.getMonth() + 1;
+  const d = time.getDate();
+  return {
+    y,
+    m,
+    d
+  }
+}
+
+function formatWeekDate(date){
+  const start = formateDate(date);
+  const end = formateDate(date);
+  if(start.y === start.y){
+    return `${start.m}.${start.d}-${end.m}.${end.d}`
+  }
+}
+
 export default {
   errorHandle,
   debounce,
@@ -263,4 +283,5 @@ export default {
   checkDataType,
   handleReleaseDesc,
   handleNewDate,
+  formatWeekDate
 }

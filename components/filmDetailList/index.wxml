@@ -1,0 +1,55 @@
+<!-- 上映影片分布影片列表 -->
+<view wx:if="{{show}}" class="filmDetailList">
+  <view class="title">
+    <text class="num">09.28-10.04</text>
+    <text>上映</text>
+    <text class="num">15</text>
+    <text>部影片</text>
+    <image  bindtap="tapClose" src="../../static/close.png" />
+  </view>
+  <scroll-view class="film-list" scroll-y>
+    <view class="item">
+      <image src=""></image>
+      <view class="main">
+        <view class="name">哈利波特与魔法师姐</view>
+        <view>导演：暂无</view>
+        <view>
+          <text>2020中国大陆上映</text>
+          <scheduleType class="scheduleType" signContent="已定档"></scheduleType>
+        </view>
+      </view>
+      <view class="right">
+        <view class="yello">
+          <text>1.5</text>
+          <text>亿预估票房</text>
+        </view>
+        <view class="wishNum">
+          <text>238.3</text>
+          <text>想看数</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="item">
+      <image src=""></image>
+      <view class="main">
+        <view class="name">哈利波特与魔法师姐</view>
+        <view>导演：暂无</view>
+        <view>
+          <text>2020中国大陆上映</text>
+          <scheduleType class="scheduleType" signContent="已定档"></scheduleType>
+        </view>
+      </view>
+      <view class="right">
+        <view class="yello">
+          <text>1.5</text>
+          <text>亿预估票房</text>
+        </view>
+        <view class="wishNum">
+          <text>238.3</text>
+          <text>想看数</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+</view>

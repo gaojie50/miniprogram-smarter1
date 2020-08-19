@@ -6,7 +6,7 @@ const {
   getMaoyanSignLabel
 } = projectConfig;
 
-const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc,handleNewDate, } = utils;
+const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc, handleNewDate, formatWeekDate } = utils;
 const app = getApp();
 const {
   reqPacking,
@@ -82,11 +82,13 @@ Page({
     dateText:'未来1年',
     filterItemHidden10: true,
     filterItemHidden11: true,
+    filmDetailList: false,
+    scrollY: true
   },
   onLoad: function ({
     token
   }) {
-   
+    formatWeekDate(2343245432323)
     if (token) wx.setStorageSync('token', token);
 
     this.setData({
@@ -99,6 +101,7 @@ Page({
         curPagePermission: true,
         initLoading:false,
       });
+      this.fetchfilmDistribution();
       this.fetchSchedule();
       this.setData(
         {loading:true},()=>this._fetchData(this.data.dateSelect));
@@ -129,6 +132,7 @@ Page({
               curPagePermission: true,
               initLoading:false,
             },()=>{
+              this.fetchfilmDistribution();
               this.fetchSchedule();
               this._fetchData(this.data.dateSelect);
             })
@@ -144,6 +148,21 @@ Page({
         });
       })
     }
+  },
+  fetchfilmDistribution: function (){
+    const query = {
+      offset: 0,
+      limit: 10,
+    }
+    reqPacking({
+      url: 'api/applet/management/filmDistribution:',
+      data: query
+    }).then(res => {
+      console.log(res)
+      if(res.success){
+        
+      }
+    })
   },
   fetchSchedule: function (){
     reqPacking({
@@ -336,12 +355,16 @@ Page({
       backdropShow: '',
       filterActive: '',
       costomShow: false,
+      filmDetailList: false,
+      scrollY: true
     })
   },
   ongetCostom: function (e) {
     const dataList = this.data;
     dataList.backdropShow = '';
     dataList.costomShow = false;
+    dataList.filmDetailList = false;
+    dataList.scrollY = true;
     if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail;
       this.setData({
@@ -540,10 +563,18 @@ Page({
     })
   },
 
+  tapfilmBox(){
+    this.setData({
+      filmDetailList: true,
+      backdropShow: 'costom',
+      scrollY: false
+    })
+  },
+
   onReady: function() {
     chart = lineChart.init('chart', {
         tipsCtx: 'chart-tips',
-        width:700,
+        width:832,
         height: 200,
         margin: 30,
         xAxis: ['0','1', '2', '3', '4', '5', '6', '7'],
