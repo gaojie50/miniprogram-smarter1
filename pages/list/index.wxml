@@ -10,6 +10,7 @@
 				<text>影片市场情报</text>
 			</view>
 		</view>
+	
 
 		<!-- <scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper"> -->
 		<scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)">
@@ -20,6 +21,47 @@
 					<input placeholder="搜索项目" disabled="true" placeholder-style="input-ph" bindtap="jumpToSearch" />
 				</label>
 			</view> -->
+
+				<!-- 上映影片分布 -->
+				<view class="filmDistribution">
+					<view class="title">上映影片分布</view>
+					<scroll-view scroll-x>
+						<view class="filmChart" style="width: 100%; ">
+							<canvas canvas-id="chart" style="width:99999rpx;"></canvas>
+						</view>
+						<view class="filmList">
+							<view class="filmItem">
+								<view class="schedule">中秋档、国庆档</view>
+								<view class="time">09.28-10.04</view>
+								<view class="filmBox">
+									<view>
+										<text>15</text>
+										<text>部</text>
+										<!-- <image src="" alt="" /> -->
+									</view>
+									<view>哈利波特与魔法师姐</view>
+									<view>刺猬索尼克</view>
+									<view>多利特的奇幻冒险家</view>
+								</view>
+							</view>
+							<view class="filmItem">
+								<view class="schedule">中秋档、国庆档</view>
+								<view class="time">09.28-10.04</view>
+								<view class="filmBox">
+									<view>
+										<text>15</text>
+										<text>部</text>
+										<!-- <image src="" alt="" /> -->
+									</view>
+									<view>哈利波特与魔法师姐</view>
+									<view>刺猬索尼克</view>
+									<view>多利特的奇幻冒险家</view>
+								</view>
+							</view>
+						</view>
+					</scroll-view>
+				</view>
+
 				<view style="min-height: calc(100vh - {{titleHeight}}px)" class="list">
 					<view class="listFilter">
 						<view class="listFilter-item" style="width: 189rpx">
