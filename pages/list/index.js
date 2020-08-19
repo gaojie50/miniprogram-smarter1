@@ -4,13 +4,19 @@ const {
   getMaoyanSignLabel
 } = projectConfig;
 
-const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc,handleNewDate, } = utils;
+const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc,handleNewDate,throttle} = utils;
 const app = getApp();
 const {
   reqPacking,
   capsuleLocation,
   barHeight,
 } = app.globalData;
+
+function rContScrollEvt({detail}){
+  this.setData({
+    rightContScrollLeft: detail.scrollLeft,
+  })
+}
 
 Page({
   data: {
@@ -532,5 +538,5 @@ Page({
       data: 'zhiduoxing@maoyan.com'
     })
   },
-  
+  rightContScroll:throttle(rContScrollEvt,100),
 })

@@ -74,92 +74,97 @@
 						<view class="extends " bindtap="tapExtend">
 							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
 						</view>
-						<scroll-view class="table-right" scroll-x>
+						<view class="table-right">
 							<view class="listTr tableRightTitleFixed">
-								<view class="listTd {{filterItemHidden1? 'itemHidden':''}}">上映日期</view>
-								<view class="listTd {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
-								<view class="listTd {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
-								<view class="listTd {{filterItemHidden4? 'itemHidden':''}}">预估评分</view>
-								<view class="listTd {{filterItemHidden5? 'itemHidden':''}}">主出品</view>
-								<view class="listTd {{filterItemHidden6? 'itemHidden':''}}">主发行</view>
-								<view class="listTd {{filterItemHidden7? 'itemHidden':''}}">类型</view>
-								<view class="listTd {{filterItemHidden8? 'itemHidden':''}}">导演</view>
-								<view class="listTd {{filterItemHidden9? 'itemHidden':''}}">项目状态</view>
-								<view class="listTd {{filterItemHidden10? 'itemHidden':''}}">合作状态</view>
-								<view class="listTd {{filterItemHidden11? 'itemHidden':''}}">跟进人</view>
-								<view class="listTd {{filterItemHidden12? 'itemHidden':''}}">映前想看人数</view>
-							</view>
-							<block wx:for="{{list}}" wx:key="maoyanId">
-								<view data-id="{{item.maoyanId}}" bindtap="jumpToDetail" class="listTr rightTableHeight">
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden1? 'itemHidden':''}}">
-										<view wx:if="{{item.reRelease}}">
-											<view>
-												<text>{{item.releaseDate}}</text>
-											</view>
-											<text wx:if="{{item.releaseDate.length !== 4}}">{{item.alias[0]}}</text>
-											<scheduleType signContent="重映"></scheduleType>
-										</view>
-										<view wx:if="{{!item.reRelease}}">
-											<view>
-												<text>{{item.releaseDate}}</text>
-											</view>
-											<text wx:if="{{item.releaseDate.length !== 4}}">{{item.alias[0]}}</text>
-											<scheduleType wx:if="{{item.movieStatus==2 && item.scheduleType==5}}" signContent=""></scheduleType>
-												<scheduleType wx:else signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
-										</view>
-									</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden2? 'itemHidden':''}}">
-										<text wx:if="{{item.cost===null}}">-</text>
-										<text wx:if="{{item.cost!==null}}">{{item.cost}}万</text>
-									</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden3? 'itemHidden':''}}">
-										<text wx:if="{{item.estimateBox === null}}">-</text>
-										<text>{{item.estimateBox2.text}}</text>
-									</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">{{item.estimateScore === null ? '-': item.estimateScore}}</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden5? 'itemHidden':''}}">
-										<view style="">
-											<text wx:if="{{item.producer === null || item.producer.length === 0}}">-</text>
-											<!-- <text wx:for="{{item.producer}}">{{item}}</text> -->
-											<text >{{item.producer[0]}}</text>
-										</view>
-									</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden6? 'itemHidden':''}}">
-										<view>
-											<text wx:if="{{item.issuer === null}}">-</text>
-											<!-- <text wx:for="{{item.issuer}}">{{item}}</text> -->
-											<text >{{item.issuer[0]}}</text>
-										</view>
-									</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden7? 'itemHidden':''}}">
-										<text>{{item.movieType}}</text>
-									</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">
-										<view>{{item.director !== undefined?item.director:'-'}}</view>
-									</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden9? 'itemHidden':''}}">
-										<text wx:if="{{(item.projectStatus > 0)}}">{{project[item.projectStatus]}}</text>
-										<text wx:if="{{item.projectStatus == 0}}">-</text>
-										<text wx:if="{{item.projectStatus == null}}">-</text>
-									</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden10? 'itemHidden':''}}">
-										<text wx:if="item.cooperStatus != null">{{cooper[item.cooperStatus]}}</text>
-										<text wx:if="item.cooperStatus == 0">-</text>
-									</view>
-									<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden11? 'itemHidden':''}}">
-										<text wx:if="{{item.principal !== null}}" wx:for="{{item.principal}}" wx:key="index">{{item}}</text>
-										<text wx:if="{{item.principal == null}}">-</text>
-
-									</view>
-									<view  style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">
-										<view>
-											<text>{{item.wishNum || '-'}}</text>
-											<view wx:if="{{item.sevenDayIncreaseWish}}">近七日新增 {{item.sevenDayIncreaseWish.text}}</view>
-										</view>
-									</view>
+								<view  class="listTr" style="left:-{{rightContScrollLeft}}px;position:relative;">
+									<view class="listTd {{filterItemHidden1? 'itemHidden':''}}">上映日期</view>
+									<view class="listTd {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
+									<view class="listTd {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
+									<view class="listTd {{filterItemHidden4? 'itemHidden':''}}">预估评分</view>
+									<view class="listTd {{filterItemHidden5? 'itemHidden':''}}">主出品</view>
+									<view class="listTd {{filterItemHidden6? 'itemHidden':''}}">主发行</view>
+									<view class="listTd {{filterItemHidden7? 'itemHidden':''}}">类型</view>
+									<view class="listTd {{filterItemHidden8? 'itemHidden':''}}">导演</view>
+									<view class="listTd {{filterItemHidden9? 'itemHidden':''}}">项目状态</view>
+									<view class="listTd {{filterItemHidden10? 'itemHidden':''}}">合作状态</view>
+									<view class="listTd {{filterItemHidden11? 'itemHidden':''}}">跟进人</view>
+									<view class="listTd {{filterItemHidden12? 'itemHidden':''}}">映前想看人数</view>
 								</view>
-							</block>
-						</scroll-view>
+							</view>
+							<scroll-view scroll-x bindscroll="rightContScroll">
+								<view class="listTr" style="min-height:0;"></view>
+								<block wx:for="{{list}}" wx:key="maoyanId">
+									<view data-id="{{item.maoyanId}}" bindtap="jumpToDetail" class="listTr rightTableHeight">
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden1? 'itemHidden':''}}">
+											<view wx:if="{{item.reRelease}}">
+												<view>
+													<text>{{item.releaseDate}}</text>
+												</view>
+												<text wx:if="{{item.releaseDate.length !== 4}}">{{item.alias[0]}}</text>
+												<scheduleType signContent="重映"></scheduleType>
+											</view>
+											<view wx:if="{{!item.reRelease}}">
+												<view>
+													<text>{{item.releaseDate}}</text>
+												</view>
+												<text wx:if="{{item.releaseDate.length !== 4}}">{{item.alias[0]}}</text>
+												<scheduleType wx:if="{{item.movieStatus==2 && item.scheduleType==5}}" signContent=""></scheduleType>
+													<scheduleType wx:else signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
+											</view>
+										</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden2? 'itemHidden':''}}">
+											<text wx:if="{{item.cost===null}}">-</text>
+											<text wx:if="{{item.cost!==null}}">{{item.cost}}万</text>
+										</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden3? 'itemHidden':''}}">
+											<text wx:if="{{item.estimateBox === null}}">-</text>
+											<text>{{item.estimateBox2.text}}</text>
+										</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">{{item.estimateScore === null ? '-': item.estimateScore}}</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden5? 'itemHidden':''}}">
+											<view style="">
+												<text wx:if="{{item.producer === null || item.producer.length === 0}}">-</text>
+												<!-- <text wx:for="{{item.producer}}">{{item}}</text> -->
+												<text >{{item.producer[0]}}</text>
+											</view>
+										</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden6? 'itemHidden':''}}">
+											<view>
+												<text wx:if="{{item.issuer === null}}">-</text>
+												<!-- <text wx:for="{{item.issuer}}">{{item}}</text> -->
+												<text >{{item.issuer[0]}}</text>
+											</view>
+										</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden7? 'itemHidden':''}}">
+											<text>{{item.movieType}}</text>
+										</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">
+											<view>{{item.director !== undefined?item.director:'-'}}</view>
+										</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden9? 'itemHidden':''}}">
+											<text wx:if="{{(item.projectStatus > 0)}}">{{project[item.projectStatus]}}</text>
+											<text wx:if="{{item.projectStatus == 0}}">-</text>
+											<text wx:if="{{item.projectStatus == null}}">-</text>
+										</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden10? 'itemHidden':''}}">
+											<text wx:if="item.cooperStatus != null">{{cooper[item.cooperStatus]}}</text>
+											<text wx:if="item.cooperStatus == 0">-</text>
+										</view>
+										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden11? 'itemHidden':''}}">
+											<text wx:if="{{item.principal !== null}}" wx:for="{{item.principal}}" wx:key="index">{{item}}</text>
+											<text wx:if="{{item.principal == null}}">-</text>
+	
+										</view>
+										<view  style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden12? 'itemHidden':''}}">
+											<view>
+												<text>{{item.wishNum || '-'}}</text>
+												<view wx:if="{{item.sevenDayIncreaseWish}}">近七日新增 {{item.sevenDayIncreaseWish.text}}</view>
+											</view>
+										</view>
+									</view>
+								</block>
+							</scroll-view>
+						</view>
 					</view>
 					<view wx:if="{{!loading && list.length == 0}}" class="no-data">
 						暂无数据

@@ -4,19 +4,46 @@ const errorHandle = (err) => {
   return err;
 };
 
-function debounce(fn, interval) {
+function debounce(fn, interval,first=false) {
   let timer;
   let gapTime = interval || 1000;
+
   return function () {
     clearTimeout(timer);
     let context = this;
     let args = arguments[0];
+    
+    if(first){
+      fn.call(context, args);
+      first=false;
+    }
+    
     timer = setTimeout(function () {
       fn.call(context, args);
     }, gapTime);
   };
 }
 
+function limit(func, wait, debounce) {
+  var timeout;
+  return function() {
+      var context = this, args = arguments;
+      // 封装函数,用于延迟调用
+      var throttler = function() {
+          // 只是节流函数的时候,对其timeout进行赋值为null,这样可以设置下一次的setTimtout
+          timeout = null;
+          func.apply(context, args);
+      };
+      // 如果debouce是true的话,前一个函数的调用timeout会被清空,不会被执行
+      if (debounce) clearTimeout(timeout);
+      // 如果debouce是true 或者 timeout 为空的情况下,设置setTimeout
+      if (debounce || !timeout) timeout = setTimeout(throttler, wait);
+  };
+};
+
+function throttle(func, wait) {
+  return limit(func, wait, false);
+};
 
 const rpxTopx = function(rpx){
   return rpx / 750 * wx.getSystemInfoSync().windowWidth;
@@ -253,6 +280,7 @@ function handleNewDate(param){
 export default {
   errorHandle,
   debounce,
+  throttle,
   rpxTopx,
   formatNumber,
   formatReleaseDate,
