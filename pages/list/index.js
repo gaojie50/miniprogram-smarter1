@@ -1,5 +1,7 @@
 import utils from './../../utils/index';
 import projectConfig from '../../constant/project-config';
+import lineChart from './../../utils/chart';
+let chart = null;
 const {
   getMaoyanSignLabel
 } = projectConfig;
@@ -174,6 +176,7 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
+
         data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
@@ -181,6 +184,9 @@ Page({
           if(item.estimateBox){
             item.estimateBox2 = formatNumber(item.estimateBox/100);
           }
+          // if(item.cost !== null && item.cost !== ''){
+          //   item.cost =formatNumber(item.cost * 1e4 ).text;
+          // }
           if(item.name.length>6 && item.maoyanSign.length !== 0){
             item.trHeight = 160;
           } else if(item.releaseDate !== 0 && item.scheduleType !== 0 && item.alias.length !== 0) {
@@ -198,6 +204,7 @@ Page({
           item.movieType = item.movieType.replace(/,/g,'/');
           item.wishNum = formatNumber(item.wishNum).text;
           item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
+       
         })
   
         return this.setData({
@@ -539,4 +546,18 @@ Page({
     })
   },
   rightContScroll:throttle(rContScrollEvt,100),
+
+  onReady: function() {
+    chart = lineChart.init('chart', {
+        tipsCtx: 'chart-tips',
+        width:700,
+        height: 200,
+        margin: 30,
+        xAxis: ['0','1', '2', '3', '4', '5', '6', '7'],
+        lines: [{
+            points: [5, 6, 50, 6, 7, 4, 3]
+        }]
+    });
+    chart.draw();
+},
 })
