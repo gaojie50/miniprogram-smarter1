@@ -55,6 +55,7 @@
 }
 .main .scheduleType {
   display: inline-block;
+  margin-left: 10rpx;
 }
 .right {
   margin-left: 64rpx;

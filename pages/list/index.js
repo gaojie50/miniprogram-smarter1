@@ -91,12 +91,14 @@ Page({
     filterItemHidden10: true,
     filterItemHidden11: true,
     filmDetailList: false,
-    scrollY: true
+    scrollY: true,
+    filmDistributionList: []
   },
   onLoad: function ({
     token
   }) {
-    formatWeekDate(2343245432323)
+   
+
     if (token) wx.setStorageSync('token', token);
 
     this.setData({
@@ -157,18 +159,27 @@ Page({
       })
     }
   },
-  fetchfilmDistribution: function (){
+  fetchfilmDistribution: function (offset, limit){
     const query = {
       offset: 0,
       limit: 10,
     }
     reqPacking({
-      url: 'api/applet/management/filmDistribution:',
+      url: 'api/applet/management/filmDistribution',
       data: query
     }).then(res => {
       console.log(res)
-      if(res.success){
-        
+      const { success, data, paging } = res;
+      data.map(item => {
+        if(item.filmSchedule && item.filmSchedule.length > 0){
+          item.filmSchedule = formatDirector(item.filmSchedule);
+        }
+        item.releaseDate = formatWeekDate(item.releaseDate);
+      })
+      if(success && data){
+        this.setData({
+          filmDistributionList: res.data
+        })
       }
     })
   },
@@ -570,9 +581,10 @@ Page({
       data: 'zhiduoxing@maoyan.com'
     })
   },
-  rightContScroll:throttle(rContScrollEvt,100),
+  rightContScroll:throttle(rContScrollEvt,10),
 
-  tapfilmBox(){
+  tapfilmBox(e){
+    console.log(e)
     this.setData({
       filmDetailList: true,
       backdropShow: 'costom',
@@ -581,6 +593,10 @@ Page({
   },
 
   onReady: function() {
+    wx.createSelectorQuery().select('#box').boundingClientRect(rect=>{
+
+      // console.log(rect)
+      }).exec();
     chart = lineChart.init('chart', {
         tipsCtx: 'chart-tips',
         width:832,
@@ -593,4 +609,7 @@ Page({
     });
     chart.draw();
 },
+outerScroll(e){
+  // console.log(e)
+}
 })

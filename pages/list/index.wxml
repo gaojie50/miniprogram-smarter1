@@ -13,7 +13,7 @@
 	
 
 		<!-- <scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper"> -->
-		<scroll-view scroll-y="{{scrollY}}" class="main" style="height:calc(100vh - {{titleHeight}}px)">
+		<scroll-view scroll-y="{{scrollY}}" class="main" bindscroll="outerScroll" style="height:calc(100vh - {{titleHeight}}px)">
 			<view id="scroll-cont">
 				<!-- <view class="search-bar">
 				<label>
@@ -30,69 +30,26 @@
 							<canvas canvas-id="chart" style="width:99999rpx;"></canvas>
 						</view>
 						<view class="filmList">
-							<view class="filmItem">
-								<view class="schedule">中秋档、国庆档</view>
-								<view class="time">09.28-10.04</view>
+							<view class="filmItem" wx:for="{{filmDistributionList}}" wx:key="yearWeek">
+								<view class="schedule">{{item.filmSchedule || ''}}</view>
+								<view class="time">{{item.releaseDate}}</view>
 								<view class="filmBox">
-									<view bindtap="tapfilmBox">
-										<text>15</text>
+									<view data-id="{{item.yearWeek}}" bindtap="tapfilmBox">
+										<text>{{item.keyFilms.length}}</text>
 										<text>部</text>
 										<image src="../../static/film.svg" alt=""></image>
 									</view>
-									<view>哈利波特与魔法师姐</view>
-									<view>刺猬索尼克</view>
-									<view>多利特的奇幻冒险家</view>
-								</view>
-							</view>
-							<view class="filmItem">
-								<view class="schedule">中秋档、国庆档</view>
-								<view class="time">09.28-10.04</view>
-								<view class="filmBox">
-									<view bindtap="tapfilmBox">
-										<text>15</text>
-										<text>部</text>
-										<image src="../../static/film.svg" alt=""></image>
-									</view>
-									<view>哈利波特与魔法师姐</view>
-									<view>刺猬索尼克</view>
-									<view>多利特的奇幻冒险家</view>
-								</view>
-							</view>
-							<view class="filmItem">
-								<view class="schedule">中秋档、国庆档</view>
-								<view class="time">09.28-10.04</view>
-								<view class="filmBox">
-									<view bindtap="tapfilmBox">
-										<text>15</text>
-										<text>部</text>
-										<image src="../../static/film.svg" alt=""></image>
-									</view>
-									<view>哈利波特与魔法师姐</view>
-									<view>刺猬索尼克</view>
-									<view>多利特的奇幻冒险家</view>
-								</view>
-							</view>
-							<view class="filmItem">
-								<view class="schedule">中秋档、国庆档</view>
-								<view class="time">09.28-10.04</view>
-								<view class="filmBox">
-									<view bindtap="tapfilmBox">
-										<text>15</text>
-										<text>部</text>
-										<image src="../../static/film.svg" alt=""></image>
-									</view>
-									<view>哈利波特与魔法师姐</view>
-									<view>刺猬索尼克</view>
-									<view>多利特的奇幻冒险家</view>
+									<view wx:if="{{item.keyFilms.length >= 1}}">{{item.keyFilms[0].movieName}}</view>
+									<view wx:if="{{item.keyFilms.length >= 2}}">{{item.keyFilms[1].movieName}}</view>
+									<view wx:if="{{item.keyFilms.length >= 3}}">{{item.keyFilms[2].movieName}}</view>
 								</view>
 							</view>
 						</view>
 					</scroll-view>
 				</view>
 
-
 				<view style="min-height: calc(100vh - {{titleHeight}}px)" class="list">
-					<view class="listFilter">
+					<view class="listFilter" id="box">
 						<view class="listFilter-item" style="width: 189rpx">
 							<text data-num="4" class="listFilter-item-text filterActive}}" bindtap="tapFilterItem">{{dateText}}</text>
 							<image src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
@@ -113,7 +70,8 @@
 						<backdrop wx:if="{{backdropShow === 'filter'}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
 						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					</view>
-					
+
+				<scroll-view style="height: calc(100vh  - {{titleHeight}}rpx)" scroll-y="{{false}}">
 					<scroll-view class="derictFilter" scroll-x>
 						<view class="listDerict">
 							<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">猫眼参与</view>
@@ -236,7 +194,9 @@
 								</block>
 							</scroll-view>
 						</view>
+						
 					</view>
+					</scroll-view>
 					<view wx:if="{{!loading && list.length == 0}}" class="no-data">
 						暂无数据
 					</view>

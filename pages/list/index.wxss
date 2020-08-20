@@ -410,6 +410,7 @@ page {
   z-index: 80;
 }
 .filmDistribution .title {
+  margin-left: 30rpx;
   margin-top: 40rpx;
   font-weight: 600;
   font-family: PingFangSC-Semibold;
@@ -447,6 +448,8 @@ page {
   margin-left: 30rpx;
 }
 .filmList .filmItem .filmBox {
+  width: 208rpx;
+  height: 220rpx;
   padding: 20rpx 16rpx;
   box-sizing: border-box;
   background: rgb(121,140,186, 0.2);
@@ -454,6 +457,7 @@ page {
 }
 
 .filmList .filmItem .schedule {
+  height: 28rpx;
   font-size: 20rpx;
   overflow: hidden;
   white-space: nowrap;
@@ -469,6 +473,7 @@ page {
   font-size: 40rpx;
 }
 .filmList .filmItem .filmBox view:not(:first-child) {
+  height: 32rpx;
   opacity: 0.6;
   overflow: hidden;
   white-space: nowrap;
