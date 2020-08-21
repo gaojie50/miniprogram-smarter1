@@ -32,5 +32,8 @@ Page({
         data: item
       })
     })
+    eventChannel.on && eventChannel.on('acceptDataFromFilmPage', item => {
+      console.log(item)
+    })
   },
 })

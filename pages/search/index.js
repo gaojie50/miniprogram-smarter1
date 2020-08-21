@@ -21,6 +21,7 @@ function fn(e) {
       data: { name: innerVal },
       method:'POST'
     }).then(({ success,data}) => {
+      console.log(data)
       if (success && data && data.length > 0) {
         return this.setData({ 
           inputVal:innerVal,
@@ -55,7 +56,6 @@ Page({
     const {id} = e.currentTarget.dataset;
     const {list} = this.data;
     const filterList = JSON.parse(JSON.stringify(list)).filter(({maoyanId,projectId}) => `${maoyanId}-${projectId}` == id)[0];
-    console.log(filterList)
     wx.navigateTo({
       url:`/pages/projectDetail/index`,
       success: function(res) {

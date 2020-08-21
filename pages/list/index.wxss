@@ -484,3 +484,7 @@ page {
   height: 17rpx;
   margin-left: 102rpx;
 }
+.filmLoading {
+  border: 1px solid red;
+  width: 200rpx;
+}

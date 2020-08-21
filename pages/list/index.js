@@ -92,7 +92,8 @@ Page({
     filterItemHidden11: true,
     filmDetailList: false,
     scrollY: true,
-    filmDistributionList: []
+    filmDistributionList: [],
+    filmDistributionItem: {}
   },
   onLoad: function ({
     token
@@ -162,7 +163,7 @@ Page({
   fetchfilmDistribution: function (offset, limit){
     const query = {
       offset: 0,
-      limit: 10,
+      limit: 5,
     }
     reqPacking({
       url: 'api/applet/management/filmDistribution',
@@ -170,15 +171,48 @@ Page({
     }).then(res => {
       console.log(res)
       const { success, data, paging } = res;
-      data.map(item => {
-        if(item.filmSchedule && item.filmSchedule.length > 0){
-          item.filmSchedule = formatDirector(item.filmSchedule);
-        }
-        item.releaseDate = formatWeekDate(item.releaseDate);
-      })
       if(success && data){
+        data.map(item => {
+          if(item.filmSchedule && item.filmSchedule.length > 0){
+            item.filmSchedule = formatDirector(item.filmSchedule);
+          }
+          if(item.keyFilms && item.keyFilms.length > 0){
+            item.keyFilms.map(item2 => {
+              if(item2.director && item2.director.length > 0){
+                item2.director = formatDirector(item2.director);
+              }
+              item2.pic = item2.pic ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
+              item2.wishNum = formatNumber(item2.wishNum).text;
+            })
+          }
+          item.releaseDate = formatWeekDate(item.releaseDate);
+        })
+        console.log(data)
         this.setData({
-          filmDistributionList: res.data
+          filmDistributionList: data
+        }, () => {
+          const { filmDistributionList } = this.data;
+          let key = [0];
+          let value = [5];
+          filmDistributionList.map((item, index) => {
+            key.push(index + 1);
+            value.push(item.filmNum);
+          })
+          key.push(filmDistributionList.length + 1);
+          value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
+          console.log(key);
+          console.log(value);
+          chart = lineChart.init('chart', {
+            tipsCtx: 'chart-tips',
+            width: key.length  * 105,
+            height: 200,
+            margin: 30,
+            xAxis: key,
+            lines: [{
+                points: value
+            }]
+          });
+          chart.draw();
         })
       }
     })
@@ -584,30 +618,21 @@ Page({
   rightContScroll:throttle(rContScrollEvt,10),
 
   tapfilmBox(e){
-    console.log(e)
+    const filmDistributionItem = e.target.dataset.item;
     this.setData({
       filmDetailList: true,
       backdropShow: 'costom',
-      scrollY: false
+      scrollY: false,
+      filmDistributionItem,
     })
   },
 
-  onReady: function() {
-    wx.createSelectorQuery().select('#box').boundingClientRect(rect=>{
+onReady: function() {
+  wx.createSelectorQuery().select('#box').boundingClientRect(rect=>{
+    // console.log(rect)
+  }).exec();
 
-      // console.log(rect)
-      }).exec();
-    chart = lineChart.init('chart', {
-        tipsCtx: 'chart-tips',
-        width:832,
-        height: 200,
-        margin: 30,
-        xAxis: ['0','1', '2', '3', '4', '5', '6', '7'],
-        lines: [{
-            points: [5, 6, 50, 6, 7, 4, 3]
-        }]
-    });
-    chart.draw();
+ 
 },
 outerScroll(e){
   // console.log(e)

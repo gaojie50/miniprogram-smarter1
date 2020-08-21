@@ -27,14 +27,14 @@
 					<view class="title">上映影片分布</view>
 					<scroll-view scroll-x>
 						<view class="filmChart" style="width: 100%; ">
-							<canvas canvas-id="chart" style="width:99999rpx;"></canvas>
+							<canvas canvas-id="chart" style="width:{{(filmDistributionList.length * 218) + 140}}rpx;"></canvas>
 						</view>
-						<view class="filmList">
+						<view class="filmList" style="width:{{(filmDistributionList.length * 218) + 40 +200}}rpx;">
 							<view class="filmItem" wx:for="{{filmDistributionList}}" wx:key="yearWeek">
 								<view class="schedule">{{item.filmSchedule || ''}}</view>
 								<view class="time">{{item.releaseDate}}</view>
 								<view class="filmBox">
-									<view data-id="{{item.yearWeek}}" bindtap="tapfilmBox">
+									<view data-item="{{item}}" bindtap="tapfilmBox">
 										<text>{{item.keyFilms.length}}</text>
 										<text>部</text>
 										<image src="../../static/film.svg" alt=""></image>
@@ -43,6 +43,9 @@
 									<view wx:if="{{item.keyFilms.length >= 2}}">{{item.keyFilms[1].movieName}}</view>
 									<view wx:if="{{item.keyFilms.length >= 3}}">{{item.keyFilms[2].movieName}}</view>
 								</view>
+							</view>
+							<view class="filmLoading">
+								<mp-loading type="circle"></mp-loading>
 							</view>
 						</view>
 					</scroll-view>
@@ -208,7 +211,7 @@
 	<view class="customListItem">
 		<costumListItem bind:myevent="ongetCostom" costomShow="{{costomShow}}"></costumListItem>
 	</view>
-	<filmDetailList bind:myevent="ongetCostom"  show="{{filmDetailList}}"></filmDetailList>
+	<filmDetailList filmDistributionItem="{{filmDistributionItem}}" bind:myevent="ongetCostom"  show="{{filmDetailList}}"></filmDetailList>
 </view>
 
 <!-- 无权限页面 -->
