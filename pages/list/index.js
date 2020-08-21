@@ -93,12 +93,18 @@ Page({
     filmDetailList: false,
     scrollY: true,
     filmDistributionList: [],
-    filmDistributionItem: {}
+    filmDistributionItem: {},
+    filmLoading: false,
+    paging: {
+      hasMore: false,
+      offset: 0,
+      limit: 5,
+      total: 0
+    }
   },
   onLoad: function ({
     token
   }) {
-   
 
     if (token) wx.setStorageSync('token', token);
 
@@ -160,10 +166,11 @@ Page({
       })
     }
   },
-  fetchfilmDistribution: function (offset, limit){
+  fetchfilmDistribution: function (){
+    const { offset, limit } = this.data.paging;
     const query = {
-      offset: 0,
-      limit: 5,
+      offset,
+      limit,
     }
     reqPacking({
       url: 'api/applet/management/filmDistribution',
@@ -189,7 +196,8 @@ Page({
         })
         console.log(data)
         this.setData({
-          filmDistributionList: data
+          filmDistributionList: data,
+          paging,
         }, () => {
           const { filmDistributionList } = this.data;
           let key = [0];
@@ -633,6 +641,13 @@ onReady: function() {
   }).exec();
 
  
+},
+filmScroll(){
+  if(this.data.paging.hasMore){
+    this.setData({
+      filmLoading: true
+    })
+  } 
 },
 outerScroll(e){
   // console.log(e)
