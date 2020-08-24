@@ -526,6 +526,11 @@ Component({
         dateSet,
         customStartDate,
         customEndDate,
+        estimateBox,
+        projectBox,
+        costBox,
+        cooperBox,
+        company,      
       } = this.data;
       this.triggerEvent('myevent', {
         dimension,
@@ -536,6 +541,11 @@ Component({
         dateSet,
         customStartDate,
         customEndDate,
+        estimateBox,
+        projectBox,
+        costBox,
+        cooperBox,
+        company,      
       })
     },
     movieAdd: function () {
@@ -553,6 +563,7 @@ Component({
                 for(let j=0; j<companyList.length; j++){
                   for(let i=0;i<companyChecked.length;i++){
                     if(companyList[j].id === companyChecked[i].id){
+                      this.data.company[j] = 'active';
                       toastStr = toastStr + companyChecked[i].name + '、';
                       companyChecked.splice(i, 1);
                       i--;
@@ -560,14 +571,27 @@ Component({
                 }
               }  
               toastStr = toastStr.substring(0, toastStr.length-1);
-              wx.showToast({
-                title: `${toastStr}已存在`,
-                icon: 'none',
-                duration: 4000
-              })
+              if(toastStr.length !== 0){
+                if(toastStr.length > 30){
+                  toastStr = toastStr.substring(0, 30);
+                  toastStr = toastStr + '...';
+                }
+                wx.showToast({
+                  title: `${toastStr}已存在`,
+                  icon: 'none',
+                  duration: 4000
+                })
+              }
+              
+              
               const newCompanyList = companyList.concat(companyChecked);
+              const newCompany = this.data.company;
+              for(let i=companyList.length; i<newCompanyList.length; i++){
+                newCompany[i] = 'active';
+              }
               this.setData({
                 companyList: newCompanyList,
+                company: newCompany
               })
               
             }

@@ -1,0 +1,90 @@
+.filmDetailList {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-height: 1423rpx;
+  padding: 40rpx 30rpx 0;
+  font-family: PingFangSC-Regular;
+  color: #333333;
+  background: #FFFFFF;
+  border-radius: 20rpx 20rpx 0 0;
+  z-index: 100;
+}
+.filmDetailList .title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 32rpx;
+  font-family: PingFangSC-Medium;
+  font-weight: 500;
+}
+.filmDetailList .title image {
+  margin-right: 60rpx;
+  width: 32rpx;
+  height: 32rpx;
+}
+.filmDetailList .title .num {
+  font-family: MaoYanHeiTi-H-H;
+}
+.filmDetailList .title text:first-child{
+  margin-right: 10rpx;
+}
+.filmDetailList .film-list {
+  max-height: 1000rpx;
+}
+.filmDetailList .film-list .item{
+  display: flex;
+  margin-top: 60rpx;
+  font-size: 24rpx;
+  color: #666666;
+}
+.filmDetailList .film-list .item image {
+  width: 100rpx;
+  height: 140rpx;
+  margin-right: 24rpx;
+}
+.main {
+  width: 100%;
+}
+.main .firstLine {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14rpx;
+}
+.main .firstLine .name{
+  width: 339rpx;
+  font-weight: 500;
+  font-family: PingFangSC-Medium;
+  font-size: 34rpx;
+  color: #333333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.main .secondLine {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.main .secondLine .director {
+  width: 339rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.main .scheduleType {
+  display: inline-block;
+  margin-left: 10rpx;
+}
+
+.yello {
+  margin-right: 60rpx;
+  color: #FF9034;
+}
+.yello text:first-child {
+  font-size: 34rpx;
+  font-family: MaoYanHeiTi-H1-H1;
+}
+.washName {
+  margin-right: 60rpx;
+}

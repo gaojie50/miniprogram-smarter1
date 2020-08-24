@@ -1,0 +1,38 @@
+<!-- 上映影片分布影片列表 -->
+<view wx:if="{{show}}" class="filmDetailList">
+  <view class="title">
+    <view>
+      <text class="num">{{filmDistributionItem.releaseDate}}</text>
+      <text>上映</text>
+      <text class="num">{{filmDistributionItem.keyFilms.length}}</text>
+      <text>部影片</text>
+    </view>
+    <image  bindtap="tapClose" src="../../static/close.png" />
+  </view>
+  <scroll-view class="film-list" scroll-y>
+    <view class="item" bindtap="jumpDetail" data-item="{{item}}" wx:for="{{filmDistributionItem.keyFilms}}" wx:key="maoyanId">
+      <image src="{{item.pic}}" alt=""></image>
+      <view class="main"> 
+        <view class="firstLine">
+          <view class="name">{{item.movieName}}</view>
+          <view class="yello">
+            <text>{{item.estimateBox ? item.estimateBox : item.wishNum}}</text>
+            <text>{{item.estimateBox ? '亿预估票房' : '想看数'}}</text>
+          </view>
+        </view>
+        <view class="secondLine">
+          <view class="director">导演：{{item.director}}</view>
+          <view wx:if="{{item.estimateBox}}" class="wishNum">
+            <text>{{item.wishNum}}</text>
+            <text>想看数</text>
+          </view>
+        </view>
+        <view>
+          <text>{{item.releaseDesc}}</text>
+          <scheduleType class="scheduleType" signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
+        </view>
+      </view>
+      
+    </view>
+  </scroll-view>
+</view>

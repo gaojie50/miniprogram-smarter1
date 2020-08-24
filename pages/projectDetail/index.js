@@ -92,6 +92,9 @@ Page({
         })
       }
     })
+    eventChannel.on && eventChannel.on('acceptDataFromFilmPage', item => {
+      console.log(item)
+    })
   },
 
   formData(resData){

@@ -1,16 +1,26 @@
 import utils from './../../utils/index';
 import projectConfig from '../../constant/project-config';
+import lineChart from './../../utils/chart';
+let chart = null;
 const {
   getMaoyanSignLabel
 } = projectConfig;
 
-const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc,handleNewDate, } = utils;
+
+const { rpxTopx, formatNumber, formatDirector ,getFutureTimePeriod, handleReleaseDesc, handleNewDate, formatWeekDate, throttle } = utils;
+
 const app = getApp();
 const {
   reqPacking,
   capsuleLocation,
   barHeight,
 } = app.globalData;
+
+function rContScrollEvt({detail}){
+  this.setData({
+    rightContScrollLeft: detail.scrollLeft,
+  })
+}
 
 Page({
   data: {
@@ -79,11 +89,24 @@ Page({
     lastFilterLength: 0,
     dateText:'未来1年',
     filterItemHidden10: true,
-    filterItemHidden11: true
+    filterItemHidden11: true,
+    filmDetailList: false,
+    outerScrollY: true,
+    interScrollY: false,
+    filmDistributionList: [],
+    filmDistributionItem: {},
+    filmLoading: false,
+    paging: {
+      hasMore: false,
+      offset: 0,
+      limit: 5,
+      total: 0
+    }
   },
   onLoad: function ({
     token
   }) {
+
     if (token) wx.setStorageSync('token', token);
 
     this.setData({
@@ -96,6 +119,7 @@ Page({
         curPagePermission: true,
         initLoading:false,
       });
+      this.fetchfilmDistribution();
       this.fetchSchedule();
       this.setData(
         {loading:true},()=>this._fetchData(this.data.dateSelect));
@@ -126,6 +150,7 @@ Page({
               curPagePermission: true,
               initLoading:false,
             },()=>{
+              this.fetchfilmDistribution();
               this.fetchSchedule();
               this._fetchData(this.data.dateSelect);
             })
@@ -141,6 +166,67 @@ Page({
         });
       })
     }
+  },
+  fetchfilmDistribution: function (){
+    const { offset, limit } = this.data.paging;
+    const query = {
+      offset,
+      limit,
+    }
+    console.log(query)
+    reqPacking({
+      url: 'api/applet/management/filmDistribution',
+      data: query
+    }).then(res => {
+      console.log(res)
+      const { success, data, paging } = res;
+      if(success && data){
+        data.map(item => {
+          if(item.filmSchedule && item.filmSchedule.length > 0){
+            item.filmSchedule = formatDirector(item.filmSchedule);
+          }
+          if(item.keyFilms && item.keyFilms.length > 0){
+            item.keyFilms.map(item2 => {
+              if(item2.director && item2.director.length > 0){
+                item2.director = formatDirector(item2.director);
+              }
+              item2.pic = item2.pic ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
+              item2.wishNum = formatNumber(item2.wishNum).text;
+            })
+          }
+          item.releaseDate = formatWeekDate(item.releaseDate);
+        })
+        console.log(data)
+        this.setData({
+          filmDistributionList: this.data.filmDistributionList.concat(data),
+          paging,
+          filmLoading: false
+        }, () => {
+          const { filmDistributionList } = this.data;
+          let key = [0];
+          let value = [5];
+          filmDistributionList.map((item, index) => {
+            key.push(index + 1);
+            value.push(item.filmNum);
+          })
+          key.push(filmDistributionList.length + 1);
+          value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
+          console.log(key);
+          console.log(value);
+          chart = lineChart.init('chart', {
+            tipsCtx: 'chart-tips',
+            width: key.length  * 105,
+            height: 200,
+            margin: 30,
+            xAxis: key,
+            lines: [{
+                points: value
+            }]
+          });
+          chart.draw();
+        })
+      }
+    })
   },
   fetchSchedule: function (){
     reqPacking({
@@ -167,6 +253,7 @@ Page({
       data
     }) => {
       if (success && data && data.length > 0) {
+
         data.map(item => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
@@ -174,6 +261,9 @@ Page({
           if(item.estimateBox){
             item.estimateBox2 = formatNumber(item.estimateBox/100);
           }
+          // if(item.cost !== null && item.cost !== ''){
+          //   item.cost =formatNumber(item.cost * 1e4 ).text;
+          // }
           if(item.name.length>6 && item.maoyanSign.length !== 0){
             item.trHeight = 160;
           } else if(item.releaseDate !== 0 && item.scheduleType !== 0 && item.alias.length !== 0) {
@@ -191,6 +281,7 @@ Page({
           item.movieType = item.movieType.replace(/,/g,'/');
           item.wishNum = formatNumber(item.wishNum).text;
           item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
+       
         })
   
         return this.setData({
@@ -269,7 +360,6 @@ Page({
 
       //最新档期筛选
       if(directFilterList[2].active){
-        console.log(newDataList)
         if(newDataList.length === 0){
           if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[3].active){
             list.map(item => {
@@ -329,12 +419,16 @@ Page({
       backdropShow: '',
       filterActive: '',
       costomShow: false,
+      filmDetailList: false,
+      scrollY: true
     })
   },
   ongetCostom: function (e) {
     const dataList = this.data;
     dataList.backdropShow = '';
     dataList.costomShow = false;
+    dataList.filmDetailList = false;
+    dataList.scrollY = true;
     if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail;
       this.setData({
@@ -532,5 +626,47 @@ Page({
       data: 'zhiduoxing@maoyan.com'
     })
   },
-  
+  rightContScroll:throttle(rContScrollEvt,10),
+
+  tapfilmBox(e){
+    const filmDistributionItem = e.target.dataset.item;
+    this.setData({
+      filmDetailList: true,
+      backdropShow: 'costom',
+      scrollY: false,
+      filmDistributionItem,
+    })
+  },
+
+onReady: function() {
+  wx.createSelectorQuery().select('#box').boundingClientRect(rect=>{
+    // console.log(rect)
+  }).exec();
+},
+filmScroll(){
+  const { limit, offset, hasMore } = this.data.paging;
+  if(hasMore){
+    this.setData({
+      filmLoading: true,
+      paging: {
+        offset: offset + limit,
+        limit,
+      }
+    }, () => {
+      this.fetchfilmDistribution()
+    })
+  } 
+},
+outerScroll(e){
+  // console.log(e)
+  if(e.detail.scrollTop >= 290){
+    this.setData({
+      outerScrollY: false,
+      interScrollY: true,
+    })
+  }
+},
+innerOupperScroll(e){
+  console.log(111)
+}
 })
