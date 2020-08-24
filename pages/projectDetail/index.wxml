@@ -1,58 +1,157 @@
 <view class="project-detail">
 	<view class="header">
-		<text class="name">{{data.name}}</text>
-		<text class="sign" wx:for="{{data.maoyanSignLabel||[]}}" wx:key="index">猫眼{{item}}</text>
+		<text class="name">{{resData.productInfo.name}}</text>
+		<text class="sign" wx:for="{{resData.productInfo.maoyanSign||[]}}" wx:key="index">猫眼{{item}}</text>
 	</view>
 </view>
 
-<view class="detail">
-	<!-- <view class="title">基础信息</view> -->
-	<view class="type">
-		<text class="special">电影</text>
-		{{data.movieType}}
+
+<view class="main">
+	<view class="detail" id="detail" style="height:{{flod.height}};">
+		<view class="title">基础信息</view>
+		<view class="type">
+			<text class="special">电影</text>
+			<text class="movietype">{{resData.productInfo.movieType}}</text>
+		</view>
+		<view class="info" wx:if="{{resData.productInfo.filmSource}}">
+			<view class="left">片源地：</view>
+			<view class="right">{{resData.productInfo.filmSource}}</view>
+		</view>
+		<view class="info" wx:if="{{resData.productInfo.adaptSource}}">
+			<view class="left">改编源：</view>
+			<view class="right">{{resData.productInfo.adaptSource}}</view>
+		</view>
+		<view class="info" wx:if="{{resData.productInfo.director}}">
+			<view class="left">导 演：</view>
+			<view class="right">{{resData.productInfo.director}}</view>
+		</view> 
+		<view class="info" wx:if="{{resData.productInfo.protagonist}}">
+			<view class="left">主 演：</view>
+			<view class="right">{{resData.productInfo.protagonist}}</view>
+		</view> 
+		<view class="info" wx:if="{{resData.productInfo.cooperStatus}}">
+			<view class="left">合作类型：</view>
+			<view class="right">{{resData.productInfo.cooperStatus}}</view>
+		</view>
+		<view class="info" wx:if="{{resData.productInfo.startupTime}}">
+			<view class="left">开机时间：</view>
+			<view class="right">{{resData.productInfo.startupTime}}</view>
+		</view>
+		<view class="info" wx:if="{{resData.productInfo.killingTime}}">
+			<view class="left">杀青时间：</view>
+			<view class="right">{{resData.productInfo.killingTime}}</view>
+		</view>
+		<view class="info" wx:if="{{resData.productInfo.producer}}">
+			<view class="left">出品方：</view>
+			<view class="right">{{resData.productInfo.producer}}</view>
+		</view>
+		<view class="info" wx:if="{{resData.productInfo.issuer}}">
+			<view class="left">发行方：</view>
+			<view class="right">{{resData.productInfo.issuer}}</view>
+		</view>
+		<view class="info" wx:if="{{resData.productInfo.supervisor}}">
+			<view class="left">监 制：</view>
+			<view class="right">{{resData.productInfo.supervisor}}</view>
+		</view>
+		<view class="info" wx:if="{{resData.productInfo.screenWriter}}">
+			<view class="left">编 剧：</view>
+			<view class="right">{{resData.productInfo.screenWriter}}</view>
+		</view>
+		<view class="arrow-container" bindtap="openOrClose">
+			<image  class="arrow" style="transform:{{flod.rotateZ}}" src="../../static/projectDetail/arrow.png" />
+		</view>
 	</view>
-	<view class="info">
-		<view class="left">上映日期：</view>
-		<view class="right">{{data.releaseDesc||"-"}}</view>
+
+	<view class="project">
+		<view class="title">市场情报</view>
+		<view class="market">
+			<view class="line"></view>
+			<view class="info">
+				<view class="item">
+					<view class="item-up">
+						<text>{{resData.marketIntelligence.estimateBox.posNum || '-'}}</text>
+						<text>{{resData.marketIntelligence.estimateBox.unit}}</text>
+					</view>
+					<view>预估票房</view>
+				</view>
+				<view class="item">
+					<view class="item-up">
+						<text>{{resData.marketIntelligence.estimateScore || '-'}}</text>
+						<text wx:if="{{resData.marketIntelligence.estimateScore}}">分</text>
+					</view>
+					<view>预估评分</view>
+				</view>
+				<view class="item">
+					<view class="item-up">
+						<text>{{resData.marketIntelligence.cost.posNum || '-'}}</text>
+						<text>{{resData.marketIntelligence.cost.unit}}</text>
+					</view>
+					<view>制作成本</view>
+				</view>
+			</view>
+			<view class="line"></view>
+			<view class="info">
+				<view class="item">
+					<view class="item-up">
+						<text>{{resData.marketIntelligence.publicityCost.posNum || '-'}}</text>
+						<text>{{resData.marketIntelligence.publicityCost.unit}}</text>
+					</view>
+					<view>宣发费用</view>
+				</view>
+				<view class="item">
+					<view class="item-up">
+						<text>{{resData.marketIntelligence.maoyanShare || '-'}}</text>
+						<text wx:if="{{resData.marketIntelligence.maoyanShare}}">%</text>
+					</view>
+					<view>猫眼份额</view>
+				</view>
+				<view class="item">
+					<view class="item-up">
+						<text>{{resData.marketIntelligence.maoyanInvest.posNum || '-'}}</text>
+						<text>{{resData.marketIntelligence.maoyanInvest.unit}}</text>
+					</view>
+					<view>猫眼投资成本</view>
+				</view>
+			</view>
+			<view class="line"></view>
+		</view>
+		<view class="details">
+			<view class="info">
+				<view class="left">项目状态：</view>
+				<view class="right">{{resData.marketIntelligence.projectStatus.label || '-'}}</view>
+			</view>
+			<view class="info">
+				<view class="left">上映时间：</view>
+				<view class="right">
+				{{resData.productInfo.releaseDesc || '-'}}
+				{{resData.productInfo.alias.length > 0 ? '('+ resData.productInfo.alias +')' : ''}}
+				</view>
+			</view>
+			<view class="info">
+				<view class="left">主出品：</view>
+				<view class="right">{{resData.marketIntelligence.mainPublish || '-'}}</view>
+			</view>
+			<view class="info">
+				<view class="left">主发行：</view>
+				<view class="right">{{resData.marketIntelligence.mainIssuer || '-'}}</view>
+			</view>
+			<view class="info">
+			<view class="left">备  注 ：</view>
+				<view class="right">{{resData.marketIntelligence.remark || '-'}}</view>
+			</view>
+		</view>
 	</view>
-	<view class="info">
-		<view class="left">制作成本：</view>
-		<view wx:if="{{data.cost}}" class="right">{{data.cost || "-"}}</view>
-	</view>
-	<view class="info">
-		<view class="left">预估票房：</view>
-		<view class="right">{{data.estimateBox || "-"}}</view>
-	</view>
-	<view class="info">
-		<view class="left">预估评分：</view>
-		<view class="right">{{data.estimateScore||"-"}}</view>
-	</view>
-	<view class="info">
-		<view class="left">主出品：</view>
-		<view class="right">{{data.producer && data.producer[ 0 ] || '-'}}</view>
-	</view>
-	<view class="info">
-		<view class="left">主发行：</view>
-		<view class="right">{{data.issuer && data.issuer[ 0 ] || '-'}}</view>
-	</view>
-	<view class="info">
-		<view class="left">导演：</view>
-		<view class="right">{{data.director||"-"}}</view>
-	</view>
-	<view class="info">
-		<view class="left">项目状态：</view>
-		<view class="right">{{data.projectStatus||"-"}}</view>
-	</view>
-  <view class="info">
-		<view class="left">合作状态：</view>
-		<view class="right">{{data.cooperStatus||"-"}}</view>
-	</view>
-    <view class="info">
-		<view class="left">跟进人：</view>
-		<view class="right">{{data.principal||"-"}}</view>
-	</view>
-  <view class="info">
-		<view class="left">映前想看：</view>
-		<view class="right">{{data.wishNum||"-"}}</view>
-	</view>
+
+		<view class="update" wx:if="{{resData.createInfo.creator}}">
+			<view class="img-container" wx:if="{{resData.createInfo.avatar}}">
+				<image src="{{resData.createInfo.avatar}}"></image>
+			</view>
+			<view class="text-container">
+				<text>{{resData.createInfo.creator}} 更新于 {{resData.createInfo.createTime}}</text>
+			</view>
+		</view>
+		<view style="height:80rpx"></view>
+
+	<button  type="primary" class="edit">编辑情报信息</button>
+
 </view>

@@ -61,7 +61,7 @@
 								<view class="listTd shadow">{{list.length}}部影片</view>
 							</view>
 							<block wx:for="{{list}}" wx:key="maoyanId">
-								<view class="listTr">
+								<view class="listTr" bindtap="jumpToDetail" data-id="{{item.maoyanId}}">
 									<view style="font-size: 28rpx;font-weight: 600;width: 218rpx;height: {{item.trHeight}}rpx" class="listTd tdPadding shadow">
 										<view>
 											<view class="movieName">{{item.name}}</view>
