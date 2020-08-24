@@ -28,8 +28,7 @@
 .header-inner text {
   height: 60rpx;
   font-size: 36rpx;
-  font-family: PingFangSC-Medium, PingFang SC;
-  font-weight: 500;
+  font-weight: bolder;
   color: #fff;
 }
 
@@ -50,7 +49,7 @@
   padding-right: 30rpx;
   height: 100%;
   padding-left: 70rpx;
-  font-weight: 400;
+  font-weight: normal;
   font-size: 28rpx;
   color: #bbb;
 }
@@ -90,7 +89,7 @@
 .no-access .title {
   height: 36rpx;
   font-size: 34rpx;
-  font-weight: 500;
+  font-weight: bolder;
   color: rgba(255, 255, 255, 1);
   line-height: 36rpx;
   margin-top: 40rpx;
@@ -100,7 +99,7 @@
 .no-access .content {
   height: 34px;
   font-size: 24rpx;
-  font-weight: 400;
+  font-weight: normal;
   color: rgba(255, 255, 255, 1);
   line-height: 34px;
   margin-top: 20rpx;
@@ -114,7 +113,7 @@
   background: rgba(24, 144, 255, 1);
   border-radius: 10rpx;
   font-size: 32rpx;
-  font-weight: 600;
+  font-weight: bold;
   color: rgba(255, 255, 255, 1);
   text-align: center;
   margin: 0 auto;
@@ -132,7 +131,7 @@ page {
   background-color: #ffffff;
   font-size: 26rpx;
   font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
+  font-weight: normal;
   color: rgba(51, 51, 51, 1);
 }
 
@@ -253,7 +252,7 @@ page {
   align-items: center;
   padding-left: 30rpx;
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: bold;
   box-sizing: border-box;
 }
 .list .listTable .table-left .listTr .listTd  .movieName {
@@ -412,7 +411,7 @@ page {
 .filmDistribution .title {
   margin-left: 30rpx;
   margin-top: 40rpx;
-  font-weight: 600;
+  font-weight: bold;
   font-family: PingFangSC-Semibold;
   font-size: 28rpx;
   color: #FFFFFF;
