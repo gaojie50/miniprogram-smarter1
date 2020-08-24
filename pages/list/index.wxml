@@ -13,7 +13,7 @@
 	
 
 		<!-- <scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper"> -->
-		<scroll-view scroll-y="{{scrollY}}" class="main" bindscroll="outerScroll" style="height:calc(100vh - {{titleHeight}}px)">
+		<scroll-view scroll-y="{{true}}" class="main" style="height:calc(100vh - {{titleHeight}}px)">
 			<view id="scroll-cont">
 				<!-- <view class="search-bar">
 				<label>
@@ -51,7 +51,7 @@
 					</scroll-view>
 				</view>
 
-				<view style="min-height: calc(100vh - {{titleHeight}}px)" class="list">
+				<view class="list">
 					<view class="listFilter" id="box">
 						<view class="listFilter-item" style="width: 189rpx">
 							<text data-num="4" class="listFilter-item-text filterActive}}" bindtap="tapFilterItem">{{dateText}}</text>
@@ -74,9 +74,9 @@
 						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					</view>
 
-				<scroll-view style="height: calc(100vh  - {{titleHeight}}rpx)" scroll-y="{{false}}">
+				<!-- <scroll-view  style="height:100vh; border:1px solid red" upper-threshold="90" bindscrolltoupper="innerOupperScroll" scroll-y="{{interScrollY}}"> -->
 					<scroll-view class="derictFilter" scroll-x>
-						<view class="listDerict">
+						<view class="listDerict" style="width: {{latestSchedule.name ? '842rpx' : '100%'}}">
 							<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">猫眼参与</view>
 							<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">阿里参与</view>
 							<view wx:if="{{latestSchedule.name}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.name}}</view>
@@ -199,7 +199,7 @@
 						</view>
 						
 					</view>
-					</scroll-view>
+					<!-- </scroll-view> -->
 					<view wx:if="{{!loading && list.length == 0}}" class="no-data">
 						暂无数据
 					</view>

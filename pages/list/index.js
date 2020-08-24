@@ -91,7 +91,8 @@ Page({
     filterItemHidden10: true,
     filterItemHidden11: true,
     filmDetailList: false,
-    scrollY: true,
+    outerScrollY: true,
+    interScrollY: false,
     filmDistributionList: [],
     filmDistributionItem: {},
     filmLoading: false,
@@ -172,6 +173,7 @@ Page({
       offset,
       limit,
     }
+    console.log(query)
     reqPacking({
       url: 'api/applet/management/filmDistribution',
       data: query
@@ -196,8 +198,9 @@ Page({
         })
         console.log(data)
         this.setData({
-          filmDistributionList: data,
+          filmDistributionList: this.data.filmDistributionList.concat(data),
           paging,
+          filmLoading: false
         }, () => {
           const { filmDistributionList } = this.data;
           let key = [0];
@@ -639,17 +642,31 @@ onReady: function() {
   wx.createSelectorQuery().select('#box').boundingClientRect(rect=>{
     // console.log(rect)
   }).exec();
-
- 
 },
 filmScroll(){
-  if(this.data.paging.hasMore){
+  const { limit, offset, hasMore } = this.data.paging;
+  if(hasMore){
     this.setData({
-      filmLoading: true
+      filmLoading: true,
+      paging: {
+        offset: offset + limit,
+        limit,
+      }
+    }, () => {
+      this.fetchfilmDistribution()
     })
   } 
 },
 outerScroll(e){
   // console.log(e)
+  if(e.detail.scrollTop >= 290){
+    this.setData({
+      outerScrollY: false,
+      interScrollY: true,
+    })
+  }
+},
+innerOupperScroll(e){
+  console.log(111)
 }
 })

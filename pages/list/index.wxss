@@ -464,6 +464,7 @@ page {
   text-overflow: ellipsis;
 }
 .filmList .filmItem .time {
+  height: 34rpx;
   font-family: MaoYanHeiTi-H1-H1;
   font-size: 28rpx;
   margin-bottom: 20rpx;

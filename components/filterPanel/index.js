@@ -563,6 +563,7 @@ Component({
                 for(let j=0; j<companyList.length; j++){
                   for(let i=0;i<companyChecked.length;i++){
                     if(companyList[j].id === companyChecked[i].id){
+                      this.data.company[j] = 'active';
                       toastStr = toastStr + companyChecked[i].name + '、';
                       companyChecked.splice(i, 1);
                       i--;
@@ -584,8 +585,13 @@ Component({
               
               
               const newCompanyList = companyList.concat(companyChecked);
+              const newCompany = this.data.company;
+              for(let i=companyList.length; i<newCompanyList.length; i++){
+                newCompany[i] = 'active';
+              }
               this.setData({
                 companyList: newCompanyList,
+                company: newCompany
               })
               
             }
