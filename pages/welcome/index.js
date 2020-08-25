@@ -10,6 +10,12 @@ Page({
     titleHeight: Math.floor(capsuleLocation.bottom + capsuleLocation.top - barHeight),
     code:null,
   },
+  
+  onLoad:function(){
+    const {isLogin} = this.data;
+
+    if(isLogin) this.goList();
+  },
 
   goList: function(){
     wx.reLaunch({
@@ -18,9 +24,8 @@ Page({
   },
 
   getUserInfo: function (e) {
-    if (e.detail.userInfo) {
-      const {iv,encryptedData} = e.detail.userInfo;
-
+    if (e.detail) {
+      const {iv,encryptedData} = e.detail;
       if(this.data.isLogin) return wx.redirectTo({url: `/pages/list/index`});
    
       return keepLogin({ iv,encryptedData});
