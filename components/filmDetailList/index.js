@@ -35,7 +35,7 @@ Component({
       wx.navigateTo({
         url: '/pages/projectDetail/index',
         success: function (res){
-          res.eventChannel.emit('acceptDataFromfilmPage', { 
+          res.eventChannel.emit('acceptDataFromListPage', { 
             item,
            })
         }

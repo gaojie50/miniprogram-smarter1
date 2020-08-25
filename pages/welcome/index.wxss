@@ -22,7 +22,6 @@ page image {
 
 .show {
   width: 600rpx;
-  height: 704rpx;
   margin-top: 60rpx;
 }
 
@@ -33,7 +32,7 @@ view.welcome button.login-btn {
   background: rgba(24, 144, 255, 1);
   border-radius: 10rpx;
   position: fixed;
-  bottom: 50rpx;
+  bottom: 150rpx;
   left: 50%;
   transform: translate(-50%, 0);
   font-size: 32rpx;
