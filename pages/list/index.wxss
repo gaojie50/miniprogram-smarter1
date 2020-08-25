@@ -72,6 +72,10 @@
   border-top-left-radius: 20rpx;
   border-top-right-radius: 20rpx;
   overflow: hidden;
+  -webkit-backface-visbility:hidden;
+  -webkit-transform: translate3d(0,0,0);
+  backface-visbility: hidden;
+  transform: translate3d(0, 0, 0);
 }
 
 /* 无权限 */
