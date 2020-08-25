@@ -98,7 +98,7 @@ Page({
     paging: {
       hasMore: false,
       offset: 0,
-      limit: 5,
+      limit: 10,
       total: 0
     }
   },
@@ -207,7 +207,7 @@ Page({
           }
           item.releaseDate = formatWeekDate(item.releaseDate);
         })
-        console.log(data)
+        // console.log(data)
         this.setData({
           filmDistributionList: this.data.filmDistributionList.concat(data),
           paging,
@@ -234,11 +234,11 @@ Page({
     })
     key.push(filmDistributionList.length + 1);
     value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
-    console.log(key);
-    console.log(value);
+    // console.log(key);
+    // console.log(value);
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
-      width: key.length  * 105,
+      width: key.length  * 120,
       height: 200,
       margin: 30,
       xAxis: key,
