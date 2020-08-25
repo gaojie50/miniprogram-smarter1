@@ -21,7 +21,6 @@ function fn(e) {
       data: { name: innerVal },
       method:'POST'
     }).then(({ success,data}) => {
-      console.log(data)
       if (success && data && data.length > 0) {
         return this.setData({ 
           inputVal:innerVal,

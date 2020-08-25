@@ -21,7 +21,8 @@ page {
 }
 
 .project-detail .header {
-  font-weight: 500;
+  /* font-weight: 500; */
+  font-weight: bold;
   font-family: PingFangSC-Medium;
   font-size: 40rpx;
   height: 40rpx;
@@ -73,7 +74,8 @@ page {
 }
 
 .detail .title {
-  font-weight: 500;
+  /* font-weight: 500; */
+  font-weight: bold;
   font-size: 32rpx;
   color: #333333;
   line-height: 36rpx;
@@ -156,7 +158,8 @@ page {
 }
 
 .project .title {
-  font-weight: 500;
+  /* font-weight: 500; */
+  font-weight: bold;
   font-size: 32rpx;
   color: #333333;
   line-height: 36rpx;
@@ -196,7 +199,8 @@ view.line{
 
 .project .market .info .item .item-up text:first-child{
   font-family: MaoYanHeiTi-H1-H1;
-  font-weight: 500;
+  /* font-weight: 500; */
+  font-weight: bold;
   font-size: 46rpx;
   color: #333333;
   text-align: center;
