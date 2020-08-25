@@ -78,6 +78,11 @@
 }
 
 .yello {
+  width: 210rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
   margin-right: 60rpx;
   color: #FF9034;
 }
@@ -85,6 +90,11 @@
   font-size: 34rpx;
   font-family: MaoYanHeiTi-H1-H1;
 }
-.washName {
+.wishNum {
   margin-right: 60rpx;
+  width: 210rpx;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

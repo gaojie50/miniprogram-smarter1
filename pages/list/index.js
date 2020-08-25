@@ -98,7 +98,7 @@ Page({
     paging: {
       hasMore: false,
       offset: 0,
-      limit: 5,
+      limit: 10,
       total: 0
     }
   },
@@ -200,13 +200,18 @@ Page({
               if(item2.director && item2.director.length > 0){
                 item2.director = formatDirector(item2.director);
               }
+              if(!item2.projectId){
+                item2.projectId = 0;
+              }
+              if(!item2.maoyanId){
+                item2.maoyanId = 0;
+              }
               item2.pic = item2.pic ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
               item2.wishNum = formatNumber(item2.wishNum).text;
             })
           }
           item.releaseDate = formatWeekDate(item.releaseDate);
         })
-
         this.setData({
           filmDistributionList: this.data.filmDistributionList.concat(data),
           paging,
@@ -233,10 +238,9 @@ Page({
     })
     key.push(filmDistributionList.length + 1);
     value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
-
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
-      width: key.length  * 105,
+      width: key.length  * 110,
       height: 200,
       margin: 30,
       xAxis: key,
