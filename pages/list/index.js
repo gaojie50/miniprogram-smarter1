@@ -92,8 +92,6 @@ Page({
     filterItemHidden10: true,
     filterItemHidden11: true,
     filmDetailList: false,
-    outerScrollY: true,
-    interScrollY: false,
     filmDistributionList: [],
     filmDistributionItem: {},
     filmLoading: false,
@@ -661,10 +659,10 @@ Page({
     const filmDistributionItem = e.target.dataset.item;
 
     this.setData({
+      filmDistributionItem,
       filmDetailList: true,
       backdropShow: 'costom',
       scrollY: false,
-      filmDistributionItem,
     })
   },
 filmScroll(){
@@ -681,16 +679,5 @@ filmScroll(){
     })
   } 
 },
-outerScroll(e){
-  if(e.detail.scrollTop >= 270){
-    this.setData({
-      outerScrollY: false,
-      interScrollY: true,
-    })
-  }
-},
-draging(e){
-  console.log(111)
-}
 
 })
