@@ -203,6 +203,9 @@ Page({
               if(!item2.projectId){
                 item2.projectId = 0;
               }
+              if(!item2.maoyanId){
+                item2.maoyanId = 0;
+              }
               item2.pic = item2.pic ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
               item2.wishNum = formatNumber(item2.wishNum).text;
             })
