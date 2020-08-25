@@ -44,7 +44,7 @@
 		</view>
 		<!-- 筛选 -->
 		<view class="filter" wx:if="{{filterShow=='3'}}">
-			<scroll-view scroll-y="true" class="scroll-area" style="height: 887rpx">
+			<scroll-view scroll-y="true" class="scroll-area" style="min-height: 887rpx">
 				<text class="title">制作成本</text>
 				<view class="cost-wrap">
 					<view wx:for="{{costBox}}"  wx:key="index" data-num="{{index}}" bindtap="tapCost" class="cost-wrap-item {{item.active? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>

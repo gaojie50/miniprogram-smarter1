@@ -15,7 +15,7 @@
   justify-content: space-between;
   font-size: 32rpx;
   font-family: PingFangSC-Medium;
-  font-weight: 500;
+  font-weight: bold;
 }
 .filmDetailList .title image {
   margin-right: 60rpx;
@@ -53,7 +53,7 @@
 }
 .main .firstLine .name{
   width: 339rpx;
-  font-weight: 500;
+  font-weight: bold;
   font-family: PingFangSC-Medium;
   font-size: 34rpx;
   color: #333333;

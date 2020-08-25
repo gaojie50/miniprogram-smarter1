@@ -21,7 +21,7 @@
           </view>
         </view>
         <view class="secondLine">
-          <view class="director">导演：{{item.director}}</view>
+          <view class="director">导演：{{item.director || '--'}}</view>
           <view wx:if="{{item.estimateBox}}" class="wishNum">
             <text>{{item.wishNum}}</text>
             <text>想看数</text>

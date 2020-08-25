@@ -26,6 +26,7 @@ Page({
   data: {
     initLoading:true,
     loading:true,
+    topFilmLoading: true,
     curPagePermission: false,
     filterActive: '',
     backdropShow: '',
@@ -114,7 +115,16 @@ Page({
     })
     
     // 判断用户是否有权限
-    if (wx.getStorageSync('listPermission') > +new Date()) {
+    const {
+      authStartTime,
+      authEndTime,
+    } = wx.getStorageSync('listPermission');
+    
+    if (  authEndTime && 
+          authEndTime  > +new Date() && 
+          authStartTime &&
+          authStartTime <= +new Date()
+        ) {
       this.setData({
         curPagePermission: true,
         initLoading:false,
@@ -133,17 +143,20 @@ Page({
         if (success) {
           app.globalData.authinfo = data;
 
-          console.log({ 
-            token:wx.getStorageSync('token'),
-            authinfoData:data,})
           if (data &&
             data.authIds &&
             (data.authIds.length > 0) &&
             data.authIds.includes(95110) &&
-            (data.authEndTime > +new Date())
+            data.authEndTime &&
+            (data.authEndTime > +new Date()) &&
+            data.authStartTime &&
+            (data.authStartTime <= +new Date())
           ) {
             //用户有权限
-            wx.setStorageSync('listPermission', data.authEndTime );
+            wx.setStorageSync('listPermission', {
+              authEndTime:data.authEndTime,
+              authStartTime:data.authStartTime,
+            });
 
             this.setData({
               loading:true,
@@ -200,33 +213,42 @@ Page({
         this.setData({
           filmDistributionList: this.data.filmDistributionList.concat(data),
           paging,
-          filmLoading: false
+          filmLoading: false,
+          topFilmLoading: false,
         }, () => {
-          const { filmDistributionList } = this.data;
-          let key = [0];
-          let value = [5];
-          filmDistributionList.map((item, index) => {
-            key.push(index + 1);
-            value.push(item.filmNum);
-          })
-          key.push(filmDistributionList.length + 1);
-          value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
-          console.log(key);
-          console.log(value);
-          chart = lineChart.init('chart', {
-            tipsCtx: 'chart-tips',
-            width: key.length  * 105,
-            height: 200,
-            margin: 30,
-            xAxis: key,
-            lines: [{
-                points: value
-            }]
-          });
-          chart.draw();
+         this.chartDraw()
+        })
+      }else {
+        this.setData({
+          filmDistributionList: [],
+          topFilmLoading: false
         })
       }
     })
+  },
+  chartDraw(){
+    const { filmDistributionList } = this.data;
+    let key = [0];
+    let value = [5];
+    filmDistributionList.map((item, index) => {
+      key.push(index + 1);
+      value.push(item.filmNum);
+    })
+    key.push(filmDistributionList.length + 1);
+    value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
+    console.log(key);
+    console.log(value);
+    chart = lineChart.init('chart', {
+      tipsCtx: 'chart-tips',
+      width: key.length  * 105,
+      height: 200,
+      margin: 30,
+      xAxis: key,
+      lines: [{
+          points: value
+      }]
+    });
+    chart.draw();
   },
   fetchSchedule: function (){
     reqPacking({
@@ -264,10 +286,22 @@ Page({
           // if(item.cost !== null && item.cost !== ''){
           //   item.cost =formatNumber(item.cost * 1e4 ).text;
           // }
+         
+          item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc);
+          item.cost = item.cost && (item.cost/100000000).toFixed(2);
+          item.director = formatDirector(item.director);
+          item.movieType = item.movieType.replace(/,/g,'/');
+          item.wishNum = formatNumber(item.wishNum).text;
+          item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
           if(item.name.length>6 && item.maoyanSign.length !== 0){
             item.trHeight = 160;
-          } else if(item.releaseDate !== 0 && item.scheduleType !== 0 && item.alias.length !== 0) {
-            item.trHeight = 160;
+          } else if(item.releaseDate.length !== 0 && item.scheduleType !== 0 && item.alias.length !== 0 ) {
+            if(item.releaseDate.length === 4){
+              item.trHeight = 120;
+            } else {
+              item.trHeight = 160;
+            }
+            
           } else if((item.producer && item.producer[0].length >16) || (item.issuer && item.issuer[0].length > 16)){
             item.trHeight = 160;
           } else if(item.movieType && item.movieType.length > 14){
@@ -276,12 +310,6 @@ Page({
           else {
             item.trHeight = 120;
           }
-          item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc);
-          item.director = formatDirector(item.director);
-          item.movieType = item.movieType.replace(/,/g,'/');
-          item.wishNum = formatNumber(item.wishNum).text;
-          item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
-       
         })
   
         return this.setData({
@@ -629,7 +657,9 @@ Page({
   rightContScroll:throttle(rContScrollEvt,10),
 
   tapfilmBox(e){
+    // console.log(this.data.paging,this.data.filmDistributionList)
     const filmDistributionItem = e.target.dataset.item;
+
     this.setData({
       filmDetailList: true,
       backdropShow: 'costom',
@@ -637,12 +667,6 @@ Page({
       filmDistributionItem,
     })
   },
-
-onReady: function() {
-  wx.createSelectorQuery().select('#box').boundingClientRect(rect=>{
-    // console.log(rect)
-  }).exec();
-},
 filmScroll(){
   const { limit, offset, hasMore } = this.data.paging;
   if(hasMore){
@@ -658,15 +682,15 @@ filmScroll(){
   } 
 },
 outerScroll(e){
-  // console.log(e)
-  if(e.detail.scrollTop >= 290){
+  if(e.detail.scrollTop >= 270){
     this.setData({
       outerScrollY: false,
       interScrollY: true,
     })
   }
 },
-innerOupperScroll(e){
+draging(e){
   console.log(111)
 }
+
 })
