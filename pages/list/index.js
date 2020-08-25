@@ -184,12 +184,11 @@ Page({
       offset,
       limit,
     }
-    console.log(query)
+
     reqPacking({
       url: 'api/applet/management/filmDistribution',
       data: query
     }).then(res => {
-      console.log(res)
       const { success, data, paging } = res;
       if(success && data){
         data.map(item => {
@@ -207,7 +206,6 @@ Page({
           }
           item.releaseDate = formatWeekDate(item.releaseDate);
         })
-        // console.log(data)
         this.setData({
           filmDistributionList: this.data.filmDistributionList.concat(data),
           paging,
@@ -234,8 +232,6 @@ Page({
     })
     key.push(filmDistributionList.length + 1);
     value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
-    // console.log(key);
-    // console.log(value);
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
       width: key.length  * 120,
@@ -655,7 +651,6 @@ Page({
   rightContScroll:throttle(rContScrollEvt,10),
 
   tapfilmBox(e){
-    // console.log(this.data.paging,this.data.filmDistributionList)
     const filmDistributionItem = e.target.dataset.item;
 
     this.setData({

@@ -69,6 +69,9 @@
 
 .header .main {
   height: 100%;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  overflow: hidden;
 }
 
 /* 无权限 */

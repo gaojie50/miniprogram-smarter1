@@ -152,6 +152,6 @@
 		</view>
 		<view style="height:80rpx"></view>
 
-	<button  type="primary" class="edit">编辑情报信息</button>
+	<!-- <button  type="primary" class="edit">编辑情报信息</button> -->
 
 </view>
