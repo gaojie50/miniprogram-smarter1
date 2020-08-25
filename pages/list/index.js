@@ -115,7 +115,16 @@ Page({
     })
     
     // 判断用户是否有权限
-    if (wx.getStorageSync('listPermission') > +new Date()) {
+    const {
+      authStartTime,
+      authEndTime,
+    } = wx.getStorageSync('listPermission');
+    
+    if (  authEndTime && 
+          authEndTime  > +new Date() && 
+          authStartTime &&
+          authStartTime <= +new Date()
+        ) {
       this.setData({
         curPagePermission: true,
         initLoading:false,
@@ -134,17 +143,20 @@ Page({
         if (success) {
           app.globalData.authinfo = data;
 
-          console.log({ 
-            token:wx.getStorageSync('token'),
-            authinfoData:data,})
           if (data &&
             data.authIds &&
             (data.authIds.length > 0) &&
             data.authIds.includes(95110) &&
-            (data.authEndTime > +new Date())
+            data.authEndTime &&
+            (data.authEndTime > +new Date()) &&
+            data.authStartTime &&
+            (data.authStartTime <= +new Date())
           ) {
             //用户有权限
-            wx.setStorageSync('listPermission', data.authEndTime );
+            wx.setStorageSync('listPermission', {
+              authEndTime:data.authEndTime,
+              authStartTime:data.authStartTime,
+            });
 
             this.setData({
               loading:true,
@@ -298,7 +310,6 @@ Page({
           else {
             item.trHeight = 120;
           }
-          console.log(item)
         })
   
         return this.setData({
