@@ -200,6 +200,9 @@ Page({
               if(item2.director && item2.director.length > 0){
                 item2.director = formatDirector(item2.director);
               }
+              if(!item2.projectId){
+                item2.projectId = 0;
+              }
               item2.pic = item2.pic ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
               item2.wishNum = formatNumber(item2.wishNum).text;
             })
@@ -234,7 +237,7 @@ Page({
     value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
-      width: key.length  * 120,
+      width: key.length  * 110,
       height: 200,
       margin: 30,
       xAxis: key,
