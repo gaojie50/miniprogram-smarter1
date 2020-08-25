@@ -13,7 +13,7 @@
 	
 
 		<!-- <scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper"> -->
-		<scroll-view scroll-y="{{true}}"  bindscroll="outerScroll" class="main" style="height:calc(100vh - {{titleHeight}}px)">
+		<scroll-view scroll-y="{{true}}" class="main" style="height:calc(100vh - {{titleHeight}}px)">
 			<view id="scroll-cont">
 				<!-- <view class="search-bar">
 				<label>
