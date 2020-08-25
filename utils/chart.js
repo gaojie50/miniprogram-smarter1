@@ -33,7 +33,6 @@ function LineChart(ctx, options) {
 }
 
 LineChart.prototype.draw = function () {
-
     this._drawAxis();
     this._drawLines();
 
@@ -144,7 +143,7 @@ LineChart.prototype._drawLine = function (line) {
     // 与x轴的面积阴影
     ctx.beginPath();
     // ctx.globalAlpha = 0.2;
-    var linearGradient= ctx.createLinearGradient(0,175,0,0);
+    var linearGradient= ctx.createLinearGradient(0,170,0,0);
     linearGradient.addColorStop(0,'rgba(121,140,186,0.00)');
     linearGradient.addColorStop(0.3,'rgba(121,140,186,0.08)');
     linearGradient.addColorStop(1,'rgba(121,140,186,1)');

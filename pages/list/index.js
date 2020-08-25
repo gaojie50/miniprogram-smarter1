@@ -26,6 +26,7 @@ Page({
   data: {
     initLoading:true,
     loading:true,
+    topFilmLoading: true,
     curPagePermission: false,
     filterActive: '',
     backdropShow: '',
@@ -200,33 +201,42 @@ Page({
         this.setData({
           filmDistributionList: this.data.filmDistributionList.concat(data),
           paging,
-          filmLoading: false
+          filmLoading: false,
+          topFilmLoading: false,
         }, () => {
-          const { filmDistributionList } = this.data;
-          let key = [0];
-          let value = [5];
-          filmDistributionList.map((item, index) => {
-            key.push(index + 1);
-            value.push(item.filmNum);
-          })
-          key.push(filmDistributionList.length + 1);
-          value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
-          console.log(key);
-          console.log(value);
-          chart = lineChart.init('chart', {
-            tipsCtx: 'chart-tips',
-            width: key.length  * 105,
-            height: 200,
-            margin: 30,
-            xAxis: key,
-            lines: [{
-                points: value
-            }]
-          });
-          chart.draw();
+         this.chartDraw()
+        })
+      }else {
+        this.setData({
+          filmDistributionList: [],
+          topFilmLoading: false
         })
       }
     })
+  },
+  chartDraw(){
+    const { filmDistributionList } = this.data;
+    let key = [0];
+    let value = [5];
+    filmDistributionList.map((item, index) => {
+      key.push(index + 1);
+      value.push(item.filmNum);
+    })
+    key.push(filmDistributionList.length + 1);
+    value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
+    console.log(key);
+    console.log(value);
+    chart = lineChart.init('chart', {
+      tipsCtx: 'chart-tips',
+      width: key.length  * 105,
+      height: 200,
+      margin: 30,
+      xAxis: key,
+      lines: [{
+          points: value
+      }]
+    });
+    chart.draw();
   },
   fetchSchedule: function (){
     reqPacking({
@@ -264,10 +274,22 @@ Page({
           // if(item.cost !== null && item.cost !== ''){
           //   item.cost =formatNumber(item.cost * 1e4 ).text;
           // }
+         
+          item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc);
+          item.cost = item.cost && (item.cost/100000000).toFixed(2);
+          item.director = formatDirector(item.director);
+          item.movieType = item.movieType.replace(/,/g,'/');
+          item.wishNum = formatNumber(item.wishNum).text;
+          item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
           if(item.name.length>6 && item.maoyanSign.length !== 0){
             item.trHeight = 160;
-          } else if(item.releaseDate !== 0 && item.scheduleType !== 0 && item.alias.length !== 0) {
-            item.trHeight = 160;
+          } else if(item.releaseDate.length !== 0 && item.scheduleType !== 0 && item.alias.length !== 0 ) {
+            if(item.releaseDate.length === 4){
+              item.trHeight = 120;
+            } else {
+              item.trHeight = 160;
+            }
+            
           } else if((item.producer && item.producer[0].length >16) || (item.issuer && item.issuer[0].length > 16)){
             item.trHeight = 160;
           } else if(item.movieType && item.movieType.length > 14){
@@ -276,12 +298,7 @@ Page({
           else {
             item.trHeight = 120;
           }
-          item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc);
-          item.director = formatDirector(item.director);
-          item.movieType = item.movieType.replace(/,/g,'/');
-          item.wishNum = formatNumber(item.wishNum).text;
-          item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish);
-       
+          console.log(item)
         })
   
         return this.setData({
@@ -629,7 +646,9 @@ Page({
   rightContScroll:throttle(rContScrollEvt,10),
 
   tapfilmBox(e){
+    // console.log(this.data.paging,this.data.filmDistributionList)
     const filmDistributionItem = e.target.dataset.item;
+
     this.setData({
       filmDetailList: true,
       backdropShow: 'costom',
@@ -637,12 +656,6 @@ Page({
       filmDistributionItem,
     })
   },
-
-onReady: function() {
-  wx.createSelectorQuery().select('#box').boundingClientRect(rect=>{
-    // console.log(rect)
-  }).exec();
-},
 filmScroll(){
   const { limit, offset, hasMore } = this.data.paging;
   if(hasMore){
@@ -658,15 +671,15 @@ filmScroll(){
   } 
 },
 outerScroll(e){
-  // console.log(e)
-  if(e.detail.scrollTop >= 290){
+  if(e.detail.scrollTop >= 270){
     this.setData({
       outerScrollY: false,
       interScrollY: true,
     })
   }
 },
-innerOupperScroll(e){
+draging(e){
   console.log(111)
 }
+
 })
