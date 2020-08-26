@@ -5,7 +5,7 @@
     "maoyanSign": "../../components/maoyanSign/index",
     "scheduleType": "../../components/scheduleType/index",
     "costumListItem": "../../components/costomListItem/index",
-    "mp-loading": "../../miniprogram_npm/weui-miniprogram/loading/loading",
+    "mp-loading": "weui-miniprogram/loading/loading",
     "filmDetailList": "../../components/filmDetailList/index"
   },
   "navigationStyle": "custom"

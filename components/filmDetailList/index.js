@@ -6,7 +6,7 @@ Component({
     },
     filmDistributionItem: {
       type: Object,
-      value: []
+      value: {}
     },
   },
   data: {

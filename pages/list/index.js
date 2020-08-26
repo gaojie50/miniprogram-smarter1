@@ -212,6 +212,7 @@ Page({
           }
           item.releaseDate = formatWeekDate(item.releaseDate);
         })
+       
         this.setData({
           filmDistributionList: this.data.filmDistributionList.concat(data),
           paging,
@@ -236,11 +237,13 @@ Page({
       key.push(index + 1);
       value.push(item.filmNum);
     })
-    key.push(filmDistributionList.length + 1);
-    value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
+    // key.push(filmDistributionList.length + 1);
+    // value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
+    console.log(key)
+    console.log(value)
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
-      width: key.length  * 110,
+      width: (key.length - 1)  * 115,
       height: 200,
       margin: 30,
       xAxis: key,
@@ -448,7 +451,6 @@ Page({
       filterActive: '',
       costomShow: false,
       filmDetailList: false,
-      scrollY: true
     })
   },
   ongetCostom: function (e) {
@@ -456,7 +458,6 @@ Page({
     dataList.backdropShow = '';
     dataList.costomShow = false;
     dataList.filmDetailList = false;
-    dataList.scrollY = true;
     if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail;
       this.setData({
@@ -658,12 +659,12 @@ Page({
 
   tapfilmBox(e){
     const filmDistributionItem = e.target.dataset.item;
-
-    this.setData({
+    console.log(filmDistributionItem)
+  
+    filmDistributionItem && this.setData({
       filmDistributionItem,
-      filmDetailList: true,
       backdropShow: 'costom',
-      scrollY: false,
+      filmDetailList: true,
     })
   },
 filmScroll(){

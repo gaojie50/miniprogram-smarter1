@@ -1,6 +1,6 @@
 {
   "component": true,
   "usingComponents": {
-    "mp-toptips": "../../miniprogram_npm/weui-miniprogram/toptips/toptips"
+    "mp-toptips": "weui-miniprogram/toptips/toptips"
   }
 }

@@ -502,7 +502,7 @@ page {
 .filmList .filmItem .filmBox view image {
   width: 11rpx;
   height: 17rpx;
-  margin-left: 102rpx;
+  margin-left: 118rpx;
 }
 .filmLoading {
   /* border: 1px solid red; */
