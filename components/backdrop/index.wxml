@@ -1,3 +1,3 @@
 <!-- 背景蒙层 -->
-<view class="backdrop" bindtap="tapFilterBackdrop" wx:if="{{backdropShow === 'filter'}}" ></view>
+<view catchtouchmove='true'  class="backdrop" bindtap="tapFilterBackdrop" wx:if="{{backdropShow === 'filter'}}" ></view>
 <view catchtouchmove='true' class="backdropTop" bindtap="tapCostomBackdrop" wx:if="{{backdropShow === 'costom'}}" ></view>

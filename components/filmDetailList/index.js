@@ -40,6 +40,9 @@ Component({
            })
         }
       })
-    }
+    },
+    handleTouchMove(){
+      return
+     }
   }
 })

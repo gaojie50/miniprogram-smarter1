@@ -1,7 +1,7 @@
 <view wx:if="{{initLoading}}" class="init-loading">
 	<mp-loading type="circle" show="{{true}}" animated="{{true}}" duration="{{900}}" tips=""></mp-loading>
 </view>
-<backdrop catchtouchmove="{{false}}" wx:if="{{backdropShow === 'costom'}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
+<backdrop catchtouchmove="{{true}}" wx:if="{{backdropShow === 'costom'}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
 <view wx:if="{{curPagePermission && !initLoading}}">
 	<view class="header">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
@@ -27,7 +27,7 @@
 					<view class="title">上映影片分布</view>
 					<scroll-view wx:if="{{filmDistributionList.length !== 0}}" lower-threshold="2" bindscrolltolower="filmScroll" scroll-x>
 						<view class="filmChart" style="width: 100%; ">
-							<canvas canvas-id="chart" style="width:{{(filmDistributionList.length * 218) + 140}}rpx;"></canvas>
+							<canvas canvas-id="chart" style="width:{{filmDistributionList.length * 218 + 160}}rpx;"></canvas>
 						</view>
 						<view class="filmList" style="width:{{filmLoading ? filmDistributionList.length * 218 + 240 : filmDistributionList.length * 218 + 40 }}rpx;">
 							<view class="filmItem" wx:for="{{filmDistributionList}}" wx:key="yearWeek">
@@ -76,7 +76,7 @@
 							<text data-num="3" bindtap="tapFilterItem"  wx:if="{{lastFilterLength > 0}}">{{lastFilterLength}}</text>
 							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
-						<backdrop wx:if="{{backdropShow === 'filter'}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
+						<backdrop catchtouchmove='true'  wx:if="{{backdropShow === 'filter'}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
 						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					</view>
 		

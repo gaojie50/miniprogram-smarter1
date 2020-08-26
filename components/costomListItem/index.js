@@ -58,6 +58,9 @@ Component({
       if(costomList.length < 9){
         this.triggerEvent('myevent', costomList)
       }
+    },
+    handleTouchMove(){
+     return
     }
   }
 })

@@ -1,5 +1,5 @@
 <!-- 上映影片分布影片列表 -->
-<view wx:if="{{show && filmDistributionItem.length !== 0}}" class="filmDetailList">
+<view wx:if="{{show && filmDistributionItem.length !== 0}}" class="filmDetailList" catchtouchmove="handleTouchMove">
   <view class="title">
     <view>
       <text class="num">{{filmDistributionItem.releaseDate}}</text>
@@ -32,7 +32,6 @@
           <scheduleType class="scheduleType" signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
         </view>
       </view>
-      
     </view>
   </scroll-view>
 </view>

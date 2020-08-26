@@ -42,6 +42,9 @@
   height: 140rpx;
   margin-right: 24rpx;
 }
+.film-list .item:last-child {
+  margin-bottom: 40rpx;
+}
 .main {
   width: 100%;
 }

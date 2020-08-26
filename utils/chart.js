@@ -75,8 +75,8 @@ LineChart.prototype._drawAxis = function () {
 
     let xLabelMaxWidth = _.max(_.map(xAxis, item => ctx.measureText(item + xUnit).width));
     let yLabelMaxWidth = _.max(_.map(labels, item => ctx.measureText(item).width)) + margin;
-    let xAxisLen = width - margin - yLabelMaxWidth;
-
+    // let xAxisLen = width - margin - yLabelMaxWidth;
+    let xAxisLen = width;
     let xOffset = yLabelMaxWidth;
     let xStep = xAxisLen / (xAxis.length - 1);
     let yOffset = margin + yAxisLen;
@@ -135,10 +135,18 @@ LineChart.prototype._drawLine = function (line) {
     } = this._attrs;
     let ctx = this.ctx;
 
-    let points = _.map(line.points, (item, index) => ({
-        x: xOffset + index * xStep,
-        y: yOffset - item * yStep
-    }));
+    let points = _.map(line.points, (item, index) => {
+        // console.log(xOffset, index, xStep)
+    //    return ({
+    //     x: xOffset + index * xStep ,
+    //     y: yOffset - item * yStep
+    //     })
+        return ({
+            x: xOffset + index * xStep ,
+            y: yOffset - item * yStep
+            })
+});
+   
 
     // 与x轴的面积阴影
     ctx.beginPath();

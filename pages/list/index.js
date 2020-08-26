@@ -239,11 +239,11 @@ Page({
     })
     // key.push(filmDistributionList.length + 1);
     // value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
-    console.log(key)
-    console.log(value)
+
+    const windowWidth = wx.getSystemInfoSync().windowWidth;
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
-      width: (key.length - 1)  * 115,
+      width: (key.length - 1) * (windowWidth * 2.9 /10) ,
       height: 200,
       margin: 30,
       xAxis: key,

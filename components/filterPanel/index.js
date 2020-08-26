@@ -598,6 +598,9 @@ Component({
           }
         }
       })
-    }
+    },
+    handleTouchMove(){
+      return
+     }
   }
 })
