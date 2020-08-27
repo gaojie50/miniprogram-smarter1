@@ -13,7 +13,7 @@
 	
 
 		<!-- <scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper"> -->
-		<scroll-view scroll-y="{{true}}"  class="main" style="height:calc(100vh - {{titleHeight}}px)">
+		<scroll-view scroll-y="{{true}}" scroll-into-view="{{toView}}"  class="main" style="height:calc(100vh - {{titleHeight}}px)">
 			<view id="scroll-cont">
 				<!-- <view class="search-bar">
 				<label>
@@ -30,18 +30,18 @@
 							<canvas canvas-id="chart" style="width:{{filmDistributionList.length * 218 + 160}}rpx;"></canvas>
 						</view>
 						<view class="filmList" style="width:{{filmLoading ? filmDistributionList.length * 218 + 240 : filmDistributionList.length * 218 + 40 }}rpx;">
-							<view class="filmItem" wx:for="{{filmDistributionList}}" wx:key="yearWeek">
+							<view  class="filmItem" wx:for="{{filmDistributionList}}" wx:key="yearWeek">
 								<view class="schedule">{{item.filmSchedule || ''}}</view>
 								<view class="time">{{item.releaseDate}}</view>
-								<view class="filmBox">
+								<view class="filmBox" data-item="{{item}}" bindtap="tapfilmBox">
 									<view data-item="{{item}}" bindtap="tapfilmBox">
 										<text data-item="{{item}}"  bindtap="tapfilmBox">{{item.keyFilms.length}}</text>
 										<text data-item="{{item}}"  bindtap="tapfilmBox">部</text>
 										<image data-item="{{item}}" bindtap="tapfilmBox" src="../../static/film.svg" alt=""></image>
 									</view>
-									<view wx:if="{{item.keyFilms.length >= 1}}">{{item.keyFilms[0].movieName}}</view>
-									<view wx:if="{{item.keyFilms.length >= 2}}">{{item.keyFilms[1].movieName}}</view>
-									<view wx:if="{{item.keyFilms.length >= 3}}">{{item.keyFilms[2].movieName}}</view>
+									<view data-item="{{item}}" bindtap="tapfilmBox" wx:if="{{item.keyFilms.length >= 1}}">{{item.keyFilms[0].movieName}}</view>
+									<view data-item="{{item}}" bindtap="tapfilmBox" wx:if="{{item.keyFilms.length >= 2}}">{{item.keyFilms[1].movieName}}</view>
+									<view data-item="{{item}}" bindtap="tapfilmBox" wx:if="{{item.keyFilms.length >= 3}}">{{item.keyFilms[2].movieName}}</view>
 								</view>
 							</view>
 							<view wx:if="{{filmLoading}}" class="filmLoading">
@@ -59,25 +59,25 @@
 
 				<view id="filter" class="list" style="min-height: calc(100vh - {{titleHeight}}px)" >
 					<view class="listFilter" id="box">
-						<view class="listFilter-item" style="width: 189rpx">
-							<text data-num="4" class="listFilter-item-text filterActive}}" bindtap="tapFilterItem">{{dateText}}</text>
-							<image src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
+						<view class="listFilter-item" style="width: 189rpx" data-num="4" bindtap="tapFilterItem">
+							<text data-num="4" class="listFilter-item-text filterActive}}" >{{dateText}}</text>
+							<image data-num="4" src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
-						<view class="listFilter-item">
-							<text data-num="1" class="listFilter-item-text {{(filterActive==1 || estimateBoxStr !== '') ? 'filterActive' : ''}}" bindtap="tapFilterItem">{{estimateBoxStr === ''? '预估票房': estimateBoxStr}}</text>
-							<image src="../../static/{{filterActive==1 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
+						<view class="listFilter-item" data-num="1"  bindtap="tapFilterItem">
+							<text data-num="1" class="listFilter-item-text {{(filterActive==1 || estimateBoxStr !== '') ? 'filterActive' : ''}}" >{{estimateBoxStr === ''? '预估票房': estimateBoxStr}}</text>
+							<image data-num="1" src="../../static/{{filterActive==1 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
-						<view class="listFilter-item">
-							<text data-num="2" class="listFilter-item-text {{(filterActive==2 || projectBoxStr !== '' )? 'filterActive' : ''}}" bindtap="tapFilterItem">{{projectBoxStr === ''? '项目状态': projectBoxStr}}</text>
-							<image src="../../static/{{filterActive==2 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
+						<view class="listFilter-item" data-num="2" bindtap="tapFilterItem">
+							<text data-num="2" class="listFilter-item-text {{(filterActive==2 || projectBoxStr !== '' )? 'filterActive' : ''}}" >{{projectBoxStr === ''? '项目状态': projectBoxStr}}</text>
+							<image data-num="2" src="../../static/{{filterActive==2 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
-						<view class="listFilter-item">
-							<text data-num="3" bindtap="tapFilterItem"  class="listFilter-item-text {{(filterActive==3 || lastFilterLength > 0 ) ? 'filterActive' : ''}}" >筛选</text>
-							<text data-num="3" bindtap="tapFilterItem"  wx:if="{{lastFilterLength > 0}}">{{lastFilterLength}}</text>
-							<image src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
+						<view class="listFilter-item" data-num="3" bindtap="tapFilterItem" >
+							<text data-num="3" class="listFilter-item-text {{(filterActive==3 || lastFilterLength > 0 ) ? 'filterActive' : ''}}" >筛选</text>
+							<text data-num="3" wx:if="{{lastFilterLength > 0}}">{{lastFilterLength}}</text>
+							<image data-num="3" src="../../static/{{filterActive==3 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
 						</view>
 						<backdrop catchtouchmove='true'  wx:if="{{backdropShow === 'filter'}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
-						<filterPanel class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
+						<filterPanel titleHeight="{{titleHeight}}" class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
 					</view>
 		
 					<scroll-view class="derictFilter" scroll-x>

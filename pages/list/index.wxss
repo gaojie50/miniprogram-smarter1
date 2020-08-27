@@ -186,6 +186,7 @@ page {
 
 .listFilter-item-text {
   width: 126rpx;
+  line-height: 90rpx;
   margin-right: 8rpx;
   text-align: right;
   overflow: hidden;
