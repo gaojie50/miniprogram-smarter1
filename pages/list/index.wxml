@@ -151,7 +151,7 @@
 										</view>
 										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden2? 'itemHidden':''}}">
 											<text wx:if="{{item.cost===null}}">-</text>
-											<text wx:if="{{item.cost!==null}}">{{item.cost}}亿</text>
+											<text wx:if="{{item.cost!==null}}">{{item.cost}}</text>
 										</view>
 										<view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden3? 'itemHidden':''}}">
 											<text wx:if="{{item.estimateBox === null}}">-</text>
