@@ -8,11 +8,12 @@ const {formatNumber,formatDirector,formatReleaseDate} = utils;
 Page({
   data: {
     isFirst: true,
-    isFlod: false,
+    isFlod: true,
     isChange: true,
+    auto: '',
     flod: {
-      height: "auto",
-      rotateZ: "rotateZ(0deg)"
+      height: "417rpx",
+      rotateZ: "rotateZ(180deg)"
     },
     resData: {}
   },
@@ -26,22 +27,26 @@ Page({
   },
 
   openOrClose: function(){
-    let that = this
     if(this.data.isFirst){
+      let that = this
+      let info = null
+      wx.createSelectorQuery().selectAll('.info').boundingClientRect(function (rect) {
+        info = rect.pop()
+      }).exec();
       wx.createSelectorQuery().select('#detail').boundingClientRect(function (rect) {
         wx.getSystemInfo({
           success: (result) => {
-            if(rect.height*(750/result.screenWidth) < 409){
+            if(rect.bottom - 61/(750/result.windowWidth)> info.bottom) {
               that.setData({
-                isChange: false,
-                isFirst: false
+                isFirst: false,
+                isChange: false
               }, () => {
                 that.fold()
               })
             } else {
               that.setData({
-                isChange: true,
-                isFirst: false
+                isFirst: false,
+                isChange: true
               }, () => {
                 that.fold()
               })
@@ -67,7 +72,7 @@ Page({
       this.setData({
         isFlod: !this.data.isFlod,
         flod: {
-          height: "409rpx",
+          height: "417rpx",
           rotateZ: "rotateZ(180deg)"
         }
       })
@@ -102,7 +107,7 @@ Page({
       resData.productInfo.director = formatDirector(resData.productInfo.director)
     }
     if(resData.productInfo.movieType){
-      resData.productInfo.movieType = resData.productInfo.movieType.join("/")
+      resData.productInfo.movieType = resData.productInfo.movieType.join(" / ")
     }
     if(resData.productInfo.protagonist){
       resData.productInfo.protagonist = formatDirector(resData.productInfo.protagonist)
