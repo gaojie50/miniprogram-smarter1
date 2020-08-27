@@ -60,15 +60,15 @@ Page({
   },
 
   fold: function(){
-    if(this.data.isFlod && this.data.isChange){
+    if(this.data.isFlod){
       this.setData({
         isFlod: !this.data.isFlod,
         flod: {
-          height: "auto",
+          height: this.data.isChange ? "auto" : "417rpx",
           rotateZ: "rotateZ(0deg)"
         }
       })
-    } else if(!this.data.isFlod && this.data.isChange) {
+    } else {
       this.setData({
         isFlod: !this.data.isFlod,
         flod: {

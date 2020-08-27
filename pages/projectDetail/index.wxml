@@ -7,7 +7,7 @@
 
 
 <view class="main">
-	<view class="detail" id="detail" style="height:{{flod.height}};">
+	<view class="detail" id="detail" style="height:{{flod.height}};" bindtap="openOrClose">
 		<view class="title">基础信息</view>
 		<view class="type">
 			<text class="special">电影</text>
@@ -57,7 +57,7 @@
 			<view class="left">编 剧：</view>
 			<view class="right">{{resData.productInfo.screenWriter}}</view>
 		</view>
-		<view class="arrow-container" bindtap="openOrClose" wx:if="{{isChange}}">
+		<view class="arrow-container" catchtap="openOrClose">
 			<image  class="arrow" style="transform:{{flod.rotateZ}}" src="../../static/projectDetail/arrow.png" />
 		</view>
 	</view>
@@ -65,7 +65,9 @@
 	<view class="project">
 		<view class="title">市场情报</view>
 		<view class="market">
-			<view class="line"></view>
+			<view class="line-container">
+				<view class="line"></view>
+			</view>
 			<view class="infoo">
 				<view class="item">
 					<view class="item-up">
@@ -89,7 +91,9 @@
 					<view>制作成本</view>
 				</view>
 			</view>
-			<view class="line"></view>
+			<view class="line-container">
+				<view class="line"></view>
+			</view>
 			<view class="infoo">
 				<view class="item">
 					<view class="item-up">
@@ -113,7 +117,9 @@
 					<view>猫眼投资成本</view>
 				</view>
 			</view>
-			<view class="line"></view>
+			<view class="line-container">
+				<view class="line"></view>
+			</view>
 		</view>
 		<view class="details">
 			<view class="infoo">
