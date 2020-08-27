@@ -44,6 +44,10 @@ Component({
     filterShow: {
       type: String,
       value: ''
+    },
+    titleHeight: {
+      type: Number,
+      value: 0
     }
   },
   data: {

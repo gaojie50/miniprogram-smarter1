@@ -103,11 +103,7 @@ Page({
     },
     toView: ''
   },
-  onShow(){
-    this.setData({
-      toView: 'filter'
-    })
-  },
+ 
   onLoad: function ({
     token
   }) {
@@ -160,6 +156,7 @@ Page({
               authEndTime:data.authEndTime,
               authStartTime:data.authStartTime,
             });
+
 
             this.setData({
               loading:true,
@@ -343,11 +340,13 @@ Page({
     } = this.data;
     if (num == filterActive) {
       this.setData({
+        toView: 'filter',
         filterActive: '',
         backdropShow: '',
       })
     } else {
       this.setData({
+        toView: 'filter',
         filterActive: e.target.dataset.num,
         backdropShow: 'filter'
       })
