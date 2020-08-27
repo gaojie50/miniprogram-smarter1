@@ -172,7 +172,6 @@ Page({
 
           this.setData({
             initLoading:false,
-            toView: 'filter'
           })
         }
 
@@ -209,6 +208,9 @@ Page({
               }
               if(!item2.maoyanId){
                 item2.maoyanId = 0;
+              }
+              if(item.estimateBox){
+                item.estimateBox = formatNumber(item.estimateBox).text;
               }
               item2.pic = item2.pic ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
               item2.wishNum = formatNumber(item2.wishNum).text;
@@ -289,14 +291,14 @@ Page({
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign);
           }
           if(item.estimateBox){
-            item.estimateBox2 = formatNumber(item.estimateBox/100);
+            item.estimateBox2 = formatNumber(item.estimateBox);
           }
           // if(item.cost !== null && item.cost !== ''){
           //   item.cost =formatNumber(item.cost * 1e4 ).text;
           // }
          
           item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc);
-          item.cost = item.cost && (item.cost/100000000).toFixed(2);
+          item.cost = formatNumber(item.cost).text;
           item.director = formatDirector(item.director);
           item.movieType = item.movieType.replace(/,/g,'/');
           item.wishNum = formatNumber(item.wishNum).text;
@@ -465,11 +467,12 @@ Page({
     dataList.backdropShow = '';
     dataList.costomShow = false;
     dataList.filmDetailList = false;
+    dataList.toView = '';
     if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail;
       this.setData({
         ...dataList
-      }, () => {
+      }, () => {     
         this.fetchFilterShow()
       })
     } else {
@@ -664,6 +667,10 @@ Page({
   },
   rightContScroll:throttle(rContScrollEvt,10),
 
+  goTop() { 
+    if(this.data.filterActive) return;
+    this.setData({toView:'scroll-cont'});
+  },
   tapfilmBox(e){
     const filmDistributionItem = e.target.dataset.item;
   
