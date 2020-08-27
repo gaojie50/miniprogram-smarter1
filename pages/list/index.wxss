@@ -198,9 +198,12 @@ page {
   height: 9.5rpx;
 }
 .list .derictFilter {
-  height: 64rpx;
-  margin-bottom: 20rpx;
-  padding-right: 30rpx;
+  height: 60rpx;
+  background-color: #fff;
+  padding: 10rpx 30rpx 20rpx 0; 
+  position: sticky;
+  top: 90rpx;
+  z-index: 20;
 }
 
 .list .derictFilter .listDerict {
@@ -255,7 +258,7 @@ page {
 
 .tableLeftTitleFixed {
   position: sticky;
-  top: 90rpx;
+  top: 180rpx;
   box-shadow: 14rpx 0 12rpx -6rpx rgba(153, 153, 153, 0.1);
   z-index: 15;
 }
@@ -339,7 +342,7 @@ page {
 
 .tableRightTitleFixed {
   position: sticky;
-  top: 90rpx;
+  top: 180rpx;
   z-index: 14;
 }
 
