@@ -57,7 +57,7 @@
 			<view class="left">编 剧：</view>
 			<view class="right">{{resData.productInfo.screenWriter}}</view>
 		</view>
-		<view class="arrow-container" bindtap="openOrClose">
+		<view class="arrow-container" bindtap="openOrClose" wx:if="{{isChange}}">
 			<image  class="arrow" style="transform:{{flod.rotateZ}}" src="../../static/projectDetail/arrow.png" />
 		</view>
 	</view>
@@ -66,7 +66,7 @@
 		<view class="title">市场情报</view>
 		<view class="market">
 			<view class="line"></view>
-			<view class="info">
+			<view class="infoo">
 				<view class="item">
 					<view class="item-up">
 						<text>{{resData.marketIntelligence.estimateBox.posNum || '-'}}</text>
@@ -90,7 +90,7 @@
 				</view>
 			</view>
 			<view class="line"></view>
-			<view class="info">
+			<view class="infoo">
 				<view class="item">
 					<view class="item-up">
 						<text>{{resData.marketIntelligence.publicityCost.posNum || '-'}}</text>
@@ -116,26 +116,26 @@
 			<view class="line"></view>
 		</view>
 		<view class="details">
-			<view class="info">
+			<view class="infoo">
 				<view class="left">项目状态：</view>
 				<view class="right">{{resData.marketIntelligence.projectStatus.label || '-'}}</view>
 			</view>
-			<view class="info">
+			<view class="infoo">
 				<view class="left">上映时间：</view>
 				<view class="right">
 				{{resData.productInfo.releaseDesc || '-'}}
 				{{resData.productInfo.alias.length > 0 ? '('+ resData.productInfo.alias +')' : ''}}
 				</view>
 			</view>
-			<view class="info">
+			<view class="infoo">
 				<view class="left">主出品：</view>
 				<view class="right">{{resData.marketIntelligence.mainPublish || '-'}}</view>
 			</view>
-			<view class="info">
+			<view class="infoo">
 				<view class="left">主发行：</view>
 				<view class="right">{{resData.marketIntelligence.mainIssuer || '-'}}</view>
 			</view>
-			<view class="info">
+			<view class="infoo">
 			<view class="left">备  注 ：</view>
 				<view class="right">{{resData.marketIntelligence.remark || '-'}}</view>
 			</view>
