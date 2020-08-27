@@ -75,18 +75,19 @@ LineChart.prototype._drawAxis = function () {
 
     let xLabelMaxWidth = _.max(_.map(xAxis, item => ctx.measureText(item + xUnit).width));
     let yLabelMaxWidth = _.max(_.map(labels, item => ctx.measureText(item).width)) + margin;
-    // let xAxisLen = width - margin - yLabelMaxWidth;
+    // let xAxisLen = width - margin - yLabelMaxWidth; x轴间距改动
     let xAxisLen = width;
     let xOffset = yLabelMaxWidth;
     let xStep = xAxisLen / (xAxis.length - 1);
+    // let yOffset = margin + yAxisLen;y轴改动
     let yOffset = margin + yAxisLen;
     let yStep = yAxisLen / (yMaxValue * 1.2);
 
 
-    // 绘制x轴label
+    // //绘制x轴label
     // let xLabelCount = Math.floor(xAxisLen / xLabelMaxWidth);
     // let xLabelStep = Math.ceil(xAxis.length / xLabelCount);
-    // 需要被绘制的lable
+    // //需要被绘制的lable
     // let xLabel = _.filter(_.map(xAxis, (item, index) => ({
     //     name: item + xUnit,
     //     index: index
@@ -97,7 +98,7 @@ LineChart.prototype._drawAxis = function () {
     //     ctx.fillText(item.name, xValue, height - margin);
     // });
 
-    // 绘制y轴label，以及水平标记线
+    // //绘制y轴label，以及水平标记线
     // _.each(labels, (item, index) => {
     //     let xValue = (yLabelMaxWidth - ctx.measureText(item).width) - 5;
     //     let yValue = yOffset - yStep * Number((index + 1) * yDelta).toFixed(fixed);
@@ -151,20 +152,22 @@ LineChart.prototype._drawLine = function (line) {
     // 与x轴的面积阴影
     ctx.beginPath();
     // ctx.globalAlpha = 0.2;
-    var linearGradient= ctx.createLinearGradient(0,170,0,0);
+    var linearGradient= ctx.createLinearGradient(0,190,0,0);
     linearGradient.addColorStop(0,'rgba(121,140,186,0.00)');
-    linearGradient.addColorStop(0.3,'rgba(121,140,186,0.08)');
+    // linearGradient.addColorStop(0.3,'rgba(121,140,186,0.08)');
     linearGradient.addColorStop(1,'rgba(121,140,186,1)');
     ctx.fillStyle = linearGradient;
+
     ctx.moveTo(xOffset, yOffset);
     _.each(points, item => {
         ctx.lineTo(item.x, item.y);
     });
-    ctx.lineTo(xOffset + xStep * (points.length - 1), yOffset);
+    // ctx.lineTo(xOffset + xStep * (points.length - 1), yOffset);
+    ctx.lineTo(xOffset + xStep * (points.length - 1), 11111);
     ctx.closePath();
     ctx.fill();
 
-    // // 线
+    // 线
     // ctx.beginPath();
     // ctx.globalAlpha = 1;
     // ctx.lineWidth = 1;

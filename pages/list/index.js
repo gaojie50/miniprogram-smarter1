@@ -100,7 +100,13 @@ Page({
       offset: 0,
       limit: 10,
       total: 0
-    }
+    },
+    toView: ''
+  },
+  onShow(){
+    this.setData({
+      toView: 'filter'
+    })
   },
   onLoad: function ({
     token
@@ -140,7 +146,6 @@ Page({
       }) => {
         if (success) {
           app.globalData.authinfo = data;
-
           if (data &&
             data.authIds &&
             (data.authIds.length > 0) &&
@@ -160,6 +165,7 @@ Page({
               loading:true,
               curPagePermission: true,
               initLoading:false,
+            
             },()=>{
               this.fetchfilmDistribution();
               this.fetchSchedule();
@@ -169,6 +175,7 @@ Page({
 
           this.setData({
             initLoading:false,
+            toView: 'filter'
           })
         }
 
@@ -218,6 +225,7 @@ Page({
           paging,
           filmLoading: false,
           topFilmLoading: false,
+         
         }, () => {
          this.chartDraw()
         })
@@ -659,7 +667,6 @@ Page({
 
   tapfilmBox(e){
     const filmDistributionItem = e.target.dataset.item;
-    console.log(filmDistributionItem)
   
     filmDistributionItem && this.setData({
       filmDistributionItem,

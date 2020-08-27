@@ -175,6 +175,8 @@ page {
   border-radius: 25rpx;
   width: 25rpx;
   height: 25rpx;
+  font-family:MaoYanHeiTi-H1-H1,MaoYanHeiTi-H1;
+  font-weight: bolder;
   text-align: center;
   font-size: 20rpx;
   line-height: 24rpx;
@@ -316,7 +318,10 @@ page {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
-.list .listTable .table-left,.table-right .listTr:last-child {
+.list .listTable .table-left .listTr:last-child {
+  border-bottom:1px solid rgba(238,238,238,1);
+}
+.list .listTable .table-right .rightScroll .listTr:last-child {
   border-bottom:1px solid rgba(238,238,238,1);
 }
 .list .listTable .table-right .listTr .listTd:nth-child(12) {
@@ -352,7 +357,7 @@ page {
   z-index: 15;
   width: 118rpx;
   height: 70rpx;
-  background: linear-gradient(90deg, rgba(247, 247, 247, 0) 0%, rgba(247, 247, 247, 1) 75%);
+  background: linear-gradient(90deg, rgba(247, 247, 247, 0) 0%, rgba(247, 247, 247, 1) 55%);
 }
 
 .itemHidden {
@@ -416,11 +421,12 @@ page {
 .filmDistribution {
   position: relative;
   width: 100%;
-  min-height: 570rpx;
+  height: 630rpx;
   font-family: PingFangSC-Regular;
   font-size: 22rpx;
   color: #FFFFFF;
   z-index: 80;
+  border:none;
 }
 .filmDistribution .film-nodata {
   text-align: center;
@@ -439,18 +445,20 @@ page {
 
 .filmChart {
   position: relative;
-  height: 220rpx;
+  height: 600rpx;
   /* border:1px solid red; */
 }
 
 .filmChart canvas {
   position: absolute;
-  bottom: 0;
+  height: 380rpx;
+  /* border: 1px solid red; */
+  top: -20rpx;
   left: -160rpx;
-  /* border:1px solid red; */
 } 
 .filmList {
-  /* position: absolute; */
+  position: absolute;
+  top: 280rpx;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;

@@ -57,7 +57,7 @@
 					</view>
 				</view>
 
-				<view class="list" style="min-height: calc(100vh - {{titleHeight}}px)" >
+				<view id="filter" class="list" style="min-height: calc(100vh - {{titleHeight}}px)" >
 					<view class="listFilter" id="box">
 						<view class="listFilter-item" style="width: 189rpx">
 							<text data-num="4" class="listFilter-item-text filterActive}}" bindtap="tapFilterItem">{{dateText}}</text>
@@ -128,7 +128,7 @@
 									<view class="listTd {{filterItemHidden12? 'itemHidden':''}}">映前想看人数</view>
 								</view>
 							</view>
-							<scroll-view scroll-x bindscroll="rightContScroll">
+							<scroll-view class="rightScroll" scroll-x bindscroll="rightContScroll">
 								<view class="listTr" style="min-height:0;"></view>
 								<block wx:for="{{list}}" wx:key="maoyanId">
 									<view data-id="{{item.maoyanId}}" bindtap="jumpToDetail" class="listTr rightTableHeight">

@@ -298,6 +298,12 @@ function formatWeekDate(date){
     end.m = ("0" + end.m).slice(-2);
     end.d = ("0" + end.d).slice(-2);
     return `${start.m}.${start.d}-${end.m}.${end.d}`
+  } else {
+    start.m = ("0" + start.m).slice(-2);
+    start.d = ("0" + start.d).slice(-2);
+    end.m = ("0" + end.m).slice(-2);
+    end.d = ("0" + end.d).slice(-2);
+    return `${start.m}.${start.d}-${end.m}.${end.d}`
   }
 }
 
