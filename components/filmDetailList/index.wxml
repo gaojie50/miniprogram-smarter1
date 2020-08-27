@@ -15,14 +15,18 @@
       <view class="main"> 
         <view class="firstLine">
           <view class="name">{{item.movieName}}</view>
-          <view class="yello">
-            <text>{{item.estimateBox ? item.estimateBox : item.wishNum}}</text>
-            <text>{{item.estimateBox ? '亿预估票房' : '想看数'}}</text>
+          <view class="yello" wx:if="{{item.estimateBox}}">
+            <text>{{item.estimateBox}}</text>
+            <text>预估票房</text>
+          </view>
+          <view class="yello" wx:if="{{!item.estimateBox && item.wishNum !== '-'}}">
+            <text>{{item.wishNum}}</text>
+            <text>想看数</text>
           </view>
         </view>
         <view class="secondLine">
           <view class="director">导演：{{item.director || '--'}}</view>
-          <view wx:if="{{item.estimateBox}}" class="wishNum">
+          <view wx:if="{{item.estimateBox && item.wishNum !== '-'}}" class="wishNum">
             <text>{{item.wishNum}}</text>
             <text>想看数</text>
           </view>
@@ -32,6 +36,7 @@
           <scheduleType class="scheduleType" signContent="{{scheduleType[item.scheduleType]}}"></scheduleType>
         </view>
       </view>
+
     </view>
   </scroll-view>
 </view>

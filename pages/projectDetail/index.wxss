@@ -49,7 +49,7 @@ page {
   color: #FFFFFF;
   line-height: 24rpx;
   padding: 6rpx 10rpx;
-  border: 1px solid #FFFFFF;
+  border: 1rpx solid #FFFFFF;
   border-radius: 4rpx;
   display: inline-block;
   margin-left: 10rpx;
@@ -119,7 +119,6 @@ page {
   flex: 1 1 130rpx;
   color: #999;
   left: 0;
-  text-align:justify;
 }
 
 .detail .info .right{
@@ -171,12 +170,16 @@ page {
   margin: 30rpx 0;
   width: 100%;
 }
-view.line{
+.project .market .line-container{
+  position: relative;
+  width: 100%;
+}
+.project .market .line-container view.line{
+  position: absolute;
   margin-left: 50%;
   transform: translateX(-50%);
-  position: relative;
   width: 630rpx;
-  height: 2rpx;
+  height: 1rpx;
   background-color: #E5E5E5;
 }
 .project .market .infoo{
