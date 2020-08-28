@@ -58,7 +58,7 @@
 			<view class="right">{{resData.productInfo.screenWriter}}</view>
 		</view>
 		<view class="arrow-container" catchtap="openOrClose">
-			<image  class="arrow" style="transform:{{flod.rotateZ}}" src="../../static/projectDetail/arrow.png" />
+			<image  class="arrow" style="transform:{{flod.rotateZ}}" src="../../static/projectDetail/arrow.png" wx:if="{{showArrow}}" />
 		</view>
 	</view>
 

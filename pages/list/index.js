@@ -669,6 +669,10 @@ Page({
   },
   rightContScroll:throttle(rContScrollEvt,10),
 
+  goTop() { 
+    if(this.data.filterActive) return;
+    this.setData({toView:'scroll-cont'});
+  },
   tapfilmBox(e){
     const filmDistributionItem = e.target.dataset.item;
   
