@@ -675,7 +675,9 @@ Page({
   },
   tapfilmBox(e){
     const filmDistributionItem = e.target.dataset.item;
-  
+
+    if(filmDistributionItem.filmNum == 0) return ;
+    
     filmDistributionItem && this.setData({
       filmDistributionItem,
       backdropShow: 'costom',
