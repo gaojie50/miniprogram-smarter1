@@ -36,14 +36,14 @@
 								<view class="schedule">{{item.filmSchedule || ''}}</view>
 								<view class="time">{{item.releaseDate}}</view>
 								<view class="filmBox" data-item="{{item}}" bindtap="tapfilmBox">
-									<view data-item="{{item}}" bindtap="tapfilmBox">
-										<text data-item="{{item}}"  bindtap="tapfilmBox">{{item.keyFilms.length}}</text>
-										<text data-item="{{item}}"  bindtap="tapfilmBox">部</text>
-										<image data-item="{{item}}" bindtap="tapfilmBox" src="../../static/film.svg" alt=""></image>
+									<view data-item="{{item}}">
+										<text data-item="{{item}}">{{item.keyFilms.length}}</text>
+										<text data-item="{{item}}">部</text>
+										<image data-item="{{item}}" src="../../static/film.svg" alt=""></image>
 									</view>
-									<view data-item="{{item}}" bindtap="tapfilmBox" wx:if="{{item.keyFilms.length >= 1}}">{{item.keyFilms[0].movieName}}</view>
-									<view data-item="{{item}}" bindtap="tapfilmBox" wx:if="{{item.keyFilms.length >= 2}}">{{item.keyFilms[1].movieName}}</view>
-									<view data-item="{{item}}" bindtap="tapfilmBox" wx:if="{{item.keyFilms.length >= 3}}">{{item.keyFilms[2].movieName}}</view>
+									<view data-item="{{item}}" wx:if="{{item.keyFilms.length >= 1}}">{{item.keyFilms[0].movieName}}</view>
+									<view data-item="{{item}}" wx:if="{{item.keyFilms.length >= 2}}">{{item.keyFilms[1].movieName}}</view>
+									<view data-item="{{item}}" wx:if="{{item.keyFilms.length >= 3}}">{{item.keyFilms[2].movieName}}</view>
 								</view>
 							</view>
 							<view wx:if="{{filmLoading}}" class="filmLoading">
