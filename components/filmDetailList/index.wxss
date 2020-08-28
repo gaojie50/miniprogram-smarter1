@@ -7,7 +7,7 @@
   color: #333333;
   background: #FFFFFF;
   border-radius: 20rpx 20rpx 0 0;
-  z-index: 100;
+  z-index: 71;
 }
 .filmDetailList .title {
   display: flex;

@@ -26,7 +26,7 @@
 
 				<!-- 上映影片分布 -->
 				<view class="filmDistribution">
-					<view class="title">上映影片分布</view>
+					<view class="title">未来一年上映影片</view>
 					<scroll-view wx:if="{{filmDistributionList.length !== 0}}" lower-threshold="2" bindscrolltolower="filmScroll" scroll-x>
 						<view class="filmChart" style="width: 100%; ">
 							<canvas canvas-id="chart" style="width:{{filmDistributionList.length * 208 + 360}}rpx;"></canvas>
