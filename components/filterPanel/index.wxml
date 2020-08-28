@@ -77,6 +77,5 @@
 			<view wx:if="{{filterShow != 4}}" bindtap="filterDefined" class="filterButton-determine">确定</view>
 			<view wx:if="{{filterShow == 4 && showDateSureBtn}}" bindtap="filterDefinedDate" class="filterButton-date-determine">确定</view>
 		</view>
-
 	</view>
 </view>

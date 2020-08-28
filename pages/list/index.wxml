@@ -58,7 +58,7 @@
 				</view>
 
 				<view id="filter" class="list" style="min-height: calc(100vh - {{titleHeight}}px)" >
-					<view class="listFilter" id="box">
+					<view class="listFilter" catchtouchmove='true'  id="box">
 						<view class="listFilter-item" style="width: 189rpx" data-num="4" bindtap="tapFilterItem">
 							<text data-num="4" class="listFilter-item-text filterActive}}" >{{dateText}}</text>
 							<image data-num="4" src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
@@ -107,6 +107,7 @@
 									</view>
 								</view>
 							</block>
+							<view style="height: 60rpx;  background-color: #fff;"></view>
 						</view>
 						<view class="extends " bindtap="tapExtend">
 							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
@@ -200,6 +201,7 @@
 										</view>
 									</view>
 								</block>
+								<view style="height: 60rpx;  background-color: #fff;"></view>
 							</scroll-view>
 						</view>
 					</view>

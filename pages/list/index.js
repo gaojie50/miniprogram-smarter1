@@ -209,8 +209,8 @@ Page({
               if(!item2.maoyanId){
                 item2.maoyanId = 0;
               }
-              if(item.estimateBox){
-                item.estimateBox = formatNumber(item.estimateBox).text;
+              if(item2.estimateBox){
+                item2.estimateBox = formatNumber(item2.estimateBox).text;
               }
               item2.pic = item2.pic ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
               item2.wishNum = formatNumber(item2.wishNum).text;
@@ -247,10 +247,12 @@ Page({
     // key.push(filmDistributionList.length + 1);
     // value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
 
+
     const windowWidth = wx.getSystemInfoSync().windowWidth;
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
-      width: (key.length - 1) * (windowWidth * 2.9 /10) ,
+      width: (key.length - 1) * (windowWidth * 2.9 /10),
+      // width: (key.length - 1) * (windowWidth * 2.9 /10),
       height: 200,
       margin: 30,
       xAxis: key,
