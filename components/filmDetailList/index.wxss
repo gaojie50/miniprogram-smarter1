@@ -2,7 +2,6 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  max-height: 1423rpx;
   padding: 40rpx 30rpx 0;
   font-family: PingFangSC-Regular;
   color: #333333;
@@ -13,6 +12,7 @@
 .filmDetailList .title {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 40rpx;
   font-size: 32rpx;
   font-family: PingFangSC-Medium;
   font-weight: bold;
@@ -29,27 +29,24 @@
   margin-right: 10rpx;
 }
 .filmDetailList .film-list {
-  max-height: 1000rpx;
+  max-height: calc(100vh *0.8);
 }
 .filmDetailList .film-list .item{
   display: flex;
-  margin-top: 60rpx;
   font-size: 24rpx;
   color: #666666;
 }
 .filmDetailList .film-list .item image {
   width: 100rpx;
   height: 140rpx;
+  border: 1px solid rgb(0, 0, 0, 0.08);
   margin-right: 24rpx;
 }
 .film-list .item:last-child {
   margin-bottom: 40rpx;
 }
-.main {
-  width: 100%;
-}
+
 .main .firstLine {
-  width: 100%;
   display: flex;
   justify-content: space-between;
   margin-bottom: 14rpx;
@@ -81,12 +78,11 @@
 }
 
 .yello {
-  width: 210rpx;
+  width: 230rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: right;
-  margin-right: 60rpx;
   color: #FF9034;
 }
 .yello text:first-child {
@@ -94,8 +90,7 @@
   font-family: MaoYanHeiTi-H1-H1;
 }
 .wishNum {
-  margin-right: 60rpx;
-  width: 210rpx;
+  width: 230rpx;
   text-align: right;
   overflow: hidden;
   text-overflow: ellipsis;

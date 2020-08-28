@@ -12,7 +12,7 @@ Page({
     isChange: true,
     auto: '',
     flod: {
-      height: "417rpx",
+      height: "",
       rotateZ: "rotateZ(180deg)"
     },
     resData: {}
@@ -27,7 +27,7 @@ Page({
   },
 
   openOrClose: function(){
-    if(this.data.isFirst){
+    if(this.data.isFirst && this.data.isChange){
       let that = this
       let info = null
       wx.createSelectorQuery().selectAll('.info').boundingClientRect(function (rect) {
@@ -60,6 +60,9 @@ Page({
   },
 
   fold: function(){
+    if(!this.data.showArrow){
+      return 
+    }
     if(this.data.isFlod){
       this.setData({
         isFlod: !this.data.isFlod,
@@ -100,28 +103,45 @@ Page({
   },
 
   formData(resData){
+    let count = 0
     if(resData.productInfo.maoyanSign && resData.productInfo.maoyanSign.length > 0){
       resData.productInfo.maoyanSign =  getMaoyanSignLabel(resData.productInfo.maoyanSign);
     }
+    if(resData.productInfo.filmSource){
+      count++
+    }
     if(resData.productInfo.director){
+      count++
+      if(resData.productInfo.director.length > 6) {
+        resData.productInfo.director.splice(6)
+      }
       resData.productInfo.director = formatDirector(resData.productInfo.director)
     }
     if(resData.productInfo.movieType){
+      count++
       resData.productInfo.movieType = resData.productInfo.movieType.join(" / ")
     }
     if(resData.productInfo.protagonist){
+      count++
+      if(resData.productInfo.protagonist.length > 6) {
+        resData.productInfo.protagonist.splice(6)
+      }
       resData.productInfo.protagonist = formatDirector(resData.productInfo.protagonist)
     }
     if(resData.productInfo.producer){
+      count++
       resData.productInfo.producer = formatDirector(resData.productInfo.producer)
     }
     if(resData.productInfo.issuer){
+      count++
       resData.productInfo.issuer = formatDirector(resData.productInfo.issuer)
     }
     if(resData.productInfo.supervisor){
+      count++
       resData.productInfo.supervisor = formatDirector(resData.productInfo.supervisor)
     }
     if(resData.productInfo.screenWriter){
+      count++
       resData.productInfo.screenWriter = formatDirector(resData.productInfo.screenWriter)
     }
     if(resData.marketIntelligence.estimateBox){
@@ -146,6 +166,31 @@ Page({
     if(resData.createInfo.createTime){
       let date = new Date(resData.createInfo.createTime)
       resData.createInfo.createTime = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+    }
+    if(count === 1) {
+      this.setData({
+        showArrow: false,
+        isChange: false,
+        flod: {
+          height: "200rpx"
+        }
+      })
+    } else if(count === 3) {
+      this.setData({
+        showArrow: false,
+        isChange: false,
+        flod: {
+          height: "330rpx"
+        }
+      })
+    }else {
+      this.setData({
+        showArrow: true,
+        flod: {
+          height: "417rpx",
+          rotateZ: "rotateZ(180deg)"
+        }
+      })
     }
     return resData
   }
