@@ -8,6 +8,7 @@
   background: #FFFFFF;
   border-radius: 20rpx 20rpx 0 0;
   z-index: 100;
+  box-sizing: border-box;
 }
 .filmDetailList .title {
   display: flex;
@@ -17,10 +18,18 @@
   font-family: PingFangSC-Medium;
   font-weight: bold;
 }
+.filmDetailList .title .close-wrap{
+  width: 88rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  position: relative;
+  right: -30rpx;
+  top: -30rpx;
+  text-align: center;
+}
 .filmDetailList .title image {
-  margin-right: 60rpx;
-  width: 32rpx;
-  height: 32rpx;
+  width: 28rpx;
+  height: 28rpx;
 }
 .filmDetailList .title .num {
   font-family: MaoYanHeiTi-H-H;
