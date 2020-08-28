@@ -81,7 +81,7 @@ LineChart.prototype._drawAxis = function () {
     // let xStep = xAxisLen / (xAxis.length - 1);
     let xStep = xAxisLen / (xAxis.length - 1);
     xStep = parseInt(xStep);
-    console.log(xStep)
+
     // let yOffset = margin + yAxisLen;y轴改动
     let yOffset = margin + yAxisLen;
     let yStep = yAxisLen / (yMaxValue * 1.2);
@@ -142,7 +142,6 @@ LineChart.prototype._drawLine = function (line) {
     let points = _.map(line.points, (item, index) => {
         // console.log( (index * xStep).toFixed(2) )
     const xGrap = parseInt((index * xStep));
-    console.log(xGrap)
     //    return ({
     //     x: xOffset + index * xStep ,
     //     y: yOffset - item * yStep
@@ -184,7 +183,7 @@ LineChart.prototype._drawLine = function (line) {
     // ctx.stroke();
 
     // 空心点
-console.log(points)
+
     _.each(points, item => {
         ctx.beginPath();
         ctx.arc(item.x, item.y, 4, 0, 4 * Math.PI);

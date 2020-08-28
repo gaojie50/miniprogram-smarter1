@@ -466,7 +466,7 @@ page {
   height: 380rpx;
   /* border: 1px solid red; */
   top: -20rpx;
-  left: -160rpx;
+  left: -153rpx;
 }
 .filmList {
   position: absolute;
