@@ -246,12 +246,20 @@ Page({
     })
     // key.push(filmDistributionList.length + 1);
     // value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
+    const handleWidth = function (){
 
-
+      if(filmDistributionList.length <= 10){
+        return (key.length - 1) * (windowWidth * 2.8648 /10) + 13;
+      }
+      if(filmDistributionList.length > 10){
+        return (key.length - 1) * (windowWidth * 2.8648 /10) ;
+      }
+    }
+    
     const windowWidth = wx.getSystemInfoSync().windowWidth;
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
-      width: (key.length - 1) * (windowWidth * 2.8648 /10) + 30,
+      width: handleWidth(),
       // width: (key.length - 1) * (windowWidth * 2.9 /10),
       height: 200,
       margin: 30,
