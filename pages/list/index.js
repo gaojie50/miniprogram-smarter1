@@ -251,7 +251,7 @@ Page({
     const windowWidth = wx.getSystemInfoSync().windowWidth;
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
-      width: (key.length - 1) * (windowWidth * 2.9 /10),
+      width: (key.length - 1) * (windowWidth * 2.8648 /10),
       // width: (key.length - 1) * (windowWidth * 2.9 /10),
       height: 200,
       margin: 30,
@@ -675,12 +675,14 @@ Page({
   },
   tapfilmBox(e){
     const filmDistributionItem = e.target.dataset.item;
-  
-    filmDistributionItem && this.setData({
-      filmDistributionItem,
-      backdropShow: 'costom',
-      filmDetailList: true,
-    })
+
+    if(filmDistributionItem.filmNum !== 0){
+      filmDistributionItem && this.setData({
+        filmDistributionItem,
+        backdropShow: 'costom',
+        filmDetailList: true,
+      })
+    }
   },
 filmScroll(){
   const { limit, offset, hasMore } = this.data.paging;
