@@ -6,7 +6,9 @@
 	<view class="header">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
 			<view class="header-inner" style='line-height:{{titleHeight - barHeight}}px;padding-top:{{barHeight}}px;'>
-				<image bindtap="jumpToSearch" class="search" style="top:calc( {{( titleHeight + barHeight ) / 2}}px -  22rpx)" src="../../static/icon/search-white.png" />
+				<view class="search-wrap" style="top:calc( {{( titleHeight + barHeight ) / 2}}px -  44rpx)" bindtap="jumpToSearch">
+					<image class="search" src="../../static/icon/search-white.png" />
+				</view>
 				<text bindtap="goTop">影片市场情报</text>
 			</view>
 		</view>
@@ -45,7 +47,7 @@
 								</view>
 							</view>
 							<view wx:if="{{filmLoading}}" class="filmLoading">
-								<mp-loading show="{{true}}" type="circle"></mp-loading>
+								<mp-loading show="{{true}}" type="circle" tips=""></mp-loading>
 							</view>
 						</view>
 					</scroll-view>
