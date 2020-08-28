@@ -267,7 +267,7 @@ page {
 
 .tableLeftTitleFixed {
   position: sticky;
-  top: 90rpx;
+  top: 178rpx;
   box-shadow: 14rpx 0 12rpx -6rpx rgba(153, 153, 153, 0.1);
   z-index: 16;
 }
