@@ -98,7 +98,7 @@ Page({
     paging: {
       hasMore: false,
       offset: 0,
-      limit: 10,
+      limit: 1000,
       total: 0
     },
     toView: ''
@@ -224,7 +224,6 @@ Page({
           paging,
           filmLoading: false,
           topFilmLoading: false,
-         
         }, () => {
          this.chartDraw()
         })
