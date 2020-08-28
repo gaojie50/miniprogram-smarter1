@@ -466,7 +466,7 @@ page {
   height: 380rpx;
   /* border: 1px solid red; */
   top: -20rpx;
-  left: -153rpx;
+  left: -142rpx;
   z-index: 1;
 }
 .filmList {

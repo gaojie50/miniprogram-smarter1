@@ -8,6 +8,7 @@
   background: #FFFFFF;
   border-radius: 20rpx 20rpx 0 0;
   z-index: 71;
+  box-sizing: border-box;
 }
 .filmDetailList .title {
   display: flex;
