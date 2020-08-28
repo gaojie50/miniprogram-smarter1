@@ -467,6 +467,7 @@ page {
   /* border: 1px solid red; */
   top: -20rpx;
   left: -153rpx;
+  z-index: -1;
 }
 .filmList {
   position: absolute;
