@@ -202,7 +202,7 @@ page {
 }
 
 .project .market .infoo .item .item-up text:first-child{
-  font-family: MaoYanHeiTi-H1-H1;
+  font-family: MaoYanHeiTi-H1;
   /* font-weight: 500; */
   font-weight: bold;
   font-size: 46rpx;

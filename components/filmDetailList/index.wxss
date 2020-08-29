@@ -96,7 +96,7 @@
 }
 .yello text:first-child {
   font-size: 34rpx;
-  font-family: MaoYanHeiTi-H1-H1;
+  font-family: MaoYanHeiTi-H1;
 }
 .wishNum {
   width: 230rpx;
