@@ -85,7 +85,6 @@
   text-align: center;
   line-height: 80rpx;
   margin-bottom: 30rpx;
-  margin-top: 30rpx;
 }
 
 .projectStatus {
@@ -217,8 +216,6 @@
 .dateBox .item.checked {
   color: #1791FF;
   position: relative;
-  left: -12rpx;
-  padding-left: 0;
 }
 
 .dateBox .checked .pic {
@@ -226,6 +223,8 @@
   width: 21rpx;
   height: 18rpx;
   margin-right: 18rpx;
+  position: absolute;
+  left: 0;
 }
 
 .dateBox .pic {
@@ -233,7 +232,7 @@
 }
 
 .custom-box {
-  height: 540rpx;
+  height: 570rpx;
 }
 
 .date-show {
