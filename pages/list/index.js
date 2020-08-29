@@ -237,10 +237,10 @@ Page({
   },
   chartDraw(){
     const { filmDistributionList } = this.data;
-    let key = [0];
-    let value = [5];
+    let key = [];
+    let value = [];
     filmDistributionList.map((item, index) => {
-      key.push(index + 1);
+      key.push(index);
       value.push(item.filmNum);
     })
     // key.push(filmDistributionList.length + 1);
