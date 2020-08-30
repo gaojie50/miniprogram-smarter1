@@ -1,5 +1,7 @@
-const _ = require('./lodash.js');
+import utils from './index';
 
+const _ = require('./lodash.js');
+const {rpxTopx} = utils;
 exports.init = function (ctx, options) {
     return new LineChart(ctx, options);
 };
@@ -81,7 +83,7 @@ LineChart.prototype._drawAxis = function () {
     let xAxisLen = width;
     let xOffset = yLabelMaxWidth;
     // let xStep = xAxisLen / (xAxis.length - 1);
-    let xStep = xAxisLen / (xAxis.length - 1);
+    let xStep = rpxTopx(216);
     xStep = parseInt(xStep);
 
     // let yOffset = margin + yAxisLen;y轴改动
@@ -149,7 +151,7 @@ LineChart.prototype._drawLine = function (line) {
     //     })
         return ({
             redDot: line.redDot[index],
-            x: 37 + xGrap ,
+            x: rpxTopx(134) + xGrap ,
             y: yOffset - item * yStep
             })
 });
@@ -163,8 +165,7 @@ LineChart.prototype._drawLine = function (line) {
     // linearGradient.addColorStop(0.3,'rgba(121,140,186,0.08)');
     linearGradient.addColorStop(1,'rgba(121,140,186,0.3)');
     ctx.fillStyle = linearGradient;
-
-    ctx.moveTo(xOffset, yOffset);
+    ctx.moveTo(0, yOffset);
     _.each(points, item => {
         ctx.lineTo(item.x, item.y);
         // console.log(item.x, item.y)

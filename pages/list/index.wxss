@@ -184,7 +184,7 @@ page {
   border-radius: 25rpx;
   width: 25rpx;
   height: 25rpx;
-  font-family:MaoYanHeiTi-H1-H1,MaoYanHeiTi-H1;
+  font-family:MaoYanHeiTi-H1;
   font-weight: bolder;
   text-align: center;
   font-size: 20rpx;
@@ -520,13 +520,13 @@ page {
 }
 .filmList .filmItem .time {
   height: 34rpx;
-  font-family: MaoYanHeiTi-H1-H1;
+  font-family: MaoYanHeiTi-H1;
   font-size: 28rpx;
   margin-bottom: 20rpx;
 }
 
 .filmList .filmItem .filmBox view:first-child text:first-child{
-  font-family: MaoYanHeiTi-H1-H1;
+  font-family: MaoYanHeiTi-H1;
   font-size: 40rpx;
 }
 .filmList .filmItem .no-filmBox view:first-child text:first-child{

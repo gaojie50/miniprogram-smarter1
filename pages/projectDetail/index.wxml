@@ -7,11 +7,14 @@
 
 
 <view class="main">
-	<view class="detail" id="detail" style="height:{{flod.height}};" bindtap="openOrClose">
+	<view class="detail" id="detail" style="height:{{flod.height}};" bindtap="fold">
 		<view class="title">基础信息</view>
+		<mp-loading wx:if="{{loading}}"></mp-loading>
 		<view class="type">
-			<text class="special">电影</text>
-			<text class="movietype">{{resData.productInfo.movieType}}</text>
+			<view class="info">
+				<text class="special">{{resData.productInfo.category}}</text>
+				<text class="movietype">{{resData.productInfo.movieType}}</text>
+			</view>
 		</view>
 		<view class="info" wx:if="{{resData.productInfo.filmSource}}">
 			<view class="left">片源地：</view>
@@ -57,105 +60,114 @@
 			<view class="left">编 剧：</view>
 			<view class="right">{{resData.productInfo.screenWriter}}</view>
 		</view>
-		<view class="arrow-container" catchtap="openOrClose">
-			<image  class="arrow" style="transform:{{flod.rotateZ}}" src="../../static/projectDetail/arrow.png" wx:if="{{showArrow}}" />
+		<view class="arrow-container" catchtap="fold" wx:if="{{isChange}}">
+			<image  class="arrow" style="transform:{{flod.rotateZ}}" src="../../static/projectDetail/arrow.png"  />
 		</view>
 	</view>
 
 	<view class="project">
 		<view class="title">市场情报</view>
-		<view class="market">
-			<view class="line-container">
-				<view class="line"></view>
-			</view>
-			<view class="infoo">
-				<view class="item">
-					<view class="item-up">
-						<text>{{resData.marketIntelligence.estimateBox.posNum || '-'}}</text>
-						<text>{{resData.marketIntelligence.estimateBox.unit}}</text>
+		<view>
+			<view class="market">
+				<view class="line-container">
+					<view class="line"></view>
+				</view>
+				<view class="infoo">
+					<view class="item">
+						<mp-loading wx:if="{{loading}}"></mp-loading>
+						<view class="item-up" wx:if="{{!loading}}">
+							<text>{{resData.marketIntelligence.estimateBox.posNum || '-'}}</text>
+							<text>{{resData.marketIntelligence.estimateBox.unit}}</text>
+						</view>
+						<view>预估票房</view>
 					</view>
-					<view>预估票房</view>
-				</view>
-				<view class="item">
-					<view class="item-up">
-						<text>{{resData.marketIntelligence.estimateScore || '-'}}</text>
-						<text wx:if="{{resData.marketIntelligence.estimateScore}}">分</text>
+					<view class="item">
+						<mp-loading wx:if="{{loading}}"></mp-loading>
+						<view class="item-up" wx:if="{{!loading}}">
+							<text>{{resData.marketIntelligence.estimateScore || '-'}}</text>
+							<text wx:if="{{resData.marketIntelligence.estimateScore}}">分</text>
+						</view>
+						<view>预估评分</view>
 					</view>
-					<view>预估评分</view>
-				</view>
-				<view class="item">
-					<view class="item-up">
-						<text>{{resData.marketIntelligence.cost.posNum || '-'}}</text>
-						<text>{{resData.marketIntelligence.cost.unit}}</text>
+					<view class="item">
+						<mp-loading wx:if="{{loading}}"></mp-loading>
+						<view class="item-up" wx:if="{{!loading}}">
+							<text>{{resData.marketIntelligence.cost.posNum || '-'}}</text>
+							<text>{{resData.marketIntelligence.cost.unit}}</text>
+						</view>
+						<view>制作成本</view>
 					</view>
-					<view>制作成本</view>
 				</view>
-			</view>
-			<view class="line-container">
-				<view class="line"></view>
-			</view>
-			<view class="infoo">
-				<view class="item">
-					<view class="item-up">
-						<text>{{resData.marketIntelligence.publicityCost.posNum || '-'}}</text>
-						<text>{{resData.marketIntelligence.publicityCost.unit}}</text>
+				<view class="line-container">
+					<view class="line"></view>
+				</view>
+				<view class="infoo">
+					<view class="item">
+						<mp-loading wx:if="{{loading}}"></mp-loading>
+						<view class="item-up" wx:if="{{!loading}}">
+							<text>{{resData.marketIntelligence.publicityCost.posNum || '-'}}</text>
+							<text>{{resData.marketIntelligence.publicityCost.unit}}</text>
+						</view>
+						<view>宣发费用</view>
 					</view>
-					<view>宣发费用</view>
-				</view>
-				<view class="item">
-					<view class="item-up">
-						<text>{{resData.marketIntelligence.maoyanShare || '-'}}</text>
-						<text wx:if="{{resData.marketIntelligence.maoyanShare}}">%</text>
+					<view class="item">
+						<mp-loading wx:if="{{loading}}"></mp-loading>
+						<view class="item-up" wx:if="{{!loading}}">
+							<text>{{resData.marketIntelligence.maoyanShare || '-'}}</text>
+							<text wx:if="{{resData.marketIntelligence.maoyanShare}}">%</text>
+						</view>
+						<view>猫眼份额</view>
 					</view>
-					<view>猫眼份额</view>
-				</view>
-				<view class="item">
-					<view class="item-up">
-						<text>{{resData.marketIntelligence.maoyanInvest.posNum || '-'}}</text>
-						<text>{{resData.marketIntelligence.maoyanInvest.unit}}</text>
+					<view class="item">
+						<mp-loading wx:if="{{loading}}"></mp-loading>
+						<view class="item-up" wx:if="{{!loading}}">
+							<text>{{resData.marketIntelligence.maoyanInvest.posNum || '-'}}</text>
+							<text>{{resData.marketIntelligence.maoyanInvest.unit}}</text>
+						</view>
+						<view>猫眼投资成本</view>
 					</view>
-					<view>猫眼投资成本</view>
+				</view>
+				<view class="line-container">
+					<view class="line"></view>
 				</view>
 			</view>
-			<view class="line-container">
-				<view class="line"></view>
-			</view>
-		</view>
-		<view class="details">
-			<view class="infoo">
-				<view class="left">项目状态：</view>
-				<view class="right">{{resData.marketIntelligence.projectStatus.label || '-'}}</view>
-			</view>
-			<view class="infoo">
-				<view class="left">上映时间：</view>
-				<view class="right">
-				{{resData.productInfo.releaseDesc || '-'}}
-				{{resData.productInfo.alias.length > 0 ? '('+ resData.productInfo.alias +')' : ''}}
+			<view class="details">
+				<view class="infoo">
+					<view class="left">项目状态：</view>
+					<view class="right">{{resData.marketIntelligence.projectStatus.label || '-'}}</view>
 				</view>
-			</view>
-			<view class="infoo">
-				<view class="left">主出品：</view>
-				<view class="right">{{resData.marketIntelligence.mainPublish || '-'}}</view>
-			</view>
-			<view class="infoo">
-				<view class="left">主发行：</view>
-				<view class="right">{{resData.marketIntelligence.mainIssuer || '-'}}</view>
-			</view>
-			<view class="infoo">
-			<view class="left">备  注 ：</view>
-				<view class="right">{{resData.marketIntelligence.remark || '-'}}</view>
+				<view class="infoo">
+					<view class="left">上映时间：</view>
+					<view class="right">
+					{{resData.productInfo.releaseDesc || '-'}}
+					{{resData.productInfo.alias.length > 0 ? '('+ resData.productInfo.alias +')' : ''}}
+					</view>
+				</view>
+				<view class="infoo">
+					<view class="left">主出品：</view>
+					<view class="right">{{resData.marketIntelligence.mainPublish || '-'}}</view>
+				</view>
+				<view class="infoo">
+					<view class="left">主发行：</view>
+					<view class="right">{{resData.marketIntelligence.mainIssuer || '-'}}</view>
+				</view>
+				<view class="infoo">
+				<view class="left">备  注 ：</view>
+					<view class="right">{{resData.marketIntelligence.remark || '-'}}</view>
+				</view>
 			</view>
 		</view>
 	</view>
 
-		<view class="update" wx:if="{{resData.createInfo.creator}}">
-			<view class="img-container" wx:if="{{resData.createInfo.avatar}}">
-				<image src="{{resData.createInfo.avatar}}"></image>
-			</view>
-			<view class="text-container">
-				<text>{{resData.createInfo.creator}} 更新于 {{resData.createInfo.createTime}}</text>
-			</view>
+	<view class="update" wx:if="{{resData.createInfo.creator}}">
+		<view class="img-container" wx:if="{{resData.createInfo.avatar}}">
+			<image src="{{resData.createInfo.avatar}}"></image>
 		</view>
+		<view class="text-container">
+			<text>
+			<text class="name">{{resData.createInfo.creator}}</text> 更新于 {{resData.createInfo.createTime}}</text>
+		</view>
+	</view>
 		<view style="height:80rpx"></view>
 
 	<!-- <button  type="primary" class="edit">编辑情报信息</button> -->

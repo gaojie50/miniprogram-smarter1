@@ -241,12 +241,13 @@ Page({
   },
   chartDraw(){
     const { filmDistributionList } = this.data;
+
     let key = [0];
     let value = [5];
     let redDot = [0]
-    console.log(filmDistributionList)
+ 
     filmDistributionList.map((item, index) => {
-      key.push(index + 1);
+      key.push(index);
       value.push(item.filmNum);
       if(item.company && item.company.indexOf(1) !== -1){
         redDot.push(1)

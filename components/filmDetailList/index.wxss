@@ -18,10 +18,18 @@
   font-family: PingFangSC-Medium;
   font-weight: bold;
 }
+.filmDetailList .title .close-wrap{
+  width: 88rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  position: relative;
+  right: -30rpx;
+  top: -30rpx;
+  text-align: center;
+}
 .filmDetailList .title image {
-  margin-right: 60rpx;
-  width: 32rpx;
-  height: 32rpx;
+  width: 28rpx;
+  height: 28rpx;
 }
 .filmDetailList .title .num {
   font-family: MaoYanHeiTi-H-H;
@@ -93,7 +101,7 @@
 }
 .yello text:first-child {
   font-size: 34rpx;
-  font-family: MaoYanHeiTi-H1-H1;
+  font-family: MaoYanHeiTi-H1;
 }
 .wishNum {
   width: 230rpx;

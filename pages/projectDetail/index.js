@@ -7,12 +7,13 @@ const {formatNumber,formatDirector,formatReleaseDate} = utils;
 
 Page({
   data: {
-    isFirst: true,
+    loading: true,
     isFlod: true,
-    isChange: true,
-    auto: '',
+    isChange: false,
+    count: 0,
+    calHeight: '',
     flod: {
-      height: "",
+      height: '200rpx',
       rotateZ: "rotateZ(180deg)"
     },
     resData: {}
@@ -26,48 +27,15 @@ Page({
     })
   },
 
-  openOrClose: function(){
-    if(this.data.isFirst && this.data.isChange){
-      let that = this
-      let info = null
-      wx.createSelectorQuery().selectAll('.info').boundingClientRect(function (rect) {
-        info = rect.pop()
-      }).exec();
-      wx.createSelectorQuery().select('#detail').boundingClientRect(function (rect) {
-        wx.getSystemInfo({
-          success: (result) => {
-            if(rect.bottom - 61/(750/result.windowWidth)> info.bottom) {
-              that.setData({
-                isFirst: false,
-                isChange: false
-              }, () => {
-                that.fold()
-              })
-            } else {
-              that.setData({
-                isFirst: false,
-                isChange: true
-              }, () => {
-                that.fold()
-              })
-            }
-          },
-        })
-      }).exec();
-    } else {
-      this.fold()
-    }
-  },
-
   fold: function(){
-    if(!this.data.showArrow){
+    if(!this.data.isChange){
       return 
     }
     if(this.data.isFlod){
       this.setData({
         isFlod: !this.data.isFlod,
         flod: {
-          height: this.data.isChange ? "auto" : "417rpx",
+          height:  "auto",
           rotateZ: "rotateZ(0deg)"
         }
       })
@@ -75,7 +43,7 @@ Page({
       this.setData({
         isFlod: !this.data.isFlod,
         flod: {
-          height: "417rpx",
+          height: this.data.calHeight,
           rotateZ: "rotateZ(180deg)"
         }
       })
@@ -83,6 +51,7 @@ Page({
   },
 
   fetchData(movieId, projectId) {
+    let that = this
     reqPacking({
       url: 'api/applet/management/projectDetail',
       data: {movieId: movieId, projectId: projectId},
@@ -96,7 +65,58 @@ Page({
         })
       } else {
         this.setData({
-          resData: this.formData(res.data)
+          resData: this.formData(res.data),
+          loading: false
+        }, () => {
+          console.log(this.data.count)
+          if(this.data.count > 4) {
+            wx.createSelectorQuery().selectAll('.info').boundingClientRect(function (rect) {
+              wx.getSystemInfo({
+                success: (result) => {
+                  that.setData({
+                    isChange: true,
+                    flod: {
+                      height: (rect[0].height+rect[1].height+rect[2].height+rect[3].height)*(750/result.windowWidth)+215+ 'rpx',
+                      rotateZ: "rotateZ(180deg)"
+                    },
+                    calHeight: (rect[0].height+rect[1].height+rect[2].height+rect[3].height)*(750/result.windowWidth)+215+ 'rpx'
+                    // + (61/(750/result.windowWidth))
+                    // *(750/result.windowWidth)
+                  })
+                },
+              })
+            }).exec();
+          } else if (this.data.count == 4) {
+            wx.createSelectorQuery().selectAll('.info').boundingClientRect(function (rect) {
+              wx.getSystemInfo({
+                success: (result) => {
+                  that.setData({
+                    isChange: false,
+                    flod: {
+                      height: (rect[0].height+rect[1].height+rect[2].height+rect[3].height)*(750/result.windowWidth)+176+ 'rpx'
+                    }
+                  })
+                },
+              })
+            }).exec();
+          } else {
+            wx.createSelectorQuery().selectAll('.info').boundingClientRect(function (rect) {
+              wx.getSystemInfo({
+                success: (result) => {
+                  let height = 96
+                  for(let i = 0; i < that.data.count; i++) {
+                    height = height + 20 +rect[i].height*(750/result.windowWidth)
+                  }
+                  that.setData({
+                    isChange: false,
+                    flod: {
+                      height: height + 'rpx'
+                    }
+                  })
+                },
+              })
+            }).exec();
+          }
         })
       }
     })
@@ -167,31 +187,34 @@ Page({
       let date = new Date(resData.createInfo.createTime)
       resData.createInfo.createTime = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
     }
-    if(count === 1) {
-      this.setData({
-        showArrow: false,
-        isChange: false,
-        flod: {
-          height: "200rpx"
-        }
-      })
-    } else if(count === 3) {
-      this.setData({
-        showArrow: false,
-        isChange: false,
-        flod: {
-          height: "330rpx"
-        }
-      })
-    }else {
-      this.setData({
-        showArrow: true,
-        flod: {
-          height: "417rpx",
-          rotateZ: "rotateZ(180deg)"
-        }
-      })
-    }
+    // if(count === 1) {
+    //   this.setData({
+    //     showArrow: false,
+    //     isChange: false,
+    //     flod: {
+    //       height: "200rpx"
+    //     }
+    //   })
+    // } else if(count === 3) {
+    //   this.setData({
+    //     showArrow: false,
+    //     isChange: false,
+    //     flod: {
+    //       height: "330rpx"
+    //     }
+    //   })
+    // }else {
+    //   this.setData({
+    //     showArrow: true,
+    //     flod: {
+    //       height: "417rpx",
+    //       rotateZ: "rotateZ(180deg)"
+    //     }
+    //   })
+    // }
+    this.setData({
+      count: count
+    })
     return resData
   }
 })
