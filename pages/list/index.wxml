@@ -6,7 +6,9 @@
 	<view class="header">
 		<view class="header-bar" style="height:{{titleHeight}}px;">
 			<view class="header-inner" style='line-height:{{titleHeight - barHeight}}px;padding-top:{{barHeight}}px;'>
-				<image bindtap="jumpToSearch" class="search" style="top:calc( {{( titleHeight + barHeight ) / 2}}px -  22rpx)" src="../../static/icon/search-white.png" />
+				<view class="search-wrap" style="top:calc( {{( titleHeight + barHeight ) / 2}}px -  44rpx)" bindtap="jumpToSearch">
+					<image class="search" src="../../static/icon/search-white.png" />
+				</view>
 				<text bindtap="goTop">影片市场情报</text>
 			</view>
 		</view>
@@ -24,28 +26,28 @@
 
 				<!-- 上映影片分布 -->
 				<view class="filmDistribution">
-					<view class="title">上映影片分布</view>
+					<view class="title">未来一年上映影片</view>
 					<scroll-view wx:if="{{filmDistributionList.length !== 0}}" lower-threshold="2" bindscrolltolower="filmScroll" scroll-x>
 						<view class="filmChart" style="width: 100%; ">
-							<canvas canvas-id="chart" style="width:{{filmDistributionList.length * 218 + 160}}rpx;"></canvas>
+							<canvas canvas-id="chart" style="width:{{filmDistributionList.length * 208 + 360}}rpx;"></canvas>
 						</view>
-						<view class="filmList" style="width:{{filmLoading ? filmDistributionList.length * 218 + 240 : filmDistributionList.length * 218 + 40 }}rpx;">
+						<view class="filmList" style="width:{{ filmDistributionList.length * 216 + 52 }}rpx;">
 							<view  class="filmItem" wx:for="{{filmDistributionList}}" wx:key="yearWeek">
 								<view class="schedule">{{item.filmSchedule || ''}}</view>
 								<view class="time">{{item.releaseDate}}</view>
 								<view class="filmBox" data-item="{{item}}" bindtap="tapfilmBox">
-									<view data-item="{{item}}" bindtap="tapfilmBox">
-										<text data-item="{{item}}"  bindtap="tapfilmBox">{{item.keyFilms.length}}</text>
-										<text data-item="{{item}}"  bindtap="tapfilmBox">部</text>
-										<image data-item="{{item}}" bindtap="tapfilmBox" src="../../static/film.svg" alt=""></image>
+									<view data-item="{{item}}">
+										<text data-item="{{item}}">{{item.keyFilms.length}}</text>
+										<text data-item="{{item}}">部</text>
+										<image data-item="{{item}}" src="../../static/film.svg" alt=""></image>
 									</view>
-									<view data-item="{{item}}" bindtap="tapfilmBox" wx:if="{{item.keyFilms.length >= 1}}">{{item.keyFilms[0].movieName}}</view>
-									<view data-item="{{item}}" bindtap="tapfilmBox" wx:if="{{item.keyFilms.length >= 2}}">{{item.keyFilms[1].movieName}}</view>
-									<view data-item="{{item}}" bindtap="tapfilmBox" wx:if="{{item.keyFilms.length >= 3}}">{{item.keyFilms[2].movieName}}</view>
+									<view data-item="{{item}}" wx:if="{{item.keyFilms.length >= 1}}">{{item.keyFilms[0].movieName}}</view>
+									<view data-item="{{item}}" wx:if="{{item.keyFilms.length >= 2}}">{{item.keyFilms[1].movieName}}</view>
+									<view data-item="{{item}}" wx:if="{{item.keyFilms.length >= 3}}">{{item.keyFilms[2].movieName}}</view>
 								</view>
 							</view>
 							<view wx:if="{{filmLoading}}" class="filmLoading">
-								<mp-loading show="{{true}}" type="circle"></mp-loading>
+								<mp-loading show="{{true}}" type="circle" tips=""></mp-loading>
 							</view>
 						</view>
 					</scroll-view>
@@ -58,7 +60,7 @@
 				</view>
 
 				<view id="filter" class="list" style="min-height: calc(100vh - {{titleHeight}}px)" >
-					<view class="listFilter" id="box">
+					<view class="listFilter" catchtouchmove='true'  id="box">
 						<view class="listFilter-item" style="width: 189rpx" data-num="4" bindtap="tapFilterItem">
 							<text data-num="4" class="listFilter-item-text filterActive}}" >{{dateText}}</text>
 							<image data-num="4" src="../../static/{{filterActive==4 ? 'arrow-down-active' : 'arrow-down'}}.png"></image>
@@ -107,6 +109,7 @@
 									</view>
 								</view>
 							</block>
+							<view style="height: 60rpx;  background-color: #fff;"></view>
 						</view>
 						<view class="extends " bindtap="tapExtend">
 							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
@@ -200,6 +203,7 @@
 										</view>
 									</view>
 								</block>
+								<view style="height: 60rpx;  background-color: #fff;"></view>
 							</scroll-view>
 						</view>
 					</view>

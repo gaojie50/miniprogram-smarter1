@@ -7,10 +7,12 @@
       <text class="num">{{filmDistributionItem.keyFilms.length}}</text>
       <text>部影片</text>
     </view>
-    <image  bindtap="tapClose" src="../../static/close.png" />
+    <view bindtap="tapClose" class="close-wrap">
+      <image src="../../static/close.png" />
+    </view>
   </view>
   <scroll-view class="film-list" scroll-y>
-    <view class="item" bindtap="jumpDetail" data-item="{{item}}" wx:for="{{filmDistributionItem.keyFilms}}" wx:key="maoyanId">
+    <view class="item" style="margin-bottom: {{filmDistributionItem.keyFilms.length === 1 ? '120rpx':'60rpx'}}" bindtap="jumpDetail" data-item="{{item}}" wx:for="{{filmDistributionItem.keyFilms}}" wx:key="maoyanId">
       <image src="{{item.pic}}" alt=""></image>
       <view class="main"> 
         <view class="firstLine">

@@ -2,7 +2,7 @@
 <view wx:if="{{filterShow.length!=0}}" class="{{filterShow.length!=0? 'filterPanelWrap':''}}" catchtouchmove="handleTouchMove">
 	<view class="filterPanel {{filterShow=='4' ? 'date':''}}" >
 		<!-- 时间筛选 -->
-		<view class="dateBox" wx:if="{{filterShow=='4'}}">
+		<scroll-view class="dateBox" style="max-height: calc(100vh * 0.75 - {{titleHeight}}px)" scroll-y wx:if="{{filterShow=='4'}}">
 			<block wx:for="{{dateSet}}" wx:key="value">
 				<view class="{{item.checked}} item" data-value="{{item.value}}" bindtap="dateSelectEvent">
 					<image class="pic" src="../../static/icon/checked.png" />
@@ -33,7 +33,7 @@
 					</picker-view>
 				</view>
 			</block>
-		</view>
+		</scroll-view>
 		<!-- 预估票房 -->
 		<view class="estimateBox" wx:if="{{filterShow=='1'}}">
 			<view wx:for="{{estimateBox}}" wx:key="index" data-num="{{index}}" bindtap="tapEstimateBox" class="estimateBox-item {{item.active ? 'filterPanelActive':''}}" style="margin-right: 20rpx;margin-bottom: 20rpx">{{item.value}}</view>
@@ -77,6 +77,5 @@
 			<view wx:if="{{filterShow != 4}}" bindtap="filterDefined" class="filterButton-determine">确定</view>
 			<view wx:if="{{filterShow == 4 && showDateSureBtn}}" bindtap="filterDefinedDate" class="filterButton-date-determine">确定</view>
 		</view>
-
 	</view>
 </view>

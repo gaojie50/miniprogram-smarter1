@@ -1,5 +1,7 @@
-const _ = require('./lodash.js');
+import utils from './index';
 
+const _ = require('./lodash.js');
+const {rpxTopx} = utils;
 exports.init = function (ctx, options) {
     return new LineChart(ctx, options);
 };
@@ -78,7 +80,10 @@ LineChart.prototype._drawAxis = function () {
     // let xAxisLen = width - margin - yLabelMaxWidth; x轴间距改动
     let xAxisLen = width;
     let xOffset = yLabelMaxWidth;
-    let xStep = xAxisLen / (xAxis.length - 1);
+    // let xStep = xAxisLen / (xAxis.length - 1);
+    let xStep = rpxTopx(216);
+    xStep = parseInt(xStep);
+
     // let yOffset = margin + yAxisLen;y轴改动
     let yOffset = margin + yAxisLen;
     let yStep = yAxisLen / (yMaxValue * 1.2);
@@ -137,13 +142,14 @@ LineChart.prototype._drawLine = function (line) {
     let ctx = this.ctx;
 
     let points = _.map(line.points, (item, index) => {
-        // console.log(xOffset, index, xStep)
+        // console.log( (index * xStep).toFixed(2) )
+    const xGrap = parseInt((index * xStep));
     //    return ({
     //     x: xOffset + index * xStep ,
     //     y: yOffset - item * yStep
     //     })
         return ({
-            x: xOffset + index * xStep ,
+            x: rpxTopx(134) + xGrap ,
             y: yOffset - item * yStep
             })
 });
@@ -155,15 +161,15 @@ LineChart.prototype._drawLine = function (line) {
     var linearGradient= ctx.createLinearGradient(0,190,0,0);
     linearGradient.addColorStop(0,'rgba(121,140,186,0.00)');
     // linearGradient.addColorStop(0.3,'rgba(121,140,186,0.08)');
-    linearGradient.addColorStop(1,'rgba(121,140,186,1)');
+    linearGradient.addColorStop(1,'rgba(121,140,186,0.3)');
     ctx.fillStyle = linearGradient;
-
-    ctx.moveTo(xOffset, yOffset);
+    ctx.moveTo(0, yOffset);
     _.each(points, item => {
         ctx.lineTo(item.x, item.y);
+        // console.log(item.x, item.y)
     });
     // ctx.lineTo(xOffset + xStep * (points.length - 1), yOffset);
-    ctx.lineTo(xOffset + xStep * (points.length - 1), 11111);
+    ctx.lineTo(xOffset + xStep , 11111);
     ctx.closePath();
     ctx.fill();
 
@@ -178,6 +184,7 @@ LineChart.prototype._drawLine = function (line) {
     // ctx.stroke();
 
     // 空心点
+
     _.each(points, item => {
         ctx.beginPath();
         ctx.arc(item.x, item.y, 4, 0, 4 * Math.PI);
