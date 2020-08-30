@@ -1,3 +1,4 @@
+
 .costomListItem {
   position: fixed;
   bottom: 0;
@@ -13,9 +14,13 @@
   z-index: 99;
 }
 .costomListItem .listTitle .closeImg {
+  position: absolute;
+  right: 5rpx;
+  top: 5rpx;
   display: inline-block;
-  width: 45rpx;
-  height: 45rpx;
+  width: 88rpx;
+  height: 88rpx;
+  line-height: 88rpx;
   text-align: center;
   margin-left: 331rpx;
 }
