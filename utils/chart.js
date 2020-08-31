@@ -83,7 +83,6 @@ LineChart.prototype._drawAxis = function () {
     // let xStep = xAxisLen / (xAxis.length - 1);
     let xStep = rpxTopx(216);
     xStep = parseInt(xStep);
-
     // let yOffset = margin + yAxisLen;y轴改动
     let yOffset = margin + yAxisLen;
     let yStep = yAxisLen / (yMaxValue * 1.2);
