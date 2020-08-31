@@ -28,14 +28,13 @@
 				<view class="filmDistribution">
 					<view class="title">
 						<text>未来一年上映影片</text>
-						<image bindtap="tapRedPrompt" class="redText" src="../../static/list/redText.svg" alt=""></image>
-						<view wx:if="{{redTextShow}}" class="redPrompt">曲线上红色标记表示当周有猫眼参与影片</view>
+						<image bindtap="tapRedPrompt" class="redText" src="../../static/list/redText.png" alt=""></image>
+						<cover-image wx:if="{{redTextShow}}" src="../../static/list/bubble.png" class="redPrompt"></cover-image> 
 					</view>
 				
 					<scroll-view wx:if="{{filmDistributionList.length !== 0}}" lower-threshold="2" bindscrolltolower="filmScroll" scroll-x>
 						<view class="filmChart" style="width: 100%; ">
 							<canvas canvas-id="chart"  style="width:{{filmDistributionList.length * 218 + 20}}rpx;"></canvas>
-							<!-- <image  src="{{canvasImg}}" style="width: 260px; height: 180px;border: 1px solid red;margin-left:100rpx;"></image> -->
 						</view>
 						<view class="filmList" style="width:{{ filmDistributionList.length * 216 + 52 }}rpx;">
 							<view  class="filmItem" style="width:{{filmItemWidth}}px;margin-right:{{filmItemMarginRight}}px" wx:for="{{filmDistributionList}}" wx:key="yearWeek">

@@ -457,7 +457,7 @@ Page({
           if(newDataList.length === 0){
             if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[2].active){
               list.map(item => {
-                if(item.estimateBox/100 >= 100000000) {
+                if(item.estimateBox >= 100000000) {
                   newDataList.push(item)
                 }
               })

@@ -13,7 +13,6 @@
 .filmDetailList .title {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 40rpx;
   font-size: 32rpx;
   font-family: PingFangSC-Medium;
   font-weight: bold;
@@ -38,7 +37,7 @@
   margin-right: 10rpx;
 }
 .filmDetailList .film-list {
-  max-height: calc(100vh *0.8 - 70rpx);
+  max-height: calc(100vh *0.8 - 550rpx);
 }
 .filmDetailList .film-list .item{
   display: flex;
