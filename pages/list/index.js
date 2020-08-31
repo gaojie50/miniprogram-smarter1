@@ -25,6 +25,8 @@ function rContScrollEvt({detail}){
 
 Page({
   data: {
+    filmItemWidth:rpxTopx(208),
+    filmItemMarginRight:rpxTopx(8),
     initLoading:true,
     loading:true,
     topFilmLoading: true,

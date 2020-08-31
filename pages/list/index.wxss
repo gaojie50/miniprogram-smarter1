@@ -487,8 +487,8 @@ page {
   height: 308rpx;
 }
 .filmList .filmItem {
-  margin-right: 8rpx;
-  width: 208rpx;
+  /* margin-right: 8rpx;
+  width: 208rpx; */
   height: 308rpx;
 }
 .filmList .filmItem:first-child {
@@ -505,7 +505,7 @@ page {
   border-radius: 10rpx 10rpx 0 0;
 }
 .filmList .filmItem .filmBox {
-  width: 208rpx;
+  width: 100%;
   height: 220rpx;
   padding: 20rpx 16rpx;
   box-sizing: border-box;
