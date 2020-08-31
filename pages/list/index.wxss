@@ -470,7 +470,7 @@ page {
   position: absolute;
   height: 380rpx;
   top: 0;
-  left: -153rpx;
+  left: 0;
 }
 .filmList {
   position: absolute;

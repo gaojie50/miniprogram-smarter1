@@ -242,8 +242,8 @@ Page({
   chartDraw(){
     const { filmDistributionList } = this.data;
 
-    let key = [0];
-    let value = [5];
+    let key = [];
+    let value = [];
     let redDot = [0]
  
     filmDistributionList.map((item, index) => {
