@@ -16,12 +16,14 @@ function LineChart(ctx, options) {
         xUnit: '',
         yUnit: '',
         xAxis: [],
+        key:[],
         lines: [],
         margin: 20,
         fontSize: 12,
     }, options, {
         xAxisOffset: (options.margin || 20) + (options.fontSize || 12) * 2.5
     });
+
 
     this._attrs = {};
 
@@ -142,13 +144,13 @@ LineChart.prototype._drawLine = function (line) {
     let ctx = this.ctx;
 
     let points = _.map(line.points, (item, index) => {
-        // console.log( (index * xStep).toFixed(2) )
     const xGrap = parseInt((index * xStep));
     //    return ({
     //     x: xOffset + index * xStep ,
     //     y: yOffset - item * yStep
     //     })
         return ({
+            redDot: line.redDot[index],
             x: rpxTopx(134) + xGrap ,
             y: yOffset - item * yStep
             })
@@ -186,10 +188,16 @@ LineChart.prototype._drawLine = function (line) {
     // 空心点
 
     _.each(points, item => {
+        // console.log(item)
         ctx.beginPath();
         ctx.arc(item.x, item.y, 4, 0, 4 * Math.PI);
         ctx.closePath();
-        ctx.fillStyle = '#798CBA';
+        if(item.redDot === 1){
+            ctx.fillStyle = '#ff0000';
+        }else {
+            ctx.fillStyle = '#798CBA';
+        }
+       
         ctx.lineWidth = 2;
         ctx.strokeStyle='#ffffff';
         ctx.fill();

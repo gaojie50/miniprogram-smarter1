@@ -26,7 +26,12 @@
 
 				<!-- 上映影片分布 -->
 				<view class="filmDistribution">
-					<view class="title">未来一年上映影片</view>
+					<view class="title">
+						<text>未来一年上映影片</text>
+						<image bindtap="tapRedPrompt" class="redText" src="../../static/list/redText.svg" alt=""></image>
+						<view wx:if="{{redTextShow}}" class="redPrompt">曲线上红色标记表示当周有猫眼参与影片</view>
+					</view>
+				
 					<scroll-view wx:if="{{filmDistributionList.length !== 0}}" lower-threshold="2" bindscrolltolower="filmScroll" scroll-x>
 						<view class="filmChart" style="width: 100%; ">
 							<canvas canvas-id="chart" style="width:{{filmDistributionList.length * 208 + 360}}rpx;"></canvas>
@@ -35,12 +40,13 @@
 							<view  class="filmItem" wx:for="{{filmDistributionList}}" wx:key="yearWeek">
 								<view class="schedule">{{item.filmSchedule || ''}}</view>
 								<view class="time">{{item.releaseDate}}</view>
-								<view class="filmBox" data-item="{{item}}" bindtap="tapfilmBox">
+								<view class="{{item.filmNum == 0 ? 'no-filmBox':'filmBox' }}" data-item="{{item}}" bindtap="tapfilmBox">
 									<view data-item="{{item}}">
 										<text data-item="{{item}}">{{item.keyFilms.length}}</text>
 										<text data-item="{{item}}">部</text>
-										<image data-item="{{item}}" src="../../static/film.svg" alt=""></image>
+										<image wx:if="{{item.filmNum !== 0}}" data-item="{{item}}" src="../../static/film.png" alt=""></image>
 									</view>
+									<view data-item="{{item}}" wx:if="{{item.keyFilms.length === 0}}">-</view>
 									<view data-item="{{item}}" wx:if="{{item.keyFilms.length >= 1}}">{{item.keyFilms[0].movieName}}</view>
 									<view data-item="{{item}}" wx:if="{{item.keyFilms.length >= 2}}">{{item.keyFilms[1].movieName}}</view>
 									<view data-item="{{item}}" wx:if="{{item.keyFilms.length >= 3}}">{{item.keyFilms[2].movieName}}</view>
@@ -58,6 +64,8 @@
 						暂无数据
 					</view>
 				</view>
+				<view wx:if="{{redTextShow}}" bindtap="redTextClose" class="redMessageClose"></view>
+				
 
 				<view id="filter" class="list" style="min-height: calc(100vh - {{titleHeight}}px)" >
 					<view class="listFilter" catchtouchmove='true'  id="box">
@@ -80,11 +88,14 @@
 						</view>
 						<backdrop catchtouchmove='true'  wx:if="{{backdropShow === 'filter'}}" bind:myevent="ongetBackDrop" class="backdrop" backdropShow="{{backdropShow}}"></backdrop>
 						<filterPanel titleHeight="{{titleHeight}}" class="filterPanel" bind:myevent="ongetFilterShow" filterShow="{{filterActive}}"></filterPanel>
+						<view wx:if="{{!loading}}" class="extends" bindtap="tapExtend">
+							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
+						</view>
 					</view>
 		
 					<scroll-view class="derictFilter" scroll-x>
-						<view class="listDerict" style="width: {{latestSchedule.name ? '842rpx' : '100%'}}">
-							<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}" style="margin-left: 30rpx">猫眼参与</view>
+						<view class="listDerict">
+							<view data-num="1" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive1? 'derictFilterActive':''}}">猫眼参与</view>
 							<view data-num="2" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive2? 'derictFilterActive':''}}">阿里参与</view>
 							<view wx:if="{{latestSchedule.name}}" data-num="3" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive3? 'derictFilterActive':''}}">{{latestSchedule.name}}</view>
 							<view data-num="4" bindtap="tapDerictFilter" class="listDerict-item {{derictFilterActive4? 'derictFilterActive':''}}">票房1亿以上</view>
@@ -109,11 +120,9 @@
 									</view>
 								</view>
 							</block>
-							<view style="height: 60rpx;  background-color: #fff;"></view>
+		
 						</view>
-						<view class="extends " bindtap="tapExtend">
-							<image src="../../static/defined.png" style="width: 20rpx; height: 20rpx; margin-left: 72rpx;" alt="" />
-						</view>
+						
 						<view class="table-right">
 							<view class="listTr tableRightTitleFixed">
 								<view  class="listTr" style="left:-{{rightContScrollLeft}}px;position:relative;">
@@ -203,9 +212,9 @@
 										</view>
 									</view>
 								</block>
-								<view style="height: 60rpx;  background-color: #fff;"></view>
 							</scroll-view>
 						</view>
+						<view class="noMore">没有更多了</view>
 					</view>
 				
 					<view wx:if="{{!loading && list.length == 0}}" class="no-data">
