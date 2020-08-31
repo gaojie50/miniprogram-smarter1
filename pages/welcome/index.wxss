@@ -22,7 +22,10 @@ page image {
 
 .show {
   width: 600rpx;
-  margin-top: 60rpx;
+  margin: 60rpx auto 0;
+  background-size:100% !important;
+  background-repeat: no-repeat !important;
+  border-radius: 20rpx;
 }
 
 view.welcome button.login-btn {

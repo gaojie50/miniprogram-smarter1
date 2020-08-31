@@ -45,14 +45,16 @@ page {
 
 .project-detail .header text.sign {
   vertical-align: middle;
-  font-weight: 400;
-  font-size: 22rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid #FFFFFF;
+  border-radius:4rpx;
+  font-size:22rpx;
+  font-weight:400;
   color: #FFFFFF;
   line-height: 24rpx;
   padding: 6rpx 10rpx;
-  border: 1rpx solid #FFFFFF;
-  border-radius: 4rpx;
-  display: inline-block;
   margin-left: 10rpx;
 }
 
