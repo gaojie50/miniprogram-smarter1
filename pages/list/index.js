@@ -457,6 +457,7 @@ Page({
           if(newDataList.length === 0){
             if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[2].active){
               list.map(item => {
+                console.log(item.estimateBox)
                 if(item.estimateBox >= 100000000) {
                   newDataList.push(item)
                 }
@@ -465,7 +466,7 @@ Page({
           } else {
             const arr2 = [];
             newDataList.map(item => {
-              if(item.estimateBox/100 >= 100000000) {
+              if(item.estimateBox >= 100000000) {
                 arr2.push(item)
               }
             })
