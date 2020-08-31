@@ -7,6 +7,7 @@ exports.init = function (ctx, options) {
 };
 
 function LineChart(ctx, options) {
+
     this.ctx = wx.createCanvasContext(ctx);
     this.tipsCtx = options.tipsCtx ? wx.createCanvasContext(options.tipsCtx) : null;
 
@@ -165,10 +166,13 @@ LineChart.prototype._drawLine = function (line) {
     linearGradient.addColorStop(1,'rgba(121,140,186,0.3)');
     ctx.fillStyle = linearGradient;
     ctx.moveTo(0, yOffset);
-    _.each(points, item => {
+    _.each(points, (item, index)=> {
         ctx.lineTo(item.x, item.y);
-        // console.log(item.x, item.y)
+        if(index === (points.length - 1)){
+            ctx.lineTo(item.x + 208, yOffset);
+        }
     });
+   
     // ctx.lineTo(xOffset + xStep * (points.length - 1), yOffset);
     ctx.lineTo(xOffset + xStep , 11111);
     ctx.closePath();
@@ -212,4 +216,5 @@ LineChart.prototype._draw = function () {
     this._timer = setTimeout(() => {
         this.ctx.draw();
     });
+
 };

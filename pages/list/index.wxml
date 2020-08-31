@@ -34,7 +34,8 @@
 				
 					<scroll-view wx:if="{{filmDistributionList.length !== 0}}" lower-threshold="2" bindscrolltolower="filmScroll" scroll-x>
 						<view class="filmChart" style="width: 100%; ">
-							<canvas canvas-id="chart" style="width:{{filmDistributionList.length * 208 + 360}}rpx;"></canvas>
+							<canvas canvas-id="chart"  style="width:{{filmDistributionList.length * 218 + 20}}rpx;"></canvas>
+							<!-- <image  src="{{canvasImg}}" style="width: 260px; height: 180px;border: 1px solid red;margin-left:100rpx;"></image> -->
 						</view>
 						<view class="filmList" style="width:{{ filmDistributionList.length * 216 + 52 }}rpx;">
 							<view  class="filmItem" wx:for="{{filmDistributionList}}" wx:key="yearWeek">
@@ -214,7 +215,7 @@
 								</block>
 							</scroll-view>
 						</view>
-						<view class="noMore">没有更多了</view>
+						<view wx:if="{{list.length !== 0}}" class="noMore">没有更多了</view>
 					</view>
 				
 					<view wx:if="{{!loading && list.length == 0}}" class="no-data">
