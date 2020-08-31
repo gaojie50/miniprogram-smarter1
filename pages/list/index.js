@@ -101,7 +101,8 @@ Page({
       limit: 1000,
       total: 0
     },
-    toView: ''
+    toView: '',
+    redTextShow: false
   },
  
   onLoad: function ({
@@ -200,6 +201,9 @@ Page({
           }
           if(item.keyFilms && item.keyFilms.length > 0){
             item.keyFilms.map(item2 => {
+              if (item2.maoyanSign && item2.maoyanSign.length > 0) {
+                item2.maoyanSignLabel = getMaoyanSignLabel(item2.maoyanSign);
+              }
               if(item2.director && item2.director.length > 0){
                 item2.director = formatDirector(item2.director);
               }
@@ -210,10 +214,10 @@ Page({
                 item2.maoyanId = 0;
               }
               if(item2.estimateBox){
-                item2.estimateBox = formatNumber(item2.estimateBox).text;
+                item2.estimateBox = formatNumber(item2.estimateBox);
               }
               item2.pic = item2.pic ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`: `../../static/icon/default-pic.svg`;
-              item2.wishNum = formatNumber(item2.wishNum).text;
+              item2.wishNum = formatNumber(item2.wishNum);
             })
           }
           item.releaseDate = formatWeekDate(item.releaseDate);
@@ -237,11 +241,19 @@ Page({
   },
   chartDraw(){
     const { filmDistributionList } = this.data;
-    let key = [];
-    let value = [];
+
+    let key = [0];
+    let value = [5];
+    let redDot = [0]
+ 
     filmDistributionList.map((item, index) => {
       key.push(index);
       value.push(item.filmNum);
+      if(item.company && item.company.indexOf(1) !== -1){
+        redDot.push(1)
+      } else {
+        redDot.push(0)
+      }
     })
     // key.push(filmDistributionList.length + 1);
     // value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
@@ -260,11 +272,12 @@ Page({
       tipsCtx: 'chart-tips',
       width: handleWidth(),
       // width: (key.length - 1) * (windowWidth * 2.9 /10),
-      height: 200,
-      margin: 30,
+      height: 120,
+      margin: 20,
       xAxis: key,
       lines: [{
-          points: value
+          points: value,
+          redDot,
       }]
     });
     chart.draw();
@@ -705,5 +718,14 @@ filmScroll(){
     })
   } 
 },
-
+tapRedPrompt(){
+  this.setData({
+    redTextShow: true
+  })
+},
+redTextClose(){
+  this.setData({
+    redTextShow: false
+  })
+}
 })
