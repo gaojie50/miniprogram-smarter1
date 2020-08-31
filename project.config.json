@@ -33,7 +33,7 @@
 		"packNpmRelationList": []
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.12.0",
+	"libVersion": "2.12.2",
 	"appid": "wx2e4c3da0429e46ce",
 	"projectname": "miniprogram-smarter",
 	"debugOptions": {

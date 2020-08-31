@@ -112,8 +112,8 @@
   white-space: nowrap;
 }
 .noMore {
-  height: 120rpx;
-  line-height: 120rpx;
+  height: 150rpx;
+  line-height: 150rpx;
   text-align: center;
   font-size: 24rpx;
   color: #999999;

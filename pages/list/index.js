@@ -1,6 +1,7 @@
 import utils from './../../utils/index';
 import projectConfig from '../../constant/project-config';
 import lineChart from './../../utils/chart';
+
 let chart = null;
 const {
   getMaoyanSignLabel
@@ -102,7 +103,8 @@ Page({
       total: 0
     },
     toView: '',
-    redTextShow: false
+    redTextShow: false,
+    canvasImg: ''
   },
  
   onLoad: function ({
@@ -229,7 +231,7 @@ Page({
           filmLoading: false,
           topFilmLoading: false,
         }, () => {
-         this.chartDraw()
+         this.chartDraw();
         })
       }else {
         this.setData({
@@ -239,12 +241,31 @@ Page({
       }
     })
   },
+  handleCanvarToImg(){
+    const { filmDistributionList } = this.data;
+    const windowWidth = wx.getSystemInfoSync().windowWidth;
+  
+    wx.canvasGetImageData({
+      x: 0,
+      y: 0,
+      width: (filmDistributionList.length - 1) * (windowWidth * 5 /10) + 33,
+      height: 120,
+      canvasId: 'chart',
+      fileType: 'png',
+      success: res => {
+        this.setData({
+          canvasImg: res.tempFilePath
+        })
+        // this.setData({ canvasImg: res.tempFilePth});
+      }
+    });  
+  },
   chartDraw(){
     const { filmDistributionList } = this.data;
 
-    let key = [0];
-    let value = [5];
-    let redDot = [0]
+    let key = [];
+    let value = [];
+    let redDot = []
  
     filmDistributionList.map((item, index) => {
       key.push(index);
@@ -255,23 +276,11 @@ Page({
         redDot.push(0)
       }
     })
-    // key.push(filmDistributionList.length + 1);
-    // value.push(filmDistributionList[filmDistributionList.length-1].filmNum);
-    const handleWidth = function (){
-
-      if(filmDistributionList.length <= 10){
-        return (key.length - 1) * (windowWidth * 2.8648 /10) + 13;
-      }
-      if(filmDistributionList.length > 10){
-        return (key.length - 1) * (windowWidth * 2.8648 /10) ;
-      }
-    }
     
     const windowWidth = wx.getSystemInfoSync().windowWidth;
     chart = lineChart.init('chart', {
       tipsCtx: 'chart-tips',
-      width: handleWidth(),
-      // width: (key.length - 1) * (windowWidth * 2.9 /10),
+      width: (key.length - 1) * (windowWidth * 5 /10) + 33,
       height: 120,
       margin: 20,
       xAxis: key,
@@ -694,6 +703,7 @@ Page({
     this.setData({toView:'scroll-cont'});
   },
   tapfilmBox(e){
+    console.log(111)
     const filmDistributionItem = e.target.dataset.item;
 
     if(filmDistributionItem.filmNum == 0) return ;

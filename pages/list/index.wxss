@@ -266,7 +266,7 @@ page {
 
 .tableLeftTitleFixed {
   position: sticky;
-  top: 178rpx;
+  top: 174rpx;
   box-shadow: 14rpx 0 12rpx -6rpx rgba(153, 153, 153, 0.1);
   z-index: 16;
 }
@@ -282,11 +282,13 @@ page {
   box-sizing: border-box;
 }
 .list .listTable .table-left .listTr .listTd  .movieName {
+  width: 180rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  word-wrap: break-word;
 }
 .list .listTable .table-left .listTr:nth-child(odd) .listTd{
   background:rgba(247,247,247,1);
@@ -351,7 +353,7 @@ page {
 
 .tableRightTitleFixed {
   position: sticky;
-  top: 178rpx;
+  top: 174rpx;
   z-index: 15;
 }
 
@@ -445,6 +447,7 @@ page {
   color: #bbb;
 }
 .filmDistribution .title {
+  position: relative;
   margin-left: 30rpx;
   margin-top: 40rpx;
   font-weight: bold;
@@ -452,12 +455,14 @@ page {
   font-size: 28rpx;
   color: #FFFFFF;
 }
-.filmDistribution .title {
+.filmDistribution .title:after {
   content: '';
+  display: block;
   overflow: hidden;
   clear: both;
 }
 .filmDistribution .title text {
+  width: 228rpx;
   float: left;
 }
 
@@ -470,7 +475,8 @@ page {
   position: absolute;
   height: 380rpx;
   top: 0;
-  left: -153rpx;
+  /* left: -153rpx; */
+  z-index: 1;
 }
 .filmList {
   position: absolute;
@@ -562,13 +568,12 @@ page {
   display: block;
   width: 26rpx;
   height: 26rpx;
-  margin-left: 8rpx;
-  margin-top: 9rpx;
+  margin-top: 10rpx;
 }
 .redPrompt {
   position: absolute;
-  top: 63rpx;
-  left: 96rpx;
+  top: 66rpx;
+  left: 66rpx;
   width: 346rpx;
   height: 135rpx;
   border-radius: 4px;
@@ -579,7 +584,7 @@ page {
   text-align: center;
   padding: 30rpx;
   box-sizing: border-box;
-  z-index: 90;
+  z-index: 100;
 }
 .redPrompt:after {
   content: '';
@@ -595,5 +600,6 @@ page {
   top: 0;
   width: 100%;
   height: 100vh;
+  background: red;
   z-index: 89;
 }
