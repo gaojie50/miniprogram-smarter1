@@ -243,31 +243,12 @@ Page({
       }
     })
   },
-  handleCanvarToImg(){
-    const { filmDistributionList } = this.data;
-    const windowWidth = wx.getSystemInfoSync().windowWidth;
-  
-    wx.canvasGetImageData({
-      x: 0,
-      y: 0,
-      width: (filmDistributionList.length - 1) * (windowWidth * 5 /10) + 33,
-      height: 120,
-      canvasId: 'chart',
-      fileType: 'png',
-      success: res => {
-        this.setData({
-          canvasImg: res.tempFilePath
-        })
-        // this.setData({ canvasImg: res.tempFilePth});
-      }
-    });  
-  },
   chartDraw(){
     const { filmDistributionList } = this.data;
 
     let key = [];
     let value = [];
-    let redDot = []
+    let redDot = [];
  
     filmDistributionList.map((item, index) => {
       key.push(index);
@@ -457,7 +438,6 @@ Page({
           if(newDataList.length === 0){
             if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[2].active){
               list.map(item => {
-                console.log(item.estimateBox)
                 if(item.estimateBox >= 100000000) {
                   newDataList.push(item)
                 }
@@ -706,7 +686,6 @@ Page({
     this.setData({toView:'scroll-cont'});
   },
   tapfilmBox(e){
-    console.log(111)
     const filmDistributionItem = e.target.dataset.item;
 
     if(filmDistributionItem.filmNum == 0) return ;

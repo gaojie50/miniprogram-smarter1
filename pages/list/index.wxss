@@ -233,7 +233,7 @@ page {
   height: 60rpx;
   white-space: nowrap;
   background: rgba(242, 243, 248, 1);
-  border: 1rpx solid transparent;
+  border: 2rpx solid transparent;
   border-radius: 10rpx;
   line-height: 60rpx;
   box-sizing: border-box;
@@ -244,10 +244,9 @@ page {
 }
 
 .derictFilterActive {
-  background: rgba(189, 208, 226, 0.1) !important;
-  border: 1rpx solid rgba(24, 144, 255, 1) !important;
+  background: rgba(24, 144, 255, 0.1) !important;
+  border: 2rpx solid rgba(24, 144, 255, 1) !important;
   color: rgba(24, 144, 255, 1);
-  box-sizing: border-box;
 }
 
 .list .listTable {
@@ -560,16 +559,18 @@ page {
   border-top:1rpx solid rgba(238,238,238,1);
 }
 .redText {
+  position: relative;
+  padding: 20rpx 20rpx 20rpx 10rpx;
   float: left;
   display: block;
+  top: -10rpx;
   width: 26rpx;
   height: 26rpx;
-  margin-top: 10rpx;
 }
 .redPrompt {
   position: absolute;
   top: 45rpx;
-  left: 82rpx;
+  left: 92rpx;
   width: 316rpx;
   height: 145rpx;
 }
