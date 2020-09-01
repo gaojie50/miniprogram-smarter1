@@ -208,7 +208,6 @@ page {
   height: 9.5rpx;
 }
 .list .derictFilter {
-
   width: 100%;
   text-align: center;
   background-color: #fff;
@@ -225,7 +224,8 @@ page {
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: space-around;
+  padding: 0 30rpx;
+  /* justify-content: space-around; */
 }
 
 .list .listDerict .listDerict-item {
@@ -236,6 +236,7 @@ page {
   border: 2rpx solid transparent;
   border-radius: 10rpx;
   line-height: 60rpx;
+  margin-right: 10rpx;
   box-sizing: border-box;
 }
 
@@ -316,7 +317,6 @@ page {
 }
 .list .listTable .table-right .listTr:not(:first-child) .listTd{
   min-width: 195rpx;
-  /* height: 160rpx; */
   display: inline-flex; 
   flex-direction: row;
   align-items: center; 
@@ -359,11 +359,11 @@ page {
   position: absolute;
   display: flex;
   right: 0;
-  top: 180rpx;
+  top: 178rpx;
   align-items: center;
   z-index: 16;
   width: 118rpx;
-  height: 70rpx;
+  height: 68rpx;
   background: linear-gradient(90deg, rgba(247, 247, 247, 0) 0%, rgba(247, 247, 247, 1) 55%);
 }
 

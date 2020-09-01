@@ -415,9 +415,9 @@ Page({
       //最新档期筛选
       if(directFilterList[2].active){
         if(newDataList.length === 0){
-          if(!directFilterList[0].active && !directFilterList[1].active && !directFilterList[3].active){
+          if(!directFilterList[0].active && !directFilterList[1].active){
             list.map(item => {
-              if((item.alias.indexOf(latestSchedule.name) !== -1) && (item.alias[0] === latestSchedule.name)){
+              if(item.alias[0] === latestSchedule.name){
                 newDataList.push(item)
               }
             })

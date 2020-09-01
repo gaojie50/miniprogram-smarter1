@@ -240,6 +240,7 @@
   margin-right: 60rpx;
   border-top: 1rpx solid #E5E5E5;
   position: relative;
+  font-family: MaoYanHeiTi-H-H;
   text-align: center;
   padding-top: 46rpx;
   color: #333;
