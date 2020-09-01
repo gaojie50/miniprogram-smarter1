@@ -1,5 +1,5 @@
 page {
-  background-color: #F7F7F7;
+  background-color: #798CBA;
 }
 
 .project-detail {
@@ -56,6 +56,11 @@ page {
   line-height: 24rpx;
   padding: 6rpx 10rpx;
   margin-left: 10rpx;
+}
+
+.main-container{
+  height: 100%;
+  background-color: #F7F7F7;
 }
 
 .main{
