@@ -245,7 +245,7 @@
   color: #333;
 }
 .date-show .left, .right {
-  font-family: MaoYanHeiTi-H-H;
+  font-family: MaoYanHeiTi-H1;
 }
 
 .date-show .detail {

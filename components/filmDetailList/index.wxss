@@ -31,7 +31,7 @@
   height: 28rpx;
 }
 .filmDetailList .title .num {
-  font-family: MaoYanHeiTi-H-H;
+  font-family: MaoYanHeiTi-H1;
 }
 .filmDetailList .title text:first-child{
   margin-right: 10rpx;
