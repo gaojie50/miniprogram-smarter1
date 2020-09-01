@@ -2,8 +2,7 @@
 	<view style="margin-top:{{titleHeight}}px">
 		<image class="logo" src="../../static/welcome/logo.png" />
 		<image class="slogan" src="../../static/welcome/slogan.png" />
-		<view  class="show" 
-		style="height: calc(100vh - 742rpx - {{titleHeight}}px);background:url(https://s3plus.sankuai.com/v1/mss_9eaf0fc6924b4158a44b25c3a45543f4/sc-cdn/applet-open-screen.png)"></view>
+		<view  class="show" style="height: calc(100vh - 742rpx - {{titleHeight}}px);"></view>
 	</view>
 
 	<button class="login-btn" hover-class="login-btn-hover" wx:if="{{!isLogin}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">立即登录</button>

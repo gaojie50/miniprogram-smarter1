@@ -25,6 +25,7 @@ page image {
   margin: 60rpx auto 0;
   background-size:100% !important;
   background-repeat: no-repeat !important;
+  background:url(https://s3plus.sankuai.com/v1/mss_9eaf0fc6924b4158a44b25c3a45543f4/sc-cdn/applet-open-screen.png);
   border-radius: 20rpx;
 }
 

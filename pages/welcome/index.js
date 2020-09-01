@@ -24,16 +24,21 @@ Page({
   },
 
   getUserInfo: function (e) {
-    if (e.detail) {
-      const {iv,encryptedData} = e.detail;
-      if(this.data.isLogin) return wx.redirectTo({url: `/pages/list/index`});
-   
-      return keepLogin({ iv,encryptedData});
-    }
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo'] && e.detail) {
+          const {iv,encryptedData} = e.detail;
+          
+          if(this.data.isLogin) return wx.redirectTo({url: `/pages/list/index`});
+       
+          return keepLogin({ iv,encryptedData});
+        };
 
-    wx.showModal({
-      title: '提示',
-      content: '您点击了拒绝授权，将无法正常使用智多星。请重新授权，或者删除小程序重新进入。',
+        wx.showModal({
+          title: '提示',
+          content: '您点击了拒绝授权，将无法正常使用智多星。请重新授权，或者删除小程序重新进入。',
+        })
+      }
     })
   },
 })
