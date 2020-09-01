@@ -19,7 +19,7 @@ Page({
     resData: {}
   },
 
-  onLoad: function (options) {
+  onLoad: function (options) { 
     const eventChannel = this.getOpenerEventChannel();
 
     eventChannel.on && eventChannel.on('acceptDataFromListPage', ({item={}}) => {

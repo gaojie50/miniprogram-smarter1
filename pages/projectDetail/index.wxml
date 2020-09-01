@@ -6,6 +6,7 @@
 </view>
 
 
+<view class="main-container">
 <view class="main">
 	<view class="detail" id="detail" style="height:{{flod.height}};" bindtap="fold">
 		<view class="title">基础信息</view>
@@ -172,4 +173,5 @@
 
 	<!-- <button  type="primary" class="edit">编辑情报信息</button> -->
 
+</view>
 </view>
