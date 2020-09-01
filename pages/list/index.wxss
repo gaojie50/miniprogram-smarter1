@@ -542,9 +542,10 @@ page {
   text-overflow: ellipsis;
 }
 .filmList .filmItem .filmBox view image {
+  float: right;
   width: 11rpx;
   height: 17rpx;
-  margin-left: 118rpx;
+  margin-top: 25rpx;
 }
 .filmLoading {
   width: 200rpx;
