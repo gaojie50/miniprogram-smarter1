@@ -1,0 +1,60 @@
+.scheduleType {
+  border-radius: 4px;
+  height: 36px;
+  margin-top: 4px;
+  font-size: 22px;
+}
+.scheduleDone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 86px;
+  border-radius: 4px;
+  color: #2FC25B;
+  background: rgba(47,194,91,0.10);
+}
+.scheduleDetermine {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 108px;
+  border-radius: 4px;
+  color: #F1303D;
+  background: rgba(241,48,61,0.1);
+}
+.scheduleMay {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  border-radius: 4px;
+  color: #FF9034;
+  background: rgba(255,144,52,0.1);
+}
+.scheduleInner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 108px;
+  border-radius: 4px;
+  color: #8543E0;
+  background: rgba(133,67,224,0.1);
+}
+.scheduleNext {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  border-radius: 4px;
+  color: #4C576E;
+  background: rgba(76,87,110,0.1);
+}
+.scheduleRemake {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  border-radius: 4px;
+  color: #13C2C2;
+  background: rgba(19,194,194,0.1);
+}
