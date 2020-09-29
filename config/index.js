@@ -1,3 +1,5 @@
+const path = require('path');
+
 const config = {
   projectName: 'taroConvert',
   date: '2020-9-27',
@@ -14,12 +16,25 @@ const config = {
   },
   copy: {
     patterns: [
+      { from: 'src/static/', to: 'dist/static/' },
     ],
     options: {
     }
   },
   framework: 'react',
+  // alias: {
+  //   '@/components': path.resolve(__dirname, '..', 'src/components'),
+  //   '@/utils': path.resolve(__dirname, '..', 'src/utils'),
+  //   '@/package': path.resolve(__dirname, '..', 'package.json'),
+  //   '@/project': path.resolve(__dirname, '..', 'project.config.json'),
+  // },
   mini: {
+    imageUrlLoaderOption: {
+      limit: 1024,
+      mimetype: 'image/png',
+      encoding: 'base64',
+      // esModule: false,   // 默认true，限制条件1024下转为base64, false代表均转为base64
+    },
     postcss: {
       pxtransform: {
         enable: true,

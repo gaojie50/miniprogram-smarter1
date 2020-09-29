@@ -60,11 +60,11 @@ class _C extends React.Component {
         <View style={'margin-top:' + titleHeight + 'px'}>
           <Image
             className="logo"
-            src={require('../../static/welcome/logo.png')}
+            src='../../static/welcome/logo.png'
           ></Image>
           <Image
             className="slogan"
-            src={require('../../static/welcome/slogan.png')}
+            src='../../static/welcome/slogan.png'
           ></Image>
           <View
             className="show"

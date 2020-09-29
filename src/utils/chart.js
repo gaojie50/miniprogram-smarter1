@@ -3,7 +3,7 @@ import utils from './index.js'
 
 const _ = require('./lodash.js')
 const { rpxTopx } = utils
-exports.init = function(ctx, options) {
+export default function (ctx, options) {
   return new LineChart(ctx, options)
 }
 

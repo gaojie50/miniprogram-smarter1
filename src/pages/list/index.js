@@ -14,13 +14,6 @@ import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
 import lineChart from '../../utils/chart.js'
 
-import FilmDetailList from '../../components/filmDetailList/index'
-// import MpLoading from "weui-miniprogram/loading/loading"  TODO
-import CostumListItem from '../../components/costomListItem/index'
-import ScheduleType from '../../components/scheduleType/index'
-import MaoyanSign from '../../components/maoyanSign/index'
-import FilterPanel from '../../components/filterPanel/index'
-import Backdrop from '../../components/backdrop/index'
 import './index.scss'
 let chart = null
 const { getMaoyanSignLabel } = projectConfig
@@ -290,9 +283,8 @@ function rContScrollEvt({ detail }) {
         redDot.push(0)
       }
     })
-
     const windowWidth = Taro.getSystemInfoSync().windowWidth
-    chart = lineChart.init('chart', {
+    chart = lineChart('chart', {
       tipsCtx: 'chart-tips',
       width: (key.length - 1) * ((windowWidth * 5) / 10) + 33,
       height: 120,
@@ -852,12 +844,12 @@ class _C extends React.Component {
           </View>
         )}
         {backdropShow === 'costom' && (
-          <Backdrop
+          <backdrop
             onTouchMove={true}
             onMyevent={this.ongetBackDrop}
             className="backdrop"
             backdropShow={backdropShow}
-          ></Backdrop>
+          ></backdrop>
         )}
         {curPagePermission && !initLoading && (
           <View>
@@ -887,7 +879,7 @@ class _C extends React.Component {
                   >
                     <Image
                       className="search"
-                      src={require('../../static/icon/search-white.png')}
+                      src='../../static/icon/search-white.png'
                     ></Image>
                   </View>
                   <Text onClick={this.goTop}>影片市场情报</Text>
@@ -908,12 +900,12 @@ class _C extends React.Component {
                       <Image
                         onClick={this.tapRedPrompt}
                         className="redText"
-                        src={require('../../static/list/redText.png')}
+                        src='../../static/list/redText.png'
                         alt
                       ></Image>
                       {redTextShow && (
                         <CoverImage
-                          src={require('../../static/list/bubble.png')}
+                          src='../../static/list/bubble.png'
                           className="redPrompt"
                         ></CoverImage>
                       )}
@@ -974,7 +966,7 @@ class _C extends React.Component {
                                     {item.filmNum !== 0 && (
                                       <Image
                                         data-item={item}
-                                        src={require('../../static/film.png')}
+                                        src='../../static/film.png'
                                         alt
                                       ></Image>
                                     )}
@@ -1153,16 +1145,16 @@ class _C extends React.Component {
                           backdropShow={backdropShow}
                         ></Backdrop>
                       )}
-                      <Filterpanel
+                      <filterPanel
                         titleHeight={titleHeight}
                         className="filterPanel"
                         onMyevent={this.ongetFilterShow}
                         filterShow={filterActive}
-                      ></Filterpanel>
+                      ></filterPanel>
                       {!loading && (
                         <View className="extends" onClick={this.tapExtend}>
                           <Image
-                            src={require('../../static/defined.png')}
+                            src='../../static/defined.png'
                             style="width: 20rpx; height: 20rpx; margin-left: 72rpx;"
                             alt
                           ></Image>
@@ -1251,10 +1243,10 @@ class _C extends React.Component {
                                       {(item.maoyanSignLabel || []).map(
                                         (item, index) => {
                                           return (
-                                            <Maoyansign
+                                            <maoyanSign
                                               key="index"
                                               signContent={item}
-                                            ></Maoyansign>
+                                            ></maoyanSign>
                                           )
                                         }
                                       )}
@@ -1405,7 +1397,7 @@ class _C extends React.Component {
                                           {item.releaseDate.length !== 4 && (
                                             <Text>{item.alias[0]}</Text>
                                           )}
-                                          <Scheduletype signContent="重映"></Scheduletype>
+                                          <scheduleType signContent="重映"></scheduleType>
                                         </View>
                                       )}
                                       {!item.reRelease && (
@@ -1616,16 +1608,16 @@ class _C extends React.Component {
               </ScrollView>
             </View>
             <View className="customListItem">
-              <Costumlistitem
+              <costumListItem
                 onMyevent={this.ongetCostom}
                 costomShow={costomShow}
-              ></Costumlistitem>
+              ></costumListItem>
             </View>
-            <Filmdetaillist
+            <filmDetailList
               filmDistributionItem={filmDistributionItem}
               onMyevent={this.ongetCostom}
               show={filmDetailList}
-            ></Filmdetaillist>
+            ></filmDetailList>
           </View>
         )}
         {/*  无权限页面  */}
@@ -1649,7 +1641,7 @@ class _C extends React.Component {
                   <Text>影片市场情报</Text>
                 </View>
               </View>
-              <Image src={require('../../static/list/no-access.png')}></Image>
+              <Image src='../../static/list/no-access.png'></Image>
               <View className="title">暂无权限查看相关数据</View>
               <View className="content">
                 申请开通请联系zhiduoxing@maoyan.com
