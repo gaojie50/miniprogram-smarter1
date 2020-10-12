@@ -15,7 +15,6 @@ import projectConfig from '../../constant/project-config.js'
 import lineChart from '../../utils/chart.js'
 
 import FilmDetailList from '../../components/filmDetailList/index'
-// import MpLoading from "weui-miniprogram/loading/loading"  TODO
 import CostumListItem from '../../components/costomListItem/index'
 import ScheduleType from '../../components/scheduleType/index'
 import MaoyanSign from '../../components/maoyanSign/index'
@@ -842,13 +841,13 @@ class _C extends React.Component {
       <Block>
         {initLoading && (
           <View className="init-loading">
-            {/* <MpLoading
+            <mpLoading
               type="circle"
               show={true}
               animated={true}
               duration={900}
-              tips
-            ></MpLoading> */}
+              tips=""
+            ></mpLoading>
           </View>
         )}
         {backdropShow === 'costom' && (
@@ -1002,11 +1001,11 @@ class _C extends React.Component {
                           })}
                           {filmLoading && (
                             <View className="filmLoading">
-                              {/* <MpLoading
+                              <mpLoading
                                 show={true}
                                 type="circle"
-                                tips
-                              ></MpLoading> */}
+                                tips=""
+                              ></mpLoading>
                             </View>
                           )}
                         </View>
@@ -1014,7 +1013,7 @@ class _C extends React.Component {
                     )}
                     {topFilmLoading && (
                       <View className="list-loading">
-                        {/* <MpLoading type="circle" show={true} tips></MpLoading> */}
+                        <mpLoading type="circle" show={true} tips=""></mpLoading>
                       </View>
                     )}
                     {!topFilmLoading && filmDistributionList.length === 0 && (
@@ -1216,7 +1215,7 @@ class _C extends React.Component {
                     </ScrollView>
                     {loading && (
                       <View className="list-loading">
-                        {/* <MpLoading type="circle" show={true} tips></MpLoading> */}
+                        <mpLoading type="circle" show={true} tips=""></mpLoading>
                       </View>
                     )}
                     {!loading && (
@@ -1405,10 +1404,10 @@ class _C extends React.Component {
                                           </View>
                                           {item.releaseDate.length !== 4 && (
                                             <View>
-                                            <View>
-                                              <Text>{item.alias[0]}</Text>
+                                              <View>
+                                                <Text>{item.alias[0]}</Text>
+                                              </View>
                                             </View>
-                                          </View>
                                           )}
                                           <ScheduleType signContent="重映"></ScheduleType>
                                         </View>
@@ -1421,24 +1420,18 @@ class _C extends React.Component {
                                             </View>
                                           </View>
                                           {item.releaseDate.length !== 4 && (
-                                            <View>
-                                              <View>
-                                                <Text>{item.alias[0]}</Text>
-                                              </View>
-                                            </View>
+                                            <Text>{item.alias[0]}</Text>
                                           )}
-                                          {item.movieStatus == 2 &&
-                                          item.scheduleType == 5 ? (
-                                            <ScheduleType
-                                              signContent
-                                            ></ScheduleType>
-                                          ) : (
-                                            <ScheduleType
-                                              signContent={
-                                                scheduleType[item.scheduleType]
-                                              }
-                                            ></ScheduleType>
-                                          )}
+                                          <ScheduleType
+                                            signContent={
+                                              item.movieStatus === 2 &&
+                                              item.scheduleType === 5
+                                                ? ''
+                                                : scheduleType[
+                                                    item.scheduleType
+                                                  ]
+                                            }
+                                          ></ScheduleType>
                                         </View>
                                       )}
                                     </View>

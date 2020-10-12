@@ -8,33 +8,37 @@ import './index.scss'
   properties: {
     signContent: {
       type: String,
-      value: ''
-    }
-  }
+      value: '',
+    },
+  },
 })
 class _C extends React.Component {
   render() {
     const { signContent } = this.data
     return (
       <Block>
-        {signContent == '主出' && (
-          <View><Text className="mainOutput">{signContent}</Text></View>
-        )}
-        {signContent == '主发' && (
-          <View><Text className="mainPublish">{signContent}</Text></View>
-        )}
-        {signContent == '联出' && (
-          <View><Text className="nionOutput">{signContent}</Text></View>
-        )}
-        {signContent == '出品' && (
-          <View><Text className="products">{signContent}</Text></View>
-        )}
-        {signContent == '发行' && (
-          <View><Text className="issue">{signContent}</Text></View>
-        )}
-        {signContent == '联发' && (
-          <View><Text className="unionPublish">{signContent}</Text></View>
-        )}
+        <View className="mainInline">
+          <View>
+            {signContent == '主出' && (
+              <Text className="mainOutput">{signContent}</Text>
+            )}
+            {signContent == '主发' && (
+              <Text className="mainPublish">{signContent}</Text>
+            )}
+            {signContent == '联出' && (
+              <Text className="nionOutput">{signContent}</Text>
+            )}
+            {signContent == '出品' && (
+              <Text className="products">{signContent}</Text>
+            )}
+            {signContent == '发行' && (
+              <Text className="issue">{signContent}</Text>
+            )}
+            {signContent == '联发' && (
+              <Text className="unionPublish">{signContent}</Text>
+            )}
+          </View>
+        </View>
       </Block>
     )
   }

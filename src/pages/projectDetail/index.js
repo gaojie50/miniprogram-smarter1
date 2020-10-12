@@ -413,7 +413,7 @@ class _C extends React.Component {
                   <Image
                     className="arrow"
                     style={'transform:' + flod.rotateZ}
-                    src={require('../../static/projectDetail/arrow.png')}
+                    src='../../static/projectDetail/arrow.png'
                   ></Image>
                 </View>
               )}
