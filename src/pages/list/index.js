@@ -386,6 +386,9 @@ function rContScrollEvt({ detail }) {
         toView: 'filter',
         filterActive: e.target.dataset.num,
         backdropShow: 'filter'
+      }, () => {
+        console.log(this.data.backdropShow)
+        console.log(this.data.filterActive)
       })
     }
   },
@@ -844,12 +847,12 @@ class _C extends React.Component {
           </View>
         )}
         {backdropShow === 'costom' && (
-          <backdrop
+          <backDrop
             onTouchMove={true}
             onMyevent={this.ongetBackDrop}
             className="backdrop"
             backdropShow={backdropShow}
-          ></backdrop>
+          ></backDrop>
         )}
         {curPagePermission && !initLoading && (
           <View>
@@ -1138,16 +1141,14 @@ class _C extends React.Component {
                         ></Image>
                       </View>
                       {backdropShow === 'filter' && (
-                        <Backdrop
+                        <backDrop
                           onTouchMove={this.privateStopNoop}
                           onMyevent={this.ongetBackDrop}
-                          className="backdrop"
                           backdropShow={backdropShow}
-                        ></Backdrop>
+                        ></backDrop>
                       )}
                       <filterPanel
                         titleHeight={titleHeight}
-                        className="filterPanel"
                         onMyevent={this.ongetFilterShow}
                         filterShow={filterActive}
                       ></filterPanel>
@@ -1212,7 +1213,7 @@ class _C extends React.Component {
                         {/* <MpLoading type="circle" show={true} tips></MpLoading> */}
                       </View>
                     )}
-                    {!loading && (
+                    {/* {!loading && (
                       <View className="listTable">
                         <View className="table-left">
                           <View className="listTr tableLeftTitleFixed">
@@ -1410,15 +1411,15 @@ class _C extends React.Component {
                                           )}
                                           {item.movieStatus == 2 &&
                                           item.scheduleType == 5 ? (
-                                            <Scheduletype
+                                            <scheduleType
                                               signContent
-                                            ></Scheduletype>
+                                            ></scheduleType>
                                           ) : (
-                                            <Scheduletype
+                                            <scheduleType
                                               signContent={
                                                 scheduleType[item.scheduleType]
                                               }
-                                            ></Scheduletype>
+                                            ></scheduleType>
                                           )}
                                         </View>
                                       )}
@@ -1445,7 +1446,7 @@ class _C extends React.Component {
                                       {item.estimateBox === null && (
                                         <Text>-</Text>
                                       )}
-                                      <Text>{item.estimateBox2.text}</Text>
+                                      <Text>{item.estimateBox2?.text}</Text>
                                     </View>
                                     <View
                                       style={'height: ' + item.trHeight + 'rpx'}
@@ -1470,8 +1471,7 @@ class _C extends React.Component {
                                           item.producer.length === 0) && (
                                           <Text>-</Text>
                                         )}
-                                        {/*  <text wx:for="{{item.producer}}">{{item}}</text>  */}
-                                        <Text>{item.producer[0]}</Text>
+                                        <Text>{item.producer?.[0]}</Text>
                                       </View>
                                     </View>
                                     <View
@@ -1483,8 +1483,7 @@ class _C extends React.Component {
                                     >
                                       <View>
                                         {item.issuer === null && <Text>-</Text>}
-                                        {/*  <text wx:for="{{item.issuer}}">{{item}}</text>  */}
-                                        <Text>{item.issuer[0]}</Text>
+                                        <Text>{item.issuer?.[0]}</Text>
                                       </View>
                                     </View>
                                     <View
@@ -1540,7 +1539,7 @@ class _C extends React.Component {
                                       )}
                                       {item.cooperStatus == 0 && <Text>-</Text>}
                                     </View>
-                                    {item.principal.map((item, index) => {
+                                    {item.principal?.map((items, index) => {
                                       return (
                                         <View
                                           style={
@@ -1602,7 +1601,7 @@ class _C extends React.Component {
                     )}
                     {!loading && list.length == 0 && (
                       <View className="no-data">暂无数据</View>
-                    )}
+                    )} */}
                   </View>
                 </View>
               </ScrollView>

@@ -8,46 +8,49 @@ import './index.scss'
   properties: {
     backdropShow: {
       type: String,
-      value: ''
-    }
+      value: '1',
+    },
   },
   methods: {
-    tapFilterBackdrop: function() {
+    tapFilterBackdrop: function () {
       const cancelPanel = {
         backdropShow: '',
-        filterActive: ''
+        filterActive: '',
       }
       this.triggerEvent('myevent', cancelPanel)
     },
-    tapCostomBackdrop: function() {
+    tapCostomBackdrop: function () {
       const cancelPanel = {
         backdropShow: '',
-        costomShow: false
+        costomShow: false,
       }
       this.triggerEvent('myevent', cancelPanel)
-    }
-  }
+    },
+  },
 })
 class _C extends React.Component {
+
   render() {
-    const { backdropShow } = this.data
+    const { backdropShow } = this.props
     return (
-      <Block>
-        {backdropShow === 'filter' && (
-          <View
-            onTouchMove={this.privateStopNoop}
-            className="backdrop"
-            onClick={this.tapFilterBackdrop}
-          ></View>
-        )}
-        {backdropShow === 'costom' && (
-          <View
-            onTouchMove={this.privateStopNoop}
-            className="backdropTop"
-            onClick={this.tapCostomBackdrop}
-          ></View>
-        )}
-      </Block>
+      <View className="backdropAll">
+        <Block>
+          {backdropShow === 'filter' && (
+            <View
+              onTouchMove={this.privateStopNoop}
+              className="backdrop"
+              onClick={this.tapFilterBackdrop}
+            ></View>
+          )}
+          {backdropShow === 'costom' && (
+            <View
+              onTouchMove={this.privateStopNoop}
+              className="backdropTop"
+              onClick={this.tapCostomBackdrop}
+            ></View>
+          )}
+        </Block>
+      </View>
     )
   }
 }

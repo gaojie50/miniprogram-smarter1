@@ -1,7 +1,7 @@
 export default {
   component: true,
   usingComponents: {
-    scheduleType: '../scheduleType/index',
+    scheduleType: '../../components/scheduleType/index',
     maoyanSign: '../../components/maoyanSign/index',
   },
 }

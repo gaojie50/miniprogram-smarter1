@@ -1,6 +1,6 @@
 export default {
   usingComponents: {
-    backdrop: "../../components/backdrop/index",
+    backDrop: "../../components/backdrop/index",
     filterPanel: "../../components/filterPanel/index",
     maoyanSign: "../../components/maoyanSign/index",
     scheduleType: "../../components/scheduleType/index",

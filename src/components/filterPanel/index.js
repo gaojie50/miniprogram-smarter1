@@ -4,7 +4,7 @@ import {
   ScrollView,
   Image,
   Text,
-  PickerView
+  PickerView,
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
@@ -47,7 +47,7 @@ function dateValueCommon(timeStamp) {
   return [
     years.indexOf(innerTimeStamp.getFullYear()),
     months.indexOf(innerTimeStamp.getMonth() + 1),
-    days.indexOf(innerTimeStamp.getDate())
+    days.indexOf(innerTimeStamp.getDate()),
   ]
 }
 
@@ -55,12 +55,12 @@ function dateValueCommon(timeStamp) {
   properties: {
     filterShow: {
       type: String,
-      value: ''
+      value: '4',
     },
     titleHeight: {
       type: Number,
-      value: 0
-    }
+      value: 100,
+    },
   },
   data: {
     dimension: [],
@@ -72,134 +72,134 @@ function dateValueCommon(timeStamp) {
     companyList: [
       {
         id: 37786,
-        name: '上海猫眼影业有限公司'
+        name: '上海猫眼影业有限公司',
       },
       {
         id: 1230,
-        name: '天津猫眼微影文化传媒有限公司'
-      }
+        name: '天津猫眼微影文化传媒有限公司',
+      },
     ],
     dateSet: [
       {
         label: '未来30天',
         checked: '',
-        value: 30
+        value: 30,
       },
       {
         label: '未来90天',
         checked: '',
-        value: 90
+        value: 90,
       },
       {
         label: '未来1年',
         checked: 'checked',
-        value: 365
+        value: 365,
       },
       {
         label: '自定义',
         checked: '',
-        value: 'custom'
-      }
+        value: 'custom',
+      },
     ],
     estimateBox: [
       {
         value: '10亿以上',
-        active: false
+        active: false,
       },
       {
         value: '5亿～10亿',
-        active: false
+        active: false,
       },
       {
         value: '1亿～5亿',
-        active: false
+        active: false,
       },
       {
         value: '5000万～1亿',
-        active: false
+        active: false,
       },
       {
         value: '5000万以下',
-        active: false
+        active: false,
       },
       {
         value: '未知',
-        active: false
-      }
+        active: false,
+      },
     ],
     projectBox: [
       {
         value: '筹备',
-        active: false
+        active: false,
       },
       {
         value: '拍摄',
-        active: false
+        active: false,
       },
       {
         value: '后期',
-        active: false
+        active: false,
       },
       {
         value: '待过审',
-        active: false
+        active: false,
       },
       {
         value: '已过审',
-        active: false
+        active: false,
       },
       {
         value: '已上映',
-        active: false
+        active: false,
       },
       {
         value: '未知',
-        active: false
-      }
+        active: false,
+      },
     ],
     costBox: [
       {
         value: '8000万以上',
-        active: false
+        active: false,
       },
       {
         value: '5000万～8000万',
-        active: false
+        active: false,
       },
       {
         value: '1000万～5000万',
-        active: false
+        active: false,
       },
       {
         value: '1000万以下',
-        active: false
+        active: false,
       },
       {
         value: '未知',
-        active: false
-      }
+        active: false,
+      },
     ],
     cooperBox: [
       {
         value: '评估中',
-        active: false
+        active: false,
       },
       {
         value: '跟进中',
-        active: false
+        active: false,
       },
       {
         value: '未合作',
-        active: false
+        active: false,
       },
       {
         value: '开发中',
-        active: false
+        active: false,
       },
       {
         value: '投资中',
-        active: false
-      }
+        active: false,
+      },
     ],
     years,
     months,
@@ -207,17 +207,17 @@ function dateValueCommon(timeStamp) {
     dateValue: dateValueCommon(defaultCustomDate.startDate),
     customStartDate: {
       value: formartDate(defaultCustomDate.startDate),
-      week: calcWeek(defaultCustomDate.startDate)
+      week: calcWeek(defaultCustomDate.startDate),
     },
     customEndDate: {
       value: formartDate(defaultCustomDate.endDate),
-      week: calcWeek(defaultCustomDate.endDate)
+      week: calcWeek(defaultCustomDate.endDate),
     },
     dateShowFirstActive: true,
-    showDateSureBtn: false
+    showDateSureBtn: false,
   },
   methods: {
-    dateSelect: function(e) {
+    dateSelect: function (e) {
       const val = e.detail.value
       const {
         dateShowFirstActive,
@@ -225,10 +225,10 @@ function dateValueCommon(timeStamp) {
         months,
         days,
         customEndDate,
-        customStartDate
+        customStartDate,
       } = this.data
       let timeStamp = +new Date(
-        `${years[val[0]]}/${months[val[1]]}/${days[val[2]]}`
+        `${years[val[0]]}/${months[val[1]]}/${days[val[2]]}`,
       )
       let obj = {}
       if (dateShowFirstActive) {
@@ -236,14 +236,14 @@ function dateValueCommon(timeStamp) {
         if (timeStamp > +handleNewDate(customEndDate.value)) {
           obj.customEndDate = {
             value: formartDate(timeStamp),
-            week: calcWeek(timeStamp)
+            week: calcWeek(timeStamp),
           }
         }
         //一年时间限制 限制开始日期
         const minimumTimeStamp = +handleDays(
           customEndDate.value,
           180,
-          'subtract'
+          'subtract',
         )
 
         if (timeStamp < minimumTimeStamp) {
@@ -251,13 +251,13 @@ function dateValueCommon(timeStamp) {
 
           obj.customEndDate = {
             value: formartDate(endStamp),
-            week: calcWeek(endStamp)
+            week: calcWeek(endStamp),
           }
         }
 
         obj['customStartDate'] = {
           value: formartDate(timeStamp),
-          week: calcWeek(timeStamp)
+          week: calcWeek(timeStamp),
         }
         obj.dateValue = dateValueCommon(timeStamp)
         return this.setData(obj)
@@ -267,7 +267,7 @@ function dateValueCommon(timeStamp) {
       if (timeStamp < +handleNewDate(customStartDate.value)) {
         obj.customStartDate = {
           value: formartDate(timeStamp),
-          week: calcWeek(timeStamp)
+          week: calcWeek(timeStamp),
         }
       }
 
@@ -278,25 +278,25 @@ function dateValueCommon(timeStamp) {
 
         obj.customStartDate = {
           value: formartDate(startStamp),
-          week: calcWeek(startStamp)
+          week: calcWeek(startStamp),
         }
       }
 
       obj['customEndDate'] = {
         value: formartDate(timeStamp),
-        week: calcWeek(timeStamp)
+        week: calcWeek(timeStamp),
       }
 
       obj.dateValue = dateValueCommon(timeStamp)
       this.setData(obj)
     },
 
-    switchDate: function(e) {
+    switchDate: function (e) {
       const { sign } = e.currentTarget.dataset
       const {
         dateShowFirstActive,
         customStartDate,
-        customEndDate
+        customEndDate,
       } = assignDeep(this.data)
 
       if (
@@ -308,26 +308,26 @@ function dateValueCommon(timeStamp) {
       if (sign == 'begin') {
         return this.setData({
           dateShowFirstActive: true,
-          dateValue: dateValueCommon(customStartDate.value)
+          dateValue: dateValueCommon(customStartDate.value),
         })
       }
 
       this.setData({
         dateShowFirstActive: false,
-        dateValue: dateValueCommon(customEndDate.value)
+        dateValue: dateValueCommon(customEndDate.value),
       })
     },
 
-    dateSelectEvent: function(e) {
+    dateSelectEvent: function (e) {
       const { value } = e.target.dataset
       let { dateSet, showDateSureBtn } = this.data
 
       if (
-        dateSet.some(item => item.value == value && item.checked == 'checked')
+        dateSet.some((item) => item.value == value && item.checked == 'checked')
       )
         return
 
-      const dateSetVar = dateSet.map(item => {
+      const dateSetVar = dateSet.map((item) => {
         item.checked = ''
         if (item.value == value) {
           item.checked = 'checked'
@@ -339,48 +339,48 @@ function dateValueCommon(timeStamp) {
       this.setData(
         {
           dateSet: dateSetVar,
-          showDateSureBtn
+          showDateSureBtn,
         },
         () => {
           const { showDateSureBtn } = this.data
 
           if (!showDateSureBtn) this.filterDefinedDate()
-        }
+        },
       )
     },
-    tapEstimateBox: function(e) {
+    tapEstimateBox: function (e) {
       const num = e.target.dataset.num
       const newEstimateBox = this.data.estimateBox
       newEstimateBox[num].active = !newEstimateBox[num].active
       this.setData({
-        estimateBox: newEstimateBox
+        estimateBox: newEstimateBox,
       })
     },
-    tapProjectStatus: function(e) {
+    tapProjectStatus: function (e) {
       const num = e.target.dataset.num
       const newprojectBox = this.data.projectBox
       newprojectBox[num].active = !newprojectBox[num].active
       this.setData({
-        projectBox: newprojectBox
+        projectBox: newprojectBox,
       })
     },
-    tapCost: function(e) {
+    tapCost: function (e) {
       const num = e.target.dataset.num
       const newcostBox = this.data.costBox
       newcostBox[num].active = !newcostBox[num].active
       this.setData({
-        costBox: newcostBox
+        costBox: newcostBox,
       })
     },
-    tapCooper: function(e) {
+    tapCooper: function (e) {
       const num = e.target.dataset.num
       const newcooperBox = this.data.cooperBox
       newcooperBox[num].active = !newcooperBox[num].active
       this.setData({
-        cooperBox: newcooperBox
+        cooperBox: newcooperBox,
       })
     },
-    tapCompany: function(e) {
+    tapCompany: function (e) {
       const num = e.target.dataset.num
       const { companyList } = this.data
       const dataList = this.data
@@ -397,10 +397,10 @@ function dateValueCommon(timeStamp) {
         }
       }
       this.setData({
-        ...dataList
+        ...dataList,
       })
     },
-    tapCompanyText: function(e) {
+    tapCompanyText: function (e) {
       const num = e.target.dataset.num
       const { companyList } = this.data
       const dataList = this.data
@@ -417,42 +417,42 @@ function dateValueCommon(timeStamp) {
         }
       }
       this.setData({
-        ...dataList
+        ...dataList,
       })
     },
-    filterReset: function() {
+    filterReset: function () {
       const { filterShow, estimateBox, projectBox } = this.data
       if (filterShow == '1') {
-        estimateBox.map(item => {
+        estimateBox.map((item) => {
           item.active = false
         })
         this.setData({
-          estimateBox
+          estimateBox,
         })
       } else if (filterShow == '2') {
-        projectBox.map(item => {
+        projectBox.map((item) => {
           item.active = false
         })
         this.setData({
-          projectBox
+          projectBox,
         })
       } else if (filterShow == '3') {
         const dataList = this.data
-        dataList.costBox.map(item => {
+        dataList.costBox.map((item) => {
           item.active = false
         })
-        dataList.cooperBox.map(item => {
+        dataList.cooperBox.map((item) => {
           item.active = false
         })
         for (let j = 0; j < dataList.companyList.length; j++) {
           dataList.company[j] = ''
         }
         this.setData({
-          ...dataList
+          ...dataList,
         })
       }
     },
-    filterDefined: function() {
+    filterDefined: function () {
       const {
         estimateBox,
         projectBox,
@@ -467,7 +467,7 @@ function dateValueCommon(timeStamp) {
         company,
         companyList,
         customStartDate,
-        customEndDate
+        customEndDate,
       } = this.data
       //处理预估票房
       estimateBox.map((item, index) => {
@@ -512,7 +512,7 @@ function dateValueCommon(timeStamp) {
         if (company[index] === 'active') {
           if (pcId.length !== 0) {
             let add = true
-            pcId.map(item1 => {
+            pcId.map((item1) => {
               if (item1.id == companyList[index].id) {
                 add = false
               }
@@ -546,12 +546,12 @@ function dateValueCommon(timeStamp) {
         cooperBox,
         company,
         customStartDate,
-        customEndDate
+        customEndDate,
       }
 
       this.triggerEvent('myevent', myEventDetail)
     },
-    filterDefinedDate: function() {
+    filterDefinedDate: function () {
       const {
         dimension,
         projectStatus,
@@ -565,7 +565,7 @@ function dateValueCommon(timeStamp) {
         projectBox,
         costBox,
         cooperBox,
-        company
+        company,
       } = this.data
       this.triggerEvent('myevent', {
         dimension,
@@ -580,14 +580,14 @@ function dateValueCommon(timeStamp) {
         projectBox,
         costBox,
         cooperBox,
-        company
+        company,
       })
     },
-    movieAdd: function() {
+    movieAdd: function () {
       Taro.navigateTo({
         url: '/pages/searchCompany/index',
         events: {
-          searchPCFinish: data => {
+          searchPCFinish: (data) => {
             const { companyChecked } = data
             const { companyList } = this.data
 
@@ -612,7 +612,7 @@ function dateValueCommon(timeStamp) {
                 Taro.showToast({
                   title: `${toastStr}已存在`,
                   icon: 'none',
-                  duration: 4000
+                  duration: 4000,
                 })
               }
 
@@ -623,19 +623,50 @@ function dateValueCommon(timeStamp) {
               }
               this.setData({
                 companyList: newCompanyList,
-                company: newCompany
+                company: newCompany,
               })
             }
-          }
-        }
+          },
+        },
       })
     },
     handleTouchMove() {
       return
-    }
-  }
+    },
+  },
 })
 class _C extends React.Component {
+
+  static getDerivedStateFromProps(props, state) {
+    console.log(props);
+    return null
+  }
+  componentDidMount() {
+    console.log('componentDidMount')
+  }
+
+  shouldComponentUpdate() {
+    console.log('shouldComponentUpdate')
+    return true;
+  }
+
+  componentWillUpdate() {
+    console.log('componentWillUpdate')
+  }
+
+  componentDidUpdate() {
+    console.log('componentDidUpdate')
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('aaa')
+    // if (nextProps.filterShow !== this.props.filterShow) {
+    //   this.setState({
+    //     filterShow: nextProps.filterShow
+    //   })
+    // }
+  }
+
   render() {
     const {
       filterShow,
@@ -654,306 +685,321 @@ class _C extends React.Component {
       cooperBox,
       company,
       companyList,
-      showDateSureBtn
+      showDateSureBtn,
     } = this.data
+    console.log(this.props)
+    console.log(this.data)
+
     return (
       filterShow.length != 0 && (
-        <View
-          className={filterShow.length != 0 ? 'filterPanelWrap' : ''}
-          onTouchMove={this.handleTouchMove}
-        >
-          <View className={'filterPanel ' + (filterShow == '4' ? 'date' : '')}>
-            {filterShow == '4' && (
-              <ScrollView
-                className="dateBox"
-                style={'max-height: calc(100vh * 0.75 - ' + titleHeight + 'px)'}
-                scrollY
-              >
-                {dateSet.map((item, index) => {
-                  return (
-                    <Block key="value">
-                      <View
-                        className={item.checked + ' item'}
-                        data-value={item.value}
-                        onClick={this.dateSelectEvent}
-                      >
-                        <Image
-                          className="pic"
-                          src={require('../../static/icon/checked.png')}
-                        ></Image>
-                        {item.label}
-                      </View>
-                      {item.value == 'custom' && item.checked == 'checked' && (
-                        <View className="custom-box">
-                          <View className="date-show">
-                            <View
-                              className={
-                                'left ' + (dateShowFirstActive ? 'active' : '')
-                              }
-                              data-sign="begin"
-                              onClick={this.switchDate}
-                            >
-                              <View className="detail">
-                                {customStartDate.value}
-                              </View>
-                              <Text className="week">
-                                {customStartDate.week}
-                              </Text>
-                            </View>
-                            <Text>至</Text>
-                            <View
-                              className={
-                                'right ' +
-                                (!dateShowFirstActive ? 'active' : '')
-                              }
-                              data-sign="end"
-                              onClick={this.switchDate}
-                            >
-                              <View className="detail">
-                                {customEndDate.value}
-                              </View>
-                              <Text className="week">{customEndDate.week}</Text>
-                            </View>
-                          </View>
-                          <PickerView
-                            indicatorStyle="height: 60rpx;"
-                            value={dateValue}
-                            onChange={this.dateSelect}
-                            className="date-box"
-                          >
-                            <PickerViewColumn>
-                              {years.map((item, index) => {
-                                return (
-                                  <View
-                                    key="item"
-                                    style="line-height: 60rpx;text-align:right;"
-                                  >
-                                    {item + '年'}
-                                  </View>
-                                )
-                              })}
-                            </PickerViewColumn>
-                            <PickerViewColumn>
-                              {months.map((item, index) => {
-                                return (
-                                  <View
-                                    key="item"
-                                    style="line-height: 60rpx;text-align:center;"
-                                  >
-                                    {item + '月'}
-                                  </View>
-                                )
-                              })}
-                            </PickerViewColumn>
-                            <PickerViewColumn>
-                              {days.map((item, index) => {
-                                return (
-                                  <View
-                                    key="item"
-                                    style="line-height: 60rpx;text-align:left;"
-                                  >
-                                    {item + '日'}
-                                  </View>
-                                )
-                              })}
-                            </PickerViewColumn>
-                          </PickerView>
-                        </View>
-                      )}
-                    </Block>
-                  )
-                })}
-              </ScrollView>
-            )}
-            {/*  预估票房  */}
-            {filterShow == '1' && (
-              <View className="estimateBox">
-                {estimateBox.map((item, index) => {
-                  return (
-                    <View
-                      key="index"
-                      data-num={index}
-                      onClick={this.tapEstimateBox}
-                      className={
-                        'estimateBox-item ' +
-                        (item.active ? 'filterPanelActive' : '')
-                      }
-                      style="margin-right: 20rpx;margin-bottom: 20rpx"
-                    >
-                      {item.value}
-                    </View>
-                  )
-                })}
-              </View>
-            )}
-            {/*  项目状态  */}
-            {filterShow == '2' && (
-              <View className="projectStatus">
-                {projectBox.map((item, index) => {
-                  return (
-                    <View
-                      key="index"
-                      data-num={index}
-                      onClick={this.tapProjectStatus}
-                      className={
-                        'projectStatus-item ' +
-                        (item.active ? 'filterPanelActive' : '')
-                      }
-                      style="margin-right: 20rpx;margin-bottom: 20rpx"
-                    >
-                      {item.value}
-                    </View>
-                  )
-                })}
-              </View>
-            )}
-            {/*  筛选  */}
-            {filterShow == '3' && (
-              <View className="filter">
+        <View className="filterPanel">
+          <View
+            className={filterShow.length != 0 ? 'filterPanelWrap' : ''}
+            onTouchMove={this.handleTouchMove}
+          >
+            <View
+              className={'filterPanels ' + (filterShow == '4' ? 'date' : '')}
+            >
+              {filterShow == '4' && (
                 <ScrollView
-                  scrollY="true"
-                  className="scroll-area"
+                  className="dateBox"
                   style={
                     'max-height: calc(100vh * 0.75 - ' + titleHeight + 'px)'
                   }
+                  scrollY
                 >
-                  <Text className="title">制作成本</Text>
-                  <View className="cost-wrap">
-                    {costBox.map((item, index) => {
-                      return (
+                  {dateSet.map((item, index) => {
+                    return (
+                      <Block key="value">
                         <View
-                          key="index"
-                          data-num={index}
-                          onClick={this.tapCost}
-                          className={
-                            'cost-wrap-item ' +
-                            (item.active ? 'filterPanelActive' : '')
-                          }
-                          style="margin-right: 20rpx;margin-bottom: 20rpx"
+                          className={item.checked + ' item'}
+                          data-value={item.value}
+                          onClick={this.dateSelectEvent}
                         >
-                          {item.value}
+                          <Image
+                            className="pic"
+                            src='../../static/icon/checked.png'
+                          ></Image>
+                          {item.label}
                         </View>
-                      )
-                    })}
-                  </View>
-                  <Text className="title">合作状态</Text>
-                  <View className="cooper-wrap">
-                    {cooperBox.map((item, index) => {
-                      return (
-                        <View
-                          key="index"
-                          data-num={index}
-                          onClick={this.tapCooper}
-                          className={
-                            'cooper-wrap-item ' +
-                            (item.active ? 'filterPanelActive' : '')
-                          }
-                          style="margin-right: 20rpx;margin-bottom: 20rpx"
-                        >
-                          {item.value}
-                        </View>
-                      )
-                    })}
-                  </View>
-                  <View className="last-title">
-                    <Text className="title">片方</Text>
-                    <Text onClick={this.movieAdd} className="add">
-                      添加
-                    </Text>
-                    <Image
-                      onClick={this.movieAdd}
-                      src={require('../../static/arrow.png')}
-                      style="height: 20rpx;width: 11rpx"
-                      alt
-                    ></Image>
-                  </View>
-                  <View className="company">
-                    <View className="company-left">
-                      {index % 2 === 0 && (
-                        <Block>
-                          {companyList.map((item, index) => {
-                            return (
+                        {item.value == 'custom' && item.checked == 'checked' && (
+                          <View className="custom-box">
+                            <View className="date-show">
                               <View
-                                data-num={index}
-                                onClick={this.tapCompany}
-                                key="index"
                                 className={
-                                  'company-item ' +
-                                  (company[index] == 'active'
-                                    ? 'companyActive'
-                                    : '')
+                                  'left ' +
+                                  (dateShowFirstActive ? 'active' : '')
                                 }
+                                data-sign="begin"
+                                onClick={this.switchDate}
                               >
-                                <Text
-                                  data-num={index}
-                                  onClick={this.tapCompanyText}
-                                >
-                                  {item.name}
+                                <View className="detail">
+                                  {customStartDate.value}
+                                </View>
+                                <Text className="week">
+                                  {customStartDate.week}
                                 </Text>
                               </View>
-                            )
-                          })}
-                        </Block>
-                      )}
-                    </View>
-                    <View className="company-right">
-                      {index % 2 !== 0 && (
-                        <Block>
-                          {companyList.map((item, index) => {
-                            return (
+                              <Text>至</Text>
                               <View
-                                onClick={this.tapCompany}
-                                key="index"
-                                data-num={index}
                                 className={
-                                  'company-item ' +
-                                  (company[index] == 'active'
-                                    ? 'companyActive'
-                                    : '')
+                                  'right ' +
+                                  (!dateShowFirstActive ? 'active' : '')
                                 }
+                                data-sign="end"
+                                onClick={this.switchDate}
                               >
-                                <Text
-                                  data-num={index}
-                                  onClick={this.tapCompanyText}
-                                >
-                                  {item.name}
+                                <View className="detail">
+                                  {customEndDate.value}
+                                </View>
+                                <Text className="week">
+                                  {customEndDate.week}
                                 </Text>
                               </View>
-                            )
-                          })}
-                        </Block>
-                      )}
-                    </View>
-                  </View>
+                            </View>
+                            <PickerView
+                              indicatorStyle="height: 60rpx;"
+                              value={dateValue}
+                              onChange={this.dateSelect}
+                              className="date-box"
+                            >
+                              <PickerViewColumn>
+                                {years.map((item, index) => {
+                                  return (
+                                    <View
+                                      key="item"
+                                      style="line-height: 60rpx;text-align:right;"
+                                    >
+                                      {item + '年'}
+                                    </View>
+                                  )
+                                })}
+                              </PickerViewColumn>
+                              <PickerViewColumn>
+                                {months.map((item, index) => {
+                                  return (
+                                    <View
+                                      key="item"
+                                      style="line-height: 60rpx;text-align:center;"
+                                    >
+                                      {item + '月'}
+                                    </View>
+                                  )
+                                })}
+                              </PickerViewColumn>
+                              <PickerViewColumn>
+                                {days.map((item, index) => {
+                                  return (
+                                    <View
+                                      key="item"
+                                      style="line-height: 60rpx;text-align:left;"
+                                    >
+                                      {item + '日'}
+                                    </View>
+                                  )
+                                })}
+                              </PickerViewColumn>
+                            </PickerView>
+                          </View>
+                        )}
+                      </Block>
+                    )
+                  })}
                 </ScrollView>
+              )}
+              {/*  预估票房  */}
+              {filterShow == '1' && (
+                <View className="estimateBox">
+                  {estimateBox.map((item, index) => {
+                    return (
+                      <View
+                        key="index"
+                        data-num={index}
+                        onClick={this.tapEstimateBox}
+                        className={
+                          'estimateBox-item ' +
+                          (item.active ? 'filterPanelActive' : '')
+                        }
+                        style="margin-right: 20rpx;margin-bottom: 20rpx"
+                      >
+                        {item.value}
+                      </View>
+                    )
+                  })}
+                </View>
+              )}
+              {/*  项目状态  */}
+              {filterShow == '2' && (
+                <View className="projectStatus">
+                  {projectBox.map((item, index) => {
+                    return (
+                      <View
+                        key="index"
+                        data-num={index}
+                        onClick={this.tapProjectStatus}
+                        className={
+                          'projectStatus-item ' +
+                          (item.active ? 'filterPanelActive' : '')
+                        }
+                        style="margin-right: 20rpx;margin-bottom: 20rpx"
+                      >
+                        {item.value}
+                      </View>
+                    )
+                  })}
+                </View>
+              )}
+              {/*  筛选  */}
+              {filterShow == '3' && (
+                <View className="filter">
+                  <ScrollView
+                    scrollY="true"
+                    className="scroll-area"
+                    style={
+                      'max-height: calc(100vh * 0.75 - ' + titleHeight + 'px)'
+                    }
+                  >
+                    <Text className="title">制作成本</Text>
+                    <View className="cost-wrap">
+                      {costBox.map((item, index) => {
+                        return (
+                          <View
+                            key="index"
+                            data-num={index}
+                            onClick={this.tapCost}
+                            className={
+                              'cost-wrap-item ' +
+                              (item.active ? 'filterPanelActive' : '')
+                            }
+                            style="margin-right: 20rpx;margin-bottom: 20rpx"
+                          >
+                            {item.value}
+                          </View>
+                        )
+                      })}
+                    </View>
+                    <Text className="title">合作状态</Text>
+                    <View className="cooper-wrap">
+                      {cooperBox.map((item, index) => {
+                        return (
+                          <View
+                            key="index"
+                            data-num={index}
+                            onClick={this.tapCooper}
+                            className={
+                              'cooper-wrap-item ' +
+                              (item.active ? 'filterPanelActive' : '')
+                            }
+                            style="margin-right: 20rpx;margin-bottom: 20rpx"
+                          >
+                            {item.value}
+                          </View>
+                        )
+                      })}
+                    </View>
+                    <View className="last-title">
+                      <Text className="title">片方</Text>
+                      <Text onClick={this.movieAdd} className="add">
+                        添加
+                      </Text>
+                      <Image
+                        onClick={this.movieAdd}
+                        src='../../static/arrow.png'
+                        style="height: 20rpx;width: 11rpx"
+                        alt
+                      ></Image>
+                    </View>
+                    <View className="company">
+                      <View className="company-left">
+                        <Block>
+                          {companyList.map((item, index) => {
+                            return (
+                              index % 2 === 0 && (
+                                <View
+                                  data-num={index}
+                                  onClick={this.tapCompany}
+                                  key="index"
+                                  className={
+                                    'company-item ' +
+                                    (company[index] == 'active'
+                                      ? 'companyActive'
+                                      : '')
+                                  }
+                                >
+                                  <Text
+                                    data-num={index}
+                                    onClick={this.tapCompanyText}
+                                  >
+                                    {item.name}
+                                  </Text>
+                                </View>
+                              )
+                            )
+                          })}
+                        </Block>
+                      </View>
+                      <View className="company-right">
+                        <Block>
+                          {companyList.map((item, index) => {
+                            return (
+                              index % 2 !== 0 && (
+                                <View
+                                  onClick={this.tapCompany}
+                                  key="index"
+                                  data-num={index}
+                                  className={
+                                    'company-item ' +
+                                    (company[index] == 'active'
+                                      ? 'companyActive'
+                                      : '')
+                                  }
+                                >
+                                  <Text
+                                    data-num={index}
+                                    onClick={this.tapCompanyText}
+                                  >
+                                    {item.name}
+                                  </Text>
+                                </View>
+                              )
+                            )
+                          })}
+                        </Block>
+                      </View>
+                    </View>
+                  </ScrollView>
+                </View>
+              )}
+              <View
+                className={
+                  filterShow == '3' ? 'lastFilterButton' : 'filterButton'
+                }
+              >
+                {filterShow != 4 && (
+                  <View
+                    onClick={this.filterReset}
+                    className="filterButton-reset"
+                  >
+                    重置
+                  </View>
+                )}
+                {filterShow != 4 && (
+                  <View
+                    onClick={this.filterDefined}
+                    className="filterButton-determine"
+                  >
+                    确定
+                  </View>
+                )}
+                {filterShow == 4 && showDateSureBtn && (
+                  <View
+                    onClick={this.filterDefinedDate}
+                    className="filterButton-date-determine"
+                  >
+                    确定
+                  </View>
+                )}
               </View>
-            )}
-            <View
-              className={
-                filterShow == '3' ? 'lastFilterButton' : 'filterButton'
-              }
-            >
-              {filterShow != 4 && (
-                <View onClick={this.filterReset} className="filterButton-reset">
-                  重置
-                </View>
-              )}
-              {filterShow != 4 && (
-                <View
-                  onClick={this.filterDefined}
-                  className="filterButton-determine"
-                >
-                  确定
-                </View>
-              )}
-              {filterShow == 4 && showDateSureBtn && (
-                <View
-                  onClick={this.filterDefinedDate}
-                  className="filterButton-date-determine"
-                >
-                  确定
-                </View>
-              )}
             </View>
           </View>
         </View>
