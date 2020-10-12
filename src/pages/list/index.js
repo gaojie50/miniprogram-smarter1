@@ -5,7 +5,7 @@ import {
   Text,
   ScrollView,
   CoverImage,
-  Canvas
+  Canvas,
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
@@ -13,6 +13,14 @@ import withWeapp from '@tarojs/with-weapp'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
 import lineChart from '../../utils/chart.js'
+
+import FilmDetailList from '../../components/filmDetailList/index'
+// import MpLoading from "weui-miniprogram/loading/loading"  TODO
+import CostumListItem from '../../components/costomListItem/index'
+import ScheduleType from '../../components/scheduleType/index'
+import MaoyanSign from '../../components/maoyanSign/index'
+import FilterPanel from '../../components/filterPanel/index'
+import Backdrop from '../../components/backdrop/index'
 
 import './index.scss'
 let chart = null
@@ -26,19 +34,19 @@ const {
   handleReleaseDesc,
   handleNewDate,
   formatWeekDate,
-  throttle
+  throttle,
 } = utils
 
 const app = Taro.getApp()
-import reqPacking from "../../utils/reqPacking.js";
+import reqPacking from '../../utils/reqPacking.js'
 
-const capsuleLocation= Taro.getMenuButtonBoundingClientRect();
-const barHeight= Taro.getSystemInfoSync().statusBarHeight;
+const capsuleLocation = Taro.getMenuButtonBoundingClientRect()
+const barHeight = Taro.getSystemInfoSync().statusBarHeight
 // const { reqPacking, capsuleLocation, barHeight } = app.globalData
 
 function rContScrollEvt({ detail }) {
   this.setData({
-    rightContScrollLeft: detail.scrollLeft
+    rightContScrollLeft: detail.scrollLeft,
   })
 }
 
@@ -55,7 +63,7 @@ function rContScrollEvt({ detail }) {
     costomShow: false,
     barHeight,
     titleHeight: Math.floor(
-      capsuleLocation.bottom + capsuleLocation.top - barHeight
+      capsuleLocation.bottom + capsuleLocation.top - barHeight,
     ),
     gapHeight: Math.floor(capsuleLocation.top - barHeight),
     showIcon: false,
@@ -73,39 +81,39 @@ function rContScrollEvt({ detail }) {
       2: '非常确定',
       3: '可能',
       4: '内部建议',
-      5: '待定'
+      5: '待定',
     },
     project: {
       1: '筹备',
       2: '拍摄',
       3: '后期',
       4: '待过审',
-      5: '已过审'
+      5: '已过审',
     },
     cooper: {
       1: '评估中',
       2: '跟进中',
       3: '未合作',
       4: '开发中',
-      5: '投资中'
+      5: '投资中',
     },
     directFilterList: [
       {
         name: 'maoyan',
-        active: false
+        active: false,
       },
       {
         name: 'ali',
-        active: false
+        active: false,
       },
       {
         name: 'latestSchedule',
-        active: false
+        active: false,
       },
       {
         name: 'superOneMillonEstimateBox',
-        active: false
-      }
+        active: false,
+      },
     ],
     filterItemHidden: [],
     dateSelect: getFutureTimePeriod(),
@@ -123,18 +131,18 @@ function rContScrollEvt({ detail }) {
       hasMore: false,
       offset: 0,
       limit: 1000,
-      total: 0
+      total: 0,
     },
     toView: '',
     redTextShow: false,
-    canvasImg: ''
+    canvasImg: '',
   },
 
-  onLoad: function({ token }) {
+  onLoad: function ({ token }) {
     if (token) Taro.setStorageSync('token', token)
 
     this.setData({
-      screenHeight: Taro.getSystemInfoSync().windowHeight
+      screenHeight: Taro.getSystemInfoSync().windowHeight,
     })
 
     // 判断用户是否有权限
@@ -148,19 +156,19 @@ function rContScrollEvt({ detail }) {
     ) {
       this.setData({
         curPagePermission: true,
-        initLoading: false
+        initLoading: false,
       })
       this.fetchfilmDistribution()
       this.fetchSchedule()
       this.setData({ loading: true }, () =>
-        this._fetchData(this.data.dateSelect)
+        this._fetchData(this.data.dateSelect),
       )
     } else {
       reqPacking(
         {
-          url: 'api/user/authinfo'
+          url: 'api/user/authinfo',
         },
-        'passport'
+        'passport',
       ).then(({ success, data }) => {
         if (success) {
           // app.globalData.authinfo = data todo
@@ -177,53 +185,53 @@ function rContScrollEvt({ detail }) {
             //用户有权限
             Taro.setStorageSync('listPermission', {
               authEndTime: data.authEndTime,
-              authStartTime: data.authStartTime
+              authStartTime: data.authStartTime,
             })
 
             this.setData(
               {
                 loading: true,
                 curPagePermission: true,
-                initLoading: false
+                initLoading: false,
               },
               () => {
                 this.fetchfilmDistribution()
                 this.fetchSchedule()
                 this._fetchData(this.data.dateSelect)
-              }
+              },
             )
           }
 
           this.setData({
-            initLoading: false
+            initLoading: false,
           })
         }
 
         this.setData({
-          initLoading: false
+          initLoading: false,
         })
       })
     }
   },
-  fetchfilmDistribution: function() {
+  fetchfilmDistribution: function () {
     const { offset, limit } = this.data.paging
     const query = {
       offset,
-      limit
+      limit,
     }
 
     reqPacking({
       url: 'api/applet/management/filmDistribution',
-      data: query
-    }).then(res => {
+      data: query,
+    }).then((res) => {
       const { success, data, paging } = res
       if (success && data) {
-        data.map(item => {
+        data.map((item) => {
           if (item.filmSchedule && item.filmSchedule.length > 0) {
             item.filmSchedule = formatDirector(item.filmSchedule)
           }
           if (item.keyFilms && item.keyFilms.length > 0) {
-            item.keyFilms.map(item2 => {
+            item.keyFilms.map((item2) => {
               if (item2.maoyanSign && item2.maoyanSign.length > 0) {
                 item2.maoyanSignLabel = getMaoyanSignLabel(item2.maoyanSign)
               }
@@ -253,16 +261,16 @@ function rContScrollEvt({ detail }) {
             filmDistributionList: this.data.filmDistributionList.concat(data),
             paging,
             filmLoading: false,
-            topFilmLoading: false
+            topFilmLoading: false,
           },
           () => {
             this.chartDraw()
-          }
+          },
         )
       } else {
         this.setData({
           filmDistributionList: [],
-          topFilmLoading: false
+          topFilmLoading: false,
         })
       }
     })
@@ -293,32 +301,32 @@ function rContScrollEvt({ detail }) {
       lines: [
         {
           points: value,
-          redDot
-        }
-      ]
+          redDot,
+        },
+      ],
     })
     chart.draw()
   },
-  fetchSchedule: function() {
+  fetchSchedule: function () {
     reqPacking({
-      url: 'api/applet/management/latestSchedule'
+      url: 'api/applet/management/latestSchedule',
     }).then(({ success, data }) => {
       if (success && data) {
         this.setData({
-          latestSchedule: data
+          latestSchedule: data,
         })
       }
     })
   },
 
-  _fetchData: function(param = {}) {
+  _fetchData: function (param = {}) {
     reqPacking({
       url: 'api/management/list',
       data: param,
-      method: 'POST'
+      method: 'POST',
     }).then(({ success, data }) => {
       if (success && data && data.length > 0) {
-        data.map(item => {
+        data.map((item) => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign)
           }
@@ -362,37 +370,34 @@ function rContScrollEvt({ detail }) {
         return this.setData({
           list: data,
           subList: data,
-          loading: false
+          loading: false,
         })
       }
       this.setData({
         list: [],
         subList: [],
-        loading: false
+        loading: false,
       })
     })
   },
-  tapFilterItem: function(e) {
+  tapFilterItem: function (e) {
     const num = e.target.dataset.num
     const { filterActive } = this.data
     if (num == filterActive) {
       this.setData({
         toView: 'filter',
         filterActive: '',
-        backdropShow: ''
+        backdropShow: '',
       })
     } else {
       this.setData({
         toView: 'filter',
         filterActive: e.target.dataset.num,
-        backdropShow: 'filter'
-      }, () => {
-        console.log(this.data.backdropShow)
-        console.log(this.data.filterActive)
+        backdropShow: 'filter',
       })
     }
   },
-  tapDerictFilter: function(e) {
+  tapDerictFilter: function (e) {
     const num = e.target.dataset.num
     const derictFilterWrap = this.data
     let newDataList = []
@@ -401,7 +406,7 @@ function rContScrollEvt({ detail }) {
     ]
     this.setData(
       {
-        ...derictFilterWrap
+        ...derictFilterWrap,
       },
       () => {
         const { subList, latestSchedule, directFilterList } = this.data
@@ -420,10 +425,10 @@ function rContScrollEvt({ detail }) {
           !directFilterList[3].active
         ) {
           this.setData({
-            list: subList
+            list: subList,
           })
         } else {
-          list.map(item => {
+          list.map((item) => {
             //只看猫眼参与
             if (directFilterList[0].active && item.company.indexOf(1) !== -1) {
               for (let i = 0; i < newDataList.length; i++) {
@@ -449,7 +454,7 @@ function rContScrollEvt({ detail }) {
           if (directFilterList[2].active) {
             if (newDataList.length === 0) {
               if (!directFilterList[0].active && !directFilterList[1].active) {
-                list.map(item => {
+                list.map((item) => {
                   if (item.alias[0] === latestSchedule.name) {
                     newDataList.push(item)
                   }
@@ -457,7 +462,7 @@ function rContScrollEvt({ detail }) {
               }
             } else {
               const arr = []
-              newDataList.map(item => {
+              newDataList.map((item) => {
                 if (item.alias[0] === latestSchedule.name) {
                   arr.push(item)
                 }
@@ -474,7 +479,7 @@ function rContScrollEvt({ detail }) {
                 !directFilterList[1].active &&
                 !directFilterList[2].active
               ) {
-                list.map(item => {
+                list.map((item) => {
                   if (item.estimateBox >= 100000000) {
                     newDataList.push(item)
                   }
@@ -482,7 +487,7 @@ function rContScrollEvt({ detail }) {
               }
             } else {
               const arr2 = []
-              newDataList.map(item => {
+              newDataList.map((item) => {
                 if (item.estimateBox >= 100000000) {
                   arr2.push(item)
                 }
@@ -491,29 +496,29 @@ function rContScrollEvt({ detail }) {
             }
           }
           this.setData({
-            list: newDataList
+            list: newDataList,
           })
         }
-      }
+      },
     )
   },
-  tapExtend: function() {
+  tapExtend: function () {
     const dataList = this.data
     dataList.backdropShow = 'costom'
     dataList.costomShow = true
     this.setData({
-      ...dataList
+      ...dataList,
     })
   },
-  ongetBackDrop: function(e) {
+  ongetBackDrop: function (e) {
     this.setData({
       backdropShow: '',
       filterActive: '',
       costomShow: false,
-      filmDetailList: false
+      filmDetailList: false,
     })
   },
-  ongetCostom: function(e) {
+  ongetCostom: function (e) {
     const dataList = this.data
     dataList.backdropShow = ''
     dataList.costomShow = false
@@ -523,19 +528,19 @@ function rContScrollEvt({ detail }) {
       dataList.filterItemHidden = e.detail
       this.setData(
         {
-          ...dataList
+          ...dataList,
         },
         () => {
           this.fetchFilterShow()
-        }
+        },
       )
     } else {
       this.setData({
-        ...dataList
+        ...dataList,
       })
     }
   },
-  fetchFilterShow: function() {
+  fetchFilterShow: function () {
     const dataList = this.data
     dataList.filterItemHidden.map((item, index) => {
       dataList[`filterItemHidden${item}`] = true
@@ -546,10 +551,10 @@ function rContScrollEvt({ detail }) {
       }
     }
     this.setData({
-      ...dataList
+      ...dataList,
     })
   },
-  ongetFilterShow: function(e) {
+  ongetFilterShow: function (e) {
     const {
       dimension,
       projectStatus,
@@ -562,11 +567,11 @@ function rContScrollEvt({ detail }) {
       cooperBox,
       company,
       customStartDate,
-      customEndDate
+      customEndDate,
     } = e.detail
 
     const checkedDate = e.detail.dateSet.filter(
-      item => item.checked == 'checked'
+      (item) => item.checked == 'checked',
     )[0]
     const dateValue = checkedDate.value
     let { dateText, dateSelect } = this.data
@@ -578,11 +583,11 @@ function rContScrollEvt({ detail }) {
       //时间为自定义
       dateSelect = {
         startDate: +new Date(
-          handleNewDate(customStartDate.value).setHours(0, 0, 0, 0)
+          handleNewDate(customStartDate.value).setHours(0, 0, 0, 0),
         ),
         endDate: +new Date(
-          handleNewDate(customEndDate.value).setHours(23, 59, 59, 999)
-        )
+          handleNewDate(customEndDate.value).setHours(23, 59, 59, 999),
+        ),
       }
 
       function abbrCurYear(str) {
@@ -591,11 +596,11 @@ function rContScrollEvt({ detail }) {
       }
 
       dateText = `${abbrCurYear(customStartDate.value)}-${abbrCurYear(
-        customEndDate.value
+        customEndDate.value,
       )}`
     }
 
-    const formateFilterStr = function(arr) {
+    const formateFilterStr = function (arr) {
       if (!arr) return
       let newStr = ''
       if (arr.length !== 0) {
@@ -609,23 +614,23 @@ function rContScrollEvt({ detail }) {
       newStr = newStr.substring(0, newStr.length - 1)
       return newStr
     }
-    const formateFilterLength = function(cost, cooper, company) {
+    const formateFilterLength = function (cost, cooper, company) {
       const newCost = []
       const newCooper = []
       const newPcId = []
       cost &&
-        cost.map(item => {
+        cost.map((item) => {
           if (item.active) {
             newCost.push(item)
           }
         })
       cooper &&
-        cooper.map(item => {
+        cooper.map((item) => {
           if (item.active) {
             newCooper.push(item)
           }
         })
-      Object.keys(company || {}).forEach(item => {
+      Object.keys(company || {}).forEach((item) => {
         if (company[item] === 'active') {
           newPcId.push(pcId[item])
         }
@@ -634,10 +639,10 @@ function rContScrollEvt({ detail }) {
       const result = newCost.length + newCooper.length + newPcId.length
       return result
     }
-    const handlePcId = function(pcId) {
+    const handlePcId = function (pcId) {
       const pcIdArr = []
       pcId &&
-        pcId.map(item => {
+        pcId.map((item) => {
           pcIdArr.push(item.id)
         })
       return pcIdArr
@@ -646,7 +651,7 @@ function rContScrollEvt({ detail }) {
     const projectBoxStr = formateFilterStr(projectBox)
     const lastFilterLength = formateFilterLength(costBox, cooperBox, company)
     const pcIdRequest = handlePcId(pcId)
-    this.data.directFilterList.map(item => {
+    this.data.directFilterList.map((item) => {
       item.active = false
     })
     this.setData(
@@ -666,7 +671,7 @@ function rContScrollEvt({ detail }) {
         backdropShow: '',
         filterActive: '',
         dateText,
-        dateSelect
+        dateSelect,
       },
       () => {
         const {
@@ -675,7 +680,7 @@ function rContScrollEvt({ detail }) {
           cost,
           cooperStatus,
           pcId,
-          dateSelect
+          dateSelect,
         } = this.data
         const param = {
           dimension,
@@ -683,60 +688,60 @@ function rContScrollEvt({ detail }) {
           cost,
           cooperStatus,
           pcId,
-          ...dateSelect
+          ...dateSelect,
         }
 
-        Object.keys(param).forEach(key => {
+        Object.keys(param).forEach((key) => {
           if (param[key].length === 0) {
             delete param[key]
           }
         })
         this.setData(
           {
-            loading: true
+            loading: true,
           },
-          () => this._fetchData(param)
+          () => this._fetchData(param),
         )
-      }
+      },
     )
   },
   scroll(e) {
     if (e.detail.scrollTop > rpxTopx(80)) {
       this.setData({
-        showIcon: true
+        showIcon: true,
       })
     } else {
       this.setData({
-        showIcon: false
+        showIcon: false,
       })
     }
   },
 
   jumpToSearch() {
     Taro.navigateTo({
-      url: '/pages/search/index'
+      url: '/pages/search/index',
     })
   },
-  jumpToDetail: function(e) {
+  jumpToDetail: function (e) {
     const { id } = e.currentTarget.dataset
     const { list } = this.data
     const filterList = JSON.parse(JSON.stringify(list)).filter(
-      ({ maoyanId, projectId }) => maoyanId == id
+      ({ maoyanId, projectId }) => maoyanId == id,
     )[0]
 
     Taro.navigateTo({
       url: `/pages/projectDetail/index`,
-      success: function(res) {
+      success: function (res) {
         res.eventChannel.emit('acceptDataFromListPage', {
-          item: filterList
+          item: filterList,
         })
-      }
+      },
     })
   },
 
   copyMail() {
     Taro.setClipboardData({
-      data: 'zhiduoxing@maoyan.com'
+      data: 'zhiduoxing@maoyan.com',
     })
   },
   rightContScroll: throttle(rContScrollEvt, 10),
@@ -754,7 +759,7 @@ function rContScrollEvt({ detail }) {
       this.setData({
         filmDistributionItem,
         backdropShow: 'costom',
-        filmDetailList: true
+        filmDetailList: true,
       })
   },
   filmScroll() {
@@ -765,25 +770,25 @@ function rContScrollEvt({ detail }) {
           filmLoading: true,
           paging: {
             offset: offset + limit,
-            limit
-          }
+            limit,
+          },
         },
         () => {
           this.fetchfilmDistribution()
-        }
+        },
       )
     }
   },
   tapRedPrompt() {
     this.setData({
-      redTextShow: true
+      redTextShow: true,
     })
   },
   redTextClose() {
     this.setData({
-      redTextShow: false
+      redTextShow: false,
     })
-  }
+  },
 })
 class _C extends React.Component {
   render() {
@@ -831,7 +836,7 @@ class _C extends React.Component {
       costomShow,
       filmDistributionItem,
       filmDetailList,
-      curPagePermission
+      curPagePermission,
     } = this.data
     return (
       <Block>
@@ -847,12 +852,11 @@ class _C extends React.Component {
           </View>
         )}
         {backdropShow === 'costom' && (
-          <backDrop
+          <Backdrop
             onTouchMove={true}
             onMyevent={this.ongetBackDrop}
-            className="backdrop"
             backdropShow={backdropShow}
-          ></backDrop>
+          ></Backdrop>
         )}
         {curPagePermission && !initLoading && (
           <View>
@@ -882,7 +886,7 @@ class _C extends React.Component {
                   >
                     <Image
                       className="search"
-                      src='../../static/icon/search-white.png'
+                      src="../../static/icon/search-white.png"
                     ></Image>
                   </View>
                   <Text onClick={this.goTop}>影片市场情报</Text>
@@ -903,12 +907,12 @@ class _C extends React.Component {
                       <Image
                         onClick={this.tapRedPrompt}
                         className="redText"
-                        src='../../static/list/redText.png'
+                        src="../../static/list/redText.png"
                         alt
                       ></Image>
                       {redTextShow && (
                         <CoverImage
-                          src='../../static/list/bubble.png'
+                          src="../../static/list/bubble.png"
                           className="redPrompt"
                         ></CoverImage>
                       )}
@@ -969,7 +973,7 @@ class _C extends React.Component {
                                     {item.filmNum !== 0 && (
                                       <Image
                                         data-item={item}
-                                        src='../../static/film.png'
+                                        src="../../static/film.png"
                                         alt
                                       ></Image>
                                     )}
@@ -1141,21 +1145,23 @@ class _C extends React.Component {
                         ></Image>
                       </View>
                       {backdropShow === 'filter' && (
-                        <backDrop
+                        <Backdrop
                           onTouchMove={this.privateStopNoop}
                           onMyevent={this.ongetBackDrop}
                           backdropShow={backdropShow}
-                        ></backDrop>
+                        ></Backdrop>
                       )}
-                      <filterPanel
+                      <FilterPanel
                         titleHeight={titleHeight}
                         onMyevent={this.ongetFilterShow}
                         filterShow={filterActive}
-                      ></filterPanel>
+                      >
+                        {filterActive}
+                      </FilterPanel>
                       {!loading && (
                         <View className="extends" onClick={this.tapExtend}>
                           <Image
-                            src='../../static/defined.png'
+                            src="../../static/defined.png"
                             style="width: 20rpx; height: 20rpx; margin-left: 72rpx;"
                             alt
                           ></Image>
@@ -1213,7 +1219,7 @@ class _C extends React.Component {
                         {/* <MpLoading type="circle" show={true} tips></MpLoading> */}
                       </View>
                     )}
-                    {/* {!loading && (
+                    {!loading && (
                       <View className="listTable">
                         <View className="table-left">
                           <View className="listTr tableLeftTitleFixed">
@@ -1244,12 +1250,12 @@ class _C extends React.Component {
                                       {(item.maoyanSignLabel || []).map(
                                         (item, index) => {
                                           return (
-                                            <maoyanSign
+                                            <MaoyanSign
                                               key="index"
                                               signContent={item}
-                                            ></maoyanSign>
+                                            ></MaoyanSign>
                                           )
-                                        }
+                                        },
                                       )}
                                     </View>
                                   </View>
@@ -1393,33 +1399,45 @@ class _C extends React.Component {
                                       {item.reRelease && (
                                         <View>
                                           <View>
-                                            <Text>{item.releaseDate}</Text>
+                                            <View>
+                                              <Text>{item.releaseDate}</Text>
+                                            </View>
                                           </View>
                                           {item.releaseDate.length !== 4 && (
-                                            <Text>{item.alias[0]}</Text>
+                                            <View>
+                                            <View>
+                                              <Text>{item.alias[0]}</Text>
+                                            </View>
+                                          </View>
                                           )}
-                                          <scheduleType signContent="重映"></scheduleType>
+                                          <ScheduleType signContent="重映"></ScheduleType>
                                         </View>
                                       )}
                                       {!item.reRelease && (
                                         <View>
                                           <View>
-                                            <Text>{item.releaseDate}</Text>
+                                            <View>
+                                              <Text>{item.releaseDate}</Text>
+                                            </View>
                                           </View>
                                           {item.releaseDate.length !== 4 && (
-                                            <Text>{item.alias[0]}</Text>
+                                            <View>
+                                              <View>
+                                                <Text>{item.alias[0]}</Text>
+                                              </View>
+                                            </View>
                                           )}
                                           {item.movieStatus == 2 &&
                                           item.scheduleType == 5 ? (
-                                            <scheduleType
+                                            <ScheduleType
                                               signContent
-                                            ></scheduleType>
+                                            ></ScheduleType>
                                           ) : (
-                                            <scheduleType
+                                            <ScheduleType
                                               signContent={
                                                 scheduleType[item.scheduleType]
                                               }
-                                            ></scheduleType>
+                                            ></ScheduleType>
                                           )}
                                         </View>
                                       )}
@@ -1561,7 +1579,7 @@ class _C extends React.Component {
                                                       {item}
                                                     </Text>
                                                   )
-                                                }
+                                                },
                                               )}
                                             </Block>
                                           )}
@@ -1601,22 +1619,22 @@ class _C extends React.Component {
                     )}
                     {!loading && list.length == 0 && (
                       <View className="no-data">暂无数据</View>
-                    )} */}
+                    )}
                   </View>
                 </View>
               </ScrollView>
             </View>
             <View className="customListItem">
-              <costumListItem
+              <CostumListItem
                 onMyevent={this.ongetCostom}
                 costomShow={costomShow}
-              ></costumListItem>
+              ></CostumListItem>
             </View>
-            <filmDetailList
+            <FilmDetailList
               filmDistributionItem={filmDistributionItem}
               onMyevent={this.ongetCostom}
               show={filmDetailList}
-            ></filmDetailList>
+            ></FilmDetailList>
           </View>
         )}
         {/*  无权限页面  */}
@@ -1640,7 +1658,7 @@ class _C extends React.Component {
                   <Text>影片市场情报</Text>
                 </View>
               </View>
-              <Image src='../../static/list/no-access.png'></Image>
+              <Image src="../../static/list/no-access.png"></Image>
               <View className="title">暂无权限查看相关数据</View>
               <View className="content">
                 申请开通请联系zhiduoxing@maoyan.com

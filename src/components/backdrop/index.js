@@ -8,7 +8,7 @@ import './index.scss'
   properties: {
     backdropShow: {
       type: String,
-      value: '1',
+      value: '',
     },
   },
   methods: {
@@ -29,7 +29,6 @@ import './index.scss'
   },
 })
 class _C extends React.Component {
-
   render() {
     const { backdropShow } = this.props
     return (

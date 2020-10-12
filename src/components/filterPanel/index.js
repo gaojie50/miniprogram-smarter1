@@ -636,37 +636,6 @@ function dateValueCommon(timeStamp) {
   },
 })
 class _C extends React.Component {
-
-  static getDerivedStateFromProps(props, state) {
-    console.log(props);
-    return null
-  }
-  componentDidMount() {
-    console.log('componentDidMount')
-  }
-
-  shouldComponentUpdate() {
-    console.log('shouldComponentUpdate')
-    return true;
-  }
-
-  componentWillUpdate() {
-    console.log('componentWillUpdate')
-  }
-
-  componentDidUpdate() {
-    console.log('componentDidUpdate')
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('aaa')
-    // if (nextProps.filterShow !== this.props.filterShow) {
-    //   this.setState({
-    //     filterShow: nextProps.filterShow
-    //   })
-    // }
-  }
-
   render() {
     const {
       filterShow,
@@ -687,8 +656,6 @@ class _C extends React.Component {
       companyList,
       showDateSureBtn,
     } = this.data
-    console.log(this.props)
-    console.log(this.data)
 
     return (
       filterShow.length != 0 && (

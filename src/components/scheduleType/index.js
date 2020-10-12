@@ -18,22 +18,22 @@ class _C extends React.Component {
     return (
       <View className="scheduleType">
         {signContent == '已定档' && (
-          <Text className="scheduleDone">{signContent}</Text>
+          <View><Text className="scheduleDone">{signContent}</Text></View>
         )}
         {signContent == '非常确定' && (
-          <Text className="scheduleDetermine">{signContent}</Text>
+          <View><Text className="scheduleDetermine">{signContent}</Text></View>
         )}
         {signContent == '可能' && (
-          <Text className="scheduleMay">{signContent}</Text>
+          <View><Text className="scheduleMay">{signContent}</Text></View>
         )}
         {signContent == '内部建议' && (
-          <Text className="scheduleInner">{signContent}</Text>
+          <View><Text className="scheduleInner">{signContent}</Text></View>
         )}
         {signContent == '待定' && (
-          <Text className="scheduleNext">{signContent}</Text>
+          <View><Text className="scheduleNext">{signContent}</Text></View>
         )}
         {signContent == '重映' && (
-          <Text className="scheduleRemake">{signContent}</Text>
+          <View><Text className="scheduleRemake">{signContent}</Text></View>
         )}
       </View>
     )

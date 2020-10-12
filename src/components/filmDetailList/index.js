@@ -2,6 +2,8 @@ import { Block, View, Text, Image, ScrollView } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
 import withWeapp from '@tarojs/with-weapp'
+import MaoyanSign from '../maoyanSign/index'
+import ScheduleType from '../scheduleType/index'
 import './index.scss'
 
 @withWeapp({
@@ -109,11 +111,11 @@ class _C extends React.Component {
                       <View className="left">
                         {(item.maoyanSignLabel || []).map((item, index) => {
                           return (
-                            <maoyanSign
+                            <MaoyanSign
                               className="maoyanSign"
                               key="index"
                               signContent={item}
-                            ></maoyanSign>
+                            ></MaoyanSign>
                           )
                         })}
                         <View className="director">
@@ -129,10 +131,10 @@ class _C extends React.Component {
                     </View>
                     <View>
                       <Text>{item.releaseDesc}</Text>
-                      <scheduleType
+                      <ScheduleType
                         className="scheduleType"
                         signContent={scheduleType[item.scheduleType]}
-                      ></scheduleType>
+                      ></ScheduleType>
                     </View>
                   </View>
                 </View>
