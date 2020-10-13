@@ -66,7 +66,7 @@ class _C extends React.Component {
               <Text>部影片</Text>
             </View>
             <View onClick={this.tapClose} className="close-wrap">
-              <Image src={require('../../static/close.png')}></Image>
+              <Image src='../../static/close.png'></Image>
             </View>
           </View>
           <ScrollView
@@ -125,7 +125,7 @@ class _C extends React.Component {
                       )}
                     </View>
                     <View>
-                      <Text>{item.releaseDesc}</Text>
+                      <Text style={{ marginRight: 10}}>{item.releaseDesc}</Text>
                       <ScheduleType
                         className="scheduleType"
                         signContent={scheduleType[item.scheduleType]}

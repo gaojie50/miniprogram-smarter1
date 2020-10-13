@@ -5,11 +5,13 @@ import {
   Image,
   Text,
   PickerView,
+  PickerViewColumn
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
 import withWeapp from '@tarojs/with-weapp'
 import utils from '../../utils/index.js'
+
 
 import './index.scss'
 const { getFutureTimePeriod, calcWeek, assignDeep, handleNewDate } = utils
@@ -707,7 +709,7 @@ class _C extends React.Component {
                                   {customStartDate.week}
                                 </Text>
                               </View>
-                              <Text>至</Text>
+                              <View><Text>至</Text></View>
                               <View
                                 className={
                                   'right ' +

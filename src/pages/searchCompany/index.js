@@ -116,7 +116,7 @@ class _C extends React.Component {
             <Label>
               <Image
                 className="searchIco"
-                src={require('../../static/icon/search.png')}
+                src='../../static/icon/search.png'
               ></Image>
               <Input autoFocus onInput={this.bindKeyInput}></Input>
             </Label>
@@ -140,7 +140,7 @@ class _C extends React.Component {
                   data-name={item.name}
                   data-id={item.id}
                 >
-                  <Image src={require('../../static/icon/checked.png')}></Image>
+                  <Image src='../../static/icon/checked.png'></Image>
                   {item.name}
                 </View>
               )

@@ -96,7 +96,7 @@ class _C extends React.Component {
               至少保留4项
             </Text>
             <View onClick={this.tapClose} className="closeImg">
-              <Image src={require('../../static/close.png')}></Image>
+              <Image src='../../static/close.png'></Image>
             </View>
           </View>
           <View className="listWrap">

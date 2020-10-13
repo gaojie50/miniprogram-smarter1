@@ -410,8 +410,8 @@ class _C extends React.Component {
                 <View className="arrow-container" onClick={this.fold}>
                   <Image
                     className="arrow"
-                    style={"transform:" + flod.rotateZ}
-                    src="../../static/projectDetail/arrow.png"
+                    style={'transform:' + flod.rotateZ}
+                    src='../../static/projectDetail/arrow.png'
                   ></Image>
                 </View>
               )}

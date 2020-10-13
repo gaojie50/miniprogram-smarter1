@@ -97,7 +97,7 @@ class _C extends React.Component {
             <Label>
               <Image
                 className="searchIco"
-                src={require('../../static/icon/search.png')}
+                src='../../static/icon/search.png'
               ></Image>
               <Input autoFocus onInput={this.bindKeyInput}></Input>
             </Label>
