@@ -727,8 +727,8 @@ class _C extends React.Component {
                               </View>
                             </View>
                             <PickerView
-                              indicatorStyle="height: 60rpx;"
                               value={dateValue}
+                              indicatorClass="data-selected"
                               onChange={this.dateSelect}
                               className="date-box"
                             >

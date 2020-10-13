@@ -22,12 +22,6 @@ const config = {
     }
   },
   framework: 'react',
-  // alias: {
-  //   '@/components': path.resolve(__dirname, '..', 'src/components'),
-  //   '@/utils': path.resolve(__dirname, '..', 'src/utils'),
-  //   '@/package': path.resolve(__dirname, '..', 'package.json'),
-  //   '@/project': path.resolve(__dirname, '..', 'project.config.json'),
-  // },
   mini: {
     imageUrlLoaderOption: {
       limit: 1024,

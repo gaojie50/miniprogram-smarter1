@@ -129,10 +129,9 @@ class _C extends React.Component {
                         </View>
                       )}
                     </View>
-                    <View>
-                      <Text style={{ marginRight: 10}}>{item.releaseDesc}</Text>
+                    <View className="thirdLine">
+                      <Text>{item.releaseDesc}</Text>
                       <ScheduleType
-                        className="scheduleType"
                         signContent={scheduleType[item.scheduleType]}
                       ></ScheduleType>
                     </View>

@@ -1013,7 +1013,11 @@ class _C extends React.Component {
                     )}
                     {topFilmLoading && (
                       <View className="list-loading">
-                        <mpLoading type="circle" show={true} tips=""></mpLoading>
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
                       </View>
                     )}
                     {!topFilmLoading && filmDistributionList.length === 0 && (
@@ -1215,7 +1219,11 @@ class _C extends React.Component {
                     </ScrollView>
                     {loading && (
                       <View className="list-loading">
-                        <mpLoading type="circle" show={true} tips=""></mpLoading>
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
                       </View>
                     )}
                     {!loading && (
@@ -1420,7 +1428,11 @@ class _C extends React.Component {
                                             </View>
                                           </View>
                                           {item.releaseDate.length !== 4 && (
-                                            <Text>{item.alias[0]}</Text>
+                                            <View>
+                                              <View>
+                                                <Text>{item.alias[0]}</Text>
+                                              </View>
+                                            </View>
                                           )}
                                           <ScheduleType
                                             signContent={
