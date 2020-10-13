@@ -722,19 +722,16 @@ function rContScrollEvt({ detail }) {
     })
   },
   jumpToDetail: function (e) {
-    const { id } = e.currentTarget.dataset
-    const { list } = this.data
+    const { id } = e.currentTarget.dataset;
+    console.log(id ,'id', e.currentTarget.dataset);
+    const { list } = this.data;
     const filterList = JSON.parse(JSON.stringify(list)).filter(
       ({ maoyanId, projectId }) => maoyanId == id,
-    )[0]
+    )[0];
+    const { maoyanId, projectId } = filterList;
 
     Taro.navigateTo({
-      url: `/pages/projectDetail/index`,
-      success: function (res) {
-        res.eventChannel.emit('acceptDataFromListPage', {
-          item: filterList,
-        })
-      },
+      url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
     })
   },
 
