@@ -39,14 +39,9 @@ import './index.scss'
     jumpDetail(e) {
       console.log(e)
       const { item } = e.currentTarget.dataset
-
+      const { maoyanId, projectId } = item;
       Taro.navigateTo({
-        url: '/pages/projectDetail/index',
-        success: function(res) {
-          res.eventChannel.emit('acceptDataFromListPage', {
-            item
-          })
-        }
+        url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
       })
     },
     handleTouchMove() {

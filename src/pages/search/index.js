@@ -73,18 +73,17 @@ function fn(e) {
   bindKeyInput: debounce(fn, 500),
 
   jumpDetail: function(e) {
-    const { id } = e.currentTarget.dataset
-    const { list } = this.data
+    const { id } = e.currentTarget.dataset;
+    console.log(id ,'id', e.currentTarget.dataset);
+    const { list } = this.data;
     const filterList = JSON.parse(JSON.stringify(list)).filter(
       ({ maoyanId, projectId }) => `${maoyanId}-${projectId}` == id
-    )[0]
+    )[0];
+    console.log(filterList, 'filterList');
+    const { maoyanId, projectId } = filterList;
+
     Taro.navigateTo({
-      url: `/pages/projectDetail/index`,
-      success: function(res) {
-        res.eventChannel.emit('acceptDataFromListPage', {
-          item: filterList
-        })
-      }
+      url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
     })
   }
 })
@@ -119,7 +118,7 @@ class _C extends React.Component {
                 <View
                   className="item"
                   key="id"
-                  data-Id={item.maoyanId + '-' + item.projectId}
+                  data-id={item.maoyanId + '-' + item.projectId}
                   onClick={this.jumpDetail}
                 >
                   <Image src={item.pic}></Image>
