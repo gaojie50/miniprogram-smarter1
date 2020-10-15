@@ -9,26 +9,24 @@ import {
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
-import withWeapp from '@tarojs/with-weapp'
 import reqPacking from '../../utils/reqPacking.js'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
 
-// import MpLoading from '../../weui-miniprogram/loading/loading' TODO
 import './index.scss'
 const { debounce } = utils
 const { getScheduleType } = projectConfig
 
-function fn(e) {
+function fn(e, _this) {
   const { value } = e.detail
   const innerVal = value.trim()
 
   if (innerVal == '')
-    return this.setData({
+    return _this.setState({
       inputVal: '',
       list: []
     })
-  this.setData(
+    _this.setState(
     {
       loading: true
     },
@@ -39,7 +37,7 @@ function fn(e) {
         method: 'POST'
       }).then(({ success, data }) => {
         if (success && data && data.length > 0) {
-          return this.setData({
+          return _this.setState({
             inputVal: innerVal,
             loading: false,
             list: data.map(item => {
@@ -53,7 +51,7 @@ function fn(e) {
           })
         }
 
-        this.setData({
+        _this.setState({
           inputVal: innerVal,
           loading: false,
           list: []
@@ -62,34 +60,32 @@ function fn(e) {
     }
   )
 }
-
-@withWeapp({
-  data: {
+class _C extends React.Component {
+  state = {
     inputVal: '',
     list: [],
     loading: false
-  },
+  }
 
-  bindKeyInput: debounce(fn, 500),
+  bindKeyInput = (e) => {
+    return debounce(fn(e, this), 500);
+  };
 
-  jumpDetail: function(e) {
+  jumpDetail = (e) => {
     const { id } = e.currentTarget.dataset;
-    console.log(id ,'id', e.currentTarget.dataset);
-    const { list } = this.data;
+    const { list } = this.state;
     const filterList = JSON.parse(JSON.stringify(list)).filter(
       ({ maoyanId, projectId }) => `${maoyanId}-${projectId}` == id
     )[0];
-    console.log(filterList, 'filterList');
     const { maoyanId, projectId } = filterList;
 
     Taro.navigateTo({
       url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
     })
-  }
-})
-class _C extends React.Component {
+  };
+
   render() {
-    const { loading, inputVal, list } = this.data
+    const { loading, inputVal, list } = this.state
     return (
       <Block>
         <View className="search-box">
@@ -105,7 +101,7 @@ class _C extends React.Component {
         </View>
         {loading && (
           <View className="list-loading">
-            {/* <MpLoading type="circle" show={true} tips></MpLoading> */}
+            <mpLoading type="circle" show={true} tips></mpLoading>
           </View>
         )}
         {inputVal != '' && list.length == 0 && !loading && (

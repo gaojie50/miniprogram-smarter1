@@ -5,11 +5,9 @@ import {
   Text,
   ScrollView,
   CoverImage,
-  Canvas,
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
-import withWeapp from '@tarojs/with-weapp'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
 import lineChart from '../../utils/chart.js'
@@ -20,6 +18,8 @@ import ScheduleType from '../../components/scheduleType/index'
 import MaoyanSign from '../../components/maoyanSign/index'
 import FilterPanel from '../../components/filterPanel/index'
 import Backdrop from '../../components/backdrop/index'
+import FilmDistribution from '../../components/filmDistribution/index'
+import { set as setGlobalData, get as getGlobalData } from '../../global_data'
 
 import './index.scss'
 let chart = null
@@ -36,21 +36,18 @@ const {
   throttle,
 } = utils
 
-const app = Taro.getApp()
-import reqPacking from '../../utils/reqPacking.js'
+const reqPacking = getGlobalData('reqPacking')
+const capsuleLocation = getGlobalData('capsuleLocation')
+const barHeight = getGlobalData('barHeight')
 
-const capsuleLocation = Taro.getMenuButtonBoundingClientRect()
-const barHeight = Taro.getSystemInfoSync().statusBarHeight
-// const { reqPacking, capsuleLocation, barHeight } = app.globalData
-
-function rContScrollEvt({ detail }) {
-  this.setData({
+function rContScrollEvt({ detail }, _this) {
+  _this.setState({
     rightContScrollLeft: detail.scrollLeft,
   })
 }
 
-@withWeapp({
-  data: {
+class _C extends React.Component {
+  state = {
     filmItemWidth: rpxTopx(208),
     filmItemMarginRight: rpxTopx(8),
     initLoading: true,
@@ -135,12 +132,12 @@ function rContScrollEvt({ detail }) {
     toView: '',
     redTextShow: false,
     canvasImg: '',
-  },
+  }
 
-  onLoad: function ({ token }) {
+  onLoad = ({ token }) => {
     if (token) Taro.setStorageSync('token', token)
 
-    this.setData({
+    this.setState({
       screenHeight: Taro.getSystemInfoSync().windowHeight,
     })
 
@@ -153,14 +150,14 @@ function rContScrollEvt({ detail }) {
       authStartTime &&
       authStartTime <= +new Date()
     ) {
-      this.setData({
+      this.setState({
         curPagePermission: true,
         initLoading: false,
       })
       this.fetchfilmDistribution()
       this.fetchSchedule()
-      this.setData({ loading: true }, () =>
-        this._fetchData(this.data.dateSelect),
+      this.setState({ loading: true }, () =>
+        this._fetchData(this.state.dateSelect),
       )
     } else {
       reqPacking(
@@ -170,7 +167,7 @@ function rContScrollEvt({ detail }) {
         'passport',
       ).then(({ success, data }) => {
         if (success) {
-          // app.globalData.authinfo = data todo
+          setGlobalData('authinfo', data)
           if (
             data &&
             data.authIds &&
@@ -187,7 +184,7 @@ function rContScrollEvt({ detail }) {
               authStartTime: data.authStartTime,
             })
 
-            this.setData(
+            this.setState(
               {
                 loading: true,
                 curPagePermission: true,
@@ -196,24 +193,25 @@ function rContScrollEvt({ detail }) {
               () => {
                 this.fetchfilmDistribution()
                 this.fetchSchedule()
-                this._fetchData(this.data.dateSelect)
+                this._fetchData(this.state.dateSelect)
               },
             )
           }
 
-          this.setData({
+          this.setState({
             initLoading: false,
           })
         }
 
-        this.setData({
+        this.setState({
           initLoading: false,
         })
       })
     }
-  },
-  fetchfilmDistribution: function () {
-    const { offset, limit } = this.data.paging
+  }
+
+  fetchfilmDistribution = () => {
+    const { offset, limit } = this.state.paging
     const query = {
       offset,
       limit,
@@ -255,9 +253,9 @@ function rContScrollEvt({ detail }) {
           item.releaseDate = formatWeekDate(item.releaseDate)
         })
 
-        this.setData(
+        this.setState(
           {
-            filmDistributionList: this.data.filmDistributionList.concat(data),
+            filmDistributionList: this.state.filmDistributionList.concat(data),
             paging,
             filmLoading: false,
             topFilmLoading: false,
@@ -267,15 +265,16 @@ function rContScrollEvt({ detail }) {
           },
         )
       } else {
-        this.setData({
+        this.setState({
           filmDistributionList: [],
           topFilmLoading: false,
         })
       }
     })
-  },
-  chartDraw() {
-    const { filmDistributionList } = this.data
+  }
+
+  chartDraw = () => {
+    const { filmDistributionList } = this.state
 
     let key = []
     let value = []
@@ -305,20 +304,21 @@ function rContScrollEvt({ detail }) {
       ],
     })
     chart.draw()
-  },
-  fetchSchedule: function () {
+  }
+
+  fetchSchedule = () => {
     reqPacking({
       url: 'api/applet/management/latestSchedule',
     }).then(({ success, data }) => {
       if (success && data) {
-        this.setData({
+        this.setState({
           latestSchedule: data,
         })
       }
     })
-  },
+  }
 
-  _fetchData: function (param = {}) {
+  _fetchData = (param = {}) => {
     reqPacking({
       url: 'api/management/list',
       data: param,
@@ -366,49 +366,51 @@ function rContScrollEvt({ detail }) {
           }
         })
 
-        return this.setData({
+        return this.setState({
           list: data,
           subList: data,
           loading: false,
         })
       }
-      this.setData({
+      this.setState({
         list: [],
         subList: [],
         loading: false,
       })
     })
-  },
-  tapFilterItem: function (e) {
+  }
+
+  tapFilterItem = (e) => {
     const num = e.target.dataset.num
-    const { filterActive } = this.data
+    const { filterActive } = this.state
     if (num == filterActive) {
-      this.setData({
+      this.setState({
         toView: 'filter',
         filterActive: '',
         backdropShow: '',
       })
     } else {
-      this.setData({
+      this.setState({
         toView: 'filter',
         filterActive: e.target.dataset.num,
         backdropShow: 'filter',
       })
     }
-  },
-  tapDerictFilter: function (e) {
+  }
+
+  tapDerictFilter = (e) => {
     const num = e.target.dataset.num
-    const derictFilterWrap = this.data
+    const derictFilterWrap = this.state
     let newDataList = []
     derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[
       `derictFilterActive${num}`
     ]
-    this.setData(
+    this.setState(
       {
         ...derictFilterWrap,
       },
       () => {
-        const { subList, latestSchedule, directFilterList } = this.data
+        const { subList, latestSchedule, directFilterList } = this.state
         const list = subList
 
         directFilterList.map((item, index) => {
@@ -423,7 +425,7 @@ function rContScrollEvt({ detail }) {
           !directFilterList[2].active &&
           !directFilterList[3].active
         ) {
-          this.setData({
+          this.setState({
             list: subList,
           })
         } else {
@@ -494,38 +496,41 @@ function rContScrollEvt({ detail }) {
               newDataList = arr2
             }
           }
-          this.setData({
+          this.setState({
             list: newDataList,
           })
         }
       },
     )
-  },
-  tapExtend: function () {
-    const dataList = this.data
+  }
+
+  tapExtend = () => {
+    const dataList = this.state
     dataList.backdropShow = 'costom'
     dataList.costomShow = true
-    this.setData({
+    this.setState({
       ...dataList,
     })
-  },
-  ongetBackDrop: function (e) {
-    this.setData({
+  }
+
+  ongetBackDrop = () => {
+    this.setState({
       backdropShow: '',
       filterActive: '',
       costomShow: false,
       filmDetailList: false,
     })
-  },
-  ongetCostom: function (e) {
-    const dataList = this.data
+  }
+
+  ongetCostom = (e) => {
+    const dataList = this.state
     dataList.backdropShow = ''
     dataList.costomShow = false
     dataList.filmDetailList = false
     dataList.toView = ''
     if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail
-      this.setData(
+      this.setState(
         {
           ...dataList,
         },
@@ -534,13 +539,14 @@ function rContScrollEvt({ detail }) {
         },
       )
     } else {
-      this.setData({
+      this.setState({
         ...dataList,
       })
     }
-  },
-  fetchFilterShow: function () {
-    const dataList = this.data
+  }
+
+  fetchFilterShow = () => {
+    const dataList = this.state
     dataList.filterItemHidden.map((item, index) => {
       dataList[`filterItemHidden${item}`] = true
     })
@@ -549,11 +555,12 @@ function rContScrollEvt({ detail }) {
         dataList[`filterItemHidden${i}`] = false
       }
     }
-    this.setData({
+    this.setState({
       ...dataList,
     })
-  },
-  ongetFilterShow: function (e) {
+  }
+
+  ongetFilterShow = (e) => {
     const {
       dimension,
       projectStatus,
@@ -567,13 +574,13 @@ function rContScrollEvt({ detail }) {
       company,
       customStartDate,
       customEndDate,
-    } = e.detail
+    } = e;
 
-    const checkedDate = e.detail.dateSet.filter(
+    const checkedDate = e.dateSet.filter(
       (item) => item.checked == 'checked',
     )[0]
     const dateValue = checkedDate.value
-    let { dateText, dateSelect } = this.data
+    let { dateText, dateSelect } = this.state
 
     if (checkedDate.value != 'custom') {
       dateSelect = getFutureTimePeriod(dateValue)
@@ -650,10 +657,10 @@ function rContScrollEvt({ detail }) {
     const projectBoxStr = formateFilterStr(projectBox)
     const lastFilterLength = formateFilterLength(costBox, cooperBox, company)
     const pcIdRequest = handlePcId(pcId)
-    this.data.directFilterList.map((item) => {
+    this.state.directFilterList.map((item) => {
       item.active = false
     })
-    this.setData(
+    this.setState(
       {
         derictFilterActive1: false,
         derictFilterActive2: false,
@@ -680,7 +687,7 @@ function rContScrollEvt({ detail }) {
           cooperStatus,
           pcId,
           dateSelect,
-        } = this.data
+        } = this.state
         const param = {
           dimension,
           projectStatus,
@@ -695,7 +702,7 @@ function rContScrollEvt({ detail }) {
             delete param[key]
           }
         })
-        this.setData(
+        this.setState(
           {
             loading: true,
           },
@@ -703,65 +710,66 @@ function rContScrollEvt({ detail }) {
         )
       },
     )
-  },
-  scroll(e) {
+  }
+
+  scroll = (e) => {
     if (e.detail.scrollTop > rpxTopx(80)) {
-      this.setData({
+      this.setState({
         showIcon: true,
       })
     } else {
-      this.setData({
+      this.setState({
         showIcon: false,
       })
     }
-  },
+  }
 
-  jumpToSearch() {
+  jumpToSearch = () => {
     Taro.navigateTo({
       url: '/pages/search/index',
     })
-  },
-  jumpToDetail: function (e) {
-    const { id } = e.currentTarget.dataset;
-    console.log(id ,'id', e.currentTarget.dataset);
-    const { list } = this.data;
+  }
+
+  jumpToDetail = (e) => {
+    const { id } = e.currentTarget.dataset
+    const { list } = this.state
     const filterList = JSON.parse(JSON.stringify(list)).filter(
       ({ maoyanId, projectId }) => maoyanId == id,
-    )[0];
-    const { maoyanId, projectId } = filterList;
+    )[0]
+    const { maoyanId, projectId } = filterList
 
     Taro.navigateTo({
       url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
     })
-  },
+  }
 
-  copyMail() {
+  copyMail = () => {
     Taro.setClipboardData({
       data: 'zhiduoxing@maoyan.com',
     })
-  },
-  rightContScroll: throttle(rContScrollEvt, 10),
+  }
 
-  goTop() {
-    if (this.data.filterActive) return
-    this.setData({ toView: 'scroll-cont' })
-  },
-  tapfilmBox(e) {
-    const filmDistributionItem = e.target.dataset.item
+  rightContScroll = (e) => {
+    return throttle(rContScrollEvt(e, this), 10)
+  }
 
-    if (filmDistributionItem.filmNum == 0) return
+  goTop = () => {
+    if (this.state.filterActive) return
+    this.setState({ toView: 'scroll-cont' })
+  }
 
-    filmDistributionItem &&
-      this.setData({
-        filmDistributionItem,
-        backdropShow: 'costom',
-        filmDetailList: true,
-      })
-  },
-  filmScroll() {
-    const { limit, offset, hasMore } = this.data.paging
+  tapfilmBox = (value) => {
+    this.setState({
+      filmDistributionItem: value,
+      backdropShow: 'costom',
+      filmDetailList: true,
+    })
+  }
+
+  filmScroll = () => {
+    const { limit, offset, hasMore } = this.state.paging
     if (hasMore) {
-      this.setData(
+      this.setState(
         {
           filmLoading: true,
           paging: {
@@ -774,19 +782,20 @@ function rContScrollEvt({ detail }) {
         },
       )
     }
-  },
-  tapRedPrompt() {
-    this.setData({
+  }
+
+  tapRedPrompt = () => {
+    this.setState({
       redTextShow: true,
     })
-  },
-  redTextClose() {
-    this.setData({
+  }
+
+  redTextClose = () => {
+    this.setState({
       redTextShow: false,
     })
-  },
-})
-class _C extends React.Component {
+  }
+
   render() {
     const {
       initLoading,
@@ -833,7 +842,7 @@ class _C extends React.Component {
       filmDistributionItem,
       filmDetailList,
       curPagePermission,
-    } = this.data
+    } = this.state
     return (
       <Block>
         {initLoading && (
@@ -850,7 +859,7 @@ class _C extends React.Component {
         {backdropShow === 'costom' && (
           <Backdrop
             onTouchMove={true}
-            onMyevent={this.ongetBackDrop}
+            ongetBackDrop={this.ongetBackDrop}
             backdropShow={backdropShow}
           ></Backdrop>
         )}
@@ -888,7 +897,6 @@ class _C extends React.Component {
                   <Text onClick={this.goTop}>影片市场情报</Text>
                 </View>
               </View>
-              {/*  <scroll-view scroll-y class="main" style="height:calc(100vh - {{titleHeight}}px)" bindscroll="scroll" upper-threshold="80rpx" bindscrolltoupper="upper">  */}
               <ScrollView
                 scrollY={true}
                 scrollIntoView={toView}
@@ -914,99 +922,13 @@ class _C extends React.Component {
                       )}
                     </View>
                     {filmDistributionList.length !== 0 && (
-                      <ScrollView
-                        lowerThreshold="2"
-                        onScrollToLower={this.filmScroll}
-                        scrollX
-                      >
-                        <View className="filmChart" style="width: 100%;">
-                          <Canvas
-                            canvasId="chart"
-                            style={
-                              'width:' +
-                              (filmDistributionList.length * 218 + 20) +
-                              'rpx;'
-                            }
-                          ></Canvas>
-                        </View>
-                        <View
-                          className="filmList"
-                          style={
-                            'width:' +
-                            (filmDistributionList.length * 216 + 52) +
-                            'rpx;'
-                          }
-                        >
-                          {filmDistributionList.map((item, index) => {
-                            return (
-                              <View
-                                className="filmItem"
-                                style={
-                                  'width:' +
-                                  filmItemWidth +
-                                  'px;margin-right:' +
-                                  filmItemMarginRight +
-                                  'px'
-                                }
-                                key="yearWeek"
-                              >
-                                <View className="schedule">
-                                  {item.filmSchedule || ''}
-                                </View>
-                                <View className="time">{item.releaseDate}</View>
-                                <View
-                                  className={
-                                    item.filmNum == 0 ? 'no-filmBox' : 'filmBox'
-                                  }
-                                  data-item={item}
-                                  onClick={this.tapfilmBox}
-                                >
-                                  <View data-item={item}>
-                                    <Text data-item={item}>
-                                      {item.keyFilms.length}
-                                    </Text>
-                                    <Text data-item={item}>部</Text>
-                                    {item.filmNum !== 0 && (
-                                      <Image
-                                        data-item={item}
-                                        src="../../static/film.png"
-                                        alt
-                                      ></Image>
-                                    )}
-                                  </View>
-                                  {item.keyFilms.length === 0 && (
-                                    <View data-item={item}>-</View>
-                                  )}
-                                  {item.keyFilms.length >= 1 && (
-                                    <View data-item={item}>
-                                      {item.keyFilms[0].movieName}
-                                    </View>
-                                  )}
-                                  {item.keyFilms.length >= 2 && (
-                                    <View data-item={item}>
-                                      {item.keyFilms[1].movieName}
-                                    </View>
-                                  )}
-                                  {item.keyFilms.length >= 3 && (
-                                    <View data-item={item}>
-                                      {item.keyFilms[2].movieName}
-                                    </View>
-                                  )}
-                                </View>
-                              </View>
-                            )
-                          })}
-                          {filmLoading && (
-                            <View className="filmLoading">
-                              <mpLoading
-                                show={true}
-                                type="circle"
-                                tips=""
-                              ></mpLoading>
-                            </View>
-                          )}
-                        </View>
-                      </ScrollView>
+                      <FilmDistribution
+                        filmInfo={{
+                          filmDistributionList, filmItemWidth, filmItemMarginRight, filmLoading, topFilmLoading,
+                        }}
+                        onTapfilmBox={this.tapfilmBox}
+                        onFilmScroll={this.filmScroll}
+                      ></FilmDistribution>
                     )}
                     {topFilmLoading && (
                       <View className="list-loading">
@@ -1027,6 +949,7 @@ class _C extends React.Component {
                       className="redMessageClose"
                     ></View>
                   )}
+
                   <View
                     id="filter"
                     className="list"
@@ -1147,13 +1070,13 @@ class _C extends React.Component {
                       {backdropShow === 'filter' && (
                         <Backdrop
                           onTouchMove={this.privateStopNoop}
-                          onMyevent={this.ongetBackDrop}
+                          ongetBackDrop={this.ongetBackDrop}
                           backdropShow={backdropShow}
                         ></Backdrop>
                       )}
                       <FilterPanel
                         titleHeight={titleHeight}
-                        onMyevent={this.ongetFilterShow}
+                        ongetFilterShow={this.ongetFilterShow}
                         filterShow={filterActive}
                       >
                         {filterActive}
@@ -1628,13 +1551,13 @@ class _C extends React.Component {
             </View>
             <View className="customListItem">
               <CostumListItem
-                onMyevent={this.ongetCostom}
+                ongetCostom={this.ongetCostom}
                 costomShow={costomShow}
               ></CostumListItem>
             </View>
             <FilmDetailList
               filmDistributionItem={filmDistributionItem}
-              onMyevent={this.ongetCostom}
+              ongetCostom={this.ongetCostom}
               show={filmDetailList}
             ></FilmDetailList>
           </View>

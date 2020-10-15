@@ -1,20 +1,13 @@
 import { Block, Text, View } from '@tarojs/components'
 import React from 'react'
-import Taro from '@tarojs/taro'
-import withWeapp from '@tarojs/with-weapp'
 import './index.scss'
 
-@withWeapp({
-  properties: {
-    signContent: {
-      type: String,
-      value: '',
-    },
-  },
-})
 class _C extends React.Component {
+  static defaultProps = {
+    signContent: ''
+  }
   render() {
-    const { signContent } = this.data
+    const { signContent } = this.props
     return (
       <Block>
         <View className="mainInline">

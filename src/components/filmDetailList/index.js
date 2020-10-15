@@ -1,23 +1,16 @@
-import { Block, View, Text, Image, ScrollView } from '@tarojs/components'
+import { View, Text, Image, ScrollView } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
-import withWeapp from '@tarojs/with-weapp'
 import MaoyanSign from '../maoyanSign/index'
 import ScheduleType from '../scheduleType/index'
 import './index.scss'
-
-@withWeapp({
-  properties: {
-    show: {
-      type: Boolean,
-      value: false
-    },
-    filmDistributionItem: {
-      type: Object,
-      value: {}
-    }
-  },
-  data: {
+class _C extends React.Component {
+  static defaultProps = {
+    show: false,
+    filmDistributionItem: {},
+  }
+  
+  state = {
     scheduleType: {
       1: '已定档',
       2: '非常确定',
@@ -25,33 +18,33 @@ import './index.scss'
       4: '内部建议',
       5: '待定'
     }
-  },
-  methods: {
-    tapClose() {
-      this.setData({
-        show: false
-      })
-      const myEventDetail = {
-        backdropShow: false
-      }
-      this.triggerEvent('myevent', myEventDetail)
-    },
-    jumpDetail(e) {
-      console.log(e)
-      const { item } = e.currentTarget.dataset
-      const { maoyanId, projectId } = item;
-      Taro.navigateTo({
-        url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
-      })
-    },
-    handleTouchMove() {
-      return
-    }
   }
-})
-class _C extends React.Component {
+
+  tapClose = () => {
+    this.setState({
+      show: false
+    })
+    const myEventDetail = {
+      backdropShow: false
+    }
+    this.props.ongetCostom(myEventDetail);
+  };
+
+  jumpDetail = (e) => {
+    const { item } = e.currentTarget.dataset
+    const { maoyanId, projectId } = item;
+    Taro.navigateTo({
+      url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
+    })
+  };
+
+  handleTouchMove = () => {
+    return
+  };
+
   render() {
-    const { filmDistributionItem, scheduleType, show } = this.data
+    const { scheduleType } = this.state;
+    const { filmDistributionItem, show } = this.props;
     return (
       show &&
       filmDistributionItem.length !== 0 && (

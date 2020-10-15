@@ -1,262 +1,265 @@
-import { Block, View, Text, Image } from "@tarojs/components";
-import React from "react";
-import Taro, { getCurrentInstance } from "@tarojs/taro";
-import withWeapp from "@tarojs/with-weapp";
-import projectConfig from "../../constant/project-config.js";
-import reqPacking from "../../utils/reqPacking.js";
-import utils from "../../utils/index.js";
+import { Block, View, Text, Image } from '@tarojs/components'
+import React from 'react'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import projectConfig from '../../constant/project-config.js'
+import reqPacking from '../../utils/reqPacking.js'
+import utils from '../../utils/index.js'
 
-// import MpLoading from '../../weui-miniprogram/loading/loading' TODO
-import "./index.scss";
-const { getMaoyanSignLabel, getProjectStatus, getCooperStatus } = projectConfig;
-const { formatNumber, formatDirector, formatReleaseDate } = utils;
+import './index.scss'
+const { getMaoyanSignLabel, getProjectStatus, getCooperStatus } = projectConfig
+const { formatNumber, formatDirector, formatReleaseDate } = utils
 
-@withWeapp({
-  data: {
+class _C extends React.Component {
+  state = {
     loading: true,
     isFlod: true,
     isChange: false,
     count: 0,
-    calHeight: "",
+    calHeight: '',
     flod: {
-      height: "200rpx",
-      rotateZ: "rotateZ(180deg)"
+      height: '200rpx',
+      rotateZ: 'rotateZ(180deg)',
     },
-    resData: {}
-  },
+    resData: {},
+  }
 
-  onLoad: function() {
-    console.log(getCurrentInstance().router.params, "onLoad");
-    const { maoyanId, projectId } = getCurrentInstance().router.params;
-    this.fetchData(maoyanId, projectId);
-  },
+  onLoad() {
+    const { maoyanId, projectId } = getCurrentInstance().router.params
+    this.fetchData(maoyanId, projectId)
+  }
 
-  fold: function() {
-    if (!this.data.isChange) {
-      return;
+  onReady() {
+    const that = this;
+
+    setTimeout(function () {
+      load(that)
+    }, 100)
+
+    function load(that) {
+      if (that.state.count > 4) {
+        Taro.createSelectorQuery()
+          .selectAll('.info')
+          .boundingClientRect(function (rect) {
+            Taro.getSystemInfo({
+              success: (result) => {
+                that.setState({
+                  isChange: true,
+                  flod: {
+                    height:
+                      (rect[0]?.height +
+                        rect[1]?.height +
+                        rect[2]?.height +
+                        rect[3]?.height) *
+                        (750 / result.windowWidth) +
+                      215 +
+                      'rpx',
+                    rotateZ: 'rotateZ(180deg)',
+                  },
+                  calHeight:
+                    (rect[0]?.height +
+                      rect[1]?.height +
+                      rect[2]?.height +
+                      rect[3]?.height) *
+                      (750 / result.windowWidth) +
+                    215 +
+                    'rpx',
+                  // + (61/(750/result.windowWidth))
+                  // *(750/result.windowWidth)
+                })
+              },
+            })
+          })
+          .exec()
+      } else if (that.state.count == 4) {
+        Taro.createSelectorQuery()
+          .selectAll('.info')
+          .boundingClientRect(function (rect) {
+            Taro.getSystemInfo({
+              success: (result) => {
+                that.setState({
+                  isChange: false,
+                  flod: {
+                    height:
+                      (rect[0]?.height +
+                        rect[1]?.height +
+                        rect[2]?.height +
+                        rect[3]?.height) *
+                        (750 / result.windowWidth) +
+                      176 +
+                      'rpx',
+                  },
+                })
+              },
+            })
+          })
+          .exec()
+      } else {
+        Taro.createSelectorQuery()
+          .selectAll('.info')
+          .boundingClientRect(function (rect) {
+            Taro.getSystemInfo({
+              success: (result) => {
+                let height = 96
+                for (let i = 0; i < rect.height; i++) {
+                  height =
+                    height + 20 + rect[i].height * (750 / result.windowWidth)
+                }
+                that.setState({
+                  isChange: false,
+                  flod: {
+                    height: height + 'rpx',
+                  },
+                })
+              },
+            })
+          })
+          .exec()
+      }
     }
-    if (this.data.isFlod) {
-      this.setData({
-        isFlod: !this.data.isFlod,
+  }
+
+  fold = (e) => {
+    e.stopPropagation()
+    if (!this.state.isChange) {
+      return
+    }
+    if (this.state.isFlod) {
+      this.setState({
+        isFlod: !this.state.isFlod,
         flod: {
-          height: "auto",
-          rotateZ: "rotateZ(0deg)"
-        }
-      });
+          height: 'auto',
+          rotateZ: 'rotateZ(0deg)',
+        },
+      })
     } else {
-      this.setData({
-        isFlod: !this.data.isFlod,
+      this.setState({
+        isFlod: !this.state.isFlod,
         flod: {
-          height: this.data.calHeight,
-          rotateZ: "rotateZ(180deg)"
-        }
-      });
+          height: this.state.calHeight,
+          rotateZ: 'rotateZ(180deg)',
+        },
+      })
     }
-  },
+  }
 
-  fetchData(movieId, projectId) {
-    let that = this;
+  fetchData = (movieId, projectId) => {
+    let that = this
     reqPacking({
-      url: "api/applet/management/projectDetail",
+      url: 'api/applet/management/projectDetail',
       data: { movieId: movieId, projectId: projectId },
-      method: "GET"
-    }).then(res => {
+      method: 'GET',
+    }).then((res) => {
       if (!res.success) {
         Taro.showToast({
           title: res.error.message,
-          icon: "none",
-          duration: 2000
-        });
+          icon: 'none',
+          duration: 2000,
+        })
       } else {
-        this.setData(
-          {
-            resData: this.formData(res.data),
-            loading: false
-          },
-          () => {
-            console.log(this.data.count);
-            if (this.data.count > 4) {
-              Taro.createSelectorQuery()
-                .selectAll(".info")
-                .boundingClientRect(function(rect) {
-                  Taro.getSystemInfo({
-                    success: result => {
-                      that.setData({
-                        isChange: true,
-                        flod: {
-                          height:
-                            (rect[0]?.height +
-                              rect[1]?.height +
-                              rect[2]?.height +
-                              rect[3]?.height) *
-                              (750 / result.windowWidth) +
-                            215 +
-                            "rpx",
-                          rotateZ: "rotateZ(180deg)"
-                        },
-                        calHeight:
-                          (rect[0]?.height +
-                            rect[1]?.height +
-                            rect[2]?.height +
-                            rect[3]?.height) *
-                            (750 / result.windowWidth) +
-                          215 +
-                          "rpx"
-                        // + (61/(750/result.windowWidth))
-                        // *(750/result.windowWidth)
-                      });
-                    }
-                  });
-                })
-                .exec();
-            } else if (this.data.count == 4) {
-              Taro.createSelectorQuery()
-                .selectAll(".info")
-                .boundingClientRect(function(rect) {
-                  Taro.getSystemInfo({
-                    success: result => {
-                      that.setData({
-                        isChange: false,
-                        flod: {
-                          height:
-                            (rect[0]?.height +
-                              rect[1]?.height +
-                              rect[2]?.height +
-                              rect[3]?.height) *
-                              (750 / result.windowWidth) +
-                            176 +
-                            "rpx"
-                        }
-                      });
-                    }
-                  });
-                })
-                .exec();
-            } else {
-              Taro.createSelectorQuery()
-                .selectAll(".info")
-                .boundingClientRect(function(rect) {
-                  Taro.getSystemInfo({
-                    success: result => {
-                      let height = 96;
-                      for (let i = 0; i < that.data.count; i++) {
-                        height =
-                          height +
-                          20 +
-                          rect[i].height * (750 / result.windowWidth);
-                      }
-                      that.setData({
-                        isChange: false,
-                        flod: {
-                          height: height + "rpx"
-                        }
-                      });
-                    }
-                  });
-                })
-                .exec();
-            }
-          }
-        );
+        this.setState({
+          resData: this.formData(res.data),
+          loading: false,
+        })
       }
-    });
-  },
+    })
+  }
 
-  formData(resData) {
-    let count = 0;
+  formData = (resData) => {
+    let count = 0
     if (
       resData.productInfo.maoyanSign &&
       resData.productInfo.maoyanSign.length > 0
     ) {
       resData.productInfo.maoyanSign = getMaoyanSignLabel(
-        resData.productInfo.maoyanSign
-      );
+        resData.productInfo.maoyanSign,
+      )
     }
     if (resData.productInfo.filmSource) {
-      count++;
+      count++
     }
     if (resData.productInfo.director) {
-      count++;
+      count++
       if (resData.productInfo.director.length > 6) {
-        resData.productInfo.director.splice(6);
+        resData.productInfo.director.splice(6)
       }
       resData.productInfo.director = formatDirector(
-        resData.productInfo.director
-      );
+        resData.productInfo.director,
+      )
     }
     if (resData.productInfo.movieType) {
-      count++;
-      resData.productInfo.movieType = resData.productInfo.movieType.join(" / ");
+      count++
+      resData.productInfo.movieType = resData.productInfo.movieType.join(' / ')
     }
     if (resData.productInfo.protagonist) {
-      count++;
+      count++
       if (resData.productInfo.protagonist.length > 6) {
-        resData.productInfo.protagonist.splice(6);
+        resData.productInfo.protagonist.splice(6)
       }
       resData.productInfo.protagonist = formatDirector(
-        resData.productInfo.protagonist
-      );
+        resData.productInfo.protagonist,
+      )
     }
     if (resData.productInfo.producer) {
-      count++;
+      count++
       resData.productInfo.producer = formatDirector(
-        resData.productInfo.producer
-      );
+        resData.productInfo.producer,
+      )
     }
     if (resData.productInfo.issuer) {
-      count++;
-      resData.productInfo.issuer = formatDirector(resData.productInfo.issuer);
+      count++
+      resData.productInfo.issuer = formatDirector(resData.productInfo.issuer)
     }
     if (resData.productInfo.supervisor) {
-      count++;
+      count++
       resData.productInfo.supervisor = formatDirector(
-        resData.productInfo.supervisor
-      );
+        resData.productInfo.supervisor,
+      )
     }
     if (resData.productInfo.screenWriter) {
-      count++;
+      count++
       resData.productInfo.screenWriter = formatDirector(
-        resData.productInfo.screenWriter
-      );
+        resData.productInfo.screenWriter,
+      )
     }
     if (resData.marketIntelligence.estimateBox) {
       resData.marketIntelligence.estimateBox = formatNumber(
-        resData.marketIntelligence.estimateBox
-      );
+        resData.marketIntelligence.estimateBox,
+      )
     }
     if (resData.marketIntelligence.cost) {
       resData.marketIntelligence.cost = formatNumber(
-        resData.marketIntelligence.cost
-      );
+        resData.marketIntelligence.cost,
+      )
     }
     if (resData.marketIntelligence.publicityCost) {
       resData.marketIntelligence.publicityCost = formatNumber(
-        resData.marketIntelligence.publicityCost
-      );
+        resData.marketIntelligence.publicityCost,
+      )
     }
     if (resData.marketIntelligence.maoyanInvest) {
       resData.marketIntelligence.maoyanInvest = formatNumber(
-        resData.marketIntelligence.maoyanInvest
-      );
+        resData.marketIntelligence.maoyanInvest,
+      )
     }
     if (resData.productInfo.cooperStatus !== null) {
       resData.productInfo.cooperStatus = getCooperStatus(
-        resData.productInfo.cooperStatus
-      );
+        resData.productInfo.cooperStatus,
+      )
     }
 
     if (resData.marketIntelligence.projectStatus !== null) {
       resData.marketIntelligence.projectStatus = getProjectStatus(
-        resData.marketIntelligence.projectStatus
-      );
+        resData.marketIntelligence.projectStatus,
+      )
     }
     if (resData.createInfo.createTime) {
-      let date = new Date(resData.createInfo.createTime);
-      resData.createInfo.createTime = `${date.getFullYear()}-${date.getMonth() +
-        1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+      let date = new Date(resData.createInfo.createTime)
+      resData.createInfo.createTime = `${date.getFullYear()}-${
+        date.getMonth() + 1
+      }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
     }
     // if(count === 1) {
-    //   this.setData({
+    //   this.setState({
     //     showArrow: false,
     //     isChange: false,
     //     flod: {
@@ -264,7 +267,7 @@ const { formatNumber, formatDirector, formatReleaseDate } = utils;
     //     }
     //   })
     // } else if(count === 3) {
-    //   this.setData({
+    //   this.setState({
     //     showArrow: false,
     //     isChange: false,
     //     flod: {
@@ -272,7 +275,7 @@ const { formatNumber, formatDirector, formatReleaseDate } = utils;
     //     }
     //   })
     // }else {
-    //   this.setData({
+    //   this.setState({
     //     showArrow: true,
     //     flod: {
     //       height: "417rpx",
@@ -280,15 +283,14 @@ const { formatNumber, formatDirector, formatReleaseDate } = utils;
     //     }
     //   })
     // }
-    this.setData({
-      count: count
-    });
-    return resData;
+    this.setState({
+      count: count,
+    })
+    return resData
   }
-})
-class _C extends React.Component {
+
   render() {
-    const { resData, flod, loading, isChange } = this.data;
+    const { resData, flod, loading, isChange } = this.state
 
     return (
       <Block>
@@ -298,9 +300,9 @@ class _C extends React.Component {
             {(resData.productInfo?.maoyanSign || []).map((item, index) => {
               return (
                 <Text className="sign" key="index">
-                  {"猫眼" + item}
+                  {'猫眼' + item}
                 </Text>
-              );
+              )
             })}
           </View>
         </View>
@@ -309,11 +311,11 @@ class _C extends React.Component {
             <View
               className="detail"
               id="detail"
-              style={"height:" + flod.height + ";"}
+              style={'height:' + flod.height + ';'}
               onClick={this.fold}
             >
               <View className="title">基础信息</View>
-              {/* {loading && <MpLoading></MpLoading>} */}
+              {loading && <mpLoading></mpLoading>}
               <View className="type">
                 <View className="info">
                   <Text className="special">
@@ -411,7 +413,7 @@ class _C extends React.Component {
                   <Image
                     className="arrow"
                     style={'transform:' + flod.rotateZ}
-                    src='../../static/projectDetail/arrow.png'
+                    src="../../static/projectDetail/arrow.png"
                   ></Image>
                 </View>
               )}
@@ -425,12 +427,12 @@ class _C extends React.Component {
                   </View>
                   <View className="infoo">
                     <View className="item">
-                      {/* {loading && <MpLoading></MpLoading>} */}
+                      {loading && <mpLoading></mpLoading>}
                       {!loading && (
                         <View className="item-up">
                           <Text>
                             {resData.marketIntelligence?.estimateBox?.posNum ||
-                              "-"}
+                              '-'}
                           </Text>
                           <Text>
                             {resData.marketIntelligence?.estimateBox?.unit}
@@ -440,11 +442,11 @@ class _C extends React.Component {
                       <View>预估票房</View>
                     </View>
                     <View className="item">
-                      {/* {loading && <MpLoading></MpLoading>} */}
+                      {loading && <mpLoading></mpLoading>}
                       {!loading && (
                         <View className="item-up">
                           <Text>
-                            {resData.marketIntelligence?.estimateScore || "-"}
+                            {resData.marketIntelligence?.estimateScore || '-'}
                           </Text>
                           {resData.marketIntelligence?.estimateScore && (
                             <Text>分</Text>
@@ -454,11 +456,11 @@ class _C extends React.Component {
                       <View>预估评分</View>
                     </View>
                     <View className="item">
-                      {/* {loading && <MpLoading></MpLoading>} */}
+                      {loading && <mpLoading></mpLoading>}
                       {!loading && (
                         <View className="item-up">
                           <Text>
-                            {resData.marketIntelligence?.cost?.posNum || "-"}
+                            {resData.marketIntelligence?.cost?.posNum || '-'}
                           </Text>
                           <Text>{resData.marketIntelligence?.cost?.unit}</Text>
                         </View>
@@ -471,12 +473,12 @@ class _C extends React.Component {
                   </View>
                   <View className="infoo">
                     <View className="item">
-                      {/* {loading && <MpLoading></MpLoading>} */}
+                      {loading && <mpLoading></mpLoading>}
                       {!loading && (
                         <View className="item-up">
                           <Text>
                             {resData.marketIntelligence?.publicityCost
-                              ?.posNum || "-"}
+                              ?.posNum || '-'}
                           </Text>
                           <Text>
                             {resData.marketIntelligence?.publicityCost?.unit}
@@ -486,11 +488,11 @@ class _C extends React.Component {
                       <View>宣发费用</View>
                     </View>
                     <View className="item">
-                      {/* {loading && <MpLoading></MpLoading>} */}
+                      {loading && <mpLoading></mpLoading>}
                       {!loading && (
                         <View className="item-up">
                           <Text>
-                            {resData.marketIntelligence?.maoyanShare || "-"}
+                            {resData.marketIntelligence?.maoyanShare || '-'}
                           </Text>
                           {resData.marketIntelligence?.maoyanShare && (
                             <Text>%</Text>
@@ -500,12 +502,12 @@ class _C extends React.Component {
                       <View>猫眼份额</View>
                     </View>
                     <View className="item">
-                      {/* {loading && <MpLoading></MpLoading>} */}
+                      {loading && <mpLoading></mpLoading>}
                       {!loading && (
                         <View className="item-up">
                           <Text>
                             {resData.marketIntelligence?.maoyanInvest?.posNum ||
-                              "-"}
+                              '-'}
                           </Text>
                           <Text>
                             {resData.marketIntelligence?.maoyanInvest?.unit}
@@ -523,35 +525,35 @@ class _C extends React.Component {
                   <View className="infoo">
                     <View className="left">项目状态：</View>
                     <View className="right">
-                      {resData.marketIntelligence?.projectStatus?.label || "-"}
+                      {resData.marketIntelligence?.projectStatus?.label || '-'}
                     </View>
                   </View>
                   <View className="infoo">
                     <View className="left">上映时间：</View>
                     <View className="right">
-                      {(resData.productInfo?.releaseDesc || "-") +
-                        " " +
+                      {(resData.productInfo?.releaseDesc || '-') +
+                        ' ' +
                         (resData.productInfo?.alias.length > 0
-                          ? "(" + resData.productInfo?.alias + ")"
-                          : "")}
+                          ? '(' + resData.productInfo?.alias + ')'
+                          : '')}
                     </View>
                   </View>
                   <View className="infoo">
                     <View className="left">主出品：</View>
                     <View className="right">
-                      {resData.marketIntelligence?.mainPublish || "-"}
+                      {resData.marketIntelligence?.mainPublish || '-'}
                     </View>
                   </View>
                   <View className="infoo">
                     <View className="left">主发行：</View>
                     <View className="right">
-                      {resData.marketIntelligence?.mainIssuer || "-"}
+                      {resData.marketIntelligence?.mainIssuer || '-'}
                     </View>
                   </View>
                   <View className="infoo">
                     <View className="left">备 注 ：</View>
                     <View className="right">
-                      {resData.marketIntelligence?.remark || "-"}
+                      {resData.marketIntelligence?.remark || '-'}
                     </View>
                   </View>
                 </View>
@@ -567,7 +569,7 @@ class _C extends React.Component {
                 <View className="text-container">
                   <Text>
                     <Text className="name">{resData.createInfo?.creator}</Text>
-                    {"更新于 " + resData.createInfo?.createTime}
+                    {'更新于 ' + resData.createInfo?.createTime}
                   </Text>
                 </View>
               </View>
@@ -577,8 +579,8 @@ class _C extends React.Component {
           </View>
         </View>
       </Block>
-    );
+    )
   }
 }
 
-export default _C;
+export default _C

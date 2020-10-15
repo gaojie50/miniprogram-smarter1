@@ -3,10 +3,8 @@ export default {
     'pages/welcome/index',
     'pages/list/index',
     'pages/search/index',
-    'pages/inputInfo/index',
     'pages/projectDetail/index',
     'pages/searchCompany/index',
-    'pages/webview/index'
   ],
   window: {
     navigationBarBackgroundColor: '#798CBA',

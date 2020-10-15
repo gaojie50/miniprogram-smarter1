@@ -1,43 +1,41 @@
-import { Block, View, Image, Button } from '@tarojs/components'
+import { View, Image, Button } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
-import withWeapp from '@tarojs/with-weapp'
 import keepLogin from '../../utils/keepLogin.js'
+import { get as getGlobalData } from '../../global_data'
 
 import './index.scss'
-const app = Taro.getApp()
 
-// const { capsuleLocation, barHeight } = app.globalData
-const capsuleLocation= Taro.getMenuButtonBoundingClientRect();
-const barHeight= Taro.getSystemInfoSync().statusBarHeight;
-@withWeapp({
-  data: {
+const capsuleLocation = getGlobalData('capsuleLocation')
+const barHeight = getGlobalData('barHeight')
+class _C extends React.Component {
+  state = {
     isLogin: Taro.getStorageSync('token'),
     titleHeight: Math.floor(
-      capsuleLocation.bottom + capsuleLocation.top - barHeight
+      capsuleLocation.bottom + capsuleLocation.top - barHeight,
     ),
-    code: null
-  },
+    code: null,
+  }
 
-  onLoad: function() {
-    const { isLogin } = this.data
+  onLoad = () => {
+    const { isLogin } = this.state
 
     if (isLogin) this.goList()
-  },
+  };
 
-  goList: function() {
+  goList = () => {
     Taro.reLaunch({
-      url: '../list/index'
+      url: '../list/index',
     })
-  },
+  };
 
-  getUserInfo: function(e) {
+  getUserInfo = (e) => {
     Taro.getSetting({
-      success: res => {
+      success: (res) => {
         if (res.authSetting['scope.userInfo'] && e.detail) {
           const { iv, encryptedData } = e.detail
 
-          if (this.data.isLogin)
+          if (this.state.isLogin)
             return Taro.redirectTo({ url: `/pages/list/index` })
 
           return keepLogin({ iv, encryptedData })
@@ -46,25 +44,20 @@ const barHeight= Taro.getSystemInfoSync().statusBarHeight;
         Taro.showModal({
           title: '提示',
           content:
-            '您点击了拒绝授权，将无法正常使用智多星。请重新授权，或者删除小程序重新进入。'
+            '您点击了拒绝授权，将无法正常使用智多星。请重新授权，或者删除小程序重新进入。',
         })
-      }
+      },
     })
-  }
-})
-class _C extends React.Component {
+  };
   render() {
-    const { titleHeight, isLogin } = this.data
+    const { titleHeight, isLogin } = this.state
     return (
       <View className="welcome">
         <View style={'margin-top:' + titleHeight + 'px'}>
-          <Image
-            className="logo"
-            src='../../static/welcome/logo.png'
-          ></Image>
+          <Image className="logo" src="../../static/welcome/logo.png"></Image>
           <Image
             className="slogan"
-            src='../../static/welcome/slogan.png'
+            src="../../static/welcome/slogan.png"
           ></Image>
           <View
             className="show"

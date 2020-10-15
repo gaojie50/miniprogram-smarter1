@@ -9,9 +9,7 @@ import {
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
-import withWeapp from '@tarojs/with-weapp'
 import utils from '../../utils/index.js'
-
 
 import './index.scss'
 const { getFutureTimePeriod, calcWeek, assignDeep, handleNewDate } = utils
@@ -53,18 +51,13 @@ function dateValueCommon(timeStamp) {
   ]
 }
 
-@withWeapp({
-  properties: {
-    filterShow: {
-      type: String,
-      value: '4',
-    },
-    titleHeight: {
-      type: Number,
-      value: 100,
-    },
-  },
-  data: {
+class _C extends React.Component {
+  static defalutProps = {
+    filterShow: '',
+    titleHeight: 0,
+  }
+
+  state = {
     dimension: [],
     projectStatus: [],
     cost: [],
@@ -217,431 +210,476 @@ function dateValueCommon(timeStamp) {
     },
     dateShowFirstActive: true,
     showDateSureBtn: false,
-  },
-  methods: {
-    dateSelect: function (e) {
-      const val = e.detail.value
-      const {
-        dateShowFirstActive,
-        years,
-        months,
-        days,
-        customEndDate,
-        customStartDate,
-      } = this.data
-      let timeStamp = +new Date(
-        `${years[val[0]]}/${months[val[1]]}/${days[val[2]]}`,
-      )
-      let obj = {}
-      if (dateShowFirstActive) {
-        //开始时间大于结束时间
-        if (timeStamp > +handleNewDate(customEndDate.value)) {
-          obj.customEndDate = {
-            value: formartDate(timeStamp),
-            week: calcWeek(timeStamp),
-          }
-        }
-        //一年时间限制 限制开始日期
-        const minimumTimeStamp = +handleDays(
-          customEndDate.value,
-          180,
-          'subtract',
-        )
+  }
 
-        if (timeStamp < minimumTimeStamp) {
-          const endStamp = +handleDays(timeStamp, 180)
-
-          obj.customEndDate = {
-            value: formartDate(endStamp),
-            week: calcWeek(endStamp),
-          }
-        }
-
-        obj['customStartDate'] = {
-          value: formartDate(timeStamp),
-          week: calcWeek(timeStamp),
-        }
-        obj.dateValue = dateValueCommon(timeStamp)
-        return this.setData(obj)
-      }
-
-      //结束时间小于开始时间
-      if (timeStamp < +handleNewDate(customStartDate.value)) {
-        obj.customStartDate = {
+  dateSelect = (e) => {
+    const val = e.detail.value
+    const {
+      dateShowFirstActive,
+      years,
+      months,
+      days,
+      customEndDate,
+      customStartDate,
+    } = this.state
+    let timeStamp = +new Date(
+      `${years[val[0]]}/${months[val[1]]}/${days[val[2]]}`,
+    )
+    let obj = {}
+    if (dateShowFirstActive) {
+      //开始时间大于结束时间
+      if (timeStamp > +handleNewDate(customEndDate.value)) {
+        obj.customEndDate = {
           value: formartDate(timeStamp),
           week: calcWeek(timeStamp),
         }
       }
+      //一年时间限制 限制开始日期
+      const minimumTimeStamp = +handleDays(customEndDate.value, 180, 'subtract')
 
-      //一年时间限制 限制结束日期
-      const maxTimeStamp = +handleDays(customStartDate.value, 180)
-      if (timeStamp > maxTimeStamp) {
-        const startStamp = +handleDays(timeStamp, 180, 'subtract')
+      if (timeStamp < minimumTimeStamp) {
+        const endStamp = +handleDays(timeStamp, 180)
 
-        obj.customStartDate = {
-          value: formartDate(startStamp),
-          week: calcWeek(startStamp),
+        obj.customEndDate = {
+          value: formartDate(endStamp),
+          week: calcWeek(endStamp),
         }
       }
 
-      obj['customEndDate'] = {
+      obj['customStartDate'] = {
         value: formartDate(timeStamp),
         week: calcWeek(timeStamp),
       }
-
       obj.dateValue = dateValueCommon(timeStamp)
-      this.setData(obj)
-    },
+      return this.setState(obj)
+    }
 
-    switchDate: function (e) {
-      const { sign } = e.currentTarget.dataset
-      const {
-        dateShowFirstActive,
-        customStartDate,
-        customEndDate,
-      } = assignDeep(this.data)
-
-      if (
-        (dateShowFirstActive && sign == 'begin') ||
-        (!dateShowFirstActive && sign != 'begin')
-      )
-        return
-
-      if (sign == 'begin') {
-        return this.setData({
-          dateShowFirstActive: true,
-          dateValue: dateValueCommon(customStartDate.value),
-        })
+    //结束时间小于开始时间
+    if (timeStamp < +handleNewDate(customStartDate.value)) {
+      obj.customStartDate = {
+        value: formartDate(timeStamp),
+        week: calcWeek(timeStamp),
       }
+    }
 
-      this.setData({
-        dateShowFirstActive: false,
-        dateValue: dateValueCommon(customEndDate.value),
-      })
-    },
+    //一年时间限制 限制结束日期
+    const maxTimeStamp = +handleDays(customStartDate.value, 180)
+    if (timeStamp > maxTimeStamp) {
+      const startStamp = +handleDays(timeStamp, 180, 'subtract')
 
-    dateSelectEvent: function (e) {
-      const { value } = e.target.dataset
-      let { dateSet, showDateSureBtn } = this.data
-
-      if (
-        dateSet.some((item) => item.value == value && item.checked == 'checked')
-      )
-        return
-
-      const dateSetVar = dateSet.map((item) => {
-        item.checked = ''
-        if (item.value == value) {
-          item.checked = 'checked'
-          showDateSureBtn = item.label == '自定义'
-        }
-        return item
-      })
-
-      this.setData(
-        {
-          dateSet: dateSetVar,
-          showDateSureBtn,
-        },
-        () => {
-          const { showDateSureBtn } = this.data
-
-          if (!showDateSureBtn) this.filterDefinedDate()
-        },
-      )
-    },
-    tapEstimateBox: function (e) {
-      const num = e.target.dataset.num
-      const newEstimateBox = this.data.estimateBox
-      newEstimateBox[num].active = !newEstimateBox[num].active
-      this.setData({
-        estimateBox: newEstimateBox,
-      })
-    },
-    tapProjectStatus: function (e) {
-      const num = e.target.dataset.num
-      const newprojectBox = this.data.projectBox
-      newprojectBox[num].active = !newprojectBox[num].active
-      this.setData({
-        projectBox: newprojectBox,
-      })
-    },
-    tapCost: function (e) {
-      const num = e.target.dataset.num
-      const newcostBox = this.data.costBox
-      newcostBox[num].active = !newcostBox[num].active
-      this.setData({
-        costBox: newcostBox,
-      })
-    },
-    tapCooper: function (e) {
-      const num = e.target.dataset.num
-      const newcooperBox = this.data.cooperBox
-      newcooperBox[num].active = !newcooperBox[num].active
-      this.setData({
-        cooperBox: newcooperBox,
-      })
-    },
-    tapCompany: function (e) {
-      const num = e.target.dataset.num
-      const { companyList } = this.data
-      const dataList = this.data
-      if (JSON.stringify(dataList.company) == '{}') {
-        for (let m = 0; m < companyList.length; m++) {
-          dataList.company[m] = ''
-        }
+      obj.customStartDate = {
+        value: formartDate(startStamp),
+        week: calcWeek(startStamp),
       }
-      if (num != null) {
-        if (dataList.company[num] == '') {
-          dataList.company[num] = 'active'
-        } else {
-          dataList.company[num] = ''
-        }
-      }
-      this.setData({
-        ...dataList,
-      })
-    },
-    tapCompanyText: function (e) {
-      const num = e.target.dataset.num
-      const { companyList } = this.data
-      const dataList = this.data
-      if (JSON.stringify(dataList.company) == '{}') {
-        for (let m = 0; m < companyList.length; m++) {
-          dataList.company[m] = ''
-        }
-      }
-      if (num != null) {
-        if (dataList.company[num] !== '') {
-          dataList.company[num] = 'active'
-        } else {
-          dataList.company[num] = ''
-        }
-      }
-      this.setData({
-        ...dataList,
-      })
-    },
-    filterReset: function () {
-      const { filterShow, estimateBox, projectBox } = this.data
-      if (filterShow == '1') {
-        estimateBox.map((item) => {
-          item.active = false
-        })
-        this.setData({
-          estimateBox,
-        })
-      } else if (filterShow == '2') {
-        projectBox.map((item) => {
-          item.active = false
-        })
-        this.setData({
-          projectBox,
-        })
-      } else if (filterShow == '3') {
-        const dataList = this.data
-        dataList.costBox.map((item) => {
-          item.active = false
-        })
-        dataList.cooperBox.map((item) => {
-          item.active = false
-        })
-        for (let j = 0; j < dataList.companyList.length; j++) {
-          dataList.company[j] = ''
-        }
-        this.setData({
-          ...dataList,
-        })
-      }
-    },
-    filterDefined: function () {
-      const {
-        estimateBox,
-        projectBox,
-        costBox,
-        cooperBox,
-        dimension,
-        projectStatus,
-        cost,
-        cooperStatus,
-        dateSet,
-        pcId,
-        company,
-        companyList,
-        customStartDate,
-        customEndDate,
-      } = this.data
-      //处理预估票房
-      estimateBox.map((item, index) => {
-        if (item.active && dimension.indexOf(index + 1) === -1) {
-          dimension.push(index + 1)
-        }
-        if (!item.active && dimension.indexOf(index + 1) !== -1) {
-          const i = dimension.indexOf(index + 1)
-          dimension.splice(i, 1)
-        }
-      })
-      //处理项目状态
-      projectBox.map((item, index) => {
-        if (item.active && projectStatus.indexOf(index + 1) === -1) {
-          projectStatus.push(index + 1)
-        }
-        if (!item.active && projectStatus.indexOf(index + 1) !== -1) {
-          const i = projectStatus.indexOf(index + 1)
-          projectStatus.splice(i, 1)
-        }
-      })
-      //处理筛选
-      costBox.map((item, index) => {
-        if (item.active && cost.indexOf(index + 1) === -1) {
-          cost.push(index + 1)
-        }
-        if (!item.active && cost.indexOf(index + 1) !== -1) {
-          const i = cost.indexOf(index + 1)
-          cost.splice(i, 1)
-        }
-      })
-      cooperBox.map((item, index) => {
-        if (item.active && cooperStatus.indexOf(index + 1) === -1) {
-          cooperStatus.push(index + 1)
-        }
-        if (!item.active && cooperStatus.indexOf(index + 1) !== -1) {
-          const i = cooperStatus.indexOf(index + 1)
-          cooperStatus.splice(i, 1)
-        }
-      })
-      companyList.map((item, index) => {
-        if (company[index] === 'active') {
-          if (pcId.length !== 0) {
-            let add = true
-            pcId.map((item1) => {
-              if (item1.id == companyList[index].id) {
-                add = false
-              }
-            })
-            if (add) {
-              pcId.push(companyList[index])
-            }
-          } else {
-            pcId.push(companyList[index])
+    }
+
+    obj['customEndDate'] = {
+      value: formartDate(timeStamp),
+      week: calcWeek(timeStamp),
+    }
+
+    obj.dateValue = dateValueCommon(timeStamp)
+    this.setState(obj)
+  }
+
+  searchPCFinish = (data) => {
+    const { companyChecked } = data
+    const { companyList } = this.state
+
+    if (companyChecked.length !== 0) {
+      let toastStr = ''
+      for (let j = 0; j < companyList.length; j++) {
+        for (let i = 0; i < companyChecked.length; i++) {
+          if (companyList[j].id === companyChecked[i].id) {
+            this.state.company[j] = 'active'
+            toastStr = toastStr + companyChecked[i].name + '、'
+            companyChecked.splice(i, 1)
+            i--
           }
         }
-        if (company[index] !== 'active') {
-          pcId.map((item2, i) => {
-            if (item2.id === companyList[index].id) {
-              pcId.splice(i, 1)
-            }
-          })
+      }
+      toastStr = toastStr.substring(0, toastStr.length - 1)
+      if (toastStr.length !== 0) {
+        if (toastStr.length > 30) {
+          toastStr = toastStr.substring(0, 30)
+          toastStr = toastStr + '...'
         }
-      })
-
-      const myEventDetail = {
-        dimension,
-        projectStatus,
-        cost,
-        cooperStatus,
-        dateSet,
-        pcId,
-        estimateBox,
-        projectBox,
-        costBox,
-        cooperBox,
-        company,
-        customStartDate,
-        customEndDate,
+        Taro.showToast({
+          title: `${toastStr}已存在`,
+          icon: 'none',
+          duration: 4000,
+        })
       }
 
-      this.triggerEvent('myevent', myEventDetail)
-    },
-    filterDefinedDate: function () {
-      const {
-        dimension,
-        projectStatus,
-        cost,
-        cooperStatus,
-        pcId,
-        dateSet,
-        customStartDate,
-        customEndDate,
-        estimateBox,
-        projectBox,
-        costBox,
-        cooperBox,
-        company,
-      } = this.data
-      this.triggerEvent('myevent', {
-        dimension,
-        projectStatus,
-        cost,
-        cooperStatus,
-        pcId,
-        dateSet,
-        customStartDate,
-        customEndDate,
-        estimateBox,
-        projectBox,
-        costBox,
-        cooperBox,
-        company,
+      const newCompanyList = companyList.concat(companyChecked)
+      const newCompany = this.state.company
+      for (let i = companyList.length; i < newCompanyList.length; i++) {
+        newCompany[i] = 'active'
+      }
+      this.setState({
+        companyList: newCompanyList,
+        company: newCompany,
       })
-    },
-    movieAdd: function () {
-      Taro.navigateTo({
-        url: '/pages/searchCompany/index',
-        events: {
-          searchPCFinish: (data) => {
-            const { companyChecked } = data
-            const { companyList } = this.data
+    }
+  }
 
-            if (companyChecked.length !== 0) {
-              let toastStr = ''
-              for (let j = 0; j < companyList.length; j++) {
-                for (let i = 0; i < companyChecked.length; i++) {
-                  if (companyList[j].id === companyChecked[i].id) {
-                    this.data.company[j] = 'active'
-                    toastStr = toastStr + companyChecked[i].name + '、'
-                    companyChecked.splice(i, 1)
-                    i--
-                  }
+  switchDate = (e) => {
+    const { sign } = e.currentTarget.dataset
+    const { dateShowFirstActive, customStartDate, customEndDate } = assignDeep(
+      this.state,
+    )
+
+    if (
+      (dateShowFirstActive && sign == 'begin') ||
+      (!dateShowFirstActive && sign != 'begin')
+    )
+      return
+
+    if (sign == 'begin') {
+      return this.setState({
+        dateShowFirstActive: true,
+        dateValue: dateValueCommon(customStartDate.value),
+      })
+    }
+
+    this.setState({
+      dateShowFirstActive: false,
+      dateValue: dateValueCommon(customEndDate.value),
+    })
+  }
+
+  dateSelectEvent = (e) => {
+    const { value } = e.target.dataset
+    let { dateSet, showDateSureBtn } = this.state
+
+    if (
+      dateSet.some((item) => item.value == value && item.checked == 'checked')
+    )
+      return
+
+    const dateSetVar = dateSet.map((item) => {
+      item.checked = ''
+      if (item.value == value) {
+        item.checked = 'checked'
+        showDateSureBtn = item.label == '自定义'
+      }
+      return item
+    })
+
+    this.setState(
+      {
+        dateSet: dateSetVar,
+        showDateSureBtn,
+      },
+      () => {
+        const { showDateSureBtn } = this.state
+
+        if (!showDateSureBtn) this.filterDefinedDate()
+      },
+    )
+  }
+
+  tapEstimateBox = (e) => {
+    const num = e.target.dataset.num
+    const newEstimateBox = this.state.estimateBox
+    newEstimateBox[num].active = !newEstimateBox[num].active
+    this.setState({
+      estimateBox: newEstimateBox,
+    })
+  }
+
+  tapProjectStatus = (e) => {
+    const num = e.target.dataset.num
+    const newprojectBox = this.state.projectBox
+    newprojectBox[num].active = !newprojectBox[num].active
+    this.setState({
+      projectBox: newprojectBox,
+    })
+  }
+
+  tapCost = (e) => {
+    const num = e.target.dataset.num
+    const newcostBox = this.state.costBox
+    newcostBox[num].active = !newcostBox[num].active
+    this.setState({
+      costBox: newcostBox,
+    })
+  }
+
+  tapCooper = (e) => {
+    const num = e.target.dataset.num
+    const newcooperBox = this.state.cooperBox
+    newcooperBox[num].active = !newcooperBox[num].active
+    this.setState({
+      cooperBox: newcooperBox,
+    })
+  }
+
+  tapCompany = (e) => {
+    const num = e.target.dataset.num
+    const { companyList } = this.state
+    const dataList = this.state
+    if (JSON.stringify(dataList.company) == '{}') {
+      for (let m = 0; m < companyList.length; m++) {
+        dataList.company[m] = ''
+      }
+    }
+    if (num != null) {
+      if (dataList.company[num] == '') {
+        dataList.company[num] = 'active'
+      } else {
+        dataList.company[num] = ''
+      }
+    }
+    this.setState({
+      ...dataList,
+    })
+  }
+
+  tapCompanyText = (e) => {
+    const num = e.target.dataset.num
+    const { companyList } = this.state
+    const dataList = this.state
+    if (JSON.stringify(dataList.company) == '{}') {
+      for (let m = 0; m < companyList.length; m++) {
+        dataList.company[m] = ''
+      }
+    }
+    if (num != null) {
+      if (dataList.company[num] !== '') {
+        dataList.company[num] = 'active'
+      } else {
+        dataList.company[num] = ''
+      }
+    }
+    this.setState({
+      ...dataList,
+    })
+  }
+
+  filterReset = () => {
+    const { estimateBox, projectBox } = this.state
+    const { filterShow } = this.props;
+    if (filterShow == '1') {
+      estimateBox.map((item) => {
+        item.active = false
+      })
+      this.setState({
+        estimateBox,
+      })
+    } else if (filterShow == '2') {
+      projectBox.map((item) => {
+        item.active = false
+      })
+      this.setState({
+        projectBox,
+      })
+    } else if (filterShow == '3') {
+      const dataList = this.state
+      dataList.costBox.map((item) => {
+        item.active = false
+      })
+      dataList.cooperBox.map((item) => {
+        item.active = false
+      })
+      for (let j = 0; j < dataList.companyList.length; j++) {
+        dataList.company[j] = ''
+      }
+      this.setState({
+        ...dataList,
+      })
+    }
+  }
+
+  filterDefined = () => {
+    const {
+      estimateBox,
+      projectBox,
+      costBox,
+      cooperBox,
+      dimension,
+      projectStatus,
+      cost,
+      cooperStatus,
+      dateSet,
+      pcId,
+      company,
+      companyList,
+      customStartDate,
+      customEndDate,
+    } = this.state
+
+    //处理预估票房
+    estimateBox.map((item, index) => {
+      if (item.active && dimension.indexOf(index + 1) === -1) {
+        dimension.push(index + 1)
+      }
+      if (!item.active && dimension.indexOf(index + 1) !== -1) {
+        const i = dimension.indexOf(index + 1)
+        dimension.splice(i, 1)
+      }
+    })
+    //处理项目状态
+    projectBox.map((item, index) => {
+      if (item.active && projectStatus.indexOf(index + 1) === -1) {
+        projectStatus.push(index + 1)
+      }
+      if (!item.active && projectStatus.indexOf(index + 1) !== -1) {
+        const i = projectStatus.indexOf(index + 1)
+        projectStatus.splice(i, 1)
+      }
+    })
+    //处理筛选
+    costBox.map((item, index) => {
+      if (item.active && cost.indexOf(index + 1) === -1) {
+        cost.push(index + 1)
+      }
+      if (!item.active && cost.indexOf(index + 1) !== -1) {
+        const i = cost.indexOf(index + 1)
+        cost.splice(i, 1)
+      }
+    })
+    cooperBox.map((item, index) => {
+      if (item.active && cooperStatus.indexOf(index + 1) === -1) {
+        cooperStatus.push(index + 1)
+      }
+      if (!item.active && cooperStatus.indexOf(index + 1) !== -1) {
+        const i = cooperStatus.indexOf(index + 1)
+        cooperStatus.splice(i, 1)
+      }
+    })
+    companyList.map((item, index) => {
+      if (company[index] === 'active') {
+        if (pcId.length !== 0) {
+          let add = true
+          pcId.map((item1) => {
+            if (item1.id == companyList[index].id) {
+              add = false
+            }
+          })
+          if (add) {
+            pcId.push(companyList[index])
+          }
+        } else {
+          pcId.push(companyList[index])
+        }
+      }
+      if (company[index] !== 'active') {
+        pcId.map((item2, i) => {
+          if (item2.id === companyList[index].id) {
+            pcId.splice(i, 1)
+          }
+        })
+      }
+    })
+
+    const myEventDetail = {
+      dimension,
+      projectStatus,
+      cost,
+      cooperStatus,
+      dateSet,
+      pcId,
+      estimateBox,
+      projectBox,
+      costBox,
+      cooperBox,
+      company,
+      customStartDate,
+      customEndDate,
+    }
+
+    this.props.ongetFilterShow(myEventDetail);
+    // this.triggerEvent('myevent', myEventDetail)
+  }
+
+  filterDefinedDate = () => {
+    const {
+      dimension,
+      projectStatus,
+      cost,
+      cooperStatus,
+      pcId,
+      dateSet,
+      customStartDate,
+      customEndDate,
+      estimateBox,
+      projectBox,
+      costBox,
+      cooperBox,
+      company,
+    } = this.state
+    this.props.ongetFilterShow({
+      dimension,
+      projectStatus,
+      cost,
+      cooperStatus,
+      pcId,
+      dateSet,
+      customStartDate,
+      customEndDate,
+      estimateBox,
+      projectBox,
+      costBox,
+      cooperBox,
+      company,
+    })
+  }
+
+  movieAdd = () => {
+    Taro.navigateTo({
+      url: '/pages/searchCompany/index',
+      events: {
+        searchPCFinish: (data) => {
+          const { companyChecked } = data
+          const { companyList } = this.state
+
+          if (companyChecked.length !== 0) {
+            let toastStr = ''
+            for (let j = 0; j < companyList.length; j++) {
+              for (let i = 0; i < companyChecked.length; i++) {
+                if (companyList[j].id === companyChecked[i].id) {
+                  this.state.company[j] = 'active'
+                  toastStr = toastStr + companyChecked[i].name + '、'
+                  companyChecked.splice(i, 1)
+                  i--
                 }
               }
-              toastStr = toastStr.substring(0, toastStr.length - 1)
-              if (toastStr.length !== 0) {
-                if (toastStr.length > 30) {
-                  toastStr = toastStr.substring(0, 30)
-                  toastStr = toastStr + '...'
-                }
-                Taro.showToast({
-                  title: `${toastStr}已存在`,
-                  icon: 'none',
-                  duration: 4000,
-                })
+            }
+            toastStr = toastStr.substring(0, toastStr.length - 1)
+            if (toastStr.length !== 0) {
+              if (toastStr.length > 30) {
+                toastStr = toastStr.substring(0, 30)
+                toastStr = toastStr + '...'
               }
-
-              const newCompanyList = companyList.concat(companyChecked)
-              const newCompany = this.data.company
-              for (let i = companyList.length; i < newCompanyList.length; i++) {
-                newCompany[i] = 'active'
-              }
-              this.setData({
-                companyList: newCompanyList,
-                company: newCompany,
+              Taro.showToast({
+                title: `${toastStr}已存在`,
+                icon: 'none',
+                duration: 4000,
               })
             }
-          },
+
+            const newCompanyList = companyList.concat(companyChecked)
+            const newCompany = this.state.company
+            for (let i = companyList.length; i < newCompanyList.length; i++) {
+              newCompany[i] = 'active'
+            }
+            this.setState({
+              companyList: newCompanyList,
+              company: newCompany,
+            })
+          }
         },
-      })
-    },
-    handleTouchMove() {
-      return
-    },
-  },
-})
-class _C extends React.Component {
+      },
+    })
+  }
+
+  handleTouchMove = () => {
+    return
+  }
+
   render() {
     const {
-      filterShow,
-      titleHeight,
       dateShowFirstActive,
       customStartDate,
       customEndDate,
@@ -657,7 +695,8 @@ class _C extends React.Component {
       company,
       companyList,
       showDateSureBtn,
-    } = this.data
+    } = this.state
+    const { filterShow, titleHeight } = this.props
 
     return (
       filterShow.length != 0 && (
@@ -687,7 +726,7 @@ class _C extends React.Component {
                         >
                           <Image
                             className="pic"
-                            src='../../static/icon/checked.png'
+                            src="../../static/icon/checked.png"
                           ></Image>
                           {item.label}
                         </View>
@@ -709,7 +748,9 @@ class _C extends React.Component {
                                   {customStartDate.week}
                                 </Text>
                               </View>
-                              <View><Text>至</Text></View>
+                              <View>
+                                <Text>至</Text>
+                              </View>
                               <View
                                 className={
                                   'right ' +
@@ -873,7 +914,7 @@ class _C extends React.Component {
                       </Text>
                       <Image
                         onClick={this.movieAdd}
-                        src='../../static/arrow.png'
+                        src="../../static/arrow.png"
                         style="height: 20rpx;width: 11rpx"
                         alt
                       ></Image>

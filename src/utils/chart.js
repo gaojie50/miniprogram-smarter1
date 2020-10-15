@@ -191,7 +191,6 @@ LineChart.prototype._drawLine = function(line) {
   // 空心点
 
   _.each(points, item => {
-    // console.log(item)
     ctx.beginPath()
     ctx.arc(item.x, item.y, 4, 0, 4 * Math.PI)
     ctx.closePath()
