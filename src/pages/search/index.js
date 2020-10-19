@@ -101,7 +101,7 @@ class _C extends React.Component {
         </View>
         {loading && (
           <View className="list-loading">
-            <mpLoading type="circle" show={true} tips></mpLoading>
+            <mpLoading type="circle" show={true} tips=""></mpLoading>
           </View>
         )}
         {inputVal != '' && list.length == 0 && !loading && (

@@ -17,6 +17,7 @@ const config = {
   copy: {
     patterns: [
       { from: 'src/static/', to: 'dist/static/' },
+      { from: 'sitemap.json', to: 'dist/sitemap.json'}
     ],
     options: {
     }

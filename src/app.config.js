@@ -13,6 +13,6 @@ export default {
     navigationBarTextStyle: 'white'
   },
   style: 'v2',
-  // sitemapLocation: 'sitemap.json',
+  sitemapLocation: 'sitemap.json',
   useExtendedLib: { weui: true }
 }
