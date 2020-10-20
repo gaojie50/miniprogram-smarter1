@@ -20,16 +20,6 @@ class _C extends React.Component {
     }
   }
 
-  tapClose = () => {
-    this.setState({
-      show: false
-    })
-    const myEventDetail = {
-      backdropShow: false
-    }
-    this.props.ongetCostom(myEventDetail);
-  };
-
   jumpDetail = (e) => {
     const { item } = e.currentTarget.dataset
     const { maoyanId, projectId } = item;
@@ -58,7 +48,7 @@ class _C extends React.Component {
               </Text>
               <Text>部影片</Text>
             </View>
-            <View onClick={this.tapClose} className="close-wrap">
+            <View onClick={() => this.props.ongetCostom({})} className="close-wrap">
               <Image src='../../static/close.png'></Image>
             </View>
           </View>
@@ -76,7 +66,7 @@ class _C extends React.Component {
                   className="item"
                   onClick={this.jumpDetail}
                   data-item={item}
-                  key="maoyanId"
+                  key={item.maoyanId}
                 >
                   <Image src={item.pic} alt></Image>
                   <View className="main">

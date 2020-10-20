@@ -45,9 +45,11 @@ function rContScrollEvt({ detail }, _this) {
     rightContScrollLeft: detail.scrollLeft,
   })
 }
-
 class _C extends React.Component {
   state = {
+    allList: [],
+    offset: 0,
+    limit: 20,
     filmItemWidth: rpxTopx(208),
     filmItemMarginRight: rpxTopx(8),
     initLoading: true,
@@ -119,7 +121,7 @@ class _C extends React.Component {
     dateText: '未来1年',
     filterItemHidden10: true,
     filterItemHidden11: true,
-    filmDetailList: false,
+    isShowFilmDetailList: false,
     filmDistributionList: [],
     filmDistributionItem: {},
     filmLoading: false,
@@ -324,7 +326,7 @@ class _C extends React.Component {
       data: param,
       method: 'POST',
     }).then(({ success, data }) => {
-      if (success && data && data.length > 0) {
+      if (success && data) {
         data.map((item) => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
             item.maoyanSignLabel = getMaoyanSignLabel(item.maoyanSign)
@@ -367,9 +369,11 @@ class _C extends React.Component {
         })
 
         return this.setState({
-          list: data,
-          subList: data,
+          list: data.slice(0, 20),
+          allList: data,
+          subList: data.slice(0, 20),
           loading: false,
+          offset: 20,
         })
       }
       this.setState({
@@ -518,7 +522,7 @@ class _C extends React.Component {
       backdropShow: '',
       filterActive: '',
       costomShow: false,
-      filmDetailList: false,
+      isShowFilmDetailList: false,
     })
   }
 
@@ -526,7 +530,7 @@ class _C extends React.Component {
     const dataList = this.state
     dataList.backdropShow = ''
     dataList.costomShow = false
-    dataList.filmDetailList = false
+    dataList.isShowFilmDetailList = false
     dataList.toView = ''
     if (Array.isArray(e.detail)) {
       dataList.filterItemHidden = e.detail
@@ -574,11 +578,9 @@ class _C extends React.Component {
       company,
       customStartDate,
       customEndDate,
-    } = e;
+    } = e
 
-    const checkedDate = e.dateSet.filter(
-      (item) => item.checked == 'checked',
-    )[0]
+    const checkedDate = e.dateSet.filter((item) => item.checked == 'checked')[0]
     const dateValue = checkedDate.value
     let { dateText, dateSelect } = this.state
 
@@ -762,7 +764,7 @@ class _C extends React.Component {
     this.setState({
       filmDistributionItem: value,
       backdropShow: 'costom',
-      filmDetailList: true,
+      isShowFilmDetailList: true,
     })
   }
 
@@ -840,9 +842,13 @@ class _C extends React.Component {
       cooper,
       costomShow,
       filmDistributionItem,
-      filmDetailList,
+      isShowFilmDetailList,
       curPagePermission,
+      allList,
+      offset,
+      limit,
     } = this.state
+
     return (
       <Block>
         {initLoading && (
@@ -863,6 +869,11 @@ class _C extends React.Component {
             backdropShow={backdropShow}
           ></Backdrop>
         )}
+        {/* <Backdrop
+          onTouchMove={true}
+          ongetBackDrop={this.ongetBackDrop}
+          backdropShow={backdropShow}
+        ></Backdrop> */}
         {curPagePermission && !initLoading && (
           <View>
             <View className="header">
@@ -900,6 +911,22 @@ class _C extends React.Component {
               <ScrollView
                 scrollY={true}
                 scrollIntoView={toView}
+                onScroll={(e) => {
+                  if (e.detail.scrollTop < 250) {
+                    this.setState({
+                      list: allList.slice(0, limit),
+                      offset: limit,
+                      subList: allList.slice(0, limit),
+                    })
+                  }
+                }}
+                onScrollToLower={() => {
+                  this.setState({
+                    list: allList.slice(0, offset + limit),
+                    offset: offset + limit,
+                    subList: allList.slice(0, offset + limit),
+                  })
+                }}
                 className="main"
                 style={'height:calc(100vh - ' + titleHeight + 'px)'}
               >
@@ -924,7 +951,11 @@ class _C extends React.Component {
                     {filmDistributionList.length !== 0 && (
                       <FilmDistribution
                         filmInfo={{
-                          filmDistributionList, filmItemWidth, filmItemMarginRight, filmLoading, topFilmLoading,
+                          filmDistributionList,
+                          filmItemWidth,
+                          filmItemMarginRight,
+                          filmLoading,
+                          topFilmLoading,
                         }}
                         onTapfilmBox={this.tapfilmBox}
                         onFilmScroll={this.filmScroll}
@@ -1146,17 +1177,18 @@ class _C extends React.Component {
                         ></mpLoading>
                       </View>
                     )}
+
                     {!loading && (
                       <View className="listTable">
                         <View className="table-left">
                           <View className="listTr tableLeftTitleFixed">
                             <View className="listTd shadow">
-                              {list.length + '部影片'}
+                              {allList.length + '部影片'}
                             </View>
                           </View>
                           {list.map((item, index) => {
                             return (
-                              <Block key="maoyanId">
+                              <Block key={item.maoyanId}>
                                 <View
                                   className="listTr"
                                   onClick={this.jumpToDetail}
@@ -1178,7 +1210,7 @@ class _C extends React.Component {
                                         (item, index) => {
                                           return (
                                             <MaoyanSign
-                                              key="index"
+                                              key={index}
                                               signContent={item}
                                             ></MaoyanSign>
                                           )
@@ -1310,7 +1342,7 @@ class _C extends React.Component {
                             ></View>
                             {list.map((item, index) => {
                               return (
-                                <Block key="maoyanId">
+                                <Block key={item.maoyanId}>
                                   <View
                                     data-id={item.maoyanId}
                                     onClick={this.jumpToDetail}
@@ -1494,13 +1526,14 @@ class _C extends React.Component {
                                               ? 'itemHidden'
                                               : '')
                                           }
+                                          key={index}
                                         >
                                           {item.principal !== null && (
                                             <Block>
                                               {item.principal.map(
                                                 (item, index) => {
                                                   return (
-                                                    <Text key="index">
+                                                    <Text key={index}>
                                                       {item}
                                                     </Text>
                                                   )
@@ -1537,11 +1570,23 @@ class _C extends React.Component {
                             })}
                           </ScrollView>
                         </View>
-                        {list.length !== 0 && (
+                        {list.length !== allList.length && (
+                          <View className="init-loading">
+                            <mpLoading
+                              type="circle"
+                              show={true}
+                              animated={true}
+                              duration={900}
+                              tips="加载中"
+                            ></mpLoading>
+                          </View>
+                        )}
+                        {allList.length !== 0 && (
                           <View className="noMore">没有更多了</View>
                         )}
                       </View>
                     )}
+
                     {!loading && list.length == 0 && (
                       <View className="no-data">暂无数据</View>
                     )}
@@ -1558,7 +1603,7 @@ class _C extends React.Component {
             <FilmDetailList
               filmDistributionItem={filmDistributionItem}
               ongetCostom={this.ongetCostom}
-              show={filmDetailList}
+              show={isShowFilmDetailList}
             ></FilmDetailList>
           </View>
         )}
