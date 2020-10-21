@@ -718,7 +718,7 @@ class _C extends React.Component {
                 >
                   {dateSet.map((item, index) => {
                     return (
-                      <Block key="value">
+                      <Block key={item.value}>
                         <View
                           className={item.checked + ' item'}
                           data-value={item.value}
@@ -777,7 +777,7 @@ class _C extends React.Component {
                                 {years.map((item, index) => {
                                   return (
                                     <View
-                                      key="item"
+                                      key={item}
                                       style="line-height: 60rpx;text-align:right;"
                                     >
                                       {item + '年'}
@@ -789,7 +789,7 @@ class _C extends React.Component {
                                 {months.map((item, index) => {
                                   return (
                                     <View
-                                      key="item"
+                                      key={item}
                                       style="line-height: 60rpx;text-align:center;"
                                     >
                                       {item + '月'}
@@ -801,7 +801,7 @@ class _C extends React.Component {
                                 {days.map((item, index) => {
                                   return (
                                     <View
-                                      key="item"
+                                      key={item}
                                       style="line-height: 60rpx;text-align:left;"
                                     >
                                       {item + '日'}
@@ -823,7 +823,7 @@ class _C extends React.Component {
                   {estimateBox.map((item, index) => {
                     return (
                       <View
-                        key="index"
+                        key={index}
                         data-num={index}
                         onClick={this.tapEstimateBox}
                         className={
@@ -844,7 +844,7 @@ class _C extends React.Component {
                   {projectBox.map((item, index) => {
                     return (
                       <View
-                        key="index"
+                        key={index}
                         data-num={index}
                         onClick={this.tapProjectStatus}
                         className={
@@ -874,7 +874,7 @@ class _C extends React.Component {
                       {costBox.map((item, index) => {
                         return (
                           <View
-                            key="index"
+                            key={index}
                             data-num={index}
                             onClick={this.tapCost}
                             className={
@@ -893,7 +893,7 @@ class _C extends React.Component {
                       {cooperBox.map((item, index) => {
                         return (
                           <View
-                            key="index"
+                            key={index}
                             data-num={index}
                             onClick={this.tapCooper}
                             className={
@@ -928,7 +928,7 @@ class _C extends React.Component {
                                 <View
                                   data-num={index}
                                   onClick={this.tapCompany}
-                                  key="index"
+                                  key={index}
                                   className={
                                     'company-item ' +
                                     (company[index] == 'active'
@@ -955,7 +955,7 @@ class _C extends React.Component {
                               index % 2 !== 0 && (
                                 <View
                                   onClick={this.tapCompany}
-                                  key="index"
+                                  key={index}
                                   data-num={index}
                                   className={
                                     'company-item ' +

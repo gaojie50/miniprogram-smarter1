@@ -47,7 +47,7 @@ class _C extends React.Component {
                   filmItemMarginRight +
                   'px'
                 }
-                key="yearWeek"
+                key={item.yearWeek}
               >
                 <View className="schedule">{item.filmSchedule || ''}</View>
                 <View className="time">{item.releaseDate}</View>

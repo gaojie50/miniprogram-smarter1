@@ -371,7 +371,7 @@ class _C extends React.Component {
         return this.setState({
           list: data.slice(0, 20),
           allList: data,
-          subList: data.slice(0, 20),
+          subList: data,
           loading: false,
           offset: 20,
         })
@@ -379,6 +379,7 @@ class _C extends React.Component {
       this.setState({
         list: [],
         subList: [],
+        allList: [],
         loading: false,
       })
     })
@@ -405,6 +406,7 @@ class _C extends React.Component {
   tapDerictFilter = (e) => {
     const num = e.target.dataset.num
     const derictFilterWrap = this.state
+    const limit = this.state
     let newDataList = []
     derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[
       `derictFilterActive${num}`
@@ -430,7 +432,9 @@ class _C extends React.Component {
           !directFilterList[3].active
         ) {
           this.setState({
-            list: subList,
+            list: subList.slice(0, limit),
+            allList: subList,
+            offset: limit,
           })
         } else {
           list.map((item) => {
@@ -501,7 +505,9 @@ class _C extends React.Component {
             }
           }
           this.setState({
-            list: newDataList,
+            list: newDataList.slice(0, limit),
+            allList: newDataList,
+            offset: limit,
           })
         }
       },
@@ -916,7 +922,6 @@ class _C extends React.Component {
                     this.setState({
                       list: allList.slice(0, limit),
                       offset: limit,
-                      subList: allList.slice(0, limit),
                     })
                   }
                 }}
@@ -924,7 +929,6 @@ class _C extends React.Component {
                   this.setState({
                     list: allList.slice(0, offset + limit),
                     offset: offset + limit,
-                    subList: allList.slice(0, offset + limit),
                   })
                 }}
                 className="main"
@@ -1581,7 +1585,7 @@ class _C extends React.Component {
                             ></mpLoading>
                           </View>
                         )}
-                        {allList.length !== 0 && (
+                        {(list.length === allList.length && list.length !== 0) && (
                           <View className="noMore">没有更多了</View>
                         )}
                       </View>

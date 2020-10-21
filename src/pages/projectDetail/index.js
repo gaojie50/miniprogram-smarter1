@@ -299,7 +299,7 @@ class _C extends React.Component {
             <Text className="name">{resData.productInfo?.name}</Text>
             {(resData.productInfo?.maoyanSign || []).map((item, index) => {
               return (
-                <Text className="sign" key="index">
+                <Text className="sign" key={index}>
                   {'猫眼' + item}
                 </Text>
               )

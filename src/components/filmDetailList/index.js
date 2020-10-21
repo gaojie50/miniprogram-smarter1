@@ -91,7 +91,7 @@ class _C extends React.Component {
                           return (
                             <MaoyanSign
                               className="maoyanSign"
-                              key="index"
+                              key={index}
                               signContent={item}
                             ></MaoyanSign>
                           )

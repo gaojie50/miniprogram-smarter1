@@ -138,7 +138,7 @@ class _C extends React.Component {
               return (
                 <View
                   className={item.checked}
-                  key="id"
+                  key={item.id}
                   data-name={item.name}
                   data-id={item.id}
                 >

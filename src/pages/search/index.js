@@ -113,7 +113,7 @@ class _C extends React.Component {
               return (
                 <View
                   className="item"
-                  key="id"
+                  key={item.id}
                   data-id={item.maoyanId + '-' + item.projectId}
                   onClick={this.jumpDetail}
                 >
