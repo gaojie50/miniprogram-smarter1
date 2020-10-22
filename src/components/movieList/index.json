@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "maoyansign": "../../components/maoyanSign/index",
+    "scheduletype": "../../components/scheduleType/index"
+  }
+}

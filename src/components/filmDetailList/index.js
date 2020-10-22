@@ -1,8 +1,6 @@
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
-import MaoyanSign from '../maoyanSign/index'
-import ScheduleType from '../scheduleType/index'
 import './index.scss'
 class _C extends React.Component {
   static defaultProps = {
@@ -89,11 +87,11 @@ class _C extends React.Component {
                       <View className="left">
                         {(item.maoyanSignLabel || []).map((item, index) => {
                           return (
-                            <MaoyanSign
+                            <maoyansign
                               className="maoyanSign"
                               key={index}
                               signContent={item}
-                            ></MaoyanSign>
+                            ></maoyansign>
                           )
                         })}
                         <View className="director">
@@ -109,9 +107,9 @@ class _C extends React.Component {
                     </View>
                     <View className="thirdLine">
                       <Text>{item.releaseDesc}</Text>
-                      <ScheduleType
+                      <scheduletype
                         signContent={scheduleType[item.scheduleType]}
-                      ></ScheduleType>
+                      ></scheduletype>
                     </View>
                   </View>
                 </View>

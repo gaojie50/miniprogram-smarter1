@@ -1,10 +1,4 @@
-import {
-  View,
-  Image,
-  Text,
-  ScrollView,
-  Canvas,
-} from '@tarojs/components'
+import { View, Image, Text, ScrollView, Canvas } from '@tarojs/components'
 import React from 'react'
 
 import './index.scss'
@@ -16,21 +10,32 @@ class _C extends React.Component {
     item: {},
   }
 
-  tapfilmBox = (e) => {
-    const filmDistributionItem = e.target.dataset.item
-
-    if (filmDistributionItem.filmNum == 0) return
-    filmDistributionItem && this.props.onTapfilmBox(filmDistributionItem)
-  }
   render() {
-    const { filmInfo: {filmItemWidth, filmItemMarginRight, filmDistributionList, filmLoading} } = this.props
+    const {
+      filmInfo: {
+        filmItemWidth,
+        filmItemMarginRight,
+        filmDistributionList,
+        filmLoading,
+        imgSrc,
+      },
+    } = this.props
+
     return (
-      <ScrollView lowerThreshold="2" onScrollToLower={() => this.props.filmScroll()} scrollX>
-        <View className="filmChart" style="width: 100%;">
+      <ScrollView
+        lowerThreshold={10}
+        onScrollToLower={() => this.props.onFilmScroll()}
+        scrollX={true}
+        scrollAnchoring={true}
+      >
+        <View className="filmChart">
           <Canvas
             canvasId="chart"
+            // type="2d"
             style={'width:' + (filmDistributionList.length * 218 + 20) + 'rpx;'}
+            id="can"
           ></Canvas>
+          <Image src={imgSrc} style={'width:' + (filmDistributionList.length * 218 + 20) + 'rpx;'}></Image>
         </View>
         <View
           className="filmList"
@@ -53,8 +58,7 @@ class _C extends React.Component {
                 <View className="time">{item.releaseDate}</View>
                 <View
                   className={item.filmNum == 0 ? 'no-filmBox' : 'filmBox'}
-                  data-item={item}
-                  onClick={this.tapfilmBox}
+                  onClick={() => this.props.onTapfilmBox(index)}
                 >
                   <View data-item={item}>
                     <Text data-item={item}>{item.keyFilms.length}</Text>
