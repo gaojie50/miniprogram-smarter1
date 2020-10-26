@@ -809,9 +809,13 @@ class _C extends React.Component {
               <ScrollView
                 scrollY={true}
                 scrollIntoView={toView}
-                lowerThreshold={20}
                 className="main"
                 style={'height:calc(100vh - ' + titleHeight + 'px)'}
+                onScroll={(e) => {
+                  this.setState({
+                    toView: ''
+                  })
+                }}
               >
                 <View id="scroll-cont">
                   {/*  上映影片分布  */}
@@ -825,10 +829,10 @@ class _C extends React.Component {
                         alt
                       ></Image>
                       {redTextShow && (
-                        <CoverImage
+                        <Image
                           src="../../static/list/bubble.png"
                           className="redPrompt"
-                        ></CoverImage>
+                        ></Image>
                       )}
                     </View>
                     {filmDistributionList.length !== 0 && (
@@ -857,12 +861,11 @@ class _C extends React.Component {
                       <View className="film-nodata">暂无数据</View>
                     )}
                   </View>
-                  {redTextShow && (
-                    <View
-                      onClick={this.redTextClose}
-                      className="redMessageClose"
-                    ></View>
-                  )}
+                  <View
+                    onClick={this.redTextClose}
+                    className="redMessageClose"
+                    style={{ display: redTextShow ? 'block' : 'none' }}
+                  ></View>
 
                   <View
                     id="filter"
