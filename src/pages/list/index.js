@@ -10,7 +10,6 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
-import lineChart from '../../utils/chart.js'
 
 import FilmDetailList from '../../components/filmDetailList/index'
 import CostumListItem from '../../components/costomListItem/index'
@@ -20,7 +19,6 @@ import FilmDistribution from '../../components/filmDistribution/index'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
 
 import './index.scss'
-let chart = null
 const { getMaoyanSignLabel } = projectConfig
 
 const {
@@ -38,7 +36,6 @@ const capsuleLocation = getGlobalData('capsuleLocation')
 const barHeight = getGlobalData('barHeight')
 class _C extends React.Component {
   state = {
-    imgSrc: '',
     filmItemWidth: rpxTopx(208),
     filmItemMarginRight: rpxTopx(8),
     initLoading: true,
@@ -223,17 +220,12 @@ class _C extends React.Component {
           item.releaseDate = formatWeekDate(item.releaseDate)
         })
 
-        this.setState(
-          {
-            filmDistributionList: this.state.filmDistributionList.concat(data),
-            paging,
-            filmLoading: false,
-            topFilmLoading: false,
-          },
-          () => {
-            this.chartDraw()
-          },
-        )
+        this.setState({
+          filmDistributionList: this.state.filmDistributionList.concat(data),
+          paging,
+          filmLoading: false,
+          topFilmLoading: false,
+        })
       } else {
         this.setState({
           filmDistributionList: [],
@@ -241,43 +233,6 @@ class _C extends React.Component {
         })
       }
     })
-  }
-
-  chartDraw = () => {
-    const { filmDistributionList } = this.state
-
-    let key = []
-    let value = []
-    let redDot = []
-
-    filmDistributionList.map((item, index) => {
-      key.push(index)
-      value.push(item.filmNum)
-      if (item.company && item.company.indexOf(1) !== -1) {
-        redDot.push(1)
-      } else {
-        redDot.push(0)
-      }
-    })
-    const windowWidth = Taro.getSystemInfoSync().windowWidth
-    chart = lineChart(
-      'chart',
-      {
-        tipsCtx: 'chart-tips',
-        width: (key.length - 1) * ((windowWidth * 5) / 10) + 33,
-        height: 120,
-        margin: 20,
-        xAxis: key,
-        lines: [
-          {
-            points: value,
-            redDot,
-          },
-        ],
-      },
-      this,
-    )
-    chart.draw()
   }
 
   fetchSchedule = () => {
@@ -795,7 +750,6 @@ class _C extends React.Component {
       filmDistributionItem,
       isShowFilmDetailList,
       curPagePermission,
-      imgSrc,
     } = this.state
 
     return (
@@ -885,7 +839,6 @@ class _C extends React.Component {
                           filmItemMarginRight,
                           filmLoading,
                           topFilmLoading,
-                          imgSrc,
                         }}
                         onTapfilmBox={this.tapfilmBox}
                         onFilmScroll={this.filmScroll}

@@ -8,75 +8,77 @@ export default function (ctx, options, that) {
 }
 
 function LineChart(ctx, options, that) {
-  this.ctx = Taro.createCanvasContext(ctx)
-  // const query = Taro.createSelectorQuery()
-  // query
-  //   .select('#can')
-  //   .context((res) => {
-  //     this.ctx = res.context
-  //     this.options = Object.assign(
-  //       {
-  //         width: 320,
-  //         height: 200,
-  //         xUnit: '',
-  //         yUnit: '',
-  //         xAxis: [],
-  //         key: [],
-  //         lines: [],
-  //         margin: 20,
-  //         fontSize: 12,
-  //       },
-  //       options,
-  //       {
-  //         xAxisOffset: (options.margin || 20) + (options.fontSize || 12) * 2.5,
-  //       },
-  //     )
-    
-  //     this._attrs = {}
-    
-  //     if (_.isEmpty(this.options.xAxis)) {
-  //       throw new Error('options.xAxis can not be empty')
-  //     }
-    
-  //     if (_.isEmpty(this.options.lines)) {
-  //       throw new Error('options.lines can not be empty')
-  //     }
-  //     this.draw();
-  //   })
-  //   .exec()
+  // this.ctx = Taro.createCanvasContext(ctx)
+  this.canvasId = ctx
+  const query = Taro.createSelectorQuery()
+  query
+    .select(`#${ctx}`)
+    .context((res) => {
+      this.ctx = res.context
+      this.options = Object.assign(
+        {
+          width: 320,
+          height: 200,
+          xUnit: '',
+          yUnit: '',
+          xAxis: [],
+          key: [],
+          lines: [],
+          margin: 20,
+          fontSize: 12,
+        },
+        options,
+        {
+          xAxisOffset: (options.margin || 20) + (options.fontSize || 12) * 2.5,
+        },
+      )
 
-  this.tipsCtx = options.tipsCtx
-    ? Taro.createCanvasContext(options.tipsCtx)
-    : null
+      this._attrs = {}
+      this.that = that
 
-  this.options = Object.assign(
-    {
-      width: 320,
-      height: 200,
-      xUnit: '',
-      yUnit: '',
-      xAxis: [],
-      key: [],
-      lines: [],
-      margin: 20,
-      fontSize: 12,
-    },
-    options,
-    {
-      xAxisOffset: (options.margin || 20) + (options.fontSize || 12) * 2.5,
-    },
-  )
+      if (_.isEmpty(this.options.xAxis)) {
+        throw new Error('options.xAxis can not be empty')
+      }
 
-  this._attrs = {}
-  this.that = that;
+      if (_.isEmpty(this.options.lines)) {
+        throw new Error('options.lines can not be empty')
+      }
+      this.draw()
+    })
+    .exec()
 
-  if (_.isEmpty(this.options.xAxis)) {
-    throw new Error('options.xAxis can not be empty')
-  }
+  // this.tipsCtx = options.tipsCtx
+  //   ? Taro.createCanvasContext(options.tipsCtx)
+  //   : null
 
-  if (_.isEmpty(this.options.lines)) {
-    throw new Error('options.lines can not be empty')
-  }
+  // this.options = Object.assign(
+  //   {
+  //     width: 320,
+  //     height: 200,
+  //     xUnit: '',
+  //     yUnit: '',
+  //     xAxis: [],
+  //     key: [],
+  //     lines: [],
+  //     margin: 20,
+  //     fontSize: 12,
+  //   },
+  //   options,
+  //   {
+  //     xAxisOffset: (options.margin || 20) + (options.fontSize || 12) * 2.5,
+  //   },
+  // )
+
+  // this._attrs = {}
+  // this.that = that;
+
+  // if (_.isEmpty(this.options.xAxis)) {
+  //   throw new Error('options.xAxis can not be empty')
+  // }
+
+  // if (_.isEmpty(this.options.lines)) {
+  //   throw new Error('options.lines can not be empty')
+  // }
 }
 
 LineChart.prototype.draw = function () {
@@ -250,15 +252,15 @@ LineChart.prototype._draw = function () {
   }
 
   this._timer = setTimeout(() => {
-    const t = this;
+    const t = this
     this.ctx.draw(true, () => {
       Taro.canvasToTempFilePath({
-        canvasId:'chart',
-        success: function(res) {
+        canvasId: t.canvasId,
+        success: function (res) {
           t.that.setState({
-            imgSrc: res.tempFilePath
+            imgSrc: res.tempFilePath,
           })
-        }
+        },
       })
     })
   })

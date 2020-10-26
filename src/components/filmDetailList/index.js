@@ -7,32 +7,32 @@ class _C extends React.Component {
     show: false,
     filmDistributionItem: {},
   }
-  
+
   state = {
     scheduleType: {
       1: '已定档',
       2: '非常确定',
       3: '可能',
       4: '内部建议',
-      5: '待定'
-    }
+      5: '待定',
+    },
   }
 
   jumpDetail = (e) => {
     const { item } = e.currentTarget.dataset
-    const { maoyanId, projectId } = item;
+    const { maoyanId, projectId } = item
     Taro.navigateTo({
       url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
     })
-  };
+  }
 
   handleTouchMove = () => {
     return
-  };
+  }
 
   render() {
-    const { scheduleType } = this.state;
-    const { filmDistributionItem, show } = this.props;
+    const { scheduleType } = this.state
+    const { filmDistributionItem, show } = this.props
     return (
       show &&
       filmDistributionItem.length !== 0 && (
@@ -46,8 +46,11 @@ class _C extends React.Component {
               </Text>
               <Text>部影片</Text>
             </View>
-            <View onClick={() => this.props.ongetCostom({})} className="close-wrap">
-              <Image src='../../static/close.png'></Image>
+            <View
+              onClick={() => this.props.ongetCostom({})}
+              className="close-wrap"
+            >
+              <Image src="../../static/close.png"></Image>
             </View>
           </View>
           <ScrollView
@@ -88,7 +91,6 @@ class _C extends React.Component {
                         {(item.maoyanSignLabel || []).map((item, index) => {
                           return (
                             <maoyansign
-                              className="maoyanSign"
                               key={index}
                               signContent={item}
                             ></maoyansign>
