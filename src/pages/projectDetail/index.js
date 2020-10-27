@@ -23,7 +23,7 @@ class _C extends React.Component {
     resData: {},
   }
 
-  onLoad() {
+  componentWillMount() {
     const { maoyanId, projectId } = getCurrentInstance().router.params
     this.fetchData(maoyanId, projectId)
   }
@@ -89,8 +89,7 @@ class _C extends React.Component {
                   rect[0].height *
                     that.state.count *
                     (750 / result.windowWidth) +
-                  176 +
-                  'rpx'
+                  176
               } else {
                 for (let i = 0; i < rect.length; i++) {
                   height =
@@ -110,11 +109,10 @@ class _C extends React.Component {
     }
   }
 
-  onReady() {
-    const that = this
-    setTimeout(function () {
-      that.reload(that)
-    }, 100)
+  componentDidUpdate(preProps, preState) {
+    if (preState.resData !== this.state.resData) {
+      this.reload(this)
+    }
   }
 
   fold = (e) => {
