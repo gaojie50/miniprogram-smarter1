@@ -28,94 +28,93 @@ class _C extends React.Component {
     this.fetchData(maoyanId, projectId)
   }
 
-  onReady() {
-    const that = this;
-
-    setTimeout(function () {
-      load(that)
-    }, 100)
-
-    function load(that) {
-      if (that.state.count > 4) {
-        Taro.createSelectorQuery()
-          .selectAll('.info')
-          .boundingClientRect(function (rect) {
-            Taro.getSystemInfo({
-              success: (result) => {
-                that.setState({
-                  isChange: true,
-                  flod: {
-                    height:
-                      (rect[0]?.height +
-                        rect[1]?.height +
-                        rect[2]?.height +
-                        rect[3]?.height) *
-                        (750 / result.windowWidth) +
-                      215 +
-                      'rpx',
-                    rotateZ: 'rotateZ(180deg)',
-                  },
-                  calHeight:
-                    (rect[0]?.height +
-                      rect[1]?.height +
-                      rect[2]?.height +
-                      rect[3]?.height) *
-                      (750 / result.windowWidth) +
-                    215 +
-                    'rpx',
-                  // + (61/(750/result.windowWidth))
-                  // *(750/result.windowWidth)
-                })
-              },
-            })
+  reload(that) {
+    if (that.state.count > 4) {
+      Taro.createSelectorQuery()
+        .selectAll('.info')
+        .boundingClientRect(function (rect) {
+          Taro.getSystemInfo({
+            success: (result) => {
+              const allHeight =
+                rect.length !== 1
+                  ? rect[0]?.height +
+                    rect[1]?.height +
+                    rect[2]?.height +
+                    rect[3]?.height
+                  : rect[0].height * 4
+              that.setState({
+                isChange: true,
+                flod: {
+                  height: allHeight * (750 / result.windowWidth) + 215 + 'rpx',
+                  rotateZ: 'rotateZ(180deg)',
+                },
+                calHeight: allHeight * (750 / result.windowWidth) + 215 + 'rpx',
+              })
+            },
           })
-          .exec()
-      } else if (that.state.count == 4) {
-        Taro.createSelectorQuery()
-          .selectAll('.info')
-          .boundingClientRect(function (rect) {
-            Taro.getSystemInfo({
-              success: (result) => {
-                that.setState({
-                  isChange: false,
-                  flod: {
-                    height:
-                      (rect[0]?.height +
-                        rect[1]?.height +
-                        rect[2]?.height +
-                        rect[3]?.height) *
-                        (750 / result.windowWidth) +
-                      176 +
-                      'rpx',
-                  },
-                })
-              },
-            })
+        })
+        .exec()
+    } else if (that.state.count == 4) {
+      Taro.createSelectorQuery()
+        .selectAll('.info')
+        .boundingClientRect(function (rect) {
+          Taro.getSystemInfo({
+            success: (result) => {
+              const allHeight =
+                rect.length !== 1
+                  ? rect[0]?.height +
+                    rect[1]?.height +
+                    rect[2]?.height +
+                    rect[3]?.height
+                  : rect[0].height * 4
+              that.setState({
+                isChange: false,
+                flod: {
+                  height: allHeight * (750 / result.windowWidth) + 176 + 'rpx',
+                },
+              })
+            },
           })
-          .exec()
-      } else {
-        Taro.createSelectorQuery()
-          .selectAll('.info')
-          .boundingClientRect(function (rect) {
-            Taro.getSystemInfo({
-              success: (result) => {
-                let height = 96
-                for (let i = 0; i < rect.height; i++) {
+        })
+        .exec()
+    } else {
+      Taro.createSelectorQuery()
+        .selectAll('.info')
+        .boundingClientRect(function (rect) {
+          Taro.getSystemInfo({
+            success: (result) => {
+              let height = 96
+              if (rect.length !== that.state.count) {
+                height =
+                  rect[0].height *
+                    that.state.count *
+                    (750 / result.windowWidth) +
+                  176 +
+                  'rpx'
+              } else {
+                for (let i = 0; i < rect.length; i++) {
                   height =
                     height + 20 + rect[i].height * (750 / result.windowWidth)
                 }
-                that.setState({
-                  isChange: false,
-                  flod: {
-                    height: height + 'rpx',
-                  },
-                })
-              },
-            })
+              }
+              that.setState({
+                isChange: false,
+                flod: {
+                  height: height + 'rpx',
+                },
+              })
+            },
           })
-          .exec()
-      }
+        })
+        .exec()
     }
+  }
+
+  onReady() {
+    const that = this
+    setTimeout(function () {
+      that.reload(that)
+    }, 100)
   }
 
   fold = (e) => {
@@ -533,7 +532,7 @@ class _C extends React.Component {
                     <View className="right">
                       {(resData.productInfo?.releaseDesc || '-') +
                         ' ' +
-                        (resData.productInfo?.alias.length > 0
+                        (resData.productInfo?.alias?.length > 0
                           ? '(' + resData.productInfo?.alias + ')'
                           : '')}
                     </View>

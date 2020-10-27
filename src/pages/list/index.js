@@ -188,14 +188,14 @@ class _C extends React.Component {
       url: 'api/applet/management/filmDistribution',
       data: query,
     }).then((res) => {
-      const { success, data, paging } = res
+      const { success, data = [], paging } = res
       if (success && data) {
         data.map((item) => {
           if (item.filmSchedule && item.filmSchedule.length > 0) {
             item.filmSchedule = formatDirector(item.filmSchedule)
           }
           if (item.keyFilms && item.keyFilms.length > 0) {
-            item.keyFilms.map((item2) => {
+            (item.keyFilms || []).map((item2) => {
               if (item2.maoyanSign && item2.maoyanSign.length > 0) {
                 item2.maoyanSignLabel = getMaoyanSignLabel(item2.maoyanSign)
               }
@@ -252,7 +252,7 @@ class _C extends React.Component {
       url: 'api/management/list',
       data: param,
       method: 'POST',
-    }).then(({ success, data }) => {
+    }).then(({ success, data = [] }) => {
       if (success && data) {
         data.map((item) => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
@@ -340,8 +340,8 @@ class _C extends React.Component {
         ...derictFilterWrap,
       },
       () => {
-        const { subList, latestSchedule, directFilterList } = this.state
-        const list = subList
+        const { subList = [], latestSchedule, directFilterList = [] } = this.state
+        const list = subList || []
 
         directFilterList.map((item, index) => {
           if (num == index + 1) {
@@ -477,7 +477,7 @@ class _C extends React.Component {
 
   fetchFilterShow = () => {
     const dataList = this.state
-    dataList.filterItemHidden.map((item, index) => {
+    (dataList.filterItemHidden || []).map((item, index) => {
       dataList[`filterItemHidden${item}`] = true
     })
     for (let i = 1; i < 13; i++) {
@@ -585,7 +585,7 @@ class _C extends React.Component {
     const projectBoxStr = formateFilterStr(projectBox)
     const lastFilterLength = formateFilterLength(costBox, cooperBox, company)
     const pcIdRequest = handlePcId(pcId)
-    this.state.directFilterList.map((item) => {
+    (this.state.directFilterList || []).map((item) => {
       item.active = false
     })
     this.setState(
