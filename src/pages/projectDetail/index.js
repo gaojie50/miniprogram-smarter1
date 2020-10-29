@@ -263,31 +263,6 @@ class _C extends React.Component {
         date.getMonth() + 1
       }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
     }
-    // if(count === 1) {
-    //   this.setState({
-    //     showArrow: false,
-    //     isChange: false,
-    //     flod: {
-    //       height: "200rpx"
-    //     }
-    //   })
-    // } else if(count === 3) {
-    //   this.setState({
-    //     showArrow: false,
-    //     isChange: false,
-    //     flod: {
-    //       height: "330rpx"
-    //     }
-    //   })
-    // }else {
-    //   this.setState({
-    //     showArrow: true,
-    //     flod: {
-    //       height: "417rpx",
-    //       rotateZ: "rotateZ(180deg)"
-    //     }
-    //   })
-    // }
     this.setState({
       count: count,
     })
@@ -320,7 +295,9 @@ class _C extends React.Component {
               onClick={this.fold}
             >
               <View className="title">基础信息</View>
-              {loading && <mpLoading></mpLoading>}
+              {loading && (
+                <mpLoading type="circle" show={true} tips=""></mpLoading>
+              )}
               <View className="type">
                 <View className="info">
                   <Text className="special">
@@ -432,7 +409,13 @@ class _C extends React.Component {
                   </View>
                   <View className="infoo">
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -447,7 +430,13 @@ class _C extends React.Component {
                       <View>预估票房</View>
                     </View>
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -461,7 +450,13 @@ class _C extends React.Component {
                       <View>预估评分</View>
                     </View>
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -478,7 +473,13 @@ class _C extends React.Component {
                   </View>
                   <View className="infoo">
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -493,7 +494,13 @@ class _C extends React.Component {
                       <View>宣发费用</View>
                     </View>
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -507,7 +514,13 @@ class _C extends React.Component {
                       <View>猫眼份额</View>
                     </View>
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>

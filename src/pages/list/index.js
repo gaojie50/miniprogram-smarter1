@@ -4,7 +4,6 @@ import {
   Image,
   Text,
   ScrollView,
-  CoverImage,
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
@@ -261,9 +260,6 @@ class _C extends React.Component {
           if (item.estimateBox) {
             item.estimateBox2 = formatNumber(item.estimateBox)
           }
-          // if(item.cost !== null && item.cost !== ''){
-          //   item.cost =formatNumber(item.cost * 1e4 ).text;
-          // }
 
           item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc)
           item.cost = formatNumber(item.cost).text
