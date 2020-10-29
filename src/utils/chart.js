@@ -222,6 +222,7 @@ LineChart.prototype._draw = function () {
     this.ctx.draw(true, () => {
       Taro.canvasToTempFilePath({
         canvasId: t.canvasId,
+        fileType: 'png',
         success: function (res) {
           t.that.setState({
             imgSrc: res.tempFilePath,

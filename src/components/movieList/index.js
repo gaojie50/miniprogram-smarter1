@@ -44,21 +44,34 @@ Component({
       5: '投资中',
     },
     rightContScrollLeft: undefined,
+    listData: [],
+    page: 0,
   },
 
   attached: function () {
-    // console.log(this.data)
+    this.createIntersectionObserver().relativeToViewport({bottom: 200}).observe('.noMore', (res) => {
+      if(res.intersectionRect.top > 0) {
+        const page = this.data.page;
+        this.setData({
+          page: page + 1,
+          ['listData[' + page + ']']: this.properties.list.slice(page * 10, page * 10 + 10),
+        })
+      }
+    })
   },
   moved: function () {
     
   },
   detached: function () {},
 
-  // observers: {
-  //   'rightContScrollLeft': function(rightContScrollLeft) {
-  //     console.log(rightContScrollLeft)
-  //   }
-  // },
+  observers: {
+    'list': function(list) {
+      this.setData({
+        page: 1,
+        listData: [list.slice(0, 10)],
+      })
+    }
+  },
 
   methods: {
     rContScrollEvt: function ({ detail }) {

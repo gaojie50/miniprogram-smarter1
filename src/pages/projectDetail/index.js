@@ -7,7 +7,8 @@ import utils from '../../utils/index.js'
 
 import './index.scss'
 const { getMaoyanSignLabel, getProjectStatus, getCooperStatus } = projectConfig
-const { formatNumber, formatDirector, formatReleaseDate } = utils
+const { formatNumber, formatDirector } = utils
+let timer = null
 
 class _C extends React.Component {
   state = {
@@ -26,6 +27,19 @@ class _C extends React.Component {
   componentWillMount() {
     const { maoyanId, projectId } = getCurrentInstance().router.params
     this.fetchData(maoyanId, projectId)
+  }
+
+  componentDidUpdate(preProps, preState) {
+    const that = this
+    if (preState.resData !== this.state.resData) {
+      timer = setTimeout(() => {
+        that.reload(that)
+      }, 0)
+    }
+  }
+  
+  componentWillUnmount() {
+    clearTimeout(timer)
   }
 
   reload(that) {
@@ -106,12 +120,6 @@ class _C extends React.Component {
           })
         })
         .exec()
-    }
-  }
-
-  componentDidUpdate(preProps, preState) {
-    if (preState.resData !== this.state.resData) {
-      this.reload(this)
     }
   }
 

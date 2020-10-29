@@ -340,7 +340,11 @@ class _C extends React.Component {
         ...derictFilterWrap,
       },
       () => {
-        const { subList = [], latestSchedule, directFilterList = [] } = this.state
+        const {
+          subList = [],
+          latestSchedule,
+          directFilterList = [],
+        } = this.state
         const list = subList || []
 
         directFilterList.map((item, index) => {
@@ -428,6 +432,7 @@ class _C extends React.Component {
           }
           this.setState({
             list: newDataList,
+            toView: 'filter'
           })
         }
       },
@@ -476,10 +481,11 @@ class _C extends React.Component {
   }
 
   fetchFilterShow = () => {
-    const dataList = this.state
-    (dataList.filterItemHidden || []).map((item, index) => {
-      dataList[`filterItemHidden${item}`] = true
-    })
+    const dataList = this.state(dataList.filterItemHidden || []).map(
+      (item, index) => {
+        dataList[`filterItemHidden${item}`] = true
+      },
+    )
     for (let i = 1; i < 13; i++) {
       if (dataList.filterItemHidden.indexOf(i) === -1) {
         dataList[`filterItemHidden${i}`] = false
@@ -585,7 +591,7 @@ class _C extends React.Component {
     const projectBoxStr = formateFilterStr(projectBox)
     const lastFilterLength = formateFilterLength(costBox, cooperBox, company)
     const pcIdRequest = handlePcId(pcId)
-    (this.state.directFilterList || []).map((item) => {
+    this.state.directFilterList.map((item) => {
       item.active = false
     })
     this.setState(
@@ -811,10 +817,11 @@ class _C extends React.Component {
                 scrollIntoView={toView}
                 className="main"
                 style={'height:calc(100vh - ' + titleHeight + 'px)'}
-                onScroll={(e) => {
-                  this.setState({
-                    toView: ''
-                  })
+                onScroll={() => {
+                  toView !== '' &&
+                    this.setState({
+                      toView: '',
+                    })
                 }}
               >
                 <View id="scroll-cont">
