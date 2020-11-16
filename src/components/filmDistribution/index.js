@@ -1,11 +1,7 @@
-import {
-  View,
-  Image,
-  Text,
-  ScrollView,
-  Canvas,
-} from '@tarojs/components'
+import { View, Image, Text, ScrollView, Canvas } from '@tarojs/components'
 import React from 'react'
+import Taro from '@tarojs/taro'
+import lineChart from '../../utils/chart.js'
 
 import './index.scss'
 
@@ -16,21 +12,104 @@ class _C extends React.Component {
     item: {},
   }
 
-  tapfilmBox = (e) => {
-    const filmDistributionItem = e.target.dataset.item
-
-    if (filmDistributionItem.filmNum == 0) return
-    filmDistributionItem && this.props.onTapfilmBox(filmDistributionItem)
+  state = {
+    imgSrc: '',
+    scrollLeft: 0,
+    scroll: 0,
   }
+
+  componentDidMount() {
+    const { filmDistributionList } = this.props.filmInfo
+    if (filmDistributionList) {
+      setTimeout(() => {
+        this.chartDraw()
+      }, 500)
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.props.filmInfo.filmDistributionList !==
+      nextProps.filmInfo.filmDistributionList
+    ) {
+      this.chartDraw()
+    }
+  }
+
+  chartDraw = () => {
+    const { filmDistributionList } = this.props.filmInfo
+
+    let key = []
+    let value = []
+    let redDot = []
+
+    filmDistributionList.map((item, index) => {
+      key.push(index)
+      value.push(item.filmNum)
+      if (item.company && item.company.indexOf(1) !== -1) {
+        redDot.push(1)
+      } else {
+        redDot.push(0)
+      }
+    })
+    const windowWidth = Taro.getSystemInfoSync().windowWidth
+    lineChart(
+      'chart',
+      {
+        tipsCtx: 'chart-tips',
+        width: (key.length - 1) * ((windowWidth * 5) / 10) + 33,
+        height: 120,
+        margin: 20,
+        xAxis: key,
+        lines: [
+          {
+            points: value,
+            redDot,
+          },
+        ],
+      },
+      this,
+    )
+  }
+
   render() {
-    const { filmInfo: {filmItemWidth, filmItemMarginRight, filmDistributionList, filmLoading} } = this.props
+    const {
+      filmInfo: {
+        filmItemWidth,
+        filmItemMarginRight,
+        filmDistributionList,
+        filmLoading,
+      },
+    } = this.props
+    const { imgSrc, scrollLeft, scroll } = this.state
+
     return (
-      <ScrollView lowerThreshold="2" onScrollToLower={() => this.props.filmScroll()} scrollX>
-        <View className="filmChart" style="width: 100%;">
+      <ScrollView
+        lowerThreshold={10}
+        onScrollToLower={() => this.props.onFilmScroll()}
+        onScroll={(e) => {
+          this.setState({
+            scroll: e.detail.scrollLeft,
+          })
+        }}
+        scrollX={true}
+        scrollLeft={scrollLeft}
+      >
+        <View className="filmChart">
           <Canvas
             canvasId="chart"
             style={'width:' + (filmDistributionList.length * 218 + 20) + 'rpx;'}
+            id="chart"
           ></Canvas>
+          <Image
+            src={imgSrc}
+            style={'width:' + (filmDistributionList.length * 218 + 20) + 'rpx;'}
+          ></Image>
+          {!imgSrc && (
+            <View className="list-loading">
+              <mpLoading type="circle" show={true} tips=""></mpLoading>
+            </View>
+          )}
         </View>
         <View
           className="filmList"
@@ -53,8 +132,16 @@ class _C extends React.Component {
                 <View className="time">{item.releaseDate}</View>
                 <View
                   className={item.filmNum == 0 ? 'no-filmBox' : 'filmBox'}
-                  data-item={item}
-                  onClick={this.tapfilmBox}
+                  onClick={() => {
+                    this.setState(
+                      {
+                        scrollLeft: scroll,
+                      },
+                      () => {
+                        this.props.onTapfilmBox(index)
+                      },
+                    )
+                  }}
                 >
                   <View data-item={item}>
                     <Text data-item={item}>{item.keyFilms.length}</Text>

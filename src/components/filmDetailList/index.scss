@@ -10,6 +10,7 @@
   z-index: 71;
   box-sizing: border-box;
 }
+
 .filmDetailList .title {
   display: flex;
   justify-content: space-between;
@@ -17,7 +18,8 @@
   font-family: PingFangSC-Medium;
   font-weight: bold;
 }
-.filmDetailList .title .close-wrap{
+
+.filmDetailList .title .close-wrap {
   width: 88px;
   height: 88px;
   line-height: 88px;
@@ -26,31 +28,38 @@
   top: -30px;
   text-align: center;
 }
+
 .filmDetailList .title image {
   width: 28px;
   height: 28px;
 }
+
 .filmDetailList .title .num {
   font-family: MaoYanHeiTi-H1;
 }
-.filmDetailList .title text:first-child{
+
+.filmDetailList .title text:first-child {
   margin-right: 10px;
 }
+
 .filmDetailList .film-list {
   max-height: calc(100vh *0.8 - 550px);
 }
-.filmDetailList .film-list .item{
+
+.filmDetailList .film-list .item {
   display: flex;
   font-size: 24px;
   color: #666666;
   margin-bottom: 60px;
 }
+
 .filmDetailList .film-list .item image {
   width: 100px;
   height: 140px;
   border: 2px solid rgba(0, 0, 0, 0.08);
   margin-right: 24px;
 }
+
 .film-list .item:last-child {
   margin-bottom: 0 !important;
 }
@@ -59,7 +68,8 @@
   display: flex;
   justify-content: space-between;
 }
-.main .firstLine .name{
+
+.main .firstLine .name {
   width: 339px;
   font-weight: bold;
   font-family: PingFangSC-Medium;
@@ -69,6 +79,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .main .secondLine {
   display: flex;
   justify-content: space-between;
@@ -84,9 +95,13 @@
   white-space: nowrap;
   margin-top: 10px;
 }
-.thirdLine .scheduleType {
-  display: inline-block;
-  margin-left: 10px;
+
+.thirdLine {
+  display: flex;
+}
+
+.thirdLine text {
+  margin-right: 10px;
 }
 
 .yello {
@@ -98,10 +113,12 @@
   font-size: 24px;
   color: #FF9034;
 }
+
 .yello text:first-child {
   font-size: 34px;
   font-family: MaoYanHeiTi-H1;
 }
+
 .wishNum {
   width: 230px;
   text-align: right;
@@ -110,6 +127,7 @@
   font-size: 24px;
   white-space: nowrap;
 }
+
 .noMore {
   height: 150px;
   line-height: 150px;

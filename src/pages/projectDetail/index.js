@@ -7,7 +7,8 @@ import utils from '../../utils/index.js'
 
 import './index.scss'
 const { getMaoyanSignLabel, getProjectStatus, getCooperStatus } = projectConfig
-const { formatNumber, formatDirector, formatReleaseDate } = utils
+const { formatNumber, formatDirector } = utils
+let timer = null
 
 class _C extends React.Component {
   state = {
@@ -23,98 +24,102 @@ class _C extends React.Component {
     resData: {},
   }
 
-  onLoad() {
+  componentWillMount() {
     const { maoyanId, projectId } = getCurrentInstance().router.params
     this.fetchData(maoyanId, projectId)
   }
 
-  onReady() {
-    const that = this;
+  componentDidUpdate(preProps, preState) {
+    const that = this
+    if (preState.resData !== this.state.resData) {
+      timer = setTimeout(() => {
+        that.reload(that)
+      }, 0)
+    }
+  }
+  
+  componentWillUnmount() {
+    clearTimeout(timer)
+  }
 
-    setTimeout(function () {
-      load(that)
-    }, 100)
-
-    function load(that) {
-      if (that.state.count > 4) {
-        Taro.createSelectorQuery()
-          .selectAll('.info')
-          .boundingClientRect(function (rect) {
-            Taro.getSystemInfo({
-              success: (result) => {
-                that.setState({
-                  isChange: true,
-                  flod: {
-                    height:
-                      (rect[0]?.height +
-                        rect[1]?.height +
-                        rect[2]?.height +
-                        rect[3]?.height) *
-                        (750 / result.windowWidth) +
-                      215 +
-                      'rpx',
-                    rotateZ: 'rotateZ(180deg)',
-                  },
-                  calHeight:
-                    (rect[0]?.height +
-                      rect[1]?.height +
-                      rect[2]?.height +
-                      rect[3]?.height) *
-                      (750 / result.windowWidth) +
-                    215 +
-                    'rpx',
-                  // + (61/(750/result.windowWidth))
-                  // *(750/result.windowWidth)
-                })
-              },
-            })
+  reload(that) {
+    if (that.state.count > 4) {
+      Taro.createSelectorQuery()
+        .selectAll('.info')
+        .boundingClientRect(function (rect) {
+          Taro.getSystemInfo({
+            success: (result) => {
+              const allHeight =
+                rect.length !== 1
+                  ? rect[0]?.height +
+                    rect[1]?.height +
+                    rect[2]?.height +
+                    rect[3]?.height
+                  : rect[0].height * 4
+              that.setState({
+                isChange: true,
+                flod: {
+                  height: allHeight * (750 / result.windowWidth) + 215 + 'rpx',
+                  rotateZ: 'rotateZ(180deg)',
+                },
+                calHeight: allHeight * (750 / result.windowWidth) + 215 + 'rpx',
+              })
+            },
           })
-          .exec()
-      } else if (that.state.count == 4) {
-        Taro.createSelectorQuery()
-          .selectAll('.info')
-          .boundingClientRect(function (rect) {
-            Taro.getSystemInfo({
-              success: (result) => {
-                that.setState({
-                  isChange: false,
-                  flod: {
-                    height:
-                      (rect[0]?.height +
-                        rect[1]?.height +
-                        rect[2]?.height +
-                        rect[3]?.height) *
-                        (750 / result.windowWidth) +
-                      176 +
-                      'rpx',
-                  },
-                })
-              },
-            })
+        })
+        .exec()
+    } else if (that.state.count == 4) {
+      Taro.createSelectorQuery()
+        .selectAll('.info')
+        .boundingClientRect(function (rect) {
+          Taro.getSystemInfo({
+            success: (result) => {
+              const allHeight =
+                rect.length !== 1
+                  ? rect[0]?.height +
+                    rect[1]?.height +
+                    rect[2]?.height +
+                    rect[3]?.height
+                  : rect[0].height * 4
+              that.setState({
+                isChange: false,
+                flod: {
+                  height: allHeight * (750 / result.windowWidth) + 176 + 'rpx',
+                },
+              })
+            },
           })
-          .exec()
-      } else {
-        Taro.createSelectorQuery()
-          .selectAll('.info')
-          .boundingClientRect(function (rect) {
-            Taro.getSystemInfo({
-              success: (result) => {
-                let height = 96
-                for (let i = 0; i < rect.height; i++) {
+        })
+        .exec()
+    } else {
+      Taro.createSelectorQuery()
+        .selectAll('.info')
+        .boundingClientRect(function (rect) {
+          Taro.getSystemInfo({
+            success: (result) => {
+              let height = 96
+              if (rect.length !== that.state.count) {
+                height =
+                  rect[0].height *
+                    that.state.count *
+                    (750 / result.windowWidth) +
+                  176
+              } else {
+                for (let i = 0; i < rect.length; i++) {
                   height =
                     height + 20 + rect[i].height * (750 / result.windowWidth)
                 }
-                that.setState({
-                  isChange: false,
-                  flod: {
-                    height: height + 'rpx',
-                  },
-                })
-              },
-            })
+              }
+              that.setState({
+                isChange: false,
+                flod: {
+                  height: height + 'rpx',
+                },
+              })
+            },
           })
-          .exec()
-      }
+        })
+        .exec()
     }
   }
 
@@ -258,31 +263,6 @@ class _C extends React.Component {
         date.getMonth() + 1
       }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
     }
-    // if(count === 1) {
-    //   this.setState({
-    //     showArrow: false,
-    //     isChange: false,
-    //     flod: {
-    //       height: "200rpx"
-    //     }
-    //   })
-    // } else if(count === 3) {
-    //   this.setState({
-    //     showArrow: false,
-    //     isChange: false,
-    //     flod: {
-    //       height: "330rpx"
-    //     }
-    //   })
-    // }else {
-    //   this.setState({
-    //     showArrow: true,
-    //     flod: {
-    //       height: "417rpx",
-    //       rotateZ: "rotateZ(180deg)"
-    //     }
-    //   })
-    // }
     this.setState({
       count: count,
     })
@@ -315,7 +295,9 @@ class _C extends React.Component {
               onClick={this.fold}
             >
               <View className="title">基础信息</View>
-              {loading && <mpLoading></mpLoading>}
+              {loading && (
+                <mpLoading type="circle" show={true} tips=""></mpLoading>
+              )}
               <View className="type">
                 <View className="info">
                   <Text className="special">
@@ -427,7 +409,13 @@ class _C extends React.Component {
                   </View>
                   <View className="infoo">
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -442,7 +430,13 @@ class _C extends React.Component {
                       <View>预估票房</View>
                     </View>
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -456,7 +450,13 @@ class _C extends React.Component {
                       <View>预估评分</View>
                     </View>
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -473,7 +473,13 @@ class _C extends React.Component {
                   </View>
                   <View className="infoo">
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -488,7 +494,13 @@ class _C extends React.Component {
                       <View>宣发费用</View>
                     </View>
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -502,7 +514,13 @@ class _C extends React.Component {
                       <View>猫眼份额</View>
                     </View>
                     <View className="item">
-                      {loading && <mpLoading></mpLoading>}
+                      {loading && (
+                        <mpLoading
+                          type="circle"
+                          show={true}
+                          tips=""
+                        ></mpLoading>
+                      )}
                       {!loading && (
                         <View className="item-up">
                           <Text>
@@ -533,7 +551,7 @@ class _C extends React.Component {
                     <View className="right">
                       {(resData.productInfo?.releaseDesc || '-') +
                         ' ' +
-                        (resData.productInfo?.alias.length > 0
+                        (resData.productInfo?.alias?.length > 0
                           ? '(' + resData.productInfo?.alias + ')'
                           : '')}
                     </View>

@@ -33,8 +33,8 @@ class _C extends React.Component {
         inputVal: '',
         list: [],
       })
-  
-      _this.setState(
+
+    _this.setState(
       {
         loading: true,
       },
@@ -55,7 +55,7 @@ class _C extends React.Component {
               }),
             })
           }
-  
+
           _this.setState({
             inputVal: innerVal,
             loading: false,
@@ -64,10 +64,10 @@ class _C extends React.Component {
         })
       },
     )
-  };
+  }
 
   bindKeyInput = (e) => {
-    return debounce(this.fn(e, this), 500);
+    return debounce(this.fn(e, this), 500)
   }
 
   touchCheckEvent = (e) => {
@@ -92,13 +92,13 @@ class _C extends React.Component {
         return item
       }),
     })
-  };
+  }
 
-  jumpList = () =>  {
+  jumpList = () => {
     const { checked } = this.state
-    const pages = getCurrentPages();
-    const current = pages[pages.length - 1];
-    const eventChannel = current.getOpenerEventChannel();
+    const pages = getCurrentPages()
+    const current = pages[pages.length - 1]
+    const eventChannel = current.getOpenerEventChannel()
     // const eventChannel = this.getOpenerEventChannel();
 
     Taro.navigateBack({
@@ -107,7 +107,7 @@ class _C extends React.Component {
         eventChannel.emit('searchPCFinish', { companyChecked: checked })
       },
     })
-  };
+  }
 
   render() {
     const { loading, inputVal, list, checked } = this.state
@@ -133,8 +133,12 @@ class _C extends React.Component {
           <View className="no-data">暂无数据</View>
         )}
         {!loading && (
-          <ScrollView className="search-list" onClick={this.touchCheckEvent}>
-            {list.map((item, index) => {
+          <ScrollView
+            className="search-list"
+            onClick={this.touchCheckEvent}
+            scrollY
+          >
+            {list.map((item) => {
               return (
                 <View
                   className={item.checked}
@@ -147,6 +151,7 @@ class _C extends React.Component {
                 </View>
               )
             })}
+            <View style={{ height: '160rpx'}}></View>
           </ScrollView>
         )}
         <View className="finish" onClick={this.jumpList}>

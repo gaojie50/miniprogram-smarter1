@@ -4,25 +4,20 @@ import {
   Image,
   Text,
   ScrollView,
-  CoverImage,
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
-import lineChart from '../../utils/chart.js'
 
 import FilmDetailList from '../../components/filmDetailList/index'
 import CostumListItem from '../../components/costomListItem/index'
-import ScheduleType from '../../components/scheduleType/index'
-import MaoyanSign from '../../components/maoyanSign/index'
 import FilterPanel from '../../components/filterPanel/index'
 import Backdrop from '../../components/backdrop/index'
 import FilmDistribution from '../../components/filmDistribution/index'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
 
 import './index.scss'
-let chart = null
 const { getMaoyanSignLabel } = projectConfig
 
 const {
@@ -33,23 +28,13 @@ const {
   handleReleaseDesc,
   handleNewDate,
   formatWeekDate,
-  throttle,
 } = utils
 
 const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
 const barHeight = getGlobalData('barHeight')
-
-function rContScrollEvt({ detail }, _this) {
-  _this.setState({
-    rightContScrollLeft: detail.scrollLeft,
-  })
-}
 class _C extends React.Component {
   state = {
-    allList: [],
-    offset: 0,
-    limit: 20,
     filmItemWidth: rpxTopx(208),
     filmItemMarginRight: rpxTopx(8),
     initLoading: true,
@@ -74,27 +59,6 @@ class _C extends React.Component {
     subList: [],
     filterItemHidden: [],
     latestSchedule: {},
-    scheduleType: {
-      1: '已定档',
-      2: '非常确定',
-      3: '可能',
-      4: '内部建议',
-      5: '待定',
-    },
-    project: {
-      1: '筹备',
-      2: '拍摄',
-      3: '后期',
-      4: '待过审',
-      5: '已过审',
-    },
-    cooper: {
-      1: '评估中',
-      2: '跟进中',
-      3: '未合作',
-      4: '开发中',
-      5: '投资中',
-    },
     directFilterList: [
       {
         name: 'maoyan',
@@ -223,14 +187,14 @@ class _C extends React.Component {
       url: 'api/applet/management/filmDistribution',
       data: query,
     }).then((res) => {
-      const { success, data, paging } = res
+      const { success, data = [], paging } = res
       if (success && data) {
         data.map((item) => {
           if (item.filmSchedule && item.filmSchedule.length > 0) {
             item.filmSchedule = formatDirector(item.filmSchedule)
           }
           if (item.keyFilms && item.keyFilms.length > 0) {
-            item.keyFilms.map((item2) => {
+            (item.keyFilms || []).map((item2) => {
               if (item2.maoyanSign && item2.maoyanSign.length > 0) {
                 item2.maoyanSignLabel = getMaoyanSignLabel(item2.maoyanSign)
               }
@@ -255,17 +219,12 @@ class _C extends React.Component {
           item.releaseDate = formatWeekDate(item.releaseDate)
         })
 
-        this.setState(
-          {
-            filmDistributionList: this.state.filmDistributionList.concat(data),
-            paging,
-            filmLoading: false,
-            topFilmLoading: false,
-          },
-          () => {
-            this.chartDraw()
-          },
-        )
+        this.setState({
+          filmDistributionList: this.state.filmDistributionList.concat(data),
+          paging,
+          filmLoading: false,
+          topFilmLoading: false,
+        })
       } else {
         this.setState({
           filmDistributionList: [],
@@ -273,39 +232,6 @@ class _C extends React.Component {
         })
       }
     })
-  }
-
-  chartDraw = () => {
-    const { filmDistributionList } = this.state
-
-    let key = []
-    let value = []
-    let redDot = []
-
-    filmDistributionList.map((item, index) => {
-      key.push(index)
-      value.push(item.filmNum)
-      if (item.company && item.company.indexOf(1) !== -1) {
-        redDot.push(1)
-      } else {
-        redDot.push(0)
-      }
-    })
-    const windowWidth = Taro.getSystemInfoSync().windowWidth
-    chart = lineChart('chart', {
-      tipsCtx: 'chart-tips',
-      width: (key.length - 1) * ((windowWidth * 5) / 10) + 33,
-      height: 120,
-      margin: 20,
-      xAxis: key,
-      lines: [
-        {
-          points: value,
-          redDot,
-        },
-      ],
-    })
-    chart.draw()
   }
 
   fetchSchedule = () => {
@@ -325,7 +251,7 @@ class _C extends React.Component {
       url: 'api/management/list',
       data: param,
       method: 'POST',
-    }).then(({ success, data }) => {
+    }).then(({ success, data = [] }) => {
       if (success && data) {
         data.map((item) => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
@@ -334,9 +260,6 @@ class _C extends React.Component {
           if (item.estimateBox) {
             item.estimateBox2 = formatNumber(item.estimateBox)
           }
-          // if(item.cost !== null && item.cost !== ''){
-          //   item.cost =formatNumber(item.cost * 1e4 ).text;
-          // }
 
           item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc)
           item.cost = formatNumber(item.cost).text
@@ -369,17 +292,14 @@ class _C extends React.Component {
         })
 
         return this.setState({
-          list: data.slice(0, 20),
-          allList: data,
+          list: data,
           subList: data,
           loading: false,
-          offset: 20,
         })
       }
       this.setState({
         list: [],
         subList: [],
-        allList: [],
         loading: false,
       })
     })
@@ -406,7 +326,7 @@ class _C extends React.Component {
   tapDerictFilter = (e) => {
     const num = e.target.dataset.num
     const derictFilterWrap = this.state
-    const limit = this.state
+    const limit = this.state.limit
     let newDataList = []
     derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[
       `derictFilterActive${num}`
@@ -416,8 +336,12 @@ class _C extends React.Component {
         ...derictFilterWrap,
       },
       () => {
-        const { subList, latestSchedule, directFilterList } = this.state
-        const list = subList
+        const {
+          subList = [],
+          latestSchedule,
+          directFilterList = [],
+        } = this.state
+        const list = subList || []
 
         directFilterList.map((item, index) => {
           if (num == index + 1) {
@@ -432,9 +356,7 @@ class _C extends React.Component {
           !directFilterList[3].active
         ) {
           this.setState({
-            list: subList.slice(0, limit),
-            allList: subList,
-            offset: limit,
+            list: subList,
           })
         } else {
           list.map((item) => {
@@ -505,9 +427,8 @@ class _C extends React.Component {
             }
           }
           this.setState({
-            list: newDataList.slice(0, limit),
-            allList: newDataList,
-            offset: limit,
+            list: newDataList,
+            toView: 'filter'
           })
         }
       },
@@ -556,10 +477,11 @@ class _C extends React.Component {
   }
 
   fetchFilterShow = () => {
-    const dataList = this.state
-    dataList.filterItemHidden.map((item, index) => {
-      dataList[`filterItemHidden${item}`] = true
-    })
+    const dataList = this.state(dataList.filterItemHidden || []).map(
+      (item, index) => {
+        dataList[`filterItemHidden${item}`] = true
+      },
+    )
     for (let i = 1; i < 13; i++) {
       if (dataList.filterItemHidden.indexOf(i) === -1) {
         dataList[`filterItemHidden${i}`] = false
@@ -738,27 +660,10 @@ class _C extends React.Component {
     })
   }
 
-  jumpToDetail = (e) => {
-    const { id } = e.currentTarget.dataset
-    const { list } = this.state
-    const filterList = JSON.parse(JSON.stringify(list)).filter(
-      ({ maoyanId, projectId }) => maoyanId == id,
-    )[0]
-    const { maoyanId, projectId } = filterList
-
-    Taro.navigateTo({
-      url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
-    })
-  }
-
   copyMail = () => {
     Taro.setClipboardData({
       data: 'zhiduoxing@maoyan.com',
     })
-  }
-
-  rightContScroll = (e) => {
-    return throttle(rContScrollEvt(e, this), 10)
   }
 
   goTop = () => {
@@ -766,12 +671,14 @@ class _C extends React.Component {
     this.setState({ toView: 'scroll-cont' })
   }
 
-  tapfilmBox = (value) => {
-    this.setState({
-      filmDistributionItem: value,
-      backdropShow: 'costom',
-      isShowFilmDetailList: true,
-    })
+  tapfilmBox = (index) => {
+    const filmDistributionItem = this.state.filmDistributionList[index]
+    filmDistributionItem &&
+      this.setState({
+        filmDistributionItem,
+        backdropShow: 'costom',
+        isShowFilmDetailList: true,
+      })
   }
 
   filmScroll = () => {
@@ -829,7 +736,6 @@ class _C extends React.Component {
       latestSchedule,
       derictFilterActive4,
       list,
-      rightContScrollLeft,
       filterItemHidden1,
       filterItemHidden2,
       filterItemHidden3,
@@ -842,17 +748,10 @@ class _C extends React.Component {
       filterItemHidden10,
       filterItemHidden11,
       filterItemHidden12,
-      scheduleType,
-      undefined,
-      project,
-      cooper,
       costomShow,
       filmDistributionItem,
       isShowFilmDetailList,
       curPagePermission,
-      allList,
-      offset,
-      limit,
     } = this.state
 
     return (
@@ -875,11 +774,6 @@ class _C extends React.Component {
             backdropShow={backdropShow}
           ></Backdrop>
         )}
-        {/* <Backdrop
-          onTouchMove={true}
-          ongetBackDrop={this.ongetBackDrop}
-          backdropShow={backdropShow}
-        ></Backdrop> */}
         {curPagePermission && !initLoading && (
           <View>
             <View className="header">
@@ -917,22 +811,14 @@ class _C extends React.Component {
               <ScrollView
                 scrollY={true}
                 scrollIntoView={toView}
-                onScroll={(e) => {
-                  if (e.detail.scrollTop < 250) {
-                    this.setState({
-                      list: allList.slice(0, limit),
-                      offset: limit,
-                    })
-                  }
-                }}
-                onScrollToLower={() => {
-                  this.setState({
-                    list: allList.slice(0, offset + limit),
-                    offset: offset + limit,
-                  })
-                }}
                 className="main"
                 style={'height:calc(100vh - ' + titleHeight + 'px)'}
+                onScroll={() => {
+                  toView !== '' &&
+                    this.setState({
+                      toView: '',
+                    })
+                }}
               >
                 <View id="scroll-cont">
                   {/*  上映影片分布  */}
@@ -946,10 +832,10 @@ class _C extends React.Component {
                         alt
                       ></Image>
                       {redTextShow && (
-                        <CoverImage
+                        <Image
                           src="../../static/list/bubble.png"
                           className="redPrompt"
-                        ></CoverImage>
+                        ></Image>
                       )}
                     </View>
                     {filmDistributionList.length !== 0 && (
@@ -978,12 +864,11 @@ class _C extends React.Component {
                       <View className="film-nodata">暂无数据</View>
                     )}
                   </View>
-                  {redTextShow && (
-                    <View
-                      onClick={this.redTextClose}
-                      className="redMessageClose"
-                    ></View>
-                  )}
+                  <View
+                    onClick={this.redTextClose}
+                    className="redMessageClose"
+                    style={{ display: redTextShow ? 'block' : 'none' }}
+                  ></View>
 
                   <View
                     id="filter"
@@ -1184,414 +1069,24 @@ class _C extends React.Component {
 
                     {!loading && (
                       <View className="listTable">
-                        <View className="table-left">
-                          <View className="listTr tableLeftTitleFixed">
-                            <View className="listTd shadow">
-                              {allList.length + '部影片'}
-                            </View>
-                          </View>
-                          {list.map((item, index) => {
-                            return (
-                              <Block key={item.maoyanId}>
-                                <View
-                                  className="listTr"
-                                  onClick={this.jumpToDetail}
-                                  data-id={item.maoyanId}
-                                >
-                                  <View
-                                    style={
-                                      'font-size: 28rpx;font-weight: bold;width: 218rpx;height: ' +
-                                      item.trHeight +
-                                      'rpx'
-                                    }
-                                    className="listTd tdPadding shadow"
-                                  >
-                                    <View>
-                                      <View className="movieName">
-                                        {item.name}
-                                      </View>
-                                      {(item.maoyanSignLabel || []).map(
-                                        (item, index) => {
-                                          return (
-                                            <MaoyanSign
-                                              key={index}
-                                              signContent={item}
-                                            ></MaoyanSign>
-                                          )
-                                        },
-                                      )}
-                                    </View>
-                                  </View>
-                                </View>
-                              </Block>
-                            )
-                          })}
-                        </View>
-                        <View className="table-right">
-                          <View className="listTr tableRightTitleFixed">
-                            <View
-                              className="listTr"
-                              style={
-                                'left:-' +
-                                rightContScrollLeft +
-                                'px;position:relative;'
-                              }
-                            >
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden1 ? 'itemHidden' : '')
-                                }
-                              >
-                                上映日期
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden2 ? 'itemHidden' : '')
-                                }
-                              >
-                                制作成本
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden3 ? 'itemHidden' : '')
-                                }
-                              >
-                                预估票房
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden4 ? 'itemHidden' : '')
-                                }
-                              >
-                                预估评分
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden5 ? 'itemHidden' : '')
-                                }
-                              >
-                                主出品
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden6 ? 'itemHidden' : '')
-                                }
-                              >
-                                主发行
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden7 ? 'itemHidden' : '')
-                                }
-                              >
-                                类型
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden8 ? 'itemHidden' : '')
-                                }
-                              >
-                                导演
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden9 ? 'itemHidden' : '')
-                                }
-                              >
-                                项目状态
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden10 ? 'itemHidden' : '')
-                                }
-                              >
-                                合作状态
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden11 ? 'itemHidden' : '')
-                                }
-                              >
-                                跟进人
-                              </View>
-                              <View
-                                className={
-                                  'listTd ' +
-                                  (filterItemHidden12 ? 'itemHidden' : '')
-                                }
-                              >
-                                映前想看人数
-                              </View>
-                            </View>
-                          </View>
-                          <ScrollView
-                            className="rightScroll"
-                            scrollX
-                            onScroll={this.rightContScroll}
-                          >
-                            <View
-                              className="listTr"
-                              style="min-height:0;"
-                            ></View>
-                            {list.map((item, index) => {
-                              return (
-                                <Block key={item.maoyanId}>
-                                  <View
-                                    data-id={item.maoyanId}
-                                    onClick={this.jumpToDetail}
-                                    className="listTr rightTableHeight"
-                                  >
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden1 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      {item.reRelease && (
-                                        <View>
-                                          <View>
-                                            <View>
-                                              <Text>{item.releaseDate}</Text>
-                                            </View>
-                                          </View>
-                                          {item.releaseDate.length !== 4 && (
-                                            <View>
-                                              <View>
-                                                <Text>{item.alias[0]}</Text>
-                                              </View>
-                                            </View>
-                                          )}
-                                          <ScheduleType signContent="重映"></ScheduleType>
-                                        </View>
-                                      )}
-                                      {!item.reRelease && (
-                                        <View>
-                                          <View>
-                                            <View>
-                                              <Text>{item.releaseDate}</Text>
-                                            </View>
-                                          </View>
-                                          {item.releaseDate.length !== 4 && (
-                                            <View>
-                                              <View>
-                                                <Text>{item.alias[0]}</Text>
-                                              </View>
-                                            </View>
-                                          )}
-                                          <ScheduleType
-                                            signContent={
-                                              item.movieStatus === 2 &&
-                                              item.scheduleType === 5
-                                                ? ''
-                                                : scheduleType[
-                                                    item.scheduleType
-                                                  ]
-                                            }
-                                          ></ScheduleType>
-                                        </View>
-                                      )}
-                                    </View>
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden2 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      {item.cost === null && <Text>-</Text>}
-                                      {item.cost !== null && (
-                                        <Text>{item.cost}</Text>
-                                      )}
-                                    </View>
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden3 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      {item.estimateBox === null && (
-                                        <Text>-</Text>
-                                      )}
-                                      <Text>{item.estimateBox2?.text}</Text>
-                                    </View>
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden4 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      {item.estimateScore === null
-                                        ? '-'
-                                        : item.estimateScore}
-                                    </View>
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden5 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      <View style>
-                                        {(item.producer === null ||
-                                          item.producer.length === 0) && (
-                                          <Text>-</Text>
-                                        )}
-                                        <Text>{item.producer?.[0]}</Text>
-                                      </View>
-                                    </View>
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden6 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      <View>
-                                        {item.issuer === null && <Text>-</Text>}
-                                        <Text>{item.issuer?.[0]}</Text>
-                                      </View>
-                                    </View>
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden7 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      <Text>{item.movieType}</Text>
-                                    </View>
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden8 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      <View>
-                                        {item.director !== undefined
-                                          ? item.director
-                                          : '-'}
-                                      </View>
-                                    </View>
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden9 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      {item.projectStatus > 0 && (
-                                        <Text>
-                                          {project[item.projectStatus]}
-                                        </Text>
-                                      )}
-                                      {item.projectStatus == 0 && (
-                                        <Text>-</Text>
-                                      )}
-                                      {item.projectStatus == null && (
-                                        <Text>-</Text>
-                                      )}
-                                    </View>
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden10 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      {item.cooperStatus != null && (
-                                        <Text>{cooper[item.cooperStatus]}</Text>
-                                      )}
-                                      {item.cooperStatus == 0 && <Text>-</Text>}
-                                    </View>
-                                    {item.principal?.map((items, index) => {
-                                      return (
-                                        <View
-                                          style={
-                                            'height: ' + item.trHeight + 'rpx'
-                                          }
-                                          className={
-                                            'listTd tdPadding ' +
-                                            (filterItemHidden11
-                                              ? 'itemHidden'
-                                              : '')
-                                          }
-                                          key={index}
-                                        >
-                                          {item.principal !== null && (
-                                            <Block>
-                                              {item.principal.map(
-                                                (item, index) => {
-                                                  return (
-                                                    <Text key={index}>
-                                                      {item}
-                                                    </Text>
-                                                  )
-                                                },
-                                              )}
-                                            </Block>
-                                          )}
-                                          {item.principal == null && (
-                                            <Text>-</Text>
-                                          )}
-                                        </View>
-                                      )
-                                    })}
-                                    <View
-                                      style={'height: ' + item.trHeight + 'rpx'}
-                                      className={
-                                        'listTd tdPadding ' +
-                                        (filterItemHidden12 ? 'itemHidden' : '')
-                                      }
-                                    >
-                                      <View>
-                                        <Text>{item.wishNum || '-'}</Text>
-                                        {item.sevenDayIncreaseWish && (
-                                          <View>
-                                            {'近七日新增 ' +
-                                              item.sevenDayIncreaseWish.text}
-                                          </View>
-                                        )}
-                                      </View>
-                                    </View>
-                                  </View>
-                                </Block>
-                              )
-                            })}
-                          </ScrollView>
-                        </View>
-                        {list.length !== allList.length && (
-                          <View className="init-loading">
-                            <mpLoading
-                              type="circle"
-                              show={true}
-                              animated={true}
-                              duration={900}
-                              tips="加载中"
-                            ></mpLoading>
-                          </View>
-                        )}
-                        {(list.length === allList.length && list.length !== 0) && (
-                          <View className="noMore">没有更多了</View>
-                        )}
+                        <movielist
+                          list={list}
+                          filterItemHidden1={filterItemHidden1}
+                          filterItemHidden2={filterItemHidden2}
+                          filterItemHidden3={filterItemHidden3}
+                          filterItemHidden4={filterItemHidden4}
+                          filterItemHidden5={filterItemHidden5}
+                          filterItemHidden6={filterItemHidden6}
+                          filterItemHidden7={filterItemHidden7}
+                          filterItemHidden8={filterItemHidden8}
+                          filterItemHidden9={filterItemHidden9}
+                          filterItemHidden10={filterItemHidden10}
+                          filterItemHidden11={filterItemHidden11}
+                          filterItemHidden12={filterItemHidden12}
+                        />
                       </View>
                     )}
-
-                    {!loading && list.length == 0 && (
+                    {!loading && list.length === 0 && (
                       <View className="no-data">暂无数据</View>
                     )}
                   </View>
