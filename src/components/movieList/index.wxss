@@ -12,6 +12,10 @@
   min-height: 70rpx;
 }
 
+.itemHidden {
+  display: none !important;
+}
+
 .tableLeftTitleFixed {
   position: sticky;
   top: 174rpx;

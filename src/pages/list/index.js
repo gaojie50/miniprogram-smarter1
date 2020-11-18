@@ -1,10 +1,4 @@
-import {
-  Block,
-  View,
-  Image,
-  Text,
-  ScrollView,
-} from '@tarojs/components'
+import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
@@ -326,7 +320,6 @@ class _C extends React.Component {
   tapDerictFilter = (e) => {
     const num = e.target.dataset.num
     const derictFilterWrap = this.state
-    const limit = this.state.limit
     let newDataList = []
     derictFilterWrap[`derictFilterActive${num}`] = !derictFilterWrap[
       `derictFilterActive${num}`
@@ -363,7 +356,10 @@ class _C extends React.Component {
             //只看猫眼参与
             if (directFilterList[0].active && item.company.indexOf(1) !== -1) {
               for (let i = 0; i < newDataList.length; i++) {
-                if (newDataList[i].maoyanId == item.maoyanId) {
+                if (
+                  newDataList[i].maoyanId == item.maoyanId &&
+                  newDataList[i].projectId == item.projectId
+                ) {
                   newDataList.splice(i, 1)
                 }
               }
@@ -373,7 +369,10 @@ class _C extends React.Component {
             //只看阿里参与
             if (directFilterList[1].active && item.company.indexOf(2) !== -1) {
               for (let i = 0; i < newDataList.length; i++) {
-                if (newDataList[i].maoyanId == item.maoyanId) {
+                if (
+                  newDataList[i].maoyanId == item.maoyanId &&
+                  newDataList[i].projectId == item.projectId
+                ) {
                   newDataList.splice(i, 1)
                 }
               }
@@ -428,7 +427,7 @@ class _C extends React.Component {
           }
           this.setState({
             list: newDataList,
-            toView: 'filter'
+            toView: 'filter',
           })
         }
       },
@@ -459,8 +458,8 @@ class _C extends React.Component {
     dataList.costomShow = false
     dataList.isShowFilmDetailList = false
     dataList.toView = ''
-    if (Array.isArray(e.detail)) {
-      dataList.filterItemHidden = e.detail
+    if (Array.isArray(e)) {
+      dataList.filterItemHidden = e
       this.setState(
         {
           ...dataList,
@@ -477,11 +476,10 @@ class _C extends React.Component {
   }
 
   fetchFilterShow = () => {
-    const dataList = this.state(dataList.filterItemHidden || []).map(
-      (item, index) => {
-        dataList[`filterItemHidden${item}`] = true
-      },
-    )
+    const dataList = this.state
+    dataList.filterItemHidden.map((item, index) => {
+      dataList[`filterItemHidden${item}`] = true
+    })
     for (let i = 1; i < 13; i++) {
       if (dataList.filterItemHidden.indexOf(i) === -1) {
         dataList[`filterItemHidden${i}`] = false
@@ -642,18 +640,6 @@ class _C extends React.Component {
     )
   }
 
-  scroll = (e) => {
-    if (e.detail.scrollTop > rpxTopx(80)) {
-      this.setState({
-        showIcon: true,
-      })
-    } else {
-      this.setState({
-        showIcon: false,
-      })
-    }
-  }
-
   jumpToSearch = () => {
     Taro.navigateTo({
       url: '/pages/search/index',
@@ -673,6 +659,7 @@ class _C extends React.Component {
 
   tapfilmBox = (index) => {
     const filmDistributionItem = this.state.filmDistributionList[index]
+    if(filmDistributionItem.filmNum == 0) return ;
     filmDistributionItem &&
       this.setState({
         filmDistributionItem,

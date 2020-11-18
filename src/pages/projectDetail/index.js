@@ -7,7 +7,7 @@ import utils from '../../utils/index.js'
 
 import './index.scss'
 const { getMaoyanSignLabel, getProjectStatus, getCooperStatus } = projectConfig
-const { formatNumber, formatDirector } = utils
+const { formatNumber, formatDirector, formatCreateTime } = utils
 let timer = null
 
 class _C extends React.Component {
@@ -258,10 +258,9 @@ class _C extends React.Component {
       )
     }
     if (resData.createInfo.createTime) {
-      let date = new Date(resData.createInfo.createTime)
-      resData.createInfo.createTime = `${date.getFullYear()}-${
-        date.getMonth() + 1
-      }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+      resData.createInfo.createTime = formatCreateTime(
+        resData.createInfo.createTime,
+      )
     }
     this.setState({
       count: count,
@@ -586,7 +585,7 @@ class _C extends React.Component {
                 )}
                 <View className="text-container">
                   <Text>
-                    <Text className="name">{resData.createInfo?.creator}</Text>
+                    <Text className="name">{resData.createInfo?.creator + ' '}</Text>
                     {'更新于 ' + resData.createInfo?.createTime}
                   </Text>
                 </View>
