@@ -96,10 +96,9 @@ class _C extends React.Component {
 
   jumpList = () => {
     const { checked } = this.state
-    const pages = getCurrentPages()
+    const pages = Taro.getCurrentPages() // 获取当前的页面栈
     const current = pages[pages.length - 1]
     const eventChannel = current.getOpenerEventChannel()
-    // const eventChannel = this.getOpenerEventChannel();
 
     Taro.navigateBack({
       success: function (res) {
@@ -133,11 +132,7 @@ class _C extends React.Component {
           <View className="no-data">暂无数据</View>
         )}
         {!loading && (
-          <ScrollView
-            className="search-list"
-            onClick={this.touchCheckEvent}
-            scrollY
-          >
+          <ScrollView className="search-list" scrollY>
             {list.map((item) => {
               return (
                 <View
@@ -145,13 +140,14 @@ class _C extends React.Component {
                   key={item.id}
                   data-name={item.name}
                   data-id={item.id}
+                  onClick={this.touchCheckEvent}
                 >
                   <Image src="../../static/icon/checked.png"></Image>
                   {item.name}
                 </View>
               )
             })}
-            <View style={{ height: '160rpx'}}></View>
+            <View style={{ height: '160rpx' }}></View>
           </ScrollView>
         )}
         <View className="finish" onClick={this.jumpList}>

@@ -10,7 +10,6 @@ const capsuleLocation = getGlobalData('capsuleLocation')
 const barHeight = getGlobalData('barHeight')
 class _C extends React.Component {
   state = {
-    isLogin: Taro.getStorageSync('token'),
     titleHeight: Math.floor(
       capsuleLocation.bottom + capsuleLocation.top - barHeight,
     ),
@@ -18,16 +17,14 @@ class _C extends React.Component {
   }
 
   onLoad = () => {
-    const { isLogin } = this.state
-
-    if (isLogin) this.goList()
-  };
+    if (Taro.getStorageSync('token')) this.goList()
+  }
 
   goList = () => {
     Taro.reLaunch({
       url: '../list/index',
     })
-  };
+  }
 
   getUserInfo = (e) => {
     Taro.getSetting({
@@ -35,7 +32,7 @@ class _C extends React.Component {
         if (res.authSetting['scope.userInfo'] && e.detail) {
           const { iv, encryptedData } = e.detail
 
-          if (this.state.isLogin)
+          if (Taro.getStorageSync('token'))
             return Taro.redirectTo({ url: `/pages/list/index` })
 
           return keepLogin({ iv, encryptedData })
@@ -48,7 +45,7 @@ class _C extends React.Component {
         })
       },
     })
-  };
+  }
   render() {
     const { titleHeight, isLogin } = this.state
     return (

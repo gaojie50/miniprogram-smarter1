@@ -5,7 +5,7 @@ import {
   Image,
   Text,
   PickerView,
-  PickerViewColumn
+  PickerViewColumn,
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
@@ -282,47 +282,6 @@ class _C extends React.Component {
     this.setState(obj)
   }
 
-  searchPCFinish = (data) => {
-    const { companyChecked } = data
-    const { companyList } = this.state
-
-    if (companyChecked.length !== 0) {
-      let toastStr = ''
-      for (let j = 0; j < companyList.length; j++) {
-        for (let i = 0; i < companyChecked.length; i++) {
-          if (companyList[j].id === companyChecked[i].id) {
-            this.state.company[j] = 'active'
-            toastStr = toastStr + companyChecked[i].name + '、'
-            companyChecked.splice(i, 1)
-            i--
-          }
-        }
-      }
-      toastStr = toastStr.substring(0, toastStr.length - 1)
-      if (toastStr.length !== 0) {
-        if (toastStr.length > 30) {
-          toastStr = toastStr.substring(0, 30)
-          toastStr = toastStr + '...'
-        }
-        Taro.showToast({
-          title: `${toastStr}已存在`,
-          icon: 'none',
-          duration: 4000,
-        })
-      }
-
-      const newCompanyList = companyList.concat(companyChecked)
-      const newCompany = this.state.company
-      for (let i = companyList.length; i < newCompanyList.length; i++) {
-        newCompany[i] = 'active'
-      }
-      this.setState({
-        companyList: newCompanyList,
-        company: newCompany,
-      })
-    }
-  }
-
   switchDate = (e) => {
     const { sign } = e.currentTarget.dataset
     const { dateShowFirstActive, customStartDate, customEndDate } = assignDeep(
@@ -459,7 +418,7 @@ class _C extends React.Component {
 
   filterReset = () => {
     const { estimateBox, projectBox } = this.state
-    const { filterShow } = this.props;
+    const { filterShow } = this.props
     if (filterShow == '1') {
       estimateBox.map((item) => {
         item.active = false
@@ -589,8 +548,7 @@ class _C extends React.Component {
       customEndDate,
     }
 
-    this.props.ongetFilterShow(myEventDetail);
-    // this.triggerEvent('myevent', myEventDetail)
+    this.props.ongetFilterShow(myEventDetail)
   }
 
   filterDefinedDate = () => {
@@ -652,11 +610,13 @@ class _C extends React.Component {
                 toastStr = toastStr.substring(0, 30)
                 toastStr = toastStr + '...'
               }
-              Taro.showToast({
-                title: `${toastStr}已存在`,
-                icon: 'none',
-                duration: 4000,
-              })
+              setTimeout(() => {
+                Taro.showToast({
+                  title: `${toastStr}已存在`,
+                  icon: 'none',
+                  duration: 4000,
+                })
+              }, 100);
             }
 
             const newCompanyList = companyList.concat(companyChecked)
