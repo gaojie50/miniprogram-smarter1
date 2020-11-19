@@ -1,9 +1,16 @@
 import Taro from '@tarojs/taro'
 //错误处理
-const errorHandle = (err) => {
-  console.warn(err)
-  return err
-}
+const errorHandle = err => {
+  if(err && err.message ){
+    Taro.showToast({
+      title: err.message,
+      icon: 'none',
+      duration: 2000
+    })
+  }
+ 
+  return err;
+};
 
 function debounce(fn, interval, first = false) {
   let timer

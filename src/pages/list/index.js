@@ -38,6 +38,7 @@ class _C extends React.Component {
     filterActive: '',
     backdropShow: '',
     costomShow: false,
+    isScroll: true,
     barHeight,
     titleHeight: Math.floor(
       capsuleLocation.bottom + capsuleLocation.top - barHeight,
@@ -245,7 +246,7 @@ class _C extends React.Component {
       url: 'api/management/list',
       data: param,
       method: 'POST',
-    }).then(({ success, data = [] }) => {
+    }).then(({ success, data = [], error }) => {
       if (success && data) {
         data.map((item) => {
           if (item.maoyanSign && item.maoyanSign.length > 0) {
@@ -291,6 +292,14 @@ class _C extends React.Component {
           loading: false,
         })
       }
+
+      if(error && (error.code == 12110002)){
+        Taro.removeStorageSync('token');
+        Taro.removeStorageSync('listPermission');
+ 
+        Taro.reLaunch({ url:'../welcome/index' })
+      };
+      
       this.setState({
         list: [],
         subList: [],
@@ -307,12 +316,14 @@ class _C extends React.Component {
         toView: 'filter',
         filterActive: '',
         backdropShow: '',
+        isScroll: true,
       })
     } else {
       this.setState({
         toView: 'filter',
         filterActive: e.target.dataset.num,
         backdropShow: 'filter',
+        isScroll: false,
       })
     }
   }
@@ -449,6 +460,7 @@ class _C extends React.Component {
       filterActive: '',
       costomShow: false,
       isShowFilmDetailList: false,
+      isScroll: true,
     })
   }
 
@@ -606,6 +618,7 @@ class _C extends React.Component {
         filterActive: '',
         dateText,
         dateSelect,
+        isScroll: true,
       },
       () => {
         const {
@@ -659,7 +672,7 @@ class _C extends React.Component {
 
   tapfilmBox = (index) => {
     const filmDistributionItem = this.state.filmDistributionList[index]
-    if(filmDistributionItem.filmNum == 0) return ;
+    if (filmDistributionItem.filmNum == 0) return
     filmDistributionItem &&
       this.setState({
         filmDistributionItem,
@@ -739,6 +752,7 @@ class _C extends React.Component {
       filmDistributionItem,
       isShowFilmDetailList,
       curPagePermission,
+      isScroll,
     } = this.state
 
     return (
@@ -796,7 +810,7 @@ class _C extends React.Component {
                 </View>
               </View>
               <ScrollView
-                scrollY={true}
+                scrollY={isScroll}
                 scrollIntoView={toView}
                 className="main"
                 style={'height:calc(100vh - ' + titleHeight + 'px)'}

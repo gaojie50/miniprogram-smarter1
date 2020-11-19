@@ -110,4 +110,7 @@
         </block>
     </scroll-view>
   </view>
-  <view wx:if="{{list.length !== 0}}" class="noMore">没有更多了</view>
+  <view wx:if="{{!noMore}}" class="list-loading">
+    <mp-loading type="circle" show="{{true}}" tips=""></mp-loading>
+  </view>
+  <view wx:if="{{noMore}}" class="noMore">没有更多了</view>

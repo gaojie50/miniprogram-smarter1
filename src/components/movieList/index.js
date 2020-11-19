@@ -46,15 +46,18 @@ Component({
     rightContScrollLeft: undefined,
     listData: [],
     page: 0,
+    noMore: false,
   },
 
   attached: function () {
-    this.createIntersectionObserver().relativeToViewport({bottom: 200}).observe('.noMore', (res) => {
+    this.createIntersectionObserver().relativeToViewport({bottom: 200}).observe('.list-loading', (res) => {
       if(res.intersectionRect.top > 0) {
-        const page = this.data.page;
+        const { page, list } = this.data;
+        const noMore = page * 20 > list.length ? true : false
         this.setData({
           page: page + 1,
-          ['listData[' + page + ']']: this.properties.list.slice(page * 10, page * 10 + 10),
+          ['listData[' + page + ']']: this.properties.list.slice(page * 20, page * 20 + 20),
+          noMore,
         })
       }
     })
@@ -68,7 +71,7 @@ Component({
     'list': function(list) {
       this.setData({
         page: 1,
-        listData: [list.slice(0, 10)],
+        listData: [list.slice(0, 20)],
       })
     }
   },
