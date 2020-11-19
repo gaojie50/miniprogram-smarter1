@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "maoyansign": "../../components/maoyanSign/index",
+    "scheduletype": "../../components/scheduleType/index",
+    "mp-loading": "weui-miniprogram/loading/loading"
+  }
+}

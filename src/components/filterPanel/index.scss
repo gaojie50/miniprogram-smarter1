@@ -1,0 +1,315 @@
+.data-selected {
+  height: 60px;
+}
+
+.filterPanel {
+  position: absolute;
+  width: 100%;
+  top: 90px;
+  left: 0;
+}
+
+.filterPanelWrap {
+  width: 100%;
+  overflow: hidden;
+}
+
+
+.filterPanels {
+  width: 100%;
+  padding: 30px 28px 30px 30px;
+  border-top: 1px solid rgba(238, 238, 238, 1);
+  background-color: #ffffff;
+  position: absolute;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.filterPanels.date{
+  padding-bottom: 0;
+}
+
+.filterPanel.date .filterButton{
+  margin-top: 10px;
+}
+
+.estimateBox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.estimateBox .estimateBox-item {
+  width: 216px;
+  height: 80px;
+  text-align: center;
+  line-height: 80px;
+  background: rgba(242, 243, 248, 1);
+  border-radius: 10px;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.filterButton {
+  display: flex;
+  flex-direction: row;
+  font-size: 32px;
+  margin-top: 40px;
+}
+
+.lastFilterButton {
+  position: relative;
+  bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  font-size: 32px;
+}
+
+.filterButton-reset {
+  width: 335px;
+  height: 80px;
+  color: rgba(51, 51, 51, 1);
+  background: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  border: 1px solid rgba(204, 204, 204, 1);
+  margin-right: 20px;
+  text-align: center;
+  line-height: 80px;
+}
+
+.filterButton-determine {
+  width: 335px;
+  height: 80px;
+  background: rgba(24, 144, 255, 1);
+  color: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  text-align: center;
+  line-height: 80px;
+}
+
+.filterButton-date-determine {
+  width: 690px;
+  height: 80px;
+  background: rgba(24, 144, 255, 1);
+  color: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  text-align: center;
+  line-height: 80px;
+  margin-bottom: 30px;
+}
+
+.projectStatus {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.projectStatus .projectStatus-item {
+  width: 158px;
+  height: 80px;
+  background: rgba(242, 243, 248, 1);
+  border-radius: 10px;
+  text-align: center;
+  line-height: 80px;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+.filter .title {
+  font-weight: bold;
+  color: rgba(51, 51, 51, 1);
+}
+
+.cost-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.cost-wrap .cost-wrap-item {
+  width: 216px;
+  height: 80px;
+  background: rgba(242, 243, 248, 1);
+  border-radius: 10px;
+  text-align: center;
+  line-height: 80px;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.cooper-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.cooper-wrap .cooper-wrap-item {
+  width: 158px;
+  height: 80px;
+  background: rgba(242, 243, 248, 1);
+  border-radius: 10px;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 80px;
+  box-sizing: border-box;
+}
+
+.last-title .add {
+  margin-left: 564px;
+}
+
+.last-title image {
+  margin-left: 10px;
+}
+ 
+.filterPanelActive {
+  background: rgba(24, 144, 255, 0.1) !important;
+  border-radius: 10px;
+  border: 2px solid rgba(24, 144, 255, 1);
+  color: rgba(24, 144, 255, 1);
+  line-height: 78px !important;
+}
+
+.companyActive {
+  background: rgba(24, 144, 255, 0.1) !important;
+  border: 2px solid rgba(24, 144, 255, 1);
+  color: rgba(24, 144, 255, 1);
+  padding-top: 19px !important;
+  padding-bottom: 19px !important;
+}
+
+.company {
+  display: flex; 
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+.company .company-left {
+  width: 335px;
+  margin-right: 22px;
+}
+.company .company-right {
+  width: 335px;
+}
+
+.company .company-item {
+  width: 335px;
+  min-height: 80px;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  background: rgba(242, 243, 248, 1);
+  box-sizing: border-box;
+}
+.company .company-item text {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.dateBox .item {
+  font-weight: 400;
+  font-size: 30px;
+  color: #333;
+  min-height: 92px;
+  padding: 0 27px;
+  word-break: break-all;
+  display: flex;
+  align-items: center;
+}
+
+.dateBox .item.checked {
+  color: #1791FF;
+  position: relative;
+}
+
+.dateBox .checked .pic {
+  display: block;
+  width: 21px;
+  height: 18px;
+  margin-right: 18px;
+  position: absolute;
+  left: 0;
+}
+
+.dateBox .pic {
+  display: none;
+}
+
+.custom-box {
+  height: 570px;
+}
+
+.date-show {
+  height: 162px;
+  margin-right: 60px;
+  border-top: 1px solid #E5E5E5;
+  position: relative;
+  text-align: center;
+  padding-top: 46px;
+  color: #333;
+}
+.date-show .left, .right {
+  font-family: MaoYanHeiTi-H1;
+}
+
+.date-show .detail {
+  font-size: 46px;
+  line-height: 46px;
+  /* font-weight: 500; */
+  font-weight: bold;
+}
+
+.date-show .left .week {
+  float: left;
+}
+
+.date-show .right .week {
+  float: right;
+}
+
+.date-show .week {
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 36px;
+  margin-top: 10px;
+}
+
+.date-show view.active {
+  color: #1791FF;
+  border-bottom: 2px solid #1791FF;
+}
+
+.date-show .left {
+  position: absolute;
+  left: 0;
+  top: 40px;
+  width: 320px;
+  border-bottom: 2px solid #E5E5E5;
+  height: 122px;
+  text-align: left;
+}
+
+.date-show .right {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 320px;
+  border-bottom: 2px solid #E5E5E5;
+  height: 122px;
+  text-align: right;
+}
+
+.date-box {
+  width: 100%;
+  height: 336px;
+  position: relative;
+  left: -30px;
+  font-size: 40px;
+}

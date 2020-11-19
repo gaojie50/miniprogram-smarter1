@@ -1,0 +1,113 @@
+.filmChart {
+  position: relative;
+  height: 480px;
+}
+
+.filmChart canvas {
+  position: absolute;
+  height: 380px;
+  top: -200%;
+  z-index: -1;
+  left: 0;
+}
+
+.filmChart image {
+  position: absolute;
+  height: 380px;
+  top: 0;
+  z-index: -1;
+  left: 0;
+}
+
+.filmList {
+  position: absolute;
+  top: 180px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 308px;
+}
+
+.filmList .filmItem {
+  /* margin-right: 8rpx;
+  width: 208rpx; */
+  height: 308px;
+}
+
+.filmList .filmItem:first-child {
+  margin-left: 30px;
+}
+
+.no-filmBox {
+  width: 208px;
+  height: 220px;
+  padding: 20px 16px;
+  box-sizing: border-box;
+  opacity: 0.5;
+  background: rgba(111, 134, 189, 0.10);
+  border: 2px dashed #6F86BD;
+  border-radius: 10px 10px 0 0;
+}
+
+.filmList .filmItem .filmBox {
+  width: 100%;
+  height: 220px;
+  padding: 20px 16px;
+  box-sizing: border-box;
+  background: rgba(111, 134, 189, 0.3);
+  border-radius: 10px 10px 0 0;
+  z-index: 30;
+}
+
+.filmList .filmItem .filmBox .item {
+  width: 208px;
+}
+
+.filmList .filmItem .schedule {
+  height: 28px;
+  font-size: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.filmList .filmItem .time {
+  height: 34px;
+  font-family: MaoYanHeiTi-H1;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.filmList .filmItem .filmBox view:first-child text:first-child {
+  font-family: MaoYanHeiTi-H1;
+  font-size: 40px;
+}
+
+.filmList .filmItem .no-filmBox view:first-child text:first-child {
+  font-family: MaoYanHeiTi-H1-H1;
+  font-size: 40px;
+}
+
+.filmList .filmItem .filmBox view:not(:first-child) {
+  height: 32px;
+  opacity: 0.6;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.filmList .filmItem .filmBox view image {
+  float: right;
+  width: 11px;
+  height: 17px;
+  margin-top: 25px;
+}
+
+.filmLoading {
+  width: 200px;
+}
+
+.list-loading {
+  width: 100%;
+  height: 100%;
+}
