@@ -99,7 +99,6 @@ class _C extends React.Component {
     const pages = Taro.getCurrentPages() // 获取当前的页面栈
     const current = pages[pages.length - 1]
     const eventChannel = current.getOpenerEventChannel()
-    // const eventChannel = this.getOpenerEventChannel();
 
     Taro.navigateBack({
       success: function (res) {

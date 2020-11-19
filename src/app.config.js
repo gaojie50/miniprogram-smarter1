@@ -5,6 +5,7 @@ export default {
     'pages/search/index',
     'pages/projectDetail/index',
     'pages/searchCompany/index',
+    'pages/webview/index', 
   ],
   window: {
     navigationBarBackgroundColor: '#798CBA',
