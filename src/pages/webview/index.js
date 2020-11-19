@@ -1,6 +1,5 @@
 import { WebView } from '@tarojs/components'
 import React from 'react'
-import './index.scss'
 
 class _C extends React.Component {
   state = {
