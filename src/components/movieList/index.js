@@ -49,19 +49,6 @@ Component({
     noMore: false,
   },
 
-  attached: function () {
-    this.createIntersectionObserver().relativeToViewport({bottom: 200}).observe('.list-loading', (res) => {
-      if(res.intersectionRect.top > 0) {
-        const { page, list } = this.data;
-        const noMore = page * 20 > list.length ? true : false
-        this.setData({
-          page: page + 1,
-          ['listData[' + page + ']']: this.properties.list.slice(page * 20, page * 20 + 20),
-          noMore,
-        })
-      }
-    })
-  },
   moved: function () {
     
   },
@@ -72,6 +59,18 @@ Component({
       this.setData({
         page: 1,
         listData: [list.slice(0, 20)],
+        noMore: false,
+      })
+      this.createIntersectionObserver().relativeToViewport({bottom: 200}).observe('.list-loading', (res) => {
+        if(res.intersectionRect.top > 0) {
+          const { page, list } = this.data;
+          const noMore = page * 20 > list.length ? true : false
+          this.setData({
+            page: page + 1,
+            ['listData[' + page + ']']: this.properties.list.slice(page * 20, page * 20 + 20),
+            noMore,
+          })
+        }
       })
     }
   },

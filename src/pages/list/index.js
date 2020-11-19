@@ -438,7 +438,6 @@ class _C extends React.Component {
           }
           this.setState({
             list: newDataList,
-            toView: 'filter',
           })
         }
       },
