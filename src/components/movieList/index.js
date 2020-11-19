@@ -49,11 +49,6 @@ Component({
     noMore: false,
   },
 
-  moved: function () {
-    
-  },
-  detached: function () {},
-
   observers: {
     'list': function(list) {
       this.setData({
