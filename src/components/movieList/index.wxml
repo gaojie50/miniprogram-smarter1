@@ -86,7 +86,6 @@
                 </view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden10? 'itemHidden':''}}">
                     <text wx:if="item.cooperStatus != null">{{cooper[item.cooperStatus]}}</text>
-                    <text wx:if="item.cooperStatus == 0">-</text>
                 </view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden11? 'itemHidden':''}}">
                     <text wx:if="{{item.principal !== null}}" wx:for="{{item.principal}}" wx:key="index">{{item}}</text>
