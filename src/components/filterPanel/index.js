@@ -176,23 +176,27 @@ class _C extends React.Component {
     ],
     cooperBox: [
       {
-        value: '评估中',
+        value:'接触中',
+        active:false,
+      },
+      {
+        value: '确定合作',
         active: false,
       },
       {
-        value: '跟进中',
+        value: '正常完结',
+        active: false,
+      },
+      {
+        value: '合作暂停',
+        active: false,
+      },
+      {
+        value: '合作取消',
         active: false,
       },
       {
         value: '未合作',
-        active: false,
-      },
-      {
-        value: '开发中',
-        active: false,
-      },
-      {
-        value: '投资中',
         active: false,
       },
     ],
@@ -499,11 +503,11 @@ class _C extends React.Component {
       }
     })
     cooperBox.map((item, index) => {
-      if (item.active && cooperStatus.indexOf(index + 1) === -1) {
-        cooperStatus.push(index + 1)
+      if (item.active && cooperStatus.indexOf(index) === -1) {
+        cooperStatus.push(index)
       }
-      if (!item.active && cooperStatus.indexOf(index + 1) !== -1) {
-        const i = cooperStatus.indexOf(index + 1)
+      if (!item.active && cooperStatus.indexOf(index) !== -1) {
+        const i = cooperStatus.indexOf(index)
         cooperStatus.splice(i, 1)
       }
     })

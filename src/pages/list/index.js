@@ -931,7 +931,7 @@ class _C extends React.Component {
                           }
                         ></Image>
                       </View>
-                      <View
+                      {/* <View
                         className="listFilter-item"
                         data-num="2"
                         onClick={this.tapFilterItem}
@@ -957,7 +957,7 @@ class _C extends React.Component {
                             '.png'
                           }
                         ></Image>
-                      </View>
+                      </View> */}
                       <View
                         className="listFilter-item"
                         data-num="3"

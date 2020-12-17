@@ -155,14 +155,14 @@ class _C extends React.Component {
             >
               导演
             </View>
-            <View
+            {/* <View
               data-num="9"
               onClick={this.tapCostom}
               className={'listWrapItem ' + (costom9 ? 'costomActive' : '')}
               style="margin-right: 0;"
             >
               项目状态
-            </View>
+            </View> */}
             <View
               data-num="10"
               onClick={this.tapCostom}

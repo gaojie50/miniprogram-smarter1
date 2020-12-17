@@ -2,7 +2,7 @@
 	"miniprogramRoot": "dist/",
 	"projectname": "taroConvert",
 	"description": "",
-	"appid": "touristappid",
+	"appid": "wx2e4c3da0429e46ce",
 	"setting": {
 		"urlCheck": true,
 		"es6": false,
@@ -28,7 +28,9 @@
 		},
 		"useIsolateContext": true,
 		"useCompilerModule": false,
-		"userConfirmedUseCompilerModuleSwitch": false
+		"userConfirmedUseCompilerModuleSwitch": false,
+		"packNpmManually": false,
+		"packNpmRelationList": []
 	},
 	"compileType": "miniprogram",
 	"simulatorType": "wechat",

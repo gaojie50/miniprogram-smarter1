@@ -28,7 +28,6 @@
             <view class="listTd {{filterItemHidden6? 'itemHidden':''}}">主发行</view>
             <view class="listTd {{filterItemHidden7? 'itemHidden':''}}">类型</view>
             <view class="listTd {{filterItemHidden8? 'itemHidden':''}}">导演</view>
-            <view class="listTd {{filterItemHidden9? 'itemHidden':''}}">项目状态</view>
             <view class="listTd {{filterItemHidden10? 'itemHidden':''}}">合作状态</view>
             <view class="listTd {{filterItemHidden11? 'itemHidden':''}}">跟进人</view>
             <view class="listTd {{filterItemHidden12? 'itemHidden':''}}">映前想看人数</view>
@@ -84,11 +83,6 @@
                 </view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">
                     <view>{{item.director !== undefined?item.director:'-'}}</view>
-                </view>
-                <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden9? 'itemHidden':''}}">
-                    <text wx:if="{{(item.projectStatus > 0)}}">{{project[item.projectStatus]}}</text>
-                    <text wx:if="{{item.projectStatus == 0}}">-</text>
-                    <text wx:if="{{item.projectStatus == null}}">-</text>
                 </view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden10? 'itemHidden':''}}">
                     <text wx:if="item.cooperStatus != null">{{cooper[item.cooperStatus]}}</text>

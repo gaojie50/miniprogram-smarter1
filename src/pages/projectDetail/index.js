@@ -540,12 +540,12 @@ class _C extends React.Component {
                   </View>
                 </View>
                 <View className="details">
-                  <View className="infoo">
+                  {/* <View className="infoo">
                     <View className="left">项目状态：</View>
                     <View className="right">
                       {resData.marketIntelligence?.projectStatus?.label || '-'}
                     </View>
-                  </View>
+                  </View> */}
                   <View className="infoo">
                     <View className="left">上映时间：</View>
                     <View className="right">
