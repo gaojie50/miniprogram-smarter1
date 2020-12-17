@@ -259,7 +259,8 @@ class _C extends React.Component {
           item.releaseDate = handleReleaseDesc(item.showType, item.releaseDesc)
           item.cost = formatNumber(item.cost).text
           item.director = formatDirector(item.director)
-          item.movieType = item.movieType.replace(/,/g, '/')
+          item.movieType = item.movieType && item.movieType.replace(/,/g, '/')
+
           item.wishNum = formatNumber(item.wishNum).text
           item.sevenDayIncreaseWish = formatNumber(item.sevenDayIncreaseWish)
           if (item.name.length > 6 && item.maoyanSign.length !== 0) {

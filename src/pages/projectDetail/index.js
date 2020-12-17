@@ -154,6 +154,7 @@ class _C extends React.Component {
       data: { movieId: movieId, projectId: projectId },
       method: 'GET',
     }).then((res) => {
+      console.log(res)
       if (!res.success) {
         Taro.showToast({
           title: res.error.message,
@@ -269,8 +270,8 @@ class _C extends React.Component {
   }
 
   render() {
-    const { resData, flod, loading, isChange } = this.state
-
+    const { resData, flod, loading, isChange } = this.state;
+    console.log(resData)
     return (
       <Block>
         <View className="project-detail">
@@ -341,7 +342,7 @@ class _C extends React.Component {
                 <View className="info">
                   <View className="left">合作类型：</View>
                   <View className="right">
-                    {resData.productInfo?.cooperStatus}
+                    {resData.productInfo?.cooperStatus.label}
                   </View>
                 </View>
               )}
@@ -372,7 +373,7 @@ class _C extends React.Component {
                   <View className="left">发行方：</View>
                   <View className="right">{resData.productInfo?.issuer}</View>
                 </View>
-              )}
+              )} 
               {resData.productInfo?.supervisor && (
                 <View className="info">
                   <View className="left">监 制：</View>

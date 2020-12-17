@@ -144,11 +144,11 @@ const formatNumber = (value, sign) => {
 }
 
 const handleReleaseDesc = (showType, date) => {
-  if (showType === 1) {
+  if (date && showType === 1) {
     const newDate = date.slice(5, 10)
     const result = newDate.replace(/-/g, '.')
     return result
-  } else if (showType === 2) {
+  } else if (date && showType === 2) {
     const newDate = date.slice(5, 7)
     if (newDate[0] === '0') {
       const result = newDate.slice(1)
@@ -156,15 +156,15 @@ const handleReleaseDesc = (showType, date) => {
     } else {
       return `${newDate}月`
     }
-  } else if (showType === 3) {
+  } else if (date && showType === 3) {
     const startTime = date.slice(5, 10).replace(/-/g, '.')
     const endTime = date.slice(16, 21).replace(/-/g, '.')
     return `${startTime}~${endTime}`
-  } else if (showType === 4) {
+  } else if (date && showType === 4) {
     const newDate = date.slice(0, 4)
     return newDate
   } else {
-    return date
+    return ''
   }
 }
 

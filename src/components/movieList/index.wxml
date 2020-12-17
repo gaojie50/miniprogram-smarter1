@@ -80,7 +80,7 @@
                     </view>
                 </view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden7? 'itemHidden':''}}">
-                    <text>{{item.movieType}}</text>
+                    <text>{{item.movieType || '-'}}</text>
                 </view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden8? 'itemHidden':''}}">
                     <view>{{item.director !== undefined?item.director:'-'}}</view>

@@ -4,6 +4,8 @@
 
 ```
 npm install
+
+
 npm run dev:weapp  
 
 <!-- env-config.js -->
@@ -38,3 +40,13 @@ http://wxappci.maoyan.info/
 
 
 appeid wx2e4c3da0429e46ce
+
+如果有指定源错误需运行：
+npm install --registry=http://r.npm.sankuai.com
+
+如果有node-sass错误需安装：
+npm i node-sass --sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
+
+！！！Taro需要全局安装
+
+node 版本 12.14.1
