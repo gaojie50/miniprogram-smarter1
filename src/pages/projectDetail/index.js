@@ -4,8 +4,8 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import projectConfig from '../../constant/project-config.js'
 import reqPacking from '../../utils/reqPacking.js'
 import utils from '../../utils/index.js'
-
 import './index.scss'
+
 const { getMaoyanSignLabel, getProjectStatus, getCooperStatus } = projectConfig
 const { formatNumber, formatDirector, formatCreateTime } = utils
 let timer = null
@@ -99,11 +99,12 @@ class _C extends React.Component {
             success: (result) => {
               let height = 96
               if (rect.length !== that.state.count) {
+                
                 height =
                   rect[0].height *
                     that.state.count *
                     (750 / result.windowWidth) +
-                  176
+                  176 + 40
               } else {
                 for (let i = 0; i < rect.length; i++) {
                   height =
@@ -154,7 +155,6 @@ class _C extends React.Component {
       data: { movieId: movieId, projectId: projectId },
       method: 'GET',
     }).then((res) => {
-      console.log(res)
       if (!res.success) {
         Taro.showToast({
           title: res.error.message,
@@ -271,153 +271,153 @@ class _C extends React.Component {
 
   render() {
     const { resData, flod, loading, isChange } = this.state;
-    console.log(resData)
+
     return (
       <Block>
-        <View className="project-detail">
-          <View className="header">
-            <Text className="name">{resData.productInfo?.name}</Text>
+        <View className='project-detail'>
+          <View className='header'>
+            <Text className='name'>{resData.productInfo?.name}</Text>
             {(resData.productInfo?.maoyanSign || []).map((item, index) => {
               return (
-                <Text className="sign" key={index}>
+                <Text className='sign' key={index}>
                   {'猫眼' + item}
                 </Text>
               )
             })}
           </View>
         </View>
-        <View className="main-container">
-          <View className="main">
+        <View className='main-container'>
+          <View className='main'>
             <View
-              className="detail"
-              id="detail"
+              className='detail'
+              id='detail'
               style={'height:' + flod.height + ';'}
               onClick={this.fold}
             >
-              <View className="title">基础信息</View>
+              <View className='title'>基础信息</View>
               {loading && (
-                <mpLoading type="circle" show={true} tips=""></mpLoading>
+                <mpLoading type='circle' show tips=''></mpLoading>
               )}
-              <View className="type">
-                <View className="info">
-                  <Text className="special">
+              <View className='type'>
+                <View className='info'>
+                  <Text className='special'>
                     {resData.productInfo?.category}
                   </Text>
-                  <Text className="movietype">
+                  <Text className='movietype'>
                     {resData.productInfo?.movieType}
                   </Text>
                 </View>
               </View>
               {resData.productInfo?.filmSource && (
-                <View className="info">
-                  <View className="left">片源地：</View>
-                  <View className="right">
+                <View className='info'>
+                  <View className='left'>片源地：</View>
+                  <View className='right'>
                     {resData.productInfo?.filmSource}
                   </View>
                 </View>
               )}
               {resData.productInfo?.adaptSource && (
-                <View className="info">
-                  <View className="left">改编源：</View>
-                  <View className="right">
+                <View className='info'>
+                  <View className='left'>改编源：</View>
+                  <View className='right'>
                     {resData.productInfo?.adaptSource}
                   </View>
                 </View>
               )}
               {resData.productInfo?.director && (
-                <View className="info">
-                  <View className="left">导 演：</View>
-                  <View className="right">{resData.productInfo?.director}</View>
+                <View className='info'>
+                  <View className='left'>导 演：</View>
+                  <View className='right'>{resData.productInfo?.director}</View>
                 </View>
               )}
               {resData.productInfo?.protagonist && (
-                <View className="info">
-                  <View className="left">主 演：</View>
-                  <View className="right">
+                <View className='info'>
+                  <View className='left'>主 演：</View>
+                  <View className='right'>
                     {resData.productInfo?.protagonist}
                   </View>
                 </View>
               )}
               {resData.productInfo?.cooperStatus && (
-                <View className="info">
-                  <View className="left">合作类型：</View>
-                  <View className="right">
+                <View className='info'>
+                  <View className='left'>合作类型：</View>
+                  <View className='right'>
                     {resData.productInfo?.cooperStatus.label}
                   </View>
                 </View>
               )}
               {resData.productInfo?.startupTime && (
-                <View className="info">
-                  <View className="left">开机时间：</View>
-                  <View className="right">
+                <View className='info'>
+                  <View className='left'>开机时间：</View>
+                  <View className='right'>
                     {resData.productInfo?.startupTime}
                   </View>
                 </View>
               )}
               {resData.productInfo?.killingTime && (
-                <View className="info">
-                  <View className="left">杀青时间：</View>
-                  <View className="right">
+                <View className='info'>
+                  <View className='left'>杀青时间：</View>
+                  <View className='right'>
                     {resData.productInfo?.killingTime}
                   </View>
                 </View>
               )}
               {resData.productInfo?.producer && (
-                <View className="info">
-                  <View className="left">出品方：</View>
-                  <View className="right">{resData.productInfo?.producer}</View>
+                <View className='info'>
+                  <View className='left'>出品方：</View>
+                  <View className='right'>{resData.productInfo?.producer}</View>
                 </View>
               )}
               {resData.productInfo?.issuer && (
-                <View className="info">
-                  <View className="left">发行方：</View>
-                  <View className="right">{resData.productInfo?.issuer}</View>
+                <View className='info'>
+                  <View className='left'>发行方：</View>
+                  <View className='right'>{resData.productInfo?.issuer}</View>
                 </View>
               )} 
               {resData.productInfo?.supervisor && (
-                <View className="info">
-                  <View className="left">监 制：</View>
-                  <View className="right">
+                <View className='info'>
+                  <View className='left'>监 制：</View>
+                  <View className='right'>
                     {resData.productInfo?.supervisor}
                   </View>
                 </View>
               )}
               {resData.productInfo?.screenWriter && (
-                <View className="info">
-                  <View className="left">编 剧：</View>
-                  <View className="right">
+                <View className='info'>
+                  <View className='left'>编 剧：</View>
+                  <View className='right'>
                     {resData.productInfo?.screenWriter}
                   </View>
                 </View>
               )}
               {isChange && (
-                <View className="arrow-container" onClick={this.fold}>
+                <View className='arrow-container' onClick={this.fold}>
                   <Image
-                    className="arrow"
+                    className='arrow'
                     style={'transform:' + flod.rotateZ}
-                    src="../../static/projectDetail/arrow.png"
+                    src='../../static/projectDetail/arrow.png'
                   ></Image>
                 </View>
               )}
             </View>
-            <View className="project">
-              <View className="title">市场情报</View>
+            <View className='project'>
+              <View className='title'>市场情报</View>
               <View>
-                <View className="market">
-                  <View className="line-container">
-                    <View className="line"></View>
+                <View className='market'>
+                  <View className='line-container'>
+                    <View className='line'></View>
                   </View>
-                  <View className="infoo">
-                    <View className="item">
+                  <View className='infoo'>
+                    <View className='item'>
                       {loading && (
                         <mpLoading
-                          type="circle"
-                          show={true}
-                          tips=""
+                          type='circle'
+                          show
+                          tips=''
                         ></mpLoading>
                       )}
                       {!loading && (
-                        <View className="item-up">
+                        <View className='item-up'>
                           <Text>
                             {resData.marketIntelligence?.estimateBox?.posNum ||
                               '-'}
@@ -429,16 +429,16 @@ class _C extends React.Component {
                       )}
                       <View>预估票房</View>
                     </View>
-                    <View className="item">
+                    <View className='item'>
                       {loading && (
                         <mpLoading
-                          type="circle"
-                          show={true}
-                          tips=""
+                          type='circle'
+                          show
+                          tips=''
                         ></mpLoading>
                       )}
                       {!loading && (
-                        <View className="item-up">
+                        <View className='item-up'>
                           <Text>
                             {resData.marketIntelligence?.estimateScore || '-'}
                           </Text>
@@ -449,16 +449,16 @@ class _C extends React.Component {
                       )}
                       <View>预估评分</View>
                     </View>
-                    <View className="item">
+                    <View className='item'>
                       {loading && (
                         <mpLoading
-                          type="circle"
-                          show={true}
-                          tips=""
+                          type='circle'
+                          show
+                          tips=''
                         ></mpLoading>
                       )}
                       {!loading && (
-                        <View className="item-up">
+                        <View className='item-up'>
                           <Text>
                             {resData.marketIntelligence?.cost?.posNum || '-'}
                           </Text>
@@ -468,20 +468,20 @@ class _C extends React.Component {
                       <View>制作成本</View>
                     </View>
                   </View>
-                  <View className="line-container">
-                    <View className="line"></View>
+                  <View className='line-container'>
+                    <View className='line'></View>
                   </View>
-                  <View className="infoo">
-                    <View className="item">
+                  <View className='infoo'>
+                    <View className='item'>
                       {loading && (
                         <mpLoading
-                          type="circle"
-                          show={true}
-                          tips=""
+                          type='circle'
+                          show
+                          tips=''
                         ></mpLoading>
                       )}
                       {!loading && (
-                        <View className="item-up">
+                        <View className='item-up'>
                           <Text>
                             {resData.marketIntelligence?.publicityCost
                               ?.posNum || '-'}
@@ -493,16 +493,16 @@ class _C extends React.Component {
                       )}
                       <View>宣发费用</View>
                     </View>
-                    <View className="item">
+                    <View className='item'>
                       {loading && (
                         <mpLoading
-                          type="circle"
-                          show={true}
-                          tips=""
+                          type='circle'
+                          show
+                          tips=''
                         ></mpLoading>
                       )}
                       {!loading && (
-                        <View className="item-up">
+                        <View className='item-up'>
                           <Text>
                             {resData.marketIntelligence?.maoyanShare || '-'}
                           </Text>
@@ -513,16 +513,16 @@ class _C extends React.Component {
                       )}
                       <View>猫眼份额</View>
                     </View>
-                    <View className="item">
+                    <View className='item'>
                       {loading && (
                         <mpLoading
-                          type="circle"
-                          show={true}
-                          tips=""
+                          type='circle'
+                          show
+                          tips=''
                         ></mpLoading>
                       )}
                       {!loading && (
-                        <View className="item-up">
+                        <View className='item-up'>
                           <Text>
                             {resData.marketIntelligence?.maoyanInvest?.posNum ||
                               '-'}
@@ -535,20 +535,20 @@ class _C extends React.Component {
                       <View>猫眼投资成本</View>
                     </View>
                   </View>
-                  <View className="line-container">
-                    <View className="line"></View>
+                  <View className='line-container'>
+                    <View className='line'></View>
                   </View>
                 </View>
-                <View className="details">
+                <View className='details'>
                   {/* <View className="infoo">
                     <View className="left">项目状态：</View>
                     <View className="right">
                       {resData.marketIntelligence?.projectStatus?.label || '-'}
                     </View>
                   </View> */}
-                  <View className="infoo">
-                    <View className="left">上映时间：</View>
-                    <View className="right">
+                  <View className='infoo'>
+                    <View className='left'>上映时间：</View>
+                    <View className='right'>
                       {(resData.productInfo?.releaseDesc || '-') +
                         ' ' +
                         (resData.productInfo?.alias?.length > 0
@@ -556,21 +556,21 @@ class _C extends React.Component {
                           : '')}
                     </View>
                   </View>
-                  <View className="infoo">
-                    <View className="left">主出品：</View>
-                    <View className="right">
+                  <View className='infoo'>
+                    <View className='left'>主出品：</View>
+                    <View className='right'>
                       {resData.marketIntelligence?.mainPublish || '-'}
                     </View>
                   </View>
-                  <View className="infoo">
-                    <View className="left">主发行：</View>
-                    <View className="right">
+                  <View className='infoo'>
+                    <View className='left'>主发行：</View>
+                    <View className='right'>
                       {resData.marketIntelligence?.mainIssuer || '-'}
                     </View>
                   </View>
-                  <View className="infoo">
-                    <View className="left">备 注 ：</View>
-                    <View className="right">
+                  <View className='infoo'>
+                    <View className='left'>备 注 ：</View>
+                    <View className='right'>
                       {resData.marketIntelligence?.remark || '-'}
                     </View>
                   </View>
@@ -578,21 +578,21 @@ class _C extends React.Component {
               </View>
             </View>
             {resData.createInfo?.creator && (
-              <View className="update">
+              <View className='update'>
                 {resData.createInfo?.avatar && (
-                  <View className="img-container">
+                  <View className='img-container'>
                     <Image src={resData.createInfo?.avatar}></Image>
                   </View>
                 )}
-                <View className="text-container">
+                <View className='text-container'>
                   <Text>
-                    <Text className="name">{resData.createInfo?.creator + ' '}</Text>
+                    <Text className='name'>{resData.createInfo?.creator + ' '}</Text>
                     {'更新于 ' + resData.createInfo?.createTime}
                   </Text>
                 </View>
               </View>
             )}
-            <View style="height:80rpx"></View>
+            <View style='height:80rpx'></View>
             {/*  <button type="primary" class="edit">编辑情报信息</button>  */}
           </View>
         </View>
