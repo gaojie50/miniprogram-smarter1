@@ -123,28 +123,32 @@ function getProjectStatus(value) {
 }
 
 function getCooperStatus(value) {
-  if (!value) return '-'
+  if (value === undefined) return '-'
 
   const CooperStatus = [
     {
+      value:0,
+      label:'接触中',
+    },
+    {
       value: 1,
-      label: '评估中'
+      label: '确定合作'
     },
     {
       value: 2,
-      label: '跟进中'
+      label: '正常完结'
     },
     {
       value: 3,
-      label: '未合作'
+      label: '合作暂停'
     },
     {
       value: 4,
-      label: '开发中'
+      label: '合作取消'
     },
     {
       value: 5,
-      label: '投资中'
+      label: '未合作'
     }
   ]
 
