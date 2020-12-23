@@ -65,6 +65,7 @@ class _C extends React.Component {
           {
             points: value,
             redDot,
+            color:"#3C7DF2"
           },
         ],
       },

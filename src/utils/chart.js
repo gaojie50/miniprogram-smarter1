@@ -116,10 +116,18 @@ LineChart.prototype._drawAxis = function () {
   //     ctx.fillText(item.name, xValue, height - margin);
   // });
 
-  // //绘制y轴label，以及水平标记线
-  // _.each(labels, (item, index) => {
+  //   // 绘制y轴label，以及水平标记线
+  //   _.each(labels, (item, index) => {
   //     let xValue = (yLabelMaxWidth - ctx.measureText(item).width) - 5;
   //     let yValue = yOffset - yStep * Number((index + 1) * yDelta).toFixed(fixed);
+
+  //     // 水平标记线
+  //     ctx.beginPath();
+  //     ctx.lineWidth = 0.8;
+  //     ctx.strokeStyle = axisColor;
+  //     ctx.moveTo(yLabelMaxWidth, yValue);
+  //     ctx.lineTo(width - margin, yValue);
+  //     ctx.stroke();
 
   //     // label
   //     ctx.strokeStyle = labelColor;
@@ -128,12 +136,12 @@ LineChart.prototype._drawAxis = function () {
 
   // 将这几个数据存放在attrs上，绘制线的时候有用
   Object.assign(this._attrs, {
-    xOffset,
-    yOffset,
-    xStep,
-    yStep,
-  })
-}
+      xOffset,
+      yOffset,
+      xStep,
+      yStep
+  });
+};
 
 LineChart.prototype._drawLines = function () {
   _.each(this.options.lines, (item) => {
@@ -163,20 +171,20 @@ LineChart.prototype._drawLine = function (line) {
   })
 
   // 与x轴的面积阴影
-  ctx.beginPath()
-  // ctx.globalAlpha = 0.2;
-  var linearGradient = ctx.createLinearGradient(0, 100, 0, 0)
-  linearGradient.addColorStop(0, 'rgba(121,140,186,0.00)')
-  // linearGradient.addColorStop(0.3,'rgba(121,140,186,0.08)');
-  linearGradient.addColorStop(1, 'rgba(121,140,186,0.3)')
-  ctx.fillStyle = linearGradient
-  ctx.moveTo(0, yOffset)
-  _.each(points, (item, index) => {
-    ctx.lineTo(item.x, item.y)
-    if (index === points.length - 1) {
-      ctx.lineTo(item.x + 208, yOffset)
-    }
-  })
+  // ctx.beginPath()
+  // // ctx.globalAlpha = 0.2;
+  // var linearGradient = ctx.createLinearGradient(0, 100, 0, 0)
+  // linearGradient.addColorStop(0, 'rgba(121,140,186,0.00)')
+  // // linearGradient.addColorStop(0.3,'rgba(121,140,186,0.08)');
+  // linearGradient.addColorStop(1, 'rgba(121,140,186,0.3)')
+  // ctx.fillStyle = linearGradient
+  // ctx.moveTo(0, yOffset)
+  // _.each(points, (item, index) => {
+  //   ctx.lineTo(item.x, item.y)
+  //   if (index === points.length - 1) {
+  //     ctx.lineTo(item.x + 208, yOffset)
+  //   }
+  // })
 
   // ctx.lineTo(xOffset + xStep * (points.length - 1), yOffset);
   ctx.lineTo(xOffset + xStep, 11111)
@@ -184,25 +192,26 @@ LineChart.prototype._drawLine = function (line) {
   ctx.fill()
 
   // 线
-  // ctx.beginPath();
+  ctx.beginPath();
   // ctx.globalAlpha = 1;
-  // ctx.lineWidth = 1;
-  // ctx.strokeStyle = line.color;
-  // _.each(points, item => {
-  //     ctx.lineTo(item.x, item.y);
-  // });
-  // ctx.stroke();
+  ctx.lineWidth = 1;
+  console.log(line.color);
+  ctx.strokeStyle = line.color;
+  _.each(points, item => {
+      ctx.lineTo(item.x, item.y);
+  });
+  ctx.stroke();
 
   // 空心点
 
   _.each(points, (item) => {
     ctx.beginPath()
-    ctx.arc(item.x, item.y, 4, 0, 4 * Math.PI)
-    ctx.closePath()
     if (item.redDot === 1) {
+      ctx.arc(item.x, item.y, 4, 0, 4 * Math.PI)
+      ctx.closePath()
       ctx.fillStyle = '#ff0000'
     } else {
-      ctx.fillStyle = '#798CBA'
+      // ctx.fillStyle = '#798CBA'
     }
 
     ctx.lineWidth = 2

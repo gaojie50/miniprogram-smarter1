@@ -377,8 +377,9 @@ page {
 
     &::before{
       content: "";
-      width: 10rpx;
-      height: 10rpx;
+      width: 14rpx;
+      height: 14rpx;
+      box-sizing: border-box;
       display: inline-block;
       margin-right: 10rpx;
       box-shadow: 0 4rpx 6rpx 0 rgba(49,68,115,0.10);
