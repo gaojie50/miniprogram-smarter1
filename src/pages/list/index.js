@@ -29,8 +29,8 @@ const capsuleLocation = getGlobalData('capsuleLocation')
 const barHeight = getGlobalData('barHeight')
 class _C extends React.Component {
   state = {
-    filmItemWidth: rpxTopx(208),
-    filmItemMarginRight: rpxTopx(8),
+    filmItemWidth: rpxTopx(216),
+    filmItemMarginRight: rpxTopx(10),
     initLoading: true,
     loading: true,
     topFilmLoading: true,
@@ -843,7 +843,7 @@ class _C extends React.Component {
                         <Text>含可能定档</Text>
                       </View>
                     </View>
-                    
+                    <View className="yAxis" />
                     {filmDistributionList.length !== 0 && (
                       <FilmDistribution
                         filmInfo={{
@@ -854,8 +854,7 @@ class _C extends React.Component {
                           topFilmLoading,
                         }}
                         onTapfilmBox={this.tapfilmBox}
-                        onFilmScroll={this.filmScroll}
-                      ></FilmDistribution>
+                        onFilmScroll={this.filmScroll}/>
                     )}
                     {topFilmLoading && (
                       <View className="list-loading">

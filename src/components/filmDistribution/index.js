@@ -2,9 +2,10 @@ import { View, Image, Text, ScrollView, Canvas } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
 import lineChart from '../../utils/chart.js'
-
+import utils from './../../utils/index'
 import './index.scss'
 
+const { rpxTopx } = utils
 class _C extends React.Component {
   static defaultProps = {
     filmItemWidth: 0,
@@ -58,9 +59,10 @@ class _C extends React.Component {
       {
         tipsCtx: 'chart-tips',
         width: (key.length - 1) * ((windowWidth * 5) / 10) + 33,
-        height: 120,
-        margin: 20,
+        height: rpxTopx(350),
+        marginLR: rpxTopx(30),
         xAxis: key,
+        yUnit:'亿',
         lines: [
           {
             points: value,
@@ -99,37 +101,27 @@ class _C extends React.Component {
         <View className="filmChart">
           <Canvas
             canvasId="chart"
-            style={'width:' + (filmDistributionList.length * 218 + 20) + 'rpx;'}
             id="chart"
-          ></Canvas>
+            style={`width:${filmDistributionList.length * (216+10) + 20}rpx`} />
           <Image
             src={imgSrc}
-            style={'width:' + (filmDistributionList.length * 218 + 20) + 'rpx;'}
-          ></Image>
+            style={`width:${filmDistributionList.length * (216+10) + 20}rpx`} />
           {!imgSrc && (
             <View className="list-loading">
               <mpLoading type="circle" show={true} tips=""></mpLoading>
             </View>
           )}
         </View>
-        <View
-          className="filmList"
-          style={'width:' + (filmDistributionList.length * 216 + 52) + 'rpx;'}
-        >
+        <View className="filmList" style={`width:${filmDistributionList.length * (216+10) + 52}rpx`}>
           {filmDistributionList.map((item, index) => {
             return (
               <View
                 className="filmItem"
-                style={
-                  'width:' +
-                  filmItemWidth +
-                  'px;margin-right:' +
-                  filmItemMarginRight +
-                  'px'
-                }
-                key={item.yearWeek}
-              >
-                <View className="schedule">{item.filmSchedule || ''}</View>
+                style={`width:${filmItemWidth}px;margin-right:${filmItemMarginRight}px`}
+                key={item.yearWeek}>
+                <View className="schedule-wrap">
+                  <View className={item.filmSchedule && item.filmSchedule.length > 0 ? "schedule":"no-schedule"}>{item.filmSchedule}</View>
+                </View>
                 <View className="time">{item.releaseDate}</View>
                 <View
                   className={item.filmNum == 0 ? 'no-filmBox' : 'filmBox'}

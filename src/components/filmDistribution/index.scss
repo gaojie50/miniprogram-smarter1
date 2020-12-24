@@ -1,11 +1,19 @@
 .filmChart {
-  position: relative;
-  height: 480px;
+  height: 688px;
+
+  // .yAxis{
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   background-color: #FFF;
+  //   width: 88px;
+  //   height: 350px;
+  // }
 }
 
 .filmChart canvas {
   position: absolute;
-  height: 380px;
+  height: 350px;
   top: -200%;
   z-index: -1;
   left: 0;
@@ -13,7 +21,7 @@
 
 .filmChart image {
   position: absolute;
-  height: 380px;
+  height: 350px;
   top: 0;
   z-index: -1;
   left: 0;
@@ -21,7 +29,7 @@
 
 .filmList {
   position: absolute;
-  top: 180px;
+  top: 388px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -29,8 +37,6 @@
 }
 
 .filmList .filmItem {
-  /* margin-right: 8rpx;
-  width: 208rpx; */
   height: 308px;
 }
 
@@ -39,7 +45,7 @@
 }
 
 .no-filmBox {
-  width: 208px;
+  width: 216px;
   height: 220px;
   padding: 20px 16px;
   box-sizing: border-box;
@@ -60,22 +66,34 @@
   z-index: 30;
 }
 
-.filmList .filmItem .filmBox .item {
-  width: 208px;
+.schedule-wrap{
+  height: 36px;
 }
 
 .filmList .filmItem .schedule {
-  height: 28px;
-  font-size: 20px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  background: rgba($color: #FFF, $alpha: .06);
+  border-radius: 4px;
+  font-weight: 400;
+  font-size: 22px;
+  color: #FFF;
+  height: 36px;
+  line-height: 36px;
+  padding: 0 10px;
+  max-width: calc(100% - 20px);
+  float: left;
+}
+
+.filmList .filmItem .no-schedule{
+  height: 36px;
 }
 
 .filmList .filmItem .time {
   height: 34px;
   font-family: MaoYanHeiTi-H1;
-  font-size: 28px;
+  font-size: 22px;
   margin-bottom: 20px;
 }
 
