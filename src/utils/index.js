@@ -62,7 +62,6 @@ const calcValue = (paramValue, digits) => {
   return Math.floor(paramValue * Math.pow(10, digits)) / Math.pow(10, digits)
 }
 
-//四舍五入
 const formatNumber = (value, sign) => {
   if (value === 0) {
     return {

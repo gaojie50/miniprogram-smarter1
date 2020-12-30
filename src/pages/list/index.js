@@ -206,7 +206,7 @@ class _C extends React.Component {
                 item2.estimateBox = formatNumber(item2.estimateBox)
               }
               item2.pic = item2.pic
-                ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`
+                ? `${item2.pic.replace('/w.h/', '/460.660/')}`
                 : `../../static/icon/default-pic.svg`
               item2.wishNum = formatNumber(item2.wishNum)
             })
@@ -822,7 +822,6 @@ class _C extends React.Component {
                 }}
               >
                 <View id="scroll-cont">
-                  {/*  上映影片分布  */}
                   <View className="filmDistribution">
                     <View className="title">
                       <Text>待映影片及预估大盘</Text>
@@ -839,8 +838,12 @@ class _C extends React.Component {
                         ></Image>
                       )}
                       <View className="toolTipSign">
-                        <Text>已定档</Text>
-                        <Text>含可能定档</Text>
+                        <View>已定档</View>
+                        <View>
+                          <Image
+                            src="../../static/list/dash.svg"
+                          ></Image>
+                          含可能定档</View>
                       </View>
                     </View>
                     <View className="yAxis" />
@@ -1108,7 +1111,7 @@ class _C extends React.Component {
               filmDistributionItem={filmDistributionItem}
               ongetCostom={this.ongetCostom}
               show={isShowFilmDetailList}
-            ></FilmDetailList>
+              titleHeight={titleHeight} />
           </View>
         )}
         {/*  无权限页面  */}

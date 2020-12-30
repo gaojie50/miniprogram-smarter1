@@ -5,7 +5,7 @@ import lineChart from '../../utils/chart.js'
 import utils from './../../utils/index'
 import './index.scss'
 
-const { rpxTopx } = utils
+const { rpxTopx, formatNumber } = utils
 class _C extends React.Component {
   static defaultProps = {
     filmItemWidth: 0,
@@ -137,16 +137,21 @@ class _C extends React.Component {
                   }}
                 >
                   <View data-item={item}>
-                    <Text data-item={item}>{item.keyFilms.length}</Text>
-                    <Text data-item={item}>部</Text>
-                    {item.filmNum !== 0 && (
-                      <Image
-                        data-item={item}
-                        src="../../static/film.png"
-                        alt
-                      ></Image>
-                    )}
+                    {
+                      item.filmNum !== 0 ? <React.Fragment>
+                        <Text data-item={item}>{formatNumber(item.hasFixEstimateBox,'floor').posNum}</Text>
+                        <Text data-item={item}>{formatNumber(item.hasFixEstimateBox,'floor').unit}</Text>
+                        <Text className="numbers">{item.keyFilms.length}部</Text>
+                        <Image data-item={item} src="../../static/film.png" alt />
+                      </React.Fragment> :
+                      <React.Fragment>
+                        <Text data-item={item}>0</Text>
+                        <Text data-item={item}>部</Text>
+                      </React.Fragment>
+                    }
+                    
                   </View>
+
                   {item.keyFilms.length === 0 && (
                     <View data-item={item}>-</View>
                   )}
