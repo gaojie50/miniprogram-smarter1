@@ -1,6 +1,5 @@
 import { View, Image, Text, ScrollView, Canvas } from '@tarojs/components'
 import React from 'react'
-import Taro from '@tarojs/taro'
 import lineChart from '../../utils/chart.js'
 import utils from './../../utils/index'
 import './index.scss'
@@ -40,39 +39,33 @@ class _C extends React.Component {
   chartDraw = () => {
     const { filmDistributionList } = this.props.filmInfo
 
-    let key = []
-    let value = []
-    let redDot = []
+    let key = [];
+    let lines1 = {points:[],redDot:[],color:"#666",dash: true};
+    let lines2 = {points:[],redDot:[],color:"#3C7DF2"};
 
-    filmDistributionList.map((item, index) => {
-      key.push(index)
-      value.push(item.filmNum)
-      if (item.company && item.company.indexOf(1) !== -1) {
-        redDot.push(1)
-      } else {
-        redDot.push(0)
-      }
-    })
-    const windowWidth = Taro.getSystemInfoSync().windowWidth
-    lineChart(
-      'chart',
+    filmDistributionList.map(({
+      hasFixEstimateBox,
+      estimateBox,
+      hasFixMaoyanJoin,
+      maoyanJoin,
+    }, index) => {
+      key.push(index);
+      
+      lines1['points'].push(estimateBox);
+      lines2['points'].push(hasFixEstimateBox);
+
+      lines1['redDot'].push(maoyanJoin ? 1 : 0);
+      lines2['redDot'].push(hasFixMaoyanJoin ? 1 : 0);
+    });
+    
+    lineChart('chart',
       {
-        tipsCtx: 'chart-tips',
-        width: (key.length - 1) * ((windowWidth * 5) / 10) + 33,
-        height: rpxTopx(350),
-        marginLR: rpxTopx(30),
+        width: rpxTopx(30 + (216 + 10)* key.length + 20),
+        height: rpxTopx(348),
         xAxis: key,
-        yUnit:'亿',
-        lines: [
-          {
-            points: value,
-            redDot,
-            color:"#3C7DF2"
-          },
-        ],
-      },
-      this,
-    )
+        lines: [ lines1,lines2 ],
+      },this
+    );
   }
 
   render() {

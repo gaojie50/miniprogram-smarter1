@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-//错误处理
+
 const errorHandle = err => {
   if(err && err.message ){
     Taro.showToast({
@@ -348,6 +348,14 @@ function formatCreateTime(timeStamp) {
   return Y + M + D + h + m
 }
 
+function arrayMaxItem(arr) {
+  return Math.max.apply(null, arr);
+};
+
+function arrayMinItem(arr) {
+  return Math.min.apply(null, arr);
+};
+
 export default {
   errorHandle,
   debounce,
@@ -364,4 +372,6 @@ export default {
   handleNewDate,
   formatWeekDate,
   formatCreateTime,
+  arrayMinItem,
+  arrayMaxItem,
 }
