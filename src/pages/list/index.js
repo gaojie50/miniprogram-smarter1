@@ -758,8 +758,7 @@ class _C extends React.Component {
       isScroll,
       yMaxLength,
     } = this.state;
-    const yMaxLengthArr = ["","","","",""].map((item,index)=> formatNumber(yMaxLength * (1 - index/5)).text);
-    console.log(yMaxLengthArr);
+    const yMaxLengthArr = ["","","","","",""].map((item,index)=> formatNumber(yMaxLength * (1 - index/5)).posNum);
     return (
       <Block>
         {initLoading && (
@@ -851,9 +850,7 @@ class _C extends React.Component {
                           含可能定档</View>
                       </View>
                     </View>
-                    <View className="yAxis">
-                      { yMaxLengthArr.map((item,index)=> <Text key={index}>{item}</Text> )}
-                    </View>
+                    <View className="yAxis">{ yMaxLengthArr.map((item,index)=> <Text key={index}>{item}亿</Text> )}</View>
                     {filmDistributionList.length !== 0 && (
                       <FilmDistribution
                         filmInfo={{

@@ -31,8 +31,18 @@ LineChart.prototype._drawLines = function () {
   let yAxisLen = height * (1 - 1/yLabelCount);
   let yMaxValue = arrayMaxItem(lines[0].points);
   let yOffset = yAxisLen + height / (2 * yLabelCount);
-  let yMaxLength = yMaxValue * 1.2;
+  let yMaxLength = carryBit(yMaxValue);
   let yStep = yAxisLen / yMaxLength;
+
+  function carryBit(num){
+    if(num < 100) return num;
+
+    const numStr = `${num}`;
+    const {length} = numStr;
+    const numLen = Number(`1e+${length-2}`);
+
+    return Math.ceil(num/numLen) * numLen;
+  };
 
   /**
    * 绘制水平标记线 Start
