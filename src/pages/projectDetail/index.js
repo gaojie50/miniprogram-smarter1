@@ -22,6 +22,8 @@ class _C extends React.Component {
       rotateZ: 'rotateZ(180deg)',
     },
     resData: {},
+    showDetail:false,
+    estimateBoxArr:[],
   }
 
   componentWillMount() {
@@ -149,7 +151,6 @@ class _C extends React.Component {
   }
 
   fetchData = (movieId, projectId) => {
-    let that = this
     reqPacking({
       url: 'api/applet/management/projectDetail',
       data: { movieId: movieId, projectId: projectId },
@@ -167,6 +168,44 @@ class _C extends React.Component {
           loading: false,
         })
       }
+    });
+
+    reqPacking({
+      url: '/api/management/searchestimateboxdetail',
+      data: { projectId: projectId },
+      method: 'GET',
+    }).then(res => {
+      const {success,data} = res;
+      // data = [
+      //   {
+      //     "dt": 1609928289540,
+      //     "estimateNum": 5619530,
+      //     "estimateNumType": 2,
+      //     "estimateNumAppendMessage": {
+      //       assessId:2,
+      //       roundName:"第五轮项目评估"
+      //     }
+      //   },
+      //   {
+      //     "dt": 1609928289540,
+      //     "estimateNum": 5619530,
+      //     "estimateNumType": 1,
+      //     "estimateNumAppendMessage": {
+      //       "userName":"严冰",
+      //       "userId":"1",
+      //     }
+      //   },
+      //   {
+      //     "dt": 1609928289540,
+      //     "estimateNum": 5619530,
+      //     "estimateNumType": 0,
+      //     "estimateNumAppendMessage": {
+      //       "recordId":1
+      //     }
+      //   },
+      // ];
+
+      if( success && data && data.length>0 ) this.setState({estimateBoxArr : data});
     })
   }
 
@@ -269,9 +308,11 @@ class _C extends React.Component {
     return resData
   }
 
-  render() {
-    const { resData, flod, loading, isChange } = this.state;
+  goToDetail = () => this.setState({ showDetail:!this.state.showDetail });
 
+  render() {
+    const { resData, flod, loading, isChange,showDetail,estimateBoxArr } = this.state;
+    
     return (
       <Block>
         <View className='project-detail'>
@@ -400,7 +441,38 @@ class _C extends React.Component {
                 </View>
               )}
             </View>
-            <View className='project'>
+            {
+              showDetail ? 
+              <View className='project'>
+                <View className='title'>预估票房历史变化
+                  <View onClick={this.goToDetail} className="close-wrap">
+                    <Image src="../../static/close.png"></Image>
+                  </View>
+                </View>
+                <view class="table">
+                  <view class="table-tr">
+                  <view class="table-th"> </view>
+                    <view class="table-th">更新时间</view>
+                    <view class="table-th">预估票房</view>
+                    <view class="table-th">预估来源</view>
+                  </view>
+                  {
+                    estimateBoxArr.map((item,index,arr) =>{
+                      return <view class="table-tr" key={index}>
+                      <view class="table-td">{arr.length -index}</view>
+                      <view class="table-td">{formatCreateTime(item.dt,'day')}</view>
+                      <view class="table-td">{formatNumber(item.estimateNum,'floor').text}</view>
+                      <view class="table-td">{
+                        item.estimateNumType == 0 ? '机器评估':
+                          item.estimateNumType == 1 ? `@${item.estimateNumAppendMessage.userName} 修改`:
+                          item.estimateNumAppendMessage.roundName
+                      }</view>
+                    </view>
+                    })
+                  }
+                </view>
+              </View>:
+              <View className='project'>
               <View className='title'>市场情报</View>
               <View>
                 <View className='market'>
@@ -408,7 +480,7 @@ class _C extends React.Component {
                     <View className='line'></View>
                   </View>
                   <View className='infoo'>
-                    <View className='item'>
+                    <View className={`item ${estimateBoxArr.length>0 ? 'item-click' :''}`} onClick={estimateBoxArr.length>0 ? this.goToDetail : null}>
                       {loading && (
                         <mpLoading
                           type='circle'
@@ -577,6 +649,8 @@ class _C extends React.Component {
                 </View>
               </View>
             </View>
+            }
+            
             {resData.createInfo?.creator && (
               <View className='update'>
                 {resData.createInfo?.avatar && (

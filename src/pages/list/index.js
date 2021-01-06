@@ -788,7 +788,7 @@ class _C extends React.Component {
         )}
         {curPagePermission && !initLoading && (
           <View>
-            <View className="header">
+            <View className="header" style={`height:${titleHeight + rpxTopx(115)}px`}>
               <View
                 className="header-bar"
                 style={'height:' + titleHeight + 'px;'}

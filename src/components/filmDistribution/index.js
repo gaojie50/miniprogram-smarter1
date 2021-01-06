@@ -95,6 +95,7 @@ class _C extends React.Component {
     const { 
       // imgSrc, 
       scrollLeft, scroll } = this.state
+    const styleStr =(len=20) => `width:${filmDistributionList.length * (216+10) + len}rpx`;
 
     return (
       <ScrollView
@@ -108,20 +109,12 @@ class _C extends React.Component {
         scrollLeft={scrollLeft}
       >
         <View className="filmChart">
-          <Canvas
-            canvasId="chart"
-            id="chart"
-            style={`width:${filmDistributionList.length * (216+10) + 20}rpx`} />
-          <Image
-            id="chart-pic"
-            style={`width:${filmDistributionList.length * (216+10) + 20}rpx`} />
-          {/* {!imgSrc && (
-            <View className="list-loading">
-              <mpLoading type="circle" show={true} tips=""></mpLoading>
-            </View>
-          )} */}
+          <View className="chart-wrap" style={styleStr(52)}>
+            <Canvas canvasId="chart" id="chart" style={styleStr()} />
+            <Image id="chart-pic" style={styleStr()} />
+          </View>
         </View>
-        <View className="filmList" style={`width:${filmDistributionList.length * (216+10) + 52}rpx`}>
+        <View className="filmList" style={styleStr(52)}>
           {filmDistributionList.map((item, index) => {
             return (
               <View

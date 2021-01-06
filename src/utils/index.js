@@ -330,7 +330,7 @@ function formatWeekDate(date) {
   }
 }
 
-function formatCreateTime(timeStamp) {
+function formatCreateTime(timeStamp,sign) {
   let date = new Date(timeStamp)
 
   var Y = date.getFullYear() + '-'
@@ -344,7 +344,9 @@ function formatCreateTime(timeStamp) {
 
   var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
 
-  var m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+  var m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+
+  if(sign === 'day') return Y + M + D;
   return Y + M + D + h + m
 }
 
