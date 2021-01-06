@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import utils from './index.js'
 
-const { rpxTopx, arrayMaxItem, } = utils
+const { rpxTopx, } = utils
 
 export default (ctx, options, that) => new LineChart(ctx, options, that); 
 
@@ -20,9 +20,29 @@ function LineChart(ctx, options, that) {
 
 LineChart.prototype.draw = function () {
   this.clearCanvas();
+  this._subline();
   this._drawLines();
   this._drawToPng();  //转为png
 };
+
+LineChart.prototype._subline = function(){
+  let ctx = this.ctx;
+
+  for (let i = 0; i < 6; i++) {
+    let yValue = rpxTopx(29 * (1 + 2 * i));
+
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2, 6]);
+    ctx.moveTo(rpxTopx(88), yValue);
+    ctx.lineTo(this.options.width, yValue);
+    ctx.strokeStyle = "rgba(255,255,255,.2)";
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.beginPath();
+  }
+}
 
 LineChart.prototype.clearCanvas = function(){
   let ctx = this.ctx;
@@ -32,37 +52,14 @@ LineChart.prototype.clearCanvas = function(){
 }
 
 LineChart.prototype._drawLines = function () {
-  let { width, height, yMaxLength, } = this.options;
-  let ctx = this.ctx;
+  let {height, yMaxLength, } = this.options;
   let yLabelCount = 6;
   let yAxisLen = height * (1 - 1 / yLabelCount);
   let yOffset = yAxisLen + height / (2 * yLabelCount);
 
   let yStep = yAxisLen / yMaxLength;
 
-  /**
-   * 绘制水平标记线 Start
-   */
-  for (let i = 0; i < 6; i++) {
-    let yValue = rpxTopx(29 * (1 + 2 * i));
-
-    ctx.beginPath();
-    ctx.lineWidth = 1;
-    ctx.setLineDash([2, 6]);
-    ctx.moveTo(rpxTopx(88), yValue);
-    ctx.lineTo(width, yValue);
-    ctx.strokeStyle = "rgba(255,255,255,.2)";
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.beginPath();
-  }
-  /**
-   * 绘制水平标记线 End
-   */
-
-  // 将这几个数据存放在attrs上，绘制线的时候有用
-  Object.assign(this._attrs, { yOffset, yStep, yMaxLength });
+  Object.assign(this._attrs, { yOffset, yStep, });
 
   this.options.lines.map((item) => {
     if (item.hidden) return;
@@ -116,18 +113,19 @@ LineChart.prototype._drawLine = function (line) {
 
 LineChart.prototype._drawToPng = function () {
   if (this._timer) clearTimeout(this._timer);
-
+  
+  const chartPic = document.getElementById('chart-pic');
+  
   this._timer = setTimeout(() => {
-    const { canvasId, that, _attrs } = this;
-    const { yMaxLength } = _attrs;
+    const { canvasId,} = this;
 
-    this.ctx.draw(true, () => {
+    this.ctx.draw(false, () => {
       Taro.canvasToTempFilePath({
         canvasId: canvasId,
         fileType: 'png',
         success: function (res) {
-          that.props.setMaxLengthY(yMaxLength);
-          that.setState({ imgSrc: res.tempFilePath })
+          chartPic.setAttribute('src',res.tempFilePath);
+          // that.setState({ imgSrc: res.tempFilePath })
         },
       })
     })

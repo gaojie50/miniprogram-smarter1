@@ -16,9 +16,10 @@ function carryBit(num){
 };
 
 function yMaxValueCalc(scrollLeft,points=[]){
-  const turn = Math.ceil((scrollLeft-rpxTopx(66))/rpxTopx(216+10));
+  let turn = Math.ceil((scrollLeft+rpxTopx(750-30))/rpxTopx(216+10))-4;
   const filterPointsMaxItem = arrayMaxItem(points.filter((item,index) => {
-    return (index <3 + turn) && (index >= turn);
+    turn = turn <0 ? 0:turn;
+    return index <=(3 + turn) && index >= turn;
   }));
   let yMaxValue = filterPointsMaxItem == 0 ? arrayMaxItem(points) : filterPointsMaxItem;
   return Math.ceil(carryBit(yMaxValue));
@@ -31,7 +32,7 @@ class _C extends React.Component {
   }
 
   state = {
-    imgSrc: '',
+    // imgSrc: '',
     scrollLeft: 0,
     scroll: 0,
   }
@@ -44,15 +45,6 @@ class _C extends React.Component {
       }, 500)
     }
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if (
-  //     this.props.filmInfo.filmDistributionList !==
-  //     nextProps.filmInfo.filmDistributionList
-  //   ) {
-  //     this.chartDraw()
-  //   }
-  // }
 
   getOpts = () => {
     const { filmDistributionList } = this.props.filmInfo;
@@ -87,6 +79,7 @@ class _C extends React.Component {
     const opt = this.getOpts();
 
     opt['yMaxLength'] = yMaxValueCalc(scrollLeft,opt.lines[0]['points']);
+    this.props.setMaxLengthY(opt['yMaxLength']);
     lineChart('chart',opt,this);
   }
 
@@ -99,17 +92,18 @@ class _C extends React.Component {
         filmLoading,
       },
     } = this.props
-    const { imgSrc, scrollLeft, scroll } = this.state
+    const { 
+      // imgSrc, 
+      scrollLeft, scroll } = this.state
 
     return (
       <ScrollView
-        lowerThreshold={10}
+        lowerThreshold={0}
         onScrollToLower={() => this.props.onFilmScroll()}
-        onScroll={ throttle(e => {
+        onScroll={throttle(e => {
           this.chartDraw(e.detail.scrollLeft)
           this.setState({ scroll: e.detail.scrollLeft,})
-        },200)
-        }
+        },200)}
         scrollX={true}
         scrollLeft={scrollLeft}
       >
@@ -119,13 +113,13 @@ class _C extends React.Component {
             id="chart"
             style={`width:${filmDistributionList.length * (216+10) + 20}rpx`} />
           <Image
-            src={imgSrc}
+            id="chart-pic"
             style={`width:${filmDistributionList.length * (216+10) + 20}rpx`} />
-          {!imgSrc && (
+          {/* {!imgSrc && (
             <View className="list-loading">
               <mpLoading type="circle" show={true} tips=""></mpLoading>
             </View>
-          )}
+          )} */}
         </View>
         <View className="filmList" style={`width:${filmDistributionList.length * (216+10) + 52}rpx`}>
           {filmDistributionList.map((item, index) => {

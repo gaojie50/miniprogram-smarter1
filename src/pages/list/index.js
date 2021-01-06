@@ -1108,9 +1108,9 @@ class _C extends React.Component {
                         />
                       </View>
                     )}
-                    {!loading && list.length === 0 && (
+                    {/* {!loading && list.length === 0 && (
                       <View className="no-data">暂无数据</View>
-                    )}
+                    )} */}
                   </View>
                 </View>
               </ScrollView>
