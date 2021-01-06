@@ -14,46 +14,42 @@ function LineChart(ctx, options, that) {
       this.options = options;
       this._attrs = {};
       this.that = that;
-
       this.draw();
     }).exec()
 }
 
 LineChart.prototype.draw = function () {
+  this.clearCanvas();
   this._drawLines();
   this._drawToPng();  //转为png
 };
 
+LineChart.prototype.clearCanvas = function(){
+  let ctx = this.ctx;
+  let {width,height} = this.options;
+  
+  ctx.clearRect(0,0,width,height);
+}
+
 LineChart.prototype._drawLines = function () {
-  let { width, height, lines,} = this.options;
+  let { width, height, yMaxLength, } = this.options;
   let ctx = this.ctx;
   let yLabelCount = 6;
-  let yAxisLen = height * (1 - 1/yLabelCount);
-  let yMaxValue = arrayMaxItem(lines[0].points);
+  let yAxisLen = height * (1 - 1 / yLabelCount);
   let yOffset = yAxisLen + height / (2 * yLabelCount);
-  let yMaxLength = carryBit(yMaxValue);
+
   let yStep = yAxisLen / yMaxLength;
-
-  function carryBit(num){
-    if(num < 100) return num;
-
-    const numStr = `${num}`;
-    const {length} = numStr;
-    const numLen = Number(`1e+${length-2}`);
-
-    return Math.ceil(num/numLen) * numLen;
-  };
 
   /**
    * 绘制水平标记线 Start
    */
-  for(let i = 0 ; i < 6 ; i++){
-    let yValue = rpxTopx(29 * ( 1 + 2 * i ));
+  for (let i = 0; i < 6; i++) {
+    let yValue = rpxTopx(29 * (1 + 2 * i));
 
     ctx.beginPath();
     ctx.lineWidth = 1;
     ctx.setLineDash([2, 6]);
-    ctx.moveTo(rpxTopx(88),yValue);
+    ctx.moveTo(rpxTopx(88), yValue);
     ctx.lineTo(width, yValue);
     ctx.strokeStyle = "rgba(255,255,255,.2)";
     ctx.stroke();
@@ -66,7 +62,7 @@ LineChart.prototype._drawLines = function () {
    */
 
   // 将这几个数据存放在attrs上，绘制线的时候有用
-  Object.assign(this._attrs, { yOffset, yStep,yMaxLength});
+  Object.assign(this._attrs, { yOffset, yStep, yMaxLength });
 
   this.options.lines.map((item) => {
     if (item.hidden) return;
@@ -78,12 +74,12 @@ LineChart.prototype._drawLines = function () {
 LineChart.prototype._drawLine = function (line) {
   let { yOffset, yStep } = this._attrs;
   let ctx = this.ctx;
-  let {points,redDot,color,dash=false} = line;
+  let { points, redDot, color, dash = false } = line;
 
-  let handlePoints = points.map((item, index) => { 
+  let handlePoints = points.map((item, index) => {
     return {
       redDot: redDot[index],
-      x: rpxTopx(216/2 + 30) + (index * rpxTopx(216 + 10)),
+      x: rpxTopx(216 / 2 + 30) + (index * rpxTopx(216 + 10)),
       y: yOffset - item * yStep,
     }
   })
@@ -96,7 +92,7 @@ LineChart.prototype._drawLine = function (line) {
   ctx.lineWidth = 2;
   ctx.strokeStyle = color;
 
-  if(dash) ctx.setLineDash([4, 6]);
+  if (dash) ctx.setLineDash([4, 6]);
 
   handlePoints.map(item => { ctx.lineTo(item.x, item.y) });
   ctx.stroke();
@@ -122,16 +118,17 @@ LineChart.prototype._drawToPng = function () {
   if (this._timer) clearTimeout(this._timer);
 
   this._timer = setTimeout(() => {
-    const {canvasId, that, _attrs} = this;
+    const { canvasId, that, _attrs } = this;
     const { yMaxLength } = _attrs;
 
     this.ctx.draw(true, () => {
       Taro.canvasToTempFilePath({
         canvasId: canvasId,
         fileType: 'png',
-        success: function (res) { 
+        success: function (res) {
           that.props.setMaxLengthY(yMaxLength);
-          that.setState({ imgSrc: res.tempFilePath }) },
+          that.setState({ imgSrc: res.tempFilePath })
+        },
       })
     })
   })

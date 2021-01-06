@@ -27,6 +27,11 @@ const {
 const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
 const barHeight = getGlobalData('barHeight')
+
+function strip(num, precision = 12) {
+  return +parseFloat(num.toPrecision(precision));
+}
+
 class _C extends React.Component {
   state = {
     filmItemWidth: rpxTopx(216),
@@ -758,7 +763,9 @@ class _C extends React.Component {
       isScroll,
       yMaxLength,
     } = this.state;
-    const yMaxLengthArr = ["","","","","",""].map((item,index)=> formatNumber(yMaxLength * (1 - index/5)).posNum);
+    
+    const yMaxLengthArr = ["","","","","",""].map((item,index)=>strip(formatNumber(yMaxLength * (1 - index/5)).posNum));
+    
     return (
       <Block>
         {initLoading && (
@@ -850,7 +857,9 @@ class _C extends React.Component {
                           含可能定档</View>
                       </View>
                     </View>
-                    <View className="yAxis">{ yMaxLengthArr.map((item,index)=> <Text key={index}>{item}亿</Text> )}</View>
+                    {
+                      filmDistributionList.length !== 0 && <View className="yAxis">{ yMaxLengthArr.map((item,index)=> <Text key={index}>{item}亿</Text> )}</View>
+                    }
                     {filmDistributionList.length !== 0 && (
                       <FilmDistribution
                         filmInfo={{

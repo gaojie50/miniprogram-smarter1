@@ -4,7 +4,25 @@ import lineChart from '../../utils/chart.js'
 import utils from './../../utils/index'
 import './index.scss'
 
-const { rpxTopx, formatNumber } = utils
+const { rpxTopx, formatNumber,arrayMaxItem,throttle } = utils;
+function carryBit(num){
+  if(num < 100) return num;
+
+  const numStr = `${num}`;
+  const {length} = numStr;
+  const numLen = Number(`1e+${length-2}`);
+
+  return (Math.ceil(num/numLen) * numLen);
+};
+
+function yMaxValueCalc(scrollLeft,points=[]){
+  const turn = Math.ceil((scrollLeft-rpxTopx(66))/rpxTopx(216+10));
+  const filterPointsMaxItem = arrayMaxItem(points.filter((item,index) => {
+    return (index <3 + turn) && (index >= turn);
+  }));
+  let yMaxValue = filterPointsMaxItem == 0 ? arrayMaxItem(points) : filterPointsMaxItem;
+  return Math.ceil(carryBit(yMaxValue));
+}
 class _C extends React.Component {
   static defaultProps = {
     filmItemWidth: 0,
@@ -27,18 +45,17 @@ class _C extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      this.props.filmInfo.filmDistributionList !==
-      nextProps.filmInfo.filmDistributionList
-    ) {
-      this.chartDraw()
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (
+  //     this.props.filmInfo.filmDistributionList !==
+  //     nextProps.filmInfo.filmDistributionList
+  //   ) {
+  //     this.chartDraw()
+  //   }
+  // }
 
-  chartDraw = () => {
-    const { filmDistributionList } = this.props.filmInfo
-
+  getOpts = () => {
+    const { filmDistributionList } = this.props.filmInfo;
     let key = [];
     let lines1 = {points:[],redDot:[],color:"#666",dash: true};
     let lines2 = {points:[],redDot:[],color:"#3C7DF2"};
@@ -51,21 +68,26 @@ class _C extends React.Component {
     }, index) => {
       key.push(index);
       
-      lines1['points'].push(estimateBox);
-      lines2['points'].push(hasFixEstimateBox);
+      lines1['points'].push(estimateBox/1e8);
+      lines2['points'].push(hasFixEstimateBox/1e8);
 
       lines1['redDot'].push(maoyanJoin ? 1 : 0);
       lines2['redDot'].push(hasFixMaoyanJoin ? 1 : 0);
     });
-    
-    lineChart('chart',
-      {
-        width: rpxTopx(30 + (216 + 10)* key.length + 20),
-        height: rpxTopx(348),
-        xAxis: key,
-        lines: [ lines1,lines2 ],
-      },this
-    );
+
+    return {
+      width: rpxTopx(30 + (216 + 10)* key.length + 20),
+      height: rpxTopx(348),
+      xAxis: key,
+      lines: [ lines1,lines2 ],
+    }
+  }
+
+  chartDraw = (scrollLeft=0) => {
+    const opt = this.getOpts();
+
+    opt['yMaxLength'] = yMaxValueCalc(scrollLeft,opt.lines[0]['points']);
+    lineChart('chart',opt,this);
   }
 
   render() {
@@ -83,11 +105,11 @@ class _C extends React.Component {
       <ScrollView
         lowerThreshold={10}
         onScrollToLower={() => this.props.onFilmScroll()}
-        onScroll={(e) => {
-          this.setState({
-            scroll: e.detail.scrollLeft,
-          })
-        }}
+        onScroll={ throttle(e => {
+          this.chartDraw(e.detail.scrollLeft)
+          this.setState({ scroll: e.detail.scrollLeft,})
+        },200)
+        }
         scrollX={true}
         scrollLeft={scrollLeft}
       >
