@@ -464,8 +464,8 @@ class _C extends React.Component {
                       <view class="table-td">{formatNumber(item.estimateNum,'floor').text}</view>
                       <view class="table-td">{
                         item.estimateNumType == 0 ? '机器评估':
-                          item.estimateNumType == 1 ? `@${item.estimateNumAppendMessage.userName} 修改`:
-                          item.estimateNumAppendMessage.roundName
+                          item.estimateNumType == 1 ? `@${JSON.parse(item.estimateNumAppendMessage).userName} 修改`:
+                          JSON.parse(item.estimateNumAppendMessage).roundName
                       }</view>
                     </view>
                     })
