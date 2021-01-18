@@ -89,7 +89,7 @@ LineChart.prototype._drawLine = function (line) {
   ctx.lineWidth = rpxTopx(3);
   ctx.strokeStyle = color;
 
-  if (dash) ctx.setLineDash([4, 6]);
+  if (dash) ctx.setLineDash([4]);
 
   handlePoints.map(item => { ctx.lineTo(item.x, item.y) });
   ctx.stroke();
