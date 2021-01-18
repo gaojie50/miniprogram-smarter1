@@ -49,7 +49,7 @@ class _C extends React.Component {
   getOpts = () => {
     const { filmDistributionList } = this.props.filmInfo;
     let key = [];
-    let lines1 = {points:[],redDot:[],color:"#666",dash: true};
+    let lines1 = {points:[],redDot:[],color:"rgba($color: #FFF, $alpha: .2)",dash: true};
     let lines2 = {points:[],redDot:[],color:"#3C7DF2"};
 
     filmDistributionList.map(({

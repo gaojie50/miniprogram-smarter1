@@ -32,7 +32,7 @@ LineChart.prototype._subline = function(){
     let yValue = rpxTopx(29 * (1 + 2 * i));
 
     ctx.beginPath();
-    ctx.lineWidth = 1;
+    ctx.lineWidth = rpxTopx(1);
     ctx.setLineDash([2, 6]);
     ctx.moveTo(rpxTopx(88), yValue);
     ctx.lineTo(this.options.width, yValue);
@@ -86,7 +86,7 @@ LineChart.prototype._drawLine = function (line) {
 
   // 线
   ctx.beginPath();
-  ctx.lineWidth = 2;
+  ctx.lineWidth = rpxTopx(3);
   ctx.strokeStyle = color;
 
   if (dash) ctx.setLineDash([4, 6]);
@@ -104,7 +104,7 @@ LineChart.prototype._drawLine = function (line) {
       ctx.fillStyle = '#F00';
     }
 
-    ctx.lineWidth = 2;
+    ctx.lineWidth = rpxTopx(3);
     ctx.strokeStyle = '#FFF';
     ctx.fill();
     ctx.stroke();

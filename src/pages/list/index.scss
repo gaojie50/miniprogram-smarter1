@@ -388,11 +388,11 @@ page {
 
   view{
     font-weight: 300;
-    opacity: 0.6;
+    // opacity: 0.6;
     background: rgba(255, 255, 255,.06);
     font-family: PingFangSC-Light;
     font-size: 22rpx;
-    color: #FFF;
+    color: rgba(255, 255, 255,.6);
     border-radius: 24rpx;
     display: inline-block;
     padding: 0 20rpx;
@@ -417,11 +417,12 @@ page {
     }
 
     image{
-      width: 14px;
-      height: 14px;
+      width: 15px;
+      height: 15px;
       position: absolute;
       left: 20px;
-      top: 20px;
+      top: 18px;
+      opacity: .6;
     }
   }
 }
@@ -439,7 +440,7 @@ page {
 .redPrompt {
   position: absolute;
   top: 45px;
-  left: 92px;
+  left: 116px;
   width: 316px;
   height: 145px;
   z-index: 100;

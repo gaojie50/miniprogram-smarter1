@@ -54,7 +54,7 @@
   box-sizing: border-box;
   opacity: 0.5;
   background: rgba(111, 134, 189, 0.10);
-  border: 2px dashed #6F86BD;
+  border: 2px dashed rgba($color: #fff, $alpha: 0.4);
   border-radius: 10px 10px 0 0;
 }
 
@@ -70,6 +70,8 @@
 
 .schedule-wrap{
   height: 36px;
+  position: relative;
+  top: -10px;
 }
 
 .filmList .filmItem .schedule {
