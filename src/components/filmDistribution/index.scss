@@ -1,9 +1,9 @@
 .filmChart {
-  height: 688px;
+  height: 640px;
 
   .chart-wrap{
     position: absolute;
-    height: 348rpx;
+    height: 300rpx;
     top: 0;
     z-index: -1;
     left: 0;
@@ -14,7 +14,7 @@
 
 .filmChart canvas {
   position: absolute;
-  height: 348px;
+  height: 300px;
   top: -200%;
   z-index: -1;
   left: 0;
@@ -23,7 +23,7 @@
 
 .filmChart image {
   position: absolute;
-  height: 348px;
+  height: 300px;
   top: 0;
   z-index: -1;
   left: 0;
@@ -32,7 +32,7 @@
 
 .filmList {
   position: absolute;
-  top: 388px;
+  top: 340px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;

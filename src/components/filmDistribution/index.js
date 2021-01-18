@@ -69,7 +69,7 @@ class _C extends React.Component {
 
     return {
       width: rpxTopx(30 + (216 + 10)* key.length + 20),
-      height: rpxTopx(348),
+      height: rpxTopx(300),
       xAxis: key,
       lines: [ lines1,lines2 ],
     }

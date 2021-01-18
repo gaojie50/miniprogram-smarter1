@@ -29,7 +29,7 @@ LineChart.prototype._subline = function(){
   let ctx = this.ctx;
 
   for (let i = 0; i < 6; i++) {
-    let yValue = rpxTopx(29 * (1 + 2 * i));
+    let yValue = rpxTopx(25 * (1 + 2 * i));
 
     ctx.beginPath();
     ctx.lineWidth = rpxTopx(1);
