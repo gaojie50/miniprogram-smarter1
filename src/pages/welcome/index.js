@@ -21,8 +21,11 @@ class _C extends React.Component {
   }
 
   goList = () => {
+    // Taro.reLaunch({
+    //   url: '../list/index',
+    // })
     Taro.reLaunch({
-      url: '../list/index',
+      url: '../management/preview/index?projectId=12436',
     })
   }
 
@@ -31,9 +34,10 @@ class _C extends React.Component {
       success: (res) => {
         if (res.authSetting['scope.userInfo'] && e.detail) {
           const { iv, encryptedData } = e.detail
-
+          debugger
           if (Taro.getStorageSync('token'))
-            return Taro.redirectTo({ url: `/pages/list/index` })
+            // return Taro.redirectTo({ url: `/pages/list/index` })
+            return Taro.redirectTo({ url: `../management/preview/index?projectId=12436` })
 
           return keepLogin({ iv, encryptedData })
         }
@@ -46,6 +50,7 @@ class _C extends React.Component {
       },
     })
   }
+
   render() {
     const { titleHeight, isLogin } = this.state
     return (
