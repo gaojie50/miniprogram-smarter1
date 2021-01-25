@@ -29,7 +29,7 @@ const accountVerify = (WrappedComponent) => {
             const { success, data = {} } = res;
             if( !success ){
               Taro.navigateTo({
-                url: '/welcome/index'
+                url: '/pages/welcome/index'
               });
               return;
             }
