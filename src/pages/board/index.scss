@@ -1,0 +1,45 @@
+.board {
+  background-color: #fff;
+  font-family: PingFangSC-Medium;
+  color: #333;
+}
+
+.board-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  padding-bottom: 24px;
+}
+
+.board-header-title {
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 36px;
+}
+
+.board-header-search {
+  height: 44px;
+  width: 44px;
+
+  position: absolute;
+  left: 28px;
+  // bottom: 22px;
+}
+
+.board-tab {
+  white-space: nowrap;
+  padding-left: 20px;
+}
+
+.board-tab-item {
+  display: inline-block;
+
+  height: 186px;
+  width: 146px;
+  box-shadow: 0 2px 20px 0 rgba(0,0,0,0.08);
+  border-radius: 10px;
+
+  margin: 20px 10px
+}
