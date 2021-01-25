@@ -32,11 +32,13 @@
 
 .filmList {
   position: absolute;
-  top: 340px;
+  top: 290px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   height: 308px;
+  padding-top: 50px;
+  background-color: #040B18;
 }
 
 .filmList .filmItem {
