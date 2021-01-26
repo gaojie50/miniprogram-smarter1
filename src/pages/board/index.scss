@@ -79,6 +79,16 @@
     font-family: 'MaoYanHeiTi-H1';
     color: #F1303D;
   }
+  &-p5-acitve {
+    font-family: 'MaoYanHeiTi-H1';
+    color: #fff;
+  }
+
+  &-active {
+    background: #276FF0;
+    box-shadow: 0 10px 30px 0 rgba(39,111,240,0.40);
+    color: #fff;
+  }
 }
 
 .board-tab-item-head {
@@ -124,6 +134,7 @@
   color: #999;
 
   margin: 0 30px;
+  margin-bottom: 20px;
 }
 
 .project-item {
@@ -131,6 +142,7 @@
   height: 200px;
 
   margin: 0 30px;
+  margin-bottom: 60px;
 
   position: relative;
 
@@ -254,8 +266,11 @@
     font-weight: 600;
     font-family: 'PingFangSC-Semibold';
   }
-}
 
+  &-no-update {
+    color: #999;
+  }
+}
 .project-item-status-btn {
   background: #276FF0;
   border-radius: 26px;

@@ -1,5 +1,5 @@
 import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
@@ -44,17 +44,36 @@ const FILTER_ITEMS = [
   {
     name: '筛选',
   },
+];
+
+const PROJECT_TYPE = [
+  {
+    name: '新增项目',
+    key: 'newProjects'
+  },
+  {
+    name: '其他更新项目',
+    key: 'updateProjects'
+  },
+  {
+    name: '以下项目暂无新动态',
+    key: 'noChangeProjects'
+  },
 ]
 
 export default function Board() {
-  const { component: tab } = useStatusTab();
+  const [data, setData] = useState({});
+  const { component: tab, tabSelected } = useStatusTab();
   const { component: filter } = useBoardFilter();
 
   useEffect(() => {
-    PureReq_ListInfo().then((data) => {
-      console.log(data);
-    })
-  }, [])
+    const { cooperStatus } = tabSelected;
+    PureReq_ListInfo({
+      cooperStatus,
+    }).then((d) => {
+      setData(d);
+    });
+  }, [tabSelected])
 
   return (
     <View className="board">
@@ -73,10 +92,27 @@ export default function Board() {
         </View>
         {tab}
         {filter}
-        <View className="project-add-text">
-          <Text>新增项目 4个</Text>
-        </View>
-        <ProjectItem />
+        {
+          PROJECT_TYPE.map(({ name, key }) => {
+            if (!data?.[key]?.length > 0) return null;
+            const arr = data?.[key] || [];
+            return (
+              <View>
+                <View className="project-add-text">
+                  <Text>{name}</Text>
+                </View>
+                {
+                  arr.map((obj) =>{
+                    if (obj?.projectStageStep?.length > 0) {
+                      obj.hasUpdate = true;
+                    }
+                    return  <ProjectItem {...obj} />
+                  })
+                }
+              </View>
+            );
+          })
+        }
       </View>
   )
 }
@@ -108,9 +144,15 @@ const NAME_MAPPING_ARR = [
   },
 ];
 
+const DEFAULT_ARR = NAME_MAPPING_ARR.map(({ name }) => {
+  return {
+    p1: name,
+  }
+});
+
 function useStatusTab() {
-  const [cooperStatus, setCooperStatus] = useState(1)
-  const [data, setData] = useState([]);
+  const [active, setActive] = useState(0);
+  const [data, setData] = useState(DEFAULT_ARR);
 
   useEffect(() => {
     PureReq_Cooperation().then((data) => {
@@ -125,35 +167,60 @@ function useStatusTab() {
       })
       setData(arr);
     });
-
   }, [])
 
   return {
-    component: <NiceTab list={data} />
-  }
+    component: <NiceTab list={data} active={active} onClick={(i) => setActive(i)} />,
+    tabSelected: NAME_MAPPING_ARR[active],
+  };
 }
 
 function NiceTab(props) {
-  const { list = [], active } = props;
+  const { list = [], active, onClick } = props;
+
   return (
     <ScrollView className="board-tab" scrollX>
       {list.map((item, i) => {
         const {p1 = '-', p2 = '-', p3 = '', p4 = '近7日', p5 = ''} = item;
+        const className = `
+          board-tab-item
+          ${
+            i === 0
+              ? 'board-tab-item-head'
+              : i + 1 === list.length
+              ? 'board-tab-item-tail'
+              : ''
+          }
+          ${active === i ? 'board-tab-item-active' : ''}
+        `;
         return (
-          (
-            <View key={item} className={`board-tab-item ${i === 0 ? 'board-tab-item-head' : i + 1 === list.length ? 'board-tab-item-tail' : ''}`} key={item}>
-              <View className="board-tab-item-p1">{p1}</View>
-              <View className="board-tab-item-p2">
-                <Text>{p2}</Text>
-                <Text className="board-tab-item-p3">{p3}</Text>
-              </View>
-              <View className="board-tab-item-p4">
-                <View>{p4}</View>
-                <View className="board-tab-item-p5">{p5}</View>
+          <View
+            key={item}
+            className={className}
+            key={item}
+            onClick={() => {
+              if (onClick instanceof Function) onClick(i);
+            }}
+          >
+            <View className="board-tab-item-p1">{p1}</View>
+            <View className="board-tab-item-p2">
+              <Text>{p2}</Text>
+              <Text className="board-tab-item-p3">{p3}</Text>
+            </View>
+            <View className="board-tab-item-p4">
+              <View>{p4}</View>
+              <View
+                className={`${
+                  active === i
+                    ? 'board-tab-item-p5-active'
+                    : 'board-tab-item-p5'
+                }`}
+              >
+                {p5}
               </View>
             </View>
-          )
-        )
+          </View>
+        );
       })}
     </ScrollView>
   );
@@ -188,43 +255,75 @@ function useBoardFilter() {
   };
 }
 
+const OBJECT_TYPE = {
+  3: '院线电影',
+  1: '网络剧',
+}
+
 function ProjectItem(props) {
+  const {
+    type,
+    name = '-',
+    pic,
+    cooperType = [],
+    releaseDate,
+    estimateBox,
+    scheduleType,
+    score = '8.5',
+    projectStageStep = [],
+    hasUpdate = false,
+  } = props;
+
+  const [val, unit] = useMemo(() => {
+    return trans(estimateBox)
+  }, [estimateBox]);
+
+  const [stageName, stageDescribe, stageLength] = useMemo(() => {
+    if (projectStageStep.length === 0) return '';
+    const { stageStatus:[ stageName = '' ], describe = '' }  = projectStageStep[projectStageStep.length - 1];
+    return [`[${stageName}]`, describe, projectStageStep.length]
+  }, [projectStageStep])
+
   return (
     <View className="project-item">
-      <View className="project-item-type">
-        院线电影
-      </View>
-      <Image
-        className=".project-item-img"
-        src={'../../static/welcome/show.png'}
-      />
+      <View className="project-item-type">{OBJECT_TYPE[type] || '-'}</View>
+      <Image className=".project-item-img" src={pic} />
       <View className="project-item-detail">
         <View className="project-item-title">
-          <View className="project-item-title-name">小伟</View>
+          <View className="project-item-title-name">{name}</View>
           <View className="project-item-title-predict">
             预估
-            <Text className="project-item-title-predict-num">9.18</Text>亿
+            <Text className="project-item-title-predict-num">{val}</Text>
+            {unit}
           </View>
         </View>
         <View className="project-item-ps">
-          <View className="project-item-publication">开发 / 跟投 / 联发</View>
-          <View className="project-item-score">8.5分</View>
+          <View className="project-item-publication">
+            {cooperType.join('/')}
+          </View>
+          <View className="project-item-score">{score}</View>
         </View>
         <View className="project-item-date">
-          <Text>2018-02-16</Text>
+          <Text>{releaseDate}</Text>
         </View>
         <View className="project-item-status">
           <View className="project-item-status-text">
-            <Text className="project-item-status-text-status">[开发]&nbsp;</Text>
-            本周三提交三幕分场，编辑,本周三提交三幕分场，编辑
+            {hasUpdate && (
+              <Text className="project-item-status-text-status">
+                {stageName}&nbsp;
+              </Text>
+            )}
+            {hasUpdate ? stageDescribe : <Text className="project-item-status-text-no-update">本周暂无更新</Text>}
           </View>
-          <View className="project-item-status-btn">
-            <View>5</View>
-            <Image
-              className="project-item-status-btn-dropdown"
-              src="../../static/icon/arrow-down.svg"
-            />
-          </View>
+          {hasUpdate && (
+            <View className="project-item-status-btn">
+              <View>{stageLength}</View>
+              <Image
+                className="project-item-status-btn-dropdown"
+                src="../../static/icon/arrow-down.svg"
+              />
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -238,13 +337,16 @@ function onHandleResponse(res) {
 }
 
 function PureReq_ListInfo(params) {
+  const { 
+    cooperStatus = 0
+  } = params;
   return reqPacking(
     {
       url: 'api/management/lisInfo',
       data: {
         startDate: 1611072000000,
         endDate: 1611676799999,
-        cooperStatus: 1,
+        cooperStatus,
       }
     },
     'server',
@@ -260,3 +362,18 @@ function PureReq_Cooperation(params) {
   ).then((res) => onHandleResponse(res))
 }
 
+function trans(input) {
+  if (!typeof input === 'number') return [];
+  let unit = '';
+  let val = input;
+  if (input > 1e9) {
+    unit = '亿';
+    val = (input / 1e9).toFixed(2);
+  } else if (input > 1e5 && input < 1e9) {
+    unit = '万';
+    val = (input / 1e5).toFixed(1);
+  } else {
+    unit = '';
+  }
+  return [val, unit];
+}
