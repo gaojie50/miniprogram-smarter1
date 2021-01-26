@@ -1,8 +1,7 @@
 export default {
-  navigationBarTitleText: '发起评估',
+  navigationBarTitleText: '模板预览',
   navigationStyle: 'default',
   navigationBarBackgroundColor: '#fff',
   navigationBarTextStyle: 'black',
-  disableScroll: true,
   usingComponents: {}
 }
