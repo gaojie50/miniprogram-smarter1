@@ -1,5 +1,6 @@
 export default {
   pages: [
+    'pages/management/template/index',
     'pages/welcome/index',
     'pages/management/create/index', 
     'pages/list/index',
@@ -7,7 +8,6 @@ export default {
     'pages/projectDetail/index',
     'pages/searchCompany/index',
     'pages/webview/index', 
-    'pages/management/template/index'
   ],
   window: {
     navigationBarBackgroundColor: '#798CBA',

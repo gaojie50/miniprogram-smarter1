@@ -157,6 +157,25 @@ export default class _C extends React.Component {
   handleUpload = () => {
     const { projectId, filesChecked, primaryFilesChecked } = this.state;
     const that = this;
+    Taro.showActionSheet({
+      itemList: ['从项目文件中选择', '从聊天文件中选择'],
+      success: function (res) {
+        console.log(res.tapIndex)
+        if( res.tapIndex===0 ){
+          that.uploadFromProjectFile();
+        }else{
+          that.uploadFromMessage();
+        }
+      },
+      fail: function (res) {
+        console.log(res.errMsg)
+      }
+    })
+  }
+
+  uploadFromMessage = ()=>{
+    const { projectId, filesChecked, primaryFilesChecked } = this.state;
+    const that = this;
     Taro.chooseMessageFile({
       success (res) {
         const tempFile = res.tempFiles[0];
@@ -195,10 +214,12 @@ export default class _C extends React.Component {
                   primaryFilesChecked,
                 }, () => that.fetchProjectProfile(projectId));
               }
+              Taro.hideLoading();
               return errorHandle({
                 message: error.message
               });
             }else{
+              Taro.hideLoading();
               errorHandle({
                 message: '上传失败'
               });
@@ -206,7 +227,7 @@ export default class _C extends React.Component {
           },
           fail(res){
             const { errMsg } = res;
-            console.log(errMsg);
+            Taro.hideLoading();
             if( errMsg ){
               errorHandle( {
                 message: errMsg
@@ -216,6 +237,10 @@ export default class _C extends React.Component {
         });
       }
     })
+  }
+
+  uploadFromProjectFile = ()=>{
+    
   }
 
   handleDelete = (uid, sign) => {
@@ -234,6 +259,7 @@ export default class _C extends React.Component {
   handleChangeTemp=(tempId)=>{
     this.setState({ tempId });
   }
+
 
   handlePreview=(e, tempId)=>{
     e.stopPropagation();
@@ -267,7 +293,7 @@ export default class _C extends React.Component {
     this.setState({ isSubmitting: true });
     reqPacking(
       {
-        url: 'api/management/evaluation',
+        url: 'api/management/appletevaluation',
         data: params,
         method: 'POST'
       },

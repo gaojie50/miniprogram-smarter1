@@ -13,25 +13,20 @@ page image {
   background: #FFFFFF;
   border-radius: 40px 40px 0 0;
   padding: 0 30px 150px 30px;
-  .title {
+  .title,.title-input {
     font-size: 46px;
     font-weight: 500;
     color: #333;
+    line-height: 46px;
   }
   .edit-btn-wrap {
     display: inline-block;
   }
   .title-input {
     box-sizing: border-box;
-    border: 1px solid #DCE2ED;
     border-radius: 2px;
     width: 100%;
-    line-height: 32px;
-    font-weight: 400;
-    font-size: 28px;
-    color: #19233B;
     text-align: left;
-    padding: 0 12px;
     margin: 0 auto;
     outline: none;
 
