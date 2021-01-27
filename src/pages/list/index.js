@@ -26,7 +26,7 @@ const {
 
 const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
-const barHeight = getGlobalData('barHeight')
+const {statusBarHeight} = getGlobalData('systemInfo')
 
 function strip(num, precision = 12) {
   return +parseFloat(num.toPrecision(precision));
@@ -44,11 +44,11 @@ class _C extends React.Component {
     backdropShow: '',
     costomShow: false,
     isScroll: true,
-    barHeight,
+    statusBarHeight,
     titleHeight: Math.floor(
-      capsuleLocation.bottom + capsuleLocation.top - barHeight,
+      capsuleLocation.bottom + capsuleLocation.top - statusBarHeight,
     ),
-    gapHeight: Math.floor(capsuleLocation.top - barHeight),
+    gapHeight: Math.floor(capsuleLocation.top - statusBarHeight),
     showIcon: false,
     dimension: [],
     projectStatus: [],
@@ -135,6 +135,8 @@ class _C extends React.Component {
       ).then(({ success, data }) => {
         if (success) {
           setGlobalData('authinfo', data)
+          Taro.setStorageSync('authinfo', data);
+
           if (
             data &&
             data.authIds &&
@@ -724,7 +726,7 @@ class _C extends React.Component {
       initLoading,
       backdropShow,
       titleHeight,
-      barHeight,
+      statusBarHeight,
       toView,
       redTextShow,
       filmDistributionList,
@@ -797,9 +799,9 @@ class _C extends React.Component {
                   className="header-inner"
                   style={
                     'line-height:' +
-                    (titleHeight - barHeight) +
+                    (titleHeight - statusBarHeight) +
                     'px;padding-top:' +
-                    barHeight +
+                    statusBarHeight +
                     'px;'
                   }
                 >
@@ -807,7 +809,7 @@ class _C extends React.Component {
                     className="search-wrap"
                     style={
                       'top:calc( ' +
-                      (titleHeight + barHeight) / 2 +
+                      (titleHeight + statusBarHeight) / 2 +
                       'px -  44rpx)'
                     }
                     onClick={this.jumpToSearch}
@@ -1140,9 +1142,9 @@ class _C extends React.Component {
                   className="header-inner"
                   style={
                     'line-height:' +
-                    (titleHeight - barHeight) +
+                    (titleHeight - statusBarHeight) +
                     'px;padding-top:' +
-                    barHeight +
+                    statusBarHeight +
                     'px;'
                   }
                 >

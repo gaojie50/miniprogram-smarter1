@@ -1,0 +1,192 @@
+@function getColor($sign,$opacity:1) {
+  $color:rgba(159, 64, 255,$opacity);
+
+  @if($sign == 1) { $color:rgba(253, 156, 0, $opacity) }
+  @else if($sign == 2) { $color:rgba(105, 191, 19, $opacity) }
+  @else if($sign == 3) { $color:rgba(102, 102, 255, $opacity) }
+  @else if($sign == 4) { $color:rgba(9, 179, 179, $opacity) }
+  @else if($sign == 5) { $color:rgba(217, 43, 217, $opacity) }
+
+  @return $color;
+}
+
+@mixin getActive($sign) {
+  color: getColor($sign);
+  &::after{ background-color: getColor($sign) };
+}
+
+$title:88px;
+
+.check-progress{
+
+  .tab-title{
+    height: $title;
+    line-height: $title;
+    box-sizing: border-box;
+    box-shadow: 0 2px 20px 0 rgba(0,0,0,0.05);
+
+    view{
+      display: inline-block;
+      width: 125px;
+      height: 100%;
+      text-align: center; 
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 30px;
+      color: #333333;
+      letter-spacing: 0; 
+      
+      @mixin active($sign){
+        @include getActive($sign);
+
+        font-weight: 600;
+        font-family: PingFangSC-Semibold;
+        font-size: 30px;
+        position: relative;
+
+        &::after{
+          content:"";
+          position: absolute;
+          bottom: 0;
+          left: 42px;
+          display: inline-block;
+          height: 6px;
+          width: 40px;
+          border-radius: 3px;
+        }
+      }
+
+      @for $i from 1 through 6 { &.active-#{$i} { @include active($i) } }      
+    }
+  }
+
+  .tab-content{
+
+    .no-update{
+      text-align: center;
+
+      image{
+        width: 416px;
+        height: 220px;
+        margin-top: 290px;
+      }
+
+      view{
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 28px;
+        color: #333333;
+        letter-spacing: 0;
+        text-align: center;
+        line-height: 44px;
+        margin-top: 9px;
+      }
+    }
+
+    .main{
+      min-height: calc(100vh - #{$title});
+      position: relative;
+      padding-left: 60px;
+      padding-right: 30px;
+
+      &::before{
+        content: "";
+        background-color:  rgba(0,0,0,0.1);
+        position: absolute;
+        left: 27.5px;
+        top: 30px;
+        height: 100%;
+        width: 1px;
+        display: block;
+      }
+
+      &>view{
+       
+       .item-title{
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        color: #999999;
+        line-height: 84px;
+        position: relative;
+
+        &::before{
+          content: "";
+          display: inline-block;
+          box-sizing: border-box;
+          width: 16px;
+          height: 16px;
+          position: absolute;
+          top: 34px;
+          left: -40px;
+          background: #F8F8F8;
+          border: 5px solid #CCCCCC;
+          border-radius: 50%;
+
+        }
+       }
+
+        @mixin item($sign){
+          border-radius: 10px;
+          background-color: getColor($sign, 0.06);
+          padding: 20px;
+          position: relative;
+
+          .delete{
+            position: absolute;
+            top: 22px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+          }
+
+          .content-top{
+            margin-bottom: 20px;
+            max-width: 596px;
+
+            text{
+              display: inline-block;
+              line-height: 48px;
+              text-align: center;
+              background-color: getColor($sign,0.1);
+              border-radius: 4px;
+              font-weight: 400;
+              font-family: PingFangSC-Regular;
+              font-size: 24px;
+              color: getColor($sign);
+              letter-spacing: 0;
+              margin-left: 10px;
+              margin-bottom: 10px;
+              padding: 0 12px;
+            }
+          }
+
+        }
+
+        @for $i from 1 through 6 { .item-#{$i} { @include item($i) } }
+
+        .content-bottom{
+          font-weight: 400;
+          font-family: PingFangSC-Regular;
+          font-size: 28px;
+          color: #333333;
+          letter-spacing: 0;
+          text-align: justify;
+          line-height: 44px;
+          word-wrap:break-word;
+        }
+      }
+
+      .no-more{
+        text-align: center;
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        color: #999999;
+        line-height: 36px;
+        margin-top: 40px;
+        margin-bottom: 88px;
+      }
+    } 
+  }
+}
