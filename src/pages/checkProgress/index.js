@@ -1,51 +1,15 @@
-import { View, Image, Text } from '@tarojs/components';
-import React from 'react';
+import React,{useState} from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
+import { View, Image, Text } from '@tarojs/components';
 import { get as getGlobalData } from '../../global_data';
+import projectConfig from '../../constant/project-config';
 import utils from '../../utils/index.js';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 
 const { formatCreateTime } = utils;
-const TAB_TITLES = [
-  {
-    label:'开发',
-    color:'rgb(253, 156, 0)',
-    value:1,
-    key:'developStageList',
-  },
-  {
-    label:'完片',
-    color:'rgb(105, 191, 19)',
-    value:2,
-    key:'completedStageList',
-  },
-  {
-    label:'宣发',
-    color:'rgb(102, 102, 255)',
-    value:3,
-    key:'publicityStageList',
-  },
-  {
-    label:'发行',
-    color:'rgb(9, 179, 179)',
-    value:4,
-    key:'publishStageList',
-  },
-  {
-    label:'上映',
-    color:'rgb(217, 43, 217)',
-    value:5,
-    key:'showStageList',
-  },
-  {
-    label:'映后',
-    color:'rgb(159, 64, 255)',
-    value:6,
-    key:'showAfterStageList',
-  },
-];
+const {getProjectStages} = projectConfig
 export default class _C extends React.Component {
   state = {
     recordData: {},
@@ -53,8 +17,9 @@ export default class _C extends React.Component {
   }
 
   componentDidMount() {
-    const { projectId } = getCurrentInstance().router.params;
-    
+    const { projectId,activeTab } = getCurrentInstance().router.params;
+
+    if(activeTab && activeTab != 1) this.setState({activeTab});
     this.fetchRecordData(projectId);
   }
 
@@ -65,11 +30,11 @@ export default class _C extends React.Component {
       method: 'GET',
     })
       .then(res => {
-        const { success, data = {}, err } = res;
+        const { success, data = {}, message } = res;
         if (success) return this.setState({ recordData: data });
 
         Taro.showToast({
-          title: err.message,
+          title: message,
           icon: 'none',
           duration: 2000
         });
@@ -83,7 +48,8 @@ export default class _C extends React.Component {
       recordData,
       activeTab,
     } = this.state;
-
+    const TAB_TITLES = getProjectStages();
+    
     return (
       <View className="check-progress">
         <View className="tab-title">
@@ -141,7 +107,7 @@ function TabItem (
             data:{recordId,projectId},
             method: 'POST',
           }).then(res => {
-            const { success, error } = res;
+            const { success, error,message } = res;
             if (success) {
               fetchRecordData(projectId);
 
@@ -153,7 +119,7 @@ function TabItem (
             };
 
             return Taro.showToast({
-              title: `删除失败：${error && error.message}`,
+              title: `删除失败：${error && message}`,
               icon: 'none',
               duration: 2000
             });
