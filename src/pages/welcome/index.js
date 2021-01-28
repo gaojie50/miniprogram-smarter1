@@ -7,11 +7,11 @@ import { get as getGlobalData } from '../../global_data'
 import './index.scss'
 
 const capsuleLocation = getGlobalData('capsuleLocation')
-const barHeight = getGlobalData('barHeight')
+const {statusBarHeight} = getGlobalData('systemInfo')
 class _C extends React.Component {
   state = {
     titleHeight: Math.floor(
-      capsuleLocation.bottom + capsuleLocation.top - barHeight,
+      capsuleLocation.bottom + capsuleLocation.top - statusBarHeight,
     ),
     code: null,
   }
