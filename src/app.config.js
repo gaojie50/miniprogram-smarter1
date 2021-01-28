@@ -11,7 +11,8 @@ export default {
     navigationBarBackgroundColor: '#798CBA',
     backgroundTextStyle: 'light',
     navigationBarTitleText: ' ',
-    navigationBarTextStyle: 'white'
+    navigationBarTextStyle: 'white',
+    enablePullDownRefresh: true
   },
   style: 'v2',
   sitemapLocation: 'sitemap.json',
