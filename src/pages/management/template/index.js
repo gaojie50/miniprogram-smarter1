@@ -11,6 +11,7 @@ const { errorHandle } = utils;
 export default function PerviewTemplate(){
 
   const [ questions, setQuestions ] = useState([]);
+  const [ btnDisabled, setBtnDisabled ] = useState(true)
   const tempId = 10;
 
   useEffect(() => {
@@ -29,18 +30,21 @@ export default function PerviewTemplate(){
       'server',
     ).then(res => {
         const { data, error } = res;
-        const { questions } = data;
-
         if (!error) {
+          const { questions } = data;
           setQuestions(questions);
           Taro.hideLoading();
           errorHandle(error);
           return;
         }
-
-        (error.message);
+        errorHandle(error);
         Taro.hideLoading();
-      });
+        setBtnDisabled(true);
+      }).catch(err=>{
+        errorHandle({message: '加载失败'});
+        Taro.hideLoading();
+        setBtnDisabled(true);
+      })
   };
 
   const handleSelect = () =>{
@@ -104,9 +108,15 @@ export default function PerviewTemplate(){
           })
         }
       </View>
-      <View className="btn-wrap">
-        <Button className="select-btn" onClick={handleSelect}>选择该模板</Button>
-      </View>
+      {!btnDisabled && <View className="btn-wrap">
+        <Button 
+          className="select-btn" 
+          onClick={handleSelect}
+          disabled={btnDisabled}
+        >
+            选择该模板
+        </Button>
+      </View>}
     </View>
     </View>
   )
