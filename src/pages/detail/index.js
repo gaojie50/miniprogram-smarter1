@@ -105,7 +105,8 @@ export default class Detail extends React.Component {
         {
           judgeRole.role && judgeRole.role !== 2 ?  
           <KeyData 
-            projectId={ basicData.projectId } 
+            basicData={ basicData } 
+            keyData={ keyData } 
             judgeRole={ judgeRole }
             changeKeyData={ data => this.handleChangeKeyData(data)}
           /> : ''
