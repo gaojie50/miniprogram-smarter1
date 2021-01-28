@@ -34,15 +34,19 @@ const SYSTEM_BAR_HEIGHT = capsuleLocation.top;
 const FILTER_ITEMS = [
   {
     name: '最近7天',
+    type: '4'
   },
   {
     name: '项目类型',
+    type: '1'
   },
   {
     name: '合作类型',
+    type: '2'
   },
   {
     name: '筛选',
+    type: '3'
   },
 ];
 
@@ -227,29 +231,38 @@ function NiceTab(props) {
 }
 
 function useBoardFilter() {
+  const [filterActive, setFilterActive] = useState('');
   return {
+    setFilterActive,
     component: (
       <View>
         <View className="board-filter">
-          {
-            FILTER_ITEMS.map((item) => {
-              return (
-                <View className="board-filter-item">
-                  <Text className="board-filter-item-name">{item.name}</Text>
-                  <Image
-                    className="board-filter-item-img"
-                    src={
-                      '../../static/' +
-                      (false ? 'arrow-down-active' : 'arrow-down') +
-                      '.png'
-                    }
-                  />
-                </View>
-              );
-            })
-          }
+          {FILTER_ITEMS.map((item) => {
+            return (
+              <View
+                className="board-filter-item"
+                onClick={() => setFilterActive(item.type)}
+              >
+                <Text className="board-filter-item-name">{item.name}</Text>
+                <Image
+                  className="board-filter-item-img"
+                  src={
+                    '../../static/' +
+                    (false ? 'arrow-down-active' : 'arrow-down') +
+                    '.png'
+                  }
+                />
+              </View>
+            );
+          })}
         </View>
-        {/* <Filter titleHeight={HEAD_HEIGHT} filterShow={"4"} ongetFilterShow={() => {}} /> */}
+        <Filter
+          titleHeight={HEAD_HEIGHT}
+          filterShow={filterActive}
+          ongetFilterShow={(v) => {
+            setFilterActive('');
+          }}
+        />
       </View>
     ),
   };
