@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="44px" viewBox="0 0 44 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>delete</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="C06项目看板-跟进详情-宣发" transform="translate(-656.000000, -910.000000)" stroke="#333333" stroke-width="3">
+            <g id="编组-2备份-2" transform="translate(20.000000, 834.000000)">
+                <g id="icon/编辑" transform="translate(629.000000, 69.000000)">
+                    <g id="编组-4" transform="translate(15.000000, 12.000000)">
+                        <line x1="17.2941176" y1="14" x2="17.2941176" y2="23.8823529" id="路径-4"></line>
+                        <line x1="10.7058824" y1="14" x2="10.7058824" y2="23.8823529" id="路径-4"></line>
+                        <polygon id="矩形" points="2.47058824 6.58823529 25.5294118 6.58823529 25.5294118 32.1176471 2.47058824 32.1176471"></polygon>
+                        <line x1="0" y1="6.58823529" x2="28" y2="6.58823529" id="路径-4"></line>
+                        <line x1="9.88235294" y1="0.823529412" x2="18.1176471" y2="0.823529412" id="路径-4"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

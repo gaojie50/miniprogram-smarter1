@@ -6,7 +6,7 @@ const globalData = {
     APISet: envConfig,
     reqPacking,
     capsuleLocation: Taro.getMenuButtonBoundingClientRect(),
-    barHeight: Taro.getSystemInfoSync().statusBarHeight
+    systemInfo: Taro.getSystemInfoSync(),
   }
 export function set (key, val) {
   globalData[key] = val
