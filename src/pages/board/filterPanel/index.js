@@ -712,7 +712,7 @@ class _C extends React.Component {
                                   {customStartDate.week}
                                 </Text>
                               </View>
-                              <View>
+                              <View className="date-to">
                                 <Text>至</Text>
                               </View>
                               <View
