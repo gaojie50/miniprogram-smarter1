@@ -132,8 +132,34 @@ export default function assessPage(){
     setRate(`${Math.round(leng / innerQues.length * 1000) / 10}%`);
   };
 
-  function handlePreviewFile(){
-    
+  function handlePreviewFile(url, name){
+    const extensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'];
+
+    let fileType = name.slice(name.lastIndexOf('.')+1);
+    if( extensions.includes(fileType) ){
+      Taro.downloadFile({
+        url: url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com'),
+        success: function (res) {
+          var filePath = res.tempFilePath
+          Taro.openDocument({
+            filePath: filePath,
+            success: function (res) {
+              console.log('打开文档成功')
+            },
+            fail: function(res){
+              console.log(res);
+            }
+          })
+        }
+      });
+      return;
+    }
+
+    Taro.showModal({
+      content: '暂不支持该格式预览，请至PC端查看',
+      showCancel: false
+    })
+   
   }
 
   console.log('briefInfo',briefInfo);
@@ -155,7 +181,7 @@ export default function assessPage(){
             {
               (briefInfo.projectFile || []).map(item=>{
                 return (
-                  <View className="file-item" onClick={this.handlePreviewFile}>
+                  <View className="file-item" onClick={()=>{handlePreviewFile(item.url, item.title)}}>
                     <View className="logo"></View>
                     <View className="file-info-wrap">
                       <View className="file-name">{item.title}</View>
@@ -167,10 +193,8 @@ export default function assessPage(){
             }
           </View>
         </View>
-
-        <View className="btn-wrap">
-          <Button className="start-btn">开始评估</Button>
-        </View>
+        
+        <Button className="start-btn">开始评估</Button>
       </View>
       
       </View>

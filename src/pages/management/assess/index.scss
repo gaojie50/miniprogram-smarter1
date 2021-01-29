@@ -16,6 +16,7 @@ page image {
     border-radius: 40px;
     min-height: calc(100vh-60px);
     padding: 40px 45px;
+    box-sizing: border-box;
   }
   .briefinfo-wrap {
     text-align: center;
@@ -98,33 +99,20 @@ page image {
     }
   }
 
-  .btn-wrap {
-    width: 100%;
-    height: 164px;
-    background: #FFFFFF;
-    box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
-    position: fixed;
-    bottom: 0;
-    left: 0; 
-    button[type='primary']{
+  .start-btn {
+    margin: auto;
+    padding: 0;
+    margin-top: 64px;
+    width: 600px;
+    background: #276FF0;
+    border-radius: 40px;
+    color: #fff;
+    font-size: 30px;
+    line-height: 80px;
+    text-align: center;
+    
+    &:hover, &:active, &:visited {
       background: #276FF0;
-    }
-    .start-btn {
-      width: 690px;
-      background: #276FF0;
-      border-radius: 40px;
-      color: #fff;
-      font-size: 30px;
-      line-height: 80px;
-      text-align: center;
-      padding: 0;
-      position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translate(-50%);
-      &:hover, &:active, &:visited {
-        background: #276FF0;
-      }
     }
   }
   
