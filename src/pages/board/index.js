@@ -1,7 +1,8 @@
 import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
+import { picFn } from '../../utils/pic';
 import projectConfig from '../../constant/project-config.js'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
 import Filter from './filterPanel';
@@ -75,6 +76,8 @@ const PROJECT_TYPE = [
 export default function Board() {
   const [data, setData] = useState({});
   const [sticky, setSticky] = useState(false);
+  const scroller = useRef(null);
+
   const {
     tabSelected,
     Component: StatusTab,
@@ -85,10 +88,11 @@ export default function Board() {
     props: boardFilterProps,
   } = useBoardFilter();
 
-  // 状态复用
-  const tab = <StatusTab {...tabProps} type="default"/>;
+  const { filterActive } = boardFilterProps;
+
+  const tab = <StatusTab {...tabProps} type="default" />;
   const filter = <BoardFilterComponent {...boardFilterProps} />;
-  const tab_sticky = <StatusTab {...tabProps} type="small"/>;
+  const tab_sticky = <StatusTab {...tabProps} type="small" />;
   const filter_sticky = <BoardFilterComponent {...boardFilterProps} />;
 
   useEffect(() => {
@@ -100,8 +104,31 @@ export default function Board() {
     });
   }, [tabSelected])
 
-  const checkIfSticky = useCallback((e) => {
-    if (e.detail.scrollTop > 50) {
+  useEffect(() => {
+    setTimeout(() => {
+      scroller.current = Taro.createSelectorQuery().select('#board-list-scroll')
+    }, 200)
+  }, [])
+
+  useEffect(() => {
+    if (filterActive) {
+      setSticky(true);
+    } else {
+      if (scroller.current) {
+        scroller.current.scrollOffset((res) => {
+          const { scrollTop } = res;
+          if (scrollTop > 150) {
+            setSticky(true)
+          } else {
+            setSticky(false)
+          }
+        }).exec();
+      }
+    }
+  }, [filterActive])
+
+  const checkIfSticky = useCallback((t) => {
+    if (t > 150) {
       setSticky(true);
     } else {
       setSticky(false);
@@ -126,38 +153,44 @@ export default function Board() {
         </View>
       </View>
       <ScrollView
+        id="board-list-scroll"
         className="board"
         scrollY
-        scrollAnchoring
         style={{
           paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
           height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx)`,
         }}
+        // onScrollToUpper={() => {
+        //   checkIfSticky(0)
+        // }}
         onScroll={(e) => {
-          checkIfSticky(e);
+          checkIfSticky(e.detail.scrollTop);
         }}
       >
         <View
-        style={{
-          visibility: sticky ? 'hidden' : 'visible'
-        }}
+          style={{
+            visibility: sticky ? 'hidden' : 'visible',
+          }}
         >
           {tab}
           {filter}
         </View>
-        <View
-          style={{
-            position: 'fixed',
-            top: `${HEAD_HEIGHT + SYSTEM_BAR_HEIGHT}px`,
-            width: '100%',
-            zIndex: 1,
-            backgroundColor: '#fff',
-            visibility: sticky ? 'visible' : 'hidden',
-          }}
-        >
-          {tab_sticky}
-          {filter_sticky}
-        </View>
+        {sticky && (
+          <View
+            style={{
+              position: 'fixed',
+              top: `${HEAD_HEIGHT + SYSTEM_BAR_HEIGHT}px`,
+              width: '100%',
+              zIndex: 3,
+              backgroundColor: '#fff',
+              // visibility: sticky ? 'visible' : 'hidden',
+            }}
+          >
+            {tab_sticky}
+            {filter_sticky}
+          </View>
+        )}
+
         <View>
           {PROJECT_TYPE.map(({ name, key }) => {
             if (!data?.[key]?.length > 0) return null;
@@ -318,6 +351,7 @@ function useBoardFilter() {
   const [filterActive, setFilterActive] = useState('');
   const props = {
     filterActive,
+    setFilterActive,
   }
   return {
     setFilterActive,
@@ -328,9 +362,9 @@ function useBoardFilter() {
 }
 
 function BoardFilter(props) {
-  const { filterActive = '' } = props;
+  const { filterActive = '', setFilterActive } = props;
   return (
-    <View>
+    <View style={{ position: 'relative' }}>
       <View className="board-filter">
         {FILTER_ITEMS.map((item) => {
           return (
@@ -351,18 +385,22 @@ function BoardFilter(props) {
           );
         })}
       </View>
-      {
-        filterActive && <View catchMove={false} className="board-filter-mask" onClick={() => setFilterActive('')} />
-      }
+      {filterActive && (
+        <View
+          catchMove={false}
+          className="board-filter-mask"
+          onClick={() => setFilterActive('')}
+        />
+      )}
       <Filter
-        titleHeight={HEAD_HEIGHT}
+        titleHeight={SCROLL_TOP_MARGIN + 20}
         filterShow={filterActive}
         ongetFilterShow={(v) => {
           setFilterActive('');
         }}
       />
     </View>
-  )
+  );
 }
 
 const OBJECT_TYPE = {
@@ -397,7 +435,7 @@ function ProjectItem(props) {
   return (
     <View className="project-item">
       <View className="project-item-type">{OBJECT_TYPE[type] || '-'}</View>
-      <Image className=".project-item-img" src={pic} />
+      <Image className=".project-item-img" src={picFn(pic)} />
       <View className="project-item-detail">
         <View className="project-item-title">
           <View className="project-item-title-name">{name}</View>
