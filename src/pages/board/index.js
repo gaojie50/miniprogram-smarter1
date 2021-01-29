@@ -1,5 +1,5 @@
 import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
@@ -28,8 +28,14 @@ function strip(num, precision = 12) {
   return +parseFloat(num.toPrecision(precision));
 }
 
+Taro.setNavigationBarColor({
+  frontColor: '#000000',
+  backgroundColor: '#ffffff',
+})
+
 const HEAD_HEIGHT = capsuleLocation.bottom - capsuleLocation.top;
 const SYSTEM_BAR_HEIGHT = capsuleLocation.top;
+const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_HEIGHT;
 
 const FILTER_ITEMS = [
   {
@@ -65,10 +71,25 @@ const PROJECT_TYPE = [
   },
 ]
 
+
 export default function Board() {
   const [data, setData] = useState({});
-  const { component: tab, tabSelected } = useStatusTab();
-  const { component: filter } = useBoardFilter();
+  const [sticky, setSticky] = useState(false);
+  const {
+    tabSelected,
+    Component: StatusTab,
+    props: tabProps,
+  } = useStatusTab();
+  const {
+    Component: BoardFilterComponent,
+    props: boardFilterProps,
+  } = useBoardFilter();
+
+  // 状态复用
+  const tab = <StatusTab {...tabProps} type="default"/>;
+  const filter = <BoardFilterComponent {...boardFilterProps} />;
+  const tab_sticky = <StatusTab {...tabProps} type="small"/>;
+  const filter_sticky = <BoardFilterComponent {...boardFilterProps} />;
 
   useEffect(() => {
     const { cooperStatus } = tabSelected;
@@ -79,25 +100,66 @@ export default function Board() {
     });
   }, [tabSelected])
 
+  const checkIfSticky = useCallback((e) => {
+    if (e.detail.scrollTop > 50) {
+      setSticky(true);
+    } else {
+      setSticky(false);
+    }
+  }, [])
+
   return (
-    <View className="board">
+    <>
+      <View className="board-header">
         <View
-          className="board-header"
+          className="board-header-title"
           style={{
-            height: `${HEAD_HEIGHT}px`,
             paddingTop: `${SYSTEM_BAR_HEIGHT}px`,
+            height: `${HEAD_HEIGHT}px`,
           }}
         >
           <Image
             className="board-header-search"
             src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
           />
-          <Text className="board-header-title">项目看板</Text>
+          <Text className="board-header-title-text">项目看板</Text>
         </View>
-        {tab}
-        {filter}
-        {
-          PROJECT_TYPE.map(({ name, key }) => {
+      </View>
+      <ScrollView
+        className="board"
+        scrollY
+        scrollAnchoring
+        style={{
+          paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
+          height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx)`,
+        }}
+        onScroll={(e) => {
+          checkIfSticky(e);
+        }}
+      >
+        <View
+        style={{
+          visibility: sticky ? 'hidden' : 'visible'
+        }}
+        >
+          {tab}
+          {filter}
+        </View>
+        <View
+          style={{
+            position: 'fixed',
+            top: `${HEAD_HEIGHT + SYSTEM_BAR_HEIGHT}px`,
+            width: '100%',
+            zIndex: 1,
+            backgroundColor: '#fff',
+            visibility: sticky ? 'visible' : 'hidden',
+          }}
+        >
+          {tab_sticky}
+          {filter_sticky}
+        </View>
+        <View>
+          {PROJECT_TYPE.map(({ name, key }) => {
             if (!data?.[key]?.length > 0) return null;
             const arr = data?.[key] || [];
             return (
@@ -105,21 +167,21 @@ export default function Board() {
                 <View className="project-add-text">
                   <Text>{name}</Text>
                 </View>
-                {
-                  arr.map((obj) =>{
-                    if (obj?.projectStageStep?.length > 0) {
-                      obj.hasUpdate = true;
-                    }
-                    return  <ProjectItem {...obj} />
-                  })
-                }
+                {arr.map((obj) => {
+                  if (obj?.projectStageStep?.length > 0) {
+                    obj.hasUpdate = true;
+                  }
+                  return <ProjectItem {...obj} />;
+                })}
               </View>
             );
-          })
-        }
-      </View>
-  )
+          })}
+        </View>
+      </ScrollView>
+    </>
+  );
 }
+
 const NAME_MAPPING_ARR = [
   {
     name: '确定合作',
@@ -155,8 +217,9 @@ const DEFAULT_ARR = NAME_MAPPING_ARR.map(({ name }) => {
 });
 
 function useStatusTab() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(1);
   const [data, setData] = useState(DEFAULT_ARR);
+  const [type, setType] = useState('default');
 
   useEffect(() => {
     PureReq_Cooperation().then((data) => {
@@ -173,29 +236,46 @@ function useStatusTab() {
     });
   }, [])
 
+  const props = {
+    list: data,
+    active,
+    onClick: (i) => setActive(i),
+    type,
+  }
+
   return {
-    component: <NiceTab list={data} active={active} onClick={(i) => setActive(i)} />,
+    component: (
+      <NiceTab {...props}/>
+    ),
+    Component: NiceTab,
+    props,
     tabSelected: NAME_MAPPING_ARR[active],
+    setType,
   };
 }
 
+
+const CLASSNAME_BOARD = {
+  default: 'board-tab-item',
+  small: 'board-tab-item-small'
+}
 function NiceTab(props) {
-  const { list = [], active, onClick } = props;
+  const { list = [], active, onClick, type = 'small' } = props;
 
   return (
     <ScrollView className="board-tab" scrollX>
       {list.map((item, i) => {
         const {p1 = '-', p2 = '-', p3 = '', p4 = '近7日', p5 = ''} = item;
         const className = `
-          board-tab-item
+          ${CLASSNAME_BOARD[type]}
           ${
             i === 0
-              ? 'board-tab-item-head'
+              ? `${CLASSNAME_BOARD[type]}-head`
               : i + 1 === list.length
-              ? 'board-tab-item-tail'
+              ? `${CLASSNAME_BOARD[type]}-tail`
               : ''
           }
-          ${active === i ? 'board-tab-item-active' : ''}
+          ${active === i ? `${CLASSNAME_BOARD[type]}-active` : ''}
         `;
         return (
           <View
@@ -206,23 +286,27 @@ function NiceTab(props) {
               if (onClick instanceof Function) onClick(i);
             }}
           >
-            <View className="board-tab-item-p1">{p1}</View>
-            <View className="board-tab-item-p2">
-              <Text>{p2}</Text>
-              <Text className="board-tab-item-p3">{p3}</Text>
-            </View>
-            <View className="board-tab-item-p4">
-              <View>{p4}</View>
-              <View
-                className={`${
-                  active === i
-                    ? 'board-tab-item-p5-active'
-                    : 'board-tab-item-p5'
-                }`}
-              >
-                {p5}
-              </View>
-            </View>
+            <View className={`${CLASSNAME_BOARD[type]}-p1`}>{p1}</View>
+            {type === 'default' && (
+              <>
+                <View className="board-tab-item-p2">
+                  <Text>{p2}</Text>
+                  <Text className="board-tab-item-p3">{p3}</Text>
+                </View>
+                <View className="board-tab-item-p4">
+                  <View>{p4}</View>
+                  <View
+                    className={`${
+                      active === i
+                        ? 'board-tab-item-p5-active'
+                        : 'board-tab-item-p5'
+                    }`}
+                  >
+                    {p5}
+                  </View>
+                </View>
+              </>
+            )}
           </View>
         );
       })}
@@ -232,40 +316,53 @@ function NiceTab(props) {
 
 function useBoardFilter() {
   const [filterActive, setFilterActive] = useState('');
+  const props = {
+    filterActive,
+  }
   return {
     setFilterActive,
-    component: (
-      <View>
-        <View className="board-filter">
-          {FILTER_ITEMS.map((item) => {
-            return (
-              <View
-                className="board-filter-item"
-                onClick={() => setFilterActive(item.type)}
-              >
-                <Text className="board-filter-item-name">{item.name}</Text>
-                <Image
-                  className="board-filter-item-img"
-                  src={
-                    '../../static/' +
-                    (false ? 'arrow-down-active' : 'arrow-down') +
-                    '.png'
-                  }
-                />
-              </View>
-            );
-          })}
-        </View>
-        <Filter
-          titleHeight={HEAD_HEIGHT}
-          filterShow={filterActive}
-          ongetFilterShow={(v) => {
-            setFilterActive('');
-          }}
-        />
-      </View>
-    ),
+    component: <BoardFilter {...props} />,
+    Component: BoardFilter,
+    props,
   };
+}
+
+function BoardFilter(props) {
+  const { filterActive = '' } = props;
+  return (
+    <View>
+      <View className="board-filter">
+        {FILTER_ITEMS.map((item) => {
+          return (
+            <View
+              className="board-filter-item"
+              onClick={() => setFilterActive(item.type)}
+            >
+              <Text className="board-filter-item-name">{item.name}</Text>
+              <Image
+                className="board-filter-item-img"
+                src={
+                  '../../static/' +
+                  (false ? 'arrow-down-active' : 'arrow-down') +
+                  '.png'
+                }
+              />
+            </View>
+          );
+        })}
+      </View>
+      {
+        filterActive && <View catchMove={false} className="board-filter-mask" onClick={() => setFilterActive('')} />
+      }
+      <Filter
+        titleHeight={HEAD_HEIGHT}
+        filterShow={filterActive}
+        ongetFilterShow={(v) => {
+          setFilterActive('');
+        }}
+      />
+    </View>
+  )
 }
 
 const OBJECT_TYPE = {

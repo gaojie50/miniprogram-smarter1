@@ -1,35 +1,75 @@
 .board {
   background-color: #fff;
-  font-family: 'PingFangSC-Medium';
+  font-family: PingFangSC-Medium;
   color: #333;
+  height: 100%;
 }
 
 .board-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  &-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-  padding-bottom: 24px;
+  &-title-text {
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 36px;
+  }
+
+  &-search {
+    height: 44px;
+    width: 44px;
+  
+    position: absolute;
+    left: 28px;
+  }
+
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+
+  background-color: #fff;
 }
 
-.board-header-title {
-  font-weight: 500;
-  font-size: 36px;
-  line-height: 36px;
-}
-
-.board-header-search {
-  height: 44px;
-  width: 44px;
-
-  position: absolute;
-  left: 28px;
-  // bottom: 22px;
-}
 
 .board-tab {
   white-space: nowrap;
+}
+
+.board-tab-item-small {
+  display: inline-flex;
+  flex-direction: column;
+  padding: 26px 30px 24px 30px;
+  font-family: PingFangSC-Regular;
+
+  &-p1 {
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 38px;
+  }
+
+  &-active {
+    font-weight: 600;
+    font-family:PingFangSC-Semibold;
+    color: #276FF0;
+
+    position: relative;
+  }
+
+  &-active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 6px;
+    width: 70px;
+    background-color: #276FF0;
+    border-radius: 3px;
+  }
 }
 
 .board-tab-item {
@@ -46,7 +86,7 @@
   font-weight: 400;
   &-p1 {
     font-weight: 600;
-    font-family: 'PingFangSC-Semibold';
+    font-family: PingFangSC-Semibold;
     font-size: 26px;
     line-height: 26px;
 
@@ -60,14 +100,14 @@
     height: 46px;
   }
   &-p3 {
-    font-family: 'PingFangSC-Regular';
+    font-family: PingFangSC-Regular;
     font-size: 24px;
     line-height: 46px;
   }
   &-p4 {
     display: flex;
     align-items: center;
-    font-family: 'PingFangSC-Regular';
+    font-family: PingFangSC-Regular;
     font-size: 24px;
     line-height: 24px;
 
@@ -106,12 +146,20 @@
 
   height: 90px;
 }
+.board-filter-mask {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0,0,0,0.6);
+  z-index: 2;
+}
 .board-filter-item {
   flex: 1;
   text-align: center;
   position: relative;
 
-  font-family: 'PingFangSC-Semibold';
+  font-family: PingFangSC-Semibold;
   font-weight: 600;
   font-size: 26px;
   line-height: 36px;
@@ -127,7 +175,7 @@
 }
 
 .project-add-text {
-  font-family: 'PingFangSC-Regular';
+  font-family: PingFangSC-Regular;
   font-weight: 400;
   font-size: 24px;
   line-height: 36px;
@@ -153,7 +201,7 @@
     width: 96px;
 
     font-weight: 400;
-    font-family: 'PingFangSC-Regular';
+    font-family: PingFangSC-Regular;
     font-size: 24px;
     color: #FFFFFF;
     letter-spacing: 0;
@@ -194,7 +242,7 @@
 }
 
 .project-item-title-name {
-  font-family: 'PingFangSC-Medium';
+  font-family: PingFangSC-Medium;
   font-weight: 500;
   font-size: 34px;
   line-height: 36px;
@@ -202,7 +250,7 @@
 }
 
 .project-item-title-predict {
-  font-family: 'PingFangSC-Regular';
+  font-family: PingFangSC-Regular;
   font-weight: 400;
   font-size: 24px;
   line-height: 36px;
@@ -220,7 +268,7 @@
   justify-content: space-between;
 
   font-weight: 400;
-  font-family: 'PingFangSC-Regular';
+  font-family: PingFangSC-Regular;
   font-size: 24px;
   color: #666666;
   line-height: 36px;
@@ -230,7 +278,7 @@
 
 .project-item-date {
   font-weight: 400;
-  font-family: 'PingFangSC-Regular';
+  font-family: PingFangSC-Regular;
   font-size: 24px;
   color: #666666;
   line-height: 24px;
@@ -251,7 +299,7 @@
 
 .project-item-status-text {
   font-weight: 400;
-  font-family: 'PingFangSC-Regular';
+  font-family: PingFangSC-Regular;
   font-size: 24px;
   color: #333333;
   line-height: 34px;
@@ -264,7 +312,7 @@
   margin-left: 20px;
   &-status {
     font-weight: 600;
-    font-family: 'PingFangSC-Semibold';
+    font-family: PingFangSC-Semibold;
   }
 
   &-no-update {
