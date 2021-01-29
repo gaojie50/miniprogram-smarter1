@@ -2,7 +2,7 @@ import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import reqPacking from '../../../utils/reqPacking.js'
-import { Radio, MatrixRadio, MatrixScale, GapFillingText } from '../../../components/assess';
+import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '../../../components/assess';
 import utils from '../../../utils/index';
 import './index.scss'
 
@@ -11,17 +11,18 @@ const { errorHandle } = utils;
 export default function PerviewTemplate(){
 
   const [ questions, setQuestions ] = useState([]);
-  const [ btnDisabled, setBtnDisabled ] = useState(true)
-  const tempId = 10;
+  const { tempId } = getCurrentInstance().router.params;
 
   useEffect(() => {
-    Taro.showLoading();
     fetchTemp(tempId);
   }, []);
 
   const fetchTemp = value => {
-    if (!value) return;
-
+    if (!value){
+      return Taro.showModal({title: '提示', content:'缺少tempId', duration:1000});
+    } 
+    
+    Taro.showLoading();
     reqPacking(
       {
         url: '/api/management/tempQuestion',
@@ -39,11 +40,9 @@ export default function PerviewTemplate(){
         }
         errorHandle(error);
         Taro.hideLoading();
-        setBtnDisabled(true);
       }).catch(err=>{
         errorHandle({message: '加载失败'});
         Taro.hideLoading();
-        setBtnDisabled(true);
       })
   };
 
@@ -68,6 +67,16 @@ export default function PerviewTemplate(){
                 required={ required }
                 title={ title }
                 isPreview={ true }
+                questionNum={ questionNum }
+              />;
+            }
+
+            if (type == 2) {
+              return <GapFillingNum
+                key={ index }
+                required={ required }
+                isPreview={ true }
+                gapFilling={ gapFilling }
                 questionNum={ questionNum }
               />;
             }
@@ -108,15 +117,14 @@ export default function PerviewTemplate(){
           })
         }
       </View>
-      {!btnDisabled && <View className="btn-wrap">
+      <View className="btn-wrap">
         <Button 
           className="select-btn" 
           onClick={handleSelect}
-          disabled={btnDisabled}
         >
             选择该模板
         </Button>
-      </View>}
+      </View>
     </View>
     </View>
   )

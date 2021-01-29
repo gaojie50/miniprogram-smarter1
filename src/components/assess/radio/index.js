@@ -24,12 +24,14 @@ export default class Radio extends React.Component {
 
     return <View className={ `radio-wrap ${required ? "required" : ""}` }>
       <View className="ques-title">{questionNum}、{title}</View>
-      <View>
+      <View className="list-wrap">
         {radioItems.map((item, index) => <View
           key={ index }
-          className={ `${isPreview ? 'preview' : selected === index ? 'active' : ''}` }
+          className={ `list-item ${isPreview ? 'preview' : selected === index ? 'active' : ''}` }
           onClick={ this.selectChange }
-          data-item={ index }><View className="dot" />{item}</View>)}
+          data-item={ index }><View className="dot" />
+          <View className="text">{item}</View>
+        </View>)}
       </View>
       { required && showError ? <View className="error-tip">请选择</View> : "" }
     </View >;

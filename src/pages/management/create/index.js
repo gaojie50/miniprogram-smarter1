@@ -1,8 +1,14 @@
 import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components'
-import React from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
-import reqPacking from '../../../utils/reqPacking.js'
+import React from 'react';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
+import reqPacking from '../../../utils/reqPacking.js';
 import utils from '../../../utils/index';
+import _cloneDeep from 'lodash/cloneDeep'
+import AtActionSheet from '../../../components/m5/action-sheet';
+import AtActionSheetItem from '../../../components/m5/action-sheet/body/item';
+import AtFloatLayout from '../../../components/m5/float-layout';
+import '../../../components/m5/style/components/action-sheet.scss';
+import '../../../components/m5/style/components/float-layout.scss';
 import './index.scss'
 
 const { errorHandle } = utils;
@@ -34,10 +40,11 @@ export default class _C extends React.Component {
     titleErrorTip: false,
     despErrorTip: false,
     projectProfile: [],
-    showModal: false,
     primaryFilesChecked: [],
     filesChecked: [],
-    isSubmitting: false
+    isSubmitting: false,
+    uploadSelectorIsOpen: false,
+    fileSelectorIsOpen: false
   }
 
   componentDidMount(){
@@ -48,8 +55,11 @@ export default class _C extends React.Component {
   }
 
   componentDidShow(){
-    const tempId = Taro.getStorageSync('tempId');
-    this.setState({ tempId: Number(tempId) });
+    const newTempId = Taro.getStorageSync('tempId');
+    if(newTempId){
+      this.setState({ tempId: Number(newTempId) });
+      Taro.removeStorageSync('tempId');
+    }
   }
 
   fetchProjectProfile = projectId => {
@@ -155,25 +165,15 @@ export default class _C extends React.Component {
   };
 
   handleUpload = () => {
-    const { projectId, filesChecked, primaryFilesChecked } = this.state;
-    const that = this;
-    Taro.showActionSheet({
-      itemList: ['从项目文件中选择', '从聊天文件中选择'],
-      success: function (res) {
-        console.log(res.tapIndex)
-        if( res.tapIndex===0 ){
-          that.uploadFromProjectFile();
-        }else{
-          that.uploadFromMessage();
-        }
-      },
-      fail: function (res) {
-        console.log(res.errMsg)
-      }
-    })
+    this.setState({ uploadSelectorIsOpen: true });
+  }
+
+  handleUploadSelectorClose = () => {
+    this.setState({ uploadSelectorIsOpen: false });
   }
 
   uploadFromMessage = ()=>{
+    this.setState({ uploadSelectorIsOpen: false });
     const { projectId, filesChecked, primaryFilesChecked } = this.state;
     const that = this;
     Taro.chooseMessageFile({
@@ -240,8 +240,9 @@ export default class _C extends React.Component {
   }
 
   uploadFromProjectFile = ()=>{
-    
+    this.setState({ fileSelectorIsOpen: true, uploadSelectorIsOpen: false });
   }
+
 
   handleDelete = (uid, sign) => {
     let { filesChecked } = this.state;
@@ -317,10 +318,30 @@ export default class _C extends React.Component {
     });
   };
 
+  fileChecked = (profileId) => {
+    let { primaryFilesChecked } = this.state;
+    primaryFilesChecked.includes(profileId) ?
+    primaryFilesChecked = primaryFilesChecked.filter(item => item != profileId)
+    :primaryFilesChecked.push(profileId)
+    this.setState({ primaryFilesChecked });
+  };
 
+  checkedFiles = () => {
+    this.setState({
+      filesChecked: _cloneDeep(this.state.primaryFilesChecked),
+      fileSelectorIsOpen: false
+    });
+  };
+
+  handleFileSelectorClose = ()=>{
+    const { filesChecked } = this.state;
+    this.setState({
+      primaryFilesChecked: _cloneDeep(filesChecked)
+    })
+    this.setState({ fileSelectorIsOpen: false });
+  }
 
   render() {
-    console.log(this.state.userName);
     const {
       projectId,
       briefInfo,
@@ -330,12 +351,14 @@ export default class _C extends React.Component {
       titleErrorTip,
       despErrorTip,
       projectProfile,
-      showModal,
       primaryFilesChecked,
       filesChecked,
-      isSubmitting
+      isSubmitting,
+      uploadSelectorIsOpen,
+      fileSelectorIsOpen
     } = this.state;
-    
+    console.log(primaryFilesChecked);
+    console.log(filesChecked);
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
     const templateList = briefInfo.tempList || [];
     return (
@@ -425,6 +448,57 @@ export default class _C extends React.Component {
             loading={ isSubmitting }
           >发布评估</Button>
         </View>
+
+        <AtActionSheet 
+          className="uplaod-action-sheet"
+          isOpened={uploadSelectorIsOpen} 
+          cancelText='取消'
+        >
+          <AtActionSheetItem onClick={ this.uploadFromProjectFile}>
+            从项目文件中选择
+          </AtActionSheetItem>
+          <AtActionSheetItem onClick={ this.uploadFromMessage }>
+            从聊天中选择
+          </AtActionSheetItem>
+        </AtActionSheet>
+
+        <AtFloatLayout
+          className="file-select-list"
+          isOpened={ fileSelectorIsOpen }
+          title="从项目文件中选择"
+          onClose={this.handleFileSelectorClose}
+          footer={<View className="btn-wrap">
+                    <Button 
+                      className="select-sure-btn" 
+                      onClick={this.checkedFiles}
+                    >确定</Button>
+                  </View>
+                 }
+        >
+          <View className="content-wrap">
+          {
+            projectProfile.map(({
+              profileId, profileName, uploader, uploadTime, profileSize
+            }) => <View key={ profileId } className="file-item-wrap">
+              <View className="left-info-wrap">
+                <Text className="file-name">{profileName}</Text>
+                <View className="message">
+                  <Text className="uploader">{uploader}</Text>
+                  <Text className="upload-time">{uploadTime}</Text>
+                  <Text className="upload-size">{profileSize}</Text>
+                </View>
+              </View>
+              <Button 
+                onClick={() => this.fileChecked(profileId)}
+                className={`select-btn ${primaryFilesChecked.includes(profileId)? 'selected':''}`}
+              >
+                {primaryFilesChecked.includes(profileId) ?'取消':'选择'}
+              </Button>
+            </View>)
+          }
+          </View>
+        </AtFloatLayout>
+        
       </View>
     )
   }

@@ -1,13 +1,14 @@
 export default {
   pages: [
-    'pages/management/template/index',
     'pages/welcome/index',
-    'pages/management/create/index', 
     'pages/list/index',
     'pages/search/index',
     'pages/projectDetail/index',
     'pages/searchCompany/index',
     'pages/webview/index', 
+    'pages/management/create/index', 
+    'pages/management/template/index',
+    'pages/management/assess/index',
   ],
   window: {
     navigationBarBackgroundColor: '#798CBA',

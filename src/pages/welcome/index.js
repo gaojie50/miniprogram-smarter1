@@ -24,8 +24,11 @@ class _C extends React.Component {
     // Taro.reLaunch({
     //   url: '../list/index',
     // })
+    // Taro.reLaunch({
+    //   url: '../management/assess/index?projectId=6009&roundId=291'
+    // })
     Taro.reLaunch({
-      url: '../management/create/index?projectId=14332',
+      url: '../management/assess/index?projectId=14332&roundId=350'
     })
   }
 
@@ -36,7 +39,8 @@ class _C extends React.Component {
           const { iv, encryptedData } = e.detail
           if (Taro.getStorageSync('token'))
             // return Taro.redirectTo({ url: `/pages/list/index` })
-            return Taro.redirectTo({ url: `../management/create/index?projectId=14332` })
+            // return Taro.redirectTo({ url: `../management/create/index?projectId=14332` })
+            return Taro.redirectTo({ url: `../management/assess/index?projectId=14332&roundId=350` })
 
           return keepLogin({ iv, encryptedData })
         }
