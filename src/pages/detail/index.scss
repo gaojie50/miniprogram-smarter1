@@ -49,3 +49,35 @@
     }
   }
 }
+.detail-tabs {
+  width: 100%;
+  margin-top: 30px;
+  .tabs {
+    .at-tabs__header {
+      height: 88px;
+      box-shadow: 0 2px 20px 0 rgba(0,0,0,0.05);
+      .at-tabs__item {
+        height: 88px;
+        padding: 0;
+        line-height: 88px;
+        font-size: 30px;
+        color: #333333;
+      }
+      .at-tabs__item--active {
+        font-weight: 500;
+        font-family: PingFangSC-Medium;
+        color: #276FF0;
+      }
+      .at-tabs__item-underline {
+        width: 40px;
+        height: 6px;
+        background: #276FF0;
+        border-radius: 3px;
+        left: 40%;
+      }
+    }
+    .at-tabs__underline {
+      background-color: transparent;
+    }
+  }
+}

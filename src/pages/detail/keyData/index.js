@@ -1,4 +1,4 @@
-import { View, Image, Text } from '@tarojs/components';
+import { View, Image, Text, ScrollView } from '@tarojs/components';
 import React from 'react';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
 import utils from '../../../utils/index.js';
@@ -34,10 +34,9 @@ export default class KeyData extends React.Component {
 
   render() {
     const { basicData, keyData, judgeRole } = this.props;
-    console.log(basicData, keyData,formatNumber,111)
     return (
       <View className="keyData">
-        <View className="keyData-top" >
+        <ScrollView className="keyData-top" scrollX>
           {
             basicData.category === 3 && judgeRole.releaseStage === 1 ?
             <View className="item" style={{width: '33.33%'}}>
@@ -98,14 +97,13 @@ export default class KeyData extends React.Component {
             basicData.category === 3 && judgeRole.releaseStage === 2 ?
               <View className="item" style={{width: '30.43%'}}>
                 <View className="title">累计票房</View>
-                <View style={ { color: '#F1303D'} }>
-                  <Text className="num" style={{fontSize: '36rpx'}}>{formatNumber(keyData.cumulateBox, 'floor').num}</Text>
+                <View className="number" style={ { color: '#F1303D'} }>
+                  <Text className="num" style={{fontSize: '36rpx', color: '#F1303D'}}>{formatNumber(keyData.cumulateBox, 'floor').num}</Text>
                   <Text>{formatNumber(keyData.cumulateBox, 'floor').unit}</Text>
                 </View>
                 {
                   keyData.estimateBox && basicData.cooperStatus === 2 ?
-                    <View className="compare">预估票房 
-                      <Text className="num">
+                    <View className="compare">预估票房 <Text className="num">
                         {formatNumber(keyData.estimateBox.num, 'floor').num}
                       </Text>
                         {formatNumber(keyData.estimateBox.num, 'floor').unit}
@@ -118,7 +116,7 @@ export default class KeyData extends React.Component {
               <View className="item" style={ { width: basicData.category === 3 ? '30.43%' : '33.33%' } }>
                 <View className="title">猫眼评分</View>
                 <View style={ { color: '#FD9C00'} } className="number">
-                  <Text className="num" style={{fontSize: '36rpx'}}>{keyData.maoyanScore || '-'}</Text>
+                  <Text className="num" style={{fontSize: '36rpx',color: '#FD9C00'}}>{keyData.maoyanScore || '-'}</Text>
                   <Text>{keyData.maoyanScore ? '分' : ''}</Text>
                 </View>
                 {
@@ -130,8 +128,8 @@ export default class KeyData extends React.Component {
             judgeRole.releaseStage === 2 ?
               <View className="item" style={ { width: basicData.category === 3 ? '30.43%' : '33.33%' } }>
                 <View className="title">豆瓣评分</View>
-                <View style={ { color: '#FD9C00'} } className="number">
-                  <Text className="num" style={{fontSize: '36rpx'}}>{keyData.doubanScore || '-'}</Text>
+                <View style={ { color: '#2D963D'} } className="number">
+                  <Text className="num" style={{fontSize: '36rpx', color: '#2D963D'}}>{keyData.doubanScore || '-'}</Text>
                   <Text>{keyData.doubanScore ? '分' : ''}</Text>
                 </View>
               </View> : ''
@@ -150,7 +148,7 @@ export default class KeyData extends React.Component {
                 <View className="compare">昨日<Text className="num" style={{color: '#F1303D'}}>+{keyData.wishNum.compare}</Text></View> : ''
             }
           </View>
-        </View>
+        </ScrollView>
         {
           judgeRole.role !== 1 ? ''  
           :<View className="keyData-bottom">
