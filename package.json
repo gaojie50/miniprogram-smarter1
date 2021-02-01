@@ -41,7 +41,6 @@
     "@tarojs/runtime": "3.0.13",
     "@tarojs/taro": "3.0.13",
     "@tarojs/with-weapp": "^3.0.13",
-    "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "react": "^16.10.0",
     "react-dom": "^16.10.0"
