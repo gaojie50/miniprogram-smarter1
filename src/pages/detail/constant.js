@@ -56,7 +56,89 @@ const ScheduleType = [
   },
 ];
 
+const BasicItem = [
+  {
+    key: 'name',
+    name: '片名'
+  },
+  {
+    key: 'type',
+    name: '类型'
+  },
+  {
+    key: 'duration',
+    name: '片长'
+  },
+  {
+    key: 'movieSource',
+    name: '制片地'
+  },
+  {
+    key: 'newDirector',
+    name: '导演'
+  },{
+    key: 'newMainRole',
+    name: '主演'
+  },{
+    key: 'mainControl',
+    name: '主控方'
+  },{
+    key: 'mainProduct',
+    name: '出品方'
+  },{
+    key: 'mainIssue',
+    name: '发行方'
+  }
+];
+
+const FollowList = {
+  developStageList: {
+    name: '开发',
+    color: '#FD9C00',
+    bgColor: 'rgba(253,156,0, 0.06)',
+    tipColor: '#B26F01',
+    tipBgColor: 'rgba(253,156,0, 0.10)'
+  },
+  completedStageList: {
+    name: '完片',
+    color: '#69BF13',
+    bgColor: 'rgba(105,191,19, 0.06)',
+    tipColor: '#4D8C0E',
+    tipBgColor: 'rgba(105,191,19, 0.10)'
+  },
+  publicityStageList: {
+    name: '宣传',
+    color: '#6666FF',
+    bgColor: 'rgba(102,102,255, 0.06)',
+    tipColor: '#4747B2',
+    tipBgColor: 'rgba(102,102,255, 0.10)'
+  },
+  publishStageList: {
+    name: '发行',
+    color: '#09B3B3',
+    bgColor: 'rgba(9,179,179, 0.06)',
+    tipColor: '#067D7D',
+    tipBgColor: 'rgba(9,179,179, 0.10)'
+  },
+  showStageList: {
+    name: '上映',
+    color: '#D92BD9',
+    bgColor: 'rgba(217,43,217, 0.06)',
+    tipColor: '#981E98',
+    tipBgColor: 'rgba(217,43,217, 0.10)'
+  },
+  showAfterStageList: {
+    name: '映后',
+    color: '#9F40FF',
+    bgColor: 'rgba(159,64,255, 0.06)',
+    tipColor: '#981E98',
+    tipBgColor: 'rgba(159,64,255, 0.10)'
+  },
+};
+
 export {
   CategoryList,
   ScheduleType,
+  BasicItem,
+  FollowList
 }

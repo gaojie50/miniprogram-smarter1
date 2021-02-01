@@ -21,4 +21,103 @@
       color: #333333;
     }
   }
+  &-item {
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    .first {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      .name {
+        height: 36px;
+        font-weight: 500;
+        font-family: PingFangSC-Medium;
+        font-size: 34px;
+        letter-spacing: 0;
+        line-height: 36px;
+      }
+      .date {
+        font-weight: 400;
+        opacity: 0.5;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        color: #000000;
+        letter-spacing: 0;
+        vertical-align: middle;
+        line-height: 36px;
+      }
+    }
+    .second {
+      .tag {
+        display: inline-block;
+        height: 48px;
+        line-height: 48px;
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        margin-bottom: 20px;
+        padding: 0 12px;
+        margin-right: 10px;
+      }
+    }
+    .three {
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #333333;
+      letter-spacing: 0;
+      line-height: 44px;
+    }
+  }
+  &-result {
+    display: inline-block;
+    padding: 20px;
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    width: 48.5%;
+    box-sizing: border-box;
+    .result-name {
+      display: flex;
+      justify-content: space-between;
+      height: 36px;
+      margin-bottom: 16px;
+      .name {
+        font-weight: 500;
+        font-family: PingFangSC-Medium;
+        font-size: 34px;
+        letter-spacing: 0;
+        line-height: 36px;
+      }
+      image {
+        width: 12px;
+        height: 24px;
+        line-height: 36px;
+      }
+    }
+    .result-num {
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #333333;
+      .num {
+        height: 46px;
+        font-family: MaoYanHeiTi-H1;
+        font-size: 36px;
+        line-height: 46px;
+      }
+    }
+    .result-time {
+      font-weight: 400;
+      opacity: 0.5;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #000000;
+      letter-spacing: 0;
+      line-height: 30px;
+    }
+  }
+  &-result:nth-child(odd) {
+    margin-right: 3%;
+  }
 }

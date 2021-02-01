@@ -85,20 +85,20 @@
 .basic-data-bottom {
   position: relative;
   margin-top: 30px;
-  padding: 20px;
+  padding: 20px 20px 0;
   width: 100%;
-  height: 106px;
+  // height: 106px;
   background: #F8F8F8;
   border-radius: 10px;
   box-sizing: border-box;
   .itemWrap {
     width: 100%;
-    height: 66px;
+    // height: 66px;
     overflow: hidden;
     .item {
       width: 90%;
       height: 28px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       font-weight: 400;
       font-family: PingFangSC-Regular;
       font-size: 24px;
@@ -113,10 +113,24 @@
     width: 12px;
     height: 24px;
     position: absolute;
-    top: 40px;
+    top: 35.5%;
     right: 20px;
     background-image: url('../../../static/detail/gray.png');
     background-size: 12px 24px;
-    
+  }
+  
+  }
+  .float {
+
+    .line {
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #333333;
+      line-height: 40px;
+      margin-bottom: 28px;
+      .name {
+        color: #999999;
+      }
   }
 }

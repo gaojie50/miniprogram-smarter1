@@ -22,7 +22,7 @@ export default class Detail extends React.Component {
     keyData: {},
     current: 0
   }
-  
+
   componentWillMount(){
     const page = Taro.getCurrentPages();
     console.log(page);
