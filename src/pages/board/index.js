@@ -5,7 +5,8 @@ import utils from '../../utils/index.js'
 import { picFn } from '../../utils/pic';
 import projectConfig from '../../constant/project-config.js'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
-import Filter from './filterPanel';
+import { useFilterPanel } from './filterPanel';
+import Tab from '../../components/tab';
 
 
 import './index.scss'
@@ -108,6 +109,7 @@ export default function Board() {
     setTimeout(() => {
       scroller.current = Taro.createSelectorQuery().select('#board-list-scroll')
     }, 200)
+
   }, [])
 
   useEffect(() => {
@@ -210,7 +212,9 @@ export default function Board() {
             );
           })}
         </View>
+        <Tab />
       </ScrollView>
+
     </>
   );
 }
@@ -363,6 +367,14 @@ function useBoardFilter() {
 
 function BoardFilter(props) {
   const { filterActive = '', setFilterActive } = props;
+  const { component: filterPanel } = useFilterPanel({
+    titleHeight: SCROLL_TOP_MARGIN + 20,
+    filterActive,
+    ongetFilterShow(v) {
+      console.log(v);
+      setFilterActive('');
+    },
+  });
   return (
     <View style={{ position: 'relative' }}>
       <View className="board-filter">
@@ -392,14 +404,7 @@ function BoardFilter(props) {
           onClick={() => setFilterActive('')}
         />
       )}
-      <Filter
-        titleHeight={SCROLL_TOP_MARGIN + 20}
-        filterShow={filterActive}
-        ongetFilterShow={(v) => {
-          console.log(v);
-          setFilterActive('');
-        }}
-      />
+      {filterPanel}
     </View>
   );
 }

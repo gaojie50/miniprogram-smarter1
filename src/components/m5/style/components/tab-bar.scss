@@ -14,7 +14,8 @@ $at-tab-bar-title-max-width: 200px;
   text-align: center;
   box-sizing: border-box;
   background-color: $at-tab-bar-bg-color;
-  @include hairline-top();
+  box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
+  // @include hairline-top();
 
   /* elements */
   &__item {
@@ -25,7 +26,7 @@ $at-tab-bar-title-max-width: 200px;
     transition: all 0.2s;
 
     &--active {
-      color: $at-tab-bar-color-active;
+      color: #276FF0;
     }
   }
 
@@ -46,12 +47,18 @@ $at-tab-bar-title-max-width: 200px;
   &__title {
     display: block;
     padding: $spacing-v-xs 0;
-    max-width: $at-tab-bar-title-max-width;
-    font-size: $at-tab-bar-font-size;
-    line-height: $line-height-base;
+    // max-width: $at-tab-bar-title-max-width;
+    // font-size: $at-tab-bar-font-size;
+    // line-height: $line-height-base;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    font-weight: 300;
+    font-family: PingFangSC-Light;
+    font-size: 20px;
+    text-align: center;
+    line-height: 22px;
   }
 
   /* modifiers */
