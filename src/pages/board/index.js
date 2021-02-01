@@ -396,6 +396,7 @@ function BoardFilter(props) {
         titleHeight={SCROLL_TOP_MARGIN + 20}
         filterShow={filterActive}
         ongetFilterShow={(v) => {
+          console.log(v);
           setFilterActive('');
         }}
       />

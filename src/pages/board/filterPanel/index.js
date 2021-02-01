@@ -58,22 +58,6 @@ class _C extends React.Component {
   }
 
   state = {
-    dimension: [],
-    projectStatus: [],
-    cost: [],
-    cooperStatus: [],
-    pcId: [],
-    company: {},
-    companyList: [
-      {
-        id: 37786,
-        name: '上海猫眼影业有限公司',
-      },
-      {
-        id: 1230,
-        name: '天津猫眼微影文化传媒有限公司',
-      },
-    ],
     dateSet: [
       {
         label: '未来30天',
@@ -96,107 +80,113 @@ class _C extends React.Component {
         value: 'custom',
       },
     ],
-    estimateBox: [
+    projectType: [
       {
-        value: '10亿以上',
+        value: '网络剧',
         active: false,
       },
       {
-        value: '5亿～10亿',
+        value: '电视剧',
         active: false,
       },
       {
-        value: '1亿～5亿',
+        value: '院线电影',
         active: false,
       },
       {
-        value: '5000万～1亿',
+        value: '网络电影',
         active: false,
       },
       {
-        value: '5000万以下',
+        value: '综艺',
         active: false,
       },
       {
-        value: '未知',
-        active: false,
-      },
-    ],
-    projectBox: [
-      {
-        value: '筹备',
-        active: false,
-      },
-      {
-        value: '拍摄',
-        active: false,
-      },
-      {
-        value: '后期',
-        active: false,
-      },
-      {
-        value: '待过审',
-        active: false,
-      },
-      {
-        value: '已过审',
-        active: false,
-      },
-      {
-        value: '已上映',
-        active: false,
-      },
-      {
-        value: '未知',
+        value: '其他',
         active: false,
       },
     ],
-    costBox: [
+    cooperateType: [
       {
-        value: '8000万以上',
+        value: '主投',
         active: false,
       },
       {
-        value: '5000万～8000万',
+        value: '跟投',
         active: false,
       },
       {
-        value: '1000万～5000万',
+        value: '开发',
         active: false,
       },
       {
-        value: '1000万以下',
+        value: '宣传',
         active: false,
       },
       {
-        value: '未知',
+        value: '主发',
+        active: false,
+      },
+      {
+        value: '联发',
+        active: false,
+      },
+      {
+        value: '票务合作',
+        active: false,
+      },
+      {
+        value: '其他',
         active: false,
       },
     ],
-    cooperBox: [
+    projectStage: [
       {
-        value:'接触中',
-        active:false,
-      },
-      {
-        value: '确定合作',
+        value: '开发',
         active: false,
       },
       {
-        value: '正常完结',
+        value: '完片',
         active: false,
       },
       {
-        value: '合作暂停',
+        value: '宣传',
         active: false,
       },
       {
-        value: '合作取消',
+        value: '发行',
         active: false,
       },
       {
-        value: '未合作',
+        value: '上映',
+        active: false,
+      },
+      {
+        value: '映后',
+        active: false,
+      },
+    ],
+    movieLocation: [
+      {
+        value: '中国',
+        active: false,
+      },
+      {
+        value: '海外',
+        active: false,
+      },
+    ],
+    jobType: [
+      {
+        value: '我负责的',
+        active: false,
+      },
+      {
+        value: '我参与的',
+        active: false,
+      },
+      {
+        value: '我协作的',
         active: false,
       },
     ],
@@ -342,81 +332,37 @@ class _C extends React.Component {
     )
   }
 
-  tapEstimateBox = (e) => {
+  tapProjectType = (e) => {
     const num = e.target.dataset.num
-    const newEstimateBox = this.state.estimateBox
-    newEstimateBox[num].active = !newEstimateBox[num].active
+    this.state.projectType[num].active = !this.state.projectType[num].active
     this.setState({
-      estimateBox: newEstimateBox,
+      projectType: this.state.projectType,
     })
   }
 
-  tapProjectStatus = (e) => {
+  tapCooperateType = (e) => {
     const num = e.target.dataset.num
-    const newprojectBox = this.state.projectBox
-    newprojectBox[num].active = !newprojectBox[num].active
+    this.state.cooperateType[num].active = !this.state.cooperateType[num].active
     this.setState({
-      projectBox: newprojectBox,
+      cooperateType: this.state.cooperateType,
     })
   }
 
-  tapCost = (e) => {
-    const num = e.target.dataset.num
-    const newcostBox = this.state.costBox
-    newcostBox[num].active = !newcostBox[num].active
+
+  tapMovieLocation = (e) => {
+    const num = e.target.dataset.num;
+    this.state.movieLocation[num].active = !this.state.movieLocation[num].active;
     this.setState({
-      costBox: newcostBox,
-    })
+      movieLocation: this.state.movieLocation,
+    });
   }
 
-  tapCooper = (e) => {
+  tapJobType = (e) => {
     const num = e.target.dataset.num
-    const newcooperBox = this.state.cooperBox
-    newcooperBox[num].active = !newcooperBox[num].active
+    const newJobType = this.state.jobType
+    newJobType[num].active = !newJobType[num].active
     this.setState({
-      cooperBox: newcooperBox,
-    })
-  }
-
-  tapCompany = (e) => {
-    const num = e.target.dataset.num
-    const { companyList } = this.state
-    const dataList = this.state
-    if (JSON.stringify(dataList.company) == '{}') {
-      for (let m = 0; m < companyList.length; m++) {
-        dataList.company[m] = ''
-      }
-    }
-    if (num != null) {
-      if (dataList.company[num] == '') {
-        dataList.company[num] = 'active'
-      } else {
-        dataList.company[num] = ''
-      }
-    }
-    this.setState({
-      ...dataList,
-    })
-  }
-
-  tapCompanyText = (e) => {
-    const num = e.target.dataset.num
-    const { companyList } = this.state
-    const dataList = this.state
-    if (JSON.stringify(dataList.company) == '{}') {
-      for (let m = 0; m < companyList.length; m++) {
-        dataList.company[m] = ''
-      }
-    }
-    if (num != null) {
-      if (dataList.company[num] !== '') {
-        dataList.company[num] = 'active'
-      } else {
-        dataList.company[num] = ''
-      }
-    }
-    this.setState({
-      ...dataList,
+      jobType: newJobType,
     })
   }
 
@@ -456,190 +402,50 @@ class _C extends React.Component {
 
   filterDefined = () => {
     const {
-      estimateBox,
-      projectBox,
-      costBox,
-      cooperBox,
-      dimension,
-      projectStatus,
-      cost,
-      cooperStatus,
+      projectType,
+      cooperateType,
+      projectStage,
       dateSet,
-      pcId,
-      company,
-      companyList,
+      movieLocation,
+      jobType,
       customStartDate,
       customEndDate,
-    } = this.state
+    } = this.state;
 
-    //处理预估票房
-    estimateBox.map((item, index) => {
-      if (item.active && dimension.indexOf(index + 1) === -1) {
-        dimension.push(index + 1)
-      }
-      if (!item.active && dimension.indexOf(index + 1) !== -1) {
-        const i = dimension.indexOf(index + 1)
-        dimension.splice(i, 1)
-      }
-    })
-    //处理项目状态
-    projectBox.map((item, index) => {
-      if (item.active && projectStatus.indexOf(index + 1) === -1) {
-        projectStatus.push(index + 1)
-      }
-      if (!item.active && projectStatus.indexOf(index + 1) !== -1) {
-        const i = projectStatus.indexOf(index + 1)
-        projectStatus.splice(i, 1)
-      }
-    })
-    //处理筛选
-    costBox.map((item, index) => {
-      if (item.active && cost.indexOf(index + 1) === -1) {
-        cost.push(index + 1)
-      }
-      if (!item.active && cost.indexOf(index + 1) !== -1) {
-        const i = cost.indexOf(index + 1)
-        cost.splice(i, 1)
-      }
-    })
-    cooperBox.map((item, index) => {
-      if (item.active && cooperStatus.indexOf(index) === -1) {
-        cooperStatus.push(index)
-      }
-      if (!item.active && cooperStatus.indexOf(index) !== -1) {
-        const i = cooperStatus.indexOf(index)
-        cooperStatus.splice(i, 1)
-      }
-    })
-    companyList.map((item, index) => {
-      if (company[index] === 'active') {
-        if (pcId.length !== 0) {
-          let add = true
-          pcId.map((item1) => {
-            if (item1.id == companyList[index].id) {
-              add = false
-            }
-          })
-          if (add) {
-            pcId.push(companyList[index])
-          }
-        } else {
-          pcId.push(companyList[index])
-        }
-      }
-      if (company[index] !== 'active') {
-        pcId.map((item2, i) => {
-          if (item2.id === companyList[index].id) {
-            pcId.splice(i, 1)
-          }
-        })
-      }
-    })
-
-    const myEventDetail = {
-      dimension,
-      projectStatus,
-      cost,
-      cooperStatus,
+    this.props.ongetFilterShow({
+      projectType,
+      cooperateType,
+      projectStage,
+      movieLocation,
       dateSet,
-      pcId,
-      estimateBox,
-      projectBox,
-      costBox,
-      cooperBox,
-      company,
+      jobType,
       customStartDate,
       customEndDate,
-    }
-
-    this.props.ongetFilterShow(myEventDetail)
+    })
   }
 
   filterDefinedDate = () => {
     const {
-      dimension,
-      projectStatus,
-      cost,
-      cooperStatus,
-      pcId,
+      projectType,
+      cooperateType,
+      projectStage,
       dateSet,
+      movieLocation,
+      jobType,
       customStartDate,
       customEndDate,
-      estimateBox,
-      projectBox,
-      costBox,
-      cooperBox,
-      company,
-    } = this.state
+    } = this.state;
+
     this.props.ongetFilterShow({
-      dimension,
-      projectStatus,
-      cost,
-      cooperStatus,
-      pcId,
+      projectType,
+      cooperateType,
+      projectStage,
+      movieLocation,
       dateSet,
+      jobType,
       customStartDate,
       customEndDate,
-      estimateBox,
-      projectBox,
-      costBox,
-      cooperBox,
-      company,
     })
-  }
-
-  movieAdd = () => {
-    Taro.navigateTo({
-      url: '/pages/searchCompany/index',
-      events: {
-        searchPCFinish: (data) => {
-          const { companyChecked } = data
-          const { companyList } = this.state
-
-          if (companyChecked.length !== 0) {
-            let toastStr = ''
-            for (let j = 0; j < companyList.length; j++) {
-              for (let i = 0; i < companyChecked.length; i++) {
-                if (companyList[j].id === companyChecked[i].id) {
-                  this.state.company[j] = 'active'
-                  toastStr = toastStr + companyChecked[i].name + '、'
-                  companyChecked.splice(i, 1)
-                  i--
-                }
-              }
-            }
-            toastStr = toastStr.substring(0, toastStr.length - 1)
-            if (toastStr.length !== 0) {
-              if (toastStr.length > 30) {
-                toastStr = toastStr.substring(0, 30)
-                toastStr = toastStr + '...'
-              }
-              setTimeout(() => {
-                Taro.showToast({
-                  title: `${toastStr}已存在`,
-                  icon: 'none',
-                  duration: 4000,
-                })
-              }, 100);
-            }
-
-            const newCompanyList = companyList.concat(companyChecked)
-            const newCompany = this.state.company
-            for (let i = companyList.length; i < newCompanyList.length; i++) {
-              newCompany[i] = 'active'
-            }
-            this.setState({
-              companyList: newCompanyList,
-              company: newCompany,
-            })
-          }
-        },
-      },
-    })
-  }
-
-  handleTouchMove = () => {
-    return
   }
 
   render() {
@@ -652,10 +458,11 @@ class _C extends React.Component {
       months,
       days,
       dateSet,
-      estimateBox,
-      projectBox,
-      costBox,
-      cooperBox,
+      projectType,
+      cooperateType,
+      projectStage,
+      movieLocation,
+      jobType,
       company,
       companyList,
       showDateSureBtn,
@@ -666,17 +473,16 @@ class _C extends React.Component {
       filterShow.length != 0 && (
         <View className="filterPanel">
           <View
-            className={filterShow.length != 0 ? 'filterPanelWrap' : ''}
-            onTouchMove={this.handleTouchMove}
+            className={filterShow.length != 0 ? "filterPanelWrap" : ""}
           >
             <View
-              className={'filterPanels ' + (filterShow == '4' ? 'date' : '')}
+              className={"filterPanels " + (filterShow == "4" ? `date ${showDateSureBtn === false ? 'filterPanel-no-bottom' : ''}` : "")}
             >
-              {filterShow == '4' && (
+              {filterShow == "4" && (
                 <ScrollView
                   className="dateBox"
                   style={
-                    'max-height: calc(100vh * 0.75 - ' + titleHeight + 'px)'
+                    "max-height: calc(100vh * 0.75 - " + titleHeight + "px)"
                   }
                   scrollY
                 >
@@ -684,7 +490,7 @@ class _C extends React.Component {
                     return (
                       <Block key={item.value}>
                         <View
-                          className={item.checked + ' item'}
+                          className={item.checked + " item"}
                           data-value={item.value}
                           onClick={this.dateSelectEvent}
                         >
@@ -694,13 +500,13 @@ class _C extends React.Component {
                           ></Image>
                           {item.label}
                         </View>
-                        {item.value == 'custom' && item.checked == 'checked' && (
+                        {item.value == "custom" && item.checked == "checked" && (
                           <View className="custom-box">
                             <View className="date-show">
                               <View
                                 className={
-                                  'left ' +
-                                  (dateShowFirstActive ? 'active' : '')
+                                  "left " +
+                                  (dateShowFirstActive ? "active" : "")
                                 }
                                 data-sign="begin"
                                 onClick={this.switchDate}
@@ -717,8 +523,8 @@ class _C extends React.Component {
                               </View>
                               <View
                                 className={
-                                  'right ' +
-                                  (!dateShowFirstActive ? 'active' : '')
+                                  "right " +
+                                  (!dateShowFirstActive ? "active" : "")
                                 }
                                 data-sign="end"
                                 onClick={this.switchDate}
@@ -744,9 +550,9 @@ class _C extends React.Component {
                                       key={item}
                                       style="line-height: 60rpx;text-align:right;"
                                     >
-                                      {item + '年'}
+                                      {item + "年"}
                                     </View>
-                                  )
+                                  );
                                 })}
                               </PickerViewColumn>
                               <PickerViewColumn>
@@ -756,9 +562,9 @@ class _C extends React.Component {
                                       key={item}
                                       style="line-height: 60rpx;text-align:center;"
                                     >
-                                      {item + '月'}
+                                      {item + "月"}
                                     </View>
-                                  )
+                                  );
                                 })}
                               </PickerViewColumn>
                               <PickerViewColumn>
@@ -768,217 +574,165 @@ class _C extends React.Component {
                                       key={item}
                                       style="line-height: 60rpx;text-align:left;"
                                     >
-                                      {item + '日'}
+                                      {item + "日"}
                                     </View>
-                                  )
+                                  );
                                 })}
                               </PickerViewColumn>
                             </PickerView>
                           </View>
                         )}
                       </Block>
-                    )
+                    );
                   })}
                 </ScrollView>
               )}
-              {/*  预估票房  */}
-              {filterShow == '1' && (
+              {/*  项目类型  */}
+              {filterShow == "1" && (
                 <View className="estimateBox">
-                  {estimateBox.map((item, index) => {
+                  {projectType.map((item, index) => {
                     return (
                       <View
                         key={index}
                         data-num={index}
-                        onClick={this.tapEstimateBox}
+                        onClick={this.tapProjectType}
                         className={
-                          'estimateBox-item ' +
-                          (item.active ? 'filterPanelActive' : '')
+                          "estimateBox-item " +
+                          (item.active ? "filterPanelActive" : "")
                         }
                         style="margin-right: 20rpx;margin-bottom: 20rpx"
                       >
                         {item.value}
                       </View>
-                    )
+                    );
                   })}
                 </View>
               )}
-              {/*  项目状态  */}
-              {filterShow == '2' && (
+              {/*  合作类型  */}
+              {filterShow == "2" && (
                 <View className="projectStatus">
-                  {projectBox.map((item, index) => {
+                  {cooperateType.map((item, index) => {
                     return (
                       <View
                         key={index}
                         data-num={index}
-                        onClick={this.tapProjectStatus}
+                        onClick={this.tapCooperateType}
                         className={
-                          'projectStatus-item ' +
-                          (item.active ? 'filterPanelActive' : '')
+                          "projectStatus-item " +
+                          (item.active ? "filterPanelActive" : "")
                         }
                         style="margin-right: 20rpx;margin-bottom: 20rpx"
                       >
                         {item.value}
                       </View>
-                    )
+                    );
                   })}
                 </View>
               )}
               {/*  筛选  */}
-              {filterShow == '3' && (
+              {filterShow == "3" && (
                 <View className="filter">
                   <ScrollView
                     scrollY="true"
                     className="scroll-area"
                     style={
-                      'max-height: calc(100vh * 0.75 - ' + titleHeight + 'px)'
+                      "max-height: calc(100vh * 0.75 - " + titleHeight + "px)"
                     }
                   >
-                    <Text className="title">制作成本</Text>
+                    <Text className="title">项目阶段</Text>
                     <View className="cost-wrap">
-                      {costBox.map((item, index) => {
+                      {projectStage.map((item, index) => {
                         return (
                           <View
                             key={index}
                             data-num={index}
-                            onClick={this.tapCost}
+                            onClick={this.tapProjectType}
                             className={
-                              'cost-wrap-item ' +
-                              (item.active ? 'filterPanelActive' : '')
+                              "cost-wrap-item " +
+                              (item.active ? "filterPanelActive" : "")
                             }
                             style="margin-right: 20rpx;margin-bottom: 20rpx"
                           >
                             {item.value}
                           </View>
-                        )
+                        );
                       })}
                     </View>
-                    <Text className="title">合作状态</Text>
-                    <View className="cooper-wrap">
-                      {cooperBox.map((item, index) => {
+                    <Text className="title">片源地</Text>
+                    <View className="cost-wrap">
+                      {movieLocation.map((item, index) => {
                         return (
                           <View
                             key={index}
                             data-num={index}
-                            onClick={this.tapCooper}
+                            onClick={this.tapMovieLocation}
                             className={
-                              'cooper-wrap-item ' +
-                              (item.active ? 'filterPanelActive' : '')
+                              "cost-wrap-item " +
+                              (item.active ? "filterPanelActive" : "")
                             }
                             style="margin-right: 20rpx;margin-bottom: 20rpx"
                           >
                             {item.value}
                           </View>
-                        )
+                        );
                       })}
                     </View>
-                    <View className="last-title">
-                      <Text className="title">片方</Text>
-                      <Text onClick={this.movieAdd} className="add">
-                        添加
-                      </Text>
-                      <Image
-                        onClick={this.movieAdd}
-                        src="../../static/arrow.png"
-                        style="height: 20rpx;width: 11rpx"
-                        alt
-                      ></Image>
-                    </View>
-                    <View className="company">
-                      <View className="company-left">
-                        <Block>
-                          {companyList.map((item, index) => {
-                            return (
-                              index % 2 === 0 && (
-                                <View
-                                  data-num={index}
-                                  onClick={this.tapCompany}
-                                  key={index}
-                                  className={
-                                    'company-item ' +
-                                    (company[index] == 'active'
-                                      ? 'companyActive'
-                                      : '')
-                                  }
-                                >
-                                  <Text
-                                    data-num={index}
-                                    onClick={this.tapCompanyText}
-                                  >
-                                    {item.name}
-                                  </Text>
-                                </View>
-                              )
-                            )
-                          })}
-                        </Block>
-                      </View>
-                      <View className="company-right">
-                        <Block>
-                          {companyList.map((item, index) => {
-                            return (
-                              index % 2 !== 0 && (
-                                <View
-                                  onClick={this.tapCompany}
-                                  key={index}
-                                  data-num={index}
-                                  className={
-                                    'company-item ' +
-                                    (company[index] == 'active'
-                                      ? 'companyActive'
-                                      : '')
-                                  }
-                                >
-                                  <Text
-                                    data-num={index}
-                                    onClick={this.tapCompanyText}
-                                  >
-                                    {item.name}
-                                  </Text>
-                                </View>
-                              )
-                            )
-                          })}
-                        </Block>
-                      </View>
+                    <Text className="title">参与程度</Text>
+                    <View className="cost-wrap">
+                      {jobType.map((item, index) => {
+                        return (
+                          <View
+                            key={index}
+                            data-num={index}
+                            onClick={this.tapJobType}
+                            className={
+                              "cost-wrap-item " +
+                              (item.active ? "filterPanelActive" : "")
+                            }
+                            style="margin-right: 20rpx;margin-bottom: 20rpx"
+                          >
+                            {item.value}
+                          </View>
+                        );
+                      })}
                     </View>
                   </ScrollView>
                 </View>
               )}
-              <View
-                className={
-                  filterShow == '3' ? 'lastFilterButton' : 'filterButton'
-                }
-              >
-                {filterShow != 4 && (
-                  <View
-                    onClick={this.filterReset}
-                    className="filterButton-reset"
-                  >
-                    重置
+              {filterShow ? (
+                filterShow !== "4" ? (
+                  <View className="filterButton">
+                    <View
+                      onClick={this.filterReset}
+                      className="filterButton-reset"
+                    >
+                      重置
+                    </View>
+                    <View
+                      onClick={this.filterDefined}
+                      className="filterButton-determine"
+                    >
+                      确定
+                    </View>
                   </View>
-                )}
-                {filterShow != 4 && (
-                  <View
-                    onClick={this.filterDefined}
-                    className="filterButton-determine"
-                  >
-                    确定
-                  </View>
-                )}
-                {filterShow == 4 && showDateSureBtn && (
-                  <View
-                    onClick={this.filterDefinedDate}
-                    className="filterButton-date-determine"
-                  >
-                    确定
-                  </View>
-                )}
-              </View>
+                ) : (
+                  showDateSureBtn && (
+                    <View className="filterButton">
+                      <View
+                        onClick={this.filterDefinedDate}
+                        className="filterButton-date-determine"
+                      >
+                        确定
+                      </View>
+                    </View>
+                  )
+                )
+              ) : null}
             </View>
           </View>
         </View>
       )
-    )
+    );
   }
 }
 
