@@ -85,7 +85,7 @@ class _C extends React.Component {
     const { maoyanId, projectId } = filterList;
 
     Taro.navigateTo({
-      url: `/pages/details?projectId=${projectId}`,
+      url: `/pages/detail/index?projectId=${projectId}`,
     })
   };
 
@@ -115,6 +115,22 @@ class _C extends React.Component {
         )}
         {inputVal != '' && !loading && (
           <ScrollView className="search-list">
+            <View
+              className="custom-project"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              onClick={() => {
+                Taro.navigateTo({
+                  url: `/pages/addProject/index?name=${inputVal}`,
+                })
+              }}
+            >
+              <View>
+                没找到项目？
+                创建项目"
+                <Text className="custom-project-name">{inputVal}</Text>
+                ""
+              </View>
+            </View>
             {list.map((item, index) => {
               return (
                 <View
@@ -127,6 +143,9 @@ class _C extends React.Component {
                   <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                     <View>
                       <View className="name">{item.name}</View>
+                      <View className="cooperType">
+                        {item?.cooperType?.join('/')}
+                      </View>
                       <View className="director">
                         {'导演：' + (item.director ? item.director : '-')}
                       </View>

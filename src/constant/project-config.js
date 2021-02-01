@@ -155,11 +155,47 @@ function getCooperStatus(value) {
   return CooperStatus.filter(item => item.value == value)[0]
 }
 
+function getProjectStages(){
+  return [
+    {
+      label:'开发',
+      value:1,
+      key:'developStageList',
+    },
+    {
+      label:'完片',
+      value:2,
+      key:'completedStageList',
+    },
+    {
+      label:'宣发',
+      value:3,
+      key:'publicityStageList',
+    },
+    {
+      label:'发行',
+      value:4,
+      key:'publishStageList',
+    },
+    {
+      label:'上映',
+      value:5,
+      key:'showStageList',
+    },
+    {
+      label:'映后',
+      value:6,
+      key:'showAfterStageList',
+    },
+  ];
+}
+
 export default {
   appkey,
   weixinAppTypeEnum,
   getScheduleType,
   getMaoyanSignLabel,
   getProjectStatus,
-  getCooperStatus
+  getCooperStatus,
+  getProjectStages,
 }

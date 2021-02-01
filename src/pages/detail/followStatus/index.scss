@@ -1,0 +1,24 @@
+.followStatus {
+  padding: 30px;
+  .noPermission {
+    height: 150px;
+    text-align: center;
+    line-height: 150px;
+    font-size: 30px;
+    color: #999595;
+  }
+  .nodata {
+    text-align: center;
+    image {
+      margin-top: 90px;
+      width: 416px;
+      height: 220px;
+    }
+    .text {
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #333333;
+    }
+  }
+}

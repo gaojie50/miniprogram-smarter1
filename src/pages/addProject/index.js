@@ -84,6 +84,7 @@ export default function AddProject() {
   }, [cooperType])
 
   const searchMovie = useCallback(debounce((val) => {
+    console.log('kk')
     PureReq_Search_Movie({
       keyword: val
     }).then((data) => {
@@ -106,12 +107,18 @@ export default function AddProject() {
           backgroundColor: '#fff',
           margin: '0 30rpx 30rpx 30rpx',
         }}>
-        <M5Input placeholder='请输入片名' value={name} onChange={(val) => {
-          if (val !== name) {
-            setName(val);
-            searchMovie(val);
-          }
-        }} />
+        <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+          <M5Input placeholder='请输入片名' value={name} onChange={(val) => {
+            if (val !== name) {
+              setName(val);
+              searchMovie(val);
+            }
+            return val
+          }} />
+          <View className="movie-search-loading">
+            <mpLoading type="circle" show={true} tips="" />
+          </View>
+        </View>
         <FloatCard
           isOpened={!!searchResult.length}
           onClose={() => setSearchResult([])}

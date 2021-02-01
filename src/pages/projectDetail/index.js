@@ -171,39 +171,11 @@ class _C extends React.Component {
     });
 
     reqPacking({
-      url: '/api/management/searchestimateboxdetail',
+      url: 'api/management/searchestimateboxdetail',
       data: { projectId: projectId },
       method: 'GET',
     }).then(res => {
       const {success,data} = res;
-      // data = [
-      //   {
-      //     "dt": 1609928289540,
-      //     "estimateNum": 5619530,
-      //     "estimateNumType": 2,
-      //     "estimateNumAppendMessage": {
-      //       assessId:2,
-      //       roundName:"第五轮项目评估"
-      //     }
-      //   },
-      //   {
-      //     "dt": 1609928289540,
-      //     "estimateNum": 5619530,
-      //     "estimateNumType": 1,
-      //     "estimateNumAppendMessage": {
-      //       "userName":"严冰",
-      //       "userId":"1",
-      //     }
-      //   },
-      //   {
-      //     "dt": 1609928289540,
-      //     "estimateNum": 5619530,
-      //     "estimateNumType": 0,
-      //     "estimateNumAppendMessage": {
-      //       "recordId":1
-      //     }
-      //   },
-      // ];
 
       if( success && data && data.length>0 ) this.setState({estimateBoxArr : data});
     })

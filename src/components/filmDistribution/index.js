@@ -116,6 +116,8 @@ class _C extends React.Component {
         </View>
         <View className="filmList" style={styleStr(52)}>
           {filmDistributionList.map((item, index) => {
+            const isSetScheduleArr = item.keyFilms.filter(v => v.scheduleType == 1);
+
             return (
               <View
                 className="filmItem"
@@ -126,7 +128,7 @@ class _C extends React.Component {
                 </View>
                 <View className="time">{item.releaseDate}</View>
                 <View
-                  className={item.filmNum == 0 ? 'no-filmBox' : 'filmBox'}
+                  className={!item.hasFixFilmNum ? 'no-filmBox' : 'filmBox'}
                   onClick={() => {
                     this.setState(
                       {
@@ -140,10 +142,10 @@ class _C extends React.Component {
                 >
                   <View data-item={item}>
                     {
-                      item.filmNum !== 0 ? <React.Fragment>
+                      item.hasFixFilmNum ? <React.Fragment>
                         <Text data-item={item}>{formatNumber(item.hasFixEstimateBox,'floor').posNum}</Text>
                         <Text data-item={item}>{formatNumber(item.hasFixEstimateBox,'floor').unit}</Text>
-                        <Text className="numbers">{item.keyFilms.length}部</Text>
+                        <Text className="numbers">{item.hasFixFilmNum}部</Text>
                         <Image data-item={item} src="../../static/film.png" alt />
                       </React.Fragment> :
                       <React.Fragment>
@@ -154,17 +156,17 @@ class _C extends React.Component {
                     
                   </View>
 
-                  {item.keyFilms.length === 0 && (
+                  {item.hasFixFilmNum === 0 && (
                     <View data-item={item}>-</View>
                   )}
-                  {item.keyFilms.length >= 1 && (
-                    <View data-item={item}>{item.keyFilms[0].movieName}</View>
+                  {item.hasFixFilmNum >= 1 && (
+                    <View data-item={item}>{isSetScheduleArr[0].movieName}</View>
                   )}
-                  {item.keyFilms.length >= 2 && (
-                    <View data-item={item}>{item.keyFilms[1].movieName}</View>
+                  {item.hasFixFilmNum >= 2 && (
+                    <View data-item={item}>{isSetScheduleArr[1].movieName}</View>
                   )}
-                  {item.keyFilms.length >= 3 && (
-                    <View data-item={item}>{item.keyFilms[2].movieName}</View>
+                  {item.hasFixFilmNum >= 3 && (
+                    <View data-item={item}>{isSetScheduleArr[2].movieName}</View>
                   )}
                 </View>
               </View>

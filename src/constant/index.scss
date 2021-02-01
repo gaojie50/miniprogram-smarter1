@@ -1,0 +1,11 @@
+@function getColor($sign,$opacity:1) {
+  $color:rgba(159, 64, 255,$opacity);
+
+  @if($sign == 1) { $color:rgba(253, 156, 0, $opacity) }
+  @else if($sign == 2) { $color:rgba(105, 191, 19, $opacity) }
+  @else if($sign == 3) { $color:rgba(102, 102, 255, $opacity) }
+  @else if($sign == 4) { $color:rgba(9, 179, 179, $opacity) }
+  @else if($sign == 5) { $color:rgba(217, 43, 217, $opacity) }
+
+  @return $color;
+}

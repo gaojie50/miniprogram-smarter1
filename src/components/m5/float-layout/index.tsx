@@ -65,7 +65,7 @@ export default class AtFloatLayout extends React.Component<
     const { _isOpened } = this.state
     const {
       title,
-
+      footer,
       scrollY,
       scrollX,
       scrollTop,
@@ -116,6 +116,11 @@ export default class AtFloatLayout extends React.Component<
               {this.props.children}
             </ScrollView>
           </View>
+          {footer ? (
+            <View className='layout-footer'>
+              {footer}
+            </View>
+          ) : null}
         </View>
       </View>
     )

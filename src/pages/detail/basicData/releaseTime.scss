@@ -1,0 +1,77 @@
+
+.releaseTime {
+  position: absolute;
+  bottom: 20px;
+  right: 0;
+  width: 220px;
+  height: 110px;
+  border-radius: 10px;
+  padding-left: 12px;
+  .schedule {
+    position: absolute;
+    top: -47px;
+    right: 0;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 24px;
+    color: #333333;
+  }
+  .scheduleType {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 22px;
+    color: #FFFFFF;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 8px;
+    box-sizing: border-box;
+    border-radius: 0 10px 0 10px;
+  }
+  .title {
+    height: 24px;
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 24px;
+    color: #333333;
+    line-height: 24px;
+    margin-top: 16px;
+  }
+  .time {
+    font-family: MaoYanHeiTi-H1;
+    color: #333333;
+  }
+  .accurateTime {
+    height: 36px;
+    font-size: 36px;
+    margin-top: 14px;
+    line-height: 36px;
+  }
+  .durationWrap {
+    height: 54px;
+    display: flex;
+    margin-top: 10px;
+    .duration {
+      margin:0;
+      padding: 0;
+      .year {
+        margin:0;
+        padding: 0;
+        display: block;
+        height: 18px;
+        font-size: 16px;
+        line-height: 18px;
+      }
+      .date {
+        margin:0;
+        padding: 0;
+        display: block;
+        height: 36px;
+        font-size: 32px;
+        line-height: 36px;
+      }
+    }
+  }
+}
