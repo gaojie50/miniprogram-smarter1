@@ -2,6 +2,7 @@ export default {
   pages: [
     'pages/board/index',
     'pages/welcome/index',
+    'pages/detail/index',
     'pages/list/index',
     'pages/search/index',
     'pages/projectDetail/index',
