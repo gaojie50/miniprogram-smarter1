@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import reqPacking from '../../../utils/reqPacking.js';
 import utils from '../../../utils/index';
-import _cloneDeep from 'lodash/cloneDeep'
-import _merge from 'lodash/merge'
+import _cloneDeep from 'lodash/cloneDeep';
+import _merge from 'lodash/merge';
+import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '../../../components/assess';
 import AtActionSheet from '../../../components/m5/action-sheet';
 import AtActionSheetItem from '../../../components/m5/action-sheet/body/item';
 import AtFloatLayout from '../../../components/m5/float-layout';
@@ -78,7 +79,7 @@ export default function assessPage(){
         const { data, error } = res;
         const { evaluationList } = data;
         if (!error) {
-          setCurEvalObj(evaluationList.filter(item => item.roundId == this.props.roundId)[ 0 ] || {})
+          setCurEvalObj(evaluationList.filter(item => item.roundId == roundId)[ 0 ] || {})
           setLoading(false)
           return;
         }
@@ -95,7 +96,7 @@ export default function assessPage(){
     reqPacking(
       {
         url: 'api/management/tempQuestion',
-        data: { tempId: chooseTempId },
+        data: { tempId: value },
       },
       'server',
     ).then(res => {
@@ -120,15 +121,9 @@ export default function assessPage(){
       });
   };
 
-  // function setBriefInfo(briefInfo){
-  //   setBriefInfo(briefInfo);
-  //   const { chooseTempId } = briefInfo;
-  //   fetchTemp(chooseTempId);
-  // }
-
   
   function updateQues (obj, questionId, itemObj) {
-    let innerQues = this.state.questions.map(item => {
+    let innerQues = questions.map(item => {
       if (item.questionId == questionId) return _merge(itemObj, obj);
       return item;
     });
@@ -162,7 +157,7 @@ export default function assessPage(){
               isPreview={ false }
               questionNum={ questionNum }
               showError={ showError }
-              cb={ obj => this.updateQues(obj, questionId, arr[ index ]) }
+              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
             />;
           }
 
@@ -174,7 +169,7 @@ export default function assessPage(){
               gapFilling={ gapFilling }
               questionNum={ questionNum }
               showError={ showError }
-              cb={ obj => this.updateQues(obj, questionId, arr[ index ]) }
+              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
             />;
           }
 
@@ -187,7 +182,7 @@ export default function assessPage(){
               matrixRadio={ matrixRadio }
               questionNum={ questionNum }
               showError={ showError }
-              cb={ obj => this.updateQues(obj, questionId, arr[ index ]) }
+              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
             />;
           }
 
@@ -200,7 +195,7 @@ export default function assessPage(){
               questionNum={ questionNum }
               radioItems={ radioItems }
               showError={ showError }
-              cb={ obj => this.updateQues(obj, questionId, arr[ index ]) }
+              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
             />;
           }
 
@@ -213,7 +208,7 @@ export default function assessPage(){
               questionNum={ questionNum }
               matrixScale={ matrixScale || {} }
               showError={ showError }
-              cb={ obj => this.updateQues(obj, questionId, arr[ index ]) }
+              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
             />;
           }
 
