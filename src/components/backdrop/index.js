@@ -7,6 +7,7 @@ class _C extends React.Component {
   }
 
   render() {
+    console.log(this.privateStopNoop);
     const { backdropShow } = this.props
     return (
       <View className="backdropAll">

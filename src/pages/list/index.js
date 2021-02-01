@@ -26,11 +26,16 @@ const {
 
 const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
-const barHeight = getGlobalData('barHeight')
+const {statusBarHeight} = getGlobalData('systemInfo')
+
+function strip(num, precision = 12) {
+  return +parseFloat(num.toPrecision(precision));
+}
+
 class _C extends React.Component {
   state = {
-    filmItemWidth: rpxTopx(208),
-    filmItemMarginRight: rpxTopx(8),
+    filmItemWidth: rpxTopx(216),
+    filmItemMarginRight: rpxTopx(10),
     initLoading: true,
     loading: true,
     topFilmLoading: true,
@@ -39,11 +44,11 @@ class _C extends React.Component {
     backdropShow: '',
     costomShow: false,
     isScroll: true,
-    barHeight,
+    statusBarHeight,
     titleHeight: Math.floor(
-      capsuleLocation.bottom + capsuleLocation.top - barHeight,
+      capsuleLocation.bottom + capsuleLocation.top - statusBarHeight,
     ),
-    gapHeight: Math.floor(capsuleLocation.top - barHeight),
+    gapHeight: Math.floor(capsuleLocation.top - statusBarHeight),
     showIcon: false,
     dimension: [],
     projectStatus: [],
@@ -93,6 +98,7 @@ class _C extends React.Component {
     toView: '',
     redTextShow: false,
     canvasImg: '',
+    yMaxLength:0,
   }
 
   onLoad = ({ token }) => {
@@ -129,6 +135,8 @@ class _C extends React.Component {
       ).then(({ success, data }) => {
         if (success) {
           setGlobalData('authinfo', data)
+          Taro.setStorageSync('authinfo', data);
+
           if (
             data &&
             data.authIds &&
@@ -206,7 +214,7 @@ class _C extends React.Component {
                 item2.estimateBox = formatNumber(item2.estimateBox)
               }
               item2.pic = item2.pic
-                ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`
+                ? `${item2.pic.replace('/w.h/', '/460.660/')}`
                 : `../../static/icon/default-pic.svg`
               item2.wishNum = formatNumber(item2.wishNum)
             })
@@ -655,7 +663,8 @@ class _C extends React.Component {
 
   jumpToSearch = () => {
     Taro.navigateTo({
-      url: '/pages/search/index',
+      // url: '/pages/search/index',
+      url:'/pages/checkProgress/index?projectId=14332&activeTab=1'
     })
   }
 
@@ -711,12 +720,14 @@ class _C extends React.Component {
     })
   }
 
+  setMaxLengthY = yMaxLength => this.setState({ yMaxLength });
+
   render() {
     const {
       initLoading,
       backdropShow,
       titleHeight,
-      barHeight,
+      statusBarHeight,
       toView,
       redTextShow,
       filmDistributionList,
@@ -753,8 +764,11 @@ class _C extends React.Component {
       isShowFilmDetailList,
       curPagePermission,
       isScroll,
-    } = this.state
-
+      yMaxLength,
+    } = this.state;
+    
+    const yMaxLengthArr = ["","","","","",""].map((item,index)=>strip(formatNumber(yMaxLength * (1 - index/5)).posNum));
+    
     return (
       <Block>
         {initLoading && (
@@ -777,7 +791,7 @@ class _C extends React.Component {
         )}
         {curPagePermission && !initLoading && (
           <View>
-            <View className="header">
+            <View className="header" style={`height:${titleHeight + rpxTopx(115)}px`}>
               <View
                 className="header-bar"
                 style={'height:' + titleHeight + 'px;'}
@@ -786,9 +800,9 @@ class _C extends React.Component {
                   className="header-inner"
                   style={
                     'line-height:' +
-                    (titleHeight - barHeight) +
+                    (titleHeight - statusBarHeight) +
                     'px;padding-top:' +
-                    barHeight +
+                    statusBarHeight +
                     'px;'
                   }
                 >
@@ -796,7 +810,7 @@ class _C extends React.Component {
                     className="search-wrap"
                     style={
                       'top:calc( ' +
-                      (titleHeight + barHeight) / 2 +
+                      (titleHeight + statusBarHeight) / 2 +
                       'px -  44rpx)'
                     }
                     onClick={this.jumpToSearch}
@@ -822,10 +836,9 @@ class _C extends React.Component {
                 }}
               >
                 <View id="scroll-cont">
-                  {/*  上映影片分布  */}
                   <View className="filmDistribution">
                     <View className="title">
-                      <Text>未来一年上映影片</Text>
+                      <Text>待映影片及预估大盘</Text>
                       <Image
                         onClick={this.tapRedPrompt}
                         className="redText"
@@ -838,7 +851,18 @@ class _C extends React.Component {
                           className="redPrompt"
                         ></Image>
                       )}
+                      <View className="toolTipSign">
+                        <View>已定档</View>
+                        <View>
+                          <Image
+                            src="../../static/list/dash.svg"
+                          ></Image>
+                          含可能定档</View>
+                      </View>
                     </View>
+                    {
+                      filmDistributionList.length !== 0 && <View className="yAxis">{ yMaxLengthArr.map((item,index)=> <Text key={index}>{item}亿</Text> )}</View>
+                    }
                     {filmDistributionList.length !== 0 && (
                       <FilmDistribution
                         filmInfo={{
@@ -848,9 +872,9 @@ class _C extends React.Component {
                           filmLoading,
                           topFilmLoading,
                         }}
+                        setMaxLengthY = {this.setMaxLengthY}
                         onTapfilmBox={this.tapfilmBox}
-                        onFilmScroll={this.filmScroll}
-                      ></FilmDistribution>
+                        onFilmScroll={this.filmScroll}/>
                     )}
                     {topFilmLoading && (
                       <View className="list-loading">
@@ -1087,9 +1111,9 @@ class _C extends React.Component {
                         />
                       </View>
                     )}
-                    {!loading && list.length === 0 && (
+                    {/* {!loading && list.length === 0 && (
                       <View className="no-data">暂无数据</View>
-                    )}
+                    )} */}
                   </View>
                 </View>
               </ScrollView>
@@ -1104,7 +1128,7 @@ class _C extends React.Component {
               filmDistributionItem={filmDistributionItem}
               ongetCostom={this.ongetCostom}
               show={isShowFilmDetailList}
-            ></FilmDetailList>
+              titleHeight={titleHeight} />
           </View>
         )}
         {/*  无权限页面  */}
@@ -1119,9 +1143,9 @@ class _C extends React.Component {
                   className="header-inner"
                   style={
                     'line-height:' +
-                    (titleHeight - barHeight) +
+                    (titleHeight - statusBarHeight) +
                     'px;padding-top:' +
-                    barHeight +
+                    statusBarHeight +
                     'px;'
                   }
                 >

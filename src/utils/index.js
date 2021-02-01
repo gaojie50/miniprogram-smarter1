@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-//错误处理
+
 const errorHandle = err => {
   if(err && err.message ){
     Taro.showToast({
@@ -62,7 +62,6 @@ const calcValue = (paramValue, digits) => {
   return Math.floor(paramValue * Math.pow(10, digits)) / Math.pow(10, digits)
 }
 
-//四舍五入
 const formatNumber = (value, sign) => {
   if (value === 0) {
     return {
@@ -331,7 +330,7 @@ function formatWeekDate(date) {
   }
 }
 
-function formatCreateTime(timeStamp) {
+function formatCreateTime(timeStamp,sign) {
   let date = new Date(timeStamp)
 
   var Y = date.getFullYear() + '-'
@@ -345,9 +344,19 @@ function formatCreateTime(timeStamp) {
 
   var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
 
-  var m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+  var m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+
+  if(sign === 'day') return Y + M + D;
   return Y + M + D + h + m
 }
+
+function arrayMaxItem(arr) {
+  return Math.max.apply(null, arr);
+};
+
+function arrayMinItem(arr) {
+  return Math.min.apply(null, arr);
+};
 
 export default {
   errorHandle,
@@ -365,4 +374,6 @@ export default {
   handleNewDate,
   formatWeekDate,
   formatCreateTime,
+  arrayMinItem,
+  arrayMaxItem,
 }
