@@ -2,17 +2,9 @@ export default {
   pages: [
     'pages/welcome/index',
     'pages/board/index',
-    'pages/detail/index',
     'pages/list/index',
     'pages/search/index',
-    'pages/projectDetail/index',
     'pages/searchCompany/index',
-    'pages/webview/index', 
-    'pages/checkProgress/index',
-    'pages/assess/create/index', 
-    'pages/assess/template/index',
-    'pages/assess/index/index',
-    'pages/assess/detail/index',
   ],
   window: {
     navigationBarBackgroundColor: '#798CBA',
@@ -22,5 +14,27 @@ export default {
   },
   style: 'v2',
   sitemapLocation: 'sitemap.json',
-  useExtendedLib: { weui: true }
+  useExtendedLib: { weui: true },
+  subpackages: [
+    {
+      root: "pages/detail",
+      pages: ["index"]
+    },
+    {
+      root: "pages/projectDetail",
+      pages: ["index"]
+    },
+    {
+      root: "pages/webview",
+      pages: ["index"]
+    },
+    {
+      root: "pages/checkProgress",
+      pages: ["index"]
+    },
+    {
+      root: "pages/assess",
+      pages: [ "index/index", "create/index", "template/index", "detail/index"]
+    }
+  ]
 }
