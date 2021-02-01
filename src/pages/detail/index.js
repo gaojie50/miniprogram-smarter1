@@ -22,6 +22,7 @@ export default class Detail extends React.Component {
     keyData: {},
     current: 0
   }
+  
   componentWillMount(){
     const page = Taro.getCurrentPages();
     console.log(page);
@@ -30,9 +31,9 @@ export default class Detail extends React.Component {
 
   fetchBasicData() {
     reqPacking({
-      url: '/api/management/projectInfo',
+      url: 'api/management/projectInfo',
       data: {
-        projectId: 810
+        projectId: 8020
       }
     })
     .then(res => {
@@ -61,7 +62,7 @@ export default class Detail extends React.Component {
   fetchJudgeRole() {
     const { basicData } = this.state;
     reqPacking({
-      url: '/api/management/judgeRole',
+      url: 'api/management/judgeRole',
       data: { 
         projectId: basicData.projectId
       }
@@ -74,6 +75,11 @@ export default class Detail extends React.Component {
             // this.fetchFollowStatus();
             // this.handleTabActive(1);
           });
+          if(data.role === 2) {
+            this.setState({
+              current: 1,
+            })
+          }
         } 
       });
   }
@@ -135,7 +141,7 @@ export default class Detail extends React.Component {
             className="tabs"
           >
             <AtTabsPane current={current} index={0}>
-              <FollowStatus />
+              <FollowStatus judgeRole={ judgeRole } basicData={ basicData } />
             </AtTabsPane>
             <AtTabsPane current={current} index={1}>
               项目评估
