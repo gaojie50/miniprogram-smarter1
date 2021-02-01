@@ -14,8 +14,8 @@ $at-list-item-horizontal-padding: 24px;
 }
 
 .at-list {
-  background-color: $color-bg;
-  @include hairline-top-bottom();
+  // background-color: $color-bg;
+  // @include hairline-top-bottom();
 
   /* elements */
   &__item-container {
@@ -29,13 +29,14 @@ $at-list-item-horizontal-padding: 24px;
 
   &__item {
     padding: $spacing-v-lg $spacing-h-lg;
+    padding: 24px 30px;
     position: relative;
     box-sizing: border-box;
     color: $at-list-text-color;
     font-size: $font-size-lg;
     line-height: $line-height-zh;
     @include active;
-    @include hairline-bottom-relative($left: $spacing-h-lg);
+    // @include hairline-bottom-relative($left: $spacing-h-lg);
 
     &--thumb {
       .item-thumb {
@@ -67,6 +68,12 @@ $at-list-item-horizontal-padding: 24px;
           color: inherit;
           font-size: inherit;
           line-height: $line-height-zh;
+
+          font-weight: 600;
+          font-family: PingFangSC-Semibold;
+          font-size: 28px;
+          color: #333333;
+          line-height: 28px;
         }
 
         &-note {
@@ -88,14 +95,21 @@ $at-list-item-horizontal-padding: 24px;
       }
 
       &__info {
-        @include line(1);
+        // @include line(1);
 
-        max-width: 100%;
+        // max-width: 100%;
         color: $at-list-extra-color;
-        padding-right: 30px;
+        padding-right: 37px;
         font-size: $font-size-lg;
         vertical-align: middle;
         box-sizing: border-box;
+
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 28px;
+        color: #333333;
+        text-align: right;
+        line-height: 28px;
       }
 
       // &__icon {
@@ -108,27 +122,34 @@ $at-list-item-horizontal-padding: 24px;
       // }
 
       &__icon {
-        right: -12px;
-        top: 50%;
-        transform: translateY(-50%);
-        position: absolute;
+        // right: 0px;
+        // top: 50%;
+        // transform: translateY(-50%);
+        // position: absolute;
+
+
 
         &-arrow {
           color: $at-list-arrow-color;
           font-size: 48px;
+
+          height: 20px;
+          width: 20px;
+
+          transform: rotate(180deg);
         }
         // margin-left: $spacing-h-sm;
         // margin-right: -$spacing-h-sm;
       }
 
       &__switch {
-        vertical-align: middle;
+        // vertical-align: middle;
       }
 
       &__image {
         @include squareImg($at-list-thumb-size);
 
-        vertical-align: middle;
+        // vertical-align: middle;
         margin-right: 30px;
 
         &-info {
@@ -143,14 +164,18 @@ $at-list-item-horizontal-padding: 24px;
     @include flex(1);
 
     overflow: hidden;
-    margin-right: 40px;
+    // margin-right: 40px;
   }
 
   &__item-extra {
     // @include flex(0, 0, $at-list-extra-width);
 
-    max-width: $at-list-extra-width;
+    // max-width: $at-list-extra-width;
     text-align: right;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
 
   /* modifiers */

@@ -7,6 +7,8 @@ import projectConfig from '../../constant/project-config.js'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
 import { useFilterPanel } from './filterPanel';
 import Tab from '../../components/tab';
+import FButton from '../../components/m5/fab'
+import '../../components/m5/style/components/fab.scss';
 
 
 import './index.scss'
@@ -150,6 +152,11 @@ export default function Board() {
           <Image
             className="board-header-search"
             src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
+            onClick={() => {
+              Taro.navigateTo({
+                url: '/pages/searchProject/index',
+              })
+            }}
           />
           <Text className="board-header-title-text">项目看板</Text>
         </View>
@@ -192,7 +199,6 @@ export default function Board() {
             {filter_sticky}
           </View>
         )}
-
         <View>
           {PROJECT_TYPE.map(({ name, key }) => {
             if (!data?.[key]?.length > 0) return null;
@@ -211,6 +217,15 @@ export default function Board() {
               </View>
             );
           })}
+        </View>
+        <View className="board-float-button">
+          <FButton onClick={() => {
+            Taro.navigateTo({
+              url: '/pages/addProject/index'
+            })
+          }}>
+            <Image className="board-float-button-image" src="https://p0.meituan.net/ingee/8d49c7b5fd67f053cb60b0bbf296d0a8588.png" />
+          </FButton>
         </View>
         <Tab />
       </ScrollView>

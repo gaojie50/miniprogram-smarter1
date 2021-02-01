@@ -56,7 +56,7 @@ export default class AtGrid extends React.Component<AtGridProps> {
                 }}
               >
                 <View className='at-grid-item__content'>
-                  <View className='at-grid-item__content-inner'>
+                  <View className={`at-grid-item__content-inner ${childItem.valueClassName}`}>
                     <View className='content-inner__icon'>
                       {childItem.image && (
                         <Image
@@ -88,7 +88,7 @@ export default class AtGrid extends React.Component<AtGridProps> {
                         />
                       )}
                     </View>
-                    <Text className='content-inner__text'>
+                    <Text className="content-inner__text">
                       {childItem.value}
                     </Text>
                   </View>

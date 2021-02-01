@@ -39,6 +39,18 @@
   white-space: nowrap;
 }
 
+.board-float-button {
+  position: fixed;
+  z-index: 4;
+  bottom: 176px;
+  right: 30px;
+
+  &-image {
+    height: 33px;
+    width: 33px;
+  }
+}
+
 .board-tab-item-small {
   display: inline-flex;
   flex-direction: column;

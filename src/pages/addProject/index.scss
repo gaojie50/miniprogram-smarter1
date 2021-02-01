@@ -1,0 +1,38 @@
+.m5-grid-item-checked {
+  background-color: rgba(24, 144, 255, 0.1);
+  .content-inner__text {
+    color: rgba(24, 144, 255, 1)!important;
+  }
+}
+
+.divider {
+  border: 1px solid #e5e5e5;
+  margin-bottom: 9px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+.add-project-confirm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  &-btn {
+    width: 690px;
+    height: 80px;
+    margin: 16px 30px;
+  
+    text-align: center;
+    line-height: 80px;
+  
+    background: #276FF0;
+    color: #fff;
+    border-radius: 40px;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 30px;
+  }
+}
