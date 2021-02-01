@@ -7,7 +7,7 @@ import {
   PickerView,
   PickerViewColumn,
 } from '@tarojs/components'
-import React from 'react'
+import React, { useState } from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../../utils/index.js'
 
@@ -51,145 +51,195 @@ function dateValueCommon(timeStamp) {
   ]
 }
 
-class _C extends React.Component {
+const DATE = [
+  {
+    label: '未来30天',
+    checked: '',
+    value: 30,
+  },
+  {
+    label: '未来90天',
+    checked: '',
+    value: 90,
+  },
+  {
+    label: '未来1年',
+    checked: 'checked',
+    value: 365,
+  },
+  {
+    label: '自定义',
+    checked: '',
+    value: 'custom',
+  },
+];
+
+const PROJECT_TYPE = [
+  {
+    value: '网络剧',
+    active: false,
+  },
+  {
+    value: '电视剧',
+    active: false,
+  },
+  {
+    value: '院线电影',
+    active: false,
+  },
+  {
+    value: '网络电影',
+    active: false,
+  },
+  {
+    value: '综艺',
+    active: false,
+  },
+  {
+    value: '其他',
+    active: false,
+  },
+]
+
+const COOPERATE_TYPE = [
+  {
+    value: '主投',
+    active: false,
+  },
+  {
+    value: '跟投',
+    active: false,
+  },
+  {
+    value: '开发',
+    active: false,
+  },
+  {
+    value: '宣传',
+    active: false,
+  },
+  {
+    value: '主发',
+    active: false,
+  },
+  {
+    value: '联发',
+    active: false,
+  },
+  {
+    value: '票务合作',
+    active: false,
+  },
+  {
+    value: '其他',
+    active: false,
+  },
+];
+
+const PROJECT_STAGE = [
+  {
+    value: '开发',
+    active: false,
+  },
+  {
+    value: '完片',
+    active: false,
+  },
+  {
+    value: '宣传',
+    active: false,
+  },
+  {
+    value: '发行',
+    active: false,
+  },
+  {
+    value: '上映',
+    active: false,
+  },
+  {
+    value: '映后',
+    active: false,
+  },
+];
+
+const MOVIE_LOCATION = [
+  {
+    value: '中国',
+    active: false,
+  },
+  {
+    value: '海外',
+    active: false,
+  },
+];
+
+const JOB_TYPE = [
+  {
+    value: '我负责的',
+    active: false,
+  },
+  {
+    value: '我参与的',
+    active: false,
+  },
+  {
+    value: '我协作的',
+    active: false,
+  },
+];
+
+function noop() { }
+
+export function useFilterPanel(config = {}) {
+  const {
+    titleHeight,
+    filterActive,
+    ongetFilterShow = noop,
+  } = config;
+  const [dateSet, setDateSet] = useState(DATE);
+  const [projectType, setProjectType] = useState(PROJECT_TYPE);
+  const [cooperateType, setCooperateType] = useState(COOPERATE_TYPE);
+  const [projectStage, setProjectStage] = useState(PROJECT_STAGE);
+  const [movieLocation, setMovieLocation] = useState(MOVIE_LOCATION);
+  const [jobType, setJobType] = useState(JOB_TYPE);
+
+
+  const option = {
+    dateSet,
+    setDateSet,
+    projectType,
+    setProjectType,
+    cooperateType,
+    setCooperateType,
+    projectStage,
+    setProjectStage,
+    movieLocation,
+    setMovieLocation,
+    jobType,
+    setJobType,
+  };
+
+  return {
+    component: (
+      <FilterPanel
+        titleHeight={titleHeight}
+        filterShow={filterActive}
+        ongetFilterShow={ongetFilterShow}
+        {...option}
+      />
+        
+    )
+  }
+}
+
+export default class FilterPanel extends React.Component {
   static defalutProps = {
     filterShow: '',
     titleHeight: 0,
   }
 
   state = {
-    dateSet: [
-      {
-        label: '未来30天',
-        checked: '',
-        value: 30,
-      },
-      {
-        label: '未来90天',
-        checked: '',
-        value: 90,
-      },
-      {
-        label: '未来1年',
-        checked: 'checked',
-        value: 365,
-      },
-      {
-        label: '自定义',
-        checked: '',
-        value: 'custom',
-      },
-    ],
-    projectType: [
-      {
-        value: '网络剧',
-        active: false,
-      },
-      {
-        value: '电视剧',
-        active: false,
-      },
-      {
-        value: '院线电影',
-        active: false,
-      },
-      {
-        value: '网络电影',
-        active: false,
-      },
-      {
-        value: '综艺',
-        active: false,
-      },
-      {
-        value: '其他',
-        active: false,
-      },
-    ],
-    cooperateType: [
-      {
-        value: '主投',
-        active: false,
-      },
-      {
-        value: '跟投',
-        active: false,
-      },
-      {
-        value: '开发',
-        active: false,
-      },
-      {
-        value: '宣传',
-        active: false,
-      },
-      {
-        value: '主发',
-        active: false,
-      },
-      {
-        value: '联发',
-        active: false,
-      },
-      {
-        value: '票务合作',
-        active: false,
-      },
-      {
-        value: '其他',
-        active: false,
-      },
-    ],
-    projectStage: [
-      {
-        value: '开发',
-        active: false,
-      },
-      {
-        value: '完片',
-        active: false,
-      },
-      {
-        value: '宣传',
-        active: false,
-      },
-      {
-        value: '发行',
-        active: false,
-      },
-      {
-        value: '上映',
-        active: false,
-      },
-      {
-        value: '映后',
-        active: false,
-      },
-    ],
-    movieLocation: [
-      {
-        value: '中国',
-        active: false,
-      },
-      {
-        value: '海外',
-        active: false,
-      },
-    ],
-    jobType: [
-      {
-        value: '我负责的',
-        active: false,
-      },
-      {
-        value: '我参与的',
-        active: false,
-      },
-      {
-        value: '我协作的',
-        active: false,
-      },
-    ],
     years,
     months,
     days,
@@ -457,17 +507,19 @@ class _C extends React.Component {
       years,
       months,
       days,
+      showDateSureBtn,
+    } = this.state;
+
+    const {
+      filterShow,
+      titleHeight,
       dateSet,
       projectType,
       cooperateType,
       projectStage,
       movieLocation,
       jobType,
-      company,
-      companyList,
-      showDateSureBtn,
-    } = this.state
-    const { filterShow, titleHeight } = this.props
+    } = this.props;
 
     return (
       filterShow.length != 0 && (
@@ -716,17 +768,17 @@ class _C extends React.Component {
                     </View>
                   </View>
                 ) : (
-                  showDateSureBtn && (
-                    <View className="filterButton">
-                      <View
-                        onClick={this.filterDefinedDate}
-                        className="filterButton-date-determine"
-                      >
-                        确定
+                    showDateSureBtn && (
+                      <View className="filterButton">
+                        <View
+                          onClick={this.filterDefinedDate}
+                          className="filterButton-date-determine"
+                        >
+                          确定
                       </View>
-                    </View>
+                      </View>
+                    )
                   )
-                )
               ) : null}
             </View>
           </View>
@@ -735,5 +787,3 @@ class _C extends React.Component {
     );
   }
 }
-
-export default _C
