@@ -95,7 +95,7 @@ export default function assessPage(){
     reqPacking(
       {
         url: 'api/management/tempQuestion',
-        data: { projectId: projectId },
+        data: { tempId: chooseTempId },
       },
       'server',
     ).then(res => {

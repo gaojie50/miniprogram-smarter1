@@ -165,7 +165,7 @@ export default function assessPage(){
   function handleStartAssess(){
     console.log('sdsdsd');
     Taro.navigateTo({
-      url: `/pages/management/assessDetail/index?projectId=${projectId}&roundId=${roundId}`,
+      url: `/pages/assess/detail/index?projectId=${projectId}&roundId=${roundId}`,
     })
   }
 
