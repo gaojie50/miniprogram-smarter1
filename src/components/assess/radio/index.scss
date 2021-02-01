@@ -35,11 +35,6 @@
         }
       }
 
-      &:not(.preview):hover{
-        background: rgba(24, 144, 255,.2);
-        cursor: pointer;
-      }
-
       .dot {
         display: inline-block;
         width: 40px;

@@ -133,15 +133,85 @@ export default function assessPage(){
     setRate(`${Math.round(leng / innerQues.length * 1000) / 10}%`);
   };
 
+  function handleSubmit(){
+    let errSign = false;
+    let canFinish = false;
+    // 至少有一个填写
+    for(let i=0; i<questions.length; i++){
+      if(questions[i].finished){
+        canFinish = true;
+        break;
+      }
+    }
+    if (!canFinish){
+      Taro.showModal({
+        title: '提示',
+        content: '请至少填写一题',
+        showCancel: false
+      });
+      return;
+    }
+    
+
+    reqPacking(
+      {
+        url: 'api/management/submit',
+        method: 'POST',
+        data: {
+          projectId,
+          roundId,
+          questions: questions.map(item => {
+            const {
+              type, questionId, content, matrixSelectList
+            } = item;
+            let obj = {
+              type,
+              questionId,
+            };
+  
+            switch (type) {
+              case 1:
+              case 2:
+              case 4: obj.content = content; break;
+              default: obj.matrixSelectList = matrixSelectList;
+            }
+  
+            return obj;
+          })
+        },
+      },
+      'server',
+    ).then(res => {
+        const { success, data, error } = res;
+
+        if (success && data) {
+         Taro.showToast({
+           title: '提交成功',
+           icon: 'success'
+         });
+
+         Taro.navigateTo({
+           url: `/assess/create/index?projectId=${projectId}`
+         })
+        } else {
+          Taro.showToast({
+            title: error.message || '提交失败',
+          });
+        }
+      });
+  }
+
 
   return (
     <View className="assess-page">
       <View className="pagination-wrap">
-        <Button className="pagination-prev">上一页</Button>
-        <Button className="pagination-next">下一页</Button>
+        <Button className="pagination-button prev">上一页</Button>
         <View className="page-process-wrap">
-          <View>2/6</View>
+          <View className="page-content">2/6</View>
+          <View className="inner-bar" style={{width:'20%'}} />
         </View>
+        <Button className="pagination-button next">下一页</Button>
+       
       </View>
 
       <View className="assess-content-wrap">
@@ -215,6 +285,14 @@ export default function assessPage(){
           return null;
         })
       }
+      <View className="btn-wrap">
+        <Button 
+          className="submit-btn" 
+          onClick={handleSubmit}
+        >
+            提交评估
+        </Button>
+      </View>
       </View>
     </View>
   );
