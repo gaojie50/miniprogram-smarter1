@@ -8,6 +8,10 @@ export default {
     'pages/searchCompany/index',
     'pages/webview/index', 
     'pages/checkProgress/index',
+    'pages/management/create/index', 
+    'pages/management/template/index',
+    'pages/management/assessIndex/index',
+    'pages/management/assessDetail/index',
   ],
   window: {
     navigationBarBackgroundColor: '#798CBA',

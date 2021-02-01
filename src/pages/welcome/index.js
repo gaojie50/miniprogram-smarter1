@@ -21,15 +21,15 @@ class _C extends React.Component {
   }
 
   goList = () => {
-    // Taro.reLaunch({
-    //   url: '../list/index',
-    // })
-    // Taro.reLaunch({
-    //   url: '../management/assess/index?projectId=6009&roundId=291'
-    // })
     Taro.reLaunch({
-      url: '../management/assess/index?projectId=14332&roundId=350'
+      url: '../list/index',
     })
+  // Taro.reLaunch({
+  //   url: '../management/assessIndex/index?projectId=6009&roundId=291'
+  // })
+    // Taro.reLaunch({
+    //   url: '../management/assessIndex/index?projectId=14332&roundId=350'
+    // })
   }
 
   getUserInfo = (e) => {
@@ -38,9 +38,9 @@ class _C extends React.Component {
         if (res.authSetting['scope.userInfo'] && e.detail) {
           const { iv, encryptedData } = e.detail
           if (Taro.getStorageSync('token'))
-            // return Taro.redirectTo({ url: `/pages/list/index` })
+            return Taro.redirectTo({ url: `/pages/list/index` })
             // return Taro.redirectTo({ url: `../management/create/index?projectId=14332` })
-            return Taro.redirectTo({ url: `../management/assess/index?projectId=14332&roundId=350` })
+            // return Taro.redirectTo({ url: `../management/assessIndex/index?projectId=14332&roundId=350` })
 
           return keepLogin({ iv, encryptedData })
         }

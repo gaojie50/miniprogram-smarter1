@@ -162,6 +162,13 @@ export default function assessPage(){
    
   }
 
+  function handleStartAssess(){
+    console.log('sdsdsd');
+    Taro.navigateTo({
+      url: `/pages/management/assessDetail/index?projectId=${projectId}&roundId=${roundId}`,
+    })
+  }
+
   console.log('briefInfo',briefInfo);
   console.log('curEvalObj',curEvalObj);
   const coverPic = briefInfo.pic ? `${briefInfo.pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPic;
@@ -194,7 +201,7 @@ export default function assessPage(){
           </View>
         </View>
         
-        <Button className="start-btn">开始评估</Button>
+        <Button className="start-btn" onClick={handleStartAssess}>开始评估</Button>
       </View>
       
       </View>
