@@ -1,0 +1,13 @@
+.textEval-wrap{
+  .table {
+    th,td{
+      &:first-of-type{
+        width:190px;
+      }
+
+      &:last-of-type{
+        width: 460px;
+      }
+    }
+  } 
+}

@@ -22,6 +22,12 @@
     box-sizing: border-box;
     padding: 10px 30px 120px;
 
+    .result-comp-box{
+      & > view{
+        margin-bottom: 80px;
+      }
+    }
+
     .tip{
       font-weight: 400;
       font-family: PingFangSC-Regular;

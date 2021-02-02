@@ -4,6 +4,7 @@ import { View, } from '@tarojs/components';
 import { get as getGlobalData } from '../../global_data';
 import ProjectInfo from '../../components/projectInfo';
 import CoreSection from '../../components/coreSection';
+import TextEval from '../../components/textEval';
 import OperationFooter from '../../components/operationFooter';
 import './index.scss';
 
@@ -85,12 +86,54 @@ export default function Result() {
 
       {
         evaluated || (isLeader(projectRole) && participantNumber != 0) ?
-          <View  className="result-comp-box">
+          <View className="result-comp-box">
             {coreExist ?
               <CoreSection
                 core={core}
                 categoryType={categoryType} /> :
               ""}
+
+            {
+              resultList.map((item, index) => {
+                if (item.type == 1) {
+                  return <TextEval
+                    key={index}
+                    title={item.title}
+                    questionNum={index + (coreExist ? 2 : 1)}
+                    texts={item.texts || []}
+                  />;
+                }
+
+                // if (item.type == 3) {
+                //   return <MatrixRadioEval
+                //     key={index}
+                //     title={item.title}
+                //     questionNum={index + (coreExist ? 2 : 1)}
+                //     matrixRadios={item.matrixRadios}
+                //   />;
+                // }
+
+                // if (item.type == 4) {
+                //   return <RadioEval
+                //     key={index}
+                //     title={item.title}
+                //     questionNum={index + (coreExist ? 2 : 1)}
+                //     radios={item.radios}
+                //   />;
+                // }
+
+                // if (item.type == 5) {
+                //   return <MatrixScaleEval
+                //     key={index}
+                //     title={item.title}
+                //     questionNum={index + (coreExist ? 2 : 1)}
+                //     matrixScales={item.matrixScales}
+                //   />;
+                // }
+
+                return null;
+              })
+            }
           </View> :
           <View>
             {
