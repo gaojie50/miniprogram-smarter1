@@ -32,9 +32,11 @@ export default () => {
       tabList={TAB_LIST}
       fixed
       onClick={(val) => {
-        Taro.navigateTo({
-          url: `${ROUTER[val]}`,
-        });
+        if (val !== current) {
+          Taro.redirectTo({
+            url: `${ROUTER[val]}`,
+          });
+        }
       }}
     />
   )

@@ -161,7 +161,7 @@ export default function AddProject() {
           margin: '0 30rpx 110rpx 30rpx',
         }}>
         <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <M5Input placeholder='请输入片名' value={name} onChange={(val) => {
+          <M5Input autoFocus placeholder='请输入片名' value={name} onChange={(val) => {
             if (val !== name) {
               setName(val);
               searchMovie(val);

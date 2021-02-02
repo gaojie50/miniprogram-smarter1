@@ -429,6 +429,12 @@ const OBJECT_TYPE = {
   1: '网络剧',
 }
 
+function jumpDetail(projectId){
+  Taro.navigateTo({
+    url: `/pages/detail/index?projectId=${projectId}`,
+  })
+}
+
 function ProjectItem(props) {
   const {
     type,
@@ -441,6 +447,7 @@ function ProjectItem(props) {
     score = '8.5',
     projectStageStep = [],
     hasUpdate = false,
+    projectId
   } = props;
 
   const [val, unit] = useMemo(() => {
@@ -454,7 +461,7 @@ function ProjectItem(props) {
   }, [projectStageStep])
 
   return (
-    <View className="project-item">
+    <View className="project-item" onClick={ ()=>{jumpDetail(projectId)} }>
       <View className="project-item-type">{OBJECT_TYPE[type] || '-'}</View>
       <Image className=".project-item-img" src={picFn(pic)} />
       <View className="project-item-detail">
