@@ -6,6 +6,7 @@ import ProjectInfo from '../../components/projectInfo';
 import CoreSection from '../../components/coreSection';
 import TextEval from '../../components/textEval';
 import RadioEval from '../../components/radioEval';
+import MatrixRadioEval from '../../components/matrixRadioEval';
 import OperationFooter from '../../components/operationFooter';
 import './index.scss';
 
@@ -105,14 +106,14 @@ export default function Result() {
                   />;
                 }
 
-                // if (item.type == 3) {
-                //   return <MatrixRadioEval
-                //     key={index}
-                //     title={item.title}
-                //     questionNum={index + (coreExist ? 2 : 1)}
-                //     matrixRadios={item.matrixRadios}
-                //   />;
-                // }
+                if (item.type == 3) {
+                  return <MatrixRadioEval
+                    key={index}
+                    title={item.title}
+                    questionNum={index + (coreExist ? 2 : 1)}
+                    matrixRadios={item.matrixRadios}
+                  />;
+                }
 
                 if (item.type == 4) {
                   return <RadioEval
