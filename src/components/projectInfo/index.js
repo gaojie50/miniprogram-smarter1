@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro';
-import { View, Image, Text, Textarea, ScrollView, } from '@tarojs/components';
+import { View, Image, } from '@tarojs/components';
 import { get as getGlobalData } from '../../global_data';
 import projectConfig from '../../constant/project-config';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 const {getEvaluationLabel} = projectConfig
-export default function ProjectInfo({ projectId, roundId }) {
+export default function ProjectInfo({ projectId, roundId, setProjectEvaluationName }) {
   const [info, setInfo] = useState({});
   const fillZero = num => num < 10 ? `0${num}` : num;
   useEffect(
     () => reqPacking({
-      url: 'api/management/projectInfo',
+      url: 'api/management/briefInfo',
       data: { projectId, roundId },
       method: 'GET',
     }).then(res => {
       const { success, data = {}, error } = res;
 
-      if (success) return setInfo(data);
+      if (success) {
+        setProjectEvaluationName(data.projectEvaluationName);
+        return setInfo(data);
+      }
 
       Taro.showToast({
         title: error && error.message,
