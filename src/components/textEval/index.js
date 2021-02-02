@@ -31,6 +31,7 @@ export default function TextEval({ title, questionNum, texts }) {
 
   return <View className="textEval-wrap">
     <View className="h5">{questionNum}、{title}</View>
+
     <View className="table-wrap">
       <View className="table">
         <View className="thead">

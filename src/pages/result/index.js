@@ -5,6 +5,7 @@ import { get as getGlobalData } from '../../global_data';
 import ProjectInfo from '../../components/projectInfo';
 import CoreSection from '../../components/coreSection';
 import TextEval from '../../components/textEval';
+import RadioEval from '../../components/radioEval';
 import OperationFooter from '../../components/operationFooter';
 import './index.scss';
 
@@ -113,14 +114,14 @@ export default function Result() {
                 //   />;
                 // }
 
-                // if (item.type == 4) {
-                //   return <RadioEval
-                //     key={index}
-                //     title={item.title}
-                //     questionNum={index + (coreExist ? 2 : 1)}
-                //     radios={item.radios}
-                //   />;
-                // }
+                if (item.type == 4) {
+                  return <RadioEval
+                    key={index}
+                    title={item.title}
+                    questionNum={index + (coreExist ? 2 : 1)}
+                    radios={item.radios}
+                  />;
+                }
 
                 // if (item.type == 5) {
                 //   return <MatrixScaleEval
