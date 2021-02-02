@@ -128,7 +128,7 @@ class _C extends React.Component {
                 没找到项目？
                 创建项目"
                 <Text className="custom-project-name">{inputVal}</Text>
-                ""
+                "
               </View>
             </View>
             {list.map((item, index) => {

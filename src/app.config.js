@@ -1,8 +1,8 @@
 export default {
   pages: [
-    'pages/addProject/index',
-    'pages/searchProject/index',
     'pages/welcome/index',
+    'pages/searchProject/index',
+    'pages/addProject/index',
     'pages/detail/index',
     'pages/list/index',
     'pages/board/index',

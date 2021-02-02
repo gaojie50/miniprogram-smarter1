@@ -30,14 +30,20 @@ $float-layout-timer: 300ms;
     background-color: $color-bg;
     transform: translate3d(0, 100%, 0);
     transition: transform $float-layout-timer cubic-bezier(0.36, 0.66, 0.04, 1);
+
+    border-radius: 20px 20px 0 0;
+    padding: 40px 10px;
+    box-sizing: border-box;
   }
 
   .layout {
     &-header {
       position: relative;
-      padding: $spacing-v-md;
+      // padding: $spacing-v-md;
+      margin-bottom: 40px;
+      margin-left: 30px;
       line-height: $line-height-zh;
-      background-color: $float-layout-header-bg-color;
+      // background-color: $float-layout-header-bg-color;
 
       &__title {
         @include line(1);
@@ -46,6 +52,12 @@ $float-layout-timer: 300ms;
         font-size: $float-layout-title-font-size;
         display: block;
         padding-right: 80px;
+
+        font-weight: 600;
+        font-family: PingFangSC-Semibold;
+        font-size: 38px;
+        color: #333333;
+        line-height: 50px;
       }
 
       &__btn-close {
@@ -83,7 +95,7 @@ $float-layout-timer: 300ms;
 
     &-body {
       font-size: $font-size-base;
-      padding: $spacing-v-md;
+      // padding: $spacing-v-md;
       max-height: 828px;
       min-height: 514px;
 

@@ -37,7 +37,7 @@ export default class AtGrid extends React.Component<AtGridProps> {
       ['at-grid__flex-item', 'at-grid-item', `at-grid-item--${mode}`],
       {
         'at-grid-item--no-border': !hasBorder
-      }
+      },
     )
 
     return (
@@ -48,7 +48,7 @@ export default class AtGrid extends React.Component<AtGridProps> {
               <View
                 key={`at-grid-item-${index}`}
                 className={classNames(bodyClass, {
-                  'at-grid-item--last': index === columnNum - 1
+                  'at-grid-item--last': index === columnNum - 1,
                 })}
                 onClick={this.handleClick.bind(this, childItem, index, i)}
                 style={{

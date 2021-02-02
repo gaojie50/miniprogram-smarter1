@@ -2,18 +2,26 @@ const CATEGORY_LIST = [ {
   key: 1,
   name: '网络剧'
 },
-{
-  key: 2,
-  name: '电视剧'
-},
-{
-  key: 3,
-  name: '院线电影'
-},
-{
-  key: 4,
-  name: '网络电影'
-},
+  {
+    key: 2,
+    name: '电视剧'
+  },
+  {
+    key: 3,
+    name: '院线电影'
+  },
+  {
+    key: 4,
+    name: '网络电影'
+  },
+  {
+    key: 5,
+    name: '综艺', 
+  },
+  {
+    key: 0,
+    name: '其他',
+  },
 ];
 
 const YEAR_TYPE_LIST = [
