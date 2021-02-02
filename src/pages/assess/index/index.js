@@ -183,12 +183,12 @@ export default function assessPage(){
   }
 
   
-  const { projectFile=[], backColor='#fff', name='', pic } = briefInfo;
+  const { projectFile=[], backColor, name='', pic } = briefInfo;
   const { round, initiator, startDate, roundTitle } = curEvalObj;
 
   const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : '';
   const coverPic = projectPic ? projectPic : defaultPic;
-  const rgbColor = hexColorToRgba(backColor,0.9);
+  const rgbColor = hexColorToRgba(backColor||'#000',0.9);
   
   return (
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>

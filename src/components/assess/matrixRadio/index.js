@@ -52,10 +52,10 @@ export default class MatrixRadio extends React.Component {
 
   render() {
     let {
-      title, matrixRadio, isPreview, questionNum, required, showError
+      id, title, matrixRadio, isPreview, questionNum, required, showError
     } = this.props;
     return (
-      <View className={ `matrix-radio ${required ? "required" : ""}` }>
+      <View id={id} className={ `matrix-radio ${required ? "required" : ""}` }>
         <View className="ques-title">{questionNum}、{title}</View>
         <View className={`content ${isPreview ? 'disable': ''}`}>
           <View className="left" id="left">
