@@ -25,7 +25,13 @@
     border: 1px solid #276FF0;
     box-sizing: border-box;
     .content-inner__text {
-      color: rgba(24, 144, 255, 1)!important;
+
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 26px;
+      color: #276FF0!important;
+      text-align: center;
+      line-height: 36px;
     }
   }
 

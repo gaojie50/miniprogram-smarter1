@@ -28,6 +28,7 @@ export default () => {
 
   return (
     <Tab
+      // iconSize={58}
       current={current}
       tabList={TAB_LIST}
       fixed

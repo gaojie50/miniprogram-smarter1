@@ -30,6 +30,13 @@
         line-height: $line-height-zh;
         text-align: center;
         @include line(2);
+
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 26px;
+        color: #333333;
+        text-align: center;
+        line-height: 36px;
       }
 
       &__icon {
