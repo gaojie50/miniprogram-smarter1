@@ -1,20 +1,20 @@
 import { View, Image, Text } from '@tarojs/components'
 import React from 'react';
 import Taro from '@tarojs/taro';
-// import { AtTabs, AtTabsPane } from '../../components/m5';
-import AtTabs from '../../components/m5/tabs';
-import AtTabsPane from '../../components/m5/tabs-pane';
+import { AtTabs, AtTabsPane } from '../../components/m5';
 import BasicData from './basicData';
 import KeyData from './keyData';
 import FollowStatus from './followStatus';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import People from '../../static/detail/people.png';
 import File from '../../static/detail/file.png';
+import ArrowLeft from '../../static/detail/arrow-left.png';
 // import Edit from '../../static/detail/edit.png';
 import './index.scss';
 import '../../components/m5/style/index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
+const {statusBarHeight} = getGlobalData('systemInfo');
 export default class Detail extends React.Component {
   state = {
     basicData: {},
@@ -24,17 +24,24 @@ export default class Detail extends React.Component {
   }
 
   componentWillMount(){
-    const page = Taro.getCurrentPages();
-    console.log(page);
     this.fetchBasicData();
   }
 
   fetchBasicData() {
+    const page = Taro.getCurrentPages();
+    let param = {};
+    page.forEach(x => {
+      if(x.route === 'pages/detail/index') {
+        if(x.options.projectId && x.options.projectId !== '') {
+          param.projectId = x.options.projectId
+        } else {
+          param.maoyanId = x.options.maoyanId
+        }
+      }
+    })
     reqPacking({
       url: 'api/management/projectInfo',
-      data: {
-        projectId: 8020
-      }
+      data: param
     })
     .then(res => {
       const { success, data = {} } = res;
@@ -71,9 +78,6 @@ export default class Detail extends React.Component {
         if (success) {
           this.setState({
             judgeRole: data
-          }, () => {
-            // this.fetchFollowStatus();
-            // this.handleTabActive(1);
           });
           if(data.role === 2) {
             this.setState({
@@ -96,12 +100,20 @@ export default class Detail extends React.Component {
     })
   }
 
+  handleBack = () => {
+    wx.navigateBack()
+  }
+
   render() {
     const { basicData, judgeRole, keyData, current } = this.state;
     return (
       <View className="detail">
         <View className="detail-top">
-          <View className="detail-top-icon">
+          <View className="fixed">
+            <View style={{height: statusBarHeight,}}></View>
+            <View className="backPage" onClick={this.handleBack}><Image src={ArrowLeft} alt=""></Image></View>
+          </View>
+          <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 54)+ 'px' }}>
             <View className="cooperStatus">合作已确定</View>
             <View className="edit"></View>
             <View className="opt">

@@ -1,10 +1,10 @@
 export default {
   pages: [
-    'pages/detail/index',
     'pages/welcome/index',
     'pages/list/index',
     'pages/search/index',
     'pages/projectDetail/index',
+    'pages/detail/index',
     'pages/searchCompany/index',
     'pages/webview/index', 
     'pages/checkProgress/index',

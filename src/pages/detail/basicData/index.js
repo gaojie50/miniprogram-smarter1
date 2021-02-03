@@ -3,9 +3,9 @@ import React from 'react';
 import { CategoryList, BasicItem } from '../constant';
 import { AtFloatLayout } from '../../../components/m5';
 import Cover from '../../../static/detail/cover.png';
+import Close from '../../../static/close.png';
 import ReaseTime from './releaseTime';
 import './index.scss';
-
 
 export default class BasicData extends React.Component {
   state = {
@@ -23,7 +23,7 @@ export default class BasicData extends React.Component {
     })
   }
 
-  handleClose() {
+  handleClose = () => {
     this.setState({
       showFloat: false
     })
@@ -31,7 +31,6 @@ export default class BasicData extends React.Component {
 
   render() {
     const { data, keyData, judgeRole } = this.props;
-    console.log(data, 123)
     const newPic = data.pic ? `${data.pic.replace('/w.h/', '/')}@200w_274h_1e_1c` : Cover;
     return (
       <View className="basic-data">
@@ -76,10 +75,13 @@ export default class BasicData extends React.Component {
         </View>
         {
           this.state.showFloat && 
-          <AtFloatLayout className="float" isOpened title="这是个标题" onClose={this.handleClose.bind(this)}>
+          <AtFloatLayout className="float" isOpened>
+            <View className="title">
+              <Text className="text">项目基础信息</Text>
+              <View className="img" onClick={this.handleClose}><Image src={Close} alt=""></Image></View>
+            </View>
             {
               BasicItem.map((item, index) => {
-                console.log(item)
                 return data[item.key] && data[item.key].length > 0 ? <View key={index} className="line"><Text className="name">{item.name}：</Text>{data[item.key]}</View> : ''
               })
             }
