@@ -1,14 +1,16 @@
 import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components'
 import React from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
-import reqPacking from '../../../utils/reqPacking.js';
-import utils from '../../../utils/index';
+import reqPacking from '@utils/reqPacking.js';
+import utils from '@utils/index';
 import _cloneDeep from 'lodash/cloneDeep'
-import AtActionSheet from '../../../components/m5/action-sheet';
-import AtActionSheetItem from '../../../components/m5/action-sheet/body/item';
-import AtFloatLayout from '../../../components/m5/float-layout';
-import '../../../components/m5/style/components/action-sheet.scss';
-import '../../../components/m5/style/components/float-layout.scss';
+import Nodata from '@components/noData';
+import BriefInfo from '@components/briefInfo';
+import AtActionSheet from '@components/m5/action-sheet';
+import AtActionSheetItem from '@components/m5/action-sheet/body/item';
+import AtFloatLayout from '@components/m5/float-layout';
+import '@components/m5/style/components/action-sheet.scss';
+import '@components/m5/style/components/float-layout.scss';
 import './index.scss'
 
 const { errorHandle } = utils;
@@ -44,7 +46,7 @@ export default class _C extends React.Component {
     filesChecked: [],
     isSubmitting: false,
     uploadSelectorIsOpen: false,
-    fileSelectorIsOpen: false
+    fileSelectorIsOpen: false,
   }
 
   componentDidMount(){
@@ -77,12 +79,14 @@ export default class _C extends React.Component {
             projectProfile: data
           });
         }
-
         errorHandle(error);
-      });
+      })
   };
 
   fetchBriefInfo=(projectId)=>{
+    Taro.showLoading({
+      title: '加载中'
+    });
     reqPacking(
       {
         url: 'api/management/briefInfo',
@@ -104,6 +108,8 @@ export default class _C extends React.Component {
         }
 
         errorHandle(error);
+      }).finally(res=>{
+        Taro.hideLoading();
       });
   }
 
@@ -124,7 +130,6 @@ export default class _C extends React.Component {
   despChangeEvt = ({ target }) => {
     const curVal = target.value.replace(/\s+/g, "");
     const { briefInfo } = this.state;
-
     return this.setState({
       despErrorTip: curVal.length > 200,
       briefInfo: {
@@ -290,7 +295,8 @@ export default class _C extends React.Component {
     };
 
     if (titleErrorTip || despErrorTip) return;
-
+    console.log(params);
+    return;
     this.setState({ isSubmitting: true });
     reqPacking(
       {
@@ -360,10 +366,12 @@ export default class _C extends React.Component {
     console.log(primaryFilesChecked);
     console.log(filesChecked);
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
-    const templateList = briefInfo.tempList || [];
+    const templateList = [];
     return (
-      <View className="create-wrap">
-        <View  className="title-box">
+      <View className="assess-create-page">
+        <BriefInfo {...briefInfo} />
+        <View className="create-wrap">
+        <View  className="title-wrap">
           {!editorEvaluationName && 
           <View className="title">
             {briefInfo.projectEvaluationName}
@@ -380,11 +388,16 @@ export default class _C extends React.Component {
             onBlur={ this.titleBlurEvt } />}
           {titleErrorTip ? <View className="error-tip">请输入20个字以内</View> : ""}
         </View>
-        <Textarea
-          placeholder="请填写评估说明"
-          onInput={ this.despChangeEvt }
-          className={ `desc-input ${despErrorTip ? "error" : ""} description` } />
-        {despErrorTip ? <p className="error-tip">请输入200个字以内</p> : ""}
+
+        <View className="desc-wrap">
+          <Textarea
+            placeholder="请填写评估说明，最多200字"
+            onInput={ this.despChangeEvt }
+            className={ `desc-input ${despErrorTip ? "error" : ""} description` } 
+            maxlength={250}
+          />
+        {despErrorTip ? <View className="error-tip">请输入200个字以内</View> : ""}
+        </View>
 
         <View className="evaluation-method-wrap">
           <Text className="evaluation-title">选择评估方式</Text>
@@ -435,7 +448,9 @@ export default class _C extends React.Component {
               );
             })
             :(
-              <View className="no-template-note">暂无模板可选</View>
+              <View className="no-template-note">
+                <Nodata text="暂无模板可选" />
+              </View>
             )
           }
         </View>
@@ -453,6 +468,7 @@ export default class _C extends React.Component {
           className="uplaod-action-sheet"
           isOpened={uploadSelectorIsOpen} 
           cancelText='取消'
+          onCancel={ this.handleCancel } 
         >
           <AtActionSheetItem onClick={ this.uploadFromProjectFile}>
             从项目文件中选择
@@ -499,6 +515,7 @@ export default class _C extends React.Component {
           </View>
         </AtFloatLayout>
         
+      </View>
       </View>
     )
   }
