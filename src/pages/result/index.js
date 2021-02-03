@@ -7,6 +7,7 @@ import CoreSection from '../../components/coreSection';
 import TextEval from '../../components/textEval';
 import RadioEval from '../../components/radioEval';
 import MatrixRadioEval from '../../components/matrixRadioEval';
+import MatrixScaleEval from '../../components/matrixScaleEval';
 import OperationFooter from '../../components/operationFooter';
 import './index.scss';
 
@@ -124,14 +125,14 @@ export default function Result() {
                   />;
                 }
 
-                // if (item.type == 5) {
-                //   return <MatrixScaleEval
-                //     key={index}
-                //     title={item.title}
-                //     questionNum={index + (coreExist ? 2 : 1)}
-                //     matrixScales={item.matrixScales}
-                //   />;
-                // }
+                if (item.type == 5) {
+                  return <MatrixScaleEval
+                    key={index}
+                    title={item.title}
+                    questionNum={index + (coreExist ? 2 : 1)}
+                    matrixScales={item.matrixScales}
+                  />;
+                }
 
                 return null;
               })
