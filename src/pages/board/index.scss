@@ -39,6 +39,18 @@
   white-space: nowrap;
 }
 
+.board-float-button {
+  position: fixed;
+  z-index: 1;
+  bottom: 176px;
+  right: 30px;
+
+  &-image {
+    height: 33px;
+    width: 33px;
+  }
+}
+
 .board-tab-item-small {
   display: inline-flex;
   flex-direction: column;
@@ -189,7 +201,7 @@
   height: 200px;
 
   margin: 0 30px;
-  margin-bottom: 60px;
+  padding-bottom: 60px;
 
   position: relative;
 

@@ -1,0 +1,71 @@
+.keyData {
+  padding: 0 30px;
+  box-sizing: border-box;
+  font-family: PingFangSC-Regular;
+  font-size: 24px;
+  color: #333333;
+  line-height: 28px;
+  font-weight: 400;
+  &-top {
+    width: 100%;
+    height: 184px;
+    background: #F8F8F8;
+    white-space:nowrap;
+    flex-direction: column;
+    .item {
+      display: inline-block;
+      padding-left: 20px;
+      box-sizing: border-box;
+      min-width: 210px;
+      vertical-align: top;
+      .title {
+        margin-top: 30px;
+        box-sizing: border-box;
+      }
+      .number {
+        margin-top: 16px;
+        height: 46px;
+        line-height: 46px;
+      }
+      .compare {
+        margin-top: 10px;
+        font-size: 20px;
+      }
+    }
+  }
+  &-bottom {
+    display: flex;
+    height: 127px;
+    background: #F8F8F8;
+    padding: 0 20px;
+    box-sizing: border-box;
+    .left {
+      width: 50%;   
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .right {
+      width: 50%;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .first-line {
+      margin-top: 21px;
+    }
+    .second-line {
+      margin-top: 20px;
+    }
+    .left-label {
+      display: inline-block;
+      width: 144px;
+      margin-right: 20px;
+    }
+    .right-label {
+      display: inline-block;
+      width: 96px;
+      margin-right: 20px;
+    }
+  }
+  .num {
+    font-family: MaoYanHeiTi-H1;
+    color: #333333;
+  }
+}

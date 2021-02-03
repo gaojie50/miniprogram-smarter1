@@ -87,7 +87,7 @@ Component({
       const { maoyanId, projectId } = filterList
 
       wx.navigateTo({
-        url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
+        url: `/pages/detail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
       })
     },
 

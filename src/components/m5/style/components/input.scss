@@ -4,13 +4,14 @@
 .at-input {
   position: relative;
   padding: $spacing-v-lg 0;
+  padding: 30px;
   color: $at-input-label-color;
-  background-color: $color-bg;
-  margin-left: $spacing-h-xl;
+  // background-color: $color-bg;
+  // margin-left: $spacing-h-xl;
 
   /* 修复底线隐藏问题 */
-  margin-bottom: 1PX;
-  @include hairline-bottom();
+  // margin-bottom: 1PX;
+  // @include hairline-bottom();
 
   &__overlay {
     position: absolute;
@@ -68,6 +69,12 @@
     font-size: $at-input-font-size;
     height: $at-input-font-size * 1.4;
     line-height: $line-height-zh;
+
+    font-weight: 500;
+    font-family: PingFangSC-Medium;
+    font-size: 40rpx;
+    color: #333333;
+    line-height: 40rpx;
   }
 
   &__icon {

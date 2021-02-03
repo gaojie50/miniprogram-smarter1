@@ -12,6 +12,10 @@ export interface AtGridItem {
    */
   value?: string
   /**
+   * 宫格文字类名
+   */
+  valueClassName?: string
+  /**
    * 宫格图标
    */
   iconInfo?: AtIconBaseProps

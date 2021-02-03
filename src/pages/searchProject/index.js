@@ -12,10 +12,16 @@ import Taro from '@tarojs/taro'
 import reqPacking from '../../utils/reqPacking.js'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
+import { CATEGORY_LIST } from '../addProject/lib';
 
 import './index.scss'
 const { debounce } = utils
 const { getScheduleType } = projectConfig
+
+const CATEGORY_MAPPING = {};
+CATEGORY_LIST.map((item) => {
+  CATEGORY_MAPPING[item.key] = item.name;
+})
 
 function fn(e, _this) {
   const { value } = e.detail
@@ -32,9 +38,8 @@ function fn(e, _this) {
     },
     () => {
       reqPacking({
-        url: 'api/management/list',
-        data: { name: innerVal },
-        method: 'POST'
+        url: 'api/management/search',
+        data: { keyword: innerVal, onlyProject: true },
       }).then(({ success, data }) => {
         if (success && data && data.length > 0) {
           return _this.setState({
@@ -68,7 +73,7 @@ class _C extends React.Component {
   }
 
   bindKeyInput = (e) => {
-    return debounce(fn(e, this), 500);
+    return debounce(fn(e, this), 800);
   };
 
   jumpDetail = (e) => {
@@ -80,12 +85,13 @@ class _C extends React.Component {
     const { maoyanId, projectId } = filterList;
 
     Taro.navigateTo({
-      url: `/pages/detail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
+      url: `/pages/detail/index?projectId=${projectId}`,
     })
   };
 
   render() {
     const { loading, inputVal, list } = this.state
+
     return (
       <Block>
         <View className="search-box">
@@ -109,6 +115,22 @@ class _C extends React.Component {
         )}
         {inputVal != '' && !loading && (
           <ScrollView className="search-list">
+            <View
+              className="custom-project"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              onClick={() => {
+                Taro.navigateTo({
+                  url: `/pages/addProject/index?name=${inputVal}`,
+                })
+              }}
+            >
+              <View>
+                没找到项目？
+                创建项目"
+                <Text className="custom-project-name">{inputVal}</Text>
+                "
+              </View>
+            </View>
             {list.map((item, index) => {
               return (
                 <View
@@ -118,33 +140,22 @@ class _C extends React.Component {
                   onClick={this.jumpDetail}
                 >
                   <Image src={item.pic}></Image>
-                  <View className="name">{item.name}</View>
-                  <View className="director">
-                    {'导演：' + (item.director ? item.director : '-')}
-                  </View>
-                  <View className="release">
-                    <Text>{item.releaseDesc ? item.releaseDesc : ''}</Text>
-                    {item.movieStatus == 1 && item.reRelease && (
-                      <Text
-                        className="schedule-label"
-                        style="background-color:rgba(19,194,194,0.1); color:rgba(19,194,194,1)"
-                      >
-                        重映
-                      </Text>
-                    )}
-                    {item.movieStatus == 1 && !item.reRelease && (
-                      <Text
-                        className="schedule-label"
-                        style={
-                          'background-color:' +
-                          item.scheduleObj.bgColor +
-                          ';color:' +
-                          item.scheduleObj.color
-                        }
-                      >
-                        {item.scheduleObj.label}
-                      </Text>
-                    )}
+                  <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <View>
+                      <View className="name">{item.name}</View>
+                      <View className="cooperType">
+                        {item?.cooperType?.join('/')}
+                      </View>
+                      <View className="director">
+                        {'导演：' + (item.director ? item.director : '-')}
+                      </View>
+                      <View className="release">
+                        <Text>{item.releaseDesc ? item.releaseDesc : ''}</Text>
+                      </View>
+                    </View>
+                    <View className="category">
+                      {CATEGORY_MAPPING[item.category]}
+                    </View>
                   </View>
                 </View>
               )
