@@ -1,0 +1,104 @@
+.change-card {
+  padding: 30px;
+  margin-top: 30px;
+  margin-bottom: 40px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px 0 rgba(0,0,0,0.02);
+  border-radius: 16px;
+
+  &-wrapper {
+    position: relative;
+  }
+
+  &-title {
+    font-weight: 500;
+    font-family: PingFangSC-Medium;
+    font-size: 34px;
+    color: #333333;
+    line-height: 34px;
+
+    margin-bottom: 26px;
+  }
+
+  &-pre, &-cur {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  font-family: PingFangSC-Regular;
+
+  &-pre {
+    padding-left: 31px;
+    margin-left: 17px;
+    border-left: 1px dashed  rgba(0,0,0, 0.1);
+    padding-bottom: 20px;
+    &-symbol {
+      position: absolute;
+      left: 1px;
+      flex: 0 0 32px;
+      display: inline-flex;
+      height: 32px;
+      width: 32px;
+      box-sizing: border-box;
+      border: 1px solid rgba(241, 48, 61, 0.3);
+      background-color: #fff;
+      color: #F1303D;
+      border-radius: 16px;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 600;
+
+      margin-top: 4px;
+      margin-right: 16px;
+    }
+
+    &-content {
+      flex: 1;
+      font-weight: 400;
+      font-size: 28px;
+      color: #999999;
+      line-height: 40px;
+
+      text-decoration: line-through;
+
+      .change-card-date {
+        font-family: 'MaoYanHeiTi-H1-H1'!important;
+      }
+    }
+  }
+
+  &-cur {
+    padding-left: 31px;
+    margin-left: 17px;
+    // border-left: 1px dashed  rgba(0,0,0, 0.1);
+    &-symbol {
+      position: absolute;
+      left: 1px;
+      flex: 0 0 32px;
+      display: inline-flex;
+      height: 32px;
+      width: 32px;
+      border: 1px solid rgba(105, 191, 19, 0.3);
+      background-color: #fff;
+      color: #69BF13;
+      border-radius: 16px;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 600;
+
+      margin-top: 4px;
+      margin-right: 16px;
+      
+    }
+
+    &-content {
+      flex: 1;
+      font-weight: 400;
+      font-size: 28px;
+      color: #333333;
+      line-height: 40px;
+    }
+  }
+}

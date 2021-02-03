@@ -26,7 +26,7 @@ class _C extends React.Component {
     const { item } = e.currentTarget.dataset
     const { maoyanId, projectId } = item
     Taro.navigateTo({
-      url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
+      url: `/pages/detail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
     })
   }
 
