@@ -170,14 +170,21 @@
   text-align: center;
   position: relative;
 
-  font-family: PingFangSC-Semibold;
-  font-weight: 600;
+  font-weight: 400;
+  font-family: PingFangSC-Regular;
   font-size: 26px;
+  color: #333333;
   line-height: 36px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &-active {
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    color: #276FF0;
+  }
 }
 .board-filter-item-img {
   width: 12px;
