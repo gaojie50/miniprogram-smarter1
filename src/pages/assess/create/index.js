@@ -265,7 +265,7 @@ export default class _C extends React.Component {
   handlePreview=(e, tempId)=>{
     e.stopPropagation();
     Taro.navigateTo({
-      url: `/pages/management/template/index?tempId=${tempId}`
+      url: `/pages/assess/template/index?tempId=${tempId}`
     })
   }
 

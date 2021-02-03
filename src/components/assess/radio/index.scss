@@ -13,18 +13,19 @@
     margin-bottom: 0;
 
     .list-item{
-      border-radius: 2px;
+      box-sizing: border-box;
+      height: 86px;
+      border-radius: 10px;
       font-weight: 400;
       font-size: 28px;
-      line-height: 40px;
+      line-height: 30px;
       color: #19233C;
       text-align: left;
-      padding: 24px 20px;
-      margin-bottom: 10px;
-      border-radius: 2rpx;
+      padding: 0 20px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
-
+      background: #F8F8F8;
       &.preview{
         color: #C1C6D0;
         background-color: #F8F8F8;
@@ -36,6 +37,7 @@
       }
 
       .dot {
+        box-sizing: border-box;
         display: inline-block;
         width: 40px;
         height: 40px;
@@ -52,15 +54,16 @@
 
       &.active{
         color: #1890FF;
-
-        b.dot {
+        background: rgba(39,111,240,0.10);
+        border: 1px solid #276FF0;
+        .dot {
           border-color: #1890FF;
           position: relative;
 
           &:after {
             content: '';
-            width: 8px;
-            height: 8px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             position: absolute;
             top: 50%;

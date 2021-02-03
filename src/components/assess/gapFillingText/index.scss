@@ -9,14 +9,15 @@
     margin-bottom: 20px;
   }
   .fill-textarea{
-    min-height: 90px;
+    box-sizing: border-box;
+    height: 160px;
     background: #F8F8F8;
     border-radius: 10px;
     width: 100%;
     box-sizing: border-box;
     font-weight: 400;
     font-size: 28px;
-    color: #8B94A6;
+    color: #333;
     text-align: left;
     line-height: 36px;
     margin: 0 auto;
@@ -24,7 +25,6 @@
     outline: none;
     resize: vertical;
     padding: 20px 14px;
-
     &.preview{
       background: #F6F6F6;
       &::placeholder{
