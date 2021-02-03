@@ -19,7 +19,7 @@ export default class AtTimeline extends React.Component<AtTimelineProps> {
     }
 
     const itemElems = items.map((item, index) => {
-      const { title = '', color, icon, content = [] } = item
+      const { title = '', color, icon = 'clock', content = [] } = item
 
       const iconClass = classNames({
         'at-icon': true,

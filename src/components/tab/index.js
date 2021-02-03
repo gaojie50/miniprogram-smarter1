@@ -28,13 +28,16 @@ export default () => {
 
   return (
     <Tab
+      // iconSize={58}
       current={current}
       tabList={TAB_LIST}
       fixed
       onClick={(val) => {
-        Taro.navigateTo({
-          url: `${ROUTER[val]}`,
-        });
+        if (val !== current) {
+          Taro.redirectTo({
+            url: `${ROUTER[val]}`,
+          });
+        }
       }}
     />
   )

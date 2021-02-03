@@ -7,11 +7,12 @@ import projectConfig from '../../constant/project-config.js'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
 import { useFilterPanel } from './filterPanel';
 import Tab from '../../components/tab';
-
-
+import FButton from '../../components/m5/fab'
+import '../../components/m5/style/components/fab.scss';
 import './index.scss'
-const { getMaoyanSignLabel } = projectConfig
+import { useChangeHistory } from './history';
 
+const { getMaoyanSignLabel } = projectConfig
 const {
   rpxTopx,
   formatNumber,
@@ -20,8 +21,8 @@ const {
   handleReleaseDesc,
   handleNewDate,
   formatWeekDate,
+  debounce,
 } = utils
-
 const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
 const barHeight = getGlobalData('barHeight')
@@ -80,6 +81,10 @@ export default function Board() {
   const scroller = useRef(null);
 
   const {
+    component: changeHistory,
+  } = useChangeHistory();
+
+  const {
     tabSelected,
     Component: StatusTab,
     props: tabProps,
@@ -108,8 +113,7 @@ export default function Board() {
   useEffect(() => {
     setTimeout(() => {
       scroller.current = Taro.createSelectorQuery().select('#board-list-scroll')
-    }, 200)
-
+    }, 0)
   }, [])
 
   useEffect(() => {
@@ -129,13 +133,24 @@ export default function Board() {
     }
   }, [filterActive])
 
-  const checkIfSticky = useCallback((t) => {
+  const checkIfStickyImmediately = useCallback((t) => {
     if (t > 150) {
       setSticky(true);
     } else {
       setSticky(false);
     }
-  }, [])
+  }, []);
+
+  const checkIfStickAfterAll = useCallback(debounce(() => {
+    scroller.current.scrollOffset((res) => {
+      const { scrollTop } = res;
+      if (scrollTop > 150) {
+        setSticky(true)
+      } else {
+        setSticky(false)
+      }
+    }).exec();
+  }, 300), [])
 
   return (
     <>
@@ -150,6 +165,11 @@ export default function Board() {
           <Image
             className="board-header-search"
             src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
+            onClick={() => {
+              Taro.navigateTo({
+                url: '/pages/searchProject/index',
+              })
+            }}
           />
           <Text className="board-header-title-text">项目看板</Text>
         </View>
@@ -162,13 +182,12 @@ export default function Board() {
           paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
           height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx)`,
         }}
-        // onScrollToUpper={() => {
-        //   checkIfSticky(0)
-        // }}
         onScroll={(e) => {
-          checkIfSticky(e.detail.scrollTop);
+          checkIfStickyImmediately(e.detail.scrollTop);
+          checkIfStickAfterAll();
         }}
       >
+        {changeHistory}
         <View
           style={{
             visibility: sticky ? 'hidden' : 'visible',
@@ -192,9 +211,8 @@ export default function Board() {
             {filter_sticky}
           </View>
         )}
-
         <View>
-          {PROJECT_TYPE.map(({ name, key }) => {
+          {PROJECT_TYPE.map(({ name, key }, idx_1) => {
             if (!data?.[key]?.length > 0) return null;
             const arr = data?.[key] || [];
             return (
@@ -202,9 +220,14 @@ export default function Board() {
                 <View className="project-add-text">
                   <Text>{name}</Text>
                 </View>
-                {arr.map((obj) => {
+                {arr.map((obj, i) => {
                   if (obj?.projectStageStep?.length > 0) {
                     obj.hasUpdate = true;
+                  }
+                  if (idx_1 === PROJECT_TYPE.length - 1 && i === arr.length - 1) {
+                    obj.style = {
+                      paddingBottom: '150rpx'
+                    };
                   }
                   return <ProjectItem {...obj} />;
                 })}
@@ -212,9 +235,17 @@ export default function Board() {
             );
           })}
         </View>
+        <View className="board-float-button">
+          <FButton onClick={() => {
+            Taro.navigateTo({
+              url: '/pages/addProject/index'
+            })
+          }}>
+            <Image className="board-float-button-image" src="https://p0.meituan.net/ingee/8d49c7b5fd67f053cb60b0bbf296d0a8588.png" />
+          </FButton>
+        </View>
         <Tab />
       </ScrollView>
-
     </>
   );
 }
@@ -432,7 +463,8 @@ function ProjectItem(props) {
     score = '8.5',
     projectStageStep = [],
     hasUpdate = false,
-    projectId
+    projectId,
+    style,
   } = props;
 
   const [val, unit] = useMemo(() => {
@@ -446,7 +478,7 @@ function ProjectItem(props) {
   }, [projectStageStep])
 
   return (
-    <View className="project-item" onClick={ ()=>{jumpDetail(projectId)} }>
+    <View className="project-item" style={style} onClick={ ()=>{jumpDetail(projectId)} }>
       <View className="project-item-type">{OBJECT_TYPE[type] || '-'}</View>
       <Image className=".project-item-img" src={picFn(pic)} />
       <View className="project-item-detail">

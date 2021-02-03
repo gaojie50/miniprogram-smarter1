@@ -60,8 +60,8 @@ export default class AtTabBar extends React.Component<AtTabBarProps> {
       backgroundColor: backgroundColor || ''
     }
     const imgStyle = {
-      width: `${iconSize}px`,
-      height: `${iconSize}px`
+      width: `${iconSize}rpx`,
+      height: `${iconSize}rpx`
     }
 
     return (
