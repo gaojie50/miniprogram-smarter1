@@ -156,6 +156,9 @@ export default function Result() {
 
     </View>
 
-    <OperationFooter evaluated={evaluated} />
+    <OperationFooter
+      projectId={projectId}
+      roundId={roundId}
+      evaluated={evaluated} />
   </View>
 }
