@@ -80,7 +80,7 @@ class _C extends React.Component {
     const { maoyanId, projectId } = filterList;
 
     Taro.navigateTo({
-      url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
+      url: `/pages/detail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
     })
   };
 

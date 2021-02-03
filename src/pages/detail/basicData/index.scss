@@ -1,10 +1,10 @@
 .basic-data {
   width: 100%;
   padding: 30px 30px 20px;
+  // margin-top: -30px;
   background: #FFFFFF;
   border-radius: 40px 40px 0 0;
   box-sizing: border-box;
-  margin-top: -40px;
 }
 .basic-data-top {
   position: relative;
@@ -85,20 +85,20 @@
 .basic-data-bottom {
   position: relative;
   margin-top: 30px;
-  padding: 20px;
+  padding: 20px 20px 0;
   width: 100%;
-  height: 106px;
+  // height: 106px;
   background: #F8F8F8;
   border-radius: 10px;
   box-sizing: border-box;
   .itemWrap {
     width: 100%;
-    height: 66px;
+    // height: 66px;
     overflow: hidden;
     .item {
       width: 90%;
       height: 28px;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       font-weight: 400;
       font-family: PingFangSC-Regular;
       font-size: 24px;
@@ -113,10 +113,64 @@
     width: 12px;
     height: 24px;
     position: absolute;
-    top: 40px;
+    top: 35.5%;
     right: 20px;
     background-image: url('../../../static/detail/gray.png');
     background-size: 12px 24px;
-    
+  }
+  
+  }
+  .float {
+    position: relative;
+    .at-float-layout__container {
+      max-height: 83.4% !important;
+      min-height: 0 !important;
+      border-radius: 20px 20px 0 0 !important;
+    }
+    .line {
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #333333;
+      line-height: 40px;
+      margin-bottom: 28px;
+      .name {
+        color: #999999;
+      }
+  }
+  .layout-header {
+    display: none;
+  }
+  .layout-body {
+    padding: 0 30px 30px !important;
+    max-height: 83.4% !important;
+    min-height: 0 !important;
+    .layout-body__content {
+      max-height: 99%;
+      min-height: 0;
+    }
+    .title {
+      padding: 40px 0 34px;
+      .text {
+        font-weight: 600;
+        font-family: PingFangSC-Semibold;
+        font-size: 38px;
+        color: #333333;
+        line-height: 50px;
+      }
+      .img {
+        position: absolute;
+        top: 16px;
+        right: -6px;
+        width: 80px;
+        height: 80px;
+        text-align: center;
+        line-height: 80px;
+        image {
+          width: 28px;
+          height: 28px;
+        }
+      }
+    }
   }
 }
