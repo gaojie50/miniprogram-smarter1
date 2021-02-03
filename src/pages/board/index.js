@@ -146,6 +146,7 @@ export default function Board() {
     });
 
     PureReq_ListInfo({
+      projectType,
       cooperStatus,
       startDate,
       endDate,
@@ -653,6 +654,7 @@ function onHandleResponse(res, type = 'arr') {
 function PureReq_ListInfo(params = {}) {
   Taro.addInterceptor(interceptor);
   const {
+    projectType,
     startDate,
     endDate,
     cooperStatus = 0,
@@ -667,6 +669,7 @@ function PureReq_ListInfo(params = {}) {
       data: {
         startDate: startDate || 1611072000000,
         endDate: endDate || 1611676799999,
+        type: projectType,
         cooperStatus,
         cooperType: cooperateType,
         movieSource: movieLocation,
