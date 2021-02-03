@@ -255,6 +255,16 @@ const getFutureTimePeriod = (long = 365) => {
   }
 }
 
+const getDayPeriod = (begin = 0, end = 0) => {
+  const curDayBeginDate = new Date(new Date().setHours(0, 0, 0, 0))
+  const curDayEndDate = new Date(new Date().setHours(23, 59, 59, 999))
+
+  return {
+    startDate: curDayBeginDate.setDate(curDayBeginDate.getDate() + begin),
+    endDate: curDayEndDate.setDate(curDayEndDate.getDate() + end),
+  };
+}
+
 const calcWeek = (timeStamp) =>
   `周${
     ['日', '一', '二', '三', '四', '五', '六'][new Date(timeStamp).getDay()]
@@ -399,6 +409,7 @@ export default {
   formatReleaseDate,
   formatDirector,
   getFutureTimePeriod,
+  getDayPeriod,
   calcWeek,
   assignDeep,
   checkDataType,

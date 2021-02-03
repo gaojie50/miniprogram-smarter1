@@ -1,6 +1,5 @@
 export default {
   pages: [
-    'pages/board/index',
     'pages/welcome/index',
     'pages/addProject/index',
     'pages/searchProject/index',
@@ -18,6 +17,10 @@ export default {
   sitemapLocation: 'sitemap.json',
   useExtendedLib: { weui: true },
   subpackages: [
+    {
+      root: "pages/board",
+      pages: ["index"]
+    },
     {
       root: "pages/detail",
       pages: ["index"]
