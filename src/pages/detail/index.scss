@@ -2,17 +2,22 @@
 .detail-top {
   width: 100%;
   box-sizing: border-box;
+  // height: 312px;
+  border: 1px solid transparent;
   background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
   .fixed {
     position: fixed;
     top: 0;
-    // border: 1px solid red;
+    width: 100%;
+    background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.01) 100%);
+    z-index: 100;
+    box-sizing: border-box;
   }
   .backPage {
     margin-left: 28px;
     width: 80px;
     height: 44px;
-    margin-top: 10px;
+    margin-top: 15px;
    image {
      width: 44px;
      height: 44px;
@@ -93,6 +98,9 @@
     }
     .at-tabs__underline {
       background-color: transparent;
+    }
+    .at-tabs-pane {
+      padding: 30px !important;
     }
   }
 }

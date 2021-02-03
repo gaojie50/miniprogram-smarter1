@@ -5,7 +5,7 @@ import { AtTabs, AtTabsPane } from '../../components/m5';
 import BasicData from './basicData';
 import KeyData from './keyData';
 import FollowStatus from './followStatus';
-import { useChangeHistory } from '../board/history';
+import { UseHistory } from '../board/history';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import People from '../../static/detail/people.png';
 import File from '../../static/detail/file.png';
@@ -110,11 +110,11 @@ export default class Detail extends React.Component {
     return (
       <View className="detail">
         <View className="detail-top">
-          <View className="fixed">
+          <View className="fixed" style={{height: (statusBarHeight + 40)+ 'px' }} >
             <View style={{height: statusBarHeight,}}></View>
             <View className="backPage" onClick={this.handleBack}><Image src={ArrowLeft} alt=""></Image></View>
           </View>
-          <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 54)+ 'px' }}>
+          <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 40)+ 'px' }}>
             <View className="cooperStatus">合作已确定</View>
             <View className="edit"></View>
             <View className="opt">
@@ -160,7 +160,8 @@ export default class Detail extends React.Component {
               项目评估
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
-              {basicData.projectId && <useChangeHistory projectId={ basicData.projectId }></useChangeHistory>}
+              {console.log(basicData.projectId,667)}
+              {basicData.projectId && <UseHistory projectId={ basicData.projectId }></UseHistory>}
             </AtTabsPane>
           </AtTabs>
         </View>
