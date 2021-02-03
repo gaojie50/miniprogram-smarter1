@@ -11,6 +11,7 @@ import FButton from '../../components/m5/fab'
 import '../../components/m5/style/components/fab.scss';
 import './index.scss'
 import { useChangeHistory } from './history';
+import { noop } from 'lodash';
 
 const { getMaoyanSignLabel } = projectConfig
 const {
@@ -39,6 +40,7 @@ Taro.setNavigationBarColor({
 const HEAD_HEIGHT = capsuleLocation.bottom - capsuleLocation.top;
 const SYSTEM_BAR_HEIGHT = capsuleLocation.top;
 const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_HEIGHT;
+const STICKY_OFFSET = rpxTopx(186);
 
 const FILTER_ITEMS = [
   {
@@ -79,6 +81,7 @@ export default function Board() {
   const [data, setData] = useState({});
   const [sticky, setSticky] = useState(false);
   const scroller = useRef(null);
+  const [hasInit, setHasInit] = useState(false);
 
   const {
     component: changeHistory,
@@ -88,11 +91,14 @@ export default function Board() {
     tabSelected,
     Component: StatusTab,
     props: tabProps,
+    setData: setTabData,
   } = useStatusTab();
   const {
     Component: BoardFilterComponent,
     props: boardFilterProps,
+    params,
   } = useBoardFilter();
+
 
   const { filterActive } = boardFilterProps;
 
@@ -103,12 +109,82 @@ export default function Board() {
 
   useEffect(() => {
     const { cooperStatus } = tabSelected;
+    const {
+      dateSet,
+
+      projectType,
+      cooperateType,
+      projectStage,
+      movieLocation,
+      jobType,
+    } = params;
+
+    let startDate, endDate;
+
+    const foundDate = dateSet.find((item) => item.checked === 'checked');
+    if (foundDate) {
+      if (foundDate.label === '自定义') {
+        const {
+          customStartDate,
+          customEndDate,
+        } = params.dtPickerOption;
+        startDate = +handleNewDate(customStartDate.value);
+        endDate = +handleNewDate(customEndDate.value);
+      } else {
+        const { startDate: sd, endDate: ed } = foundDate.value();
+        startDate = sd;
+        endDate = ed;
+      }
+    }
+
+    let projectStageLocalFilter;
+    projectStage.forEach((item) => {
+      if (item.active) {
+        if (!projectStageLocalFilter) projectStageLocalFilter = {};
+        projectStageLocalFilter[item.code] = true;
+      }
+    });
+
     PureReq_ListInfo({
       cooperStatus,
+      startDate,
+      endDate,
+      cooperateType: cooperateType.filter((item) => item.active).map((item) =>item.code),
+      movieLocation: movieLocation.filter((item) => item.active).map((item) =>item.code),
+      jobType: jobType.filter((item) => item.active).map((item) =>item.code),
     }).then((d) => {
-      setData(d);
+      let { 
+        newProjects = [],
+        noChangeProjects = [],
+        updateProjects = [],
+      } = d;
+
+      if (projectStageLocalFilter) {
+        newProjects = newProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
+        // noChangeProjects = noChangeProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
+        updateProjects = updateProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
+      }
+
+
+      const nlength = newProjects.length + noChangeProjects.length + updateProjects.length;
+
+      setTabData((v) => {
+        console.log(tabSelected, v);
+        const { name } = tabSelected;
+        const found = v.find((item) => item.p1 === 'name');
+        if (found) found.p2 = nlength;
+        return [...v];
+      });
+
+      setData({
+        newProjects,
+        noChangeProjects,
+        updateProjects,
+        projectNum: nlength,
+      });
     });
-  }, [tabSelected])
+  }, [tabSelected, params])
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -123,7 +199,7 @@ export default function Board() {
       if (scroller.current) {
         scroller.current.scrollOffset((res) => {
           const { scrollTop } = res;
-          if (scrollTop > 150) {
+          if (scrollTop > STICKY_OFFSET) {
             setSticky(true)
           } else {
             setSticky(false)
@@ -134,7 +210,7 @@ export default function Board() {
   }, [filterActive])
 
   const checkIfStickyImmediately = useCallback((t) => {
-    if (t > 150) {
+    if (t > STICKY_OFFSET) {
       setSticky(true);
     } else {
       setSticky(false);
@@ -144,7 +220,7 @@ export default function Board() {
   const checkIfStickAfterAll = useCallback(debounce(() => {
     scroller.current.scrollOffset((res) => {
       const { scrollTop } = res;
-      if (scrollTop > 150) {
+      if (scrollTop > STICKY_OFFSET) {
         setSticky(true)
       } else {
         setSticky(false)
@@ -190,27 +266,25 @@ export default function Board() {
         {changeHistory}
         <View
           style={{
-            visibility: sticky ? 'hidden' : 'visible',
+            opacity: sticky ? '0' : 'initial',
           }}
         >
           {tab}
           {filter}
         </View>
-        {sticky && (
-          <View
+        <View
             style={{
               position: 'fixed',
               top: `${HEAD_HEIGHT + SYSTEM_BAR_HEIGHT}px`,
               width: '100%',
               zIndex: 3,
               backgroundColor: '#fff',
-              // visibility: sticky ? 'visible' : 'hidden',
+              visibility: sticky ? 'visible' : 'hidden',
             }}
           >
             {tab_sticky}
             {filter_sticky}
-          </View>
-        )}
+        </View>
         <View>
           {PROJECT_TYPE.map(({ name, key }, idx_1) => {
             if (!data?.[key]?.length > 0) return null;
@@ -318,6 +392,7 @@ function useStatusTab() {
     Component: NiceTab,
     props,
     tabSelected: NAME_MAPPING_ARR[active],
+    setData,
     setType,
   };
 }
@@ -384,11 +459,58 @@ function NiceTab(props) {
 
 function useBoardFilter() {
   const [filterActive, setFilterActive] = useState('');
+  const [params, setParams] = useState(null);
+  const { component: filterPanel, option } = useFilterPanel({
+    titleHeight: SCROLL_TOP_MARGIN + 20,
+    filterActive,
+    ongetFilterShow(v) {
+      setFilterActive('');
+      setParams(v);
+    },
+  });
+
+  const optionArr = useMemo(() => {
+    const arr = FILTER_ITEMS;
+    const dateOption = option.dateSet.find((item) => item.checked === 'checked');
+
+    if (dateOption) {
+      arr[0].name = dateOption.label;
+    }
+    return arr;
+  }, [option]);
+
   const props = {
     filterActive,
     setFilterActive,
+    panel: filterPanel,
+    tabs: optionArr,
   }
+
+
+  const defaultParams = useMemo(() => {
+    const {
+      dtPickerOption,
+      dateSet,
+      cooperateType,
+      jobType,
+      movieLocation,
+      projectType,
+      projectStage,
+    } = option;
+  
+    return {
+      dtPickerOption,
+      dateSet,
+      cooperateType,
+      jobType,
+      movieLocation,
+      projectType,
+      projectStage,
+    };
+  }, []);
+
   return {
+    params: params || defaultParams,
     setFilterActive,
     component: <BoardFilter {...props} />,
     Component: BoardFilter,
@@ -397,25 +519,18 @@ function useBoardFilter() {
 }
 
 function BoardFilter(props) {
-  const { filterActive = '', setFilterActive } = props;
-  const { component: filterPanel } = useFilterPanel({
-    titleHeight: SCROLL_TOP_MARGIN + 20,
-    filterActive,
-    ongetFilterShow(v) {
-      console.log(v);
-      setFilterActive('');
-    },
-  });
+  const { filterActive = '', setFilterActive, tabs = [], panel = null } = props;
+
   return (
     <View style={{ position: 'relative' }}>
       <View className="board-filter">
-        {FILTER_ITEMS.map((item) => {
+        {tabs.map((item, i) => {
           return (
             <View
               className="board-filter-item"
               onClick={() => setFilterActive(item.type)}
             >
-              <Text className="board-filter-item-name">{item.name}</Text>
+              <Text className={`board-filter-item-name ${filterActive === item.type ? 'board-filter-item-active' : ''}`}>{item.name}</Text>
               <Image
                 className="board-filter-item-img"
                 src={
@@ -435,14 +550,18 @@ function BoardFilter(props) {
           onClick={() => setFilterActive('')}
         />
       )}
-      {filterPanel}
+      {panel}
     </View>
   );
 }
 
 const OBJECT_TYPE = {
-  3: '院线电影',
   1: '网络剧',
+  2: '电视剧',
+  3: '院线电影',
+  4: '网络电影',
+  5: '综艺',
+  0: '其他',
 }
 
 function jumpDetail(projectId){
@@ -523,27 +642,39 @@ function ProjectItem(props) {
   );
 }
 
-function onHandleResponse(res) {
+function onHandleResponse(res, type = 'arr') {
   const { success, data, error } = res;
   if (success) return data;
+  if (type === 'arr') return [];
+  if (type === 'obj') return {};
   return [];
 }
 
-function PureReq_ListInfo(params) {
-  const { 
-    cooperStatus = 0
+function PureReq_ListInfo(params = {}) {
+  Taro.addInterceptor(interceptor);
+  const {
+    startDate,
+    endDate,
+    cooperStatus = 0,
+    cooperateType = [],
+    movieLocation = [],
+    jobType = [],
   } = params;
   return reqPacking(
     {
+      method: 'GET',
       url: 'api/management/lisInfo',
       data: {
-        startDate: 1611072000000,
-        endDate: 1611676799999,
+        startDate: startDate || 1611072000000,
+        endDate: endDate || 1611676799999,
         cooperStatus,
+        cooperType: cooperateType,
+        movieSource: movieLocation,
+        participation: jobType,
       }
     },
     'server',
-  ).then((res) => onHandleResponse(res))
+  ).then((res) => onHandleResponse(res, 'obj'))
 }
 
 function PureReq_Cooperation(params) {
@@ -570,3 +701,32 @@ function trans(input) {
   }
   return [val, unit];
 }
+
+const interceptor = function (chain) {
+  const requestParams = chain.requestParams;
+  const { method, data, url } = requestParams;
+
+  if (method === 'GET'){
+    if (data){
+      let str = '';
+      Object.keys(data).forEach((key) => {
+        const val = data[key];
+        if (val instanceof Array) {
+          val.forEach((item) => {
+            str += `${key}=${item}&`
+          })
+        } else {
+          str += `${key}=${val}&`
+        }
+      })
+      str = str.replace(/&$/, '');
+      requestParams.url = requestParams.url + '?' + str;
+      requestParams.data = undefined;
+    }
+  }
+ 
+  return chain.proceed(requestParams)
+      .then(res => {
+        return res
+      })
+};
