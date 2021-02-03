@@ -32,7 +32,7 @@ $float-layout-timer: 300ms;
     transition: transform $float-layout-timer cubic-bezier(0.36, 0.66, 0.04, 1);
 
     border-radius: 20px 20px 0 0;
-    padding: 40px 10px;
+    padding: 40px 20px;
     box-sizing: border-box;
   }
 
@@ -41,7 +41,7 @@ $float-layout-timer: 300ms;
       position: relative;
       // padding: $spacing-v-md;
       margin-bottom: 40px;
-      margin-left: 30px;
+      margin-left: 20px;
       line-height: $line-height-zh;
       // background-color: $float-layout-header-bg-color;
 
@@ -63,33 +63,35 @@ $float-layout-timer: 300ms;
       &__btn-close {
         position: absolute;
         padding: $spacing-h-sm;
+        padding: 25rpx;
         top: 50%;
         right: $spacing-v-md;
-        width: 40px;
-        height: 100%;
+        right: 0px;
+        height: 30px;
+        width: 30px;
         line-height: 1;
         transform: translate(0, -50%);
 
-        &::before,
-        &::after {
-          content: '';
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          display: inline-block;
-          width: 36px;
-          height: 2PX;
-          border-radius: 1PX;
-          background: $float-layout-btn-color;
-        }
+        // &::before,
+        // &::after {
+        //   content: '';
+        //   position: absolute;
+        //   top: 50%;
+        //   left: 50%;
+        //   display: inline-block;
+        //   width: 36px;
+        //   height: 2PX;
+        //   border-radius: 1PX;
+        //   background: $float-layout-btn-color;
+        // }
 
-        &::before {
-          transform: translate3d(-50%, -50%, 0) rotate(45deg);
-        }
+        // &::before {
+        //   transform: translate3d(-50%, -50%, 0) rotate(45deg);
+        // }
 
-        &::after {
-          transform: translate3d(-50%, -50%, 0) rotate(-45deg);
-        }
+        // &::after {
+        //   transform: translate3d(-50%, -50%, 0) rotate(-45deg);
+        // }
       }
     }
 

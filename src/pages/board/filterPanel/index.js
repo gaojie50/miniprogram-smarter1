@@ -52,7 +52,7 @@ function dateValueCommon(timeStamp) {
   ]
 }
 
-const DATE = [
+const DATE_INIT = () => [
   {
     label: '最近7天',
     checked: 'checked',
@@ -79,8 +79,9 @@ const DATE = [
     checked: '',
   },
 ];
+const DATE = DATE_INIT();
 
-const PROJECT_TYPE = [
+const PROJECT_TYPE_INIT = () => [
   {
     value: '网络剧',
     active: false,
@@ -111,9 +112,10 @@ const PROJECT_TYPE = [
     active: false,
     code: 0,
   },
-]
+];
+const PROJECT_TYPE = PROJECT_TYPE_INIT();
 
-const COOPERATE_TYPE = [
+const COOPERATE_TYPE_INIT = () => [
   {
     value: '主投',
     active: false,
@@ -155,8 +157,9 @@ const COOPERATE_TYPE = [
     code: 0,
   },
 ];
+const COOPERATE_TYPE = COOPERATE_TYPE_INIT();
 
-const PROJECT_STAGE = [
+const PROJECT_STAGE_INIT = () => [
   {
     value: '开发',
     active: false,
@@ -188,8 +191,9 @@ const PROJECT_STAGE = [
     code: 6,
   },
 ];
+const PROJECT_STAGE = PROJECT_STAGE_INIT();
 
-const MOVIE_LOCATION = [
+const MOVIE_LOCATION_INIT = () => [
   {
     value: '中国',
     active: false,
@@ -201,8 +205,9 @@ const MOVIE_LOCATION = [
     code: 2,
   },
 ];
+const MOVIE_LOCATION = MOVIE_LOCATION_INIT();
 
-const JOB_TYPE = [
+const JOB_TYPE_INIT = () => [
   {
     value: '我负责的',
     active: false,
@@ -219,17 +224,25 @@ const JOB_TYPE = [
     code: 3
   },
 ];
+const JOB_TYPE = JOB_TYPE_INIT();
 
-const DEFAULT_DATE_VALUE = dateValueCommon(defaultCustomDate.startDate);
+const DEFAULT_DATE_VALUE_INIT = () => dateValueCommon(defaultCustomDate.startDate);
+const DEFAULT_DATE_VALUE = DEFAULT_DATE_VALUE_INIT();
 
-const DEFAULT_CUSTOM_START_DATE = {
+
+const DEFAULT_CUSTOM_START_DATE_INIT = () => ({
   value: formartDate(defaultCustomDate.startDate),
   week: calcWeek(defaultCustomDate.startDate),
-};
-const DEFAULT_CUSTOM_END_DATE = {
-  value: formartDate(defaultCustomDate.endDate),
-  week: calcWeek(defaultCustomDate.endDate),
-};
+});
+const DEFAULT_CUSTOM_START_DATE = DEFAULT_CUSTOM_START_DATE_INIT();
+
+const DEFAULT_CUSTOM_END_DATE_INIT = () => (
+  {
+    value: formartDate(defaultCustomDate.endDate),
+    week: calcWeek(defaultCustomDate.endDate),
+  }
+);
+const DEFAULT_CUSTOM_END_DATE = DEFAULT_CUSTOM_END_DATE_INIT();
 
 function noop() {}
 
@@ -248,6 +261,25 @@ function useDatePicker() {
       `${years[a]}/${months[b]}/${days[c]}`,
     );
   }, [years, months, days]);
+
+  const reset = useCallback(() => {
+    const v1 = true;
+    const v2 = DEFAULT_CUSTOM_START_DATE_INIT();
+    const v3 = DEFAULT_CUSTOM_END_DATE_INIT();
+    const v4 = DEFAULT_DATE_VALUE_INIT();
+
+    setDateShowFirstActive(v1);
+    setCustomStartDate(v2);
+    setCustomEndDate(v3);
+    setDateValue(v4);
+
+    return {
+      dateShowFirstActive: v1,
+      customStartDate: v2,
+      customEndDate: v3,
+      dateValue: v4,
+    };
+  }, [])
 
   const option = {
     dateShowFirstActive,
@@ -348,6 +380,7 @@ function useDatePicker() {
 
   return {
     option,
+    reset,
     component: (
       <View className="custom-box">
         <View className="date-show">
@@ -453,7 +486,34 @@ export function useFilterPanel(config = {}) {
   const {
     component: dtPicker,
     option: dtPickerOption,
+    reset: datePickerReset,
   } = useDatePicker();
+
+  const reset = useCallback(() => {
+    const v1 = DATE_INIT();
+    const v2 = PROJECT_TYPE_INIT();
+    const v3 = COOPERATE_TYPE_INIT();
+    const v4 = PROJECT_STAGE_INIT();
+    const v5 = MOVIE_LOCATION_INIT();
+    const v6 = JOB_TYPE_INIT();
+
+    setDateSet(v1);
+    setProjectType(v2);
+    setCooperateType(v3);
+    setProjectStage(v4);
+    setMovieLocation(v5);
+    setJobType(v6);
+
+    return {
+      dateSet: v1,
+      projectType: v2,
+      cooperateType: v3,
+      projectStage: v4,
+      movieLocation: v5,
+      jobType: v6,
+      // ...datePickerReset(),
+    };
+  }, []);
 
 
   const option = {
@@ -482,6 +542,8 @@ export function useFilterPanel(config = {}) {
 
     dtPicker,
     dtPickerOption,
+
+    reset
   };
 
   return {
@@ -588,37 +650,8 @@ export default class FilterPanel extends React.Component {
   }
 
   filterReset = () => {
-    const { estimateBox, projectBox } = this.state
-    const { filterShow } = this.props
-    if (filterShow == '1') {
-      estimateBox.map((item) => {
-        item.active = false
-      })
-      this.setState({
-        estimateBox,
-      })
-    } else if (filterShow == '2') {
-      projectBox.map((item) => {
-        item.active = false
-      })
-      this.setState({
-        projectBox,
-      })
-    } else if (filterShow == '3') {
-      const dataList = this.state
-      dataList.costBox.map((item) => {
-        item.active = false
-      })
-      dataList.cooperBox.map((item) => {
-        item.active = false
-      })
-      for (let j = 0; j < dataList.companyList.length; j++) {
-        dataList.company[j] = ''
-      }
-      this.setState({
-        ...dataList,
-      })
-    }
+    const a = this.props.reset();
+    // this.props.ongetFilterShow(a);
   }
 
   getParams() {
