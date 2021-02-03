@@ -6,7 +6,7 @@ $at-tab-bar-title-max-width: 200px;
 
 .at-tab-bar {
   display: flex;
-  padding: $spacing-v-sm 0 $spacing-v-xs;
+  // padding: $spacing-v-sm 0 $spacing-v-xs;
   width: 100%;
   min-height: $at-tab-bar-min-height;
   justify-content: center;
@@ -14,18 +14,20 @@ $at-tab-bar-title-max-width: 200px;
   text-align: center;
   box-sizing: border-box;
   background-color: $at-tab-bar-bg-color;
-  @include hairline-top();
+  box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
+  // @include hairline-top();
 
   /* elements */
   &__item {
     flex: 1;
-    padding: $spacing-v-sm $spacing-v-sm;
+    // padding: $spacing-v-sm $spacing-v-sm;
+    padding: 6px 0 4px 0;
     color: $at-tab-bar-color;
     font-size: 0;
     transition: all 0.2s;
 
     &--active {
-      color: $at-tab-bar-color-active;
+      color: #276FF0;
     }
   }
 
@@ -45,13 +47,19 @@ $at-tab-bar-title-max-width: 200px;
 
   &__title {
     display: block;
-    padding: $spacing-v-xs 0;
-    max-width: $at-tab-bar-title-max-width;
-    font-size: $at-tab-bar-font-size;
-    line-height: $line-height-base;
+    // padding: $spacing-v-xs 0;
+    // max-width: $at-tab-bar-title-max-width;
+    // font-size: $at-tab-bar-font-size;
+    // line-height: $line-height-base;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    font-weight: 300;
+    font-family: PingFangSC-Light;
+    font-size: 20px;
+    text-align: center;
+    line-height: 22px;
   }
 
   /* modifiers */
@@ -63,6 +71,7 @@ $at-tab-bar-title-max-width: 200px;
     padding-bottom: constant(safe-area-inset-bottom);
     padding-bottom: env(safe-area-inset-bottom);
     z-index: $zindex-nav;
+    z-index: 2;
   }
 
   &--ipx {

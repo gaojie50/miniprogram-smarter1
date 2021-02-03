@@ -1,0 +1,119 @@
+page {
+  height: 100%;
+  position: relative;
+}
+
+page image {
+  display: block;
+  margin: 0 auto;
+}
+
+.assess-page-welcome {
+  
+  .content-container {
+    margin: 30px;
+    border: 3px solid #eee;
+    border-radius: 40px;
+    min-height: calc(100vh-60px);
+    padding: 40px 45px;
+    box-sizing: border-box;
+  }
+  .briefinfo-wrap {
+    text-align: center;
+    padding-bottom: 50px;
+    .project-pic {
+      width: 200px;
+      height: 275px;
+      margin-top: 60px;
+      border-radius: 20px;
+    }
+    .project-name {
+      font-size: 46px;
+      color: #333;
+      line-height: 46px;
+      margin-top: 40px;
+    }
+    .project-round {
+      font-size: 28px;
+      color: #333;
+      line-height: 34px;
+      margin-top: 30px;
+    }
+    .project-creator {
+      font-weight: 400;
+      font-size: 24px;
+      color:rgba(0,0,0,.5);
+      line-height: 24px;
+      margin-top: 10px;
+    } 
+  }
+
+  .evaluation-info-wrap {
+    border-top: 1px solid rgba(0,0,0,0.2);
+
+    .round-title {
+      margin-top: 40px;
+      font-weight: 400;
+      font-size: 32px;
+      color: #333;
+      line-height: 46px;
+      text-align: center;
+    }
+
+    .project-file-wrap {
+      margin-top: 30px;
+      .file-item {
+        width: 600px;
+        background: rgba(0,0,0,0.8);
+        border-radius: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px 26px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+      }
+      .logo {
+        width: 70px;
+        height: 70px;
+        border-radius: 70px;
+        background-color: rgba(255,255,255,.8);
+        background-image: url('../../../static/icon/default-pic.svg');
+        background-size: contain;
+        flex-shrink: 0;
+      }
+      .file-info-wrap {
+        padding: 0 20px;
+        .file-name {
+          font-weight: 600;
+          font-family: PingFangSC-Semibold;
+          font-size: 24px;
+          color: #FFFFFF;
+          line-height: 28px;
+          word-break: break-all;
+        }
+      }
+     .at-icon {
+       color: #fff;
+     }
+    }
+  }
+
+  .start-btn {
+    margin: auto;
+    padding: 0;
+    margin-top: 64px;
+    width: 600px;
+    background: #276FF0;
+    border-radius: 40px;
+    color: #fff;
+    font-size: 30px;
+    line-height: 80px;
+    text-align: center;
+    
+    &:hover, &:active, &:visited {
+      background: #276FF0;
+    }
+  }
+  
+}

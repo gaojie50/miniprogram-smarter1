@@ -17,9 +17,12 @@
   box-shadow: $at-fab-box-shadow;
   box-sizing: border-box;
 
+  background-color: #276FF0;
+  box-shadow: 0 10px 30px 0 rgba(39,111,240,0.50);
+
   &:active {
-    background: $at-fab-bg-color-active;
-    box-shadow: $at-fab-box-shadow-active;
+    // background: $at-fab-bg-color-active;
+    // box-shadow: $at-fab-box-shadow-active;
   }
 
   /* elements */

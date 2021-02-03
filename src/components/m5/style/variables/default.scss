@@ -56,7 +56,7 @@ $color-bg-lighter: tint($color-bg-light, 50%) !default;
 $color-bg-grey: #F7F7F7 !default;
 
 /* 边框颜色 */
-$color-border-base: #C5D9E8 !default;
+$color-border-base: #E5E5E5 !default;
 $color-border-split: tint($color-border-base, 20%) !default; // 分割线
 $color-border-light: tint($color-border-base, 30%) !default;
 $color-border-lighter: tint($color-border-base, 50%) !default;
@@ -413,7 +413,7 @@ $at-tab-bar-color-active: $color-brand !default;
 $at-tab-bar-font-size: $font-size-base !default;
 $at-tab-bar-icon-color: $color-grey-0 !default;
 $at-tab-bar-icon-font-size: 48px !default;
-$at-tab-bar-icon-image-size: 50px !default;
+$at-tab-bar-icon-image-size: 58px !default;
 
 /* Tabs */
 $at-tabs-color: $color-text-base !default;

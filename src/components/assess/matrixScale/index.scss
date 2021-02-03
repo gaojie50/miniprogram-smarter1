@@ -1,0 +1,84 @@
+.matrix-scale {
+  .ques-title{
+    font-weight: 500;
+    font-family: PingFangSC-Medium;
+    font-size: 34px;
+    color: #19233B;
+    letter-spacing: 0;
+    line-height: 34px;
+    margin-bottom: 20px;
+  }
+  .tips{
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 24px;
+    color: #666;
+    text-align: left;
+    line-height: 36px;
+    margin-bottom: 40px;
+  }
+  .list{
+    .title{
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 28px;
+      color: #19233C;
+      text-align: left;
+      line-height: 30px;
+      margin-bottom: 22px;
+    }
+    &:last-of-type .items{
+      margin-bottom: 0;
+    }
+    .items{
+      margin-bottom: 32px;
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      .item{
+        display: inline-block;
+        width: 134px;
+        height: 86px;
+        background: #EFEFEF;
+        border-radius: 2px;
+        line-height: 86px;
+        font-family: MaoYanHeiTi-H1-H1;
+        font-weight: 600;
+        font-size: 28px;
+        color: #19233C;
+        text-align: center;
+        &:not(:last-child){
+          margin-right: 8px;
+        }
+        &:hover{
+          font-size: 16px;
+          color: #1890FF;
+          background:rgba(24, 144, 255, 0.2);
+        }
+        &.active{
+          background: #1890FF;
+          color: #FFFFFF;
+        }
+        &.disable{
+          color: #CCC;
+        }
+      }
+      .item-disable{
+        display: inline-block;
+        width: 134px;
+        height: 86px;
+        background: #EFEFEF;
+        border-radius: 2px;
+        line-height: 86px;
+        font-family: MaoYanHeiTi-H1-H1;
+        font-weight: 600;
+        font-size: 28px;
+        color: #C1C6D0 ;
+       
+        &:not(:last-child){
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}

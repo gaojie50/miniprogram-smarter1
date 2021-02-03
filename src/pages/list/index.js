@@ -10,6 +10,7 @@ import FilterPanel from '../../components/filterPanel/index'
 import Backdrop from '../../components/backdrop/index'
 import FilmDistribution from '../../components/filmDistribution/index'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
+import Tab from '../../components/tab';
 
 import './index.scss'
 const { getMaoyanSignLabel } = projectConfig
@@ -663,8 +664,8 @@ class _C extends React.Component {
 
   jumpToSearch = () => {
     Taro.navigateTo({
-      // url: '/pages/search/index',
-      url:'/pages/checkProgress/index?projectId=14332&activeTab=1'
+      url: '/pages/search/index',
+      // url:'/pages/checkProgress/index?projectId=14332&activeTab=1'
     })
   }
 
@@ -1163,6 +1164,7 @@ class _C extends React.Component {
             </View>
           </View>
         )}
+        <Tab />
       </Block>
     )
   }

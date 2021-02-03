@@ -5,6 +5,7 @@ import { AtTabs, AtTabsPane } from '../../components/m5';
 import BasicData from './basicData';
 import KeyData from './keyData';
 import FollowStatus from './followStatus';
+import { useChangeHistory } from '../board/history';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import People from '../../static/detail/people.png';
 import File from '../../static/detail/file.png';
@@ -159,7 +160,7 @@ export default class Detail extends React.Component {
               项目评估
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
-              变更历史
+              {basicData.projectId && <useChangeHistory projectId={ basicData.projectId }></useChangeHistory>}
             </AtTabsPane>
           </AtTabs>
         </View>

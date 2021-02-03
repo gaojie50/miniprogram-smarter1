@@ -45,8 +45,8 @@ export default class AtListItem extends React.Component<AtListItemProps> {
 
     let { extraText, title } = this.props
 
-    extraText = String(extraText)
-    title = String(title)
+    // extraText = String(extraText)
+    // title = String(title)
 
     const rootClass = classNames(
       'at-list__item',
@@ -129,8 +129,9 @@ export default class AtListItem extends React.Component<AtListItemProps> {
 
             {arrow ? (
               <View className='item-extra__icon'>
-                <Text
+                <Image
                   className={`at-icon item-extra__icon-arrow at-icon-chevron-${arrow}`}
+                  src="https://p0.meituan.net/ingee/62c726d9458be6c6fc263d5b450568151101.png"
                 />
               </View>
             ) : null}
