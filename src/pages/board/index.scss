@@ -216,20 +216,24 @@
     position: absolute;
     left: -8px;
     top: 14px;
-    width: 96px;
 
-    font-weight: 400;
-    font-family: PingFangSC-Regular;
-    font-size: 24px;
-    color: #FFFFFF;
-    letter-spacing: 0;
-    line-height: 32px;
+    &-name {
 
-    padding: 8px 12px;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #FFFFFF;
+      letter-spacing: 0;
+      line-height: 40px;
+      box-sizing: border-box;
+      padding: 4px 10px;
 
-    background-image: url(https://smarter.maoyan.com/916142bd07f007113d7d874e06ad7a45.png);
-    background-size: contain;
-    background-repeat: no-repeat;
+      background-image: url(https://smarter.maoyan.com/916142bd07f007113d7d874e06ad7a45.png);
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position-y: center;
+      background-position-x: left;
+    }
   }
 }
 

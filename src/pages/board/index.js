@@ -227,7 +227,7 @@ export default function Board() {
         setSticky(false)
       }
     }).exec();
-  }, 300), [])
+  }, 0), [])
 
   return (
     <>
@@ -616,7 +616,11 @@ function ProjectItem(props) {
 
   return (
     <View className="project-item" style={style} onClick={ ()=>{jumpDetail(projectId)} }>
-      <View className="project-item-type">{OBJECT_TYPE[type] || '-'}</View>
+      <View className="project-item-type">
+        <View className="project-item-type-name">
+          {OBJECT_TYPE[type] || '-'}
+        </View>
+      </View>
       <Image className=".project-item-img" src={picFn(pic)} />
       <View className="project-item-detail">
         <View className="project-item-title">
