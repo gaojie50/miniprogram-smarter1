@@ -189,6 +189,11 @@ const PROJECT_STAGE_INIT = () => [
   },
 ];
 
+export const PROJECT_STAGE_MAPPING = {};
+PROJECT_STAGE_INIT().forEach((item) => {
+  PROJECT_STAGE_MAPPING[item.code] = item.value
+})
+
 const MOVIE_LOCATION_INIT = () => [
   {
     value: '中国',

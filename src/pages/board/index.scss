@@ -235,68 +235,69 @@
       background-position-x: left;
     }
   }
+
+  &-img {
+    height: 100%;
+    width: 146px;
+    margin-right: 24px;
+  
+    border-radius: 10px;
+  
+    flex-grow: 0;
+  }
+
+  &-detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  
+    justify-content: space-between;
+
+    .project-item-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    
+      height: 36px;
+      margin-bottom: 17px;
+      &-name {
+        font-family: PingFangSC-Medium;
+        font-weight: 500;
+        font-size: 34px;
+        line-height: 36px;
+        color: #333;
+      }
+
+      &-predict {
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 36px;
+        color: #F1303D;
+        &-num {
+          font-family: 'MaoYanHeiTi-H1';
+          font-size: 34px;
+        }
+      }
+    }
+
+    .project-item-ps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #666666;
+      line-height: 36px;
+    
+      margin-bottom: 14px;
+    }
+  }
 }
 
 
-.project-item-img {
-  height: 100%;
-  width: 146px;
-  margin-right: 24px;
-
-  border-radius: 10px;
-
-  flex-grow: 0;
-}
-
-.project-item-detail {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.project-item-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  height: 36px;
-  margin-bottom: 17px;
-}
-
-.project-item-title-name {
-  font-family: PingFangSC-Medium;
-  font-weight: 500;
-  font-size: 34px;
-  line-height: 36px;
-  color: #333;
-}
-
-.project-item-title-predict {
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 36px;
-  color: #F1303D;
-}
-
-.project-item-title-predict-num {
-  font-family: 'MaoYanHeiTi-H1';
-  font-size: 34px;
-}
-
-.project-item-ps {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  font-weight: 400;
-  font-family: PingFangSC-Regular;
-  font-size: 24px;
-  color: #666666;
-  line-height: 36px;
-
-  margin-bottom: 14px;
-}
 
 .project-item-date {
   font-weight: 400;
@@ -372,4 +373,10 @@
   width: 0;
   height: 0;
   color: transparent;
+}
+
+.scheduler-tag {
+  padding: 4px 6px;
+  border-radius: 4px;
+  margin-left: 10px;
 }

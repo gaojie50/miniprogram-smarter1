@@ -5,7 +5,7 @@ import utils from '../../utils/index.js'
 import { picFn } from '../../utils/pic';
 import projectConfig from '../../constant/project-config.js'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
-import { useFilterPanel } from './filterPanel';
+import { useFilterPanel, PROJECT_STAGE_MAPPING } from './filterPanel';
 import Tab from '../../components/tab';
 import FButton from '../../components/m5/fab'
 import '../../components/m5/style/components/fab.scss';
@@ -660,9 +660,9 @@ function ProjectItem(props) {
   }, [estimateBox]);
 
   const [stageName, stageDescribe, stageLength] = useMemo(() => {
-    if (projectStageStep.length === 0) return '';
-    const { stageStatus:[ stageName = '' ], describe = '' }  = projectStageStep[projectStageStep.length - 1];
-    return [`[${stageName}]`, describe, projectStageStep.length]
+    if (projectStageStep.length === 0) return [];
+    const { projectStage, describe = '' }  = projectStageStep[projectStageStep.length - 1];
+    return [`[${PROJECT_STAGE_MAPPING[projectStage]}]`, describe, projectStageStep.length]
   }, [projectStageStep])
 
   return (
@@ -676,20 +676,27 @@ function ProjectItem(props) {
       <View className="project-item-detail">
         <View className="project-item-title">
           <View className="project-item-title-name">{name}</View>
-          <View className="project-item-title-predict">
-            预估
-            <Text className="project-item-title-predict-num">{val}</Text>
-            {unit}
-          </View>
+          {
+            val && (
+              <View className="project-item-title-predict">
+                预估
+                <Text className="project-item-title-predict-num">{val}</Text>
+                {unit}
+              </View>
+            )
+          }
         </View>
         <View className="project-item-ps">
           <View className="project-item-publication">
-            {cooperType.join('/')}
+            {cooperType.join(' / ')}
           </View>
-          <View className="project-item-score">{score}</View>
+          {
+            score && <View className="project-item-score">{score}分</View>
+          }
         </View>
         <View className="project-item-date">
-          <Text>{releaseDate}</Text>
+          <Text>{releaseDate.slice(0, 10)}</Text>
+          <SchedulerTag type={scheduleType}/>
         </View>
         <View className="project-item-status">
           <View className="project-item-status-text">
@@ -713,6 +720,40 @@ function ProjectItem(props) {
       </View>
     </View>
   );
+}
+
+const SCHEDULER = {
+  1: {
+    label: '已定档',
+    bgColor: 'rgba(20,204,20,0.10)',
+    color: '#14CC14',
+  },
+  2: {
+    label: '非常确定',
+    bgColor: 'rgba(241,48,61,0.10)',
+    color: '#F1303D',
+  },
+  3: {
+    label: '可能',
+    bgColor: 'rgba(253,156,0,0.10)',
+    color: '#FD9C00',
+  },
+  4: {
+    label: '内部建议',
+    bgColor: 'rgba(20,204,20,0.10)',
+    color: '#14CC14',
+  },
+  5: {
+    label: '待定',
+    bgColor: 'rgba(51,51,51,0.10)',
+    color: '#333333',
+  },
+}
+function SchedulerTag(props) {
+  const { type,  } = props;
+  if (!type) return null;
+  const { label, bgColor, color } = SCHEDULER[type];
+  return <Text className="scheduler-tag" style={{ color, backgroundColor: bgColor  }}>{label}</Text>
 }
 
 function onHandleResponse(res, type = 'arr') {
