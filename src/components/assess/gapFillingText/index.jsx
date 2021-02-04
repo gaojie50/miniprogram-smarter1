@@ -18,10 +18,10 @@ export default class GapFillingText extends React.Component {
 
   render() {
     const {
-      required, title, questionNum, isPreview, showError,
+      id, required, title, questionNum, isPreview, showError,
     } = this.props;
 
-    return <View className={ `gapFilling-text ${required ? "required" : ""}` }>
+    return <View id={id} className={ `gapFilling-text ${required ? "required" : ""}` }>
       <View className="ques-title">{questionNum}、{title}</View>
       <Textarea
         value={ this.state.value }

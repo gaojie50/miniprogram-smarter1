@@ -46,11 +46,11 @@ class _C extends React.Component {
 
   render() {
     let {
-      title, matrixScale, isPreview, required, questionNum, showError
+      id, title, matrixScale, isPreview, required, questionNum, showError
     } = this.props;
     let { matrixSelectList } = this.state;
     return (
-      <View className={ `matrix-scale ${required ? "required" : ""}` }>
+      <View id={id} className={ `matrix-scale ${required ? "required" : ""}` }>
         <View className="ques-title">{questionNum}、{title}</View>
         <View className="tips">
           {
