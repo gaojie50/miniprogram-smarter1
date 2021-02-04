@@ -65,7 +65,7 @@ export default class Detail extends React.Component {
     })
     reqPacking({
       url: 'api/management/projectInfo',
-      data: {projectId: 12446}
+      data: param
     })
     .then(res => {
       const { success, data = {} } = res;
