@@ -7,8 +7,8 @@ export default function ReaseTiem(props) {
   const { data, judgeRole } = props;
   const { releaseTime = {} } = data;
   const index = releaseTime.time.indexOf('~');
-  const scheduleType = releaseTime.scheduleType && (releaseTime.scheduleType - 1);
-  
+  const scheduleType = releaseTime.scheduleType && (releaseTime.scheduleType - 1) || 4;
+
   return (
     <View className="releaseTime" style={{backgroundColor: ScheduleType[ scheduleType ].bgColor}}>
       {releaseTime.schedule && releaseTime.schedule.length > 0 ? <View className="schedule">{releaseTime.schedule[0]}</View> : ''}
@@ -23,7 +23,7 @@ export default function ReaseTiem(props) {
       <View>
         {
           index === -1 ? 
-          <View className="time accurateTime">{releaseTime.time.replace(/-/g,'.')}</View>
+          <View className="time accurateTime">{releaseTime.time.replace(/-/g,'.') || '-'}</View>
           : <View className="durationWrap">
             { SlotTime(releaseTime.time.substring(0, index), 'start') }
             {/* <Text className="time" style={{fontSize: '32px'}}>-</Text> */}
