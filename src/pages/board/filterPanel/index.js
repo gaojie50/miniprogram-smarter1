@@ -7,7 +7,7 @@ import {
   PickerView,
   PickerViewColumn,
 } from '@tarojs/components'
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../../utils/index.js'
 
@@ -79,7 +79,6 @@ const DATE_INIT = () => [
     checked: '',
   },
 ];
-const DATE = DATE_INIT();
 
 const PROJECT_TYPE_INIT = () => [
   {
@@ -113,7 +112,6 @@ const PROJECT_TYPE_INIT = () => [
     code: 0,
   },
 ];
-const PROJECT_TYPE = PROJECT_TYPE_INIT();
 
 const COOPERATE_TYPE_INIT = () => [
   {
@@ -157,7 +155,6 @@ const COOPERATE_TYPE_INIT = () => [
     code: 0,
   },
 ];
-const COOPERATE_TYPE = COOPERATE_TYPE_INIT();
 
 const PROJECT_STAGE_INIT = () => [
   {
@@ -191,7 +188,11 @@ const PROJECT_STAGE_INIT = () => [
     code: 6,
   },
 ];
-const PROJECT_STAGE = PROJECT_STAGE_INIT();
+
+export const PROJECT_STAGE_MAPPING = {};
+PROJECT_STAGE_INIT().forEach((item) => {
+  PROJECT_STAGE_MAPPING[item.code] = item.value
+})
 
 const MOVIE_LOCATION_INIT = () => [
   {
@@ -205,7 +206,6 @@ const MOVIE_LOCATION_INIT = () => [
     code: 2,
   },
 ];
-const MOVIE_LOCATION = MOVIE_LOCATION_INIT();
 
 const JOB_TYPE_INIT = () => [
   {
@@ -224,17 +224,13 @@ const JOB_TYPE_INIT = () => [
     code: 3
   },
 ];
-const JOB_TYPE = JOB_TYPE_INIT();
 
 const DEFAULT_DATE_VALUE_INIT = () => dateValueCommon(defaultCustomDate.startDate);
-const DEFAULT_DATE_VALUE = DEFAULT_DATE_VALUE_INIT();
-
 
 const DEFAULT_CUSTOM_START_DATE_INIT = () => ({
   value: formartDate(defaultCustomDate.startDate),
   week: calcWeek(defaultCustomDate.startDate),
 });
-const DEFAULT_CUSTOM_START_DATE = DEFAULT_CUSTOM_START_DATE_INIT();
 
 const DEFAULT_CUSTOM_END_DATE_INIT = () => (
   {
@@ -242,15 +238,14 @@ const DEFAULT_CUSTOM_END_DATE_INIT = () => (
     week: calcWeek(defaultCustomDate.endDate),
   }
 );
-const DEFAULT_CUSTOM_END_DATE = DEFAULT_CUSTOM_END_DATE_INIT();
 
 function noop() {}
 
 function useDatePicker() {
   const [dateShowFirstActive, setDateShowFirstActive] = useState(true);
-  const [customStartDate, setCustomStartDate] = useState(DEFAULT_CUSTOM_START_DATE);
-  const [customEndDate, setCustomEndDate] = useState(DEFAULT_CUSTOM_END_DATE);
-  const [dateValue, setDateValue] = useState(DEFAULT_DATE_VALUE);
+  const [customStartDate, setCustomStartDate] = useState(DEFAULT_CUSTOM_START_DATE_INIT());
+  const [customEndDate, setCustomEndDate] = useState(DEFAULT_CUSTOM_END_DATE_INIT());
+  const [dateValue, setDateValue] = useState(DEFAULT_DATE_VALUE_INIT());
   const [years,] = useState(YEARS);
   const [months,] = useState(MONTHS);
   const [days,] = useState(DAYS);
@@ -472,12 +467,12 @@ export function useFilterPanel(config = {}) {
     filterActive,
     ongetFilterShow = noop,
   } = config;
-  const [dateSet, setDateSet] = useState(DATE);
-  const [projectType, setProjectType] = useState(PROJECT_TYPE);
-  const [cooperateType, setCooperateType] = useState(COOPERATE_TYPE);
-  const [projectStage, setProjectStage] = useState(PROJECT_STAGE);
-  const [movieLocation, setMovieLocation] = useState(MOVIE_LOCATION);
-  const [jobType, setJobType] = useState(JOB_TYPE);
+  const [dateSet, setDateSet] = useState(DATE_INIT());
+  const [projectType, setProjectType] = useState(PROJECT_TYPE_INIT());
+  const [cooperateType, setCooperateType] = useState(COOPERATE_TYPE_INIT());
+  const [projectStage, setProjectStage] = useState(PROJECT_STAGE_INIT());
+  const [movieLocation, setMovieLocation] = useState(MOVIE_LOCATION_INIT());
+  const [jobType, setJobType] = useState(JOB_TYPE_INIT());
 
   const showDateSureBtn = useMemo(() => {
     return dateSet[3].checked === 'checked';
@@ -489,7 +484,7 @@ export function useFilterPanel(config = {}) {
     reset: datePickerReset,
   } = useDatePicker();
 
-  const reset = useCallback(() => {
+  const reset = useCallback((time) => {
     const v1 = DATE_INIT();
     const v2 = PROJECT_TYPE_INIT();
     const v3 = COOPERATE_TYPE_INIT();
@@ -497,21 +492,30 @@ export function useFilterPanel(config = {}) {
     const v5 = MOVIE_LOCATION_INIT();
     const v6 = JOB_TYPE_INIT();
 
-    setDateSet(v1);
     setProjectType(v2);
     setCooperateType(v3);
     setProjectStage(v4);
     setMovieLocation(v5);
     setJobType(v6);
 
+    let obj = {};
+    let obj2 = {};
+    if (time) {
+      setDateSet(v1);
+      obj = datePickerReset();
+      obj2 = {
+        dateSet: v1,
+      }
+    }
+
     return {
-      dateSet: v1,
       projectType: v2,
       cooperateType: v3,
       projectStage: v4,
       movieLocation: v5,
       jobType: v6,
-      // ...datePickerReset(),
+      ...obj,
+      ...obj2,
     };
   }, []);
 
@@ -534,10 +538,11 @@ export function useFilterPanel(config = {}) {
     titleHeight,
     filterShow: filterActive,
     ongetFilterShow(v) {
-      ongetFilterShow({
+      const d = {
         ...v,
         dtPickerOption,
-      })
+      };
+      ongetFilterShow(d);
     },
 
     dtPicker,

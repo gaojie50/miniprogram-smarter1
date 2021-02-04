@@ -6,9 +6,10 @@ import {
   Input,
   ScrollView,
   Text,
-  Picker
-} from '@tarojs/components'
-import React, { useState, useMemo, useEffect, useCallback } from 'react'
+  Picker,
+  Textarea,
+} from '@tarojs/components';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import Taro from '@tarojs/taro'
 import reqPacking from '../../utils/reqPacking.js'
 import List from '../../components/m5/list';
@@ -69,6 +70,7 @@ export default function AddProject() {
   const { name: passedName = '' } = pathParams;
   const [name, setName] = useState(passedName);
   const [category, setCategory] = useState();
+  const [customCategory, setCustomCategory] = useState();
   const [openCategorySelector, setOpenCategorySelector] = useState(false);
 
   const [types, setTypes] = useState({});
@@ -76,6 +78,7 @@ export default function AddProject() {
   const [showToast, setShowToast] = useState('');
 
   const [cooperType, setCooperType] = useState({});
+  const [customCooperType, setCustomCooperType] = useState({});
   const [openCooperSelector, setOpenCooperSelector] = useState(false);
 
   const [cooperState, setCooperState] = useState();
@@ -133,15 +136,59 @@ export default function AddProject() {
     setData([]);
   }, []);
 
+  const isOtherCategory = useMemo(() => {
+    return category === '其他';
+  }, [category])
+
+  useEffect(() => {
+    if (category === '其他') {
+      setTypes({});
+    } else {
+      setCustomCategory();
+    }
+  }, [category])
+
+  const hasOtherCooperType = useMemo(() => {
+    return !!cooperType['其他'];
+  }, [cooperType])
+
   const handleSave = useCallback(() => {
     const t1 = CATAGORY.find((item1) => item1.label === category)
     const cooperTypeArr = Object.keys(cooperType || {});
     const type = Object.keys(types || {});
+    if (hasOtherCooperType && customCooperType) {
+      cooperTypeArr.push(customCooperType);
+    }
+
+    if (!name) {
+      setShowToast('请填写片名')
+      return
+    }
+    if (!t1) {
+      setShowToast('请选择品类')
+      return
+    }
+
+    if (isOtherCategory && !customCategory) {
+      setShowToast('请填写品类名称')
+      return
+    }
+
+    if (cooperTypeArr.length === 0) {
+      setShowToast('请填写意向合作类型')
+      return
+    }
+    if (!cooperState) {
+      setShowToast('请填写合作状态')
+      return
+    }
+
     PureReq_Create_Project({
       name,
       category: t1?.value,
       cooperType: cooperTypeArr,
       cooperStatus: cooperState,
+      customType: isOtherCategory ? customCategory : undefined,
       type,
     }).then((data) => {
       setShowToast('新建成功')
@@ -149,7 +196,7 @@ export default function AddProject() {
         url: `/pages/detail/index?projectId=${data}`,
       })
     })
-  }, [name, category, cooperType, types, cooperState])
+  }, [name, category, cooperType, types, cooperState, isOtherCategory, hasOtherCooperType, customCategory, customCooperType])
 
   return (
     <View className="add-project">
@@ -161,7 +208,7 @@ export default function AddProject() {
           margin: '0 30rpx 110rpx 30rpx',
         }}>
         <View className="add-project-input-wrapper">
-          <Input autoFocus placeholder='请输入片名' placeholderClass="add-project-input-placeholder" value={name} onInput={(e) => {
+          <Textarea autoHeight className="add-project-input-wrapper-content" autoFocus placeholder='请输入片名' placeholderClass="add-project-input-placeholder" value={name} onInput={(e) => {
             const val = e.detail.value;
             if (val !== name) {
               setName(val);
@@ -183,15 +230,30 @@ export default function AddProject() {
                 resetOther();
               }} />
               {divider}
-              <MovieList data={data} onChoose={handleChoose} />
+              <MovieList data={data} onChoose={handleChoose} right="user" />
             </>
           )
         }
         {divider}
-        <ListItem title='类型' extraText={category || textVoid} arrow onClick={() => setOpenCategorySelector(true)} />
+        <ListItem title='品类' extraText={category || textVoid} arrow onClick={() => setOpenCategorySelector(true)} />
+        {
+          isOtherCategory && (
+            <View className="add-project-input-wrapper">
+              <Input
+                className="add-project-input-wrapper-content"
+                autoFocus placeholder='请填写品类名称'
+                placeholderClass="add-project-input-placeholder"
+                value={customCategory} onInput={(e) => {
+                  const val = e.detail.value;
+                  setCustomCategory(val);
+                }}
+              />
+            </View>
+          )
+        }
         <FloatCard
           isOpened={openCategorySelector}
-          title="选择类型"
+          title="选择品类"
           onClose={() => setOpenCategorySelector(false)}
         >
           <M5Grid
@@ -205,10 +267,10 @@ export default function AddProject() {
           />
         </FloatCard>
         {divider}
-        <ListItem title='品类' extraText={typeStr} arrow onClick={() => setOpenTypeSelector(true)} />
+        <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr} arrow onClick={() => setOpenTypeSelector(true)} />
         <FloatCard
           isOpened={openTypeSelector}
-          title="选择品类"
+          title="选择类型"
           onClose={() => setOpenTypeSelector(false)}
         >
           <M5Grid
@@ -234,6 +296,21 @@ export default function AddProject() {
         <Toast duration={1000} isOpened={showToast} text={showToast} onClose={() => setShowToast('')} />
         {divider}
         <ListItem title='意向合作类型' extraText={cooperStr} arrow onClick={() => setOpenCooperSelector(true)} />
+        {
+          hasOtherCooperType && (
+            <View className="add-project-input-wrapper">
+              <Input
+                className="add-project-input-wrapper-content"
+                placeholder='请填写合作类型'
+                placeholderClass="add-project-input-placeholder"
+                value={customCooperType} onInput={(e) => {
+                  const val = e.detail.value;
+                  setCustomCooperType(val);
+                }}
+              />
+            </View>
+          )
+        }
         <FloatCard
           isOpened={openCooperSelector}
           title="选择意向合作类型"

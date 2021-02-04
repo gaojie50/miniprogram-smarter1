@@ -17,8 +17,24 @@ CATEGORY_LIST.map((item) => {
   CATEGORY_MAPPING[item.key] = item.name;
 })
 
+
 export function MovieList(props) {
-    const { data = [], onChoose = () => { } } = props;
+    const { data = [], onChoose = () => {}, right = 'category' } = props;
+
+    const right_mapping = {
+      category: (item) => <View className="category">{CATEGORY_MAPPING[item.category]}</View>,
+      user: (item) => {
+        if (!item.creator) return null
+
+        return (
+          <View className="user">
+            <View className="p1">已创建</View>
+            <View className="p2">by {item.creator}</View>
+          </View>
+        )
+      },
+    }
+
     return (
       <ScrollView className="search-list" scrollY>
         {data.map((item, index) => {
@@ -43,9 +59,9 @@ export function MovieList(props) {
                     <Text>{item.releaseDesc ? item.releaseDesc : ''}</Text>
                   </View>
                 </View>
-                <View className="category">
-                  {CATEGORY_MAPPING[item.category]}
-                </View>
+                {
+                  right_mapping[right] ? right_mapping[right](item) : null
+                }
               </View>
             </View>
           )
