@@ -6,8 +6,9 @@ import {
   Input,
   ScrollView,
   Text,
-  Picker
-} from '@tarojs/components'
+  Picker,
+  Textarea,
+} from '@tarojs/components';
 import React, { useState, useMemo, useEffect, useCallback } from 'react'
 import Taro from '@tarojs/taro'
 import reqPacking from '../../utils/reqPacking.js'
@@ -161,7 +162,7 @@ export default function AddProject() {
           margin: '0 30rpx 110rpx 30rpx',
         }}>
         <View className="add-project-input-wrapper">
-          <Input autoFocus placeholder='请输入片名' placeholderClass="add-project-input-placeholder" value={name} onInput={(e) => {
+          <Textarea autoHeight className="add-project-input-wrapper-content" autoFocus placeholder='请输入片名' placeholderClass="add-project-input-placeholder" value={name} onInput={(e) => {
             const val = e.detail.value;
             if (val !== name) {
               setName(val);
