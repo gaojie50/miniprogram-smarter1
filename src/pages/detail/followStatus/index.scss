@@ -1,5 +1,5 @@
 .followStatus {
-  padding: 30px;
+  // padding: 30px;
   .noPermission {
     height: 150px;
     text-align: center;
@@ -120,4 +120,19 @@
   &-result:nth-child(odd) {
     margin-right: 3%;
   }
+  .allProgress {
+    width: 100%;
+    height: 90px;
+    background: rgba(39,111,240, 0.06);
+    border-radius: 10px;
+    line-height: 90px;
+    text-align: center;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 28px;
+    color: #276FF0;
+  }
+}
+.follow-reault {
+  padding: 30px 30px 10px;
 }
