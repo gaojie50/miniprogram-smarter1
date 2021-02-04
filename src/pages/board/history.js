@@ -6,6 +6,20 @@ import './history.scss';
 
 import reqPacking from '../../utils/reqPacking'
 
+export function UseHistory(props) {
+  const [data, setData] = useState([]);
+  const { projectId } = props;
+
+  useEffect(() => {
+    if (projectId) {
+      PureReq_Projectoperatelog({
+        projectId
+      }).then((d) => setData(d))
+    }
+  }, [projectId])
+
+  return  projectId ? <ChangeHistory data={data} /> : null
+}
 
 export function useChangeHistory(projectId) {
   const [data, setData] = useState([]);

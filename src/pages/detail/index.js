@@ -5,8 +5,9 @@ import { AtTabs, AtTabsPane } from '../../components/m5';
 import BasicData from './basicData';
 import KeyData from './keyData';
 import FollowStatus from './followStatus';
-import { useChangeHistory } from '../board/history';
+import { UseHistory } from '../board/history';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
+import AddingProcess from '../../components/addingProcess';
 import People from '../../static/detail/people.png';
 import File from '../../static/detail/file.png';
 import ArrowLeft from '../../static/detail/arrow-left.png';
@@ -21,9 +22,31 @@ export default class Detail extends React.Component {
     basicData: {},
     judgeRole: {}, //包含role、cooperation、releaseStage
     keyData: {},
-    current: 0
+    current: 0,
+    showProgress: false,
+    top: 0,
+    topSet: true,
   }
 
+  onPageScroll() {
+    const that = this;
+    const { top, topSet } = this.state;
+    var query = wx.createSelectorQuery();
+    query.select('#top').boundingClientRect(function (res) {
+      if(res.top < 0 && topSet) {
+        that.setState({
+          top: res.top,
+          topSet: false
+        })
+      }
+      if(res.top === 0) {
+        that.setState({
+          top: res.top,
+          topSet: true
+        })
+      }
+    }).exec()
+  }
   componentWillMount(){
     this.fetchBasicData();
   }
@@ -105,16 +128,43 @@ export default class Detail extends React.Component {
     wx.navigateBack()
   }
 
+  bottomClick(value) {
+    const { projectId } = this.state.basicData;
+    if(value === 'assess') {
+      wx.navigateTo({
+        url: `pages/assess/create/index?projectId=${projectId}`,
+      })
+    } else {
+      this.setState({
+        showProgress: true
+      })
+    }
+  }
+
+  updateProcess = () => {
+    this.setState({ 
+      showProgress: false
+    })
+    this.refs.followStatus.fetFollowStatus();
+  }
+
   render() {
-    const { basicData, judgeRole, keyData, current } = this.state;
+    const { basicData, judgeRole, keyData, current, showProgress, top } = this.state;
+
     return (
       <View className="detail">
-        <View className="detail-top">
-          <View className="fixed">
+        <View className="detail-top" id="top">
+          <View className="fixed" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top < 0 ? '#FFFFFF':''}} >
             <View style={{height: statusBarHeight,}}></View>
-            <View className="backPage" onClick={this.handleBack}><Image src={ArrowLeft} alt=""></Image></View>
+            <View className="header">
+              <View className="backPage" onClick={this.handleBack}>
+                <Image src={ArrowLeft} alt=""></Image>
+              </View>
+              <Text className="header-title">{top < 0 ? basicData.name : ''}</Text>
+            </View>
+            
           </View>
-          <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 54)+ 'px' }}>
+          <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 50)+ 'px' }}>
             <View className="cooperStatus">合作已确定</View>
             <View className="edit"></View>
             <View className="opt">
@@ -151,21 +201,26 @@ export default class Detail extends React.Component {
               { title: '变更历史' }
             ]}
             onClick={this.changeTabs}
-            className="tabs"
+            className={basicData.cooperStatus === 2 && current === 0 ? "tabs nopaddingTab" : "tabs"}
+            style={{top: (statusBarHeight + 50)+ 'px'}}
           >
             <AtTabsPane current={current} index={0}>
-              <FollowStatus judgeRole={ judgeRole } basicData={ basicData } />
+              <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
             </AtTabsPane>
             <AtTabsPane current={current} index={1}>
               项目评估
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
-              {basicData.projectId && <useChangeHistory projectId={ basicData.projectId }></useChangeHistory>}
+              {basicData.projectId && <UseHistory projectId={ basicData.projectId }></UseHistory>}
             </AtTabsPane>
           </AtTabs>
         </View>
+        <View className="bottom-fixed">
+          <View className="assess" style={{background: '#FD9C00', marginRight: '20px'}} onClick={this.bottomClick.bind(this, 'assess')}>发起评估</View>
+          <View className="assess" style={{background: '#276FF0'}} onClick={this.bottomClick.bind(this, 'progress')}>添加进展</View>
+        </View>
+        {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false })}} projectId={basicData.projectId} /> : null}
       </View>
-      
     )
   }
 }
