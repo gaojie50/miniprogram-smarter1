@@ -60,9 +60,11 @@ export function ChangeHistory(props) {
 
       }
       
+      const str = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+      
       return (
         {
-          title: `${username} 添加于${time.toLocaleString()}`,
+          title: `${username} 添加于${str}`,
           content: [
             <ChangeCard title={filedName} pre={oldFiledValue || '-'} cur={newFiledValue || '-'} />
           ]
