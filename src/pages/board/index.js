@@ -114,7 +114,7 @@ export default function Board() {
     const { cooperStatus: last_cooperStatus } = tabSelected_ref.current;
 
     const isClickTab = cooperStatus !== last_cooperStatus;
-    const currentParams = isClickTab ? reset() : params;
+    const currentParams = isClickTab ? reset(true) : params;
     tabSelected_ref.current = tabSelected;
 
     const {
@@ -518,16 +518,29 @@ function useBoardFilter() {
     const has3 = option.movieLocation.find((item) => item.active === true);
 
     if (dateOption) {
-      arr[0].active = true;
+      arr[0].changed = true;
       arr[0].name = dateOption.label;
     }
     if (hasProjectType) {
-      arr[1].active = true;
+      arr[1].changed = true;
     }
     if (hasCooperType) {
-      arr[2].active = true;
+      arr[2].changed = true;
     }
     if (has1 || has2 || has3) {
+      arr[3].changed = true;
+    }
+
+    if (option.filterShow === '4' ) {
+      arr[0].active = true;
+    }
+    if (option.filterShow === '1') {
+      arr[1].active = true;
+    }
+    if (option.filterShow === '2') {
+      arr[2].active = true;
+    }
+    if (option.filterShow === '3') {
       arr[3].active = true;
     }
 
@@ -586,12 +599,12 @@ function BoardFilter(props) {
               className="board-filter-item"
               onClick={() => setFilterActive(item.type)}
             >
-              <Text className={`board-filter-item-name ${item.active ? 'board-filter-item-active' : ''}`}>{item.name}</Text>
+              <Text className={`board-filter-item-name ${(filterActive ? item.active : item.changed)  ? 'board-filter-item-active' : ''}`}>{item.name}</Text>
               <Image
                 className="board-filter-item-img"
                 src={
                   '../../static/' +
-                  (false ? 'arrow-down-active' : 'arrow-down') +
+                  (item.active ? 'arrow-down-active' : 'arrow-down') +
                   '.png'
                 }
               />
