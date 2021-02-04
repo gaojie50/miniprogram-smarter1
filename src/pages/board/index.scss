@@ -42,7 +42,7 @@
 .board-float-button {
   position: fixed;
   z-index: 1;
-  bottom: 132px;
+  bottom: 172px;
   right: 30px;
 
   &-image {
@@ -163,7 +163,7 @@
   height: 100vh;
   width: 100%;
   background-color: rgba(0,0,0,0.6);
-  z-index: 2;
+  z-index: 3;
 }
 .board-filter-item {
   flex: 1;

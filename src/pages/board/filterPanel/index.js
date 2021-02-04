@@ -511,7 +511,7 @@ export function useFilterPanel(config = {}) {
       projectStage: v4,
       movieLocation: v5,
       jobType: v6,
-      // ...datePickerReset(),
+      ...datePickerReset(),
     };
   }, []);
 
