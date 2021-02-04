@@ -18,11 +18,11 @@ export default class Radio extends React.Component {
 
   render() {
     const {
-      required, title, questionNum, radioItems, isPreview, showError
+      id, required, title, questionNum, radioItems, isPreview, showError
     } = this.props;
     const { selected } = this.state;
 
-    return <View className={ `radio-wrap ${required ? "required" : ""}` }>
+    return <View id={id} className={ `radio-wrap ${required ? "required" : ""}` }>
       <View className="ques-title">{questionNum}、{title}</View>
       <View className="list-wrap">
         {radioItems.map((item, index) => <View

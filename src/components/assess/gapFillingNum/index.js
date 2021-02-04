@@ -31,11 +31,11 @@ export default class GapFillingNum extends React.Component {
 
   render() {
     const {
-      required, gapFilling, questionNum, isPreview, showError
+      id, required, gapFilling, questionNum, isPreview, showError
     } = this.props;
     const { leftText, rightText } = gapFilling;
 
-    return <View className={ `gapFilling-num ${required ? "required" : ""}` }>
+    return <View id={id}  className={ `gapFilling-num ${required ? "required" : ""}` }>
       <View className="ques-title">{questionNum}、{leftText}</View>
       <Input
         placeholder="请填写"
