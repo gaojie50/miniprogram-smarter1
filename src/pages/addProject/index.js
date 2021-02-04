@@ -78,7 +78,7 @@ export default function AddProject() {
   const [showToast, setShowToast] = useState('');
 
   const [cooperType, setCooperType] = useState({});
-  const [customCooperType, setCustomCooperType] = useState({});
+  const [customCooperType, setCustomCooperType] = useState();
   const [openCooperSelector, setOpenCooperSelector] = useState(false);
 
   const [cooperState, setCooperState] = useState();
