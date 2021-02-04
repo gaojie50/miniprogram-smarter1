@@ -87,6 +87,7 @@
 .board-tab-item {
   display: inline-flex;
   flex-direction: column;
+  position: relative;
 
   width: 114px;
   box-shadow: 0 2px 20px 0 rgba(0,0,0,0.08);
@@ -141,6 +142,18 @@
     box-shadow: 0 10px 30px 0 rgba(39,111,240,0.40);
     color: #fff;
   }
+}
+
+.board-tab-item-active::after {
+  content: "";
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  background-color: #276FF0;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  box-shadow: 0 10px 30px 0 rgba(39,111,240,0.40);
 }
 
 .board-tab-item-head {
