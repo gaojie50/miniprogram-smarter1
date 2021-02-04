@@ -4,6 +4,7 @@ import Taro, { getCurrentInstance } from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
 import _cloneDeep from 'lodash/cloneDeep'
+import dayjs from 'dayjs'
 import Nodata from '@components/noData';
 import BriefInfo from '@components/briefInfo';
 import AtActionSheet from '@components/m5/action-sheet';
@@ -12,7 +13,6 @@ import AtFloatLayout from '@components/m5/float-layout';
 import '@components/m5/style/components/action-sheet.scss';
 import '@components/m5/style/components/float-layout.scss';
 import './index.scss'
-
 const { errorHandle } = utils;
 
 const METHOD_LIST = [
@@ -220,9 +220,10 @@ export default class _C extends React.Component {
                 }, () => that.fetchProjectProfile(projectId));
               }
               Taro.hideLoading();
-              return errorHandle({
-                message: error.message
+              errorHandle({
+                message: error.message || '上传失败'
               });
+              return;
             }else{
               Taro.hideLoading();
               errorHandle({
@@ -295,8 +296,6 @@ export default class _C extends React.Component {
     };
 
     if (titleErrorTip || despErrorTip) return;
-    console.log(params);
-    return;
     this.setState({ isSubmitting: true });
     reqPacking(
       {
@@ -363,10 +362,8 @@ export default class _C extends React.Component {
       uploadSelectorIsOpen,
       fileSelectorIsOpen
     } = this.state;
-    console.log(primaryFilesChecked);
-    console.log(filesChecked);
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
-    const templateList = [];
+    const templateList = briefInfo.tempList || [];
     return (
       <View className="assess-create-page">
         <BriefInfo {...briefInfo} />
@@ -458,7 +455,7 @@ export default class _C extends React.Component {
         <View className="btn-wrap">
           <Button 
             className="publish-btn" 
-            disabled={isSubmitting ? true : false} 
+            disabled={isSubmitting || titleErrorTip || despErrorTip ? true : false} 
             onClick={this.handleFinish}
             loading={ isSubmitting }
           >发布评估</Button>
@@ -500,7 +497,7 @@ export default class _C extends React.Component {
                 <Text className="file-name">{profileName}</Text>
                 <View className="message">
                   <Text className="uploader">{uploader}</Text>
-                  <Text className="upload-time">{uploadTime}</Text>
+                  <Text className="upload-time">{dayjs(uploadTime).format('YYYY-MM-DD HH:mm')}</Text>
                   <Text className="upload-size">{profileSize}</Text>
                 </View>
               </View>

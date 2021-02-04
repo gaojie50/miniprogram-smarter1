@@ -13,7 +13,7 @@ page image {
   .create-wrap {
     background: #FFFFFF;
     border-radius: 40px 40px 0 0;
-    padding: 40px 30px 150px 30px;
+    padding: 40px 30px 180px 30px;
     .title,.title-input {
       font-size: 46px;
       font-weight: 500;
@@ -200,6 +200,10 @@ page image {
         margin-top: 16px;
         &:active, &:visited {
           background: #276FF0;
+        }
+        &[disabled] {
+          background: #F8F8F8;
+          color: #ccc;
         }
       }
     }
