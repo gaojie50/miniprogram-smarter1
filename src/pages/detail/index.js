@@ -132,7 +132,7 @@ export default class Detail extends React.Component {
     const { projectId } = this.state.basicData;
     if(value === 'assess') {
       wx.navigateTo({
-        url: `pages/assess/create/index?projectId=${projectId}`,
+        url: `/pages/assess/create/index?projectId=${projectId}`,
       })
     } else {
       this.setState({
@@ -142,7 +142,7 @@ export default class Detail extends React.Component {
   }
 
   updateProcess = () => {
-    this.setState({ 
+    this.setState({
       showProgress: false
     })
     this.refs.followStatus.fetFollowStatus();
