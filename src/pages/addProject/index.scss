@@ -4,18 +4,37 @@
   box-sizing: border-box;
   padding: 30px 0;
   overflow: scroll;
-  .at-input {
-    flex: 1;
+
+  .at-grid {
+    overflow: hidden;
   }
 
-  .movie-search-loading {
-    height: 54px;
-    margin-right: 25px;
-    .weui-loadmore {
-      margin: 0;
-      .weui-loading {
+  &-input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    input {
+      flex: 1;
+      padding: 40px 30px;
+      font-weight: 500;
+      font-family: PingFangSC-Medium;
+      font-size: 40rpx;
+      color: #333333;
+      line-height: 40rpx;
+
+      .add-project-input-placeholder {
+        color: #CCCCCC;
+      }
+    }
+    .movie-search-loading {
+      height: 54px;
+      margin-right: 25px;
+      .weui-loadmore {
         margin: 0;
-        margin-right: 5px;
+        .weui-loading {
+          margin: 0;
+          margin-right: 5px;
+        }
       }
     }
   }
@@ -33,16 +52,6 @@
       text-align: center;
       line-height: 36px;
     }
-  }
-
-  .divider {
-    border-bottom: 1px solid #e5e5e5;
-    margin-bottom: 4px;
-    margin-top: 5px;
-    margin-left: 30px;
-    margin-right: 30px;
-
-    transform: scaleY(0.5);
   }
 
   .add-project-confirm {
@@ -69,4 +78,10 @@
       font-size: 30px;
     }
   }
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
 }

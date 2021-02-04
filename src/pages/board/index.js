@@ -10,7 +10,6 @@ import Tab from '../../components/tab';
 import FButton from '../../components/m5/fab'
 import '../../components/m5/style/components/fab.scss';
 import './index.scss'
-import { useChangeHistory } from './history';
 import { noop } from 'lodash';
 
 const { getMaoyanSignLabel } = projectConfig
@@ -42,24 +41,27 @@ const SYSTEM_BAR_HEIGHT = capsuleLocation.top;
 const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_HEIGHT;
 const STICKY_OFFSET = rpxTopx(186);
 
-const FILTER_ITEMS = [
-  {
-    name: '最近7天',
-    type: '4'
-  },
-  {
-    name: '项目类型',
-    type: '1'
-  },
-  {
-    name: '合作类型',
-    type: '2'
-  },
-  {
-    name: '筛选',
-    type: '3'
-  },
-];
+const FILTER_ITEMS_INIT = () => (
+  [
+    {
+      name: '最近7天',
+      type: '4'
+    },
+    {
+      name: '项目类型',
+      type: '1'
+    },
+    {
+      name: '合作类型',
+      type: '2'
+    },
+    {
+      name: '筛选',
+      type: '3'
+    },
+  ]
+);
+const FILTER_ITEMS = FILTER_ITEMS_INIT();
 
 const PROJECT_TYPE = [
   {
@@ -81,12 +83,7 @@ export default function Board() {
   const [data, setData] = useState({});
   const [sticky, setSticky] = useState(false);
   const scroller = useRef(null);
-  const [hasInit, setHasInit] = useState(false);
-
-  const {
-    component: changeHistory,
-  } = useChangeHistory();
-
+  const [target, setTarget] = useState();
   const {
     tabSelected,
     Component: StatusTab,
@@ -145,8 +142,9 @@ export default function Board() {
       }
     });
 
+    setData({});
     PureReq_ListInfo({
-      projectType,
+      projectType: projectType.filter((item) => item.active).map((item) =>item.code),
       cooperStatus,
       startDate,
       endDate,
@@ -158,31 +156,33 @@ export default function Board() {
         newProjects = [],
         noChangeProjects = [],
         updateProjects = [],
-      } = d;
+      } = d || {};
 
       if (projectStageLocalFilter) {
-        newProjects = newProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
+        if (newProjects) newProjects = newProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
         // noChangeProjects = noChangeProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
-        updateProjects = updateProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
+        if (updateProjects) updateProjects = updateProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
       }
 
 
       const nlength = newProjects.length + noChangeProjects.length + updateProjects.length;
 
       setTabData((v) => {
-        console.log(tabSelected, v);
         const { name } = tabSelected;
-        const found = v.find((item) => item.p1 === 'name');
+        const found = v.find((item) => item.p1 === name);
         if (found) found.p2 = nlength;
         return [...v];
       });
 
-      setData({
-        newProjects,
-        noChangeProjects,
-        updateProjects,
-        projectNum: nlength,
-      });
+      setTimeout(() => {
+        setData({
+          newProjects,
+          noChangeProjects,
+          updateProjects,
+          projectNum: nlength,
+        })
+      }, 0)
+
     });
   }, [tabSelected, params])
 
@@ -227,7 +227,7 @@ export default function Board() {
         setSticky(false)
       }
     }).exec();
-  }, 300), [])
+  }, 0), [])
 
   return (
     <>
@@ -264,7 +264,7 @@ export default function Board() {
           checkIfStickAfterAll();
         }}
       >
-        {changeHistory}
+
         <View
           style={{
             opacity: sticky ? '0' : 'initial',
@@ -471,12 +471,29 @@ function useBoardFilter() {
   });
 
   const optionArr = useMemo(() => {
-    const arr = FILTER_ITEMS;
+    const arr = FILTER_ITEMS_INIT();
+
     const dateOption = option.dateSet.find((item) => item.checked === 'checked');
+    const hasProjectType = option.projectType.find((item) => item.active === true);
+    const hasCooperType = option.cooperateType.find((item) => item.active === true);
+    const has1 = option.projectStage.find((item) => item.active === true);
+    const has2 = option.jobType.find((item) => item.active === true);
+    const has3 = option.movieLocation.find((item) => item.active === true);
 
     if (dateOption) {
+      arr[0].active = true;
       arr[0].name = dateOption.label;
     }
+    if (hasProjectType) {
+      arr[1].active = true;
+    }
+    if (hasCooperType) {
+      arr[2].active = true;
+    }
+    if (has1 || has2 || has3) {
+      arr[3].active = true;
+    }
+
     return arr;
   }, [option]);
 
@@ -531,7 +548,7 @@ function BoardFilter(props) {
               className="board-filter-item"
               onClick={() => setFilterActive(item.type)}
             >
-              <Text className={`board-filter-item-name ${filterActive === item.type ? 'board-filter-item-active' : ''}`}>{item.name}</Text>
+              <Text className={`board-filter-item-name ${item.active ? 'board-filter-item-active' : ''}`}>{item.name}</Text>
               <Image
                 className="board-filter-item-img"
                 src={
@@ -599,7 +616,11 @@ function ProjectItem(props) {
 
   return (
     <View className="project-item" style={style} onClick={ ()=>{jumpDetail(projectId)} }>
-      <View className="project-item-type">{OBJECT_TYPE[type] || '-'}</View>
+      <View className="project-item-type">
+        <View className="project-item-type-name">
+          {OBJECT_TYPE[type] || '-'}
+        </View>
+      </View>
       <Image className=".project-item-img" src={picFn(pic)} />
       <View className="project-item-detail">
         <View className="project-item-title">

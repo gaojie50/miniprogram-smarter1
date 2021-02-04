@@ -29,7 +29,7 @@ $at-list-item-horizontal-padding: 24px;
 
   &__item {
     padding: $spacing-v-lg $spacing-h-lg;
-    padding: 24px 30px;
+    padding: 34px 30px;
     position: relative;
     box-sizing: border-box;
     color: $at-list-text-color;
@@ -175,7 +175,7 @@ $at-list-item-horizontal-padding: 24px;
 
     display: flex;
     justify-content: flex-end;
-    align-items: center;
+    align-items: baseline;
   }
 
   /* modifiers */
