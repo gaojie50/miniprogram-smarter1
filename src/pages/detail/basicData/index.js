@@ -1,11 +1,34 @@
 import { View, Image, Text } from '@tarojs/components';
 import React from 'react';
-import { CategoryList } from '../constant';
+import { CategoryList, BasicItem } from '../constant';
+import { AtFloatLayout } from '../../../components/m5';
 import Cover from '../../../static/detail/cover.png';
+import Close from '../../../static/close.png';
 import ReaseTime from './releaseTime';
 import './index.scss';
 
 export default class BasicData extends React.Component {
+  state = {
+    showFloat: false,
+  }
+
+  judgeShowBasicItem = item => {
+    const { data } = this.props;
+    return data[item] && data[item].length > 0
+  }
+
+  handleClick = () => {
+    this.setState({
+      showFloat: true
+    })
+  }
+
+  handleClose = () => {
+    this.setState({
+      showFloat: false
+    })
+  }
+
   render() {
     const { data, keyData, judgeRole } = this.props;
     const newPic = data.pic ? `${data.pic.replace('/w.h/', '/')}@200w_274h_1e_1c` : Cover;
@@ -33,19 +56,37 @@ export default class BasicData extends React.Component {
             {data.category === 5 && data.duration && data.totalTvNumber ? <View className="text">共{data.totalTvNumber}集</View> : ''}
             {data.movieSource && data.movieSource.length > 0 ? <View className="text">{data.movieSource.join('/')}</View> : ''}
           </View>
-          {keyData.releaseTime ? <ReaseTime data={keyData} judgeRole={ judgeRole } /> : ''}
+          {keyData.releaseTime ? <ReaseTime data={keyData} judgeRole={ judgeRole } onClose={this.handleClose.bind(this)} /> : ''}
         </View>
         <View>
-          <View className="basic-data-bottom">
-            <View className="itemWrap">
-              {data.newDirector &&  <View className="item">导演：{data.newDirector.join('/')}</View>}
-              {data.newMainRole &&  <View className="item">主演：{data.newMainRole.join('/')}</View>}
-              {data.mainProduct &&  <View className="item">出品方：{data.mainProduct.join('/')}</View>}
-              {data.mainIssue &&  <View className="item">发行方：{data.mainIssue.join('/')}</View>}
-            </View>
-            <View className="arrow"></View>
-          </View>
+            {
+              this.judgeShowBasicItem('newDirector') || this.judgeShowBasicItem('newMainRole') || this.judgeShowBasicItem('mainControl') || this.judgeShowBasicItem('mainProduct') || this.judgeShowBasicItem('mainIssue') ? 
+              <View className="basic-data-bottom" onClick={this.handleClick}>
+                <View className="itemWrap">
+                  {data.newDirector && data.newDirector.length > 0 &&  <View className="item">导演：{data.newDirector.join('/')}</View>}
+                  {data.newMainRole && data.newMainRole.length > 0 &&  <View className="item">主演：{data.newMainRole.join('/')}</View>}
+                  {data.mainControl && data.mainControl.length > 0 && <View className="item">主控方：{data.mainControl.join('/')}</View>}
+                  {data.mainProduct && data.mainProduct.length > 0 && <View className="item">出品方：{data.mainProduct.join('/')}</View>}
+                  {data.mainIssue && data.mainIssue.length > 0 && <View className="item">发行方：{data.mainIssue.join('/')}</View>}
+                </View> 
+                <View className="arrow"></View>  
+              </View>: ''
+            }
         </View>
+        {
+          this.state.showFloat && 
+          <AtFloatLayout className="float" isOpened>
+            <View className="title">
+              <Text className="text">项目基础信息</Text>
+              <View className="img" onClick={this.handleClose}><Image src={Close} alt=""></Image></View>
+            </View>
+            {
+              BasicItem.map((item, index) => {
+                return data[item.key] && data[item.key].length > 0 ? <View key={index} className="line"><Text className="name">{item.name}：</Text>{data[item.key]}</View> : ''
+              })
+            }
+          </AtFloatLayout>
+        } 
       </View>
     )
   }
