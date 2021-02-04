@@ -5,6 +5,7 @@ import { set as setGlobalData, get as getGlobalData } from '../../../global_data
 import NoFollow from '../../../static/detail/noFollows.png';
 import { FollowList } from '../constant';
 import Gray from '../../../static/detail/gray.png';
+import Path from '../../../static/detail/path.png';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking'); 
@@ -112,7 +113,7 @@ export default class FollowStatus extends React.Component {
                 }
                 {
                   showFollows.length > 0 && basicData.cooperStatus !== 2 ?
-                  <View className="allProgress" onClick={this.handleAllProgress}>查看所有进展</View> : null
+                  <View className="allProgress" onClick={this.handleAllProgress}>查看所有进展 <Image src={Path} alt=""></Image></View> : null
                 }
               </Block>
             }

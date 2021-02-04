@@ -81,8 +81,8 @@
 .detail-tabs {
   width: 100%;
   margin-top: 18px;
-  margin-bottom: 164px;  
-
+  padding-bottom: 164px;  
+  box-sizing: border-box;
   .tabs {
     .at-tabs__header {
       height: 88px;

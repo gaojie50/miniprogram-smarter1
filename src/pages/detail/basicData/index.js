@@ -82,7 +82,7 @@ export default class BasicData extends React.Component {
             </View>
             {
               BasicItem.map((item, index) => {
-                return data[item.key] && data[item.key].length > 0 ? <View key={index} className="line"><Text className="name">{item.name}：</Text>{data[item.key]}</View> : ''
+                return data[item.key] && data[item.key].length > 0 ? <View key={index} className="line"><Text className="name">{item.name}：</Text>{Array.isArray(data[item.key]) ? data[item.key].join('/') : data[item.key]}</View> : ''
               })
             }
           </AtFloatLayout>
