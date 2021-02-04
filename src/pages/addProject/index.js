@@ -23,15 +23,13 @@ import '../../components/m5/style/components/float-layout.scss';
 import '../../components/m5/style/components/grid.scss';
 import '../../components/m5/style/components/toast.scss';
 import './index.scss'
-import './search.scss';
-import { MOVIE_TYPE_LIST, CATEGORY_LIST } from './lib';
+import { MOVIE_TYPE_LIST } from './lib';
 import utils from '../../utils/index.js'
 import { get as getGlobalData } from '../../global_data'
+import { CustomName } from './component/custom-project';
+import { MovieList } from './component/movie-list';
+import Divider from './component/divider';
 
-const CATEGORY_MAPPING = {};
-CATEGORY_LIST.map((item) => {
-  CATEGORY_MAPPING[item.key] = item.name;
-})
 const {
   debounce
 } = utils;
@@ -64,10 +62,12 @@ const COOPER_STATE = [
 ];
 const textVoid = <Text style={{ color: '#CCCCCC' }}>请选择</Text>;
 
-const divider = <View className="divider" />
+const divider = <Divider />
 
 export default function AddProject() {
-  const [name, setName] = useState('');
+  const pathParams = Taro.getCurrentInstance().router.params;
+  const { name: passedName = '' } = pathParams;
+  const [name, setName] = useState(passedName);
   const [category, setCategory] = useState();
   const [openCategorySelector, setOpenCategorySelector] = useState(false);
 
@@ -160,13 +160,13 @@ export default function AddProject() {
           backgroundColor: '#fff',
           margin: '0 30rpx 110rpx 30rpx',
         }}>
-        <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <M5Input autoFocus placeholder='请输入片名' value={name} onChange={(val) => {
+        <View className="add-project-input-wrapper">
+          <Input autoFocus placeholder='请输入片名' placeholderClass="add-project-input-placeholder" value={name} onInput={(e) => {
+            const val = e.detail.value;
             if (val !== name) {
               setName(val);
               searchMovie(val);
             }
-            return val
           }} />
           {
             loading && (<View className="movie-search-loading">
@@ -329,57 +329,4 @@ function onHandleResponse(res) {
     return data;
   }
   return [];
-}
-
-function CustomName(props) {
-  const { value = '', onChoose = () => { } } = props;
-  return (
-    <View
-      className="custom-project"
-      onClick={() => {
-        onChoose();
-      }}
-    >
-      <View>
-        <Text className="custom-project-name">创建新项目“{value}”</Text>
-      </View>
-    </View>
-  )
-}
-
-function MovieList(props) {
-  const { data = [], onChoose = () => { } } = props;
-  return (
-    <ScrollView className="search-list" scrollY>
-      {data.map((item, index) => {
-        return (
-          <View
-            className="item"
-            key={item.id}
-            data-id={item.maoyanId + '-' + item.projectId}
-            onClick={() => onChoose(item)}
-          >
-            <Image src={item.pic}></Image>
-            <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <View>
-                <View className="name">{item.name}</View>
-                <View className="cooperType">
-                  {item?.cooperType?.join('/')}
-                </View>
-                <View className="director">
-                  {'导演：' + (item.director ? item.director : '-')}
-                </View>
-                <View className="release">
-                  <Text>{item.releaseDesc ? item.releaseDesc : ''}</Text>
-                </View>
-              </View>
-              <View className="category">
-                {CATEGORY_MAPPING[item.category]}
-              </View>
-            </View>
-          </View>
-        )
-      })}
-    </ScrollView>
-  )
 }
