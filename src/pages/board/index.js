@@ -5,12 +5,14 @@ import utils from '../../utils/index.js'
 import { picFn } from '../../utils/pic';
 import projectConfig from '../../constant/project-config.js'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
-import { useFilterPanel } from './filterPanel';
+import { useFilterPanel, PROJECT_STAGE_MAPPING } from './filterPanel';
 import Tab from '../../components/tab';
 import FButton from '../../components/m5/fab'
 import '../../components/m5/style/components/fab.scss';
 import './index.scss'
+import DefaultPic from '../../static/detail/cover.png';
 import { noop } from 'lodash';
+import NoData from '../../components/noData';
 
 const { getMaoyanSignLabel } = projectConfig
 const {
@@ -83,17 +85,20 @@ export default function Board() {
   const [data, setData] = useState({});
   const [sticky, setSticky] = useState(false);
   const scroller = useRef(null);
-  const [target, setTarget] = useState();
+  const [noData, setNoData] = useState(false);
   const {
     tabSelected,
+    tabSelected_ref, // the value comes from React.Ref
     Component: StatusTab,
     props: tabProps,
+    dataCache,
     setData: setTabData,
   } = useStatusTab();
   const {
     Component: BoardFilterComponent,
     props: boardFilterProps,
     params,
+    reset,
   } = useBoardFilter();
 
 
@@ -106,6 +111,12 @@ export default function Board() {
 
   useEffect(() => {
     const { cooperStatus } = tabSelected;
+    const { cooperStatus: last_cooperStatus } = tabSelected_ref.current;
+
+    const isClickTab = cooperStatus !== last_cooperStatus;
+    const currentParams = isClickTab ? reset(true) : params;
+    tabSelected_ref.current = tabSelected;
+
     const {
       dateSet,
 
@@ -114,7 +125,7 @@ export default function Board() {
       projectStage,
       movieLocation,
       jobType,
-    } = params;
+    } = currentParams;
 
     let startDate, endDate;
 
@@ -124,7 +135,7 @@ export default function Board() {
         const {
           customStartDate,
           customEndDate,
-        } = params.dtPickerOption;
+        } = currentParams.dtPickerOption;
         startDate = +handleNewDate(customStartDate.value);
         endDate = +handleNewDate(customEndDate.value);
       } else {
@@ -167,12 +178,22 @@ export default function Board() {
 
       const nlength = newProjects.length + noChangeProjects.length + updateProjects.length;
 
-      setTabData((v) => {
-        const { name } = tabSelected;
-        const found = v.find((item) => item.p1 === name);
-        if (found) found.p2 = nlength;
-        return [...v];
-      });
+      if (!isClickTab) {
+        setTabData((v) => {
+          const { name } = tabSelected;
+          const found = v.find((item) => item.p1 === name);
+          if (found) found.p2 = nlength;
+          return [...v];
+        });
+      } else {
+        setTabData(JSON.parse(JSON.stringify(dataCache.current)))
+      }
+
+      if (nlength === 0) {
+        setNoData(true);
+      } else {
+        setNoData(false);
+      }
 
       setTimeout(() => {
         setData({
@@ -280,36 +301,44 @@ export default function Board() {
               width: '100%',
               zIndex: 3,
               backgroundColor: '#fff',
-              visibility: sticky ? 'visible' : 'hidden',
-            }}
-          >
-            {tab_sticky}
-            {filter_sticky}
+            visibility: sticky ? 'visible' : 'hidden',
+          }}
+        >
+          {tab_sticky}
+          {filter_sticky}
         </View>
-        <View>
-          {PROJECT_TYPE.map(({ name, key }, idx_1) => {
-            if (!data?.[key]?.length > 0) return null;
-            const arr = data?.[key] || [];
-            return (
+        {
+          noData ? (
+            <View>
+              <NoData />
+            </View>
+          ) : (
               <View>
-                <View className="project-add-text">
-                  <Text>{name}</Text>
-                </View>
-                {arr.map((obj, i) => {
-                  if (obj?.projectStageStep?.length > 0) {
-                    obj.hasUpdate = true;
-                  }
-                  if (idx_1 === PROJECT_TYPE.length - 1 && i === arr.length - 1) {
-                    obj.style = {
-                      paddingBottom: '150rpx'
-                    };
-                  }
-                  return <ProjectItem {...obj} />;
+                {PROJECT_TYPE.map(({ name, key }, idx_1) => {
+                  if (!data?.[key]?.length > 0) return null;
+                  const arr = data?.[key] || [];
+                  return (
+                    <View>
+                      <View className="project-add-text">
+                        <Text>{name}</Text>
+                      </View>
+                      {arr.map((obj, i) => {
+                        if (obj?.projectStageStep?.length > 0) {
+                          obj.hasUpdate = true;
+                        }
+                        if (idx_1 === PROJECT_TYPE.length - 1 && i === arr.length - 1) {
+                          obj.style = {
+                            paddingBottom: '150rpx'
+                          };
+                        }
+                        return <ProjectItem {...obj} />;
+                      })}
+                    </View>
+                  );
                 })}
               </View>
-            );
-          })}
-        </View>
+            )
+        }
         <View className="board-float-button">
           <FButton onClick={() => {
             Taro.navigateTo({
@@ -361,7 +390,9 @@ const DEFAULT_ARR = NAME_MAPPING_ARR.map(({ name }) => {
 
 function useStatusTab() {
   const [active, setActive] = useState(1);
+  const activeCache = useRef(NAME_MAPPING_ARR[active]);
   const [data, setData] = useState(DEFAULT_ARR);
+  const dataCache = useRef(DEFAULT_ARR);
   const [type, setType] = useState('default');
 
   useEffect(() => {
@@ -376,13 +407,17 @@ function useStatusTab() {
         }
       })
       setData(arr);
+      dataCache.current = JSON.parse(JSON.stringify(arr));
     });
   }, [])
 
   const props = {
     list: data,
     active,
-    onClick: (i) => setActive(i),
+    onClick: (i) => setActive((v) => {
+      activeCache.current = NAME_MAPPING_ARR[v];
+      return i;
+    }),
     type,
   }
 
@@ -393,8 +428,10 @@ function useStatusTab() {
     Component: NiceTab,
     props,
     tabSelected: NAME_MAPPING_ARR[active],
-    setData,
+    tabSelected_ref: activeCache,
     setType,
+    setData,
+    dataCache
   };
 }
 
@@ -481,16 +518,29 @@ function useBoardFilter() {
     const has3 = option.movieLocation.find((item) => item.active === true);
 
     if (dateOption) {
-      arr[0].active = true;
+      arr[0].changed = true;
       arr[0].name = dateOption.label;
     }
     if (hasProjectType) {
-      arr[1].active = true;
+      arr[1].changed = true;
     }
     if (hasCooperType) {
-      arr[2].active = true;
+      arr[2].changed = true;
     }
     if (has1 || has2 || has3) {
+      arr[3].changed = true;
+    }
+
+    if (option.filterShow === '4' ) {
+      arr[0].active = true;
+    }
+    if (option.filterShow === '1') {
+      arr[1].active = true;
+    }
+    if (option.filterShow === '2') {
+      arr[2].active = true;
+    }
+    if (option.filterShow === '3') {
       arr[3].active = true;
     }
 
@@ -533,6 +583,7 @@ function useBoardFilter() {
     component: <BoardFilter {...props} />,
     Component: BoardFilter,
     props,
+    reset: option.reset,
   };
 }
 
@@ -540,7 +591,7 @@ function BoardFilter(props) {
   const { filterActive = '', setFilterActive, tabs = [], panel = null } = props;
 
   return (
-    <View style={{ position: 'relative' }}>
+    <View style={{ position: 'relative' }} catchMove>
       <View className="board-filter">
         {tabs.map((item, i) => {
           return (
@@ -548,12 +599,12 @@ function BoardFilter(props) {
               className="board-filter-item"
               onClick={() => setFilterActive(item.type)}
             >
-              <Text className={`board-filter-item-name ${item.active ? 'board-filter-item-active' : ''}`}>{item.name}</Text>
+              <Text className={`board-filter-item-name ${(filterActive ? item.active : item.changed)  ? 'board-filter-item-active' : ''}`}>{item.name}</Text>
               <Image
                 className="board-filter-item-img"
                 src={
                   '../../static/' +
-                  (false ? 'arrow-down-active' : 'arrow-down') +
+                  (item.active ? 'arrow-down-active' : 'arrow-down') +
                   '.png'
                 }
               />
@@ -563,7 +614,7 @@ function BoardFilter(props) {
       </View>
       {filterActive && (
         <View
-          catchMove={false}
+          catchMove
           className="board-filter-mask"
           onClick={() => setFilterActive('')}
         />
@@ -609,9 +660,9 @@ function ProjectItem(props) {
   }, [estimateBox]);
 
   const [stageName, stageDescribe, stageLength] = useMemo(() => {
-    if (projectStageStep.length === 0) return '';
-    const { stageStatus:[ stageName = '' ], describe = '' }  = projectStageStep[projectStageStep.length - 1];
-    return [`[${stageName}]`, describe, projectStageStep.length]
+    if (projectStageStep.length === 0) return [];
+    const { projectStage, describe = '' }  = projectStageStep[projectStageStep.length - 1];
+    return [`[${PROJECT_STAGE_MAPPING[projectStage]}]`, describe, projectStageStep.length]
   }, [projectStageStep])
 
   return (
@@ -621,24 +672,31 @@ function ProjectItem(props) {
           {OBJECT_TYPE[type] || '-'}
         </View>
       </View>
-      <Image className=".project-item-img" src={picFn(pic)} />
+      <Image className=".project-item-img" src={pic ? picFn(pic) : DefaultPic} />
       <View className="project-item-detail">
         <View className="project-item-title">
           <View className="project-item-title-name">{name}</View>
-          <View className="project-item-title-predict">
-            预估
-            <Text className="project-item-title-predict-num">{val}</Text>
-            {unit}
-          </View>
+          {
+            val && (
+              <View className="project-item-title-predict">
+                预估
+                <Text className="project-item-title-predict-num">{val}</Text>
+                {unit}
+              </View>
+            )
+          }
         </View>
         <View className="project-item-ps">
           <View className="project-item-publication">
-            {cooperType.join('/')}
+            {cooperType.join(' / ')}
           </View>
-          <View className="project-item-score">{score}</View>
+          {
+            score && <View className="project-item-score">{score}分</View>
+          }
         </View>
         <View className="project-item-date">
-          <Text>{releaseDate}</Text>
+          <Text>{releaseDate.slice(0, 10)}</Text>
+          <SchedulerTag type={scheduleType}/>
         </View>
         <View className="project-item-status">
           <View className="project-item-status-text">
@@ -662,6 +720,40 @@ function ProjectItem(props) {
       </View>
     </View>
   );
+}
+
+const SCHEDULER = {
+  1: {
+    label: '已定档',
+    bgColor: 'rgba(20,204,20,0.10)',
+    color: '#14CC14',
+  },
+  2: {
+    label: '非常确定',
+    bgColor: 'rgba(241,48,61,0.10)',
+    color: '#F1303D',
+  },
+  3: {
+    label: '可能',
+    bgColor: 'rgba(253,156,0,0.10)',
+    color: '#FD9C00',
+  },
+  4: {
+    label: '内部建议',
+    bgColor: 'rgba(20,204,20,0.10)',
+    color: '#14CC14',
+  },
+  5: {
+    label: '待定',
+    bgColor: 'rgba(51,51,51,0.10)',
+    color: '#333333',
+  },
+}
+function SchedulerTag(props) {
+  const { type,  } = props;
+  if (!type) return null;
+  const { label, bgColor, color } = SCHEDULER[type];
+  return <Text className="scheduler-tag" style={{ color, backgroundColor: bgColor  }}>{label}</Text>
 }
 
 function onHandleResponse(res, type = 'arr') {

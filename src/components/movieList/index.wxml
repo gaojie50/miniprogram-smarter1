@@ -24,6 +24,7 @@
             <view class="listTd {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
             <view class="listTd {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
             <view class="listTd {{filterItemHidden4? 'itemHidden':''}}">预估评分</view>
+            <!-- <view class="listTd {{filterItemHidden13? 'itemHidden':''}}">主控方</view> -->
             <view class="listTd {{filterItemHidden5? 'itemHidden':''}}">主出品</view>
             <view class="listTd {{filterItemHidden6? 'itemHidden':''}}">主发行</view>
             <view class="listTd {{filterItemHidden7? 'itemHidden':''}}">类型</view>
@@ -64,6 +65,12 @@
                     <text>{{item.estimateBox2.text}}</text>
                 </view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">{{item.estimateScore === null ? '-': item.estimateScore}}</view>
+                <!-- <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden13? 'itemHidden':''}}">
+                    <view style="">
+                        <text wx:if="{{item.mainControl === null || item.mainControl.length === 0}}">-</text>
+                        <text >{{item.mainControl[0]}}</text>
+                    </view>
+                </view> -->
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden5? 'itemHidden':''}}">
                     <view style="">
                         <text wx:if="{{item.producer === null || item.producer.length === 0}}">-</text>
