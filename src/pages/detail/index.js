@@ -166,7 +166,7 @@ export default class Detail extends React.Component {
           </View>
           <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 50)+ 'px' }}>
             <View className="cooperStatus">合作已确定</View>
-            <View className="edit"></View>
+            {/* <View className="edit"><Image src={Edit} alt=""></Image></View> */}
             <View className="opt">
               <Image src={File} alt=""></Image>
               <Text>1</Text>
@@ -201,7 +201,7 @@ export default class Detail extends React.Component {
               { title: '变更历史' }
             ]}
             onClick={this.changeTabs}
-            className={basicData.cooperStatus === 2 && current === 0 ? "tabs nopaddingTab" : "tabs"}
+            className={basicData.cooperStatus === 2 && current === 0 ? "tabs nopaddingTab" : current === 2 ? "tabs bgHistory" : "tabs"}
             style={{top: (statusBarHeight + 50)+ 'px'}}
           >
             <AtTabsPane current={current} index={0}>
