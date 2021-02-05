@@ -52,7 +52,7 @@ export function ChangeHistory(props) {
       } = item;
 
       const time = new Date(updateTime);
-      let username = '';
+      let username = '-';
       try {
         const obj = JSON.parse(operateAppendMessage);
         username = obj.userName;
@@ -64,12 +64,24 @@ export function ChangeHistory(props) {
       const m = time.getMinutes();
       const s = time.getSeconds();
       const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
+
+      let oStr1 = oldFiledValue || '-';
+      let oStr2 = newFiledValue || '-';
+      let isDate = false;
+      if (filedName === '上映信息') {
+        const obj1 = JSON.parse(oldFiledValue || '{}');
+        const obj2 = JSON.parse(newFiledValue || '{}');
+
+        oStr1 = obj1.startShowDate ? `${obj1.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
+        oStr2 = obj2.startShowDate ? `${obj1.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
+        isDate= true;
+      }
       
       return (
         {
-          title: `${username || '-'} 添加于${str}`,
+          title: `${username} 添加于${str}`,
           content: [
-            <ChangeCard title={filedName || '-'} pre={oldFiledValue || '-'} cur={newFiledValue || '-'} isDate={filedName === ''} />
+            <ChangeCard title={filedName || '-'} pre={oStr1} cur={oStr2} isDate={isDate} />
           ]
         }
       )
