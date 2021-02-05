@@ -103,6 +103,12 @@ export default function Board() {
     reset,
   } = useBoardFilter();
 
+  useEffect(() => {
+    Taro.setNavigationBarColor({
+      frontColor: '#000000',
+      backgroundColor: '#ffffff',
+    })
+  }, [])
 
   const { filterActive } = boardFilterProps;
 
