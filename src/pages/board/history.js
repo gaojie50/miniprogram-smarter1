@@ -67,7 +67,7 @@ export function ChangeHistory(props) {
       
       return (
         {
-          title: `${username} 添加于${str}`,
+          title: `${username || '-'} 添加于${str}`,
           content: [
             <ChangeCard title={filedName || '-'} pre={oldFiledValue || '-'} cur={newFiledValue || '-'} isDate={filedName === ''} />
           ]
