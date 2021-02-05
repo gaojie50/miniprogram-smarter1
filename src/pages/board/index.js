@@ -39,9 +39,11 @@ Taro.setNavigationBarColor({
 })
 
 const HEAD_HEIGHT = capsuleLocation.bottom - capsuleLocation.top;
-const SYSTEM_BAR_HEIGHT = capsuleLocation.top;
-const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_HEIGHT;
+const SYSTEM_BAR_TOP_PADDING = capsuleLocation.top;
+const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING;
 const STICKY_OFFSET = rpxTopx(186);
+
+console.log(capsuleLocation.top)
 
 const FILTER_ITEMS_INIT = () => (
   [
@@ -254,22 +256,22 @@ export default function Board() {
     <>
       <View className="board-header">
         <View
-          className="board-header-title"
           style={{
-            paddingTop: `${SYSTEM_BAR_HEIGHT}px`,
-            height: `${HEAD_HEIGHT}px`,
+            height: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
           }}
         >
-          <Image
-            className="board-header-search"
-            src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
-            onClick={() => {
-              Taro.navigateTo({
-                url: '/pages/searchProject/index',
-              })
-            }}
-          />
-          <Text className="board-header-title-text">项目看板</Text>
+          <View className="board-header-title" style={{ paddingTop: `${SYSTEM_BAR_TOP_PADDING}px`, height: `${HEAD_HEIGHT}px` }}>
+            <Image
+              className="board-header-search"
+              src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
+              onClick={() => {
+                Taro.navigateTo({
+                  url: '/pages/searchProject/index',
+                })
+              }}
+            />
+            <Text className="board-header-title-text">项目看板</Text>
+          </View>
         </View>
       </View>
       <ScrollView
@@ -297,7 +299,7 @@ export default function Board() {
         <View
             style={{
               position: 'fixed',
-              top: `${HEAD_HEIGHT + SYSTEM_BAR_HEIGHT}px`,
+              top: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
               width: '100%',
               zIndex: 3,
               backgroundColor: '#fff',
