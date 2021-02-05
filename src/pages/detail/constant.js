@@ -142,9 +142,49 @@ const FollowList = {
   },
 };
 
+const CooperStatus = [
+  {
+    name: "合作接触",
+    color: "#FD9C00",
+    statusColor: '#FD9C00',
+    bgColor: "rgba(253,156,0, 0.1)",
+  },
+  {
+    name: "合作已确定",
+    color: "#F1303D",
+    statusColor: '#F1303D',
+    bgColor: "rgba(241,48,61, 0.1)",
+  },
+  {
+    name: "合作完结",
+    color: "#68BF14",
+    statusColor: '#68BF14',
+    bgColor: "rgba(104,191,20, 0.1)",
+  },
+  {
+    name: "合作暂停",
+    color: "#DDDDDD",
+    statusColor: '#333333',
+    bgColor: "rgba(221,221,221, 0.30)",
+  },
+  {
+    name: "合作取消",
+    color: "#DDDDDD",
+    statusColor: '#333333',
+    bgColor: "rgba(221,221,221, 0.30)",
+  },
+  {
+    name: "未合作",
+    color: "#DDDDDD",
+    statusColor: '#333333',
+    bgColor: "rgba(221,221,221, 0.30)",
+  },
+];
+
 export {
   CategoryList,
   ScheduleType,
   BasicItem,
-  FollowList
+  FollowList,
+  CooperStatus
 }

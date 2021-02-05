@@ -6,27 +6,34 @@ import BasicData from './basicData';
 import KeyData from './keyData';
 import FollowStatus from './followStatus';
 import { UseHistory } from '../board/history';
+import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import AddingProcess from '../../components/addingProcess';
 import People from '../../static/detail/people.png';
 import File from '../../static/detail/file.png';
 import ArrowLeft from '../../static/detail/arrow-left.png';
-// import Edit from '../../static/detail/edit.png';
+import Edit from '../../static/detail/edit.png';
 import './index.scss';
 import '../../components/m5/style/index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 const {statusBarHeight} = getGlobalData('systemInfo');
 export default class Detail extends React.Component {
-  state = {
-    basicData: {},
-    judgeRole: {}, //包含role、cooperation、releaseStage
-    keyData: {},
-    current: 0,
-    showProgress: false,
-    top: 0,
-    topSet: true,
+  constructor(props) {
+    super(props);
+    this.state = {
+      basicData: {
+        cooperStatus: 2,
+      },
+      judgeRole: {}, //包含role、cooperation、releaseStage
+      keyData: {},
+      current: 0,
+      showProgress: false,
+      top: 0,
+      topSet: true,
+    }
   }
+  
 
   onPageScroll() {
     const that = this;
@@ -150,7 +157,6 @@ export default class Detail extends React.Component {
 
   render() {
     const { basicData, judgeRole, keyData, current, showProgress, top } = this.state;
-
     return (
       <View className="detail">
         <View className="detail-top" id="top">
@@ -165,8 +171,8 @@ export default class Detail extends React.Component {
             
           </View>
           <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 50)+ 'px' }}>
-            <View className="cooperStatus">合作已确定</View>
-            {/* <View className="edit"><Image src={Edit} alt=""></Image></View> */}
+            <View className="cooperStatus">{CooperStatus[ basicData.cooperStatus ].name}</View>
+            <View className="edit"><Image src={Edit} alt=""></Image></View>
             <View className="opt">
               <Image src={File} alt=""></Image>
               <Text>1</Text>
