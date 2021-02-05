@@ -25,7 +25,6 @@ export default class GapFillingNum extends React.Component {
     let obj = { content: value, finished: !!value };
 
     if (obj.finished) obj.showError = false;
-
     this.setState({ value }, () => this.props.cb(obj));
   };
 
@@ -42,7 +41,7 @@ export default class GapFillingNum extends React.Component {
         value={ this.state.value }
         disabled={ isPreview }
         className={ `num-input ${isPreview ? 'preview' : ''} ` }
-        onChange={ this.valueChange } />
+        onInput={ this.valueChange } />
       {rightText}
       { required && showError ? <View className="error-tip">请填写</View> : "" }
     </View>;

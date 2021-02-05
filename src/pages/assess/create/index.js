@@ -364,9 +364,15 @@ export default class _C extends React.Component {
     } = this.state;
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
     const templateList = briefInfo.tempList || [];
+    const { name, roundNum, pic } = briefInfo;
     return (
       <View className="assess-create-page">
-        <BriefInfo {...briefInfo} />
+        <BriefInfo 
+          name={ name }
+          pic={ pic }
+          roundNum={ roundNum }
+          text = {`第${roundNum || '-'}轮`}
+        />
         <View className="create-wrap">
         <View  className="title-wrap">
           {!editorEvaluationName && 
