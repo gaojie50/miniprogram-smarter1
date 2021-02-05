@@ -59,14 +59,17 @@ export function ChangeHistory(props) {
       } catch (e) {
 
       }
-      
-      const str = `${time.getFullYear()}-${time.getMonth() + 1}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+      const d = time.getDate();
+      const h = time.getHours();
+      const m = time.getMinutes();
+      const s = time.getSeconds();
+      const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
       
       return (
         {
-          title: `${username} 添加于${str}`,
+          title: `${username || '-'} 添加于${str}`,
           content: [
-            <ChangeCard title={filedName} pre={oldFiledValue || '-'} cur={newFiledValue || '-'} />
+            <ChangeCard title={filedName || '-'} pre={oldFiledValue || '-'} cur={newFiledValue || '-'} isDate={filedName === ''} />
           ]
         }
       )
@@ -94,10 +97,9 @@ export function ChangeCard(props) {
             前
           </View>
           <View className={`change-card-pre-content`}>
-            {/* <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
+            <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
               {pre}
-            </Text> */}
-            {pre}
+            </Text>
         </View>
         </View>
         <View className="change-card-cur">
