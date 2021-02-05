@@ -52,7 +52,7 @@ export default class BasicData extends React.Component {
             </View>
             {data.type && data.type.length > 0 ? <View className="text">{data.type.join('/')}</View> : ''}
             {(data.category === 3 || data.category === 4) && data.duration ? <View className="text">{data.duration}分钟</View> : ''}
-            {(data.category === 1 || data.category === 2) && data.duration && data.totalTvNumber ? <View className="text">共{data.totalTvNumber}集，每集{basicData.duration}分钟</View> : ''}
+            {(data.category === 1 || data.category === 2) && data.duration && data.totalTvNumber ? <View className="text">共{data.totalTvNumber}集，每集{data.duration}分钟</View> : ''}
             {data.category === 5 && data.duration && data.totalTvNumber ? <View className="text">共{data.totalTvNumber}集</View> : ''}
             {data.movieSource && data.movieSource.length > 0 ? <View className="text">{data.movieSource.join('/')}</View> : ''}
           </View>
