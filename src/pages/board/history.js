@@ -55,7 +55,7 @@ export function ChangeHistory(props) {
       let username = '-';
       try {
         const obj = JSON.parse(operateAppendMessage);
-        username = obj.userName;
+        username = obj.userName || '-';
       } catch (e) {
 
       }
