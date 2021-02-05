@@ -94,9 +94,10 @@ export function ChangeCard(props) {
             前
           </View>
           <View className={`change-card-pre-content`}>
-            <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
+            {/* <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
               {pre}
-            </Text>
+            </Text> */}
+            {pre}
         </View>
         </View>
         <View className="change-card-cur">
