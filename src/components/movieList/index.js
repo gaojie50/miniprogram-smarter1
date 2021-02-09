@@ -79,10 +79,10 @@ Component({
     },
 
     jumpToDetail: function (e) {
-      const { id } = e.currentTarget.dataset
+      const { id, pid } = e.currentTarget.dataset
       const { list } = this.data
       const filterList = JSON.parse(JSON.stringify(list)).filter(
-        ({ maoyanId, projectId }) => maoyanId == id,
+        ({ maoyanId, projectId }) => maoyanId == id && projectId == pid,
       )[0]
       const { maoyanId, projectId } = filterList
 
