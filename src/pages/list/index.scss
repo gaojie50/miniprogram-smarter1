@@ -142,7 +142,8 @@
 
 page {
   height: 100%;
-  background: linear-gradient(180deg, #526AA3 0%, #2C3D66 30%);
+  background: #040B18;
+  // linear-gradient(180deg, #526AA3 0%, #2C3D66 30%);
 }
 
 .list {
@@ -336,7 +337,8 @@ page {
 
 .filmDistribution .title {
   position: relative;
-  margin-left: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
   margin-top: 40px;
   font-weight: bold;
   font-family: PingFangSC-Semibold;
@@ -351,9 +353,46 @@ page {
   clear: both;
 }
 
-.filmDistribution .title text {
-  width: 228px;
+.filmDistribution .title > text {
+  width: 252px;
   float: left;
+}
+
+.filmDistribution .title .toolTipSign{
+  float: right;
+
+  text{
+    font-weight: 300;
+    opacity: 0.6;
+    background: rgba(255, 255, 255,.06);
+    font-family: PingFangSC-Light;
+    font-size: 22rpx;
+    color: #FFF;
+    border-radius: 24rpx;
+    display: inline-block;
+    padding: 0 20rpx;
+    height: 48rpx;
+    line-height: 48rpx;
+    margin-left: 10rpx;
+
+    &::before{
+      content: "";
+      width: 10rpx;
+      height: 10rpx;
+      display: inline-block;
+      margin-right: 10rpx;
+      box-shadow: 0 4rpx 6rpx 0 rgba(49,68,115,0.10);
+      border-radius: 50%;
+    }
+    &:first-of-type::before{
+      background: #3C7DF2;
+    }
+
+    &:last-of-type::before{
+      border: 2rpx dashed #fff;
+      
+    }
+  }
 }
 
 .redText {

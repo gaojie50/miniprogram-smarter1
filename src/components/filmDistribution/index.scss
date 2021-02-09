@@ -54,7 +54,8 @@
   height: 220px;
   padding: 20px 16px;
   box-sizing: border-box;
-  background: rgba(111, 134, 189, 0.3);
+  // background: rgba(111, 134, 189, 0.3);
+  background-image: linear-gradient(180deg, #143878 0%, rgba(20,56,120,0.40) 99%);
   border-radius: 10px 10px 0 0;
   z-index: 30;
 }

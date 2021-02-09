@@ -825,7 +825,7 @@ class _C extends React.Component {
                   {/*  上映影片分布  */}
                   <View className="filmDistribution">
                     <View className="title">
-                      <Text>未来一年上映影片</Text>
+                      <Text>待映影片及预估大盘</Text>
                       <Image
                         onClick={this.tapRedPrompt}
                         className="redText"
@@ -838,7 +838,12 @@ class _C extends React.Component {
                           className="redPrompt"
                         ></Image>
                       )}
+                      <View className="toolTipSign">
+                        <Text>已定档</Text>
+                        <Text>含可能定档</Text>
+                      </View>
                     </View>
+                    
                     {filmDistributionList.length !== 0 && (
                       <FilmDistribution
                         filmInfo={{
