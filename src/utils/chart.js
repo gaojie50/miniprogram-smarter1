@@ -1,232 +1,131 @@
 import Taro from '@tarojs/taro'
 import utils from './index.js'
 
-const _ = require('./lodash.js')
-const { rpxTopx } = utils
-export default function (ctx, options, that) {
-  return new LineChart(ctx, options, that)
-}
+const { rpxTopx, } = utils
+
+export default (ctx, options, that) => new LineChart(ctx, options, that); 
 
 function LineChart(ctx, options, that) {
-  this.canvasId = ctx
-  const query = Taro.createSelectorQuery()
-  query
-    .select(`#${ctx}`)
+  this.canvasId = ctx;
+
+  Taro.createSelectorQuery().select(`#${ctx}`)
     .context((res) => {
-      this.ctx = res.context
-      this.options = Object.assign(
-        {
-          width: 320,
-          height: 200,
-          xUnit: '',
-          yUnit: '',
-          xAxis: [],
-          key: [],
-          lines: [],
-          margin: 20,
-          fontSize: 12,
-        },
-        options,
-        {
-          xAxisOffset: (options.margin || 20) + (options.fontSize || 12) * 2.5,
-        },
-      )
-
-      this._attrs = {}
-      this.that = that
-
-      if (_.isEmpty(this.options.xAxis)) {
-        throw new Error('options.xAxis can not be empty')
-      }
-
-      if (_.isEmpty(this.options.lines)) {
-        throw new Error('options.lines can not be empty')
-      }
-      this.draw()
-    })
-    .exec()
+      this.ctx = res.context;
+      this.options = options;
+      this._attrs = {};
+      this.that = that;
+      this.draw();
+    }).exec()
 }
 
 LineChart.prototype.draw = function () {
-  this._drawAxis()
-  this._drawLines()
+  this.clearCanvas();
+  this._subline();
+  this._drawLines();
+  this._drawToPng();  //转为png
+};
 
-  this._draw()
+LineChart.prototype._subline = function(){
+  let ctx = this.ctx;
+
+  for (let i = 0; i < 6; i++) {
+    let yValue = rpxTopx(25 * (1 + 2 * i));
+
+    ctx.beginPath();
+    ctx.lineWidth = rpxTopx(1);
+    ctx.setLineDash([2, 6]);
+    ctx.moveTo(rpxTopx(88), yValue);
+    ctx.lineTo(this.options.width, yValue);
+    ctx.strokeStyle = "rgba(255,255,255,.2)";
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.beginPath();
+  }
 }
 
-LineChart.prototype._drawAxis = function () {
-  let {
-    width,
-    height,
-    lines,
-    labelColor,
-    axisColor,
-    xUnit,
-    yUnit,
-    xAxis,
-    margin,
-    xAxisOffset,
-    fontSize,
-  } = this.options
-  let ctx = this.ctx
-  ctx.setFontSize(fontSize)
-
-  let yAxisLen = height - margin - xAxisOffset
-  let yLabelCount = Math.floor(yAxisLen / 25)
-  let yMaxValue = _.max(_.map(lines, (item) => _.max(item.points))) || 1
-
-  // 计算需要绘制的y轴label
-  let fixed = 0
-  let yDelta = (yMaxValue * 1.2) / yLabelCount
-  if (yDelta < 1) {
-    fixed = Math.round(1 / yDelta).toString().length
-  }
-  yDelta = Number(fixed === 0 ? Math.ceil(yDelta) : yDelta.toFixed(fixed))
-  let labels = []
-  for (let i = 2; i <= yLabelCount; i++) {
-    labels.push(Number(((i - 1) * yDelta).toFixed(fixed)) + yUnit)
-  }
-
-  let xLabelMaxWidth = _.max(
-    _.map(xAxis, (item) => ctx.measureText(item + xUnit).width),
-  )
-  let yLabelMaxWidth =
-    _.max(_.map(labels, (item) => ctx.measureText(item).width)) + margin
-  // let xAxisLen = width - margin - yLabelMaxWidth; x轴间距改动
-  let xAxisLen = width
-  let xOffset = yLabelMaxWidth
-  // let xStep = xAxisLen / (xAxis.length - 1);
-  let xStep = rpxTopx(208) + rpxTopx(8)
-
-  // let yOffset = margin + yAxisLen;y轴改动
-  let yOffset = margin + yAxisLen
-  let yStep = yAxisLen / (yMaxValue * 1.2)
-
-  // //绘制x轴label
-  // let xLabelCount = Math.floor(xAxisLen / xLabelMaxWidth);
-  // let xLabelStep = Math.ceil(xAxis.length / xLabelCount);
-  // //需要被绘制的lable
-  // let xLabel = _.filter(_.map(xAxis, (item, index) => ({
-  //     name: item + xUnit,
-  //     index: index
-  // })), (item, index) => index % xLabelStep === 0);
-  // _.each(xLabel, item => {
-  //     let xValue = xOffset + item.index * xStep - xLabelMaxWidth / 2 - 2;
-  //     ctx.fillStyle = labelColor;
-  //     ctx.fillText(item.name, xValue, height - margin);
-  // });
-
-  // //绘制y轴label，以及水平标记线
-  // _.each(labels, (item, index) => {
-  //     let xValue = (yLabelMaxWidth - ctx.measureText(item).width) - 5;
-  //     let yValue = yOffset - yStep * Number((index + 1) * yDelta).toFixed(fixed);
-
-  //     // label
-  //     ctx.strokeStyle = labelColor;
-  //     ctx.fillText(item, xValue, yValue + 4);
-  // });
-
-  // 将这几个数据存放在attrs上，绘制线的时候有用
-  Object.assign(this._attrs, {
-    xOffset,
-    yOffset,
-    xStep,
-    yStep,
-  })
+LineChart.prototype.clearCanvas = function(){
+  let ctx = this.ctx;
+  let {width,height} = this.options;
+  
+  ctx.clearRect(0,0,width,height);
 }
 
 LineChart.prototype._drawLines = function () {
-  _.each(this.options.lines, (item) => {
-    if (item.hidden) {
-      return
-    }
+  let {height, yMaxLength, } = this.options;
+  let yLabelCount = 6;
+  let yAxisLen = height * (1 - 1 / yLabelCount);
+  let yOffset = yAxisLen + height / (2 * yLabelCount);
+
+  let yStep = yAxisLen / yMaxLength;
+
+  Object.assign(this._attrs, { yOffset, yStep, });
+
+  this.options.lines.map((item) => {
+    if (item.hidden) return;
 
     this._drawLine(item)
   })
 }
 
 LineChart.prototype._drawLine = function (line) {
-  let { xOffset, yOffset, xStep, yStep } = this._attrs
-  let ctx = this.ctx
+  let { yOffset, yStep } = this._attrs;
+  let ctx = this.ctx;
+  let { points, redDot, color, dash = false } = line;
 
-  let points = _.map(line.points, (item, index) => {
-    const xGrap = parseInt(index * xStep)
-    //    return ({
-    //     x: xOffset + index * xStep ,
-    //     y: yOffset - item * yStep
-    //     })
+  let handlePoints = points.map((item, index) => {
     return {
-      redDot: line.redDot[index],
-      x: rpxTopx(134) + xGrap,
+      redDot: redDot[index],
+      x: rpxTopx(216 / 2 + 30) + (index * rpxTopx(216 + 10)),
       y: yOffset - item * yStep,
     }
   })
 
-  // 与x轴的面积阴影
-  ctx.beginPath()
-  // ctx.globalAlpha = 0.2;
-  var linearGradient = ctx.createLinearGradient(0, 100, 0, 0)
-  linearGradient.addColorStop(0, 'rgba(121,140,186,0.00)')
-  // linearGradient.addColorStop(0.3,'rgba(121,140,186,0.08)');
-  linearGradient.addColorStop(1, 'rgba(121,140,186,0.3)')
-  ctx.fillStyle = linearGradient
-  ctx.moveTo(0, yOffset)
-  _.each(points, (item, index) => {
-    ctx.lineTo(item.x, item.y)
-    if (index === points.length - 1) {
-      ctx.lineTo(item.x + 208, yOffset)
-    }
-  })
-
-  // ctx.lineTo(xOffset + xStep * (points.length - 1), yOffset);
-  ctx.lineTo(xOffset + xStep, 11111)
-  ctx.closePath()
-  ctx.fill()
+  ctx.closePath();
+  ctx.fill();
 
   // 线
-  // ctx.beginPath();
-  // ctx.globalAlpha = 1;
-  // ctx.lineWidth = 1;
-  // ctx.strokeStyle = line.color;
-  // _.each(points, item => {
-  //     ctx.lineTo(item.x, item.y);
-  // });
-  // ctx.stroke();
+  ctx.beginPath();
+  ctx.lineWidth = rpxTopx(3);
+  ctx.strokeStyle = color;
+
+  if (dash) ctx.setLineDash([4]);
+
+  handlePoints.map(item => { ctx.lineTo(item.x, item.y) });
+  ctx.stroke();
 
   // 空心点
-
-  _.each(points, (item) => {
+  handlePoints.map((item) => {
     ctx.beginPath()
-    ctx.arc(item.x, item.y, 4, 0, 4 * Math.PI)
-    ctx.closePath()
+    ctx.setLineDash([]);
     if (item.redDot === 1) {
-      ctx.fillStyle = '#ff0000'
-    } else {
-      ctx.fillStyle = '#798CBA'
+      ctx.arc(item.x, item.y, 4, 0, 4 * Math.PI);
+      ctx.closePath();
+      ctx.fillStyle = '#F00';
     }
 
-    ctx.lineWidth = 2
-    ctx.strokeStyle = '#ffffff'
-    ctx.fill()
-    ctx.stroke()
+    ctx.lineWidth = rpxTopx(3);
+    ctx.strokeStyle = '#FFF';
+    ctx.fill();
+    ctx.stroke();
   })
 }
 
-LineChart.prototype._draw = function () {
-  if (this._timer) {
-    clearTimeout(this._timer)
-  }
-
+LineChart.prototype._drawToPng = function () {
+  if (this._timer) clearTimeout(this._timer);
+  
+  const chartPic = document.getElementById('chart-pic');
+  
   this._timer = setTimeout(() => {
-    const t = this
-    this.ctx.draw(true, () => {
+    const { canvasId,} = this;
+
+    this.ctx.draw(false, () => {
       Taro.canvasToTempFilePath({
-        canvasId: t.canvasId,
+        canvasId: canvasId,
         fileType: 'png',
         success: function (res) {
-          t.that.setState({
-            imgSrc: res.tempFilePath,
-          })
+          chartPic.setAttribute('src',res.tempFilePath);
+          // that.setState({ imgSrc: res.tempFilePath })
         },
       })
     })

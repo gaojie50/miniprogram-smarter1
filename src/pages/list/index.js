@@ -27,10 +27,15 @@ const {
 const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
 const barHeight = getGlobalData('barHeight')
+
+function strip(num, precision = 12) {
+  return +parseFloat(num.toPrecision(precision));
+}
+
 class _C extends React.Component {
   state = {
-    filmItemWidth: rpxTopx(208),
-    filmItemMarginRight: rpxTopx(8),
+    filmItemWidth: rpxTopx(216),
+    filmItemMarginRight: rpxTopx(10),
     initLoading: true,
     loading: true,
     topFilmLoading: true,
@@ -93,6 +98,7 @@ class _C extends React.Component {
     toView: '',
     redTextShow: false,
     canvasImg: '',
+    yMaxLength:0,
   }
 
   onLoad = ({ token }) => {
@@ -206,7 +212,7 @@ class _C extends React.Component {
                 item2.estimateBox = formatNumber(item2.estimateBox)
               }
               item2.pic = item2.pic
-                ? `${item2.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`
+                ? `${item2.pic.replace('/w.h/', '/460.660/')}`
                 : `../../static/icon/default-pic.svg`
               item2.wishNum = formatNumber(item2.wishNum)
             })
@@ -711,6 +717,8 @@ class _C extends React.Component {
     })
   }
 
+  setMaxLengthY = yMaxLength => this.setState({ yMaxLength });
+
   render() {
     const {
       initLoading,
@@ -753,8 +761,11 @@ class _C extends React.Component {
       isShowFilmDetailList,
       curPagePermission,
       isScroll,
-    } = this.state
-
+      yMaxLength,
+    } = this.state;
+    
+    const yMaxLengthArr = ["","","","","",""].map((item,index)=>strip(formatNumber(yMaxLength * (1 - index/5)).posNum));
+    
     return (
       <Block>
         {initLoading && (
@@ -777,7 +788,7 @@ class _C extends React.Component {
         )}
         {curPagePermission && !initLoading && (
           <View>
-            <View className="header">
+            <View className="header" style={`height:${titleHeight + rpxTopx(115)}px`}>
               <View
                 className="header-bar"
                 style={'height:' + titleHeight + 'px;'}
@@ -822,7 +833,6 @@ class _C extends React.Component {
                 }}
               >
                 <View id="scroll-cont">
-                  {/*  上映影片分布  */}
                   <View className="filmDistribution">
                     <View className="title">
                       <Text>待映影片及预估大盘</Text>
@@ -839,11 +849,17 @@ class _C extends React.Component {
                         ></Image>
                       )}
                       <View className="toolTipSign">
-                        <Text>已定档</Text>
-                        <Text>含可能定档</Text>
+                        <View>已定档</View>
+                        <View>
+                          <Image
+                            src="../../static/list/dash.svg"
+                          ></Image>
+                          含可能定档</View>
                       </View>
                     </View>
-                    
+                    {
+                      filmDistributionList.length !== 0 && <View className="yAxis">{ yMaxLengthArr.map((item,index)=> <Text key={index}>{item}亿</Text> )}</View>
+                    }
                     {filmDistributionList.length !== 0 && (
                       <FilmDistribution
                         filmInfo={{
@@ -853,9 +869,9 @@ class _C extends React.Component {
                           filmLoading,
                           topFilmLoading,
                         }}
+                        setMaxLengthY = {this.setMaxLengthY}
                         onTapfilmBox={this.tapfilmBox}
-                        onFilmScroll={this.filmScroll}
-                      ></FilmDistribution>
+                        onFilmScroll={this.filmScroll}/>
                     )}
                     {topFilmLoading && (
                       <View className="list-loading">
@@ -1092,9 +1108,9 @@ class _C extends React.Component {
                         />
                       </View>
                     )}
-                    {!loading && list.length === 0 && (
+                    {/* {!loading && list.length === 0 && (
                       <View className="no-data">暂无数据</View>
-                    )}
+                    )} */}
                   </View>
                 </View>
               </ScrollView>
@@ -1109,7 +1125,7 @@ class _C extends React.Component {
               filmDistributionItem={filmDistributionItem}
               ongetCostom={this.ongetCostom}
               show={isShowFilmDetailList}
-            ></FilmDetailList>
+              titleHeight={titleHeight} />
           </View>
         )}
         {/*  无权限页面  */}
