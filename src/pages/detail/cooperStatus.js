@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, Image } from '@tarojs/components';
 import { AtFloatLayout } from '../../components/m5';
 import { CooperStatus } from './constant';
@@ -29,7 +29,7 @@ export default function Cooper(props) {
   }, [cooperActive]) 
 
   return (
-    <AtFloatLayout className="cooper-status" isOpened>
+    <AtFloatLayout className="cooper-status" onClose={() => props.cancelShow()} isOpened>
       <View className="title">
         <Text>变更合作状态</Text>
         <View className="img" onClick={() => props.cancelShow()}>

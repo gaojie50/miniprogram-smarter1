@@ -20,7 +20,7 @@ export default {
   subpackages: [
     {
       root: "pages/detail",
-      pages: ["index"]
+      pages: ["index", "editProject/index"]
     },
     {
       root: "pages/projectDetail",
