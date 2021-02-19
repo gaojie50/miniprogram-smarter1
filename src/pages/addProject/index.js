@@ -178,7 +178,7 @@ export default function AddProject() {
       setShowToast('请填写意向合作类型')
       return
     }
-    if (!cooperState) {
+    if (cooperState === undefined) {
       setShowToast('请填写合作状态')
       return
     }

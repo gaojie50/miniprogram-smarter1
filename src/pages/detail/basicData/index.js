@@ -65,7 +65,7 @@ export default class BasicData extends React.Component {
                 <View className="itemWrap">
                   {data.newDirector && data.newDirector.length > 0 &&  <View className="item">导演：{data.newDirector.join('/')}</View>}
                   {data.newMainRole && data.newMainRole.length > 0 &&  <View className="item">主演：{data.newMainRole.join('/')}</View>}
-                  {data.mainControl && data.mainControl.length > 0 && <View className="item">主控方：{data.mainControl.join('/')}</View>}
+                  {data.mainControl && data.mainControl.length > 0 && <View className="item">主控方：{data.mainControl}</View>}
                   {data.mainProduct && data.mainProduct.length > 0 && <View className="item">出品方：{data.mainProduct.join('/')}</View>}
                   {data.mainIssue && data.mainIssue.length > 0 && <View className="item">发行方：{data.mainIssue.join('/')}</View>}
                 </View> 
