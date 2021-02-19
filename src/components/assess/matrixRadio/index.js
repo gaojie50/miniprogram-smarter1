@@ -13,30 +13,34 @@ export default class MatrixRadio extends React.Component {
   };
 
   state = {
+    complete: false,
     finished: false,
-    matrixSelectList: this.props.matrixRadio.axisY.map(() => null),
+    matrixSelectList: this.props.matrixRadio.axisY.map(() => -1),
   };
 
 
   handleCheck = (index1, index2) => {
-    let { finished, matrixSelectList, } = this.state;
+    let { finished, matrixSelectList, complete } = this.state;
     let { cb, isPreview } = this.props;
     let obj = {};
     if (isPreview) return;
 
     matrixSelectList[ index1 ] = parseInt(index2, 10);
-    if (matrixSelectList.some(item => item === null)) {
+    if (matrixSelectList.some(item => item === -1)) {
       finished = false;
     } else {
       finished = true;
       obj.showError = false;
     }
+    complete = matrixSelectList.some(item => item !== -1) ? true : false;
 
     this.setState({
+      complete,
       finished,
       matrixSelectList,
     }, () => {
       cb({
+        complete,
         finished,
         matrixSelectList,
         ...obj

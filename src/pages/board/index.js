@@ -43,7 +43,6 @@ const SYSTEM_BAR_TOP_PADDING = capsuleLocation.top;
 const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING;
 const STICKY_OFFSET = rpxTopx(186);
 
-console.log(capsuleLocation.top)
 
 const FILTER_ITEMS_INIT = () => (
   [

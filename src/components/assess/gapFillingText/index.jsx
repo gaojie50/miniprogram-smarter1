@@ -9,7 +9,7 @@ export default class GapFillingText extends React.Component {
 
   valueChange = ({ target }) => {
     const { value } = target;
-    let obj = { content: value, finished: !!value };
+    let obj = { content: value, finished: !!value, complete: !!value };
 
     if (obj.finished) obj.showError = false;
     this.setState({ value }, () => this.props.cb(obj));

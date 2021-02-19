@@ -1,10 +1,11 @@
 import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components'
 import React from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
+import envConfig from '../../../constant/env-config';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
-import _cloneDeep from 'lodash/cloneDeep'
-import dayjs from 'dayjs'
+import _cloneDeep from 'lodash/cloneDeep';
+import dayjs from 'dayjs';
 import Nodata from '@components/noData';
 import BriefInfo from '@components/briefInfo';
 import AtActionSheet from '@components/m5/action-sheet';
@@ -95,7 +96,6 @@ export default class _C extends React.Component {
       'server',
     ).then(res => {
         const { error, data } = res;
-        console.log(data);
         if (!error) {
           const briefInfo = data;
           const { tempList = [] } = briefInfo;
@@ -117,7 +117,6 @@ export default class _C extends React.Component {
 
   titleChangeEvt = ({ target }) => {
     const curVal = target.value.replace(/\s+/g, "");
-    console.log(curVal);
     return this.setState({ 
       titleErrorTip: curVal.length > 20, 
       briefInfo: {
@@ -142,7 +141,6 @@ export default class _C extends React.Component {
   titleBlurEvt = ({ target }) => {
     const projectEvaluationName = target.value.replace(/\s+/g, "");
 
-    console.log(projectEvaluationName.length);
     if (projectEvaluationName.length > 20) return;
     
     this.editorTitle(false);
@@ -185,12 +183,11 @@ export default class _C extends React.Component {
       success (res) {
         const tempFile = res.tempFiles[0];
         const tempFilePath = tempFile.path;
-
         Taro.showLoading({
           title: '上传中'
         });
         Taro.uploadFile({
-          url: 'https://scweb-movie.maoyan.com/api/management/file/upload', //仅为示例，非真实的接口地址
+          url: `${envConfig.server}/api/management/file/upload`,
           filePath: tempFilePath,
           name: 'projectFile',
           header: {

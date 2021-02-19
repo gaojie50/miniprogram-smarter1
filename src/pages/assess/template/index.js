@@ -22,7 +22,9 @@ export default function PerviewTemplate(){
       return Taro.showModal({title: '提示', content:'缺少tempId', duration:1000});
     } 
     
-    Taro.showLoading();
+    Taro.showLoading({
+      title: '加载中'
+    });
     reqPacking(
       {
         url: '/api/management/tempQuestion',
@@ -40,6 +42,7 @@ export default function PerviewTemplate(){
         }
         errorHandle(error);
         Taro.hideLoading();
+
       }).catch(err=>{
         errorHandle({message: '加载失败'});
         Taro.hideLoading();

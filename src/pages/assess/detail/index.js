@@ -1,6 +1,6 @@
 import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/components'
 import React, { useState, useEffect } from 'react';
-import Taro, { getCurrentInstance, nextTick } from '@tarojs/taro';
+import Taro, { getCurrentInstance, nextTick, useShareAppMessage } from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
 import _cloneDeep from 'lodash/cloneDeep';
@@ -32,6 +32,7 @@ export default function assessPage(){
   const [ quesScrollTopList, setQuesScrollTopList ] = useState([]);
   const [ activeIndex, setActiveIndex ] = useState(1)
   const [ scrollTop, setScrollTop ] = useState(0);
+  const [ submitDisabled, setSubmitDisabled ] = useState(true);
 
   const { projectId, roundId } = getCurrentInstance().router.params;
 
@@ -115,6 +116,7 @@ export default function assessPage(){
           let ques = questions.map(item => {
             item.showError = false;
             item.finished = false;
+            item.complete = false;
             return item;
           });
 
@@ -132,12 +134,10 @@ export default function assessPage(){
 
             // 获取展示高度和滚动高度
             query.select('.assess-content-wrap').boundingClientRect(rect=>{
-              console.log(rect)
               setContentHeight(rect.height);
             }).exec();
       
             query.select('.assess-content-wrap .content').boundingClientRect(rect=>{
-              console.log(rect)
               setScrollHeight(rect.height);
             }).exec();
 
@@ -168,7 +168,7 @@ export default function assessPage(){
     let canFinish = false;
     // 至少有一个填写
     for(let i=0; i<questions.length; i++){
-      if(questions[i].finished){
+      if(questions[i].complete){
         canFinish = true;
         break;
       }
@@ -182,7 +182,24 @@ export default function assessPage(){
       return;
     }
     
+    let finalQuestions = questions.map(item => {
+      const {
+        type, questionId, content, matrixSelectList=[]
+      } = item;
+      let obj = {
+        type,
+        questionId,
+      };
 
+      switch (type) {
+        case 1:
+        case 2:
+        case 4: obj.content = content; break;
+        default: obj.matrixSelectList = matrixSelectList;
+      }
+
+      return obj;
+    });
     reqPacking(
       {
         url: 'api/management/submit',
@@ -190,24 +207,7 @@ export default function assessPage(){
         data: {
           projectId,
           roundId,
-          questions: questions.map(item => {
-            const {
-              type, questionId, content, matrixSelectList
-            } = item;
-            let obj = {
-              type,
-              questionId,
-            };
-  
-            switch (type) {
-              case 1:
-              case 2:
-              case 4: obj.content = content; break;
-              default: obj.matrixSelectList = matrixSelectList;
-            }
-  
-            return obj;
-          })
+          questions: finalQuestions
         },
       },
       'server',
@@ -224,8 +224,8 @@ export default function assessPage(){
            url: `/assess/create/index?projectId=${projectId}`
          })
         } else {
-          Taro.showToast({
-            title: error.message || '提交失败',
+          errorHandle({
+            message: error.message || '提交失败',
           });
         }
       });
@@ -257,6 +257,23 @@ export default function assessPage(){
     })
   }
 
+  function showShare(){
+    Taro.showShareMenu({
+      withShareTicket: true
+    })
+  }
+
+  useShareAppMessage(res => {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '自定义转发标题',
+      path: '/pages/assess/index/index?projectId=14332&roundId=350'
+    }
+  })
+
   const IndexList = questions.map((item, index)=>{
     return {
       key: `${index+1}`,
@@ -266,11 +283,9 @@ export default function assessPage(){
   const showIndexes = scrollHeight > contentHeight *2;
   return (
     <View className="assess-page">
+      <Button onClick={showShare} openType="share">分享</Button>
       <View className="process-wrap">
-        <View className="page-process-wrap">
-          <View className="page-content">2/6</View>
-          <View className="inner-bar" style={{width:'20%'}} />
-        </View>
+        <View className="inner-bar" style={{width:`${rate}`}} />
       </View>
 
       {showIndexes && <Indexes 
@@ -282,7 +297,7 @@ export default function assessPage(){
       <ScrollView 
         className="assess-content-wrap"
         scrollY
-        style={`height: calc(100vh - 70rpx - 40rpx);${showIndexes? 'padding-left:80rpx; padding-right:80rpx;':''}`}
+        style={`height: calc(100vh - 20rpx - 40rpx - 20rpx);${showIndexes? 'padding-left:80rpx; padding-right:80rpx;':''}`}
         scrollTop={scrollTop}
         onScroll={showIndexes ? handleScroll:()=>{}}
       >
@@ -367,7 +382,7 @@ export default function assessPage(){
       </ScrollView>
       <View className="btn-wrap">
         <Button 
-          className="submit-btn" 
+          className="submit-btn"
           onClick={handleSubmit}
         >
             提交评估
