@@ -8,6 +8,7 @@ import _cloneDeep from 'lodash/cloneDeep';
 import dayjs from 'dayjs';
 import Nodata from '@components/noData';
 import BriefInfo from '@components/briefInfo';
+import FixedButton from '@components/fixedButton';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import AtFloatLayout from '@components/m5/float-layout';
@@ -455,20 +456,19 @@ export default class _C extends React.Component {
           }
         </View>
 
-        <View className="btn-wrap">
-          <Button 
-            className="publish-btn" 
-            disabled={isSubmitting || titleErrorTip || despErrorTip ? true : false} 
-            onClick={this.handleFinish}
-            loading={ isSubmitting }
-          >发布评估</Button>
-        </View>
+        <FixedButton 
+          className="publish-btn" 
+          disabled={isSubmitting || titleErrorTip || despErrorTip ? true : false} 
+          onClick={this.handleFinish}
+          loading={ isSubmitting }
+        >发布评估</FixedButton>
 
         <AtActionSheet 
           className="uplaod-action-sheet"
           isOpened={uploadSelectorIsOpen} 
           cancelText='取消'
-          onCancel={ this.handleCancel } 
+          onClose={ this.handleUploadSelectorClose }
+          onCancel={ this.handleUploadSelectorClose } 
         >
           <AtActionSheetItem onClick={ this.uploadFromProjectFile}>
             从项目文件中选择

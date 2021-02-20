@@ -9,6 +9,7 @@ import _debounce from 'lodash/debounce'
 import { set as setGlobalData, get as getGlobalData, set } from '../../../global_data'
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '../../../components/assess';
 import Indexes from '@components/indexes';
+import FixedButton from '@components/fixedButton';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import AtFloatLayout from '@components/m5/float-layout';
@@ -37,6 +38,7 @@ export default function assessPage(){
   const { projectId, roundId } = getCurrentInstance().router.params;
 
   useEffect(()=>{
+    Taro.showLoading({title: '加载中'});
     fetchRole();
     fetchBrifInfo();
     fetchEveluationList();
@@ -101,7 +103,6 @@ export default function assessPage(){
 
   function fetchTemp(value){
     if (!value) return;
-
     reqPacking(
       {
         url: 'api/management/tempQuestion',
@@ -148,7 +149,9 @@ export default function assessPage(){
         error.message && errorHandle(error);
         setQuestions([]);
         setLoading(false);
-      });
+    }).finally(()=>{
+      Taro.hideLoading();
+    })
   };
 
   
@@ -166,6 +169,7 @@ export default function assessPage(){
   function handleSubmit(){
     let errSign = false;
     let canFinish = false;
+    let allScoreFinished = true;
     // 至少有一个填写
     for(let i=0; i<questions.length; i++){
       if(questions[i].complete){
@@ -184,13 +188,16 @@ export default function assessPage(){
     
     let finalQuestions = questions.map(item => {
       const {
-        type, questionId, content, matrixSelectList=[]
+        type, questionId, content, matrixSelectList=[], finished
       } = item;
       let obj = {
         type,
         questionId,
       };
-
+      // 只有矩阵量表题算分
+      if(type===5 && !finished){
+        allScoreFinished = false;
+      }
       switch (type) {
         case 1:
         case 2:
@@ -200,6 +207,7 @@ export default function assessPage(){
 
       return obj;
     });
+
     reqPacking(
       {
         url: 'api/management/submit',
@@ -207,7 +215,8 @@ export default function assessPage(){
         data: {
           projectId,
           roundId,
-          questions: finalQuestions
+          questions: finalQuestions,
+          scoreFinished: allScoreFinished
         },
       },
       'server',
@@ -269,8 +278,9 @@ export default function assessPage(){
       console.log(res.target)
     }
     return {
-      title: '自定义转发标题',
-      path: '/pages/assess/index/index?projectId=14332&roundId=350'
+      title: 'wangxiaojing 邀请你参加项目评估邀请你参加项目评估邀请你参加项目评估',
+      path: '/pages/assess/index/index?projectId=14332&roundId=350',
+      imgUrl: ''
     }
   })
 
@@ -297,7 +307,6 @@ export default function assessPage(){
       <ScrollView 
         className="assess-content-wrap"
         scrollY
-        style={`height: calc(100vh - 20rpx - 40rpx - 20rpx);${showIndexes? 'padding-left:80rpx; padding-right:80rpx;':''}`}
         scrollTop={scrollTop}
         onScroll={showIndexes ? handleScroll:()=>{}}
       >
@@ -380,14 +389,9 @@ export default function assessPage(){
         }
       </View>
       </ScrollView>
-      <View className="btn-wrap">
-        <Button 
-          className="submit-btn"
-          onClick={handleSubmit}
-        >
-            提交评估
-        </Button>
-      </View>
+      <FixedButton className="submit-btn" onClick={handleSubmit}>
+        提交评估
+      </FixedButton>
     </View>
   );
 }

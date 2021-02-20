@@ -1,0 +1,26 @@
+.fixed-button-component {
+  width: 100%;
+  padding: 16px 0 40px 0;
+  background: #FFFFFF;
+  box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
+  position: fixed;
+  bottom: 0;
+  left: 0; 
+  margin: auto;
+  button[type='primary']{
+    background: #276FF0;
+  }
+  .btn {
+    width: 690px;
+    background: #276FF0;
+    border-radius: 40px;
+    color: #fff;
+    font-size: 30px;
+    line-height: 80px;
+    text-align: center;
+    padding: 0;
+    &:active, &:visited {
+      background: #276FF0;
+    }
+  }
+}

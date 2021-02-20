@@ -1,6 +1,7 @@
 import React from 'react';
 import Taro from '@tarojs/taro';
 import { picFn } from '@utils/pic';
+import { defaultMovieCover } from '@utils/imageUrl';
 import {
   View,
   Image,
@@ -11,7 +12,7 @@ import coverPng from '@static/detail/cover.png';
 
 const noData = function(props){
   const { name, roundNum, pic, text } = props;
-  let finalPic = pic ? picFn(pic) : coverPng;
+  let finalPic = pic ? picFn(pic) : defaultMovieCover;
   return (
     <View className='project-briefinfo-component'>
       <View className="left info-wrap">

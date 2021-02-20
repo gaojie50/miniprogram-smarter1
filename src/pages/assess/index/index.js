@@ -1,14 +1,14 @@
-import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components'
+import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
+import dayjs, { Dayjs } from 'dayjs';
 import reqPacking from '../../../utils/reqPacking.js';
 import utils from '../../../utils/index';
-import _cloneDeep from 'lodash/cloneDeep'
-import _merge from 'lodash/merge'
-import defaultPic from '../../../static/icon/default-pic.svg';
-import { set as setGlobalData, get as getGlobalData } from '../../../global_data'
+import _cloneDeep from 'lodash/cloneDeep';
+import _merge from 'lodash/merge';
+import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
 import '../../../components/m5/style/components/icon.scss';
-import './index.scss'
+import './index.scss';
 
 const { errorHandle, hexColorToRgba } = utils;
 
@@ -18,6 +18,7 @@ export default function assessPage(){
   const [ projectRole, setProjectRole ] = useState(6);
   const [ loading, setLoading ] = useState(true);
   const [ curEvalObj, setCurEvalObj ] = useState({});
+  const [ canEvaluate, setCanEvaluate ] = useState( false )
 
   const { projectId, roundId } = getCurrentInstance().router.params;
   const capsuleLocation = getGlobalData('capsuleLocation');
@@ -32,7 +33,7 @@ export default function assessPage(){
     fetchEveluationList();
   }, [])
 
-  function fetchRole(){
+  const fetchRole = () => {
     reqPacking(
       {
         url: 'api/management/projectRole',
@@ -47,7 +48,8 @@ export default function assessPage(){
       });
   };
 
-  function fetchBrifInfo(){
+  const fetchBrifInfo = () =>{
+    
     reqPacking(
       {
         url: 'api/management/briefInfo',
@@ -65,10 +67,11 @@ export default function assessPage(){
         }
 
         errorHandle(error);
-      });
+      })
   }
 
-  function fetchEveluationList(){
+  const fetchEveluationList = () => {
+    Taro.showLoading({title: '加载中'});
     reqPacking(
       {
         url: 'api/management/evaluationList',
@@ -79,17 +82,27 @@ export default function assessPage(){
         const { data, error } = res;
         const { evaluationList } = data;
         if (!error) {
-          setCurEvalObj(evaluationList.filter(item => item.roundId == roundId)[ 0 ] || {})
-          setLoading(false)
+          const evalObj = evaluationList.filter(item => item.roundId == roundId)[ 0 ] || {};
+          if( !evalObj.round ){
+            errorHandle({ message: '该评估轮次不存在' });
+            setCanEvaluate(false);
+          }else{
+            setCanEvaluate(true);
+          }
+          setCurEvalObj(evalObj);
+          setLoading(false);
           return;
         }
         error.message && errorHandle(error);
         setQuestions([]);
         setLoading(false);
-      });
+        setCanEvaluate(false);
+      }).finally(()=>{
+        Taro.hideLoading();
+      })
   }
 
-  function fetchTemp(value){
+  const fetchTemp = (value) => {
     if (!value) return;
 
     reqPacking(
@@ -122,7 +135,7 @@ export default function assessPage(){
 
 
   
-  function updateQues (obj, questionId, itemObj) {
+  const updateQues = (obj, questionId, itemObj)  => {
     let innerQues = this.state.questions.map(item => {
       if (item.questionId == questionId) return _merge(itemObj, obj);
       return item;
@@ -133,11 +146,11 @@ export default function assessPage(){
     setRate(`${Math.round(leng / innerQues.length * 1000) / 10}%`);
   };
 
-  function handlePreviewFile(url, name){
+  const handlePreviewFile = (url, name) => {
     const extensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'];
-
     let fileType = name.slice(name.lastIndexOf('.')+1);
     if( extensions.includes(fileType) ){
+      Taro.showLoading({title:'正在打开'})
       Taro.downloadFile({
         url: url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com'),
         success: function (res) {
@@ -146,9 +159,11 @@ export default function assessPage(){
             filePath: filePath,
             success: function (res) {
               console.log('打开文档成功')
+              Taro.hideLoading()
             },
             fail: function(res){
-              console.log(res);
+              Taro.hideLoading()
+              errorHandle({ message: '打开失败' });
             }
           })
         }
@@ -160,17 +175,15 @@ export default function assessPage(){
       content: '暂不支持该格式预览，请至PC端查看',
       showCancel: false
     })
-   
   }
 
-  function handleStartAssess(){
-    console.log('sdsdsd');
-    Taro.navigateTo({
+  const handleStartAssess = () => {
+    Taro.redirectTo({
       url: `/pages/assess/detail/index?projectId=${projectId}&roundId=${roundId}`,
     })
   }
 
-  function navigateBack(){
+  const navigateBack = () => {
     let curPages = Taro.getCurrentPages();
     if(curPages.length>1){
       Taro.navigateBack();
@@ -185,26 +198,28 @@ export default function assessPage(){
   
   const { projectFile=[], backColor, name='', pic } = briefInfo;
   const { round, initiator, startDate, roundTitle } = curEvalObj;
-
-  const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : '';
-  const coverPic = projectPic ? projectPic : defaultPic;
-  const rgbColor = hexColorToRgba(backColor||'#000',0.9);
-  
+  const defaultPicUrl = 'https://obj.pipi.cn/festatic/common/image/90f5be009a6f7852f14f9553a14a3e35.png';
+  const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPicUrl;
+  const coverPic = projectPic ? projectPic : defaultPicUrl;
+  const rgbColor = hexColorToRgba(backColor||'#475975',0.9);
+  console.log('titleHeight', titleHeight);
+  console.log('statusBarHeight', statusBarHeight);
   return (
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>
-      <View className="all-container"  style={{backgroundColor: `${rgbColor}`}}>
+      <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
 
-        <View style={{height:`${statusBarHeight}px`}}></View>
-        <View className="nav-bar" style={{height: `${titleHeight}px`}} onClick={navigateBack}>
-          <View className="go-back-icon at-icon at-icon-chevron-left"></View>
-        </View>
+      <View style={{height:`${statusBarHeight}px`}}></View>
+      <View className="nav-bar" style={{height: `${titleHeight}px`}} onClick={navigateBack}>
+        <View className="go-back-icon at-icon at-icon-chevron-left"></View>
+      </View>
 
+      <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`}}>
         <View className="content-container">
         <View className="briefinfo-wrap">
           <Image className="project-pic" src={coverPic}></Image>
-          <View className="project-name">《{name}》</View>
-          <View className="project-round">第{round}轮 / 剧本评估</View>
-          <View className="project-creator">{initiator} {startDate}</View>
+          {name && <View className="project-name">《{name}》</View>}
+          {round && <View className="project-round">第{round}轮 / 剧本评估</View>}
+          { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
         </View>
 
         <View className="evaluation-info-wrap">
@@ -226,7 +241,7 @@ export default function assessPage(){
           </View>
         </View>
         
-        <Button className="start-btn" onClick={handleStartAssess}>开始评估</Button>
+        {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>开始评估</Button>}
       </View>
       </View>
       </View>

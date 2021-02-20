@@ -17,6 +17,7 @@ page image {
   .nav-bar {
     display: flex;
     align-items: center;
+    position: relative;
     .go-back-icon {
       color: #fff;
       font-size: 44px;
@@ -24,20 +25,28 @@ page image {
     }
   }
 
-  .all-container {
+  .bg-color {
     position: absolute;
-    left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    left: 0;
+    bottom: 0;
+    right: 0;
   }
+
+  .all-container {
+    position: relative;
+    box-sizing: border-box;
+    padding: 30px;
+    overflow: hidden;
+  }
+
   .content-container {
-    margin: 30px;
     border: 3px solid #eee;
     border-radius: 40px;
-    min-height: calc(100vh-60px);
-    padding: 40px 45px;
+    height: 100%;
+    padding: 60px 45px;
     box-sizing: border-box;
+    overflow-y: scroll;
   }
   .briefinfo-wrap {
     text-align: center;
@@ -45,7 +54,6 @@ page image {
     .project-pic {
       width: 200px;
       height: 275px;
-      margin-top: 60px;
       border-radius: 20px;
     }
     .project-name {
@@ -70,7 +78,7 @@ page image {
   }
 
   .evaluation-info-wrap {
-    border-top: 1px solid rgba(0,0,0,0.2);
+    border-top: 1px solid rgba(255,255,255,0.2);
 
     .round-title {
       margin-top: 40px;
@@ -83,9 +91,13 @@ page image {
 
     .project-file-wrap {
       margin-top: 30px;
+      height: 264px;
+      overflow-x: hidden;
+      overflow-y: scroll;
       .file-item {
         width: 600px;
-        background: rgba(0,0,0,0.8);
+        height: 122px;
+        background: rgba(0,0,0,0.2);
         border-radius: 60px;
         display: flex;
         justify-content: space-between;
@@ -123,7 +135,6 @@ page image {
   .start-btn {
     margin: auto;
     padding: 0;
-    margin-top: 64px;
     width: 600px;
     background: #276FF0;
     border-radius: 40px;
@@ -131,6 +142,8 @@ page image {
     font-size: 30px;
     line-height: 80px;
     text-align: center;
+    position: fixed;
+    bottom: 100px;
     
     &:active, &:visited {
       background: #276FF0;

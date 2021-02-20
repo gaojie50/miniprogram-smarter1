@@ -1,6 +1,7 @@
-import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/components'
+import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro';
+import FixedButton from '@components/fixedButton';
 import reqPacking from '../../../utils/reqPacking.js'
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '../../../components/assess';
 import utils from '../../../utils/index';
@@ -120,14 +121,12 @@ export default function PerviewTemplate(){
           })
         }
       </View>
-      <View className="btn-wrap">
-        <Button 
-          className="select-btn" 
-          onClick={handleSelect}
-        >
-            选择该模板
-        </Button>
-      </View>
+      <FixedButton 
+        className="select-btn" 
+        onClick={handleSelect}
+      >
+          选择该模板
+      </FixedButton>
     </View>
     </View>
   )
