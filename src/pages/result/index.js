@@ -17,7 +17,9 @@ export default function Result() {
   const { projectId, roundId } = getCurrentInstance().router.params;
   const [projectRole, setProjectRole] = useState(undefined);
   const [result, setResult] = useState({});
+  const [info, setInfo] = useState({});
   const [projectEvaluationName, setProjectEvaluationName] = useState('');
+
   const fetchRole = () => {
     reqPacking({
       url: 'api/management/projectRole',
@@ -37,6 +39,7 @@ export default function Result() {
         });
       });
   };
+
   const fetchResult = () => {
     reqPacking({
       url: 'api/management/result',
@@ -59,9 +62,32 @@ export default function Result() {
       });
   };
 
+  const fetchInfo = () =>{
+    reqPacking({
+      url: 'api/management/briefInfo',
+      data: { projectId, roundId },
+      method: 'GET',
+    }).then(res => {
+      const { success, data = {}, error } = res;
+
+      if (success) {
+        setProjectEvaluationName(data.projectEvaluationName);
+        data.pic = data.pic ? data.pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png';
+        return setInfo(data);
+      }
+
+      Taro.showToast({
+        title: error && error.message,
+        icon: 'none',
+        duration: 2000
+      });
+    })
+  }
+
   useEffect(() => {
     fetchRole();
     fetchResult();
+    fetchInfo();
   }, []);
 
   if (projectRole == 6) return <View className="no-permission">
@@ -80,7 +106,7 @@ export default function Result() {
   const noEvalText = isLeader(projectRole) ? "还没有人发布过评估内容" : "自行填答后，才能看到其他人的评估内容";
 
   return <View className="result">
-    <ProjectInfo setProjectEvaluationName={setProjectEvaluationName} projectId={projectId} roundId={roundId} />
+    <ProjectInfo info={info} projectId={projectId} roundId={roundId} />
     <View className="result-cont">
       {
         !evaluated && !isLeader(projectRole) ? <View className="tip">为了保证评估客观公正，您需填答后才能看到他人的评估内容</View> : ""
@@ -157,6 +183,7 @@ export default function Result() {
     </View>
 
     <OperationFooter
+      info={info}
       projectId={projectId}
       roundId={roundId}
       evaluated={evaluated} />
