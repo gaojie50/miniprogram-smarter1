@@ -18,18 +18,13 @@ export default class MatrixRadio extends React.Component {
   };
 
 
-  handleViewClick = ({ currentTarget }) => {
+  handleCheck = (index1, index2) => {
     let { finished, matrixSelectList, } = this.state;
     let { cb, isPreview } = this.props;
-    let { index1, index2 } = currentTarget.dataset;
     let obj = {};
-
     if (isPreview) return;
 
-    currentTarget.children[ 0 ].checked = true;
-
     matrixSelectList[ index1 ] = parseInt(index2, 10);
-
     if (matrixSelectList.some(item => item === null)) {
       finished = false;
     } else {
@@ -52,10 +47,11 @@ export default class MatrixRadio extends React.Component {
 
   render() {
     let {
-      title, matrixRadio, isPreview, questionNum, required, showError
+      id, title, matrixRadio, isPreview, questionNum, required, showError
     } = this.props;
+    let { matrixSelectList } = this.state;
     return (
-      <View className={ `matrix-radio ${required ? "required" : ""}` }>
+      <View id={id} className={ `matrix-radio ${required ? "required" : ""}` }>
         <View className="ques-title">{questionNum}、{title}</View>
         <View className={`content ${isPreview ? 'disable': ''}`}>
           <View className="left" id="left">
@@ -75,16 +71,19 @@ export default class MatrixRadio extends React.Component {
                 matrixRadio.axisY.map((itemY, index1) => {
                   return (
                     <View className="right-item" key={ index1 }>
+                      
                       {
                         matrixRadio.axisX.map((itemX, index2) => (
                           <View
-                            className={ isPreview ? "item-radio-disable" : "item-radio" }
+                            className={ isPreview ? "item-radio-disable" : `item-radio ${matrixSelectList[index1]===index2 ? 'active': ''}` }
                             key={ `${index1}-${index2}` }
-                            data-index1={ index1 }
-                            data-index2={ index2 }
-                            onClick={ this.handleViewClick }
+                            onClick={ ()=> { this.handleCheck(index1, index2) } }
                           >
-                            <View className="radio" name={ itemY } disabled={ !!isPreview } />
+                            <View 
+                              className="radio" 
+                              name={ itemY } 
+                              disabled={ !!isPreview } 
+                            />
                           </View>
                         ))
                       }

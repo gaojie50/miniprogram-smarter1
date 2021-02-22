@@ -5,6 +5,7 @@ import { set as setGlobalData, get as getGlobalData } from '../../../global_data
 import NoFollow from '../../../static/detail/noFollows.png';
 import { FollowList } from '../constant';
 import Gray from '../../../static/detail/gray.png';
+import Path from '../../../static/detail/path.png';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking'); 
@@ -13,15 +14,23 @@ export default class FollowStatus extends React.Component {
     followData: {},
     fetch: false,
     showFollows: [],
-    loading: true
+    loading: true,
   }
+  
   componentDidUpdate() {
     if(!this.state.fetch) {
       this.fetFollowStatus();
     }
   }
 
-  fetFollowStatus() {
+  followResult(item) {
+    const { projectId } = this.props.basicData;
+    wx.navigateTo({
+      url: `/pages/checkProgress/index?projectId=${projectId}&activeTab=${FollowList[item].value}`,
+    })
+  }
+
+  fetFollowStatus = () => {
     const { basicData, judgeRole } = this.props;
     if(judgeRole.role !== 2) {
       reqPacking({
@@ -50,11 +59,18 @@ export default class FollowStatus extends React.Component {
     }
   }
 
+  handleAllProgress = () => {
+    const { projectId } = this.props.basicData;
+    wx.navigateTo({
+      url: `/pages/checkProgress/index?projectId=${projectId}&activeTab=1`,
+    })
+  }
+
   render() {
     const { judgeRole, basicData } = this.props;
     const { followData, showFollows, loading } = this.state;
     return (
-      <View className="followStatus" style={{backgroundColor: basicData.cooperStatus === 2 && showFollows.length > 0 ? '#F8F8F8' : ''}}>
+      <View className={basicData.cooperStatus === 2 ? "followStatus follow-reault" : "followStatus"} style={{backgroundColor: basicData.cooperStatus === 2 && showFollows.length > 0 ? '#F8F8F8' : ''}}>
         {
           judgeRole.role === 2 ? <View className="noPermission">暂无查看权限</View>
           : <Block>
@@ -82,7 +98,7 @@ export default class FollowStatus extends React.Component {
                         }
                       </View>
                       <View className="three">{followData[item][0].describe}</View>
-                    </View> : <View className="followStatus-result">
+                    </View> : <View className="followStatus-result" onClick={this.followResult.bind(this, item)}>
                       <View className="result-name">
                         <View className="name" style={{color: FollowList[item].color}}>{FollowList[item].name}</View>
                         <Image src={Gray} alt=""></Image>
@@ -94,6 +110,10 @@ export default class FollowStatus extends React.Component {
                       <View className="result-time">{dayjs(followData[item][0].updateTime || 0).format('YYYY-MM-DD HH:mm')}</View>
                     </View>
                   })
+                }
+                {
+                  showFollows.length > 0 && basicData.cooperStatus !== 2 ?
+                  <View className="allProgress" onClick={this.handleAllProgress}>查看所有进展 <Image src={Path} alt=""></Image></View> : null
                 }
               </Block>
             }

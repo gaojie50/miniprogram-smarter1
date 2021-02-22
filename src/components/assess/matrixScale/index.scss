@@ -47,17 +47,13 @@
         font-size: 28px;
         color: #19233C;
         text-align: center;
+        border-radius: 10px;
         &:not(:last-child){
           margin-right: 8px;
         }
-        &:hover{
-          font-size: 16px;
-          color: #1890FF;
-          background:rgba(24, 144, 255, 0.2);
-        }
         &.active{
-          background: #1890FF;
-          color: #FFFFFF;
+          background: rgba(39,111,240,0.10);
+          color: #276FF0;
         }
         &.disable{
           color: #CCC;

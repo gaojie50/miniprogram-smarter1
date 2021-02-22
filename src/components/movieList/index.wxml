@@ -4,7 +4,7 @@
     </view>
     <block wx:for="{{listData}}" wx:key="maoyanId">
         <block wx:for="{{item}}" wx:key="maoyanId">
-        <view class="listTr" bindtap="jumpToDetail" data-id="{{item.maoyanId}}">
+        <view class="listTr" bindtap="jumpToDetail" data-id="{{item.maoyanId}}" data-pid="{{item.projectId}}">
             <view style="font-size: 28rpx;font-weight: bold;width: 218rpx;height: {{item.trHeight}}rpx" class="listTd tdPadding shadow">
                 <view>
                     <view class="movieName">{{item.name}}</view>
@@ -24,6 +24,7 @@
             <view class="listTd {{filterItemHidden2? 'itemHidden':''}}">制作成本</view>
             <view class="listTd {{filterItemHidden3? 'itemHidden':''}}">预估票房</view>
             <view class="listTd {{filterItemHidden4? 'itemHidden':''}}">预估评分</view>
+            <!-- <view class="listTd {{filterItemHidden13? 'itemHidden':''}}">主控方</view> -->
             <view class="listTd {{filterItemHidden5? 'itemHidden':''}}">主出品</view>
             <view class="listTd {{filterItemHidden6? 'itemHidden':''}}">主发行</view>
             <view class="listTd {{filterItemHidden7? 'itemHidden':''}}">类型</view>
@@ -37,7 +38,7 @@
         <view class="listTr" style="min-height:0;"></view>
         <block wx:for="{{listData}}" wx:key="maoyanId">
             <block wx:for="{{item}}" wx:key="maoyanId">
-            <view data-id="{{item.maoyanId}}" bindtap="jumpToDetail" class="listTr rightTableHeight">
+            <view data-id="{{item.maoyanId}}" data-pid="{{item.projectId}}" bindtap="jumpToDetail" class="listTr rightTableHeight">
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden1? 'itemHidden':''}}">
                     <view wx:if="{{item.reRelease}}">
                         <view>
@@ -64,6 +65,12 @@
                     <text>{{item.estimateBox2.text}}</text>
                 </view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">{{item.estimateScore === null ? '-': item.estimateScore}}</view>
+                <!-- <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden13? 'itemHidden':''}}">
+                    <view style="">
+                        <text wx:if="{{item.mainControl === null || item.mainControl.length === 0}}">-</text>
+                        <text >{{item.mainControl[0]}}</text>
+                    </view>
+                </view> -->
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden5? 'itemHidden':''}}">
                     <view style="">
                         <text wx:if="{{item.producer === null || item.producer.length === 0}}">-</text>

@@ -1,0 +1,17 @@
+.no-data-component {
+  width: 100%;
+  text-align: center;
+  image{
+    width: 416px;
+    height: 220px;
+    margin: auto;
+  }
+  .no-data-text {
+    font-weight: 400;
+    font-size: 28px;
+    color: #333333;
+    text-align: center;
+    line-height: 44px;
+    margin-top: 9px;
+  }
+}
