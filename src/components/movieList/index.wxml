@@ -4,7 +4,7 @@
     </view>
     <block wx:for="{{listData}}" wx:key="maoyanId">
         <block wx:for="{{item}}" wx:key="maoyanId">
-        <view class="listTr" bindtap="jumpToDetail" data-id="{{item.maoyanId}}">
+        <view class="listTr" bindtap="jumpToDetail" data-id="{{item.maoyanId}}" data-pid="{{item.projectId}}">
             <view style="font-size: 28rpx;font-weight: bold;width: 218rpx;height: {{item.trHeight}}rpx" class="listTd tdPadding shadow">
                 <view>
                     <view class="movieName">{{item.name}}</view>
@@ -38,7 +38,7 @@
         <view class="listTr" style="min-height:0;"></view>
         <block wx:for="{{listData}}" wx:key="maoyanId">
             <block wx:for="{{item}}" wx:key="maoyanId">
-            <view data-id="{{item.maoyanId}}" bindtap="jumpToDetail" class="listTr rightTableHeight">
+            <view data-id="{{item.maoyanId}}" data-pid="{{item.projectId}}" bindtap="jumpToDetail" class="listTr rightTableHeight">
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden1? 'itemHidden':''}}">
                     <view wx:if="{{item.reRelease}}">
                         <view>
