@@ -16,7 +16,6 @@ import People from '../../static/detail/people.png';
 import File from '../../static/detail/file.png';
 import ArrowLeft from '../../static/detail/arrow-left.png';
 import Edit from '../../static/detail/edit.png';
-import EditProject from './edit';
 import './index.scss';
 import '../../components/m5/style/index.scss';
 

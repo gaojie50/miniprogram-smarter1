@@ -1,0 +1,41 @@
+.key-input {
+  margin: 0 30px;
+  height: 108px;
+  line-height: 108px;
+  font-size: 28px;
+  color: #333333;
+  box-sizing: border-box;
+  .title {
+    float: left;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+  }
+  .input {
+    float: right;
+    display: block;
+    width: 13.34%;
+    height: 28px;
+    margin-top: 33px;
+    margin-right: 25px;
+    box-sizing: border-box;
+    .input-placeholder {
+      height: 28px;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #CCCCCC;
+    }
+  }
+  .param {
+    float: right;
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+  }
+}
+.key-input:after {
+  content: '';
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  clear: both;
+}
