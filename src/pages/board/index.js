@@ -348,7 +348,8 @@ export default function Board() {
         scrollY
         style={{
           paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
-          height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx)`,
+          height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx - 92rpx)`,
+          paddingBottom: `92rpx`,
         }}
         onScroll={(e) => {
           checkIfStickyImmediately(e.detail.scrollTop);
@@ -390,7 +391,7 @@ export default function Board() {
                   return (
                     <View>
                       <View className="project-add-text">
-                        <Text>{name}</Text>
+                        <Text>{`${name} ${arr.length}个`}</Text>
                       </View>
                       {arr.map((obj, i) => {
                         if (obj?.projectStageStep?.length > 0) {
