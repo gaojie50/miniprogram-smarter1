@@ -9,7 +9,7 @@ export default function OperationFooter({ projectId, roundId, evaluated, info })
   
   const goToAssess = () => {
     Taro.navigateTo({
-      url: `/pages/assess/detail/index?projectId=${projectId}&roundId=${roundId}`,
+      url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
     })
   }
 
