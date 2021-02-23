@@ -43,8 +43,6 @@ const SYSTEM_BAR_TOP_PADDING = capsuleLocation.top;
 const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING;
 const STICKY_OFFSET = rpxTopx(186);
 
-console.log(capsuleLocation.top)
-
 const FILTER_ITEMS_INIT = () => (
   [
     {
@@ -88,6 +86,19 @@ export default function Board() {
   const [sticky, setSticky] = useState(false);
   const scroller = useRef(null);
   const [noData, setNoData] = useState(false);
+
+  const [member, setMember] = useState([]);
+  const [department, setDepartment] = useState([]);
+  const [permission, setPermission] = useState(2);
+
+  const filterPanelProps = useMemo(() => {
+    return {
+      permission,
+      member,
+      department,
+    }
+  }, [permission, member, department])
+
   const {
     tabSelected,
     tabSelected_ref, // the value comes from React.Ref
@@ -101,12 +112,63 @@ export default function Board() {
     props: boardFilterProps,
     params,
     reset,
-  } = useBoardFilter();
+  } = useBoardFilter({
+    filterPanelPropsMixIn: filterPanelProps,
+  });
 
   useEffect(() => {
     Taro.setNavigationBarColor({
       frontColor: '#000000',
       backgroundColor: '#ffffff',
+    })
+
+    PureReq_Permission().then((d1) => {
+      setPermission(d1);
+      if (d1 !== 2) {
+        PureReq_OrgTree().then((data) => {
+          if (data.orgTreeRespList) {
+            setDepartment(data.orgTreeRespList.reduce((acc, { groupName, groupId, orgTreeRespList }) => {
+              acc.push({
+                value: groupId,
+                label: groupName
+              });
+  
+              if (orgTreeRespList && orgTreeRespList.length > 0) {
+                const secondLevel = orgTreeRespList.map(item => {
+                  return {
+                    value: item.groupId,
+                    label: item.groupName
+                  };
+                });
+  
+                acc = acc.concat(secondLevel);
+              }
+  
+              return acc;
+            }, []));
+          }
+
+          if (data.groupId != 2) member = data.orgUserRespList;
+
+          const flatten = arr => {
+            return arr.reduce((acc, next) => {
+              if (next.orgUserRespList && next.orgUserRespList.length > 0) acc = acc.concat(next.orgUserRespList);
+              if (next.orgTreeRespList && next.orgTreeRespList.length > 0) acc = acc.concat(flatten(next.orgTreeRespList));
+
+              return acc;
+            }, member);
+          };
+
+          setMember(flatten(data.orgTreeRespList)
+            // .filter(item => item.keeperUserId != window.userData.keeperUserId)
+            .map(item => {
+              return {
+                label: item.realName ? item.realName : item.mis,
+                value: item.userId,
+              };
+            }));
+        })
+      }
     })
   }, [])
 
@@ -503,10 +565,13 @@ function NiceTab(props) {
   );
 }
 
-function useBoardFilter() {
+function useBoardFilter(config = {}) {
+  const {
+    filterPanelPropsMixIn = {},
+  } = config
   const [filterActive, setFilterActive] = useState('');
   const [params, setParams] = useState(null);
-  const { component: filterPanel, option } = useFilterPanel({
+  const { option, Component: FilterPanel } = useFilterPanel({
     titleHeight: SCROLL_TOP_MARGIN + 20,
     filterActive,
     ongetFilterShow(v) {
@@ -558,7 +623,7 @@ function useBoardFilter() {
   const props = {
     filterActive,
     setFilterActive,
-    panel: filterPanel,
+    panel: <FilterPanel {...option} {...filterPanelPropsMixIn} />,
     tabs: optionArr,
   }
 
@@ -664,7 +729,8 @@ function ProjectItem(props) {
   } = props;
 
   const [val, unit] = useMemo(() => {
-    return trans(estimateBox)
+    const rsl = formatNumber(estimateBox, 'floor');
+    return [rsl.num, rsl.unit];
   }, [estimateBox]);
 
   const [stageName, stageDescribe, stageLength] = useMemo(() => {
@@ -810,20 +876,25 @@ function PureReq_Cooperation(params) {
   ).then((res) => onHandleResponse(res))
 }
 
-function trans(input) {
-  if (!typeof input === 'number') return [];
-  let unit = '';
-  let val = input;
-  if (input > 1e9) {
-    unit = '亿';
-    val = (input / 1e9).toFixed(2);
-  } else if (input > 1e5 && input < 1e9) {
-    unit = '万';
-    val = (input / 1e5).toFixed(1);
-  } else {
-    unit = '';
-  }
-  return [val, unit];
+function PureReq_Permission(params) {
+  return reqPacking(
+    {
+      url: 'api/management/userPermissions',
+    },
+    'server',
+  ).then((res) => onHandleResponse(res))
+}
+
+function PureReq_OrgTree() {
+  return reqPacking(
+    {
+      url: 'api/management/org/queryorgtree',
+      data: {
+        leaderFilter: true
+      }
+    },
+    'server',
+  ).then((res) => onHandleResponse(res))
 }
 
 const interceptor = function (chain) {
