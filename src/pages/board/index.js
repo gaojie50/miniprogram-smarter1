@@ -103,7 +103,7 @@ export default function Board() {
     tabSelected,
     tabSelected_ref, // the value comes from React.Ref
     Component: StatusTab,
-    props: tabProps,
+    props: tabOriginProps,
     dataCache,
     setData: setTabData,
   } = useStatusTab();
@@ -115,6 +115,33 @@ export default function Board() {
   } = useBoardFilter({
     filterPanelPropsMixIn: filterPanelProps,
   });
+
+  const hidden7Add = useMemo(() => {
+    let val = false;
+
+    if (boardFilterProps.tabs[0] && boardFilterProps.tabs[0].name !== '最近7天') {
+      return true;
+    }
+
+
+    for (let i = 1; i < boardFilterProps.tabs.length; i += 1) {
+      if (boardFilterProps.tabs[i].changed === true) {
+        return true;
+      }
+    }
+    return val;
+  }, [boardFilterProps.tabs])
+
+  const tabProps = useMemo(() => {
+    const cp = JSON.parse(JSON.stringify(tabOriginProps.list));
+    const found = cp.find((item) => item.p1 === tabSelected.name);
+    if (hidden7Add) {
+      found.p5 = '';
+    }
+    tabOriginProps.list = cp;
+    return {...tabOriginProps}
+  }, [hidden7Add, tabSelected, tabOriginProps])
+
 
   useEffect(() => {
     Taro.setNavigationBarColor({
@@ -517,7 +544,7 @@ function NiceTab(props) {
   return (
     <ScrollView className="board-tab" scrollX>
       {list.map((item, i) => {
-        const {p1 = '-', p2 = '-', p3 = '', p4 = '近7日', p5 = ''} = item;
+        const {p1 = '-', p2 = '-', p3 = '部', p4 = '近7日', p5 = ''} = item;
         const className = `
           ${CLASSNAME_BOARD[type]}
           ${
@@ -546,7 +573,7 @@ function NiceTab(props) {
                   <Text className="board-tab-item-p3">{p3}</Text>
                 </View>
                 <View className="board-tab-item-p4">
-                  <View>{p4}</View>
+                  <View>{p5 ? p4 : ''}</View>
                   <View
                     className={`${
                       active === i

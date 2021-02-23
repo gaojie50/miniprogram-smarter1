@@ -5,6 +5,7 @@ import '../../components/m5/style/components/timeline.scss';
 import './history.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking'
+import NoData from '../../components/noData';
 
 const { formatNumber } = utils;
 
@@ -16,19 +17,32 @@ const UNITS = {
   '预估票房': formatNumber,
 }
 
+const NO_AUTH_MESSAGE = '您没有该项目管理权限';
+
 export function UseHistory(props) {
   const [data, setData] = useState([]);
+  const [auth, setAuth] = useState(false);
   const { projectId } = props;
 
   useEffect(() => {
     if (projectId) {
       PureReq_Projectoperatelog({
         projectId
-      }).then((d) => setData(d))
+      }).then((res) => {
+        const { success, data, error } = res;
+        if (success) {
+          setData(data);
+          setAuth(true);
+        } else {
+          if (error && error.message === NO_AUTH_MESSAGE) {
+            setAuth(false);
+          }
+        }
+      })
     }
   }, [projectId])
 
-  return  projectId ? <ChangeHistory data={data} /> : null
+  return  projectId ? (!auth ? <ChangeHistory data={data} /> : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
 }
 
 export function useChangeHistory(projectId) {
@@ -175,11 +189,11 @@ function PureReq_Projectoperatelog({ projectId }) {
       }
     },
     'server',
-  ).then((res) => onHandleResponse(res))
+  ).then((res) => res)
 }
 
 function onHandleResponse(res) {
   const { success, data, error } = res;
   if (success) return data;
-  return [];
+  return error;
 }
