@@ -1,0 +1,36 @@
+.matrixScaleEval-wrap{
+  .part{
+    background: #F8F8F8;
+    border-radius: 10px;
+    position: relative;
+    padding: 20px 20px 30px;
+    margin-bottom: 20px;
+
+    &:last-of-type{
+      margin-bottom: 0;
+    }
+
+    .inner-title{
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 28px;
+      color: #333;
+      line-height: 34px;
+    }
+
+    .average{
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: #FD9C00;
+      border-radius: 0 0 10px 10px;
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 26px;
+      color: #FFF;
+      line-height: 50px;
+      text-align: center;
+      padding: 0 20px;
+    }
+  }
+}
