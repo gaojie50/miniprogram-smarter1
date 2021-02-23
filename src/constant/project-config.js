@@ -69,17 +69,17 @@ function getMaoyanSignLabel(arr = []) {
   let produce = arr.includes(1)
     ? 1
     : arr.includes(5)
-    ? 5
-    : arr.includes(3)
-    ? 3
-    : undefined
+      ? 5
+      : arr.includes(3)
+        ? 3
+        : undefined
   let release = arr.includes(2)
     ? 2
     : arr.includes(6)
-    ? 6
-    : arr.includes(4)
-    ? 4
-    : undefined
+      ? 6
+      : arr.includes(4)
+        ? 4
+        : undefined
 
   return [produce, release]
     .filter(item => !!item)
@@ -127,8 +127,8 @@ function getCooperStatus(value) {
 
   const CooperStatus = [
     {
-      value:0,
-      label:'接触中',
+      value: 0,
+      label: '接触中',
     },
     {
       value: 1,
@@ -155,39 +155,51 @@ function getCooperStatus(value) {
   return CooperStatus.filter(item => item.value == value)[0]
 }
 
-function getProjectStages(){
+function getProjectStages() {
   return [
     {
-      label:'开发',
-      value:1,
-      key:'developStageList',
+      label: '开发',
+      value: 1,
+      key: 'developStageList',
     },
     {
-      label:'完片',
-      value:2,
-      key:'completedStageList',
+      label: '完片',
+      value: 2,
+      key: 'completedStageList',
     },
     {
-      label:'宣发',
-      value:3,
-      key:'publicityStageList',
+      label: '宣发',
+      value: 3,
+      key: 'publicityStageList',
     },
     {
-      label:'发行',
-      value:4,
-      key:'publishStageList',
+      label: '发行',
+      value: 4,
+      key: 'publishStageList',
     },
     {
-      label:'上映',
-      value:5,
-      key:'showStageList',
+      label: '上映',
+      value: 5,
+      key: 'showStageList',
     },
     {
-      label:'映后',
-      value:6,
-      key:'showAfterStageList',
+      label: '映后',
+      value: 6,
+      key: 'showAfterStageList',
     },
   ];
+}
+
+function getEvaluationLabel(method) {
+  const evaluationMethodArr = [
+    { value: 1,label: '大纲评估' },
+    { value: 2,label: '剧本评估' },
+    { value: 3,label: '成片评估' },
+  ];
+
+  if (method < 1 || method > 3 || !method) return '-';
+  
+  return evaluationMethodArr.filter(item => item.value == method)[0].label;
 }
 
 export default {
@@ -198,4 +210,5 @@ export default {
   getProjectStatus,
   getCooperStatus,
   getProjectStages,
+  getEvaluationLabel,
 }

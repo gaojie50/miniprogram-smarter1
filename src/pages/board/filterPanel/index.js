@@ -548,11 +548,13 @@ export function useFilterPanel(config = {}) {
     dtPicker,
     dtPickerOption,
 
-    reset
+    reset,
+
   };
 
   return {
     option,
+    Component: FilterPanel,
     component: (
       <FilterPanel {...option} />
     )
@@ -709,16 +711,25 @@ export default class FilterPanel extends React.Component {
 
       dtPicker,
       dtPickerOption,
+
+      permission,
+      member,
+      department,
     } = this.props;
 
     return (
       filterShow.length != 0 && (
         <View className="filterPanel">
-          <View
-            className={filterShow.length != 0 ? "filterPanelWrap" : ""}
-          >
+          <View className={filterShow.length != 0 ? "filterPanelWrap" : ""}>
             <View
-              className={"filterPanels " + (filterShow == "4" ? `date ${showDateSureBtn === false ? 'filterPanel-no-bottom' : ''}` : "")}
+              className={
+                "filterPanels " +
+                (filterShow == "4"
+                  ? `date ${
+                      showDateSureBtn === false ? "filterPanel-no-bottom" : ""
+                    }`
+                  : "")
+              }
             >
               {filterShow == "4" && (
                 <ScrollView
@@ -742,7 +753,9 @@ export default class FilterPanel extends React.Component {
                           ></Image>
                           {item.label}
                         </View>
-                        {item.label == "自定义" && item.checked == "checked" && dtPicker}
+                        {item.label == "自定义" &&
+                          item.checked == "checked" &&
+                          dtPicker}
                       </Block>
                     );
                   })}
@@ -857,6 +870,52 @@ export default class FilterPanel extends React.Component {
                         );
                       })}
                     </View>
+                    {permission === 1 ? (
+                      <>
+                        <Text className="title">成员</Text>
+                        <View className="cost-wrap">
+                          {member.map((item, index) => {
+                            return (
+                              <View
+                                key={index}
+                                data-num={index}
+                                onClick={this.tapJobType}
+                                className={
+                                  "cost-wrap-item " +
+                                  (item.active ? "filterPanelActive" : "")
+                                }
+                                style="margin-right: 20rpx;margin-bottom: 20rpx"
+                              >
+                                {item.value}
+                              </View>
+                            );
+                          })}
+                        </View>
+                      </>
+                    ) : null}
+                    {permission === 3 ? (
+                      <>
+                        <Text className="title">所属部门</Text>
+                        <View className="cost-wrap">
+                          {jobType.map((item, index) => {
+                            return (
+                              <View
+                                key={index}
+                                data-num={index}
+                                onClick={this.tapJobType}
+                                className={
+                                  "cost-wrap-item " +
+                                  (item.active ? "filterPanelActive" : "")
+                                }
+                                style="margin-right: 20rpx;margin-bottom: 20rpx"
+                              >
+                                {item.value}
+                              </View>
+                            );
+                          })}
+                        </View>
+                      </>
+                    ) : null}
                   </ScrollView>
                 </View>
               )}
@@ -877,17 +936,17 @@ export default class FilterPanel extends React.Component {
                     </View>
                   </View>
                 ) : (
-                    showDateSureBtn && (
-                      <View className="filterButton">
-                        <View
-                          onClick={this.filterDefinedDate}
-                          className="filterButton-date-determine"
-                        >
-                          确定
+                  showDateSureBtn && (
+                    <View className="filterButton">
+                      <View
+                        onClick={this.filterDefinedDate}
+                        className="filterButton-date-determine"
+                      >
+                        确定
                       </View>
-                      </View>
-                    )
+                    </View>
                   )
+                )
               ) : null}
             </View>
           </View>

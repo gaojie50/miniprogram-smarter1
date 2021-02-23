@@ -106,3 +106,15 @@
     }
   }
 }
+
+.no-auth-text {
+  display: flex;
+  height: 200px;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 400;
+  font-size: 28px;
+  color: #333333;
+  line-height: 44px;
+}

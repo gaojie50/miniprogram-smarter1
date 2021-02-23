@@ -56,7 +56,7 @@ export default function assessPage(){
               success: (res)=>{
                 if(res.confirm){
                   Taro.navigateTo({
-                    url: `/pages/result?project=${projectId}&roundId=${roundId}`
+                    url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`
                   })
                 }
               }
