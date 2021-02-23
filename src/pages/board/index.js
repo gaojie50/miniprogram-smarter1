@@ -747,7 +747,9 @@ function ProjectItem(props) {
     pic,
     cooperType = [],
     releaseDate,
+    box,
     estimateBox,
+    estimateScore,
     scheduleType,
     score = '8.5',
     projectStageStep = [],
@@ -756,16 +758,21 @@ function ProjectItem(props) {
     style,
   } = props;
 
-  const [val, unit] = useMemo(() => {
-    const rsl = formatNumber(estimateBox, 'floor');
-    return [rsl.num, rsl.unit];
-  }, [estimateBox]);
+  const [val, unit, isOnline] = useMemo(() => {
+    const __isOnline = !!box;
+    const rsl = formatNumber(estimateBox || box, 'floor');
+    return [rsl.num, rsl.unit, __isOnline];
+  }, [estimateBox, box]);
 
   const [stageName, stageDescribe, stageLength] = useMemo(() => {
     if (projectStageStep.length === 0) return [];
     const { projectStage, describe = '' }  = projectStageStep[projectStageStep.length - 1];
     return [`[${PROJECT_STAGE_MAPPING[projectStage]}]`, describe, projectStageStep.length]
   }, [projectStageStep])
+
+  const formattedDate = useMemo(() => {
+    return releaseDate.replace(/[^\d-~]/g, '');
+  }, [releaseDate])
 
   return (
     <View className="project-item" style={style} onClick={ ()=>{jumpDetail(projectId)} }>
@@ -779,11 +786,17 @@ function ProjectItem(props) {
         <View className="project-item-title">
           <View className="project-item-title-name">{name}</View>
           {
-            val && (
+            type === 3 ? (
               <View className="project-item-title-predict">
-                预估
+                { isOnline ? '累计' : '预估'}
                 <Text className="project-item-title-predict-num">{val}</Text>
                 {unit}
+              </View>
+            ) : (
+              <View className="project-item-title-predict-yellow">
+                评估
+                <Text className="project-item-title-predict-num">{estimateScore || '-'}</Text>
+                分
               </View>
             )
           }
@@ -797,7 +810,7 @@ function ProjectItem(props) {
           }
         </View>
         <View className="project-item-date">
-          <Text>{releaseDate.slice(0, 10)}</Text>
+          <Text>{formattedDate}</Text>
           <SchedulerTag type={scheduleType}/>
         </View>
         <View className="project-item-status">

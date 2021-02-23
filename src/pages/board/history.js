@@ -42,7 +42,7 @@ export function UseHistory(props) {
     }
   }, [projectId])
 
-  return  projectId ? (!auth ? <ChangeHistory data={data} /> : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
+  return  projectId ? (auth ? <ChangeHistory data={data} /> : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
 }
 
 export function useChangeHistory(projectId) {
