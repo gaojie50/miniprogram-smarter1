@@ -43,8 +43,6 @@ const SYSTEM_BAR_TOP_PADDING = capsuleLocation.top;
 const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING;
 const STICKY_OFFSET = rpxTopx(186);
 
-console.log(capsuleLocation.top)
-
 const FILTER_ITEMS_INIT = () => (
   [
     {
@@ -88,11 +86,24 @@ export default function Board() {
   const [sticky, setSticky] = useState(false);
   const scroller = useRef(null);
   const [noData, setNoData] = useState(false);
+
+  const [member, setMember] = useState([]);
+  const [department, setDepartment] = useState([]);
+  const [permission, setPermission] = useState(2);
+
+  const filterPanelProps = useMemo(() => {
+    return {
+      permission,
+      member,
+      department,
+    }
+  }, [permission, member, department])
+
   const {
     tabSelected,
     tabSelected_ref, // the value comes from React.Ref
     Component: StatusTab,
-    props: tabProps,
+    props: tabOriginProps,
     dataCache,
     setData: setTabData,
   } = useStatusTab();
@@ -101,12 +112,90 @@ export default function Board() {
     props: boardFilterProps,
     params,
     reset,
-  } = useBoardFilter();
+  } = useBoardFilter({
+    filterPanelPropsMixIn: filterPanelProps,
+  });
+
+  const hidden7Add = useMemo(() => {
+    let val = false;
+
+    if (boardFilterProps.tabs[0] && boardFilterProps.tabs[0].name !== '最近7天') {
+      return true;
+    }
+
+
+    for (let i = 1; i < boardFilterProps.tabs.length; i += 1) {
+      if (boardFilterProps.tabs[i].changed === true) {
+        return true;
+      }
+    }
+    return val;
+  }, [boardFilterProps.tabs])
+
+  const tabProps = useMemo(() => {
+    const cp = JSON.parse(JSON.stringify(tabOriginProps.list));
+    const found = cp.find((item) => item.p1 === tabSelected.name);
+    if (hidden7Add) {
+      found.p5 = '';
+    }
+    tabOriginProps.list = cp;
+    return {...tabOriginProps}
+  }, [hidden7Add, tabSelected, tabOriginProps])
+
 
   useEffect(() => {
     Taro.setNavigationBarColor({
       frontColor: '#000000',
       backgroundColor: '#ffffff',
+    })
+
+    PureReq_Permission().then((d1) => {
+      setPermission(d1);
+      if (d1 !== 2) {
+        PureReq_OrgTree().then((data) => {
+          if (data.orgTreeRespList) {
+            setDepartment(data.orgTreeRespList.reduce((acc, { groupName, groupId, orgTreeRespList }) => {
+              acc.push({
+                value: groupId,
+                label: groupName
+              });
+  
+              if (orgTreeRespList && orgTreeRespList.length > 0) {
+                const secondLevel = orgTreeRespList.map(item => {
+                  return {
+                    value: item.groupId,
+                    label: item.groupName
+                  };
+                });
+  
+                acc = acc.concat(secondLevel);
+              }
+  
+              return acc;
+            }, []));
+          }
+
+          if (data.groupId != 2) member = data.orgUserRespList;
+
+          const flatten = arr => {
+            return arr.reduce((acc, next) => {
+              if (next.orgUserRespList && next.orgUserRespList.length > 0) acc = acc.concat(next.orgUserRespList);
+              if (next.orgTreeRespList && next.orgTreeRespList.length > 0) acc = acc.concat(flatten(next.orgTreeRespList));
+
+              return acc;
+            }, member);
+          };
+
+          setMember(flatten(data.orgTreeRespList)
+            // .filter(item => item.keeperUserId != window.userData.keeperUserId)
+            .map(item => {
+              return {
+                label: item.realName ? item.realName : item.mis,
+                value: item.userId,
+              };
+            }));
+        })
+      }
     })
   }, [])
 
@@ -286,7 +375,8 @@ export default function Board() {
         scrollY
         style={{
           paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
-          height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx)`,
+          height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx - 92rpx)`,
+          paddingBottom: `92rpx`,
         }}
         onScroll={(e) => {
           checkIfStickyImmediately(e.detail.scrollTop);
@@ -328,7 +418,7 @@ export default function Board() {
                   return (
                     <View>
                       <View className="project-add-text">
-                        <Text>{name}</Text>
+                        <Text>{`${name} ${arr.length}个`}</Text>
                       </View>
                       {arr.map((obj, i) => {
                         if (obj?.projectStageStep?.length > 0) {
@@ -454,7 +544,7 @@ function NiceTab(props) {
   return (
     <ScrollView className="board-tab" scrollX>
       {list.map((item, i) => {
-        const {p1 = '-', p2 = '-', p3 = '', p4 = '近7日', p5 = ''} = item;
+        const {p1 = '-', p2 = '-', p3 = '部', p4 = '近7日', p5 = ''} = item;
         const className = `
           ${CLASSNAME_BOARD[type]}
           ${
@@ -483,7 +573,7 @@ function NiceTab(props) {
                   <Text className="board-tab-item-p3">{p3}</Text>
                 </View>
                 <View className="board-tab-item-p4">
-                  <View>{p4}</View>
+                  <View>{p5 ? p4 : ''}</View>
                   <View
                     className={`${
                       active === i
@@ -503,10 +593,13 @@ function NiceTab(props) {
   );
 }
 
-function useBoardFilter() {
+function useBoardFilter(config = {}) {
+  const {
+    filterPanelPropsMixIn = {},
+  } = config
   const [filterActive, setFilterActive] = useState('');
   const [params, setParams] = useState(null);
-  const { component: filterPanel, option } = useFilterPanel({
+  const { option, Component: FilterPanel } = useFilterPanel({
     titleHeight: SCROLL_TOP_MARGIN + 20,
     filterActive,
     ongetFilterShow(v) {
@@ -558,7 +651,7 @@ function useBoardFilter() {
   const props = {
     filterActive,
     setFilterActive,
-    panel: filterPanel,
+    panel: <FilterPanel {...option} {...filterPanelPropsMixIn} />,
     tabs: optionArr,
   }
 
@@ -664,7 +757,8 @@ function ProjectItem(props) {
   } = props;
 
   const [val, unit] = useMemo(() => {
-    return trans(estimateBox)
+    const rsl = formatNumber(estimateBox, 'floor');
+    return [rsl.num, rsl.unit];
   }, [estimateBox]);
 
   const [stageName, stageDescribe, stageLength] = useMemo(() => {
@@ -810,20 +904,25 @@ function PureReq_Cooperation(params) {
   ).then((res) => onHandleResponse(res))
 }
 
-function trans(input) {
-  if (!typeof input === 'number') return [];
-  let unit = '';
-  let val = input;
-  if (input > 1e9) {
-    unit = '亿';
-    val = (input / 1e9).toFixed(2);
-  } else if (input > 1e5 && input < 1e9) {
-    unit = '万';
-    val = (input / 1e5).toFixed(1);
-  } else {
-    unit = '';
-  }
-  return [val, unit];
+function PureReq_Permission(params) {
+  return reqPacking(
+    {
+      url: 'api/management/userPermissions',
+    },
+    'server',
+  ).then((res) => onHandleResponse(res))
+}
+
+function PureReq_OrgTree() {
+  return reqPacking(
+    {
+      url: 'api/management/org/queryorgtree',
+      data: {
+        leaderFilter: true
+      }
+    },
+    'server',
+  ).then((res) => onHandleResponse(res))
 }
 
 const interceptor = function (chain) {
