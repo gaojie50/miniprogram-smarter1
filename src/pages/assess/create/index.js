@@ -303,15 +303,15 @@ export default class _C extends React.Component {
       },
       'server',
     ).then(res => {
-      const { success, error } = res;
+      const { success, error, data } = res;
 
       if (success) {
         return Taro.showToast({
           title: '提交成功',
-          duration: 2000,
+          duration: 1000,
           success: ()=>{
-            Taro.navigateTo({
-              url: '/pages/welcome/index'
+            Taro.redirectTo({
+              url: `/pages/result/index?projectId=${projectId}&roundId=${data}`
             })
           }
         })
