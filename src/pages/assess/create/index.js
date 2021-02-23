@@ -58,14 +58,6 @@ export default class _C extends React.Component {
     this.fetchProjectProfile(projectId);
   }
 
-  componentDidShow(){
-    const newTempId = Taro.getStorageSync('tempId');
-    if(newTempId){
-      this.setState({ tempId: Number(newTempId) });
-      Taro.removeStorageSync('tempId');
-    }
-  }
-
   fetchProjectProfile = projectId => {
     reqPacking(
       {
@@ -268,8 +260,14 @@ export default class _C extends React.Component {
 
   handlePreview=(e, tempId)=>{
     e.stopPropagation();
+    const that = this;
     Taro.navigateTo({
-      url: `/pages/assess/template/index?tempId=${tempId}`
+      url: `/pages/assess/template/index?tempId=${tempId}`,
+      events: {
+        selectTempId: function(data){
+          data && that.setState({ tempId: Number(data) });
+        }
+      }
     })
   }
 
@@ -492,6 +490,11 @@ export default class _C extends React.Component {
                  }
         >
           <View className="content-wrap">
+          {
+            projectProfile.length === 0 && (
+              <Nodata text="暂无文件可选" />
+            )
+          }
           {
             projectProfile.map(({
               profileId, profileName, uploader, uploadTime, profileSize

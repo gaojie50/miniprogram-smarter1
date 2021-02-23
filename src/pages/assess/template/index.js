@@ -52,7 +52,10 @@ export default function PerviewTemplate(){
 
   const handleSelect = () =>{
     const { tempId } = Taro.getCurrentInstance().router.params;
-    Taro.setStorageSync('tempId', tempId);
+    const pages = Taro.getCurrentPages(); // 获取当前的页面栈
+    const current = pages[pages.length - 1];
+    const eventChannel = current.getOpenerEventChannel();
+    eventChannel.emit('selectTempId', tempId);
     Taro.navigateBack();
   }
 
