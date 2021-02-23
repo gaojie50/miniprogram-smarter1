@@ -1,6 +1,7 @@
 import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
+import TopBar from '@components/topBar';
 import dayjs, { Dayjs } from 'dayjs';
 import reqPacking from '../../../utils/reqPacking.js';
 import utils from '../../../utils/index';
@@ -19,7 +20,7 @@ export default function assessPage(){
   const [ loading, setLoading ] = useState(true);
   const [ curEvalObj, setCurEvalObj ] = useState({});
   const [ canEvaluate, setCanEvaluate ] = useState( false )
-
+  const [ result, setResult ] = useState({});
   const { projectId, roundId } = getCurrentInstance().router.params;
   const capsuleLocation = getGlobalData('capsuleLocation');
   const {statusBarHeight} = getGlobalData('systemInfo');
@@ -28,10 +29,46 @@ export default function assessPage(){
   );
 
   useEffect(()=>{
+    fetchResult();
     fetchRole();
     fetchBrifInfo();
     fetchEveluationList();
   }, [])
+
+  const fetchResult = () => {
+    reqPacking(
+      {
+        url: 'api/management/result',
+        data: { 
+          projectId,
+          roundId,
+        },
+      },
+      'server',
+    ).then(res => {
+        const { data, success, error } = res;
+        if (success) {
+          if(data.evaluated){
+            Taro.showModal({
+              title: '提示',
+              content: '您已填答过，可直接查看评估结果',
+              confirmText: '查看结果',
+              success: (res)=>{
+                if(res.confirm){
+                  Taro.navigateTo({
+                    url: `/pages/result?project=${projectId}&roundId=${roundId}`
+                  })
+                }
+              }
+            })
+          }
+          setResult && setResult(data);
+        }
+
+        if (error) errorHandle(message);
+      });
+  };
+
 
   const fetchRole = () => {
     reqPacking(
@@ -49,7 +86,6 @@ export default function assessPage(){
   };
 
   const fetchBrifInfo = () =>{
-    
     reqPacking(
       {
         url: 'api/management/briefInfo',
@@ -94,57 +130,12 @@ export default function assessPage(){
           return;
         }
         error.message && errorHandle(error);
-        setQuestions([]);
         setLoading(false);
         setCanEvaluate(false);
       }).finally(()=>{
         Taro.hideLoading();
       })
   }
-
-  const fetchTemp = (value) => {
-    if (!value) return;
-
-    reqPacking(
-      {
-        url: 'api/management/tempQuestion',
-        data: { projectId: projectId },
-      },
-      'server',
-    ).then(res => {
-        const { data, error } = res;
-        const { questions } = data;
-
-        if (!error) {
-          let ques = questions.map(item => {
-            item.showError = false;
-            item.finished = false;
-            return item;
-          });
-
-          setQuestions(ques);
-          setLoading(false)
-          return;
-        }
-
-        error.message && errorHandle(error);
-        setQuestions([]);
-        setLoading(false);
-      });
-  };
-
-
-  
-  const updateQues = (obj, questionId, itemObj)  => {
-    let innerQues = this.state.questions.map(item => {
-      if (item.questionId == questionId) return _merge(itemObj, obj);
-      return item;
-    });
-    let leng = innerQues.filter(item => item.finished).length;
-
-    setQuestions(innerQues);
-    setRate(`${Math.round(leng / innerQues.length * 1000) / 10}%`);
-  };
 
   const handlePreviewFile = (url, name) => {
     const extensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'];
@@ -178,21 +169,27 @@ export default function assessPage(){
   }
 
   const handleStartAssess = () => {
-    Taro.redirectTo({
+    if(projectRole === 6){
+      Taro.showModal({
+        title: '提示',
+        content: '对不起，您没有评估权限，请确认权限后再评估'
+      });
+      return;
+    }
+
+    Taro.navigateTo({
       url: `/pages/assess/detail/index?projectId=${projectId}&roundId=${roundId}`,
     })
   }
 
-  const navigateBack = () => {
-    let curPages = Taro.getCurrentPages();
-    if(curPages.length>1){
+  const handleBack = () => {
+    if(Taro.getCurrentPages().length>1){
       Taro.navigateBack();
     }else{
-      Taro.navigateTo({
-        url: `/pages/list/index?projectId=${projectId}`
+      Taro.redirectTo({
+        url: `/pages/list/index`
       })
     }
-    
   }
 
   
@@ -202,16 +199,11 @@ export default function assessPage(){
   const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPicUrl;
   const coverPic = projectPic ? projectPic : defaultPicUrl;
   const rgbColor = hexColorToRgba(backColor||'#475975',0.9);
-  console.log('titleHeight', titleHeight);
-  console.log('statusBarHeight', statusBarHeight);
+
   return (
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>
       <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
-
-      <View style={{height:`${statusBarHeight}px`}}></View>
-      <View className="nav-bar" style={{height: `${titleHeight}px`}} onClick={navigateBack}>
-        <View className="go-back-icon at-icon at-icon-chevron-left"></View>
-      </View>
+      <TopBar background="transparent" hasBack={true} onBack={ handleBack } />
 
       <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`}}>
         <View className="content-container">
@@ -241,7 +233,7 @@ export default function assessPage(){
           </View>
         </View>
         
-        {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>开始评估</Button>}
+        {canEvaluate && !result.evaluated && <Button className="start-btn" onClick={handleStartAssess}>开始评估</Button>}
       </View>
       </View>
       </View>

@@ -71,7 +71,6 @@ export default function assessPage(){
         if (!error) {
           const briefInfo = data;
           const { chooseTempId } = briefInfo;
-          if (!briefInfo.projectEvaluationName) briefInfo.projectEvaluationName = `《${briefInfo.name}》项目第${briefInfo.roundNum}轮评估`;
           fetchTemp(chooseTempId);
           return;
         }
@@ -229,8 +228,8 @@ export default function assessPage(){
            icon: 'success'
          });
 
-         Taro.navigateTo({
-           url: `/assess/create/index?projectId=${projectId}`
+         Taro.redirectTo({
+           url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`
          })
         } else {
           errorHandle({
@@ -266,24 +265,6 @@ export default function assessPage(){
     })
   }
 
-  function showShare(){
-    Taro.showShareMenu({
-      withShareTicket: true
-    })
-  }
-
-  useShareAppMessage(res => {
-    if (res.from === 'button') {
-      // 来自页面内转发按钮
-      console.log(res.target)
-    }
-    return {
-      title: 'wangxiaojing 邀请你参加项目评估邀请你参加项目评估邀请你参加项目评估',
-      path: '/pages/assess/index/index?projectId=14332&roundId=350',
-      imgUrl: ''
-    }
-  })
-
   const IndexList = questions.map((item, index)=>{
     return {
       key: `${index+1}`,
@@ -293,7 +274,6 @@ export default function assessPage(){
   const showIndexes = scrollHeight > contentHeight *2;
   return (
     <View className="assess-page">
-      <Button onClick={showShare} openType="share">分享</Button>
       <View className="process-wrap">
         <View className="inner-bar" style={{width:`${rate}`}} />
       </View>
