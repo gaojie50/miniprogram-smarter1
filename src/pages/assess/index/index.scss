@@ -8,13 +8,20 @@ page image {
   margin: 0 auto;
 }
 
-.assess-page-welcome {
-  height: 100%;
-  background-position: center;
-  background-size: cover;
-  position: relative;
-
-  .nav-bar {
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: red;
+  &::after {
+    content: ".";
+    display: block;
+    font-size: 0;
+    clear: both;
+  }
+  .header {
     display: flex;
     align-items: center;
     position: relative;
@@ -24,6 +31,15 @@ page image {
       margin-left: 20px;
     }
   }
+}
+
+.assess-page-welcome {
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+
+  
 
   .bg-color {
     position: absolute;
