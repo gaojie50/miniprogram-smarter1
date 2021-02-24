@@ -349,6 +349,7 @@ export default function Board() {
 
   return (
     <>
+      <Tab />
       <View className="board-header">
         <View
           style={{
@@ -376,7 +377,7 @@ export default function Board() {
         style={{
           paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
           height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx - 92rpx)`,
-          paddingBottom: `92rpx`,
+          marginBottom: `92rpx`,
         }}
         onScroll={(e) => {
           checkIfStickyImmediately(e.detail.scrollTop);
@@ -397,7 +398,7 @@ export default function Board() {
               position: 'fixed',
               top: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
               width: '100%',
-              zIndex: 3,
+              zIndex: 4,
               backgroundColor: '#fff',
             visibility: sticky ? 'visible' : 'hidden',
           }}
@@ -426,7 +427,7 @@ export default function Board() {
                         }
                         if (idx_1 === PROJECT_TYPE.length - 1 && i === arr.length - 1) {
                           obj.style = {
-                            paddingBottom: '150rpx'
+                            // paddingBottom: '150rpx'
                           };
                         }
                         return <ProjectItem {...obj} />;
@@ -446,7 +447,6 @@ export default function Board() {
             <Image className="board-float-button-image" src="https://p0.meituan.net/ingee/8d49c7b5fd67f053cb60b0bbf296d0a8588.png" />
           </FButton>
         </View>
-        <Tab />
       </ScrollView>
     </>
   );

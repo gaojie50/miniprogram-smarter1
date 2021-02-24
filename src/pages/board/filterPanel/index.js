@@ -701,6 +701,7 @@ export default class FilterPanel extends React.Component {
     const {
       filterShow,
       titleHeight,
+      bottomHeight = 96,
       dateSet,
       projectType,
       cooperateType,
@@ -735,7 +736,7 @@ export default class FilterPanel extends React.Component {
                 <ScrollView
                   className="dateBox"
                   style={
-                    "max-height: calc(100vh * 0.75 - " + titleHeight + "px)"
+                    "max-height: calc(100vh * 0.75 - " + (titleHeight) + "px)"
                   }
                   scrollY
                 >
@@ -810,7 +811,7 @@ export default class FilterPanel extends React.Component {
                     scrollY="true"
                     className="scroll-area"
                     style={
-                      "max-height: calc(100vh * 0.75 - " + titleHeight + "px)"
+                      "max-height: calc(100vh * 0.75 - " + (titleHeight + bottomHeight) + "px)"
                     }
                   >
                     <Text className="title">项目阶段</Text>

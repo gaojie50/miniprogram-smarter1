@@ -1,6 +1,7 @@
-import { Block, View, Image, Text, ScrollView } from '@tarojs/components';
+import Taro,{useShareAppMessage} from '@tarojs/taro';
+import { Block, View, Image, Text, ScrollView, Button } from '@tarojs/components';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import './evaluationList.scss';
+import './evaluate.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking'
 import NoData from '../../components/noData';
@@ -46,7 +47,7 @@ export function EvaluationList(props) {
   return  projectId ? (auth ? (
     <View>
       {
-        evaluationList.map((item) => <EvalutaionCard {...item} />)
+        evaluationList.map((item) => <EvalutaionCard {...item} projectId={data.projectId} />)
       }
     </View>
   ) : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
@@ -54,7 +55,7 @@ export function EvaluationList(props) {
 
 function EvalutaionCard(props) {
 
-  const { round = '-', participantNumber, roundTitle, startDate, evaluationMethod, estimateBox, estimateScore, initiator = '-' } = props;
+  const { round = '-', participantNumber, roundTitle, startDate, evaluationMethod, estimateBox, estimateScore, initiator = '-', projectId, roundId, pic } = props;
 
   const timeStr = useMemo(() => {
     if (!startDate) return '-'
@@ -66,6 +67,7 @@ function EvalutaionCard(props) {
     const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
     return str;
   }, [startDate])
+  
 
   const arr = useMemo(() => {
     const __arr = [
@@ -102,6 +104,39 @@ function EvalutaionCard(props) {
     }
     return __arr;
   }, [participantNumber, estimateBox, estimateScore])
+
+  
+  useShareAppMessage(({ target, from }) => {
+    if (from != 'button') return;
+
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    const { dataset } = target;
+    const { realName = "" } = userInfo;
+
+
+
+    switch (dataset.sign) {
+      case 'invite': {
+        return {
+          title: `${realName} 邀请您参与《${roundTitle}》项目评估`,
+          imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+          path: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`
+        };
+      };
+
+      case 'attend': {
+        return {
+          title: `${realName} 分享给您关于《${roundTitle}》项目的报告`,
+          path: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`
+        }
+      }
+    }
+
+    return {
+      title: '分享报告',
+      path: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`,
+    }
+  })
 
   return (
     <View className="evaluation-card">
@@ -153,7 +188,12 @@ function EvalutaionCard(props) {
         </View>
       </View>
       <View className="evaluation-card-action">
-        <View className="evaluation-card-action-btn">邀请参与</View>
+        <Button
+          data-sign="invite"
+          openType="share"
+          className="evaluation-card-action-btn">
+          邀请参与
+        </Button>
         <View className="evaluation-card-action-btn">分享结果</View>
       </View>
     </View>

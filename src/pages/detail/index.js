@@ -270,7 +270,7 @@ export default class Detail extends React.Component {
               <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
             </AtTabsPane>
             <AtTabsPane current={current} index={1}>
-              {basicData.projectId && <EvaluationList projectId={ basicData.projectId } />}
+              <EvaluationList projectId={ basicData.projectId } />
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
               {basicData.projectId && <UseHistory projectId={ basicData.projectId }></UseHistory>}
