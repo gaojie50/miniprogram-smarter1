@@ -376,8 +376,8 @@ export default function Board() {
         scrollY
         style={{
           paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
-          height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx - 92rpx)`,
-          marginBottom: `92rpx`,
+          height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx - 112rpx)`,
+          marginBottom: `112rpx`,
         }}
         onScroll={(e) => {
           checkIfStickyImmediately(e.detail.scrollTop);
@@ -438,8 +438,9 @@ export default function Board() {
               </View>
             )
         }
-        <View className="board-float-button">
-          <FButton onClick={() => {
+        <View className="board-float-button" style={{ bottom: `${112 + 30 }rpx` }}>
+          <FButton
+            onClick={() => {
             Taro.navigateTo({
               url: '/pages/addProject/index'
             })
