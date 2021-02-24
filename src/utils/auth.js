@@ -3,7 +3,6 @@ import projectConfig from '../constant/project-config.js'
 import envConfig from '../constant/env-config.js'
 import reqPacking from './reqPacking.js'
 import utils from './index.js'
-import { reject } from 'lodash'
 
 const { appkey, weixinAppTypeEnum } = projectConfig
 const { errorHandle } = utils

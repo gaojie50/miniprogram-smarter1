@@ -11,7 +11,6 @@ import FButton from '../../components/m5/fab'
 import '../../components/m5/style/components/fab.scss';
 import './index.scss'
 import DefaultPic from '../../static/detail/cover.png';
-import { noop } from 'lodash';
 import NoData from '../../components/noData';
 
 const { getMaoyanSignLabel } = projectConfig
