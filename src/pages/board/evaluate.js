@@ -54,8 +54,14 @@ export function EvaluationList(props) {
 }
 
 function EvalutaionCard(props) {
+  const [realName, setRealName] = useState('');
 
-  const { round = '-', participantNumber, roundTitle, startDate, evaluationMethod, estimateBox, estimateScore, initiator = '-', projectId, roundId, pic } = props;
+  const {
+    round = '-', participantNumber,
+    roundTitle, startDate, evaluationMethod,
+    estimateBox, estimateScore, initiator = '-', projectId, roundId, pic,
+    hasAssess, invitees,
+  } = props;
 
   const timeStr = useMemo(() => {
     if (!startDate) return '-'
@@ -105,6 +111,11 @@ function EvalutaionCard(props) {
     return __arr;
   }, [participantNumber, estimateBox, estimateScore])
 
+  useEffect(() => {
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    setRealName(userInfo.realName);
+  }, [])
+
   
   useShareAppMessage(({ target, from }) => {
     if (from != 'button') return;
@@ -138,6 +149,28 @@ function EvalutaionCard(props) {
     }
   })
 
+  const [statusType, statusText] = useMemo(() => {
+    if (hasAssess) {
+      let prefix = '';
+      if (initiator === realName) prefix = '自己发起 ';
+      if (typeof invitees === 'string' && invitees.includes(realName)) {
+        prefix = `${initiator}邀评 `;
+      }
+      return [0, `${prefix}已评估`]
+    } else {
+      let prefix = '';
+      if (initiator === realName) prefix = '自己发起 ';
+      if (typeof invitees === 'string' && invitees.includes(realName)) {
+        prefix = `${initiator}邀评 `;
+      }
+      if (invitees) {
+        return [1, `${prefix}未评估`]
+      } else {
+        return [2, `${prefix}未评估`]
+      }
+    }
+  }, [hasAssess, initiator, realName]);
+
   return (
     <View className="evaluation-card">
       <View className="evaluation-card-title">
@@ -145,7 +178,7 @@ function EvalutaionCard(props) {
           第{round}轮
         </View>
         <View className="evaluation-card-title-right">
-          已评估
+          {statusText}
         </View>
       </View>
       <View className="evaluation-card-status">
@@ -194,7 +227,24 @@ function EvalutaionCard(props) {
           className="evaluation-card-action-btn">
           邀请参与
         </Button>
-        <View className="evaluation-card-action-btn">分享结果</View>
+        <Button
+          data-sign="attend"
+          openType="share"
+          className="evaluation-card-action-btn">
+          分享结果
+        </Button>
+        {
+          statusType !== 0 && <Button
+            className="evaluation-card-action-btn evaluation-card-action-btn-eval"
+            onClick={() => {
+              Taro.navigateTo({
+                url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
+              })
+            }}
+            >
+             去评估
+        </Button>
+        }
       </View>
     </View>
   )
