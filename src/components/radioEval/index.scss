@@ -1,0 +1,58 @@
+.radioEval-wrap{
+ 
+  .ul{
+    margin: 0;
+
+    .li{
+      padding: 0 20px;
+      color: #333;
+      text-align: left;
+      position: relative;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      margin-bottom: 20px;
+      height: 87px;
+      line-height: 87px;
+      background: rgba($color: #276FF0, $alpha: 0.1);
+      border-radius: 10px;
+
+      .right-part{
+        position: absolute;
+        top: 0;
+        left: 370px;
+        width:300px;
+        text-align: right;
+        font-size: 28px;
+        color: #333;
+        text-align: right;
+        font-family: MaoYanHeiTi-H1;
+        font-weight: 500;
+        padding-right: 20px;
+      }
+
+      .inner-process{
+        background: #276FF0;
+        border-radius: 10px;
+        font-weight: 400;
+        font-size: 28px;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #FFF;
+        overflow: hidden;
+        white-space: nowrap;
+
+        .inner-title{
+          margin-left: 20px;
+        }
+
+        .right-part{
+          color: #FFF;
+          z-index: 1;
+        }
+      }
+    }
+  }
+}

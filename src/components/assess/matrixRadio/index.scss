@@ -1,5 +1,4 @@
 .matrix-radio{
-  width: 700px;
   .ques-title{
     font-weight: 500;
     font-family: PingFangSC-Medium;
@@ -12,9 +11,7 @@
   .content{
     border-radius: 10px;
     display: flex;
-    &.disable {
-      background: #F8F8F8;
-    }
+    background: #F8F8F8;
     .left{
       display: inline-block;
       box-shadow: 10px 0 10px -6px rgba(0, 0, 0, 0.15);
@@ -78,11 +75,29 @@
             align-items: center;
             justify-content: center;
             >.radio{
+              box-sizing: border-box;
               width: 40px;
               height: 40px;
               border-radius: 20px;
               border: 3px solid #ccc;
-              background: #EEE;
+              background: #fff;
+              position: relative;
+            }
+            &.active {
+              >.radio{
+                border-color: #276FF0;
+                &:after {
+                  content: '';
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 50%;
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  background-color: #1890FF;
+                }
+              }
             }
           }
           .item-radio-disable{

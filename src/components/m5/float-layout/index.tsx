@@ -1,8 +1,9 @@
 import classNames from 'classnames'
 import PropTypes, { InferProps } from 'prop-types'
 import React from 'react'
-import { ScrollView, Text, View } from '@tarojs/components'
+import { ScrollView, Text, View, Image } from '@tarojs/components'
 import { CommonEvent } from '@tarojs/components/types/common'
+import closePic from '../../../static/close.png';
 import {
   AtFloatLayoutProps,
   AtFloatLayoutState
@@ -90,7 +91,8 @@ export default class AtFloatLayout extends React.Component<
           {title ? (
             <View className='layout-header'>
               <Text className='layout-header__title'>{title}</Text>
-              <View className='layout-header__btn-close' onClick={this.close} />
+              {/* <View className='layout-header__btn-close' onClick={this.close} /> */}
+              <Image className='layout-header__btn-close' onClick={this.close} src={closePic} />
             </View>
           ) : null}
           <View className='layout-body'>

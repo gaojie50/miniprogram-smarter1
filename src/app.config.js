@@ -1,8 +1,6 @@
 export default {
   pages: [
-    // 'pages/detail/editProject/index',
     'pages/welcome/index',
-    'pages/board/index',
     'pages/addProject/index',
     'pages/searchProject/index',
     'pages/list/index',
@@ -20,6 +18,10 @@ export default {
   useExtendedLib: { weui: true },
   subpackages: [
     {
+      root: "pages/board",
+      pages: ["index"]
+    },
+    {
       root: "pages/detail",
       pages: ["index", "editProject/index"]
     },
@@ -34,6 +36,10 @@ export default {
     {
       root: "pages/checkProgress",
       pages: ["index"]
+    },
+    {
+      root:"pages/result",
+      pages:["index"]
     },
     {
       root: "pages/assess",

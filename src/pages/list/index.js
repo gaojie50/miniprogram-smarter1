@@ -665,7 +665,7 @@ class _C extends React.Component {
   jumpToSearch = () => {
     Taro.navigateTo({
       url: '/pages/search/index',
-      // url:'/pages/checkProgress/index?projectId=14332&activeTab=1'
+      
     })
   }
 

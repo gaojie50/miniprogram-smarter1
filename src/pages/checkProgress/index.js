@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { View, Image, Text } from '@tarojs/components';
 import { get as getGlobalData } from '../../global_data';
@@ -7,7 +7,6 @@ import utils from '../../utils/index.js';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
-
 const { formatCreateTime } = utils;
 const {getProjectStages} = projectConfig
 export default class _C extends React.Component {

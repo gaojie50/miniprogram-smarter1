@@ -22,18 +22,19 @@
     line-height: 46px;
     color: #19233B;
     letter-spacing: 0;
-
-    &.preview{
-      background: #F6F6F6;
-      border-bottom: none;
-      position: relative;
-      top: -5px;
-      height: 34px;
-      vertical-align: text-top;
-      
-      &::placeholder {
-        color: #C1C6D0;
-      }
+    background: #F6F6F6;
+    border-bottom: none;
+    position: relative;
+    top: -5px;
+    height: 34px;
+    vertical-align: text-top;
+    text-align: right;
+    &.preview {
+      color: #C1C6D0;
+    }
+    
+    &::placeholder {
+      color: #C1C6D0;
     }
   }
 }

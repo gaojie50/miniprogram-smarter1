@@ -21,6 +21,11 @@ const config = {
     options: {},
   },
   framework: 'react',
+  alias: {
+    '@components': path.resolve(__dirname, '..', 'src/components'),
+    '@utils': path.resolve(__dirname, '..', 'src/utils'),
+    '@static': path.resolve(__dirname, '..', 'src/static'),
+  },
   mini: {
     imageUrlLoaderOption: {
       limit: 1024,

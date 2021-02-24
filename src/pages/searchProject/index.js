@@ -13,6 +13,9 @@ import reqPacking from '../../utils/reqPacking.js'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
 import { CATEGORY_LIST } from '../addProject/lib';
+import { CustomName } from '../addProject/component/custom-project';
+import { MovieList } from '../addProject/component/movie-list';
+import Divider from '../addProject/component/divider';
 
 import './index.scss'
 const { debounce } = utils
@@ -93,77 +96,54 @@ class _C extends React.Component {
     const { loading, inputVal, list } = this.state
 
     return (
-      <Block>
+      <View>
         <View className="search-box">
           <View className="search-bar">
             <Label>
               <Image
                 className="searchIco"
-                src='../../static/icon/search.png'
+                src="../../static/icon/search.png"
               ></Image>
               <Input autoFocus onInput={this.bindKeyInput}></Input>
             </Label>
           </View>
         </View>
+        <View style={{ marginTop: '120rpx' }}>
+        {
+          inputVal !== '' && (
+            <>
+              <CustomName value={inputVal} onChoose={() => {
+              Taro.navigateTo({
+                url: `/pages/addProject/index?name=${inputVal}`,
+
+              })
+            }}/>
+            <Divider />
+            </>
+          )
+        }
         {loading && (
           <View className="list-loading">
             <mpLoading type="circle" show={true} tips=""></mpLoading>
           </View>
         )}
-        {inputVal != '' && list.length == 0 && !loading && (
-          <View className="no-data">暂无数据</View>
-        )}
-        {inputVal != '' && !loading && (
-          <ScrollView className="search-list">
-            <View
-              className="custom-project"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              onClick={() => {
+        {inputVal != "" && (
+          <>
+            {list.length == 0 && !loading ? (
+              <View className="no-data">暂无数据</View>
+            ) : (
+              <MovieList data={list} onChoose={(item) => {
+                const { projectId } = item;
                 Taro.navigateTo({
-                  url: `/pages/addProject/index?name=${inputVal}`,
+                  url: `/pages/detail/index?projectId=${projectId}`,
                 })
-              }}
-            >
-              <View>
-                没找到项目？
-                创建项目"
-                <Text className="custom-project-name">{inputVal}</Text>
-                "
-              </View>
-            </View>
-            {list.map((item, index) => {
-              return (
-                <View
-                  className="item"
-                  key={item.id}
-                  data-id={item.maoyanId + '-' + item.projectId}
-                  onClick={this.jumpDetail}
-                >
-                  <Image src={item.pic}></Image>
-                  <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <View>
-                      <View className="name">{item.name}</View>
-                      <View className="cooperType">
-                        {item?.cooperType?.join('/')}
-                      </View>
-                      <View className="director">
-                        {'导演：' + (item.director ? item.director : '-')}
-                      </View>
-                      <View className="release">
-                        <Text>{item.releaseDesc ? item.releaseDesc : ''}</Text>
-                      </View>
-                    </View>
-                    <View className="category">
-                      {CATEGORY_MAPPING[item.category]}
-                    </View>
-                  </View>
-                </View>
-              )
-            })}
-          </ScrollView>
+              }} />
+            )}
+          </>
         )}
-      </Block>
-    )
+        </View>
+      </View>
+    );
   }
 }
 
