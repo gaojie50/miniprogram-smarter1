@@ -1,18 +1,21 @@
 import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/components'
 import React, { useState, useEffect } from 'react';
-import Taro, { getCurrentInstance } from '@tarojs/taro';
-import reqPacking from '../../../utils/reqPacking.js';
-import utils from '../../../utils/index';
+import Taro, { getCurrentInstance, nextTick, useShareAppMessage } from '@tarojs/taro';
+import reqPacking from '@utils/reqPacking.js';
+import utils from '@utils/index';
 import _cloneDeep from 'lodash/cloneDeep';
 import _merge from 'lodash/merge';
-import { set as setGlobalData, get as getGlobalData } from '../../../global_data'
+import _debounce from 'lodash/debounce'
+import { set as setGlobalData, get as getGlobalData, set } from '../../../global_data'
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '../../../components/assess';
-import AtActionSheet from '../../../components/m5/action-sheet';
-import AtActionSheetItem from '../../../components/m5/action-sheet/body/item';
-import AtFloatLayout from '../../../components/m5/float-layout';
+import Indexes from '@components/indexes';
+import FixedButton from '@components/fixedButton';
+import AtActionSheet from '@components/m5/action-sheet';
+import AtActionSheetItem from '@components/m5/action-sheet/body/item';
+import AtFloatLayout from '@components/m5/float-layout';
 
-import '../../../components/m5/style/components/action-sheet.scss';
-import '../../../components/m5/style/components/float-layout.scss';
+import '@components/m5/style/components/action-sheet.scss';
+import '@components/m5/style/components/float-layout.scss';
 import './index.scss'
 
 const { errorHandle } = utils;
@@ -23,39 +26,22 @@ export default function assessPage(){
   const [ projectRole, setProjectRole ] = useState(6);
   const [ loading, setLoading ] = useState(true);
   const [ questions, setQuestions ] = useState([]);
-  const [ curQuesId, setCurQuesId ] = useState(1);
-  const [ disablePrev, setDisablePrev ] = useState(true);
-  const [ disableNext, setDisableNext ] = useState(false);
   const [ rate, setRate ] = useState(0);
   const [ curEvalObj, setCurEvalObj ] = useState({});
-  const [ viewHeight, setViewHeight ] = useState();
-  const [ paginationHeight, setPaginationHeight ] = useState();
   const [ contentHeight, setContentHeight ] = useState();
+  const [ scrollHeight, setScrollHeight ] = useState();
   const [ quesScrollTopList, setQuesScrollTopList ] = useState([]);
-  
+  const [ activeIndex, setActiveIndex ] = useState(1)
+  const [ scrollTop, setScrollTop ] = useState(0);
+  const [ submitDisabled, setSubmitDisabled ] = useState(true);
 
   const { projectId, roundId } = getCurrentInstance().router.params;
 
   useEffect(()=>{
+    Taro.showLoading({title: '加载中'});
     fetchRole();
     fetchBrifInfo();
     fetchEveluationList();
-
-    Taro.nextTick(() => {
-      // 获取各元素高度
-      const query = Taro.createSelectorQuery();
-      query.selectViewport().boundingClientRect(rect => {
-        setViewHeight(rect.height);
-      }).exec();
-
-      query.select('.pagination-wrap').boundingClientRect(rect=>{
-        setPaginationHeight(rect.height);
-      }).exec();
-
-      query.select('.assess-content-wrap').boundingClientRect(rect=>{
-        setContentHeight(rect.height)
-      }).exec();
-    })
   }, [])
 
   function fetchRole(){
@@ -85,7 +71,6 @@ export default function assessPage(){
         if (!error) {
           const briefInfo = data;
           const { chooseTempId } = briefInfo;
-          if (!briefInfo.projectEvaluationName) briefInfo.projectEvaluationName = `《${briefInfo.name}》项目第${briefInfo.roundNum}轮评估`;
           fetchTemp(chooseTempId);
           return;
         }
@@ -116,9 +101,7 @@ export default function assessPage(){
   }
 
   function fetchTemp(value){
-    console.log('fetchTemp');
     if (!value) return;
-
     reqPacking(
       {
         url: 'api/management/tempQuestion',
@@ -133,20 +116,31 @@ export default function assessPage(){
           let ques = questions.map(item => {
             item.showError = false;
             item.finished = false;
+            item.complete = false;
             return item;
           });
 
           setQuestions(ques);
+          setActiveIndex('1');
           setLoading(false);
 
           Taro.nextTick(() => {
-            // 获取各元素高度
             const query = Taro.createSelectorQuery();
-            console.log('dd',query.selectAll('.que-item').length);
             // 一次获取所有题的位置信息
             query.selectAll('.que-item').boundingClientRect(rect=>{
-              console.log(rect)
+              const topList = rect.map(item=>item.top);
+              setQuesScrollTopList(topList.map(item=>item-topList[0]));
             }).exec();
+
+            // 获取展示高度和滚动高度
+            query.select('.assess-content-wrap').boundingClientRect(rect=>{
+              setContentHeight(rect.height);
+            }).exec();
+      
+            query.select('.assess-content-wrap .content').boundingClientRect(rect=>{
+              setScrollHeight(rect.height);
+            }).exec();
+
           });
           return;
         }
@@ -154,7 +148,9 @@ export default function assessPage(){
         error.message && errorHandle(error);
         setQuestions([]);
         setLoading(false);
-      });
+    }).finally(()=>{
+      Taro.hideLoading();
+    })
   };
 
   
@@ -172,9 +168,10 @@ export default function assessPage(){
   function handleSubmit(){
     let errSign = false;
     let canFinish = false;
+    let allScoreFinished = true;
     // 至少有一个填写
     for(let i=0; i<questions.length; i++){
-      if(questions[i].finished){
+      if(questions[i].complete){
         canFinish = true;
         break;
       }
@@ -188,6 +185,27 @@ export default function assessPage(){
       return;
     }
     
+    let finalQuestions = questions.map(item => {
+      const {
+        type, questionId, content, matrixSelectList=[], finished
+      } = item;
+      let obj = {
+        type,
+        questionId,
+      };
+      // 只有矩阵量表题算分
+      if(type===5 && !finished){
+        allScoreFinished = false;
+      }
+      switch (type) {
+        case 1:
+        case 2:
+        case 4: obj.content = content; break;
+        default: obj.matrixSelectList = matrixSelectList;
+      }
+
+      return obj;
+    });
 
     reqPacking(
       {
@@ -196,24 +214,8 @@ export default function assessPage(){
         data: {
           projectId,
           roundId,
-          questions: questions.map(item => {
-            const {
-              type, questionId, content, matrixSelectList
-            } = item;
-            let obj = {
-              type,
-              questionId,
-            };
-  
-            switch (type) {
-              case 1:
-              case 2:
-              case 4: obj.content = content; break;
-              default: obj.matrixSelectList = matrixSelectList;
-            }
-  
-            return obj;
-          })
+          questions: finalQuestions,
+          scoreFinished: allScoreFinished
         },
       },
       'server',
@@ -226,154 +228,150 @@ export default function assessPage(){
            icon: 'success'
          });
 
-         Taro.navigateTo({
-           url: `/assess/create/index?projectId=${projectId}`
+         Taro.redirectTo({
+           url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`
          })
         } else {
-          Taro.showToast({
-            title: error.message || '提交失败',
+          errorHandle({
+            message: error.message || '提交失败',
           });
         }
       });
   }
 
-  function onScroll(){
-    console.log('scroll')
-  }
+  function handleScroll(e){
+    // 计算滚动位置
+    const quesLen = quesScrollTopList.length;
+    const { scrollTop } = e.detail;
+    for( let i=0; i<quesLen; i++){
+      let curTop = quesScrollTopList[i];
+      let nextTop = quesScrollTopList[i+1];
 
-  function handlePage(pos){
-    if( pos === 'prev'){
-      curQuesId>1 && setCurQuesId(curQuesId-1);
-    }else{
-      curQuesId<questions.length && setCurQuesId(curQuesId+1) && setDisablePrev(false);
+      if( scrollTop >= curTop && scrollTop < nextTop){
+        setActiveIndex(`${i+1}`);
+        break;
+      }
     }
-    
   }
 
-  function handleScrollToUpper(){
-    setDisablePrev(true);
-  }
-  
-  function handleScrollToLower(){
-    setDisableNext(true);
+
+  function jumpTarget(target){
+    setActiveIndex(target);
+    const targetTop = quesScrollTopList[target-1];
+    // 解决被手动滚动后，再次点击上次点击过的index定位不生效的问题
+    setScrollTop(targetTop+0.001);
+    Taro.nextTick(()=>{
+      setScrollTop(targetTop);
+    })
   }
 
+  const IndexList = questions.map((item, index)=>{
+    return {
+      key: `${index+1}`,
+      title: index+1
+    }
+  })
+  const showIndexes = scrollHeight > contentHeight *2;
   return (
     <View className="assess-page">
-      <View className="pagination-wrap">
-        <Button 
-          disabled={disablePrev}
-          className={`pagination-button prev ${disablePrev?'disable':''}`} 
-          onClick={()=>{handlePage('prev')}}>
-            上一题
-        </Button>
-        <View className="page-process-wrap">
-          <View className="page-content">2/6</View>
-          <View className="inner-bar" style={{width:'20%'}} />
-        </View>
-        <Button 
-          disabled={disableNext}
-          className={`pagination-button next ${disableNext?'disable':''}`} 
-          onClick={()=>{handlePage('netx')}}>
-            下一题
-          </Button>
+      <View className="process-wrap">
+        <View className="inner-bar" style={{width:`${rate}`}} />
       </View>
 
+      {showIndexes && <Indexes 
+        list={IndexList} 
+        topKey={IndexList.length>1?IndexList[0].key:''}
+        jumpTarget={ jumpTarget }
+        activeKey={`${activeIndex}`}
+      />}
       <ScrollView 
         className="assess-content-wrap"
         scrollY
-        scrollWithAnimation
-        style={`height: calc(100vh - 70rpx - 40rpx)`}
-        onScroll={onScroll}
-        scrollIntoView={`que-num-${curQuesId}`}
-        onScrollToUpper={handleScrollToUpper}
-        onScrollToLower={handleScrollToLower}
+        scrollTop={scrollTop}
+        onScroll={showIndexes ? handleScroll:()=>{}}
       >
-      {
-        questions.map(({
-          type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio, showError, questionId,
-        }, index, arr) => {
-          let qId = `que-num-${index+1}`;
-          if (type == 1) {
-            return <View className="que-item"><GapFillingText
-              id={qId}
-              key={ index }
-              required={ required }
-              title={ title }
-              isPreview={ false }
-              questionNum={ questionNum }
-              showError={ showError }
-              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
-            /></View>;
-          }
+        <View className="content">
+        {
+          questions.map(({
+            type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio, showError, questionId,
+          }, index, arr) => {
+            let qId = `que-num-${index+1}`;
+            if (type == 1) {
+              return <View className="que-item"><GapFillingText
+                id={qId}
+                key={ index }
+                required={ required }
+                title={ title }
+                isPreview={ false }
+                questionNum={ questionNum }
+                showError={ showError }
+                cb={ obj => updateQues(obj, questionId, arr[ index ]) }
+              /></View>;
+            }
 
-          if (type == 2) {
-            return <View className="que-item"><GapFillingNum
-              id={qId}
-              key={ index }
-              required={ required }
-              isPreview={ false }
-              gapFilling={ gapFilling }
-              questionNum={ questionNum }
-              showError={ showError }
-              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
-            /></View>;
-          }
+            if (type == 2) {
+              return <View className="que-item"><GapFillingNum
+                id={qId}
+                key={ index }
+                required={ required }
+                isPreview={ false }
+                gapFilling={ gapFilling }
+                questionNum={ questionNum }
+                showError={ showError }
+                cb={ obj => updateQues(obj, questionId, arr[ index ]) }
+              /></View>;
+            }
 
-          if (type == 3) {
-            return <View className="que-item"><MatrixRadio
-              id={qId}
-              key={ index }
-              required={ required }
-              isPreview={ false }
-              title={ title }
-              matrixRadio={ matrixRadio }
-              questionNum={ questionNum }
-              showError={ showError }
-              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
-            /></View>;
-          }
+            if (type == 3) {
+              return <View className="que-item"><MatrixRadio
+                id={qId}
+                key={ index }
+                required={ required }
+                isPreview={ false }
+                title={ title }
+                matrixRadio={ matrixRadio }
+                questionNum={ questionNum }
+                showError={ showError }
+                cb={ obj => updateQues(obj, questionId, arr[ index ]) }
+              /></View>;
+            }
 
-          if (type == 4) {
-            return <View className="que-item"><Radio
-              id={qId}
-              key={ index }
-              required={ required }
-              isPreview={ false }
-              title={ title }
-              questionNum={ questionNum }
-              radioItems={ radioItems }
-              showError={ showError }
-              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
-            /></View>;
-          }
+            if (type == 4) {
+              return <View className="que-item"><Radio
+                id={qId}
+                key={ index }
+                required={ required }
+                isPreview={ false }
+                title={ title }
+                questionNum={ questionNum }
+                radioItems={ radioItems }
+                showError={ showError }
+                cb={ obj => updateQues(obj, questionId, arr[ index ]) }
+              /></View>;
+            }
 
-          if (type == 5) {
-            return <View className="que-item"><MatrixScale
-              id={qId}
-              key={ index }
-              required={ required }
-              isPreview={ false }
-              title={ title }
-              questionNum={ questionNum }
-              matrixScale={ matrixScale || {} }
-              showError={ showError }
-              cb={ obj => updateQues(obj, questionId, arr[ index ]) }
-            /></View>;
-          }
+            if (type == 5) {
+              return <View className="que-item"><MatrixScale
+                id={qId}
+                key={ index }
+                required={ required }
+                isPreview={ false }
+                title={ title }
+                questionNum={ questionNum }
+                matrixScale={ matrixScale || {} }
+                showError={ showError }
+                cb={ obj => updateQues(obj, questionId, arr[ index ]) }
+              /></View>;
+            }
 
-          return null;
-        })
-      }
-      <View className="btn-wrap">
-        <Button 
-          className="submit-btn" 
-          onClick={handleSubmit}
-        >
-            提交评估
-        </Button>
+            return null;
+          })
+        }
       </View>
       </ScrollView>
+      <FixedButton className="submit-btn" onClick={handleSubmit}>
+        提交评估
+      </FixedButton>
     </View>
   );
 }

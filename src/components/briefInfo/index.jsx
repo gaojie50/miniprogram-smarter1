@@ -1,5 +1,7 @@
 import React from 'react';
 import Taro from '@tarojs/taro';
+import { picFn } from '@utils/pic';
+import { defaultMovieCover } from '@utils/imageUrl';
 import {
   View,
   Image,
@@ -10,14 +12,14 @@ import coverPng from '@static/detail/cover.png';
 
 const noData = function(props){
   const { name, roundNum, pic, text } = props;
-  let finalPic = pic || coverPng;
+  let finalPic = pic ? picFn(pic) : defaultMovieCover;
   return (
     <View className='project-briefinfo-component'>
       <View className="left info-wrap">
         <View className="project-img" style={{backgroundImage: `url(${finalPic})`}}></View>
         <View className="info">
           <View className="project-name">{name}</View>
-          <View className="project-round">第{roundNum}轮</View>
+          <View className="project-text">{text}</View>
         </View>
       </View>
       {roundNum && <View className="right number-text">

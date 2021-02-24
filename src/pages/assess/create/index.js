@@ -1,12 +1,14 @@
 import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components'
 import React from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
+import envConfig from '../../../constant/env-config';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
-import _cloneDeep from 'lodash/cloneDeep'
-import dayjs from 'dayjs'
+import _cloneDeep from 'lodash/cloneDeep';
+import dayjs from 'dayjs';
 import Nodata from '@components/noData';
 import BriefInfo from '@components/briefInfo';
+import FixedButton from '@components/fixedButton';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import AtFloatLayout from '@components/m5/float-layout';
@@ -56,14 +58,6 @@ export default class _C extends React.Component {
     this.fetchProjectProfile(projectId);
   }
 
-  componentDidShow(){
-    const newTempId = Taro.getStorageSync('tempId');
-    if(newTempId){
-      this.setState({ tempId: Number(newTempId) });
-      Taro.removeStorageSync('tempId');
-    }
-  }
-
   fetchProjectProfile = projectId => {
     reqPacking(
       {
@@ -95,7 +89,6 @@ export default class _C extends React.Component {
       'server',
     ).then(res => {
         const { error, data } = res;
-        console.log(data);
         if (!error) {
           const briefInfo = data;
           const { tempList = [] } = briefInfo;
@@ -117,7 +110,6 @@ export default class _C extends React.Component {
 
   titleChangeEvt = ({ target }) => {
     const curVal = target.value.replace(/\s+/g, "");
-    console.log(curVal);
     return this.setState({ 
       titleErrorTip: curVal.length > 20, 
       briefInfo: {
@@ -142,7 +134,6 @@ export default class _C extends React.Component {
   titleBlurEvt = ({ target }) => {
     const projectEvaluationName = target.value.replace(/\s+/g, "");
 
-    console.log(projectEvaluationName.length);
     if (projectEvaluationName.length > 20) return;
     
     this.editorTitle(false);
@@ -185,12 +176,11 @@ export default class _C extends React.Component {
       success (res) {
         const tempFile = res.tempFiles[0];
         const tempFilePath = tempFile.path;
-
         Taro.showLoading({
           title: '上传中'
         });
         Taro.uploadFile({
-          url: 'https://scweb-movie.maoyan.com/api/management/file/upload', //仅为示例，非真实的接口地址
+          url: `${envConfig.server}/api/management/file/upload`,
           filePath: tempFilePath,
           name: 'projectFile',
           header: {
@@ -270,8 +260,14 @@ export default class _C extends React.Component {
 
   handlePreview=(e, tempId)=>{
     e.stopPropagation();
+    const that = this;
     Taro.navigateTo({
-      url: `/pages/assess/template/index?tempId=${tempId}`
+      url: `/pages/assess/template/index?tempId=${tempId}`,
+      events: {
+        selectTempId: function(data){
+          data && that.setState({ tempId: Number(data) });
+        }
+      }
     })
   }
 
@@ -305,15 +301,15 @@ export default class _C extends React.Component {
       },
       'server',
     ).then(res => {
-      const { success, error } = res;
+      const { success, error, data } = res;
 
       if (success) {
         return Taro.showToast({
           title: '提交成功',
-          duration: 2000,
+          duration: 1000,
           success: ()=>{
-            Taro.navigateTo({
-              url: '/pages/welcome/index'
+            Taro.redirectTo({
+              url: `/pages/result/index?projectId=${projectId}&roundId=${data}`
             })
           }
         })
@@ -364,9 +360,15 @@ export default class _C extends React.Component {
     } = this.state;
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
     const templateList = briefInfo.tempList || [];
+    const { name, roundNum, pic } = briefInfo;
     return (
       <View className="assess-create-page">
-        <BriefInfo {...briefInfo} />
+        <BriefInfo 
+          name={ name }
+          pic={ pic }
+          roundNum={ roundNum }
+          text = {`第${roundNum || '-'}轮`}
+        />
         <View className="create-wrap">
         <View  className="title-wrap">
           {!editorEvaluationName && 
@@ -452,20 +454,19 @@ export default class _C extends React.Component {
           }
         </View>
 
-        <View className="btn-wrap">
-          <Button 
-            className="publish-btn" 
-            disabled={isSubmitting || titleErrorTip || despErrorTip ? true : false} 
-            onClick={this.handleFinish}
-            loading={ isSubmitting }
-          >发布评估</Button>
-        </View>
+        <FixedButton 
+          className="publish-btn" 
+          disabled={isSubmitting || titleErrorTip || despErrorTip ? true : false} 
+          onClick={this.handleFinish}
+          loading={ isSubmitting }
+        >发布评估</FixedButton>
 
         <AtActionSheet 
           className="uplaod-action-sheet"
           isOpened={uploadSelectorIsOpen} 
           cancelText='取消'
-          onCancel={ this.handleCancel } 
+          onClose={ this.handleUploadSelectorClose }
+          onCancel={ this.handleUploadSelectorClose } 
         >
           <AtActionSheetItem onClick={ this.uploadFromProjectFile}>
             从项目文件中选择
@@ -489,6 +490,11 @@ export default class _C extends React.Component {
                  }
         >
           <View className="content-wrap">
+          {
+            projectProfile.length === 0 && (
+              <Nodata text="暂无文件可选" />
+            )
+          }
           {
             projectProfile.map(({
               profileId, profileName, uploader, uploadTime, profileSize

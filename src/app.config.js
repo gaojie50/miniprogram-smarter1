@@ -38,6 +38,10 @@ export default {
       pages: ["index"]
     },
     {
+      root:"pages/result",
+      pages:["index"]
+    },
+    {
       root: "pages/assess",
       pages: [ "index/index", "create/index", "template/index", "detail/index"]
     }
