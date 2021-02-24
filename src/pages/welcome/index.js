@@ -3,6 +3,7 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import keepLogin from '../../utils/keepLogin.js'
 import { get as getGlobalData } from '../../global_data'
+import auth from '../../utils/auth'
 
 import './index.scss'
 
@@ -14,10 +15,12 @@ class _C extends React.Component {
       capsuleLocation.bottom + capsuleLocation.top - statusBarHeight,
     ),
     code: null,
+    target: null
   }
 
-  onLoad = () => {
-    if (Taro.getStorageSync('token')) this.goList()
+  onLoad = (options) => {
+    let target = options.target || encodeURIComponent('/pages/list/index');
+    this.setState({ target });
   }
 
   goList = () => {
@@ -37,12 +40,14 @@ class _C extends React.Component {
       success: (res) => {
         if (res.authSetting['scope.userInfo'] && e.detail) {
           const { iv, encryptedData } = e.detail
+          return keepLogin({ iv, encryptedData, target: this.state.target });
+
           if (Taro.getStorageSync('token'))
             return Taro.redirectTo({ url: `/pages/list/index` })
             // return Taro.redirectTo({ url: `../assess/create/index?projectId=14332` })
             // return Taro.redirectTo({ url: `../management/assessIndex/index?projectId=14332&roundId=350` })
 
-          return keepLogin({ iv, encryptedData })
+          
         }
 
         Taro.showModal({

@@ -11,11 +11,13 @@ import Backdrop from '../../components/backdrop/index'
 import FilmDistribution from '../../components/filmDistribution/index'
 import { set as setGlobalData, get as getGlobalData } from '../../global_data'
 import Tab from '../../components/tab';
-
+import auth from '@utils/auth';
 import './index.scss'
+
 const { getMaoyanSignLabel } = projectConfig
 
 const {
+  errorHandle,
   rpxTopx,
   formatNumber,
   formatDirector,
@@ -32,6 +34,11 @@ const {statusBarHeight} = getGlobalData('systemInfo')
 function strip(num, precision = 12) {
   return +parseFloat(num.toPrecision(precision));
 }
+
+// 没有登录或没有权限时列表接口
+const noPermissionReqUrl = 'api/management/applet/list'; 
+const normaReqUrl = 'api/management/list';
+
 
 class _C extends React.Component {
   state = {
@@ -100,65 +107,53 @@ class _C extends React.Component {
     redTextShow: false,
     canvasImg: '',
     yMaxLength:0,
+    isLogin: false,
+    reqUrl: noPermissionReqUrl, // 没有登录时看到的
+    noPermission: true,
+    loginUrl: `/pages/welcome/index?target=${encodeURIComponent(`/pages/list/index`)}`
   }
 
-  onLoad = ({ token }) => {
-    if (token) Taro.setStorageSync('token', token)
+  onLoad = ({ token, target }) => {
+    console.log(token);
+    // 校验登录状态
+    let localToken = Taro.getStorageSync('token');
+    let authInfo = Taro.getStorageSync('authinfo');
 
-    this.setState({
-      screenHeight: Taro.getSystemInfoSync().windowHeight,
-    })
+    if( token || localToken ){
+      // 校验账号状态
+      auth.checkLogin().then(res=>{
+        const { authInfo } = res;
+        console.log(res);
+        if(res.isLogin){
+          target && this.redirectTo({ url: target });
 
-    // 判断用户是否有权限
-    const { authStartTime, authEndTime } = Taro.getStorageSync('listPermission')
+          setGlobalData('authinfo', authInfo)
+          Taro.setStorageSync('authinfo', authInfo);
 
-    if (
-      authEndTime &&
-      authEndTime > +new Date() &&
-      authStartTime &&
-      authStartTime <= +new Date()
-    ) {
-      this.setState({
-        curPagePermission: true,
-        initLoading: false,
-      })
-      this.fetchfilmDistribution()
-      this.fetchSchedule()
-      this.setState({ loading: true }, () =>
-        this._fetchData(this.state.dateSelect),
-      )
-    } else {
-      reqPacking(
-        {
-          url: 'api/user/authinfo',
-        },
-        'passport',
-      ).then(({ success, data }) => {
-        if (success) {
-          setGlobalData('authinfo', data)
-          Taro.setStorageSync('authinfo', data);
 
           if (
-            data &&
-            data.authIds &&
-            data.authIds.length > 0 &&
-            data.authIds.includes(95110) &&
-            data.authEndTime &&
-            data.authEndTime > +new Date() &&
-            data.authStartTime &&
-            data.authStartTime <= +new Date()
+            authInfo &&
+            authInfo.authIds &&
+            authInfo.authIds.length > 0 &&
+            authInfo.authIds.includes(95110) &&
+            authInfo.authEndTime &&
+            authInfo.authEndTime > +new Date() &&
+            authInfo.authStartTime &&
+            authInfo.authStartTime <= +new Date()
           ) {
             //用户有权限
             Taro.setStorageSync('listPermission', {
-              authEndTime: data.authEndTime,
-              authStartTime: data.authStartTime,
+              authEndTime: authInfo.authEndTime,
+              authStartTime: authInfo.authStartTime,
             })
 
             this.setState(
               {
+                isLogin: true,
                 loading: true,
                 curPagePermission: true,
                 initLoading: false,
+                reqUrl: normaReqUrl
               },
               () => {
                 this.fetchfilmDistribution()
@@ -166,18 +161,114 @@ class _C extends React.Component {
                 this._fetchData(this.state.dateSelect)
               },
             )
+          }else{
+          // 登录了，但没有权限
+          this.setState({ 
+            curPagePermission: false,
+            reqUrl: noPermissionReqUrl, 
+            isLogin: true,
+            initLoading: false,
+            loading: true
+          },()=>{
+            this._fetchData(this.state.dateSelect)
+          });
           }
 
           this.setState({
             initLoading: false,
           })
         }
-
-        this.setState({
-          initLoading: false,
-        })
+      }).catch(err=>{
+        errorHandle(err);
       })
+      return;
     }
+
+    // 未登录时
+    this.setState({ 
+      reqUrl: noPermissionReqUrl, 
+      isLogin: false,
+      initLoading: false,
+      loading: true
+    },()=>{
+      this._fetchData(this.state.dateSelect)
+    });
+
+    // if (token) Taro.setStorageSync('token', token)
+
+    // this.setState({
+    //   screenHeight: Taro.getSystemInfoSync().windowHeight,
+    // })
+
+    // // 判断用户是否有权限
+    // const { authStartTime, authEndTime } = Taro.getStorageSync('listPermission')
+
+    // if (
+    //   authEndTime &&
+    //   authEndTime > +new Date() &&
+    //   authStartTime &&
+    //   authStartTime <= +new Date()
+    // ) {
+    //   this.setState({
+    //     curPagePermission: true,
+    //     initLoading: false,
+    //   })
+    //   this.fetchfilmDistribution()
+    //   this.fetchSchedule()
+    //   this.setState({ loading: true }, () =>
+    //     this._fetchData(this.state.dateSelect),
+    //   )
+    // } else {
+    //   reqPacking(
+    //     {
+    //       url: 'api/user/authinfo',
+    //     },
+    //     'passport',
+    //   ).then(({ success, data }) => {
+    //     if (success) {
+    //       setGlobalData('authinfo', data)
+    //       Taro.setStorageSync('authinfo', data);
+
+    //       if (
+    //         data &&
+    //         data.authIds &&
+    //         data.authIds.length > 0 &&
+    //         data.authIds.includes(95110) &&
+    //         data.authEndTime &&
+    //         data.authEndTime > +new Date() &&
+    //         data.authStartTime &&
+    //         data.authStartTime <= +new Date()
+    //       ) {
+    //         //用户有权限
+    //         Taro.setStorageSync('listPermission', {
+    //           authEndTime: data.authEndTime,
+    //           authStartTime: data.authStartTime,
+    //         })
+
+    //         this.setState(
+    //           {
+    //             loading: true,
+    //             curPagePermission: true,
+    //             initLoading: false,
+    //           },
+    //           () => {
+    //             this.fetchfilmDistribution()
+    //             this.fetchSchedule()
+    //             this._fetchData(this.state.dateSelect)
+    //           },
+    //         )
+    //       }
+
+    //       this.setState({
+    //         initLoading: false,
+    //       })
+    //     }
+
+    //     this.setState({
+    //       initLoading: false,
+    //     })
+    //   })
+    // }
   }
 
   fetchfilmDistribution = () => {
@@ -251,8 +342,9 @@ class _C extends React.Component {
   }
 
   _fetchData = (param = {}) => {
+    const { reqUrl } = this.state;
     reqPacking({
-      url: 'api/management/list',
+      url: reqUrl,
       data: param,
       method: 'POST',
     }).then(({ success, data = [], error }) => {
@@ -303,6 +395,9 @@ class _C extends React.Component {
         })
       }
 
+      if(error){
+        errorHandle(error);
+      }
       if(error && (error.code == 12110002)){
         Taro.removeStorageSync('token');
         Taro.removeStorageSync('listPermission');
@@ -723,6 +818,14 @@ class _C extends React.Component {
 
   setMaxLengthY = yMaxLength => this.setState({ yMaxLength });
 
+
+  handleLogin = () => {
+    const { loginUrl } = this.state;
+    Taro.redirectTo({
+      url:loginUrl
+    })
+  }
+
   render() {
     const {
       initLoading,
@@ -766,8 +869,9 @@ class _C extends React.Component {
       curPagePermission,
       isScroll,
       yMaxLength,
+      isLogin
     } = this.state;
-    
+    console.log(isLogin);
     const yMaxLengthArr = ["","","","","",""].map((item,index)=>strip(formatNumber(yMaxLength * (1 - index/5)).posNum));
     
     return (
@@ -790,7 +894,7 @@ class _C extends React.Component {
             backdropShow={backdropShow}
           ></Backdrop>
         )}
-        {curPagePermission && !initLoading && (
+        {!initLoading && (
           <View>
             <View className="header" style={`height:${titleHeight + rpxTopx(115)}px`}>
               <View
@@ -837,6 +941,12 @@ class _C extends React.Component {
                 }}
               >
                 <View id="scroll-cont">
+                /* 遮罩 */
+                { !isLogin && (
+                  <View className="nologin-mask" onClick={ this.handleLogin } />
+                )}
+
+                {isLogin && curPagePermission && 
                   <View className="filmDistribution">
                     <View className="title">
                       <Text>待映影片及预估大盘</Text>
@@ -890,6 +1000,8 @@ class _C extends React.Component {
                       <View className="film-nodata">暂无数据</View>
                     )}
                   </View>
+                  }
+
                   <View
                     onClick={this.redTextClose}
                     className="redMessageClose"
@@ -956,33 +1068,6 @@ class _C extends React.Component {
                           }
                         ></Image>
                       </View>
-                      {/* <View
-                        className="listFilter-item"
-                        data-num="2"
-                        onClick={this.tapFilterItem}
-                      >
-                        <Text
-                          data-num="2"
-                          className={
-                            'listFilter-item-text ' +
-                            (filterActive == 2 || projectBoxStr !== ''
-                              ? 'filterActive'
-                              : '')
-                          }
-                        >
-                          {projectBoxStr === '' ? '项目状态' : projectBoxStr}
-                        </Text>
-                        <Image
-                          data-num="2"
-                          src={
-                            '../../static/' +
-                            (filterActive == 2
-                              ? 'arrow-down-active'
-                              : 'arrow-down') +
-                            '.png'
-                          }
-                        ></Image>
-                      </View> */}
                       <View
                         className="listFilter-item"
                         data-num="3"
@@ -1096,6 +1181,8 @@ class _C extends React.Component {
                     {!loading && (
                       <View className="listTable">
                         <movielist
+                          isLogin={isLogin}
+                          curPagePermission={curPagePermission}
                           list={list}
                           filterItemHidden1={filterItemHidden1}
                           filterItemHidden2={filterItemHidden2}
@@ -1130,38 +1217,6 @@ class _C extends React.Component {
               ongetCostom={this.ongetCostom}
               show={isShowFilmDetailList}
               titleHeight={titleHeight} />
-          </View>
-        )}
-        {/*  无权限页面  */}
-        {!curPagePermission && !initLoading && (
-          <View>
-            <View className="no-access">
-              <View
-                className="header-bar"
-                style={'height:' + titleHeight + 'px;'}
-              >
-                <View
-                  className="header-inner"
-                  style={
-                    'line-height:' +
-                    (titleHeight - statusBarHeight) +
-                    'px;padding-top:' +
-                    statusBarHeight +
-                    'px;'
-                  }
-                >
-                  <Text>影片市场情报</Text>
-                </View>
-              </View>
-              <Image src="../../static/list/no-access.png"></Image>
-              <View className="title">暂无权限查看相关数据</View>
-              <View className="content">
-                申请开通请联系zhiduoxing@maoyan.com
-              </View>
-              <View className="btn" onClick={this.copyMail}>
-                复制邮箱
-              </View>
-            </View>
           </View>
         )}
         <Tab />

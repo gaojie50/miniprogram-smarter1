@@ -1,9 +1,8 @@
 export default {
   pages: [
-    'pages/welcome/index',
-    'pages/addProject/index',
-    'pages/searchProject/index',
     'pages/list/index',
+    'pages/welcome/index',
+    'pages/searchProject/index',
     'pages/search/index',
     'pages/searchCompany/index',
   ],
@@ -17,6 +16,10 @@ export default {
   sitemapLocation: 'sitemap.json',
   useExtendedLib: { weui: true },
   subpackages: [
+    {
+      root: "pages/addProject",
+      pages: ["index"]
+    },
     {
       root: "pages/board",
       pages: ["index"]
