@@ -42,7 +42,6 @@
 .board-float-button {
   position: fixed;
   z-index: 1;
-  bottom: 220px;
   right: 30px;
 
   &-image {
@@ -173,11 +172,11 @@
   height: 90px;
 }
 .board-filter-mask {
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100%;
   background-color: rgba(0,0,0,0.6);
-  z-index: 3;
+  z-index: 4;
 }
 .board-filter-item {
   flex: 1;
@@ -280,14 +279,34 @@
         font-size: 34px;
         line-height: 36px;
         color: #333;
+
+        max-width: 306px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
       }
 
       &-predict {
+        display: flex;
+        align-items: baseline;
         font-family: PingFangSC-Regular;
         font-weight: 400;
         font-size: 24px;
         line-height: 36px;
         color: #F1303D;
+        &-num {
+          font-family: 'MaoYanHeiTi-H1';
+          font-size: 34px;
+        }
+      }
+      &-predict-yellow {
+        display: flex;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 36px;
+        color: #FD9C00;
         &-num {
           font-family: 'MaoYanHeiTi-H1';
           font-size: 34px;

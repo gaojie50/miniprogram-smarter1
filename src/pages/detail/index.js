@@ -7,6 +7,7 @@ import KeyData from './keyData';
 import FollowStatus from './followStatus';
 import Cooper from './cooperStatus';
 import { UseHistory } from '../board/history';
+import { EvaluationList } from '../board/evaluate';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import AddingProcess from '@components/addingProcess';
@@ -262,14 +263,14 @@ export default class Detail extends React.Component {
               { title: '变更历史' }
             ]}
             onClick={this.changeTabs}
-            className={basicData.cooperStatus === 2 && current === 0 ? "tabs nopaddingTab" : current === 2 ? "tabs bgHistory" : "tabs"}
+            className={basicData.cooperStatus === 2 && current === 0 ? "tabs nopaddingTab" : (current === 1 || current === 2)  ? "tabs bgHistory" : "tabs"}
             style={{top: (statusBarHeight + 50)+ 'px'}}
           >
             <AtTabsPane current={current} index={0}>
               <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
             </AtTabsPane>
             <AtTabsPane current={current} index={1}>
-              项目评估
+              <EvaluationList projectId={ basicData.projectId } />
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
               {basicData.projectId && <UseHistory projectId={ basicData.projectId }></UseHistory>}
