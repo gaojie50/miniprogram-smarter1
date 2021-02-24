@@ -2,10 +2,10 @@ import { View, Image, Text, Block } from '@tarojs/components';
 import React from 'react';
 import dayjs from 'dayjs';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
-import NoFollow from '../../../static/detail/noFollows.png';
+import NoFollow from '@static/detail/noFollows.png';
 import { FollowList } from '../constant';
-import Gray from '../../../static/detail/gray.png';
-import Path from '../../../static/detail/path.png';
+import Gray from '@static/detail/gray.png';
+import Path from '@static/detail/path.png';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking'); 

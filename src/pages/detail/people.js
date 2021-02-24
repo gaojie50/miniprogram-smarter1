@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
-import { AtFloatLayout } from '../../components/m5';
+import { AtFloatLayout } from '@components/m5';
 import { CooperStatus } from './constant';
-import Crown from '../../static/detail/crown.png';
-import MainPeople from '../../static/detail/mainPeople.png';
-import CooperPeople from '../../static/detail/cooperPeople.png';
+import Crown from '@static/detail/crown.png';
+import MainPeople from '@static/detail/mainPeople.png';
+import CooperPeople from '@static/detail/cooperPeople.png';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
-import Close from '../../static/close.png';
+import Close from '@static/close.png';
 import './people.scss';
 
 const reqPacking = getGlobalData('reqPacking');

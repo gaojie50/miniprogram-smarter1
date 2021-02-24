@@ -11,21 +11,21 @@ import {
 } from '@tarojs/components';
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import Taro from '@tarojs/taro'
-import reqPacking from '../../../utils/reqPacking.js'
-import List from '../../../components/m5/list';
-import ListItem from '../../../components/m5/list/item';
-import M5Input from '../../../components/m5/input';
-import FloatCard from '../../../components/m5/float-layout';
-import M5Grid from '../../../components/m5/grid';
-import Toast from '../../../components/m5/toast';
-import '../../../components/m5/style/components/input.scss';
-import '../../../components/m5/style/components/list.scss';
-import '../../../components/m5/style/components/float-layout.scss';
-import '../../../components/m5/style/components/grid.scss';
-import '../../../components/m5/style/components/toast.scss';
+import reqPacking from '@utils/reqPacking.js'
+import List from '@components/m5/list';
+import ListItem from '@components/m5/list/item';
+import M5Input from '@components/m5/input';
+import FloatCard from '@components/m5/float-layout';
+import M5Grid from '@components/m5/grid';
+import Toast from '@components/m5/toast';
+import '@components/m5/style/components/input.scss';
+import '@components/m5/style/components/list.scss';
+import '@components/m5/style/components/float-layout.scss';
+import '@components/m5/style/components/grid.scss';
+import '@components/m5/style/components/toast.scss';
 import './basicInfo.scss';
 import { MOVIE_TYPE_LIST } from './lib';
-import utils from '../../../utils/index.js'
+import utils from '@utils/index.js'
 import { get as getGlobalData } from '../../../global_data'
 import { CustomName } from './component/custom-project';
 import { MovieList } from './component/movie-list';

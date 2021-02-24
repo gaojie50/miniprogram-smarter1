@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import { AtFloatLayout } from '../../components/m5';
+import { AtFloatLayout } from '@components/m5';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
-import Enclosure from '../../static/detail/file.png';
-import Close from '../../static/close.png';
+import Enclosure from '@static/detail/file.png';
+import Close from '@static/close.png';
 import './projectFile.scss';
 import dayjs from 'dayjs';
 

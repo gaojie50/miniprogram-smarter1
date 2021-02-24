@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, Image } from '@tarojs/components';
-import { AtFloatLayout } from '../../components/m5';
+import { AtFloatLayout } from '@components/m5';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
-import Close from '../../static/close.png';
+import Close from '@static/close.png';
 import './cooperStatus.scss';
 
 const reqPacking = getGlobalData('reqPacking');

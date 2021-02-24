@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect, useCallback, forwardRef, useRef } from 'react';
 import { View } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import reqPacking from '../../../utils/reqPacking.js';
+import reqPacking from '@utils/reqPacking.js';
 import { Search, projectSearch, searchRole } from './search.js';
-import Toast from '../../../components/m5/toast';
+import Toast from '@components/m5/toast';
 import _BasicInfo from './basicInfo';
 import _KeyInfo from './keyInfo';
 import './index.scss';

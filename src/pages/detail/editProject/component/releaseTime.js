@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react';
 import { View, Block, Text, PickerView, PickerViewColumn } from '@tarojs/components';
-import ListItem from '../../../../components/m5/list/item';
-import FloatCard from '../../../../components/m5/float-layout';
+import ListItem from '@components/m5/list/item';
+import FloatCard from '@components/m5/float-layout';
 import { SCHEDULE_LIST } from '../lib';
-import utils from '../../../../utils/index';
-import Toast from '../../../../components/m5/toast';
-import '../../../../components/m5/style/components/toast.scss';
+import utils from '@utils/index';
+import Toast from '@components/m5/toast';
+import '@components/m5/style/components/toast.scss';
 import './releaseTime.scss';
 
 const { handleNewDate, calcWeek } = utils;

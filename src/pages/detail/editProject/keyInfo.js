@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, forwardRef, useCallback } from 'react';
 import { View, Block, Text, PickerView, PickerViewColumn } from '@tarojs/components';
 import dayjs from 'dayjs';
-import ListItem from '../../../components/m5/list/item';
-import FloatCard from '../../../components/m5/float-layout';
+import ListItem from '@components/m5/list/item';
+import FloatCard from '@components/m5/float-layout';
 import _KeyInput from './component/key-input';
 import Divider from './component/divider';
 import _ReleaseTime from './component/releaseTime';

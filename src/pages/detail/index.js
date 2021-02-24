@@ -1,7 +1,7 @@
 import { View, Image, Text } from '@tarojs/components'
 import React from 'react';
 import Taro from '@tarojs/taro';
-import { AtTabs, AtTabsPane } from '../../components/m5';
+import { AtTabs, AtTabsPane } from '@components/m5';
 import BasicData from './basicData';
 import KeyData from './keyData';
 import FollowStatus from './followStatus';
@@ -9,15 +9,15 @@ import Cooper from './cooperStatus';
 import { UseHistory } from '../board/history';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
-import AddingProcess from '../../components/addingProcess';
+import AddingProcess from '@components/addingProcess';
 import ProjectFile from './projectFile';
 import FacePeople from './people';
-import People from '../../static/detail/people.png';
-import File from '../../static/detail/file.png';
-import ArrowLeft from '../../static/detail/arrow-left.png';
-import Edit from '../../static/detail/edit.png';
+import People from '@static/detail/people.png';
+import File from '@static/detail/file.png';
+import ArrowLeft from '@static/detail/arrow-left.png';
+import Edit from '@static/detail/edit.png';
 import './index.scss';
-import '../../components/m5/style/index.scss';
+import '@components/m5/style/index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 const {statusBarHeight} = getGlobalData('systemInfo');
