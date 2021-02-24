@@ -288,7 +288,7 @@ export default function AddProject() {
           />
         </FloatCard>
         {divider}
-        <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr} arrow onClick={() => setOpenTypeSelector(true)} />
+        <ListItem disabled={isOtherCategory || !category} title='类型' extraText={typeStr} arrow onClick={() => setOpenTypeSelector(true)} />
         <FloatCard
           isOpened={openTypeSelector}
           title="选择类型"
