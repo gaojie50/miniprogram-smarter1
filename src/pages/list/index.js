@@ -113,19 +113,23 @@ class _C extends React.Component {
     loginUrl: `/pages/welcome/index?target=${encodeURIComponent(`/pages/list/index`)}`
   }
 
-  onLoad = ({ token, target }) => {
+  onLoad = ({ token, target, needLogin }) => {
     console.log('token', token);
+    console.log('target', target);
     // 校验登录状态
     let localToken = Taro.getStorageSync('token');
     let authInfo = Taro.getStorageSync('authinfo');
 
+    console.log('token || localToken', token || localToken)
+    console.log('token', token);
+    console.log('localToken', localToken)
     if( token || localToken ){
       // 校验账号状态
       auth.checkLogin().then(res=>{
         const { authInfo } = res;
         console.log('res.isLogin', res.isLogin);
         if(res.isLogin){
-          target && Taro.redirectTo({ url: target });
+          target && Taro.navigateTo({ url: decodeURIComponent(target) });
           console.log('target', target);
           setGlobalData('authinfo', authInfo)
           Taro.setStorageSync('authinfo', authInfo);
@@ -828,7 +832,7 @@ class _C extends React.Component {
   handleLogin = () => {
     const { loginUrl } = this.state;
     Taro.redirectTo({
-      url:loginUrl
+      url: loginUrl
     })
   }
 

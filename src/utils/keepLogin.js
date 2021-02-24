@@ -3,21 +3,16 @@ import projectConfig from '../constant/project-config.js'
 import envConfig from '../constant/env-config.js'
 import reqPacking from './reqPacking.js'
 import utils from './index.js'
+import { addUrlArg } from './url.js';
+import auth from './auth.js';
+import { set as setGlobalData, get as getGlobalData } from '../global_data.js'
 
+const { errorHandle } = utils;
 const { appkey, weixinAppTypeEnum } = projectConfig
-const { errorHandle } = utils
 const { keeper } = envConfig
 
 export default function keepLogin(params) {
-  console.log('params', params);
-  let target = params.target ? decodeURIComponent(params.target) : '';
-  let continueUrl = '';
-
-  if( target.split('?')[0] === '/pages/list/index' ){
-    continueUrl = `/pages/list/index`;
-  }else{
-    continueUrl = `/pages/list/index?target=${encodeURIComponent(params.target)}`;
-  }
+  let continueUrl = decodeURIComponent(params.target);
 
   Taro.login({
     success: ({ code }) => {
@@ -40,8 +35,18 @@ export default function keepLogin(params) {
             
             if (hasBindMobile) {
               Taro.setStorageSync('token', accessToken);
-              console.log('has', `/pages/list/index?token=${accessToken}&target=${encodeURIComponent(target)}`);
-              return Taro.redirectTo({ url: `/pages/list/index?token=${accessToken}&target=${encodeURIComponent(target)}` })
+              // 校验账号状态
+              auth.checkLogin().then(res=>{
+                const { authInfo } = res;
+                if(res.isLogin){
+                  Taro.redirectTo({ url: addUrlArg(continueUrl, 'token', accessToken) })
+                  setGlobalData('authinfo', authInfo)
+                  Taro.setStorageSync('authinfo', authInfo);
+                }
+              }).catch(res=>{
+                errorHandle(res);
+              })
+              return;
             }
 
             if (Taro.canIUse('web-view')) {

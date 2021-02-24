@@ -386,7 +386,7 @@ function hexColorToRgba(hexColor, alpha=1){
 }
 
 function rgbaToHexColor(rgbaArray, alphaMaxVal = 1) {
-  //补位警号
+  //补位井号
   return "#" + rgbaArray.map((chanel, index) => {
     let hexNum="";
     if (index === 3) {

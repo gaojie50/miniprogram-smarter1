@@ -18,10 +18,19 @@ class _C extends React.Component {
     target: null
   }
 
-  onLoad = (options) => {
-    console.log('options', options);
-    let target = options.target || encodeURIComponent('/pages/list/index');
-    this.setState({ target });
+  onLoad = ({target}) => {
+    // 校验登录状态
+    let localToken = Taro.getStorageSync('token');
+    if( localToken ){
+      // 校验账号状态
+      auth.checkLogin().then(res=>{
+        const { authInfo } = res;
+        if(res.isLogin){
+          target && Taro.reLaunch({ url: decodeURIComponent(target) });
+        }
+      })
+    }
+    this.setState({ target })
   }
 
   goList = () => {
