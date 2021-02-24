@@ -887,7 +887,7 @@ export default class FilterPanel extends React.Component {
                                 }
                                 style="margin-right: 20rpx;margin-bottom: 20rpx"
                               >
-                                {item.value}
+                                {item.label}
                               </View>
                             );
                           })}

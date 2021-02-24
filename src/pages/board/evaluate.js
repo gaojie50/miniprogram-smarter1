@@ -1,6 +1,7 @@
 import Taro,{useShareAppMessage} from '@tarojs/taro';
 import { Block, View, Image, Text, ScrollView, Button } from '@tarojs/components';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import NoFollow from '@static/detail/noFollows.png';
 import './evaluate.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking'
@@ -47,7 +48,14 @@ export function EvaluationList(props) {
   return  projectId ? (auth ? (
     <View>
       {
-        evaluationList.map((item) => <EvalutaionCard {...item} projectId={data.projectId} />)
+        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectId={data.projectId} />) : (
+          <>
+            <View className="no-eval-data">
+              <Image src={NoFollow} alt=""></Image>
+              <View className="text">暂无评估记录</View>
+            </View>
+          </>
+        )
       }
     </View>
   ) : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
