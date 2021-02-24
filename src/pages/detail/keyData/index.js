@@ -1,7 +1,7 @@
 import { View, Image, Text, ScrollView } from '@tarojs/components';
 import React from 'react';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
-import utils from '../../../utils/index.js';
+import utils from '@utils/index.js';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking'); 

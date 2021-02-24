@@ -2,10 +2,10 @@ import { View, Image, Text, Block } from '@tarojs/components';
 import React from 'react';
 import dayjs from 'dayjs';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
-import NoFollow from '../../../static/detail/noFollows.png';
+import NoFollow from '@static/detail/noFollows.png';
 import { FollowList } from '../constant';
-import Gray from '../../../static/detail/gray.png';
-import Path from '../../../static/detail/path.png';
+import Gray from '@static/detail/gray.png';
+import Path from '@static/detail/path.png';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking'); 
@@ -93,7 +93,7 @@ export default class FollowStatus extends React.Component {
                         {
                           followData[item][0].stageStatus && followData[item][0].stageStatus.length > 0 ?
                           followData[item][0].stageStatus.map((x, xindex) => {
-                            return <Text style={{color: FollowList[item].tipColor, backgroundColor: FollowList[item].tipBgColor}} className="tag" key={xindex}>{x}</Text> 
+                            return x !== '' ? <Text style={{color: FollowList[item].tipColor, backgroundColor: FollowList[item].tipBgColor}} className="tag" key={xindex}>{x}</Text> : null 
                           }) : ''
                         }
                       </View>

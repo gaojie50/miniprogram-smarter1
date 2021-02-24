@@ -1,20 +1,23 @@
 import { View, Image, Text } from '@tarojs/components'
 import React from 'react';
 import Taro from '@tarojs/taro';
-import { AtTabs, AtTabsPane } from '../../components/m5';
+import { AtTabs, AtTabsPane } from '@components/m5';
 import BasicData from './basicData';
 import KeyData from './keyData';
 import FollowStatus from './followStatus';
+import Cooper from './cooperStatus';
 import { UseHistory } from '../board/history';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
-import AddingProcess from '../../components/addingProcess';
-import People from '../../static/detail/people.png';
-import File from '../../static/detail/file.png';
-import ArrowLeft from '../../static/detail/arrow-left.png';
-import Edit from '../../static/detail/edit.png';
+import AddingProcess from '@components/addingProcess';
+import ProjectFile from './projectFile';
+import FacePeople from './people';
+import People from '@static/detail/people.png';
+import File from '@static/detail/file.png';
+import ArrowLeft from '@static/detail/arrow-left.png';
+import Edit from '@static/detail/edit.png';
 import './index.scss';
-import '../../components/m5/style/index.scss';
+import '@components/m5/style/index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 const {statusBarHeight} = getGlobalData('systemInfo');
@@ -25,15 +28,19 @@ export default class Detail extends React.Component {
       basicData: {
         cooperStatus: 2,
       },
+      fileData: [],
+      peopleData: [],
       judgeRole: {}, //包含role、cooperation、releaseStage
       keyData: {},
       current: 0,
       showProgress: false,
       top: 0,
       topSet: true,
+      showCooperStatus: false,
+      showPeople: false,
+      showProjectFile: false,
     }
   }
-  
 
   onPageScroll() {
     const that = this;
@@ -92,11 +99,48 @@ export default class Detail extends React.Component {
         }, () => {
           this.fetchJudgeRole();
           // this.fetchRole();
+          this.fetchPeople();
+          this.fetchProjectFile();
         });
       }
     });
   }
 
+  fetchPeople() {
+    const { basicData } = this.state;
+    reqPacking({
+      url: '/api/management/user/list',
+      data: {
+        projectId: basicData.projectId
+      }
+    })
+    .then(res => {
+      console.log(res,123)
+      if(res.success) {
+        this.setState({
+          peopleData: res.data
+        })
+      }
+    })
+  }
+
+  fetchProjectFile() {
+    const { basicData } = this.state;
+    reqPacking({
+      url: '/api/management/file/list',
+      data: {
+        projectId: basicData.projectId
+      }
+    })
+    .then(res => {
+      if(res.success) {
+        this.setState({
+          fileData: res.data
+        })
+      }
+    })
+  }
+ 
   fetchJudgeRole() {
     const { basicData } = this.state;
     reqPacking({
@@ -156,7 +200,7 @@ export default class Detail extends React.Component {
   }
 
   render() {
-    const { basicData, judgeRole, keyData, current, showProgress, top } = this.state;
+    const { basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile } = this.state;
     return (
       <View className="detail">
         <View className="detail-top" id="top">
@@ -168,18 +212,29 @@ export default class Detail extends React.Component {
               </View>
               <Text className="header-title">{top < 0 ? basicData.name : ''}</Text>
             </View>
-            
           </View>
           <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 50)+ 'px' }}>
-            <View className="cooperStatus">{CooperStatus[ basicData.cooperStatus ].name}</View>
-            <View className="edit"><Image src={Edit} alt=""></Image></View>
-            <View className="opt">
-              <Image src={File} alt=""></Image>
-              <Text>1</Text>
+            <View className="cooperStatus" style={ { 
+              color: CooperStatus[ basicData.cooperStatus ].color
+            } }
+              onClick={() => this.setState({showCooperStatus: !showCooperStatus})}
+            >
+              {CooperStatus[ basicData.cooperStatus ].name}
+              <Image className="cooper-img" src={ArrowLeft}></Image>
             </View>
-            <View className="opt">
+          {
+            judgeRole.role === 2 ? null 
+            : <View className="edit" onClick={() => wx.navigateTo({
+              url: `/pages/detail/editProject/index?projectId=${basicData.projectId}`,
+            })}><Image src={Edit} alt=""></Image></View>
+          }
+            <View className="opt" onClick={() => this.setState({showProjectFile: true})}>
+              <Image src={File} alt=""></Image>
+              <Text>{fileData.length}</Text>
+            </View>
+            <View className="opt" onClick={() => this.setState({showPeople: true})}>
             <Image src={People} alt=""></Image>
-            <Text>1</Text>
+            <Text>{peopleData.length}</Text>
             </View>
           </View>
         </View>
@@ -226,6 +281,9 @@ export default class Detail extends React.Component {
           <View className="assess" style={{background: '#276FF0'}} onClick={this.bottomClick.bind(this, 'progress')}>添加进展</View>
         </View>
         {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false })}} projectId={basicData.projectId} /> : null}
+        {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false})}></Cooper> : null}
+        {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false})}></FacePeople> : null}
+        {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false})}></ProjectFile> : null}
       </View>
     )
   }

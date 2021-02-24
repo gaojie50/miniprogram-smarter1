@@ -1,9 +1,9 @@
 import { View, Image, Text } from '@tarojs/components';
 import React from 'react';
 import { CategoryList, BasicItem } from '../constant';
-import { AtFloatLayout } from '../../../components/m5';
-import Cover from '../../../static/detail/cover.png';
-import Close from '../../../static/close.png';
+import { AtFloatLayout } from '@components/m5';
+import Cover from '@static/detail/cover.png';
+import Close from '@static/close.png';
 import ReaseTime from './releaseTime';
 import './index.scss';
 
