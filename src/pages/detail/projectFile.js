@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import { AtFloatLayout } from '../../components/m5';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
@@ -11,7 +12,7 @@ import dayjs from 'dayjs';
 const reqPacking = getGlobalData('reqPacking');
 export default function ProjectFile(props) {
   const { fileData } = props;
-console.log(fileData,345)
+
   return (
     <AtFloatLayout scrollY={false} className="projectFile" onClose={() => props.cancelShow()} isOpened>
       <View className="title">
@@ -24,7 +25,7 @@ console.log(fileData,345)
         <ScrollView className="scroll" scrollY>
         {
           fileData.map((item, index) => {
-            return  <View className="item" key={index}>
+            return  <View className="item" key={index} onClick={() => handleFile(item)}>
             <Image className="left" src={Enclosure} alt=""></Image>
             <View className="right">
               <View className="name">{item.profileName}</View>
@@ -40,4 +41,22 @@ console.log(fileData,345)
       </View>
     </AtFloatLayout>
   )
+}
+
+function handleFile(item) {
+  Taro.downloadFile({
+    url: item.url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com'),
+    success: function (res) {
+      var filePath = res.tempFilePath
+      Taro.openDocument({
+        filePath: filePath,
+        success: function (res) {
+          console.log('打开文档成功')
+        },
+        fail: function(res){
+          console.log(res);
+        }
+      })
+    }
+  })
 }

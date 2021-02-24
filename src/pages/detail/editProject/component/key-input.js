@@ -3,6 +3,7 @@ import { View, Block, Text, Input } from '@tarojs/components';
 import './key-input.scss';
 
 export default function KeyInput(props, ref) {
+
   const { name, text, type } = props;
   const [inputValue, setInputValue] = useState();
   if(inputValue) {
@@ -26,6 +27,10 @@ export default function KeyInput(props, ref) {
 }
 
 function formateCost(cost, type) {
+  if(cost === null) {
+    return ''
+  }
+
   if(type === 'expectScore' || type === 'myShare') {
     return cost
   }

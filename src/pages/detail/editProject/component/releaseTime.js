@@ -132,6 +132,7 @@ export default function ReleaseTime(props, ref) {
       query.startDate = +handleNewDate(customStartDate.value);
       query.endDate = +handleNewDate(customEndDate.value);
     }
+
     ref.current = query;
     props.updateRef();
     props.updateReleaseTime();

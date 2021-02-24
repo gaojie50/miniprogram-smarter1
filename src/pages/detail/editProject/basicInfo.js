@@ -71,6 +71,7 @@ export default function AddProject(props, ref) {
   const [movieList, setMovieList] = useState({}); 
   const [name, setName] = useState(passedName);
   const [category, setCategory] = useState();
+  const [showCategoryInput, setShowCategoryInput] = useState(false);
   const [customCategory, setCustomCategory] = useState();
   const [openCategorySelector, setOpenCategorySelector] = useState(false);
 
@@ -90,9 +91,13 @@ export default function AddProject(props, ref) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const hasOtherCooperType = useMemo(() => {
+    return !!cooperType['其他'];
+  }, [cooperType])
   const t1 = CATAGORY.find((item1) => item1.label === category)
   const cooperTypeArr = Object.keys(cooperType || {});
   const type = Object.keys(types || {});
+
   if (hasOtherCooperType && customCooperType) {
     cooperTypeArr.push(customCooperType);
   }
@@ -102,6 +107,7 @@ export default function AddProject(props, ref) {
     t1, 
     isOtherCategory,
     customCategory,
+    customCooperType,
     category: t1?.value,
     cooperType: cooperTypeArr.length === 0 ? firstCooperType : cooperTypeArr,
     cooperStatus: cooperState,
@@ -183,10 +189,6 @@ export default function AddProject(props, ref) {
       setCustomCategory();
     }
   }, [category])
-
-  const hasOtherCooperType = useMemo(() => {
-    return !!cooperType['其他'];
-  }, [cooperType])
 
   const handleSave = useCallback(() => {
     const t1 = CATAGORY.find((item1) => item1.label === category)
@@ -273,7 +275,7 @@ export default function AddProject(props, ref) {
         {divider}
         <ListItem title='品类' extraText={category || textVoid} arrow onClick={() => setOpenCategorySelector(true)} />
         {
-          isOtherCategory && (
+          isOtherCategory && showCategoryInput && (
             <View className="add-project-input-wrapper">
               <Input
                 className="add-project-input-wrapper-content"
@@ -299,11 +301,12 @@ export default function AddProject(props, ref) {
             data={CATAGORY.map((item) => ({ value: item.label, valueClassName: category === item.label ? 'm5-grid-item-checked' : '' }))}
             onClick={({ value }) => {
               setCategory(value);
+              setShowCategoryInput(true);
             }}
           />
         </FloatCard>
         {divider}
-        <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr || firstType.join(' / ') || textVoid} arrow onClick={() => setOpenTypeSelector(true)} />
+        <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr || firstType.length > 0 && firstType.join(' / ') || textVoid} arrow onClick={() => setOpenTypeSelector(true)} />
         <FloatCard
           isOpened={openTypeSelector}
           title="选择类型"
@@ -331,7 +334,7 @@ export default function AddProject(props, ref) {
         </FloatCard>
         <Toast duration={1000} isOpened={showToast} text={showToast} onClose={() => setShowToast('')} />
         {divider}
-        <ListItem title='意向合作类型' extraText={cooperStr || firstCooperType.join(' / ') || textVoid} arrow onClick={() => setOpenCooperSelector(true)} />
+        <ListItem title='意向合作类型' extraText={cooperStr || firstCooperType.length > 0 && firstCooperType.join(' / ') || textVoid} arrow onClick={() => setOpenCooperSelector(true)} />
         {
           hasOtherCooperType && (
             <View className="add-project-input-wrapper">

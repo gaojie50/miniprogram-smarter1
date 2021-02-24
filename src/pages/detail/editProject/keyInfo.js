@@ -16,8 +16,22 @@ const textVoid = <Text style={{ color: '#CCCCCC' }}>请选择</Text>;
 const divider = <Divider />
 
 export default function KeyInfo(props, ref) {
+
   const keyRef = useRef({});
   const releaseTimeRef = useRef({});
+
+  useEffect(() => {
+    if(props.movieData.movieName) {
+      const { scheduleType, startShowDate, endShowDate} = props.movieData;
+      const query = {
+        scheduleType,
+        startDate: startShowDate,
+        endDate: endShowDate
+      }
+      releaseTimeRef.current = query;
+      updateRef();
+    }
+  }, [props])
 
   const updateRef = () => {
     ref.current = {
@@ -31,7 +45,7 @@ export default function KeyInfo(props, ref) {
     const start = dayjs(startDate).format('YYYY-MM-DD');
     const end = dayjs(endDate).format('YYYY-MM-DD');
   }
-  console.log(props.judgeRole,777)
+
   return (
     <Block>
       <Text className="keyInfo-title">核心数据</Text>
@@ -60,7 +74,7 @@ export default function KeyInfo(props, ref) {
 }
 
 function _ReleaseTimeWrap(props) {
-  console.log(props,111)
+
   const [openReleaseTime, setOpenReleaseTime] = useState(false);
   const [scheduleType, setScheduleType] = useState();
   const [time, setTime] = useState('');

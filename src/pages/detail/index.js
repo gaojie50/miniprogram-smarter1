@@ -212,7 +212,6 @@ export default class Detail extends React.Component {
               </View>
               <Text className="header-title">{top < 0 ? basicData.name : ''}</Text>
             </View>
-            
           </View>
           <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 50)+ 'px' }}>
             <View className="cooperStatus" style={ { 
@@ -221,22 +220,14 @@ export default class Detail extends React.Component {
               onClick={() => this.setState({showCooperStatus: !showCooperStatus})}
             >
               {CooperStatus[ basicData.cooperStatus ].name}
-              <svg width="7px" height="10px" viewBox="0 0 7 10" >
-              <g id="B01项目详情" transform="translate(-456.000000, -182.000000)" fill={ CooperStatus[ basicData.cooperStatus ].color}>
-                <g id="tab" transform="translate(32.000000, 60.000000)">
-                  <g id="编组-10" transform="translate(348.000000, 0.000000)">
-                    <g id="编组-7" transform="translate(24.000000, 106.000000)">
-                      <g id="开发阶段箭头" transform="translate(51.414199, 16.000000)">
-                        <path d="M8.70710678,2.29290762 C9.09763107,2.68343191 9.09763107,3.31659689 8.70710678,3.70712118 L4.70710678,7.70712118 C4.31658249,8.09764547 3.68341751,8.09764547 3.29289322,7.70712118 L-0.707106781,3.70712118 C-1.09763107,3.31659689 -1.09763107,2.68343191 -0.707106781,2.29290762 C-0.316571245,1.90237208 0.316602367,1.90234096 0.707176297,2.2928381 L4,5.5850144 L4,5.5850144 L7.2928237,2.2928381 C7.68342875,1.90244887 8.31654012,1.90248 8.70710678,2.29290762 Z" transform="translate(4.000000, 5.000000) rotate(-90.000000) translate(-4.000000, -5.000000) " />
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </g>
-          </svg></View>
-            <View className="edit" onClick={() => wx.navigateTo({
+              <Image className="cooper-img" src={ArrowLeft}></Image>
+            </View>
+          {
+            judgeRole.role === 2 ? null 
+            : <View className="edit" onClick={() => wx.navigateTo({
               url: `/pages/detail/editProject/index?projectId=${basicData.projectId}`,
             })}><Image src={Edit} alt=""></Image></View>
+          }
             <View className="opt" onClick={() => this.setState({showProjectFile: true})}>
               <Image src={File} alt=""></Image>
               <Text>{fileData.length}</Text>

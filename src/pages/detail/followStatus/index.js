@@ -93,7 +93,7 @@ export default class FollowStatus extends React.Component {
                         {
                           followData[item][0].stageStatus && followData[item][0].stageStatus.length > 0 ?
                           followData[item][0].stageStatus.map((x, xindex) => {
-                            return <Text style={{color: FollowList[item].tipColor, backgroundColor: FollowList[item].tipBgColor}} className="tag" key={xindex}>{x}</Text> 
+                            return x !== '' ? <Text style={{color: FollowList[item].tipColor, backgroundColor: FollowList[item].tipBgColor}} className="tag" key={xindex}>{x}</Text> : null 
                           }) : ''
                         }
                       </View>
