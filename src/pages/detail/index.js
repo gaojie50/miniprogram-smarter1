@@ -14,6 +14,10 @@ import ProjectFile from './projectFile';
 import FacePeople from './people';
 import People from '@static/detail/people.png';
 import File from '@static/detail/file.png';
+import CooperArrow0 from '@static/detail/cooper-arrow0.svg';
+import CooperArrow1 from '@static/detail/cooper-arrow1.svg';
+import CooperArrow2 from '@static/detail/cooper-arrow2.svg';
+import CooperArrow3 from '@static/detail/cooper-arrow3.svg';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import './index.scss';
@@ -68,9 +72,10 @@ export default class Detail extends React.Component {
   fetchBasicData() {
     const page = Taro.getCurrentPages();
     let param = {};
+  
     page.forEach(x => {
       if(x.route === 'pages/detail/index') {
-        if(x.options.projectId && x.options.projectId !== '') {
+        if(x.options.projectId && x.options.projectId !== '' && x.options.projectId !== '0') {
           param.projectId = x.options.projectId
         } else {
           param.maoyanId = x.options.maoyanId
@@ -220,7 +225,7 @@ export default class Detail extends React.Component {
               onClick={() => this.setState({showCooperStatus: !showCooperStatus})}
             >
               {CooperStatus[ basicData.cooperStatus ].name}
-              <Image className="cooper-img" src={ArrowLeft}></Image>
+              <Image className="cooper-img" src={basicData.cooperStatus < 3 ? `../../static/detail/cooper-arrow${basicData.cooperStatus}.svg` : '../../static/detail/cooper-arrow3.svg'} ></Image>
             </View>
           {
             judgeRole.role === 2 ? null 

@@ -46,9 +46,12 @@ export default function EditProject() {
 
   const submit = useCallback(() => {
     console.log(projectId,keyDataRef, basicDateRef, 111)
-    const {name, category, t1, isOtherCategory, cooperType, customCategory, cooperStatus, type, customCooperType } = basicDateRef.current;
+    let {name, category, t1, isOtherCategory, cooperType, customCategory, cooperStatus, type = [], customCooperType } = basicDateRef.current;
     const {scheduleType, startDate, endDate, advertisingCosts, expectBox, expectScore, myInvestment, myShare, productionCosts} = keyDataRef.current;
-   
+    if(type === false) {
+      type = [];
+    }
+
     if (!name) {
       toast("请填写片名");
       return
@@ -63,7 +66,7 @@ export default function EditProject() {
       return
     }
 
-    if (cooperType.length === 0) {
+    if (!cooperType || cooperType.length === 0) {
       toast("请填写意向合作类型");
       return
     }
