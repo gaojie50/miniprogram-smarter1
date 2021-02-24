@@ -11,7 +11,7 @@ export default class Radio extends React.Component {
     if (this.props.isPreview) return;
 
     let selected = Number(currentTarget.dataset.item);
-    let obj = { content: selected, finished: true, showError: false };
+    let obj = { content: selected, finished: true, showError: false, complete: true };
 
     this.setState({ selected }, () => this.props.cb(obj));
   };

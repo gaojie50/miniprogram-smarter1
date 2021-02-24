@@ -1,6 +1,7 @@
-import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/components'
+import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro';
+import FixedButton from '@components/fixedButton';
 import reqPacking from '../../../utils/reqPacking.js'
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '../../../components/assess';
 import utils from '../../../utils/index';
@@ -22,7 +23,9 @@ export default function PerviewTemplate(){
       return Taro.showModal({title: '提示', content:'缺少tempId', duration:1000});
     } 
     
-    Taro.showLoading();
+    Taro.showLoading({
+      title: '加载中'
+    });
     reqPacking(
       {
         url: '/api/management/tempQuestion',
@@ -40,6 +43,7 @@ export default function PerviewTemplate(){
         }
         errorHandle(error);
         Taro.hideLoading();
+
       }).catch(err=>{
         errorHandle({message: '加载失败'});
         Taro.hideLoading();
@@ -48,7 +52,10 @@ export default function PerviewTemplate(){
 
   const handleSelect = () =>{
     const { tempId } = Taro.getCurrentInstance().router.params;
-    Taro.setStorageSync('tempId', tempId);
+    const pages = Taro.getCurrentPages(); // 获取当前的页面栈
+    const current = pages[pages.length - 1];
+    const eventChannel = current.getOpenerEventChannel();
+    eventChannel.emit('selectTempId', tempId);
     Taro.navigateBack();
   }
 
@@ -117,14 +124,12 @@ export default function PerviewTemplate(){
           })
         }
       </View>
-      <View className="btn-wrap">
-        <Button 
-          className="select-btn" 
-          onClick={handleSelect}
-        >
-            选择该模板
-        </Button>
-      </View>
+      <FixedButton 
+        className="select-btn" 
+        onClick={handleSelect}
+      >
+          选择该模板
+      </FixedButton>
     </View>
     </View>
   )
