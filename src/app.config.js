@@ -23,7 +23,7 @@ export default {
     },
     {
       root: "pages/detail",
-      pages: ["index"]
+      pages: ["index", "editProject/index"]
     },
     {
       root: "pages/projectDetail",
