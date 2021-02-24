@@ -114,7 +114,7 @@ class _C extends React.Component {
   }
 
   onLoad = ({ token, target }) => {
-    console.log(token);
+    console.log('token', token);
     // 校验登录状态
     let localToken = Taro.getStorageSync('token');
     let authInfo = Taro.getStorageSync('authinfo');
@@ -123,10 +123,10 @@ class _C extends React.Component {
       // 校验账号状态
       auth.checkLogin().then(res=>{
         const { authInfo } = res;
-        console.log(res);
+        console.log('res.isLogin', res.isLogin);
         if(res.isLogin){
-          target && this.redirectTo({ url: target });
-
+          target && Taro.redirectTo({ url: target });
+          console.log('target', target);
           setGlobalData('authinfo', authInfo)
           Taro.setStorageSync('authinfo', authInfo);
 
@@ -176,6 +176,11 @@ class _C extends React.Component {
 
           this.setState({
             initLoading: false,
+          })
+        }else{
+          console.log('跳转');
+          Taro.redirectTo({
+            url: `/pages/welcome/index?target=${encodeURIComponent(`/pages/assess/index/index?projectId=14332&roundId=382`)}`
           })
         }
       }).catch(err=>{
@@ -758,10 +763,11 @@ class _C extends React.Component {
   }
 
   jumpToSearch = () => {
-    Taro.navigateTo({
-      url: '/pages/search/index',
+    this.handleJumpShare();
+    // Taro.navigateTo({
+    //   url: '/pages/search/index',
       
-    })
+    // })
   }
 
   copyMail = () => {
@@ -823,6 +829,12 @@ class _C extends React.Component {
     const { loginUrl } = this.state;
     Taro.redirectTo({
       url:loginUrl
+    })
+  }
+
+  handleJumpShare = ()=>{
+    Taro.reLaunch({
+      url: `/pages/welcome/index?target=${encodeURIComponent(`/pages/assess/index/index?projectId=14332&roundId=382`)}`
     })
   }
 
@@ -941,7 +953,6 @@ class _C extends React.Component {
                 }}
               >
                 <View id="scroll-cont">
-                /* 遮罩 */
                 { !isLogin && (
                   <View className="nologin-mask" onClick={ this.handleLogin } />
                 )}

@@ -19,6 +19,7 @@ class _C extends React.Component {
   }
 
   onLoad = (options) => {
+    console.log('options', options);
     let target = options.target || encodeURIComponent('/pages/list/index');
     this.setState({ target });
   }

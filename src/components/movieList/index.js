@@ -9,6 +9,7 @@ Component({
       value: [],
     },
     isLogin: Boolean,
+    curPagePermission: Boolean,
     filterItemHidden1: Boolean,
     filterItemHidden2: Boolean,
     filterItemHidden3: Boolean,

@@ -9,6 +9,7 @@ const { errorHandle } = utils
 const { keeper } = envConfig
 
 export default function keepLogin(params) {
+  console.log('params', params);
   let target = params.target ? decodeURIComponent(params.target) : '';
   let continueUrl = '';
 
@@ -39,7 +40,8 @@ export default function keepLogin(params) {
             
             if (hasBindMobile) {
               Taro.setStorageSync('token', accessToken);
-              return Taro.redirectTo({ url: `/pages/list/index?token=${accessToken}` })
+              console.log('has', `/pages/list/index?token=${accessToken}&target=${encodeURIComponent(target)}`);
+              return Taro.redirectTo({ url: `/pages/list/index?token=${accessToken}&target=${encodeURIComponent(target)}` })
             }
 
             if (Taro.canIUse('web-view')) {
