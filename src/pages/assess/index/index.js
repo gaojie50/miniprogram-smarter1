@@ -8,6 +8,7 @@ import utils from '../../../utils/index';
 import _cloneDeep from 'lodash/cloneDeep';
 import _merge from 'lodash/merge';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
+import LoginNotice from '@components/loginNotice';
 import '../../../components/m5/style/components/icon.scss';
 import './index.scss';
 
@@ -17,28 +18,29 @@ export default function assessPage(){
   
   const [ briefInfo, setBriefInfo ] = useState({});
   const [ projectRole, setProjectRole ] = useState(6);
-  const [ loading, setLoading ] = useState(true);
+  const [ loading, setLoading ] = useState(false);
   const [ curEvalObj, setCurEvalObj ] = useState({});
   const [ canEvaluate, setCanEvaluate ] = useState( false )
   const [ result, setResult ] = useState({});
   
+  const isLogin = Taro.getStorageSync('token');
+  const { projectId, roundId } = getCurrentInstance().router.params;
   const capsuleLocation = getGlobalData('capsuleLocation');
   const {statusBarHeight} = getGlobalData('systemInfo');
   const titleHeight= Math.floor(
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
-  let projectId = '';
-  let roundId = '';
 
   useEffect(()=>{
-    const { projectId:pId, roundId:rId } = getCurrentInstance().router.params;
-    projectId = pId;
-    roundId = rId;
 
-    fetchResult();
-    fetchRole();
-    fetchBrifInfo();
-    fetchEveluationList();
+    if(isLogin){
+      setLoading( true );
+      fetchResult();
+      fetchRole();
+      fetchBrifInfo();
+      fetchEveluationList();
+    }
+   
   }, [])
 
   const fetchResult = () => {
@@ -206,42 +208,47 @@ export default function assessPage(){
   const coverPic = projectPic ? projectPic : defaultPicUrl;
   const rgbColor = hexColorToRgba(backColor||'#475975',0.9);
 
+  console.log('projectId', projectId);
+  console.log('roundId', roundId);
   return (
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>
       <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
       <TopBar background="transparent" hasBack={true} onBack={ handleBack } />
-
-      <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`}}>
-        <View className="content-container">
-        <View className="briefinfo-wrap">
-          <Image className="project-pic" src={coverPic}></Image>
-          {name && <View className="project-name">《{name}》</View>}
-          {round && <View className="project-round">第{round}轮 / 剧本评估</View>}
-          { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
-        </View>
-
-        <View className="evaluation-info-wrap">
-          <View className="round-title">{roundTitle}</View>
-          <View className="project-file-wrap">
-            {
-              (projectFile || []).map(item=>{
-                return (
-                  <View className="file-item" onClick={()=>{handlePreviewFile(item.url, item.title)}}>
-                    <View className="logo"></View>
-                    <View className="file-info-wrap">
-                      <View className="file-name">{item.title}</View>
-                    </View>
-                    <View className='at-icon at-icon-chevron-right'></View>
-                  </View>
-                )
-              })
-            }
+      {!isLogin ?(
+        <LoginNotice target={`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`} />
+      ) : (
+        <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`}}>
+          <View className="content-container">
+          <View className="briefinfo-wrap">
+            <Image className="project-pic" src={coverPic}></Image>
+            {name && <View className="project-name">《{name}》</View>}
+            {round && <View className="project-round">第{round}轮 / 剧本评估</View>}
+            { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
           </View>
+
+          <View className="evaluation-info-wrap">
+            <View className="round-title">{roundTitle}</View>
+            <View className="project-file-wrap">
+              {
+                (projectFile || []).map(item=>{
+                  return (
+                    <View className="file-item" onClick={()=>{handlePreviewFile(item.url, item.title)}}>
+                      <View className="logo"></View>
+                      <View className="file-info-wrap">
+                        <View className="file-name">{item.title}</View>
+                      </View>
+                      <View className='at-icon at-icon-chevron-right'></View>
+                    </View>
+                  )
+                })
+              }
+            </View>
+          </View>
+          
+          {canEvaluate && !result.evaluated && <Button className="start-btn" onClick={handleStartAssess}>开始评估</Button>}
         </View>
-        
-        {canEvaluate && !result.evaluated && <Button className="start-btn" onClick={handleStartAssess}>开始评估</Button>}
       </View>
-      </View>
+      )}
       </View>
   );
 }

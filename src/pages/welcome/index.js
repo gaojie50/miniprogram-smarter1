@@ -49,7 +49,7 @@ class _C extends React.Component {
       success: (res) => {
         if (res.authSetting['scope.userInfo'] && e.detail) {
           const { iv, encryptedData } = e.detail
-          return keepLogin({ iv, encryptedData, target: this.state.target });
+          return keepLogin({ iv, encryptedData, target: this.state.target || `/pages/list/index` });
         }
 
         Taro.showModal({

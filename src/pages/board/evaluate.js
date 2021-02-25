@@ -139,7 +139,7 @@ function EvalutaionCard(props) {
         return {
           title: `${realName} 邀请您参与《${roundTitle}》项目评估`,
           imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
-          path: `/pages/welcome/index?target=${encodeURIComponent(`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`)}`
+          path: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`
         };
       };
 
