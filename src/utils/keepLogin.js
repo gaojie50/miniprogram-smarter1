@@ -39,9 +39,9 @@ export default function keepLogin(params) {
               auth.checkLogin().then(res=>{
                 const { authInfo } = res;
                 if(res.isLogin){
-                  Taro.redirectTo({ url: addUrlArg(continueUrl, 'token', accessToken) })
                   setGlobalData('authinfo', authInfo)
                   Taro.setStorageSync('authinfo', authInfo);
+                  Taro.redirectTo({ url: addUrlArg(continueUrl, 'token', accessToken) })
                 }
               }).catch(res=>{
                 errorHandle(res);
@@ -50,7 +50,7 @@ export default function keepLogin(params) {
             }
 
             if (Taro.canIUse('web-view')) {
-              const verifyPhoneNumUrl = `${keeper}/business/bindphone?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(continueUrl)}`
+              const verifyPhoneNumUrl = `${keeper}/business/bindphone?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(`/pages/list/index?target=${continueUrl}`)}`
 
               Taro.navigateTo({
                 url: `/pages/webview/index?url=${encodeURIComponent(

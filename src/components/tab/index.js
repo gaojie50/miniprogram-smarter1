@@ -22,10 +22,10 @@ const TAB_LIST = [
 
 
 
-export default () => {
+export default (props) => {
   const currentPath = Taro.getCurrentInstance().router.path;
   const current = TAB_ACTIVE[currentPath];
-
+  const { isLogin } = props;
   return (
     <Tab
       current={current}
@@ -34,7 +34,7 @@ export default () => {
       onClick={(val) => {
         if (val !== current) {
           Taro.redirectTo({
-            url: `${ROUTER[val]}`,
+            url: isLogin ? `${ROUTER[val]}`: `/pages/welcome/index?target=${encodeURIComponent(ROUTER[val])}`
           });
         }
       }}

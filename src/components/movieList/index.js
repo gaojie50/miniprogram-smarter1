@@ -82,12 +82,18 @@ Component({
 
     jumpToDetail: function (e) {
       const { id, pid } = e.currentTarget.dataset
-      const { list } = this.data
+      const { list, isLogin } = this.data
       const filterList = JSON.parse(JSON.stringify(list)).filter(
         ({ maoyanId, projectId }) => maoyanId == id && projectId == pid,
       )[0]
       const { maoyanId, projectId } = filterList
-
+      
+      if(!isLogin){
+        wx.navigateTo({
+          url: `/pages/welcome/index?target=${encodeURIComponent('/pages/list/index')}`,
+        })
+        return;
+      }
       wx.navigateTo({
         url: `/pages/detail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
       })

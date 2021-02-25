@@ -21,14 +21,20 @@ export default function assessPage(){
   const [ curEvalObj, setCurEvalObj ] = useState({});
   const [ canEvaluate, setCanEvaluate ] = useState( false )
   const [ result, setResult ] = useState({});
-  const { projectId, roundId } = getCurrentInstance().router.params;
+  
   const capsuleLocation = getGlobalData('capsuleLocation');
   const {statusBarHeight} = getGlobalData('systemInfo');
   const titleHeight= Math.floor(
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
+  let projectId = '';
+  let roundId = '';
 
   useEffect(()=>{
+    const { projectId:pId, roundId:rId } = getCurrentInstance().router.params;
+    projectId = pId;
+    roundId = rId;
+
     fetchResult();
     fetchRole();
     fetchBrifInfo();

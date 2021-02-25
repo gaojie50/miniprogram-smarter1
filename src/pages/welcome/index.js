@@ -15,17 +15,22 @@ class _C extends React.Component {
       capsuleLocation.bottom + capsuleLocation.top - statusBarHeight,
     ),
     code: null,
-    target: null
+    target: null,
+    isLogin: false
   }
 
-  onLoad = ({target}) => {
+  onLoad = ({token, target}) => {
     // 校验登录状态
+    if(token){
+      Taro.setStorageSync('token', token);
+    }
     let localToken = Taro.getStorageSync('token');
-    if( localToken ){
+    if( token || localToken ){
       // 校验账号状态
       auth.checkLogin().then(res=>{
         const { authInfo } = res;
         if(res.isLogin){
+          this.setState({ isLogin: true });
           target && Taro.reLaunch({ url: decodeURIComponent(target) });
         }
       })
@@ -37,12 +42,6 @@ class _C extends React.Component {
     Taro.reLaunch({
       url: '../list/index',
     })
-  // Taro.reLaunch({
-  //   url: '../assess/index/index?projectId=6009&roundId=291'
-  // })
-    // Taro.reLaunch({
-    //   url: '../assess/index/index?projectId=14332&roundId=350'
-    // })
   }
 
   getUserInfo = (e) => {
@@ -51,13 +50,6 @@ class _C extends React.Component {
         if (res.authSetting['scope.userInfo'] && e.detail) {
           const { iv, encryptedData } = e.detail
           return keepLogin({ iv, encryptedData, target: this.state.target });
-
-          if (Taro.getStorageSync('token'))
-            return Taro.redirectTo({ url: `/pages/list/index` })
-            // return Taro.redirectTo({ url: `../assess/create/index?projectId=14332` })
-            // return Taro.redirectTo({ url: `../management/assessIndex/index?projectId=14332&roundId=350` })
-
-          
         }
 
         Taro.showModal({

@@ -114,23 +114,16 @@ class _C extends React.Component {
   }
 
   onLoad = ({ token, target, needLogin }) => {
-    console.log('token', token);
-    console.log('target', target);
     // 校验登录状态
     let localToken = Taro.getStorageSync('token');
     let authInfo = Taro.getStorageSync('authinfo');
 
-    console.log('token || localToken', token || localToken)
-    console.log('token', token);
-    console.log('localToken', localToken)
     if( token || localToken ){
       // 校验账号状态
       auth.checkLogin().then(res=>{
         const { authInfo } = res;
-        console.log('res.isLogin', res.isLogin);
         if(res.isLogin){
           target && Taro.navigateTo({ url: decodeURIComponent(target) });
-          console.log('target', target);
           setGlobalData('authinfo', authInfo)
           Taro.setStorageSync('authinfo', authInfo);
 
@@ -182,7 +175,6 @@ class _C extends React.Component {
             initLoading: false,
           })
         }else{
-          console.log('跳转');
           Taro.redirectTo({
             url: `/pages/welcome/index?target=${encodeURIComponent(`/pages/assess/index/index?projectId=14332&roundId=382`)}`
           })
@@ -202,82 +194,6 @@ class _C extends React.Component {
     },()=>{
       this._fetchData(this.state.dateSelect)
     });
-
-    // if (token) Taro.setStorageSync('token', token)
-
-    // this.setState({
-    //   screenHeight: Taro.getSystemInfoSync().windowHeight,
-    // })
-
-    // // 判断用户是否有权限
-    // const { authStartTime, authEndTime } = Taro.getStorageSync('listPermission')
-
-    // if (
-    //   authEndTime &&
-    //   authEndTime > +new Date() &&
-    //   authStartTime &&
-    //   authStartTime <= +new Date()
-    // ) {
-    //   this.setState({
-    //     curPagePermission: true,
-    //     initLoading: false,
-    //   })
-    //   this.fetchfilmDistribution()
-    //   this.fetchSchedule()
-    //   this.setState({ loading: true }, () =>
-    //     this._fetchData(this.state.dateSelect),
-    //   )
-    // } else {
-    //   reqPacking(
-    //     {
-    //       url: 'api/user/authinfo',
-    //     },
-    //     'passport',
-    //   ).then(({ success, data }) => {
-    //     if (success) {
-    //       setGlobalData('authinfo', data)
-    //       Taro.setStorageSync('authinfo', data);
-
-    //       if (
-    //         data &&
-    //         data.authIds &&
-    //         data.authIds.length > 0 &&
-    //         data.authIds.includes(95110) &&
-    //         data.authEndTime &&
-    //         data.authEndTime > +new Date() &&
-    //         data.authStartTime &&
-    //         data.authStartTime <= +new Date()
-    //       ) {
-    //         //用户有权限
-    //         Taro.setStorageSync('listPermission', {
-    //           authEndTime: data.authEndTime,
-    //           authStartTime: data.authStartTime,
-    //         })
-
-    //         this.setState(
-    //           {
-    //             loading: true,
-    //             curPagePermission: true,
-    //             initLoading: false,
-    //           },
-    //           () => {
-    //             this.fetchfilmDistribution()
-    //             this.fetchSchedule()
-    //             this._fetchData(this.state.dateSelect)
-    //           },
-    //         )
-    //       }
-
-    //       this.setState({
-    //         initLoading: false,
-    //       })
-    //     }
-
-    //     this.setState({
-    //       initLoading: false,
-    //     })
-    //   })
-    // }
   }
 
   fetchfilmDistribution = () => {
@@ -767,11 +683,10 @@ class _C extends React.Component {
   }
 
   jumpToSearch = () => {
-    this.handleJumpShare();
-    // Taro.navigateTo({
-    //   url: '/pages/search/index',
-      
-    // })
+    this.handleCheckLoginClick();
+    Taro.navigateTo({
+      url: '/pages/search/index',
+    })
   }
 
   copyMail = () => {
@@ -836,10 +751,12 @@ class _C extends React.Component {
     })
   }
 
-  handleJumpShare = ()=>{
-    Taro.reLaunch({
-      url: `/pages/welcome/index?target=${encodeURIComponent(`/pages/assess/index/index?projectId=14332&roundId=382`)}`
-    })
+
+  handleCheckLoginClick=()=>{
+    const { isLogin } = this.state;
+    if( !isLogin ){
+      this.handleLogin();
+    }
   }
 
   render() {
@@ -887,7 +804,7 @@ class _C extends React.Component {
       yMaxLength,
       isLogin
     } = this.state;
-    console.log(isLogin);
+
     const yMaxLengthArr = ["","","","","",""].map((item,index)=>strip(formatNumber(yMaxLength * (1 - index/5)).posNum));
     
     return (
@@ -956,10 +873,7 @@ class _C extends React.Component {
                     })
                 }}
               >
-                <View id="scroll-cont">
-                { !isLogin && (
-                  <View className="nologin-mask" onClick={ this.handleLogin } />
-                )}
+                <View id="scroll-cont" onClickCapture={this.handleCheckLoginClick}>
 
                 {isLogin && curPagePermission && 
                   <View className="filmDistribution">
@@ -1234,7 +1148,7 @@ class _C extends React.Component {
               titleHeight={titleHeight} />
           </View>
         )}
-        <Tab />
+        <Tab isLogin={isLogin} />
       </Block>
     )
   }
