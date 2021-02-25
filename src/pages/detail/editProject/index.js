@@ -148,9 +148,7 @@ export default function EditProject() {
     })
     .then(res => {
       if(res.success) {
-        wx.navigateTo({
-          url: `/pages/detail/index?projectId=${projectId}`,
-        })
+        wx.navigateBack()
       }
     })
   }, [keyDataRef, basicDateRef, projectId])

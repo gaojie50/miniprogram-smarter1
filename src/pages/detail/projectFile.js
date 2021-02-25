@@ -44,19 +44,33 @@ export default function ProjectFile(props) {
 }
 
 function handleFile(item) {
-  Taro.downloadFile({
-    url: item.url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com'),
-    success: function (res) {
-      var filePath = res.tempFilePath
-      Taro.openDocument({
-        filePath: filePath,
-        success: function (res) {
-          console.log('打开文档成功')
-        },
-        fail: function(res){
-          console.log(res);
-        }
-      })
-    }
-  })
+  const {profileName, url} = item;
+  const extensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'];
+  let fileType = profileName.slice(profileName.lastIndexOf('.')+1);
+
+  if(extensions.includes(fileType)) {
+    Taro.showLoading({title:'正在打开'})
+    Taro.downloadFile({
+      url: url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com'),
+      success: function (res) {
+        var filePath = res.tempFilePath;
+        Taro.openDocument({
+          filePath: filePath,
+          success: function (res) {
+            console.log('打开文档成功');
+            Taro.hideLoading();
+          },
+          fail: function(res){
+            Taro.hideLoading()
+            errorHandle({ message: '打开失败' });
+          }
+        })
+      }
+    })
+  } else {
+    Taro.showToast({
+      title: `暂不支持${fileType}格式文件预览`,
+      icon: 'none'
+    })
+  }
 }
