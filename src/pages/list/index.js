@@ -124,9 +124,6 @@ class _C extends React.Component {
         const { authInfo } = res;
         if(res.isLogin){
           target && Taro.navigateTo({ url: decodeURIComponent(target) });
-          setGlobalData('authinfo', authInfo)
-          Taro.setStorageSync('authinfo', authInfo);
-
 
           if (
             authInfo &&
@@ -325,6 +322,7 @@ class _C extends React.Component {
       }
       if(error && (error.code == 12110002)){
         Taro.removeStorageSync('token');
+        Taro.removeStorageSync('authinfo');
         Taro.removeStorageSync('listPermission');
  
         Taro.reLaunch({ url:'../welcome/index' })

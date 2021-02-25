@@ -25,7 +25,7 @@ const TAB_LIST = [
 export default (props) => {
   const currentPath = Taro.getCurrentInstance().router.path;
   const current = TAB_ACTIVE[currentPath];
-  const { isLogin } = props;
+  const { isLogin=true } = props;
   return (
     <Tab
       current={current}
