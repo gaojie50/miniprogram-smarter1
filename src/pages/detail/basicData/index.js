@@ -38,7 +38,7 @@ export default class BasicData extends React.Component {
           <View className="img">
             <View className="border"></View>
             <Image src={ newPic } alt=""></Image>
-            {data.category && <View className="label" style={{ backgroundImage: `url(${CategoryList[ data.category ].icon})`}}>{CategoryList[ data.category ].label}</View>}
+            {data.category >= 0 ? <View className="label" style={{ backgroundImage: `url(${CategoryList[ data.category ].icon})`}}>{CategoryList[ data.category ].label}</View> : null}
           </View>
           <View className="basic-data-top-right">
             <View className="title">{data.name}</View>

@@ -7,7 +7,7 @@ export default function ReaseTiem(props) {
   const { data, judgeRole } = props;
   const { releaseTime = {} } = data;
   const index = releaseTime.time.indexOf('~');
-  const scheduleType = releaseTime.scheduleType && (releaseTime.scheduleType - 1) || 4;
+  const scheduleType = (releaseTime.scheduleType && releaseTime.scheduleType > 0) ? releaseTime.scheduleType - 1 : 4;
 
   return (
     <View className="releaseTime" style={{backgroundColor: ScheduleType[ scheduleType ].bgColor}}>
