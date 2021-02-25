@@ -24,7 +24,7 @@ import '../../components/m5/style/components/float-layout.scss';
 import '../../components/m5/style/components/grid.scss';
 import '../../components/m5/style/components/toast.scss';
 import './index.scss'
-import { MOVIE_TYPE_LIST } from './lib';
+import { MOVIE_TYPE_LIST, TV_TYPE_LIST, VARIETY_TYPE_LIST } from './lib';
 import utils from '../../utils/index.js'
 import { get as getGlobalData } from '../../global_data'
 import { CustomName } from './component/custom-project';
@@ -190,13 +190,33 @@ export default function AddProject() {
       cooperStatus: cooperState,
       customType: isOtherCategory ? customCategory : undefined,
       type,
-    }).then((data) => {
-      setShowToast('新建成功')
-      Taro.redirectTo({
-        url: `/pages/detail/index?projectId=${data}`,
-      })
+    }).then(({ success, data, error }) => {
+      if (success) {
+        setShowToast('新建成功')
+        Taro.redirectTo({
+          url: `/pages/detail/index?projectId=${data}`,
+        })
+      } else {
+        setShowToast(error.message || `未知错误，请联系管理员`);
+      }
     })
   }, [name, category, cooperType, types, cooperState, isOtherCategory, hasOtherCooperType, customCategory, customCooperType])
+
+  const TYPES = useMemo(() => {
+    if (category === '网络剧' || category === '电视剧') {
+      return TV_TYPE_LIST;
+    }
+
+    if (category === '院线电影' || category === '网络电影') {
+      return MOVIE_TYPE_LIST
+    }
+
+    if (category === '综艺') {
+      return VARIETY_TYPE_LIST;
+    }
+
+    return [];
+  }, [category]);
 
   return (
     <View className="add-project">
@@ -263,11 +283,12 @@ export default function AddProject() {
             data={CATAGORY.map((item) => ({ value: item.label, valueClassName: category === item.label ? 'm5-grid-item-checked' : '' }))}
             onClick={({ value }) => {
               setCategory(value);
+              setTypes({});
             }}
           />
         </FloatCard>
         {divider}
-        <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr} arrow onClick={() => setOpenTypeSelector(true)} />
+        <ListItem disabled={isOtherCategory || !category} title='类型' extraText={typeStr} arrow onClick={() => setOpenTypeSelector(true)} />
         <FloatCard
           isOpened={openTypeSelector}
           title="选择类型"
@@ -277,7 +298,7 @@ export default function AddProject() {
             hasBorder={false}
             columnNum={4}
             mode="rect"
-            data={MOVIE_TYPE_LIST.map((item) => ({ value: item.name, valueClassName: types[item.name] ? 'm5-grid-item-checked' : '' }))}
+            data={TYPES.map((item) => ({ value: item.name, valueClassName: types[item.name] ? 'm5-grid-item-checked' : '' }))}
             onClick={({ value }) => {
               const keys = Object.keys(types);
               if (!types[value]) {
@@ -403,7 +424,13 @@ function onHandleResponse(res) {
           : `../../static/icon/default-pic.svg`
       });
     }
-    return data;
+    return {
+      data,
+      success,
+    };
   }
-  return [];
+  return {
+    success,
+    error,
+  };
 }
