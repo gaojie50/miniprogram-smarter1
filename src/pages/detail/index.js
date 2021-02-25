@@ -44,7 +44,8 @@ export default class Detail extends React.Component {
       showCooperStatus: false,
       showPeople: false,
       showProjectFile: false,
-      loading: true
+      loading: true,
+      stopScroll: false,
     }
   }
 
@@ -194,7 +195,8 @@ export default class Detail extends React.Component {
       })
     } else {
       this.setState({
-        showProgress: true
+        showProgress: true,
+        stopScroll: true
       })
     }
   }
@@ -207,9 +209,9 @@ export default class Detail extends React.Component {
   }
 
   render() {
-    const { loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile } = this.state;
+    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile } = this.state;
     return (
-      <View className="detail">
+      <View className={stopScroll ? "detail stopScroll" : "detail"}>
         <View className="detail-top" id="top">
           <View className="fixed" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top < 0 ? '#FFFFFF':''}} >
             <View style={{height: statusBarHeight,}}></View>
@@ -224,7 +226,7 @@ export default class Detail extends React.Component {
             <View className="cooperStatus" style={ { 
               color: CooperStatus[ basicData.cooperStatus ].color
             } }
-              onClick={() => this.setState({showCooperStatus: !showCooperStatus})}
+              onClick={() => this.setState({showCooperStatus: !showCooperStatus, stopScroll: true})}
             >
               {loading ? '' : CooperStatus[ basicData.cooperStatus ].name}
               {loading ? '' : <Image className="cooper-img" src={basicData.cooperStatus < 3 ? `../../static/detail/cooper-arrow${basicData.cooperStatus}.svg` : '../../static/detail/cooper-arrow3.svg'} ></Image>}
@@ -235,11 +237,11 @@ export default class Detail extends React.Component {
               url: `/pages/detail/editProject/index?projectId=${basicData.projectId}`,
             })}><Image src={Edit} alt=""></Image></View>
           }
-            <View className="opt" onClick={() => this.setState({showProjectFile: true})}>
+            <View className="opt" onClick={() => this.setState({showProjectFile: true,stopScroll: true})}>
                <Image src={File} alt=""></Image>
                <Text>{fileData.length}</Text>
              </View>
-             <View className="opt" onClick={() => this.setState({showPeople: true})}>
+             <View className="opt" onClick={() => this.setState({showPeople: true, stopScroll: true})}>
              <Image src={People} alt=""></Image>
              <Text>{peopleData.length}</Text>
              </View>
@@ -249,6 +251,7 @@ export default class Detail extends React.Component {
           data={ basicData } 
           judgeRole={ judgeRole }
           keyData={ keyData }
+          changeStopScroll= { () => this.setState({stopScroll: !stopScroll})}
         />
         {
           judgeRole.role && judgeRole.role !== 2 ?  
@@ -287,10 +290,10 @@ export default class Detail extends React.Component {
           <View className="assess" style={{background: '#FD9C00', marginRight: '20px'}} onClick={this.bottomClick.bind(this, 'assess')}>发起评估</View>
           <View className="assess" style={{background: '#276FF0'}} onClick={this.bottomClick.bind(this, 'progress')}>添加进展</View>
         </View>
-        {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false })}} projectId={basicData.projectId} /> : null}
-        {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false})}></Cooper> : null}
-        {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false})}></FacePeople> : null}
-        {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false})}></ProjectFile> : null}
+        {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}
+        {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
+        {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
+        {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
       </View>
     )
   }

@@ -43,6 +43,21 @@
       height: 100vh;
       box-sizing: border-box;
     }
+    .noFiles {
+      margin-top: 250px;
+      width: 100%;
+      text-align: center;
+      .img {
+        width: 416px;
+        height: 220px;
+      }
+      .text {
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 28px;
+        color: #333333;
+      }
+    }
     .item {
       width: 100%;
       display: flex;

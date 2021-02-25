@@ -139,6 +139,10 @@
     }
   }
 }
+.stopScroll {
+  height: 100vh;
+  overflow: hidden;
+}
 .detail {
   position: relative;
   .bottom-fixed {
