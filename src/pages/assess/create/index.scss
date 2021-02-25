@@ -90,6 +90,11 @@ page image {
             color: #276FF0;
             font-weight: 500;
           }
+          .logo {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+          }
         }
       }
     }
@@ -176,34 +181,6 @@ page image {
         }
         .preview-btn {
           padding: 20px 0;
-        }
-      }
-    }
-  
-    .btn-wrap {
-      width: 100%;
-      height: 164px;
-      background: #FFFFFF;
-      box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      .publish-btn {
-        width: 690px;
-        background: #276FF0;
-        border-radius: 40px;
-        color: #fff;
-        font-size: 30px;
-        line-height: 80px;
-        text-align: center;
-        padding: 0;
-        margin-top: 16px;
-        &:active, &:visited {
-          background: #276FF0;
-        }
-        &[disabled] {
-          background: #F8F8F8;
-          color: #ccc;
         }
       }
     }

@@ -9,9 +9,7 @@
   bottom: 0;
   left: 0; 
   margin: auto;
-  button[type='primary']{
-    background: #276FF0;
-  }
+  
   .btn {
     width: 690px;
     background: #276FF0;
@@ -23,6 +21,13 @@
     padding: 0;
     &:active, &:visited {
       background: #276FF0;
+    }
+    &[type='primary']{
+      background: #276FF0;
+    }
+    &[disabled]{
+      background: #F8F8F8;
+      color: #ccc;
     }
   }
 }

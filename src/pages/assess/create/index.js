@@ -1,5 +1,5 @@
-import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components'
 import React from 'react';
+import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components'
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import envConfig from '../../../constant/env-config';
 import reqPacking from '@utils/reqPacking.js';
@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import Nodata from '@components/noData';
 import BriefInfo from '@components/briefInfo';
 import FixedButton from '@components/fixedButton';
+import projectConfig from '../../../constant/project-config';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import AtFloatLayout from '@components/m5/float-layout';
@@ -16,22 +17,23 @@ import '@components/m5/style/components/action-sheet.scss';
 import '@components/m5/style/components/float-layout.scss';
 import './index.scss'
 const { errorHandle } = utils;
+const { getEvaluationIcon } = projectConfig;
 
 const METHOD_LIST = [
   {
     name: '大纲评估',
     type: 1,
-    Icon: ''
+    icon: getEvaluationIcon(1)
   },
   {
     name: '剧本评估',
     type: 2,
-    Icon: ''
+    icon: getEvaluationIcon(2)
   },
   {
     name: '成片评估',
     type: 3,
-    Icon: ''
+    icon: getEvaluationIcon(3)
   }
 ]
 export default class _C extends React.Component {
@@ -111,7 +113,7 @@ export default class _C extends React.Component {
   titleChangeEvt = ({ target }) => {
     const curVal = target.value.replace(/\s+/g, "");
     return this.setState({ 
-      titleErrorTip: curVal.length > 20, 
+      titleErrorTip: (curVal.length > 20 || curVal.length == 0), 
       briefInfo: {
         ...this.state.briefInfo,
         projectEvaluationName: curVal,
@@ -173,9 +175,17 @@ export default class _C extends React.Component {
     const { projectId, filesChecked, primaryFilesChecked } = this.state;
     const that = this;
     Taro.chooseMessageFile({
+      count: 1,
       success (res) {
         const tempFile = res.tempFiles[0];
         const tempFilePath = tempFile.path;
+        if (tempFile.size > 1024 * 1024 * 1) {
+          Taro.showModal({
+            title: '提示',
+            content: '上传的文件应小于20M'
+          })
+          return false;
+        }
         Taro.showLoading({
           title: '上传中'
         });
@@ -385,7 +395,7 @@ export default class _C extends React.Component {
             value={ briefInfo.projectEvaluationName }
             onInput={ this.titleChangeEvt }
             onBlur={ this.titleBlurEvt } />}
-          {titleErrorTip ? <View className="error-tip">请输入20个字以内</View> : ""}
+          {titleErrorTip ? <View className="error-tip">请输入1-20个字</View> : ""}
         </View>
 
         <View className="desc-wrap">
@@ -404,7 +414,10 @@ export default class _C extends React.Component {
             {
               METHOD_LIST.map(item=>{
                 return (
-                  <View className={`method-item ${item.type === evaluationMethod ? 'active':''}`} onClick={()=>{this.evalMethodChange(item.type)}}>{item.name}</View>
+                  <View className={`method-item ${item.type === evaluationMethod ? 'active':''}`} onClick={()=>{this.evalMethodChange(item.type)}}>
+                  <Image className="logo" src={item.icon} />
+                  {item.name}
+                  </View>
                 )
               })
             }

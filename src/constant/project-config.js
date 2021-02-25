@@ -190,6 +190,16 @@ function getProjectStages() {
   ];
 }
 
+const EVALUATION_ICON_MAP = {
+  1: 'https://obj.pipi.cn/festatic/common/image/7eff50ccb663599a3d3612a8d013905a.png', //大纲
+  2: 'https://obj.pipi.cn/festatic/common/image/de6e54301adde64c267565d00a41b432.png', //剧本
+  3: 'https://obj.pipi.cn/festatic/common/image/99d5b94aa88d942a5142a21ef09cd65a.png'  // 成片
+}
+
+function getEvaluationIcon(method){
+  return EVALUATION_ICON_MAP[method];
+}
+
 function getEvaluationLabel(method) {
   const evaluationMethodArr = [
     { value: 1,label: '大纲评估' },
@@ -211,4 +221,5 @@ export default {
   getCooperStatus,
   getProjectStages,
   getEvaluationLabel,
+  getEvaluationIcon
 }

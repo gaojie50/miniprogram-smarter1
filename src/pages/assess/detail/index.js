@@ -26,6 +26,7 @@ export default function assessPage(){
   const [ projectRole, setProjectRole ] = useState(6);
   const [ loading, setLoading ] = useState(true);
   const [ questions, setQuestions ] = useState([]);
+  const [ finishNum, setFinishNum ] = useState(0);
   const [ rate, setRate ] = useState(0);
   const [ curEvalObj, setCurEvalObj ] = useState({});
   const [ contentHeight, setContentHeight ] = useState();
@@ -160,7 +161,7 @@ export default function assessPage(){
       return item;
     });
     let leng = innerQues.filter(item => item.finished).length;
-
+    setFinishNum(leng);
     setQuestions(innerQues);
     setRate(`${Math.round(leng / innerQues.length * 1000) / 10}%`);
   };
@@ -370,7 +371,7 @@ export default function assessPage(){
       </View>
       </ScrollView>
       <FixedButton className="submit-btn" onClick={handleSubmit}>
-        提交评估
+        {finishNum>0?`已完成${finishNum}题，`:''}提交评估
       </FixedButton>
     </View>
   );

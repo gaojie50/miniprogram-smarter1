@@ -2,17 +2,20 @@ import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/compo
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import TopBar from '@components/topBar';
+import LoginNotice from '@components/loginNotice';
 import dayjs, { Dayjs } from 'dayjs';
 import reqPacking from '../../../utils/reqPacking.js';
 import utils from '../../../utils/index';
 import _cloneDeep from 'lodash/cloneDeep';
 import _merge from 'lodash/merge';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
-import LoginNotice from '@components/loginNotice';
+import projectConfig from '../../../constant/project-config';
 import '../../../components/m5/style/components/icon.scss';
 import './index.scss';
 
 const { errorHandle, hexColorToRgba } = utils;
+const { getEvaluationLabel, getEvaluationIcon } = projectConfig;
+
 
 export default function assessPage(){
   
@@ -201,7 +204,7 @@ export default function assessPage(){
   }
 
   
-  const { projectFile=[], backColor, name='', pic } = briefInfo;
+  const { projectFile=[], backColor, name='', pic, categoryType } = briefInfo;
   const { round, initiator, startDate, roundTitle } = curEvalObj;
   const defaultPicUrl = 'https://obj.pipi.cn/festatic/common/image/90f5be009a6f7852f14f9553a14a3e35.png';
   const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPicUrl;
@@ -222,7 +225,7 @@ export default function assessPage(){
           <View className="briefinfo-wrap">
             <Image className="project-pic" src={coverPic}></Image>
             {name && <View className="project-name">《{name}》</View>}
-            {round && <View className="project-round">第{round}轮 / 剧本评估</View>}
+            {round && <View className="project-round">第{round}轮 / {getEvaluationLabel(categoryType)}</View>}
             { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
           </View>
 
@@ -233,7 +236,7 @@ export default function assessPage(){
                 (projectFile || []).map(item=>{
                   return (
                     <View className="file-item" onClick={()=>{handlePreviewFile(item.url, item.title)}}>
-                      <View className="logo"></View>
+                      <Image className="logo" src={getEvaluationIcon(categoryType)} />
                       <View className="file-info-wrap">
                         <View className="file-name">{item.title}</View>
                       </View>

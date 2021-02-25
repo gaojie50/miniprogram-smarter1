@@ -53,6 +53,32 @@
     }
     .content {
       padding: 30px 50px 100px 50px;
+      // 试题通用样式
+      .que-item{
+        position: relative;
+        margin-bottom: 60px;
+
+        // .required::before{
+        //   display: inline-block;
+        //   color: #f5222d;
+        //   font-size: 14px;
+        //   font-family: SimSun, sans-serif;
+        //   line-height: 1;
+        //   content: '*';
+        //   position: absolute;
+        //   left: -20px;
+        //   top: 6px;
+        // }
+
+        // .error-tip{
+        //   color: #f5222d;
+        //   font-size: 12px;
+        //   font-weight: 400;
+        //   text-align: left;
+        //   position: absolute;
+        // }
+      }
     }
+    
   }
 }
