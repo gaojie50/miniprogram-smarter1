@@ -15,6 +15,10 @@ import ProjectFile from './projectFile';
 import FacePeople from './people';
 import People from '@static/detail/people.png';
 import File from '@static/detail/file.png';
+import CooperArrow0 from '@static/detail/cooper-arrow0.svg';
+import CooperArrow1 from '@static/detail/cooper-arrow1.svg';
+import CooperArrow2 from '@static/detail/cooper-arrow2.svg';
+import CooperArrow3 from '@static/detail/cooper-arrow3.svg';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import './index.scss';
@@ -40,6 +44,7 @@ export default class Detail extends React.Component {
       showCooperStatus: false,
       showPeople: false,
       showProjectFile: false,
+      loading: true
     }
   }
 
@@ -62,16 +67,17 @@ export default class Detail extends React.Component {
       }
     }).exec()
   }
-  componentWillMount(){
+  componentDidShow(){
     this.fetchBasicData();
   }
 
   fetchBasicData() {
     const page = Taro.getCurrentPages();
     let param = {};
+
     page.forEach(x => {
       if(x.route === 'pages/detail/index') {
-        if(x.options.projectId && x.options.projectId !== '') {
+        if(x.options.projectId && x.options.projectId !== '' && x.options.projectId !== '0') {
           param.projectId = x.options.projectId
         } else {
           param.maoyanId = x.options.maoyanId
@@ -97,6 +103,7 @@ export default class Detail extends React.Component {
         data.newMainRole = newMainRole;
         this.setState({
           basicData: data,
+          loading: false
         }, () => {
           this.fetchJudgeRole();
           // this.fetchRole();
@@ -116,7 +123,6 @@ export default class Detail extends React.Component {
       }
     })
     .then(res => {
-      console.log(res,123)
       if(res.success) {
         this.setState({
           peopleData: res.data
@@ -201,7 +207,7 @@ export default class Detail extends React.Component {
   }
 
   render() {
-    const { basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile } = this.state;
+    const { loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile } = this.state;
     return (
       <View className="detail">
         <View className="detail-top" id="top">
@@ -220,26 +226,26 @@ export default class Detail extends React.Component {
             } }
               onClick={() => this.setState({showCooperStatus: !showCooperStatus})}
             >
-              {CooperStatus[ basicData.cooperStatus ].name}
-              <Image className="cooper-img" src={ArrowLeft}></Image>
+              {loading ? '' : CooperStatus[ basicData.cooperStatus ].name}
+              {loading ? '' : <Image className="cooper-img" src={basicData.cooperStatus < 3 ? `../../static/detail/cooper-arrow${basicData.cooperStatus}.svg` : '../../static/detail/cooper-arrow3.svg'} ></Image>}
             </View>
           {
             judgeRole.role === 2 ? null 
-            : <View className="edit" onClick={() => wx.navigateTo({
+             : <View className="edit" onClick={() => wx.navigateTo({
               url: `/pages/detail/editProject/index?projectId=${basicData.projectId}`,
             })}><Image src={Edit} alt=""></Image></View>
           }
             <View className="opt" onClick={() => this.setState({showProjectFile: true})}>
-              <Image src={File} alt=""></Image>
-              <Text>{fileData.length}</Text>
-            </View>
-            <View className="opt" onClick={() => this.setState({showPeople: true})}>
-            <Image src={People} alt=""></Image>
-            <Text>{peopleData.length}</Text>
-            </View>
-          </View>
-        </View>
-        <BasicData 
+               <Image src={File} alt=""></Image>
+               <Text>{fileData.length}</Text>
+             </View>
+             <View className="opt" onClick={() => this.setState({showPeople: true})}>
+             <Image src={People} alt=""></Image>
+             <Text>{peopleData.length}</Text>
+             </View>
+           </View>
+         </View>
+         <BasicData 
           data={ basicData } 
           judgeRole={ judgeRole }
           keyData={ keyData }
