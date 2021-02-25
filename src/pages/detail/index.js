@@ -15,10 +15,6 @@ import ProjectFile from './projectFile';
 import FacePeople from './people';
 import People from '@static/detail/people.png';
 import File from '@static/detail/file.png';
-import CooperArrow0 from '@static/detail/cooper-arrow0.svg';
-import CooperArrow1 from '@static/detail/cooper-arrow1.svg';
-import CooperArrow2 from '@static/detail/cooper-arrow2.svg';
-import CooperArrow3 from '@static/detail/cooper-arrow3.svg';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import './index.scss';
@@ -229,7 +225,7 @@ export default class Detail extends React.Component {
               onClick={() => this.setState({showCooperStatus: !showCooperStatus, stopScroll: true})}
             >
               {loading ? '' : CooperStatus[ basicData.cooperStatus ].name}
-              {loading ? '' : <Image className="cooper-img" src={basicData.cooperStatus < 3 ? `../../static/detail/cooper-arrow${basicData.cooperStatus}.svg` : '../../static/detail/cooper-arrow3.svg'} ></Image>}
+              {loading ? '' : <Image className="cooper-img" src={basicData.cooperStatus < 3 ? `../../static/detail/cooper-arrow${basicData.cooperStatus}.png` : '../../static/detail/cooper-arrow3.png'} ></Image>}
             </View>
           {
             judgeRole.role === 2 ? null 
