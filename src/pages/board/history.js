@@ -17,6 +17,12 @@ const UNITS = {
   '预估票房': formatNumber,
 }
 
+const HAS_YUAN = {
+  '制作成本': true,
+  '宣发费用': true,
+  '猫眼投资成本': true,
+}
+
 const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 
 export function UseHistory(props) {
@@ -106,14 +112,14 @@ export function ChangeHistory(props) {
           // const { num: num1, unit: unit1 } = 
           const rsl = UNITS[filedName](Number(oStr1), 'floor');
           if (rsl) {
-            oStr1 = `${rsl.num} ${rsl.unit}`;
+            oStr1 = `${rsl.num} ${rsl.unit}${HAS_YUAN[filedName] ? '元' : ''}`;
           }
         }
 
         if (oStr2) {
           const rsl = UNITS[filedName](Number(oStr2), 'floor');
           if (rsl) {
-            oStr2 = `${rsl.num} ${rsl.unit}`;
+            oStr2 = `${rsl.num} ${rsl.unit}${HAS_YUAN[filedName] ? '元' : ''}`;
           }
         }
       }
@@ -159,7 +165,7 @@ export function ChangeCard(props) {
           <View className="change-card-pre-symbol">
             前
           </View>
-          <View className={`change-card-pre-content`}>
+          <View className={`change-card-pre-content ${pre === '-' || !pre ? 'change-card-pre-content-no-line' : ''}`}>
             <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
               {pre}
             </Text>
