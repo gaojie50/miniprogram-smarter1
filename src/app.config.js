@@ -2,6 +2,7 @@ export default {
   pages: [
     'pages/list/index',
     'pages/welcome/index',
+    'pages/loginRedirect/index',
     'pages/searchProject/index',
     'pages/search/index',
     'pages/searchCompany/index',

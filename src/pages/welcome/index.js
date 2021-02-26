@@ -16,7 +16,8 @@ class _C extends React.Component {
     ),
     code: null,
     target: null,
-    isLogin: false
+    isLogin: false,
+    loading: false
   }
 
   onLoad = ({token, target}) => {
@@ -45,11 +46,18 @@ class _C extends React.Component {
   }
 
   getUserInfo = (e) => {
+    this.setState({ loading: true });
+    const that = this;
     Taro.getSetting({
       success: (res) => {
         if (res.authSetting['scope.userInfo'] && e.detail) {
           const { iv, encryptedData } = e.detail
-          return keepLogin({ iv, encryptedData, target: this.state.target || `/pages/list/index` });
+          keepLogin({ 
+            iv, encryptedData, target: this.state.target || `/pages/list/index` 
+          }).catch(()=>{
+            that.setState({ loading: false});
+          })
+          return;
         }
 
         Taro.showModal({
@@ -62,7 +70,7 @@ class _C extends React.Component {
   }
 
   render() {
-    const { titleHeight, isLogin } = this.state
+    const { titleHeight, isLogin, loading } = this.state
     return (
       <View className="welcome">
         <View style={'margin-top:' + titleHeight + 'px'}>
@@ -82,8 +90,10 @@ class _C extends React.Component {
             hoverClass="login-btn-hover"
             openType="getUserInfo"
             onGetuserinfo={this.getUserInfo}
+            disabled={loading}
+            loading={loading}
           >
-            立即登录
+            {loading ? '登录中' : '立即登录' }
           </Button>
         )}
         {isLogin && (

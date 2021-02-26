@@ -1,4 +1,4 @@
-const appkey = 'com.sankuai.keeper.data'
+const appkey = 'com.sankuai.movie.fe.smarter'
 const weixinAppTypeEnum = 5
 
 function getScheduleType(value) {

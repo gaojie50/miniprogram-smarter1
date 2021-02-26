@@ -27,7 +27,7 @@ function checkLogin() {
           Taro.setStorageSync('authinfo', data);
           setGlobalData('authinfo', data);
         }
-        resolve({ isLogin: success ? true : false, authInfo: data });
+        resolve({ isLogin: success ? true : false, authInfo: data,  error});
       }).catch(res=>{
         console.log('catch', res);
         reject(res);
