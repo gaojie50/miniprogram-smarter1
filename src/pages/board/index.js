@@ -46,6 +46,21 @@ const SYSTEM_BAR_TOP_PADDING = capsuleLocation.top;
 const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING;
 const STICKY_OFFSET = rpxTopx(186);
 
+const BOARD_HEAD_STYLE = {
+  height: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
+};
+
+const BOARD_HEAD_TITLE_STYLE = {
+  paddingTop: `${SYSTEM_BAR_TOP_PADDING}px`,
+  height: `${HEAD_HEIGHT}px`,
+};
+
+const BOARD_CONTENT_STYLE = {
+  paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
+  height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx - 112rpx)`,
+  marginBottom: `112rpx`,
+};
+
 const FILTER_ITEMS_INIT = () => (
   [
     {
@@ -360,16 +375,11 @@ export default function Board() {
       <Tab />
       <View className="board-header">
         <View
-          style={{
-            height: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
-          }}
+          style={BOARD_HEAD_STYLE}
         >
           <View
             className="board-header-title"
-            style={{
-              paddingTop: `${SYSTEM_BAR_TOP_PADDING}px`,
-              height: `${HEAD_HEIGHT}px`,
-            }}
+            style={BOARD_HEAD_TITLE_STYLE}
           >
             <Image
               className="board-header-search"
@@ -388,11 +398,7 @@ export default function Board() {
         id="board-list-scroll"
         className="board"
         scrollY
-        style={{
-          paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
-          height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx - 112rpx)`,
-          marginBottom: `112rpx`,
-        }}
+        style={BOARD_CONTENT_STYLE}
         onScroll={(e) => {
           checkIfStickyImmediately(e.detail.scrollTop);
           checkIfStickAfterAll();
