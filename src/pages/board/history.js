@@ -102,8 +102,8 @@ export function ChangeHistory(props) {
         const obj1 = JSON.parse(oldFiledValue || '{}');
         const obj2 = JSON.parse(newFiledValue || '{}');
 
-        oStr1 = obj1.startShowDate !== undefined ? `${obj1.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
-        oStr2 = obj2.startShowDate !== undefined ? `${obj2.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
+        oStr1 = obj1.startShowDate !== undefined && obj1.startShowDate !== 0 ? `${obj1.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
+        oStr2 = obj2.startShowDate !== undefined && obj2.startShowDate !== 0 ? `${obj2.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
         isDate= true;
       }
 
@@ -155,6 +155,9 @@ export function ChangeHistory(props) {
 
 export function ChangeCard(props) {
   const { title = '-', pre = '-', cur = '-', isDate = false  } = props;
+  if (isDate) {
+    console.log(pre);
+  }
   return (
     <View className="change-card">
       <View className="change-card-title">
