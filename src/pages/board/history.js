@@ -16,7 +16,6 @@ const UNITS = {
   '猫眼投资成本': formatNumber,
   '预估票房': formatNumber,
 }
-
 const HAS_YUAN = {
   '制作成本': true,
   '宣发费用': true,
@@ -109,15 +108,14 @@ export function ChangeHistory(props) {
 
       if (typeof UNITS[filedName] === 'function') {
         if (oStr1) {
-          // const { num: num1, unit: unit1 } = 
-          const rsl = UNITS[filedName](Number(oStr1), 'floor');
+          const rsl = UNITS[filedName]( filedName === '预估票房' ? Number(oStr1) / 100  : Number(oStr1) * 10000, 'floor');
           if (rsl) {
             oStr1 = `${rsl.num} ${rsl.unit}${HAS_YUAN[filedName] ? '元' : ''}`;
           }
         }
 
         if (oStr2) {
-          const rsl = UNITS[filedName](Number(oStr2), 'floor');
+          const rsl = UNITS[filedName]( filedName === '预估票房' ? Number(oStr2) / 100 : Number(oStr2) * 10000, 'floor');
           if (rsl) {
             oStr2 = `${rsl.num} ${rsl.unit}${HAS_YUAN[filedName] ? '元' : ''}`;
           }
@@ -155,9 +153,6 @@ export function ChangeHistory(props) {
 
 export function ChangeCard(props) {
   const { title = '-', pre = '-', cur = '-', isDate = false  } = props;
-  if (isDate) {
-    console.log(pre);
-  }
   return (
     <View className="change-card">
       <View className="change-card-title">
