@@ -510,7 +510,7 @@ const DEFAULT_ARR = NAME_MAPPING_ARR.map(({ name }) => {
 });
 
 function useStatusTab() {
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
   const activeCache = useRef(NAME_MAPPING_ARR[active]);
   const [data, setData] = useState(DEFAULT_ARR);
   const dataCache = useRef(DEFAULT_ARR);
