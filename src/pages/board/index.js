@@ -226,6 +226,9 @@ export default function Board() {
       projectStage,
       movieLocation,
       jobType,
+
+      member = [],
+      department = [],
     } = currentParams;
 
     let startDate, endDate;
@@ -263,6 +266,8 @@ export default function Board() {
       cooperateType: cooperateType.filter((item) => item.active).map((item) =>item.code),
       movieLocation: movieLocation.filter((item) => item.active).map((item) =>item.code),
       jobType: jobType.filter((item) => item.active).map((item) =>item.code),
+      member: member.filter((item) => item.active).map((item) =>item.code),
+      department: department.filter((item) => item.active).map((item) =>item.code),
     }).then((d) => {
       let { 
         newProjects = [],
@@ -617,12 +622,12 @@ function useBoardFilter(config = {}) {
     filterPanelPropsMixIn = {},
   } = config
 
-  console.log(filterPanelPropsMixIn)
   const [filterActive, setFilterActive] = useState('');
   const [params, setParams] = useState(null);
   const { option, Component: FilterPanel } = useFilterPanel({
     titleHeight: SCROLL_TOP_MARGIN + 20,
     filterActive,
+    filterPanelPropsMixIn,
     ongetFilterShow(v) {
       setFilterActive('');
       setParams(v);
@@ -638,6 +643,8 @@ function useBoardFilter(config = {}) {
     const has1 = option.projectStage.find((item) => item.active === true);
     const has2 = option.jobType.find((item) => item.active === true);
     const has3 = option.movieLocation.find((item) => item.active === true);
+    const has4 = option.member.find((item, i) => i !== 0 && item.active === true);
+    const has5 = option.department.find((item, i) => i !== 0 && item.active === true);
 
     if (dateOption) {
       arr[0].changed = true;
@@ -649,7 +656,7 @@ function useBoardFilter(config = {}) {
     if (hasCooperType) {
       arr[2].changed = true;
     }
-    if (has1 || has2 || has3) {
+    if (has1 || has2 || has3 || has4 || has5) {
       arr[3].changed = true;
     }
 
@@ -672,7 +679,7 @@ function useBoardFilter(config = {}) {
   const props = {
     filterActive,
     setFilterActive,
-    panel: <FilterPanel {...option} {...filterPanelPropsMixIn} />,
+    panel: <FilterPanel {...option} />,
     tabs: optionArr,
   }
 
@@ -910,6 +917,8 @@ function PureReq_ListInfo(params = {}) {
     cooperateType = [],
     movieLocation = [],
     jobType = [],
+    member = [],
+    department = [],
   } = params;
   return reqPacking(
     {
@@ -923,6 +932,8 @@ function PureReq_ListInfo(params = {}) {
         cooperType: cooperateType,
         movieSource: movieLocation,
         participation: jobType,
+        members: member,
+        departments: department,
       }
     },
     'server',

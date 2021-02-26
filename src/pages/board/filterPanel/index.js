@@ -466,6 +466,7 @@ export function useFilterPanel(config = {}) {
     titleHeight,
     filterActive,
     ongetFilterShow = noop,
+    filterPanelPropsMixIn,
   } = config;
   const [dateSet, setDateSet] = useState(DATE_INIT());
   const [projectType, setProjectType] = useState(PROJECT_TYPE_INIT());
@@ -473,6 +474,34 @@ export function useFilterPanel(config = {}) {
   const [projectStage, setProjectStage] = useState(PROJECT_STAGE_INIT());
   const [movieLocation, setMovieLocation] = useState(MOVIE_LOCATION_INIT());
   const [jobType, setJobType] = useState(JOB_TYPE_INIT());
+
+  const [member, setMember] = useState([
+    {
+      value: '所有成员',
+      active: true,
+      code: '',
+    },
+  ]);
+  const [department, setDepartment] = useState([
+    {
+      value: '所有部门',
+      active: true,
+      code: '',
+    },
+  ]);
+
+  useEffect(() => {
+    const { 
+      member,
+      department
+    } = filterPanelPropsMixIn;
+    setMember((v)=> {
+      return [v[0], ...member.map(({ label, value }) => ({ value: label, code: value, active: false }))];
+    })
+    setDepartment((v)=> {
+      return [v[0], ...department.map(({ label, value }) => ({ value: label, code: value, active: false }))];
+    })
+  }, [filterPanelPropsMixIn.department, filterPanelPropsMixIn.member]);
 
   const showDateSureBtn = useMemo(() => {
     return dateSet[3].checked === 'checked';
@@ -498,6 +527,27 @@ export function useFilterPanel(config = {}) {
     setMovieLocation(v5);
     setJobType(v6);
 
+    setMember((v) => {
+      v.forEach((item, i) => {
+        if (i === 0) {
+          item.active = true;
+        } else {
+          item.active = false;
+        }
+      })
+      return v;
+    })
+    setDepartment((v) => {
+      v.forEach((item, i) => {
+        if (i === 0) {
+          item.active = true;
+        } else {
+          item.active = false;
+        }
+      })
+      return v;
+    })
+
     let obj = {};
     let obj2 = {};
     if (time) {
@@ -519,7 +569,6 @@ export function useFilterPanel(config = {}) {
     };
   }, []);
 
-
   const option = {
     dateSet,
     setDateSet,
@@ -533,6 +582,15 @@ export function useFilterPanel(config = {}) {
     setMovieLocation,
     jobType,
     setJobType,
+
+    permission: filterPanelPropsMixIn.permission,
+
+    member,
+    setMember,
+
+    department,
+    setDepartment,
+
     showDateSureBtn,
 
     titleHeight,
@@ -656,6 +714,36 @@ export default class FilterPanel extends React.Component {
     this.props.setJobType([...newJobType])
   }
 
+  tapMember = (e) => {
+    const num = e.target.dataset.num;
+    const newMember = this.props.member;
+    if (num === 0) {
+      newMember.forEach((item, i) => {
+        if (i !== 0) item.active = false;
+      });
+      newMember[0].active = true;
+    } else {
+      newMember[num].active = !newMember[num].active;
+      newMember[0].active = false;
+    }
+    this.props.setMember([...newMember]);
+  }
+
+  tapDepartment = (e) => {
+    const num = e.target.dataset.num;
+    const newDepartment = this.props.department;
+    if (num === 0) {
+      newDepartment.forEach((item, i) => {
+        if (i !== 0) item.active = false;
+      });
+      newDepartment[0].active = true;
+    } else {
+      newDepartment[num].active = !newDepartment[num].active;
+      newDepartment[0].active = false;
+    }
+    this.props.setDepartment([...newDepartment]);
+  }
+
   filterReset = () => {
     const a = this.props.reset();
     // this.props.ongetFilterShow(a);
@@ -675,6 +763,9 @@ export default class FilterPanel extends React.Component {
       movieLocation,
       jobType,
 
+      member,
+      department,
+
     } = this.props;
 
     return {
@@ -686,6 +777,8 @@ export default class FilterPanel extends React.Component {
       dateSet,
       movieLocation,
       jobType,
+      member,
+      department,
     };
   }
 
@@ -717,6 +810,8 @@ export default class FilterPanel extends React.Component {
       member,
       department,
     } = this.props;
+
+    console.log(member);
 
     return (
       filterShow.length != 0 && (
@@ -880,14 +975,14 @@ export default class FilterPanel extends React.Component {
                               <View
                                 key={index}
                                 data-num={index}
-                                onClick={this.tapJobType}
+                                onClick={this.tapMember}
                                 className={
                                   "cost-wrap-item " +
                                   (item.active ? "filterPanelActive" : "")
                                 }
                                 style="margin-right: 20rpx;margin-bottom: 20rpx"
                               >
-                                {item.label}
+                                {item.value}
                               </View>
                             );
                           })}
@@ -898,12 +993,12 @@ export default class FilterPanel extends React.Component {
                       <>
                         <Text className="title">所属部门</Text>
                         <View className="cost-wrap">
-                          {jobType.map((item, index) => {
+                          {department.map((item, index) => {
                             return (
                               <View
                                 key={index}
                                 data-num={index}
-                                onClick={this.tapJobType}
+                                onClick={this.tapDepartment}
                                 className={
                                   "cost-wrap-item " +
                                   (item.active ? "filterPanelActive" : "")
