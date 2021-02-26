@@ -237,7 +237,7 @@ export default function AddProject(props, ref) {
   }, [name, category, cooperType, types, cooperState, isOtherCategory, hasOtherCooperType, customCategory, customCooperType])
 
   return (
-    <View className="basicInfo">
+    <View className="add-project basicInfo">
       <View
         style={{
           boxShadow: '0 2px 10px 0 rgba(0,0,0,0.02)',
