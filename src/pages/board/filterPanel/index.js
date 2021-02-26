@@ -811,8 +811,6 @@ export default class FilterPanel extends React.Component {
       department,
     } = this.props;
 
-    console.log(member);
-
     return (
       filterShow.length != 0 && (
         <View className="filterPanel">
