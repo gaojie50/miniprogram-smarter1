@@ -16,7 +16,6 @@ const textVoid = <Text style={{ color: '#CCCCCC' }}>请选择</Text>;
 const divider = <Divider />
 
 export default function KeyInfo(props, ref) {
-
   const keyRef = useRef({});
   const releaseTimeRef = useRef({});
 
@@ -51,8 +50,11 @@ export default function KeyInfo(props, ref) {
       <Text className="keyInfo-title">核心数据</Text>
       <View className="keyInfo-content">
         <ReleaseTimeWrap updateRef={updateRef} releaseTimeRef={releaseTimeRef} movieData={props.movieData} />
-        <KeyInput updateRef={updateRef} ref={keyRef} data={props.movieData}  type="expectBox" name="预估票房" text="万"></KeyInput>
-        {divider}
+        {
+          props.projectData.category === 3 ?
+          <Block><KeyInput updateRef={updateRef} ref={keyRef} data={props.movieData}  type="expectBox" name="预估票房" text="万"></KeyInput>
+          {divider}</Block> : null
+        }
         <KeyInput updateRef={updateRef} data={props.movieData} ref={keyRef} type="expectScore" name="预估评分" text="分"></KeyInput>
         {
           props.judgeRole.role === 1 ? 

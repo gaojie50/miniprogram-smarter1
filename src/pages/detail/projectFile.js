@@ -24,7 +24,11 @@ export default function ProjectFile(props) {
       <View className="file-item">
         <ScrollView className="scroll" scrollY>
         {
-          fileData.map((item, index) => {
+          fileData.length ===0 ? <View className="noFiles">
+            <Image className="img" src="../../static/detail/noFollows.png"></Image>
+            <View className="text">暂无项目文件</View>
+          </View> 
+          : fileData.map((item, index) => {
             return  <View className="item" key={index} onClick={() => handleFile(item)}>
             <Image className="left" src={Enclosure} alt=""></Image>
             <View className="right">
@@ -69,7 +73,7 @@ function handleFile(item) {
     })
   } else {
     Taro.showToast({
-      title: `暂不支持${fileType}格式文件预览`,
+      title: '暂不支持该格式预览',
       icon: 'none'
     })
   }

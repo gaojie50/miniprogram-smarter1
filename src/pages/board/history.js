@@ -11,10 +11,17 @@ const { formatNumber } = utils;
 
 const UNITS = {
   '猫眼份额': '%',
+  '预估评分': '分',
+  '评估得分': '分',
   '制作成本': formatNumber,
   '宣发费用': formatNumber,
   '猫眼投资成本': formatNumber,
   '预估票房': formatNumber,
+}
+const HAS_YUAN = {
+  '制作成本': true,
+  '宣发费用': true,
+  '猫眼投资成本': true,
 }
 
 const NO_AUTH_MESSAGE = '您没有该项目管理权限';
@@ -96,24 +103,23 @@ export function ChangeHistory(props) {
         const obj1 = JSON.parse(oldFiledValue || '{}');
         const obj2 = JSON.parse(newFiledValue || '{}');
 
-        oStr1 = obj1.startShowDate !== undefined ? `${obj1.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
-        oStr2 = obj2.startShowDate !== undefined ? `${obj2.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
+        oStr1 = obj1.startShowDate !== undefined && obj1.startShowDate !== 0 ? `${obj1.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
+        oStr2 = obj2.startShowDate !== undefined && obj2.startShowDate !== 0 ? `${obj2.startShowDate}`.replace(/^(\d{4})(\d{2})(\d{2})$/, ($1, $2, $3, $4) => `${$2}.${$3}.${$4}`) : '-';
         isDate= true;
       }
 
       if (typeof UNITS[filedName] === 'function') {
         if (oStr1) {
-          // const { num: num1, unit: unit1 } = 
-          const rsl = UNITS[filedName](Number(oStr1), 'floor');
+          const rsl = UNITS[filedName]( filedName === '预估票房' ? Number(oStr1) / 100  : Number(oStr1) * 10000, 'floor');
           if (rsl) {
-            oStr1 = `${rsl.num} ${rsl.unit}`;
+            oStr1 = `${rsl.num} ${rsl.unit}${HAS_YUAN[filedName] ? '元' : ''}`;
           }
         }
 
         if (oStr2) {
-          const rsl = UNITS[filedName](Number(oStr2), 'floor');
+          const rsl = UNITS[filedName]( filedName === '预估票房' ? Number(oStr2) / 100 : Number(oStr2) * 10000, 'floor');
           if (rsl) {
-            oStr2 = `${rsl.num} ${rsl.unit}`;
+            oStr2 = `${rsl.num} ${rsl.unit}${HAS_YUAN[filedName] ? '元' : ''}`;
           }
         }
       }
@@ -159,7 +165,7 @@ export function ChangeCard(props) {
           <View className="change-card-pre-symbol">
             前
           </View>
-          <View className={`change-card-pre-content`}>
+          <View className={`change-card-pre-content ${pre === '-' || !pre ? 'change-card-pre-content-no-line' : ''}`}>
             <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
               {pre}
             </Text>

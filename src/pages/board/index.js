@@ -37,10 +37,29 @@ Taro.setNavigationBarColor({
   backgroundColor: '#ffffff',
 })
 
+const SYSTEM_INFO = Taro.getSystemInfoSync();
+
+const bottomBarHeight = SYSTEM_INFO.safeArea.bottom - SYSTEM_INFO.safeArea.height;
+
 const HEAD_HEIGHT = capsuleLocation.bottom - capsuleLocation.top;
 const SYSTEM_BAR_TOP_PADDING = capsuleLocation.top;
 const SCROLL_TOP_MARGIN = HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING;
 const STICKY_OFFSET = rpxTopx(186);
+
+const BOARD_HEAD_STYLE = {
+  height: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
+};
+
+const BOARD_HEAD_TITLE_STYLE = {
+  paddingTop: `${SYSTEM_BAR_TOP_PADDING}px`,
+  height: `${HEAD_HEIGHT}px`,
+};
+
+const BOARD_CONTENT_STYLE = {
+  paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
+  height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx - 112rpx)`,
+  marginBottom: `112rpx`,
+};
 
 const FILTER_ITEMS_INIT = () => (
   [
@@ -221,6 +240,9 @@ export default function Board() {
       projectStage,
       movieLocation,
       jobType,
+
+      member = [],
+      department = [],
     } = currentParams;
 
     let startDate, endDate;
@@ -258,6 +280,8 @@ export default function Board() {
       cooperateType: cooperateType.filter((item) => item.active).map((item) =>item.code),
       movieLocation: movieLocation.filter((item) => item.active).map((item) =>item.code),
       jobType: jobType.filter((item) => item.active).map((item) =>item.code),
+      member: member.filter((item) => item.active).map((item) =>item.code),
+      department: department.filter((item) => item.active).map((item) =>item.code),
     }).then((d) => {
       let { 
         newProjects = [],
@@ -351,18 +375,19 @@ export default function Board() {
       <Tab />
       <View className="board-header">
         <View
-          style={{
-            height: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
-          }}
+          style={BOARD_HEAD_STYLE}
         >
-          <View className="board-header-title" style={{ paddingTop: `${SYSTEM_BAR_TOP_PADDING}px`, height: `${HEAD_HEIGHT}px` }}>
+          <View
+            className="board-header-title"
+            style={BOARD_HEAD_TITLE_STYLE}
+          >
             <Image
               className="board-header-search"
               src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
               onClick={() => {
                 Taro.navigateTo({
-                  url: '/pages/searchProject/index',
-                })
+                  url: "/pages/searchProject/index",
+                });
               }}
             />
             <Text className="board-header-title-text">项目看板</Text>
@@ -373,78 +398,82 @@ export default function Board() {
         id="board-list-scroll"
         className="board"
         scrollY
-        style={{
-          paddingTop: `calc(${SCROLL_TOP_MARGIN}px + 20rpx)`,
-          height: `calc(100vh - ${SCROLL_TOP_MARGIN}px - 20rpx - 112rpx)`,
-          marginBottom: `112rpx`,
-        }}
+        style={BOARD_CONTENT_STYLE}
         onScroll={(e) => {
           checkIfStickyImmediately(e.detail.scrollTop);
           checkIfStickAfterAll();
         }}
       >
-
         <View
           style={{
-            opacity: sticky ? '0' : 'initial',
+            opacity: sticky ? "0" : "initial",
           }}
         >
           {tab}
           {filter}
         </View>
         <View
-            style={{
-              position: 'fixed',
-              top: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
-              width: '100%',
-              zIndex: 4,
-              backgroundColor: '#fff',
-            visibility: sticky ? 'visible' : 'hidden',
+          style={{
+            position: "fixed",
+            top: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
+            width: "100%",
+            zIndex: 4,
+            backgroundColor: "#fff",
+            visibility: sticky ? "visible" : "hidden",
+            boxShadow: '0px 20rpx 20rpx -20rpx rgba(0,0,0,0.08)'
           }}
         >
           {tab_sticky}
           {filter_sticky}
         </View>
-        {
-          noData ? (
-            <View>
-              <NoData />
-            </View>
-          ) : (
-              <View>
-                {PROJECT_TYPE.map(({ name, key }, idx_1) => {
-                  if (!data?.[key]?.length > 0) return null;
-                  const arr = data?.[key] || [];
-                  return (
-                    <View>
-                      <View className="project-add-text">
-                        <Text>{`${name} ${arr.length}个`}</Text>
-                      </View>
-                      {arr.map((obj, i) => {
-                        if (obj?.projectStageStep?.length > 0) {
-                          obj.hasUpdate = true;
-                        }
-                        if (idx_1 === PROJECT_TYPE.length - 1 && i === arr.length - 1) {
-                          obj.style = {
-                            // paddingBottom: '150rpx'
-                          };
-                        }
-                        return <ProjectItem {...obj} />;
-                      })}
-                    </View>
-                  );
-                })}
-              </View>
-            )
-        }
-        <View className="board-float-button" style={{ bottom: `${112 + 30 }rpx` }}>
+        {noData ? (
+          <View>
+            <NoData />
+          </View>
+        ) : (
+          <View>
+            {PROJECT_TYPE.map(({ name, key }, idx_1) => {
+              if (!data?.[key]?.length > 0) return null;
+              const arr = data?.[key] || [];
+              return (
+                <View>
+                  <View className="project-add-text">
+                    <Text>{`${name} ${arr.length}个`}</Text>
+                  </View>
+                  {arr.map((obj, i) => {
+                    if (obj?.projectStageStep?.length > 0) {
+                      obj.hasUpdate = true;
+                    }
+                    if (
+                      idx_1 === PROJECT_TYPE.length - 1 &&
+                      i === arr.length - 1
+                    ) {
+                      obj.style = {
+                        paddingBottom: `${bottomBarHeight}px`
+                      };
+                    }
+                    return <ProjectItem {...obj} />;
+                  })}
+                </View>
+              );
+            })}
+          </View>
+        )}
+        <View
+          className="board-float-button"
+          style={{ bottom: `calc(${112 + 30 + 'rpx'} + ${bottomBarHeight}px)` }}
+        >
           <FButton
             onClick={() => {
-            Taro.navigateTo({
-              url: '/pages/addProject/index'
-            })
-          }}>
-            <Image className="board-float-button-image" src="https://p0.meituan.net/ingee/8d49c7b5fd67f053cb60b0bbf296d0a8588.png" />
+              Taro.navigateTo({
+                url: "/pages/addProject/index",
+              });
+            }}
+          >
+            <Image
+              className="board-float-button-image"
+              src="https://p0.meituan.net/ingee/8d49c7b5fd67f053cb60b0bbf296d0a8588.png"
+            />
           </FButton>
         </View>
       </ScrollView>
@@ -487,7 +516,7 @@ const DEFAULT_ARR = NAME_MAPPING_ARR.map(({ name }) => {
 });
 
 function useStatusTab() {
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
   const activeCache = useRef(NAME_MAPPING_ARR[active]);
   const [data, setData] = useState(DEFAULT_ARR);
   const dataCache = useRef(DEFAULT_ARR);
@@ -542,7 +571,7 @@ function NiceTab(props) {
   const { list = [], active, onClick, type = 'small' } = props;
 
   return (
-    <ScrollView className="board-tab" scrollX>
+    <View className={`board-tab ${type === 'small' ? 'board-tab-small' : ''}`}>
       {list.map((item, i) => {
         const {p1 = '-', p2 = '-', p3 = '部', p4 = '近7日', p5 = ''} = item;
         const className = `
@@ -589,7 +618,7 @@ function NiceTab(props) {
           </View>
         );
       })}
-    </ScrollView>
+    </View>
   );
 }
 
@@ -597,11 +626,13 @@ function useBoardFilter(config = {}) {
   const {
     filterPanelPropsMixIn = {},
   } = config
+
   const [filterActive, setFilterActive] = useState('');
   const [params, setParams] = useState(null);
   const { option, Component: FilterPanel } = useFilterPanel({
     titleHeight: SCROLL_TOP_MARGIN + 20,
     filterActive,
+    filterPanelPropsMixIn,
     ongetFilterShow(v) {
       setFilterActive('');
       setParams(v);
@@ -617,6 +648,8 @@ function useBoardFilter(config = {}) {
     const has1 = option.projectStage.find((item) => item.active === true);
     const has2 = option.jobType.find((item) => item.active === true);
     const has3 = option.movieLocation.find((item) => item.active === true);
+    const has4 = option.member.find((item, i) => i !== 0 && item.active === true);
+    const has5 = option.department.find((item, i) => i !== 0 && item.active === true);
 
     if (dateOption) {
       arr[0].changed = true;
@@ -628,7 +661,7 @@ function useBoardFilter(config = {}) {
     if (hasCooperType) {
       arr[2].changed = true;
     }
-    if (has1 || has2 || has3) {
+    if (has1 || has2 || has3 || has4 || has5) {
       arr[3].changed = true;
     }
 
@@ -651,7 +684,7 @@ function useBoardFilter(config = {}) {
   const props = {
     filterActive,
     setFilterActive,
-    panel: <FilterPanel {...option} {...filterPanelPropsMixIn} />,
+    panel: <FilterPanel {...option} />,
     tabs: optionArr,
   }
 
@@ -889,6 +922,8 @@ function PureReq_ListInfo(params = {}) {
     cooperateType = [],
     movieLocation = [],
     jobType = [],
+    member = [],
+    department = [],
   } = params;
   return reqPacking(
     {
@@ -902,6 +937,8 @@ function PureReq_ListInfo(params = {}) {
         cooperType: cooperateType,
         movieSource: movieLocation,
         participation: jobType,
+        members: member,
+        departments: department,
       }
     },
     'server',

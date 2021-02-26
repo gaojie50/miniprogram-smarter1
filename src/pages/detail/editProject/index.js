@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback, forwardRef, useRef } from 'react';
-import { View } from '@tarojs/components';
+import { View, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import { Search, projectSearch, searchRole } from './search.js';
@@ -45,7 +45,6 @@ export default function EditProject() {
   }, [projectId])
 
   const submit = useCallback(() => {
-    console.log(projectId,keyDataRef, basicDateRef, 111)
     let {name, category, t1, isOtherCategory, cooperType, customCategory, cooperStatus, type = [], customCooperType } = basicDateRef.current;
     const {scheduleType, startDate, endDate, advertisingCosts, expectBox, expectScore, myInvestment, myShare, productionCosts} = keyDataRef.current;
     if(type === false) {
@@ -156,7 +155,7 @@ export default function EditProject() {
   return (
     <View className="editProject">
       <BasicInfo ref={basicDateRef} movieData={movieList} projectData={projectInfoList} />
-      <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} />
+      <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} projectData={projectInfoList} />
       <View className="releaseTime-submit">
           <View className="releaseTime-submit-btn" onClick={submit}>保存</View>
       </View>

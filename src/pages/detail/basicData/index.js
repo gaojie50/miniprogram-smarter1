@@ -1,7 +1,7 @@
-import { View, Image, Text } from '@tarojs/components';
+import { View, Image, Text, ScrollView } from '@tarojs/components';
 import React from 'react';
 import { CategoryList, BasicItem } from '../constant';
-import { AtFloatLayout } from '@components/m5';
+import FloatCard from '@components/m5/float-layout';
 import Cover from '@static/detail/cover.png';
 import Close from '@static/close.png';
 import ReaseTime from './releaseTime';
@@ -18,12 +18,19 @@ export default class BasicData extends React.Component {
   }
 
   handleClick = () => {
+    this.props.changeStopScroll();
     this.setState({
       showFloat: true
     })
   }
 
+  handleTochMove = e => {
+    e.preventDefault()
+        e.stopPropagation()
+  }
+
   handleClose = () => {
+    this.props.changeStopScroll()
     this.setState({
       showFloat: false
     })
@@ -75,18 +82,20 @@ export default class BasicData extends React.Component {
         </View>
         {
           this.state.showFloat && 
-          <AtFloatLayout className="float" isOpened>
+          <FloatCard className="float" isOpened onClose={this.handleClose}>
             <View className="title">
               <Text className="text">项目基础信息</Text>
               <View className="img" onClick={this.handleClose}><Image src={Close} alt=""></Image></View>
             </View>
+            <ScrollView className="content-scroll" scrollY>
             {
               BasicItem.map((item, index) => {
                 return data[item.key] && data[item.key].length > 0 ? <View key={index} className="line"><Text className="name">{item.name}：</Text>{Array.isArray(data[item.key]) ? data[item.key].join('/') : data[item.key]}</View> : ''
               })
             }
-          </AtFloatLayout>
-        } 
+            </ScrollView>
+          </FloatCard>
+        }
       </View>
     )
   }
