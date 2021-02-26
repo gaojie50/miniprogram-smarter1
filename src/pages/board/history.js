@@ -11,6 +11,8 @@ const { formatNumber } = utils;
 
 const UNITS = {
   '猫眼份额': '%',
+  '预估评分': '分',
+  '评估得分': '分',
   '制作成本': formatNumber,
   '宣发费用': formatNumber,
   '猫眼投资成本': formatNumber,
