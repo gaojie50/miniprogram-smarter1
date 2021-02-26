@@ -18,12 +18,19 @@ export default class BasicData extends React.Component {
   }
 
   handleClick = () => {
+    this.props.changeStopScroll();
     this.setState({
       showFloat: true
     })
   }
 
+  handleTochMove = e => {
+    e.preventDefault()
+        e.stopPropagation()
+  }
+
   handleClose = () => {
+    this.props.changeStopScroll()
     this.setState({
       showFloat: false
     })
@@ -75,7 +82,7 @@ export default class BasicData extends React.Component {
         </View>
         {
           this.state.showFloat && 
-          <AtFloatLayout className="float" isOpened>
+          <AtFloatLayout className="float" isOpened onClose={this.handleClose}>
             <View className="title">
               <Text className="text">项目基础信息</Text>
               <View className="img" onClick={this.handleClose}><Image src={Close} alt=""></Image></View>
@@ -86,7 +93,7 @@ export default class BasicData extends React.Component {
               })
             }
           </AtFloatLayout>
-        } 
+        }
       </View>
     )
   }
