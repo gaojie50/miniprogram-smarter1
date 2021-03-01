@@ -783,7 +783,7 @@ function ProjectItem(props) {
     estimateBox,
     estimateScore,
     scheduleType,
-    score = '8.5',
+    score,
     projectStageStep = [],
     hasUpdate = false,
     projectId,
@@ -827,7 +827,7 @@ function ProjectItem(props) {
             ) : (
               <View className="project-item-title-predict-yellow">
                 评估
-                <Text className="project-item-title-predict-num">{estimateScore || '-'}</Text>
+                <Text className="project-item-title-predict-num">{score || '-'}</Text>
                 分
               </View>
             )
@@ -838,10 +838,8 @@ function ProjectItem(props) {
             {cooperType.join(' / ')}
           </View>
           {
-            type === 3 ? (
+            type === 3 && (
               estimateScore && <View className="project-item-score">猫眼评分 {estimateScore} 分</View>
-            ) : (
-              score && <View className="project-item-score">评估总得分 {score} 分</View>
             )
           }
         </View>
