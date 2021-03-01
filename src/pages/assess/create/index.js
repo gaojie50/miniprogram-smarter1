@@ -7,6 +7,7 @@ import utils from '@utils/index';
 import _cloneDeep from 'lodash/cloneDeep';
 import dayjs from 'dayjs';
 import Nodata from '@components/noData';
+import NoAccess from '@components/noAccess';
 import BriefInfo from '@components/briefInfo';
 import FixedButton from '@components/fixedButton';
 import projectConfig from '../../../constant/project-config';
@@ -36,6 +37,7 @@ const METHOD_LIST = [
     icon: getEvaluationIcon(3)
   }
 ]
+const AUTH_ID = 95130;
 export default class _C extends React.Component {
   state = {
     projectId: '',
@@ -51,13 +53,18 @@ export default class _C extends React.Component {
     isSubmitting: false,
     uploadSelectorIsOpen: false,
     fileSelectorIsOpen: false,
+    hasPermission: false
   }
 
   componentDidMount(){
     const { projectId } = getCurrentInstance().router.params;
     this.setState({ projectId });
-    this.fetchBriefInfo(projectId);
-    this.fetchProjectProfile(projectId);
+    const authInfo = Taro.getStorageSync('authinfo');
+    if( authInfo?.authIds?.includes(AUTH_ID)){
+      this.setState({hasPermission: true});
+      this.fetchBriefInfo(projectId);
+      this.fetchProjectProfile(projectId);
+    }
   }
 
   fetchProjectProfile = projectId => {
@@ -366,173 +373,184 @@ export default class _C extends React.Component {
       filesChecked,
       isSubmitting,
       uploadSelectorIsOpen,
-      fileSelectorIsOpen
+      fileSelectorIsOpen,
+      hasPermission
     } = this.state;
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
     const templateList = briefInfo.tempList || [];
     const { name, roundNum, pic } = briefInfo;
     return (
       <View className="assess-create-page">
-        <BriefInfo 
-          name={ name }
-          pic={ pic }
-          roundNum={ roundNum }
-          text = {`第${roundNum || '-'}轮`}
-        />
-        <View className="create-wrap">
-        <View  className="title-wrap">
-          {!editorEvaluationName && 
-          <View className="title">
-            {briefInfo.projectEvaluationName}
-            <View className="edit-btn-wrap" onClick={this.editorTitle}>
-              <mp-icon type="outline" icon="pencil" size={24} onClick={ this.editorTitle }>编辑</mp-icon>
-            </View>
-          </View>}
-          {editorEvaluationName && <Input
-            className={ `title-input ${titleErrorTip ? "error" : ""}` }
-            type="text"
-            autoFocus
-            value={ briefInfo.projectEvaluationName }
-            onInput={ this.titleChangeEvt }
-            onBlur={ this.titleBlurEvt } />}
-          {titleErrorTip ? <View className="error-tip">请输入1-20个字</View> : ""}
-        </View>
-
-        <View className="desc-wrap">
-          <Textarea
-            placeholder="请填写评估说明，最多200字"
-            onInput={ this.despChangeEvt }
-            className={ `desc-input ${despErrorTip ? "error" : ""} description` } 
-            maxlength={250}
+      {
+        !hasPermission && (<NoAccess tittle="暂无项目管理权限" titleColor="#333" contentColor="#333" />)
+      }
+      {
+        hasPermission && (
+          <Block>
+            <BriefInfo 
+            name={ name }
+            pic={ pic }
+            roundNum={ roundNum }
+            text = {`第${roundNum || '-'}轮`}
           />
-        {despErrorTip ? <View className="error-tip">请输入200个字以内</View> : ""}
-        </View>
+          <View className="create-wrap">
+          <View  className="title-wrap">
+            {!editorEvaluationName && 
+            <View className="title">
+              {briefInfo.projectEvaluationName}
+              <View className="edit-btn-wrap" onClick={this.editorTitle}>
+                <mp-icon type="outline" icon="pencil" size={24} onClick={ this.editorTitle }>编辑</mp-icon>
+              </View>
+            </View>}
+            {editorEvaluationName && <Input
+              className={ `title-input ${titleErrorTip ? "error" : ""}` }
+              type="text"
+              autoFocus
+              value={ briefInfo.projectEvaluationName }
+              onInput={ this.titleChangeEvt }
+              onBlur={ this.titleBlurEvt } />}
+            {titleErrorTip ? <View className="error-tip">请输入1-20个字</View> : ""}
+          </View>
 
-        <View className="evaluation-method-wrap">
-          <Text className="evaluation-title">选择评估方式</Text>
-          <View className="method-list-wrap">
+          <View className="desc-wrap">
+            <Textarea
+              placeholder="请填写评估说明，最多200字"
+              onInput={ this.despChangeEvt }
+              className={ `desc-input ${despErrorTip ? "error" : ""} description` } 
+              maxlength={250}
+            />
+          {despErrorTip ? <View className="error-tip">请输入200个字以内</View> : ""}
+          </View>
+
+          <View className="evaluation-method-wrap">
+            <Text className="evaluation-title">选择评估方式</Text>
+            <View className="method-list-wrap">
+              {
+                METHOD_LIST.map(item=>{
+                  return (
+                    <View className={`method-item ${item.type === evaluationMethod ? 'active':''}`} onClick={()=>{this.evalMethodChange(item.type)}}>
+                    <Image className="logo" src={item.icon} />
+                    {item.name}
+                    </View>
+                  )
+                })
+              }
+            </View>
+          </View>
+
+          <View className="upload-attachment">
+          {
+            filesCheckedInfoArr.length > 0 && filesCheckedInfoArr.map(file =>
+              <View key={ 1 } className="file-wrap">
+                <View className="file-info">
+                  <Text className="file-name">{file.profileName}</Text>
+                  <Text className="file-size">{file.profileSize}</Text>
+                </View>
+                <View className="delete-btn" onClick={ () => this.handleDelete(file.profileId, "profile") }>
+                  <mp-icon type="outline" icon="delete" color="#333" size={20}></mp-icon>
+                </View>
+              </View>
+              )
+          }
+          {
+            evaluationMethod != 3 ?
+              <Block>
+                <View className={`upload-btn ${filesCheckedInfoArr.length>0 ? 'mini' : ''}`} onClick={this.handleUpload}>{filesCheckedInfoArr.length > 0 ? '继续添加':'上传附件'}</View>
+              </Block> :
+              <Text className="no-need">确保您已组织线下观看，此处无需上传附件</Text>
+          }
+          </View>
+          
+          <View className="template-select-wrap">
+            <View className="title">选择评估模板</View>
             {
-              METHOD_LIST.map(item=>{
+              templateList.length > 0 ? 
+              templateList.map((item,index)=>{
                 return (
-                  <View className={`method-item ${item.type === evaluationMethod ? 'active':''}`} onClick={()=>{this.evalMethodChange(item.type)}}>
-                  <Image className="logo" src={item.icon} />
-                  {item.name}
+                  <View className={`template-item ${tempId===item.tempId? 'active':''}`} key={item.tempId} onClick={()=>{this.handleChangeTemp(item.tempId)}}>
+                    <View className="template-name">{index+1}、{item.title}</View>
+                    <View className="preview-btn" onClick={(event)=>{this.handlePreview(event, item.tempId)}}>预览</View>
                   </View>
-                )
+                );
               })
+              :(
+                <View className="no-template-note">
+                  <Nodata text="暂无模板可选" />
+                </View>
+              )
             }
           </View>
-        </View>
 
-        <View className="upload-attachment">
-        {
-          filesCheckedInfoArr.length > 0 && filesCheckedInfoArr.map(file =>
-            <View key={ 1 } className="file-wrap">
-              <View className="file-info">
-                <Text className="file-name">{file.profileName}</Text>
-                <Text className="file-size">{file.profileSize}</Text>
-              </View>
-              <View className="delete-btn" onClick={ () => this.handleDelete(file.profileId, "profile") }>
-                <mp-icon type="outline" icon="delete" color="#333" size={20}></mp-icon>
-              </View>
-            </View>
-            )
-        }
-        {
-          evaluationMethod != 3 ?
-            <Block>
-              <View className={`upload-btn ${filesCheckedInfoArr.length>0 ? 'mini' : ''}`} onClick={this.handleUpload}>{filesCheckedInfoArr.length > 0 ? '继续添加':'上传附件'}</View>
-            </Block> :
-            <Text className="no-need">确保您已组织线下观看，此处无需上传附件</Text>
-        }
-        </View>
-        
-        <View className="template-select-wrap">
-          <View className="title">选择评估模板</View>
-          {
-            templateList.length > 0 ? 
-            templateList.map((item,index)=>{
-              return (
-                <View className={`template-item ${tempId===item.tempId? 'active':''}`} key={item.tempId} onClick={()=>{this.handleChangeTemp(item.tempId)}}>
-                  <View className="template-name">{index+1}、{item.title}</View>
-                  <View className="preview-btn" onClick={(event)=>{this.handlePreview(event, item.tempId)}}>预览</View>
-                </View>
-              );
-            })
-            :(
-              <View className="no-template-note">
-                <Nodata text="暂无模板可选" />
-              </View>
-            )
-          }
-        </View>
+          <FixedButton 
+            className="publish-btn" 
+            disabled={isSubmitting || titleErrorTip || despErrorTip ? true : false} 
+            onClick={this.handleFinish}
+            loading={ isSubmitting }
+          >发布评估</FixedButton>
 
-        <FixedButton 
-          className="publish-btn" 
-          disabled={isSubmitting || titleErrorTip || despErrorTip ? true : false} 
-          onClick={this.handleFinish}
-          loading={ isSubmitting }
-        >发布评估</FixedButton>
+          <AtActionSheet 
+            className="uplaod-action-sheet"
+            isOpened={uploadSelectorIsOpen} 
+            cancelText='取消'
+            onClose={ this.handleUploadSelectorClose }
+            onCancel={ this.handleUploadSelectorClose } 
+          >
+            <AtActionSheetItem onClick={ this.uploadFromProjectFile}>
+              从项目文件中选择
+            </AtActionSheetItem>
+            <AtActionSheetItem onClick={ this.uploadFromMessage }>
+              从聊天中选择
+            </AtActionSheetItem>
+          </AtActionSheet>
 
-        <AtActionSheet 
-          className="uplaod-action-sheet"
-          isOpened={uploadSelectorIsOpen} 
-          cancelText='取消'
-          onClose={ this.handleUploadSelectorClose }
-          onCancel={ this.handleUploadSelectorClose } 
-        >
-          <AtActionSheetItem onClick={ this.uploadFromProjectFile}>
-            从项目文件中选择
-          </AtActionSheetItem>
-          <AtActionSheetItem onClick={ this.uploadFromMessage }>
-            从聊天中选择
-          </AtActionSheetItem>
-        </AtActionSheet>
-
-        <AtFloatLayout
-          className="file-select-list"
-          isOpened={ fileSelectorIsOpen }
-          title="从项目文件中选择"
-          onClose={this.handleFileSelectorClose}
-          footer={<View className="btn-wrap">
-                    <Button 
-                      className="select-sure-btn" 
-                      onClick={this.checkedFiles}
-                    >确定</Button>
+          <AtFloatLayout
+            className="file-select-list"
+            isOpened={ fileSelectorIsOpen }
+            title="从项目文件中选择"
+            onClose={this.handleFileSelectorClose}
+            footer={<View className="btn-wrap">
+                      <Button 
+                        className="select-sure-btn" 
+                        onClick={this.checkedFiles}
+                      >确定</Button>
+                    </View>
+                  }
+          >
+            <View className="content-wrap">
+            {
+              projectProfile.length === 0 && (
+                <Nodata text="暂无文件可选" />
+              )
+            }
+            {
+              projectProfile.map(({
+                profileId, profileName, uploader, uploadTime, profileSize
+              }) => <View key={ profileId } className="file-item-wrap">
+                <View className="left-info-wrap">
+                  <Text className="file-name">{profileName}</Text>
+                  <View className="message">
+                    <Text className="uploader">{uploader}</Text>
+                    <Text className="upload-time">{dayjs(uploadTime).format('YYYY-MM-DD HH:mm')}</Text>
+                    <Text className="upload-size">{profileSize}</Text>
                   </View>
-                 }
-        >
-          <View className="content-wrap">
-          {
-            projectProfile.length === 0 && (
-              <Nodata text="暂无文件可选" />
-            )
-          }
-          {
-            projectProfile.map(({
-              profileId, profileName, uploader, uploadTime, profileSize
-            }) => <View key={ profileId } className="file-item-wrap">
-              <View className="left-info-wrap">
-                <Text className="file-name">{profileName}</Text>
-                <View className="message">
-                  <Text className="uploader">{uploader}</Text>
-                  <Text className="upload-time">{dayjs(uploadTime).format('YYYY-MM-DD HH:mm')}</Text>
-                  <Text className="upload-size">{profileSize}</Text>
                 </View>
-              </View>
-              <Button 
-                onClick={() => this.fileChecked(profileId)}
-                className={`select-btn ${primaryFilesChecked.includes(profileId)? 'selected':''}`}
-              >
-                {primaryFilesChecked.includes(profileId) ?'取消':'选择'}
-              </Button>
-            </View>)
-          }
-          </View>
-        </AtFloatLayout>
+                <Button 
+                  onClick={() => this.fileChecked(profileId)}
+                  className={`select-btn ${primaryFilesChecked.includes(profileId)? 'selected':''}`}
+                >
+                  {primaryFilesChecked.includes(profileId) ?'取消':'选择'}
+                </Button>
+              </View>)
+            }
+            </View>
+          </AtFloatLayout>
+          
+        </View>
         
-      </View>
-      </View>
+          </Block>
+        )
+      }
+        </View>
     )
   }
 }

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import TopBar from '@components/topBar';
 import LoginNotice from '@components/loginNotice';
+import NoAccess from '@components/noAccess';
 import dayjs, { Dayjs } from 'dayjs';
 import reqPacking from '../../../utils/reqPacking.js';
 import utils from '../../../utils/index';
@@ -15,7 +16,7 @@ import './index.scss';
 
 const { errorHandle, hexColorToRgba } = utils;
 const { getEvaluationLabel, getEvaluationIcon } = projectConfig;
-
+const AUTH_ID = 95130;
 
 export default function assessPage(){
   
@@ -25,6 +26,7 @@ export default function assessPage(){
   const [ curEvalObj, setCurEvalObj ] = useState({});
   const [ canEvaluate, setCanEvaluate ] = useState( false )
   const [ result, setResult ] = useState({});
+  const [ hasPermission, setHasPermission ] = useState( false );
   
   const isLogin = Taro.getStorageSync('token');
   const { projectId, roundId } = getCurrentInstance().router.params;
@@ -35,15 +37,19 @@ export default function assessPage(){
   );
 
   useEffect(()=>{
-
     if(isLogin){
-      setLoading( true );
-      fetchResult();
-      fetchRole();
-      fetchBrifInfo();
-      fetchEveluationList();
+      const authInfo = Taro.getStorageSync('authinfo');
+      console.log(authInfo);
+      if( authInfo?.authIds?.includes(AUTH_ID)){
+        setHasPermission(true);
+        setLoading( true );
+        fetchResult();
+        fetchRole();
+        fetchBrifInfo();
+        fetchEveluationList();
+      }
+      
     }
-   
   }, [])
 
   const fetchResult = () => {
@@ -217,9 +223,15 @@ export default function assessPage(){
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>
       <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
       <TopBar background="transparent" hasBack={true} onBack={ handleBack } />
-      {!isLogin ?(
+      {!isLogin && (
         <LoginNotice target={`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`} />
-      ) : (
+      )}
+      {
+       isLogin && !hasPermission && (
+        <NoAccess title="暂无评估权限" />
+       )
+      }
+      { isLogin && hasPermission && (
         <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`}}>
           <View className="content-container">
           <View className="briefinfo-wrap">
@@ -248,7 +260,7 @@ export default function assessPage(){
             </View>
           </View>
           
-          {canEvaluate && !result.evaluated && <Button className="start-btn" onClick={handleStartAssess}>开始评估</Button>}
+          {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!result.evaluated? '开始评估': '查看结果'}</Button>}
         </View>
       </View>
       )}
