@@ -158,6 +158,7 @@ export default class Detail extends React.Component {
           this.setState({
             judgeRole: data
           });
+          this.refs.keyData.fetchKeyData();
           if(data.role === 2) {
             this.setState({
               current: 1,
@@ -252,6 +253,7 @@ export default class Detail extends React.Component {
         {
           judgeRole.role && judgeRole.role !== 2 ?  
           <KeyData 
+            ref="keyData"
             basicData={ basicData } 
             keyData={ keyData } 
             judgeRole={ judgeRole }
@@ -278,7 +280,7 @@ export default class Detail extends React.Component {
               <EvaluationList projectId={ basicData.projectId } />
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
-              {basicData.projectId && <UseHistory projectId={ basicData.projectId }></UseHistory>}
+              {basicData.projectId && <UseHistory ref="history" projectId={ basicData.projectId }></UseHistory>}
             </AtTabsPane>
           </AtTabs>
         </View>

@@ -10,11 +10,8 @@ export default class KeyData extends React.Component {
   state = {
     keyData: {}
   }
-  componentDidMount() {
-    this.fetchKeyData()
-  }
 
-  fetchKeyData() {
+  fetchKeyData = () => {
     const { basicData, changeKeyData } = this.props;
     reqPacking({
       url: '/api/management/keyData',
