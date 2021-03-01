@@ -254,8 +254,8 @@ export default function Board() {
           customStartDate,
           customEndDate,
         } = currentParams.dtPickerOption;
-        startDate = +handleNewDate(customStartDate.value);
-        endDate = +handleNewDate(customEndDate.value);
+        startDate = +new Date(+handleNewDate(customStartDate.value)).setHours(0,0,0,0);
+        endDate = +new Date(+handleNewDate(customEndDate.value)).setHours(23, 59, 59, 999);
       } else {
         const { startDate: sd, endDate: ed } = foundDate.value();
         startDate = sd;
@@ -291,10 +291,9 @@ export default function Board() {
 
       if (projectStageLocalFilter) {
         if (newProjects) newProjects = newProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
-        // noChangeProjects = noChangeProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
+        // if (noChangeProjects) noChangeProjects = noChangeProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
         if (updateProjects) updateProjects = updateProjects.filter((item) => item.projectStageStep.some((val) => projectStageLocalFilter[val.projectStage]));
       }
-
 
       const nlength = newProjects.length + noChangeProjects.length + updateProjects.length;
 
@@ -784,7 +783,7 @@ function ProjectItem(props) {
     estimateBox,
     estimateScore,
     scheduleType,
-    score = '8.5',
+    score,
     projectStageStep = [],
     hasUpdate = false,
     projectId,
@@ -828,7 +827,7 @@ function ProjectItem(props) {
             ) : (
               <View className="project-item-title-predict-yellow">
                 评估
-                <Text className="project-item-title-predict-num">{estimateScore || '-'}</Text>
+                <Text className="project-item-title-predict-num">{score || '-'}</Text>
                 分
               </View>
             )
@@ -839,7 +838,9 @@ function ProjectItem(props) {
             {cooperType.join(' / ')}
           </View>
           {
-            score && <View className="project-item-score">{score}分</View>
+            type === 3 && (
+              estimateScore && <View className="project-item-score">猫眼评分 {estimateScore} 分</View>
+            )
           }
         </View>
         <View className="project-item-date">
@@ -938,7 +939,7 @@ function PureReq_ListInfo(params = {}) {
         movieSource: movieLocation,
         participation: jobType,
         members: member,
-        departments: department,
+        department: department,
       }
     },
     'server',
