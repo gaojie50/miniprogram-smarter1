@@ -101,8 +101,11 @@ export default function AddProject() {
     setLoading(true);
     await PureReq_Search_Movie({
       keyword: val
-    }).then((data) => {
-      setData(data);
+    }).then(({ success, data }) => {
+      if (success) { setData(data); }
+      else {
+        setData([]);
+      }
     });
     setLoading(false);
   }, 800), []);
