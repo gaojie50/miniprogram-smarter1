@@ -2,11 +2,12 @@ import Taro from "@tarojs/taro";
 import envConfig from "./constant/env-config.js";
 import reqPacking from "./utils/reqPacking.js";
 
+const systemInfo = Taro.getSystemInfoSync();
 const globalData = {
   APISet: envConfig,
   reqPacking,
   capsuleLocation: null,
-  systemInfo: Taro.getSystemInfoSync(),
+  systemInfo,
 }
 
 let rect = null;
