@@ -1,6 +1,6 @@
-import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
-import Taro, { getCurrentInstance } from '@tarojs/taro';
+import Taro, { getCurrentInstance, useDidShow } from '@tarojs/taro';
+import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components';
 import TopBar from '@components/topBar';
 import LoginNotice from '@components/loginNotice';
 import NoAccess from '@components/noAccess';
@@ -36,21 +36,28 @@ export default function assessPage(){
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
 
+  useDidShow(()=>{
+    fetchData();
+  })
+
   useEffect(()=>{
     if(isLogin){
       const authInfo = Taro.getStorageSync('authinfo');
       console.log(authInfo);
       if( authInfo?.authIds?.includes(AUTH_ID)){
         setHasPermission(true);
-        setLoading( true );
-        fetchResult();
-        fetchRole();
-        fetchBrifInfo();
-        fetchEveluationList();
+        fetchData();
       }
-      
     }
   }, [])
+
+  const fetchData = () => {
+    setLoading( true );
+    fetchResult();
+    fetchRole();
+    fetchBrifInfo();
+    fetchEveluationList();
+  }
 
   const fetchResult = () => {
     reqPacking(
@@ -65,20 +72,6 @@ export default function assessPage(){
     ).then(res => {
         const { data, success, error } = res;
         if (success) {
-          if(data.evaluated){
-            Taro.showModal({
-              title: '提示',
-              content: '您已填答过，可直接查看评估结果',
-              confirmText: '查看结果',
-              success: (res)=>{
-                if(res.confirm){
-                  Taro.navigateTo({
-                    url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`
-                  })
-                }
-              }
-            })
-          }
           setResult && setResult(data);
         }
 
@@ -155,6 +148,7 @@ export default function assessPage(){
   }
 
   const handleStartAssess = () => {
+
     if(projectRole === 6){
       Taro.showModal({
         title: '提示',
@@ -163,9 +157,15 @@ export default function assessPage(){
       return;
     }
 
-    Taro.navigateTo({
-      url: `/pages/assess/detail/index?projectId=${projectId}&roundId=${roundId}`,
-    })
+    if(result.evaluated){
+      Taro.redirectTo({
+        url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`,
+      })
+    }else{
+      Taro.navigateTo({
+        url: `/pages/assess/detail/index?projectId=${projectId}&roundId=${roundId}`,
+      })
+    }
   }
 
   const handleBack = () => {
@@ -173,7 +173,7 @@ export default function assessPage(){
       Taro.navigateBack();
     }else{
       Taro.redirectTo({
-        url: `/pages/list/index`
+        url: `/pages/detail/index?projectId=${projectId}`
       })
     }
   }
@@ -228,7 +228,7 @@ export default function assessPage(){
             </View>
           </View>
           
-          {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!result.evaluated? '开始评估': '查看结果'}</Button>}
+          {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!result.evaluated? '开始评估': '您已填写，查看结果'}</Button>}
         </View>
       </View>
       )}

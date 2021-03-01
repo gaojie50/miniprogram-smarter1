@@ -164,8 +164,12 @@ function EvalutaionCard(props) {
     }
   })
 
-  const jumpToResult=()=>{
-    Taro.navigateTo({ url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`})
+  const handleJump=(e)=>{
+    if( hasAssess ){
+      Taro.navigateTo({ url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`})
+    }else{
+      Taro.navigateTo({ url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`})
+    }
   }
 
   const [statusType, statusText] = useMemo(() => {
@@ -191,32 +195,33 @@ function EvalutaionCard(props) {
   }, [hasAssess, initiator, realName]);
 
   return (
-    <View className="evaluation-card" onClick={jumpToResult}>
-      <View className="evaluation-card-title">
-        <View className="evaluation-card-title-left">
-          第{round}轮
-        </View>
-        <View className="evaluation-card-title-right">
-          {statusText}
-        </View>
-      </View>
-      <View className="evaluation-card-status">
-        <View className="evaluation-card-status-left">
-          <View className="evaluation-card-status-left-initiator">
-            {initiator}
+    <View className="evaluation-card">
+      <View onClick={handleJump} >
+        <View className="evaluation-card-title">
+          <View className="evaluation-card-title-left">
+            第{round}轮
           </View>
-          <View className="evaluation-card-status-left-span">
-            发起
-          </View>
-          <View className="evaluation-card-status-left-type">
-            {TYPE[evaluationMethod]}
+          <View className="evaluation-card-title-right">
+            {statusText}
           </View>
         </View>
-        <View className="evaluation-card-status-right">
-          {timeStr}
+        <View className="evaluation-card-status">
+          <View className="evaluation-card-status-left">
+            <View className="evaluation-card-status-left-initiator">
+              {initiator}
+            </View>
+            <View className="evaluation-card-status-left-span">
+              发起
+            </View>
+            <View className="evaluation-card-status-left-type">
+              {TYPE[evaluationMethod]}
+            </View>
+          </View>
+          <View className="evaluation-card-status-right">
+            {timeStr}
+          </View>
         </View>
-      </View>
-      <View className="evaluation-card-info">
+        <View className="evaluation-card-info">
         <View className="evaluation-card-info-title">
           {roundTitle}
         </View>
@@ -238,6 +243,7 @@ function EvalutaionCard(props) {
             ))
           }
         </View>
+      </View>
       </View>
       <View className="evaluation-card-action">
         <Button
