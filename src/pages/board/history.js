@@ -22,7 +22,7 @@ const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 export function UseHistory(props) {
   const [data, setData] = useState([]);
   const [auth, setAuth] = useState(false);
-  const { projectId } = props;
+  const { projectId, keyData } = props;
 
   useEffect(() => {
     if (projectId) {
@@ -40,7 +40,7 @@ export function UseHistory(props) {
         }
       })
     }
-  }, [projectId])
+  }, [projectId, keyData])
 
   return  projectId ? (auth ? <ChangeHistory data={data} /> : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
 }

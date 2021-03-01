@@ -18,6 +18,7 @@ export default function EditProject() {
   const [projectId, setProjectId] = useState();
   const [movieList, setMovieList] = useState({});
   const [projectInfoList, setProjectInfoList] = useState({});
+  const [projectData, setProjectData] = useState({});
   const [judgeRole, setJudgeRole] = useState({});
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export default function EditProject() {
       projectSearch(projectId)
       .then(res => {
         setProjectInfoList(res);
+        setProjectData(res)
       })
       searchRole(projectId)
       .then(res => {
@@ -152,10 +154,17 @@ export default function EditProject() {
     })
   }, [keyDataRef, basicDateRef, projectId])
 
+  const changeCategory = (category) => {
+    let newData = JSON.parse(JSON.stringify(projectData));
+    newData.category = category;
+
+    setProjectData(newData)
+  }
+
   return (
     <View className="editProject">
-      <BasicInfo ref={basicDateRef} movieData={movieList} projectData={projectInfoList} />
-      <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} projectData={projectInfoList} />
+      <BasicInfo ref={basicDateRef} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
+      <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} projectData={projectData} />
       <View className="releaseTime-submit">
           <View className="releaseTime-submit-btn" onClick={submit}>保存</View>
       </View>

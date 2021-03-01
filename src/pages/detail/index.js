@@ -280,7 +280,7 @@ export default class Detail extends React.Component {
               <EvaluationList projectId={ basicData.projectId } />
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
-              {basicData.projectId && <UseHistory ref="history" projectId={ basicData.projectId }></UseHistory>}
+              {basicData.projectId && <UseHistory projectId={ basicData.projectId } keyData={keyData}></UseHistory>}
             </AtTabsPane>
           </AtTabs>
         </View>
