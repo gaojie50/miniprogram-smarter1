@@ -19,6 +19,8 @@ export default function KeyInfo(props, ref) {
   const keyRef = useRef({});
   const releaseTimeRef = useRef({});
 
+  const [category, setCategory] = useState();
+
   useEffect(() => {
     if(props.movieData.movieName) {
       const { scheduleType, startShowDate, endShowDate} = props.movieData;
@@ -29,6 +31,9 @@ export default function KeyInfo(props, ref) {
       }
       releaseTimeRef.current = query;
       updateRef();
+    }
+    if(props.projectData.category) {
+      setCategory(props.projectData.category)
     }
   }, [props])
 
@@ -51,11 +56,16 @@ export default function KeyInfo(props, ref) {
       <View className="keyInfo-content">
         <ReleaseTimeWrap updateRef={updateRef} releaseTimeRef={releaseTimeRef} movieData={props.movieData} />
         {
-          props.projectData.category === 3 ?
+          category === 3 || category === '院线电影' ?
           <Block><KeyInput updateRef={updateRef} ref={keyRef} data={props.movieData}  type="expectBox" name="预估票房" text="万"></KeyInput>
           {divider}</Block> : null
         }
-        <KeyInput updateRef={updateRef} data={props.movieData} ref={keyRef} type="expectScore" name="预估评分" text="分"></KeyInput>
+        {
+          category === 3 || category === '院线电影' ?
+          <KeyInput updateRef={updateRef} data={props.movieData} ref={keyRef} type="expectScore" name="预估评分" text="分"></KeyInput>
+          : null
+        }
+        
         {
           props.judgeRole.role === 1 ? 
           <Block>

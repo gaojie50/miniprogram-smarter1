@@ -5,6 +5,7 @@ import FloatCard from '@components/m5/float-layout';
 import Cover from '@static/detail/cover.png';
 import Close from '@static/close.png';
 import ReaseTime from './releaseTime';
+import OmitTip from '@components/omitTip';
 import './index.scss';
 
 export default class BasicData extends React.Component {
@@ -48,7 +49,9 @@ export default class BasicData extends React.Component {
             {data.category >= 0 ? <View className="label" style={{ backgroundImage: `url(${CategoryList[ data.category ].icon})`}}>{CategoryList[ data.category ].label}</View> : null}
           </View>
           <View className="basic-data-top-right">
-            <View className="title">{data.name}</View>
+            <View className="title">
+              <OmitTip content={data.name} tag="Text"></OmitTip>
+            </View>
             <View className="tag-list">
               {
                 data.cooperType && data.cooperType.length > 0 ?

@@ -292,7 +292,7 @@ export default function AddProject(props, ref) {
         <FloatCard
           isOpened={openCategorySelector}
           title="选择品类"
-          onClose={() => setOpenCategorySelector(false)}
+          onClose={() => {setOpenCategorySelector(false);props.changeCategory(category);}}
         >
           <M5Grid
             hasBorder={false}
