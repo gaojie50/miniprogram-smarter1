@@ -16,7 +16,7 @@ const TYPE = {
 }
 
 const NO_AUTH_MESSAGE = '您没有该项目管理权限';
-
+const TYPE_MOVIE = 3 || 4;
 export function EvaluationList(props) {
   const [data, setData] = useState({});
   const [auth, setAuth] = useState(false);
@@ -48,7 +48,7 @@ export function EvaluationList(props) {
   return  projectId ? (auth ? (
     <View>
       {
-        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectId={data.projectId} />) : (
+        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectId={data.projectId} category={data.category}/>) : (
           <>
             <View className="no-eval-data">
               <Image src={NoFollow} alt=""></Image>
@@ -65,12 +65,13 @@ function EvalutaionCard(props) {
   const [realName, setRealName] = useState('');
 
   const {
+    category,
     round = '-', participantNumber,
     roundTitle, startDate, evaluationMethod,
     estimateBox, estimateScore, initiator = '-', projectId, roundId, pic,
     hasAssess, invitees,
   } = props;
-
+  console.log(category)
   const timeStr = useMemo(() => {
     if (!startDate) return '-'
     const time = new Date(startDate);
@@ -84,38 +85,44 @@ function EvalutaionCard(props) {
   
 
   const arr = useMemo(() => {
-    const __arr = [
+    let __arr  = [
       {
         title: '参与人数',
         value: '-',
         unit: '',
-      },
-      {
-        title: '预估票房',
-        value: '-',
-        unit: '',
-      },
-      {
-        title: '预估评分',
-        value: '-',
-        unit: '',
-      },
-    ];
+      }
+    ]
     if (participantNumber) {
       __arr[0].value = participantNumber;
       __arr[0].unit = '人';
     }
-    if (estimateBox) {
-      const rsl = formatNumber(Number(estimateBox), 'floor');
-      if (rsl) {
-        __arr[1].value = rsl.num;
-        __arr[1].unit = rsl.unit;
+    
+    if( category === TYPE_MOVIE ) {
+      __arr = __arr.concat([
+        {
+          title: '预估票房',
+          value: '-',
+          unit: '',
+        },
+        {
+          title: '预估评分',
+          value: '-',
+          unit: '',
+        },
+      ])
+      if (estimateBox) {
+        const rsl = formatNumber(Number(estimateBox), 'floor');
+        if (rsl) {
+          __arr[1].value = rsl.num;
+          __arr[1].unit = rsl.unit;
+        }
+      }
+      if (estimateScore) {
+        __arr[2].value = estimateScore;
+        __arr[2].unit = '分';
       }
     }
-    if (estimateScore) {
-      __arr[2].value = estimateScore;
-      __arr[2].unit = '分';
-    }
+    
     return __arr;
   }, [participantNumber, estimateBox, estimateScore])
 
@@ -157,6 +164,10 @@ function EvalutaionCard(props) {
     }
   })
 
+  const jumpToResult=()=>{
+    Taro.navigateTo({ url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`})
+  }
+
   const [statusType, statusText] = useMemo(() => {
     if (hasAssess) {
       let prefix = '';
@@ -180,7 +191,7 @@ function EvalutaionCard(props) {
   }, [hasAssess, initiator, realName]);
 
   return (
-    <View className="evaluation-card">
+    <View className="evaluation-card" onClick={jumpToResult}>
       <View className="evaluation-card-title">
         <View className="evaluation-card-title-left">
           第{round}轮
