@@ -65,6 +65,7 @@ export default class Detail extends React.Component {
     }).exec()
   }
   componentDidShow(){
+    console.log(123)
     this.fetchBasicData();
   }
 
@@ -277,7 +278,7 @@ export default class Detail extends React.Component {
               <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
             </AtTabsPane>
             <AtTabsPane current={current} index={1}>
-              <EvaluationList projectId={ basicData.projectId } />
+              <EvaluationList projectId={ basicData.projectId } keyData={ keyData } />
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
               {basicData.projectId && <UseHistory projectId={ basicData.projectId } keyData={keyData}></UseHistory>}

@@ -20,7 +20,7 @@ const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 export function EvaluationList(props) {
   const [data, setData] = useState({});
   const [auth, setAuth] = useState(false);
-  const { projectId } = props;
+  const { projectId, keyData } = props;
 
   useEffect(() => {
     if (projectId) {
@@ -38,7 +38,7 @@ export function EvaluationList(props) {
         }
       })
     }
-  }, [projectId])
+  }, [projectId, keyData])
 
   const [evaluationList] = useMemo(() => {
     const { evaluationList: __evaluationList = [] } = data;
