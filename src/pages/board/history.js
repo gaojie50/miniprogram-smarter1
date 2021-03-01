@@ -5,6 +5,7 @@ import '../../components/m5/style/components/timeline.scss';
 import './history.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking'
+import NoFollow from '@static/detail/noFollows.png';
 import NoData from '../../components/noData';
 
 const { formatNumber } = utils;
@@ -49,7 +50,12 @@ export function UseHistory(props) {
     }
   }, [projectId, keyData])
 
-  return  projectId ? (auth ? <ChangeHistory data={data} /> : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
+  return projectId ? (auth ? data.length ? <ChangeHistory data={data} /> : (
+    <View className="no-eval-data">
+      <Image src={NoFollow} alt=""></Image>
+      <View className="text">暂无变更历史</View>
+    </View>
+  ) : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
 }
 
 export function useChangeHistory(projectId) {
