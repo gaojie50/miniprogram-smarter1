@@ -400,6 +400,54 @@ function rgbaToHexColor(rgbaArray, alphaMaxVal = 1) {
   }).join("");
 }
 
+function previewFile( url, name ){
+  const fileUrl = url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com');
+  const picExtensions = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff'];
+  const allExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'].concat(picExtensions);
+  let fileType = name.slice(name.lastIndexOf('.')+1);
+  const isPic = picExtensions.includes(fileType);
+  if( allExtensions.includes(fileType) ){
+    Taro.showLoading({title:'正在打开'})
+
+    if( isPic ){
+      Taro.previewImage({
+        current: fileUrl, // 当前显示图片的http链接
+        urls: [ fileUrl ],
+        success: function (res) {
+          Taro.hideLoading();
+        },
+        fail: function(res){
+          Taro.hideLoading()
+          errorHandle({ message: '打开失败' });
+        }
+      })
+      return;
+    }
+    Taro.downloadFile({
+      url: fileUrl,
+      success: function (res) {
+        var filePath = res.tempFilePath
+        Taro.openDocument({
+          filePath: filePath,
+          success: function (res) {
+            Taro.hideLoading()
+          },
+          fail: function(res){
+            Taro.hideLoading()
+            errorHandle({ message: '打开失败' });
+          }
+        })
+      }
+    });
+    return;
+  }
+
+  Taro.showModal({
+    content: '暂不支持该格式预览，请至PC端查看',
+    showCancel: false
+  })
+}
+
 export default {
   errorHandle,
   debounce,
@@ -420,5 +468,6 @@ export default {
   arrayMinItem,
   arrayMaxItem,
   hexColorToRgba,
-  rgbaToHexColor
+  rgbaToHexColor,
+  previewFile
 }

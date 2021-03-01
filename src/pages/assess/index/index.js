@@ -14,7 +14,7 @@ import projectConfig from '../../../constant/project-config';
 import '../../../components/m5/style/components/icon.scss';
 import './index.scss';
 
-const { errorHandle, hexColorToRgba } = utils;
+const { errorHandle, hexColorToRgba, previewFile } = utils;
 const { getEvaluationLabel, getEvaluationIcon } = projectConfig;
 const AUTH_ID = 95130;
 
@@ -154,37 +154,6 @@ export default function assessPage(){
       })
   }
 
-  const handlePreviewFile = (url, name) => {
-    const extensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'];
-    let fileType = name.slice(name.lastIndexOf('.')+1);
-    if( extensions.includes(fileType) ){
-      Taro.showLoading({title:'正在打开'})
-      Taro.downloadFile({
-        url: url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com'),
-        success: function (res) {
-          var filePath = res.tempFilePath
-          Taro.openDocument({
-            filePath: filePath,
-            success: function (res) {
-              console.log('打开文档成功')
-              Taro.hideLoading()
-            },
-            fail: function(res){
-              Taro.hideLoading()
-              errorHandle({ message: '打开失败' });
-            }
-          })
-        }
-      });
-      return;
-    }
-
-    Taro.showModal({
-      content: '暂不支持该格式预览，请至PC端查看',
-      showCancel: false
-    })
-  }
-
   const handleStartAssess = () => {
     if(projectRole === 6){
       Taro.showModal({
@@ -217,8 +186,7 @@ export default function assessPage(){
   const coverPic = projectPic ? projectPic : defaultPicUrl;
   const rgbColor = hexColorToRgba(backColor||'#475975',0.9);
 
-  console.log('projectId', projectId);
-  console.log('roundId', roundId);
+
   return (
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>
       <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
@@ -247,7 +215,7 @@ export default function assessPage(){
               {
                 (projectFile || []).map(item=>{
                   return (
-                    <View className="file-item" onClick={()=>{handlePreviewFile(item.url, item.title)}}>
+                    <View className="file-item" onClick={()=>{previewFile(item.url, item.title)}}>
                       <Image className="logo" src={getEvaluationIcon(categoryType)} />
                       <View className="file-info-wrap">
                         <View className="file-name">{item.title}</View>

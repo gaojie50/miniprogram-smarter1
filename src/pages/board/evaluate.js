@@ -71,7 +71,7 @@ function EvalutaionCard(props) {
     estimateBox, estimateScore, initiator = '-', projectId, roundId, pic,
     hasAssess, invitees,
   } = props;
-  console.log(category)
+
   const timeStr = useMemo(() => {
     if (!startDate) return '-'
     const time = new Date(startDate);

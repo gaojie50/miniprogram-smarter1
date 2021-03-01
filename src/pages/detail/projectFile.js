@@ -4,11 +4,13 @@ import Taro from '@tarojs/taro';
 import { AtFloatLayout } from '@components/m5';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
+import utils from '@utils/index';
 import Enclosure from '@static/detail/file.png';
 import Close from '@static/close.png';
 import './projectFile.scss';
 import dayjs from 'dayjs';
 
+const { previewFile } = utils;
 const reqPacking = getGlobalData('reqPacking');
 export default function ProjectFile(props) {
   const { fileData } = props;
@@ -49,32 +51,5 @@ export default function ProjectFile(props) {
 
 function handleFile(item) {
   const {profileName, url} = item;
-  const extensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'];
-  let fileType = profileName.slice(profileName.lastIndexOf('.')+1);
-
-  if(extensions.includes(fileType)) {
-    Taro.showLoading({title:'正在打开'})
-    Taro.downloadFile({
-      url: url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com'),
-      success: function (res) {
-        var filePath = res.tempFilePath;
-        Taro.openDocument({
-          filePath: filePath,
-          success: function (res) {
-            console.log('打开文档成功');
-            Taro.hideLoading();
-          },
-          fail: function(res){
-            Taro.hideLoading()
-            errorHandle({ message: '打开失败' });
-          }
-        })
-      }
-    })
-  } else {
-    Taro.showToast({
-      title: '暂不支持该格式预览',
-      icon: 'none'
-    })
-  }
+  previewFile( url, profileName );
 }
