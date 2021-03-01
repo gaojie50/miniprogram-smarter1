@@ -53,7 +53,7 @@ export function MovieList(props) {
                     {item?.cooperType?.join('/')}
                   </View>
                   <View className="director">
-                    {'导演：' + (item.director ? item.director : '-')}
+                    {'导演：' + (item.director && item.director.length ? item.director : '-')}
                   </View>
                   <View className="release">
                     <Text>{item.releaseDesc ? item.releaseDesc : ''}</Text>
