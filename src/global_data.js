@@ -13,6 +13,7 @@ const globalData = {
 if(globalData.capsuleLocation.top===0){
   globalData.capsuleLocation = { width: 87, height: 32, top: 24, left: 278, right: 365, bottom: 56 };
 }
+console.log('更正后为', globalData.capsuleLocation);
 export function set (key, val) {
   globalData[key] = val
 }
