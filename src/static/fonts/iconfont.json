@@ -1,0 +1,37 @@
+{
+  "id": "2353696",
+  "name": "mini-smarter",
+  "font_family": "smarter-iconfont",
+  "css_prefix_text": "icon-",
+  "description": "smarter小程序图标",
+  "glyphs": [
+    {
+      "icon_id": "20134572",
+      "name": "大纲",
+      "font_class": "dagang",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "20134573",
+      "name": "edit",
+      "font_class": "edit",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "20134574",
+      "name": "成片",
+      "font_class": "chengpian",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "20134575",
+      "name": "剧本",
+      "font_class": "juben",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    }
+  ]
+}
