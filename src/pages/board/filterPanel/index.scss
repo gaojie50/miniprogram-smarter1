@@ -109,8 +109,6 @@
   height: 80px;
   line-height: 80px;
 
-  margin-bottom: 30px;
-
   text-align: center;
 
   background: #276FF0;
@@ -251,7 +249,7 @@
 
 .dateBox .item {
   min-height: 92px;
-  padding: 0 27px;
+  padding: 0 39px;
   margin: 0 18px;
   word-break: break-all;
   display: flex;
@@ -338,20 +336,24 @@
 .date-show .left {
   position: absolute;
   left: 0;
-  top: 40px;
+  top: 0;
   width: 320px;
   border-bottom: 2px solid #E5E5E5;
-  height: 122px;
+  height: 162px;
+  padding-top: 40px;
+  box-sizing: border-box;
   text-align: left;
 }
 
 .date-show .right {
   position: absolute;
   right: 0;
-  top: 40px;
+  top: 0;
   width: 320px;
   border-bottom: 2px solid #E5E5E5;
-  height: 122px;
+  height: 162px;
+  padding-top: 40px;
+  box-sizing: border-box;
   text-align: right;
 }
 

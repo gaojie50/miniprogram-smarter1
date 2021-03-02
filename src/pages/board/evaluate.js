@@ -17,10 +17,12 @@ const TYPE = {
 
 const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 const TYPE_MOVIE = 3 || 4;
+const DEFAULT_PROJECT_ROLE = 6;
 export function EvaluationList(props) {
   const [data, setData] = useState({});
   const [auth, setAuth] = useState(false);
-  const { projectId } = props;
+  const [projectRole, setProjectRole] = useState(DEFAULT_PROJECT_ROLE);
+  const { projectId, keyData } = props;
 
   useEffect(() => {
     if (projectId) {
@@ -37,8 +39,17 @@ export function EvaluationList(props) {
           }
         }
       })
+
+      PureReq_ProjectRole({
+        projectId,
+      }).then((res) => {
+        const { success, data, error } = res;
+        if (success) {
+          setProjectRole(data?.projectRole || DEFAULT_PROJECT_ROLE);
+        }
+      })
     }
-  }, [projectId])
+  }, [projectId, keyData])
 
   const [evaluationList] = useMemo(() => {
     const { evaluationList: __evaluationList = [] } = data;
@@ -48,7 +59,7 @@ export function EvaluationList(props) {
   return  projectId ? (auth ? (
     <View>
       {
-        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectId={data.projectId} category={data.category}/>) : (
+        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectRole={projectRole} projectId={data.projectId} category={data.category}/>) : (
           <>
             <View className="no-eval-data">
               <Image src={NoFollow} alt=""></Image>
@@ -67,9 +78,10 @@ function EvalutaionCard(props) {
   const {
     category,
     round = '-', participantNumber,
-    roundTitle, startDate, evaluationMethod,
+    roundTitle, startDate, evaluationMethod, evaluationTotalScore,
     estimateBox, estimateScore, initiator = '-', projectId, roundId, pic,
     hasAssess, invitees,
+    projectRole,
   } = props;
 
   const timeStr = useMemo(() => {
@@ -121,6 +133,18 @@ function EvalutaionCard(props) {
         __arr[2].value = estimateScore;
         __arr[2].unit = '分';
       }
+    } else {
+      __arr = __arr.concat([
+        {
+          title: '评估总得分',
+          value: '-',
+          unit: '',
+        },
+      ])
+      if (evaluationTotalScore) {
+        __arr[1].value = evaluationTotalScore;
+        __arr[1].unit = '分';
+      }
     }
     
     return __arr;
@@ -165,7 +189,7 @@ function EvalutaionCard(props) {
   })
 
   const handleJump=(e)=>{
-    if( hasAssess ){
+    if( hasAssess || projectRole === 1){
       Taro.navigateTo({ url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`})
     }else{
       Taro.navigateTo({ url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`})
@@ -285,8 +309,11 @@ function PureReq_EvaluationList({ projectId }) {
   ).then((res) => res)
 }
 
-function onHandleResponse(res) {
-  const { success, data, error } = res;
-  if (success) return data;
-  return error;
+function PureReq_ProjectRole({ projectId }) {
+  return reqPacking(
+    {
+      url: `api/management/projectRole?projectId=${projectId}`,
+    },
+    'server',
+  ).then((res) => res)
 }

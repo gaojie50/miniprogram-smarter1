@@ -30,10 +30,12 @@
   &__dot,
   &__icon {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 5.5px;
+    top: 6px;
     width: $at-timeline-dot-size;
     height: $at-timeline-dot-size;
+    width: 16px;
+    height: 16px;
     font-size: 0;
     text-align: center;
     vertical-align: middle;
@@ -41,7 +43,7 @@
     background: $at-timeline-dot-color;
     box-sizing: border-box;
     z-index: 1;
-    border: 8px solid #ccc;
+    border: 5px solid #ccc;
 
     // .at-icon {
     //   font-size: $at-timeline-dot-size;

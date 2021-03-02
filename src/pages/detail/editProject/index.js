@@ -6,6 +6,7 @@ import { Search, projectSearch, searchRole } from './search.js';
 import Toast from '@components/m5/toast';
 import _BasicInfo from './basicInfo';
 import _KeyInfo from './keyInfo';
+import { CATEGORY_LIST } from './lib';
 import './index.scss';
 
 const KeyInfo = forwardRef(_KeyInfo);
@@ -155,8 +156,15 @@ export default function EditProject() {
   }, [keyDataRef, basicDateRef, projectId])
 
   const changeCategory = (category) => {
+    let key = 0;
     let newData = JSON.parse(JSON.stringify(projectData));
     newData.category = category;
+    CATEGORY_LIST.forEach(item => {
+      if(item.name === category) {
+        key = item.key
+      }
+    })
+    projectInfoList.category = key;
 
     setProjectData(newData)
   }

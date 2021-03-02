@@ -10,7 +10,7 @@ import MatrixRadioEval from '../../components/matrixRadioEval';
 import MatrixScaleEval from '../../components/matrixScaleEval';
 import OperationFooter from '../../components/operationFooter';
 import LoginNotice from '@components/loginNotice';
-
+import { picFn } from '../../utils/pic';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
@@ -75,7 +75,7 @@ export default function Result() {
 
       if (success) {
         setProjectEvaluationName(data.projectEvaluationName);
-        data.pic = data.pic ? data.pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png';
+        data.pic = data.pic ? picFn(data.pic) : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png';
         return setInfo(data);
       }
 

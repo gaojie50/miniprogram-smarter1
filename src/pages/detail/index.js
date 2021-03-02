@@ -1,4 +1,4 @@
-import { View, Image, Text } from '@tarojs/components'
+import { View, Image, Text, ScrollView } from '@tarojs/components'
 import React from 'react';
 import Taro from '@tarojs/taro';
 import { AtTabs, AtTabsPane } from '@components/m5';
@@ -42,28 +42,11 @@ export default class Detail extends React.Component {
       showProjectFile: false,
       loading: true,
       stopScroll: false,
+      isFixed: false,
+      navbarInitTop: 0, // 导航距顶部的距离
     }
   }
 
-  onPageScroll() {
-    const that = this;
-    const { top, topSet } = this.state;
-    var query = wx.createSelectorQuery();
-    query.select('#top').boundingClientRect(function (res) {
-      if(res.top < 0 && topSet) {
-        that.setState({
-          top: res.top,
-          topSet: false
-        })
-      }
-      if(res.top === 0) {
-        that.setState({
-          top: res.top,
-          topSet: true
-        })
-      }
-    }).exec()
-  }
   componentDidShow(){
     this.fetchBasicData();
   }
@@ -211,21 +194,46 @@ export default class Detail extends React.Component {
     this.refs.followStatus.fetFollowStatus();
   }
 
+  pageScroll = e => {
+    console.log(e, 222)
+    var query = wx.createSelectorQuery();
+    console.log(query.selectAll('#tabs').boundingClientRect())
+    query.selectAll('#tabs').boundingClientRect(rect => {
+        console.log(rect,111)
+    })
+    const { top, topSet } = this.state;
+    const { scrollTop } = e.detail;
+    if(scrollTop > 5 && topSet) {
+      this.setState({
+        top: scrollTop,
+        topSet: false
+      })
+    }
+    if(scrollTop < 5 && !topSet) {
+      this.setState({
+        top: scrollTop,
+        topSet: true
+      })
+    }
+   
+  }
+
   render() {
-    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile } = this.state;
+    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed } = this.state;
+
     return (
-      <View className={stopScroll ? "detail stopScroll" : "detail"}>
-        <View className="detail-top" id="top">
-          <View className="fixed" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top < 0 ? '#FFFFFF':''}} >
+      <ScrollView scrollY={!stopScroll} className={stopScroll ? "detail stopScroll" : "detail"} onScroll={this.pageScroll}>
+        <View className="detail-top">
+          <View className="fixed" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top > 5 ? '#FFFFFF':''}} >
             <View style={{height: statusBarHeight,}}></View>
             <View className="header">
               <View className="backPage" onClick={this.handleBack}>
                 <Image src={ArrowLeft} alt=""></Image>
               </View>
-              <Text className="header-title">{top < 0 ? basicData.name : ''}</Text>
+              <Text className="header-title">{top > 5 ? basicData.name : ''}</Text>
             </View>
           </View>
-          <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 50)+ 'px' }}>
+          <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 44)+ 'px' }}>
             <View className="cooperStatus" style={ { 
               color: CooperStatus[ basicData.cooperStatus ].color
             } }
@@ -257,7 +265,7 @@ export default class Detail extends React.Component {
           changeStopScroll= { () => this.setState({stopScroll: !stopScroll})}
         />
         {
-          judgeRole.role && judgeRole.role !== 2 ?  
+          judgeRole.role && judgeRole.role !== 2 ? 
           <KeyData 
             ref="keyData"
             basicData={ basicData } 
@@ -266,7 +274,7 @@ export default class Detail extends React.Component {
             changeKeyData={ data => this.handleChangeKeyData(data)}
           /> : ''
         }
-        <View className="detail-tabs">
+        <View className="detail-tabs" id="tabs">
           <AtTabs
             current={current}
             animated={false}
@@ -276,14 +284,14 @@ export default class Detail extends React.Component {
               { title: '变更历史' }
             ]}
             onClick={this.changeTabs}
-            className={basicData.cooperStatus === 2 && current === 0 ? "tabs nopaddingTab" : (current === 1 || current === 2)  ? "tabs bgHistory" : "tabs"}
-            style={{top: (statusBarHeight + 50)+ 'px'}}
+            className={(isFixed ? "tabFixed " : " ") + (basicData.cooperStatus === 2 && current === 0 ? "tabs nopaddingTab" : (current === 1 || current === 2)  ? "tabs bgHistory" : "tabs")}
+            swipeable={false}
           >
             <AtTabsPane current={current} index={0}>
               <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
             </AtTabsPane>
             <AtTabsPane current={current} index={1}>
-              <EvaluationList projectId={ basicData.projectId } />
+              <EvaluationList projectId={ basicData.projectId } keyData={ keyData } />
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
               {basicData.projectId && <UseHistory projectId={ basicData.projectId } keyData={keyData}></UseHistory>}
@@ -298,7 +306,7 @@ export default class Detail extends React.Component {
         {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
         {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
         {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
-      </View>
+      </ScrollView>
     )
   }
 }
