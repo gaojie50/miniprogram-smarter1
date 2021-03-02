@@ -24,17 +24,17 @@ const METHOD_LIST = [
   {
     name: '大纲评估',
     type: 1,
-    icon: getEvaluationIcon(1)
+    icon: "icon-dagang"
   },
   {
     name: '剧本评估',
     type: 2,
-    icon: getEvaluationIcon(2)
+    icon: "icon-juben"
   },
   {
     name: '成片评估',
     type: 3,
-    icon: getEvaluationIcon(3)
+    icon: "icon-chengpian"
   }
 ]
 const AUTH_ID = 95130;
@@ -429,7 +429,7 @@ export default class _C extends React.Component {
                 METHOD_LIST.map(item=>{
                   return (
                     <View className={`method-item ${item.type === evaluationMethod ? 'active':''}`} onClick={()=>{this.evalMethodChange(item.type)}}>
-                    <Image className="logo" src={item.icon} />
+                    <View className={`smarter-iconfont ${item.icon}`} style={{fontSize: '28rpx'}}/>
                     {item.name}
                     </View>
                   )

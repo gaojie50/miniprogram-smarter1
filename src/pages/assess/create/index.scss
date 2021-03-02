@@ -85,15 +85,15 @@ page image {
           background-color:#F8F8F8;
           border-radius: 10px;
           color: #333;
+          font-size: 28px;
           &.active {
             background-color: rgba(39,111,240,0.10);
             color: #276FF0;
             font-weight: 500;
           }
-          .logo {
-            width: 30px;
-            height: 30px;
+          .smarter-iconfont {
             display: inline-block;
+            margin-right: 8px;
           }
         }
       }

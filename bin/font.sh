@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# MAGIC, session id from cookie
+cookie='cna=fBF0FRiK6SYCAWX+iqIR4TzP; EGG_SESS_ICONFONT=U8AXvqwdm-42-umGXGwgKq_Emj2wuVCkA87TjZ3dn6xm2T4whio3sIKoy4kjkuBSusLMQ-0MhcjWBE1FwhfGmMbpO9xPCEANAHIhoET_7kJ_pbscGV6FmfCh8QTWcmCiTv5lhhXEW-AxLfe1otCy-eI-zPgODc0D5EZxlVSk4mqOdEz-94IZi5OAcsu3pRkTAQs9KRTgwyfMtp67P9YXwDeVNoXPHTR1XHpaQgBHgWZxIoXczyxCXVtKz5kL3XUgvwp6JLe2wev9xkYzghiHajuW4c_CMP8U3ntzFvtHjFZoj5YeTNJbWo2zmQgUnzO6EpB9uTX49hYHFL8MsRML4MaZzskF-UuDZ9siM0Mhmxq2v-P4Ud5x6SbrLpTOMJ2-c4rygqzAheh-1v2A3qBVf-wLfqi0oA_qjZyIydig594ceBEo4sU45o7C-bQurcc3vs2xnGcG2g-NX6rZ50mJm7LAWk72bDxcms9GZ04LEWXLMypLmmHH65-9hadqx4riJ9NlEZ4SgkgYfe8jJJ0l_qwK2sF7hmkBOuaEIuvxDwkjCrPgURmdD8_APDhd0Lv-wzCNY3iBtPVLLWiyl9nRF7PTbbW6lq5RUizkLl4qVXjTzEcX8wzPR12B-FqTuZxQ0MRwh5A9HxDCwDQ8X6EGPqlnrkO_R4sqquCHZS2JgFyxOaj4nCkA0fKnVxntFGK3OVz8Z9YRbE8pgao5D0pKtTEotLAc4Tr3pNBVqDczw_oWTjmjufCqc1885oXg9IEfTqtzSOW8DM2jqIrVbdDfmb3Gf_-xTYy5JayPwOh54mmjLkscrGxL7RhhPlGnulmn11TNXe103hfMmJsSDUCw_fJiwwSlemmCEYMgCRFnDhISdNylxSL-dWYcvFX6S2embJA8oWOf6i1GHlWiGNZvOCtV8rfTjDi7Vol5K0yPOVAj7BJh_QUK1rS7BrtnqhTTLPWNORj9r2wJX725qHc0kDBgqvSPsZ19_uoFwT2JCGFugc65IGYD_D3hQh_egUQuseMrpF6qW49MM-c5NUn9fA==; ctoken=XvLwPdlTW5Xgg-ZAZw7ENqrH; u=5213119; u.sig=E4jPR0fVix48c1JB_uplk_MFHmqcv2h5CeUFBv4__mA; isg=BC0t4eBADjdjSuhz0hL5oFuwPM-nimFcOXmpym8zm0Qh5kiYN9gLLk701LoA5nkU; trace=AQAAAOieamaJ/QAAMmo6ey13jB3840MO; '
+# download iconfont from iconfont.cn
+curl -s 'http://iconfont.cn/api/project/download.zip?pid=2353696' -H "Cookie: $cookie" > /tmp/iconfont.zip
+
+# extract iconfont files from the ziped package
+unzip -jo /tmp/iconfont.zip 'font_*/iconfont.*' -d "src/static/fonts"
+
+# Modify the iconfont.css suffix to iconfont.cssv
+
+echo "iconfont download done!"
