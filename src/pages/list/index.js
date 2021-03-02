@@ -40,7 +40,6 @@ function strip(num, precision = 12) {
 const noPermissionReqUrl = 'api/management/applet/list'; 
 const normaReqUrl = 'api/management/list';
 
-
 class _C extends React.Component {
   state = {
     filmItemWidth: rpxTopx(216),
@@ -57,7 +56,6 @@ class _C extends React.Component {
     titleHeight: Math.floor(
       capsuleLocation.bottom + capsuleLocation.top - statusBarHeight,
     ),
-    gapHeight: Math.floor(capsuleLocation.top - statusBarHeight),
     showIcon: false,
     dimension: [],
     projectStatus: [],
