@@ -787,13 +787,13 @@ function ProjectItem(props) {
     projectStageStep = [],
     hasUpdate = false,
     projectId,
+    releaseStage,
     style,
   } = props;
 
-  const [val, unit, isOnline] = useMemo(() => {
-    const __isOnline = !!box;
+  const [val, unit] = useMemo(() => {
     const rsl = formatNumber(estimateBox || box, 'floor');
-    return [rsl.num, rsl.unit, __isOnline];
+    return [rsl.num, rsl.unit];
   }, [estimateBox, box]);
 
   const [stageName, stageDescribe, stageLength] = useMemo(() => {
@@ -820,7 +820,7 @@ function ProjectItem(props) {
           {
             type === 3 ? (
               <View className="project-item-title-predict">
-                { isOnline ? '累计' : '预估'}
+                { releaseStage === 1 ? '预估' : '累计'}
                 <Text className="project-item-title-predict-num">{val}</Text>
                 {unit}
               </View>
@@ -834,12 +834,16 @@ function ProjectItem(props) {
           }
         </View>
         <View className="project-item-ps">
-          <View className="project-item-publication">
+          <View className="project-item-ps-cooperType">
             {cooperType.join(' / ')}
           </View>
           {
             type === 3 && (
-              estimateScore && <View className="project-item-score">猫眼评分 {estimateScore} 分</View>
+              releaseStage === 2 ? (
+                score ? <View className="project-item-score">猫眼 {score} 分</View> : null
+              ) : (
+                <View className="project-item-score">预估 {estimateScore || '-'} 分</View>
+              )
             )
           }
         </View>
