@@ -1,9 +1,9 @@
 import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
+import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';
 import FixedButton from '@components/fixedButton';
 import reqPacking from '../../../utils/reqPacking.js'
-import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '../../../components/assess';
 import utils from '../../../utils/index';
 import './index.scss'
 
