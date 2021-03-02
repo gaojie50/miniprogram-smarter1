@@ -35,7 +35,7 @@ export default function KeyInfo(props, ref) {
     if(props.projectData.category) {
       setCategory(props.projectData.category)
     }
-  }, [props])
+  }, [props, props.projectData.category])
 
   const updateRef = () => {
     ref.current = {
@@ -49,7 +49,7 @@ export default function KeyInfo(props, ref) {
     const start = dayjs(startDate).format('YYYY-MM-DD');
     const end = dayjs(endDate).format('YYYY-MM-DD');
   }
-
+  
   return (
     <Block>
       <Text className="keyInfo-title">核心数据</Text>
