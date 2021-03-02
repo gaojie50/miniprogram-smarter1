@@ -25,16 +25,17 @@ export default class BasicData extends React.Component {
     })
   }
 
-  handleTochMove = e => {
-    e.preventDefault()
-        e.stopPropagation()
-  }
-
   handleClose = () => {
     this.props.changeStopScroll()
     this.setState({
       showFloat: false
     })
+  }
+
+  handleTouchMove(e) {
+    console.log(1111)
+    e.preventDefault()
+    e.stopPropagation()
   }
 
   render() {
@@ -85,7 +86,7 @@ export default class BasicData extends React.Component {
         </View>
         {
           this.state.showFloat && 
-          <FloatCard className="float" isOpened onClose={this.handleClose}>
+          <FloatCard className="float" isOpened onClose={this.handleClose} >
             <View className="title">
               <Text className="text">项目基础信息</Text>
               <View className="img" onClick={this.handleClose}><Image src={Close} alt=""></Image></View>
