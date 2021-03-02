@@ -32,7 +32,7 @@ function fn(e, _this) {
     },
     () => {
       reqPacking({
-        url: 'api/management/applet/list',
+        url: 'api/management/list',
         data: { name: innerVal },
         method: 'POST'
       }).then(({ success, data }) => {
