@@ -735,11 +735,7 @@ function BoardFilter(props) {
               <Text className={`board-filter-item-name ${(filterActive ? item.active : item.changed)  ? 'board-filter-item-active' : ''}`}>{item.name}</Text>
               <Image
                 className="board-filter-item-img"
-                src={
-                  '../../static/' +
-                  (item.active ? 'arrow-down-active' : 'arrow-down') +
-                  '.png'
-                }
+                src={item.active ? 'https://p0.meituan.net/ingee/ea15b5df924dfa97a89712fa6f8ce739518.png' : 'https://p0.meituan.net/ingee/818987cccac281bfd0c522339c2a33dd519.png'}
               />
             </View>
           );
