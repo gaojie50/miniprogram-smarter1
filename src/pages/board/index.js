@@ -836,9 +836,9 @@ function ProjectItem(props) {
           {
             type === 3 && (
               releaseStage === 2 && score !== null && score !== undefined ? (
-                score ? <View className="project-item-score">猫眼 {score} 分</View> : null
+                score ? <View className="project-item-score">猫眼{score}分</View> : null
               ) : (
-                <View className="project-item-score">预估 {estimateScore || '-'} 分</View>
+                <View className="project-item-score">预估{estimateScore || '-'}分</View>
               )
             )
           }
