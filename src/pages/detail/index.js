@@ -226,7 +226,7 @@ export default class Detail extends React.Component {
     const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed } = this.state;
 
     return (
-      <ScrollView scrollY={stopScroll} className={stopScroll ? "detail stopScroll" : "detail"}>
+      <ScrollView scrollY={!stopScroll} className={stopScroll ? "detail stopScroll" : "detail"}>
         <View className="detail-top" id="top">
           <View className="fixed" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top < 0 ? '#FFFFFF':''}} >
             <View style={{height: statusBarHeight,}}></View>
