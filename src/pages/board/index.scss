@@ -249,7 +249,7 @@
       letter-spacing: 0;
       // line-height: 40px;
       box-sizing: border-box;
-      padding: 8px 10px 4px 10px;
+      padding: 4px 16px 4px 12px;
 
       background-image: url(https://smarter.maoyan.com/916142bd07f007113d7d874e06ad7a45.png);
       background-size: 100% 100%;
@@ -261,12 +261,10 @@
 
   &-img {
     height: 100%;
-    width: 146px;
     margin-right: 24px;
   
     border-radius: 10px;
-  
-    flex-grow: 0;
+    flex: 0 0 146px;
   }
 
   &-detail {
@@ -312,6 +310,7 @@
       }
       &-predict-yellow {
         display: flex;
+        align-items: baseline;
         font-family: PingFangSC-Regular;
         font-weight: 400;
         font-size: 24px;
@@ -336,6 +335,13 @@
       line-height: 36px;
     
       margin-bottom: 14px;
+
+      &-cooperType {
+        max-width: 350px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }
