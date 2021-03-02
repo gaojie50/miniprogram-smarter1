@@ -120,8 +120,22 @@ export default function AddProject(props, ref) {
       const { movieType = [], movieName, cooperType = [], cooperStatus} = props.movieData;
       setFirstType(movieType.length > 0 && movieType);
       setName(movieName);
-      setFirstCooperType(cooperType.length > 0 && cooperType)
-      setCooperState(cooperStatus)
+      setFirstCooperType(cooperType.length > 0 && cooperType);
+      setCooperState(cooperStatus);
+      if(movieType.length > 0) {
+        let newTypes = {};
+        movieType.forEach(item => {
+          newTypes[item] = true;
+        })
+        setTypes(newTypes);
+      }
+      if(cooperType.length > 0) {
+        let newCooperType = {};
+        cooperType.forEach(item => {
+          newCooperType[item] = true;
+        })
+        setCooperType(newCooperType);
+      }
     }
     if(props.projectData.name) {
       const t2 = CATAGORY.find(item2 => item2.value === props.projectData.category)
