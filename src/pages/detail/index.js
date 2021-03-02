@@ -47,40 +47,6 @@ export default class Detail extends React.Component {
     }
   }
 
-  onPageScroll(e) {
-    const that = this;
-    const { top, topSet } = this.state;
-    var query = wx.createSelectorQuery();
-    query.select('#top').boundingClientRect(function (res) {
-      if(res.top < 0 && topSet) {
-        that.setState({
-          top: res.top,
-          topSet: false
-        })
-      }
-      if(res.top === 0) {
-        that.setState({
-          top: res.top,
-          topSet: true
-        })
-      }
-    }).exec()
-    // let titleBarHeight;
-    // query.select('.fixed').boundingClientRect(function (rect) {
-    //   console.log(rect,111)
-    //   titleBarHeight = rect.height;
-    // })
-    // query.select('.tabs').boundingClientRect(function (r){
-    //   let isFixed = (r.top - e.scrollTop) <= -284;
-    //   console.log(r.top,e.scrollTop,999)
-    //   if(isFixed !== that.state.isFixed) {
-    //     that.setState({
-    //       isFixed,
-    //     })
-    //   }
-    // })
-  }
-
   componentDidShow(){
     this.fetchBasicData();
   }
@@ -222,19 +188,37 @@ export default class Detail extends React.Component {
     this.refs.followStatus.fetFollowStatus();
   }
 
+  pageScroll = e => {
+    console.log(e, 222)
+    const { top, topSet } = this.state;
+    const { scrollTop } = e.detail;
+    if(scrollTop > 5 && topSet) {
+      this.setState({
+        top: scrollTop,
+        topSet: false
+      })
+    }
+    if(scrollTop < 5 && !topSet) {
+      this.setState({
+        top: scrollTop,
+        topSet: true
+      })
+    }
+  }
+
   render() {
     const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed } = this.state;
 
     return (
-      <ScrollView scrollY={!stopScroll} className={stopScroll ? "detail stopScroll" : "detail"}>
+      <ScrollView scrollY={!stopScroll} className={stopScroll ? "detail stopScroll" : "detail"} onScroll={this.pageScroll}>
         <View className="detail-top" id="top">
-          <View className="fixed" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top < 0 ? '#FFFFFF':''}} >
+          <View className="fixed" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top > 5 ? '#FFFFFF':''}} >
             <View style={{height: statusBarHeight,}}></View>
             <View className="header">
               <View className="backPage" onClick={this.handleBack}>
                 <Image src={ArrowLeft} alt=""></Image>
               </View>
-              <Text className="header-title">{top < 0 ? basicData.name : ''}</Text>
+              <Text className="header-title">{top > 5 ? basicData.name : ''}</Text>
             </View>
           </View>
           <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 44)+ 'px' }}>
@@ -269,7 +253,7 @@ export default class Detail extends React.Component {
           changeStopScroll= { () => this.setState({stopScroll: !stopScroll})}
         />
         {
-          judgeRole.role && judgeRole.role !== 2 ?  
+          judgeRole.role && judgeRole.role !== 2 ? 
           <KeyData 
             ref="keyData"
             basicData={ basicData } 
