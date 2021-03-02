@@ -190,6 +190,11 @@ export default class Detail extends React.Component {
 
   pageScroll = e => {
     console.log(e, 222)
+    var query = wx.createSelectorQuery();
+    console.log(query.selectAll('#tabs').boundingClientRect())
+    query.selectAll('#tabs').boundingClientRect(rect => {
+        console.log(rect,111)
+    })
     const { top, topSet } = this.state;
     const { scrollTop } = e.detail;
     if(scrollTop > 5 && topSet) {
@@ -204,6 +209,7 @@ export default class Detail extends React.Component {
         topSet: true
       })
     }
+   
   }
 
   render() {
@@ -211,7 +217,7 @@ export default class Detail extends React.Component {
 
     return (
       <ScrollView scrollY={!stopScroll} className={stopScroll ? "detail stopScroll" : "detail"} onScroll={this.pageScroll}>
-        <View className="detail-top" id="top">
+        <View className="detail-top">
           <View className="fixed" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top > 5 ? '#FFFFFF':''}} >
             <View style={{height: statusBarHeight,}}></View>
             <View className="header">
@@ -262,7 +268,7 @@ export default class Detail extends React.Component {
             changeKeyData={ data => this.handleChangeKeyData(data)}
           /> : ''
         }
-        <View className="detail-tabs">
+        <View className="detail-tabs" id="tabs">
           <AtTabs
             current={current}
             animated={false}
