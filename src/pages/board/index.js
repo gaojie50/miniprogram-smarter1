@@ -816,7 +816,7 @@ function ProjectItem(props) {
           {
             type === 3 ? (
               <View className="project-item-title-predict">
-                { releaseStage === 1 ? '预估' : '累计'}
+                { releaseStage === 1 || box === null || box === undefined ? '预估' : '累计'}
                 <Text className="project-item-title-predict-num">{val}</Text>
                 {unit}
               </View>
@@ -835,10 +835,10 @@ function ProjectItem(props) {
           </View>
           {
             type === 3 && (
-              releaseStage === 2 ? (
-                score ? <View className="project-item-score">猫眼 {score} 分</View> : null
+              releaseStage === 2 && score !== null && score !== undefined ? (
+                score ? <View className="project-item-score">猫眼{score}分</View> : null
               ) : (
-                <View className="project-item-score">预估 {estimateScore || '-'} 分</View>
+                <View className="project-item-score">预估{estimateScore || '-'}分</View>
               )
             )
           }

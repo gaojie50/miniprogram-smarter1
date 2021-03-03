@@ -98,11 +98,21 @@
   .tabFixed {
     .at-tabs__header {
       position: fixed;
-      top: 128px;
+      top: 120px;
       z-index: 100;
     }
   }
   .tabs {
+    .noMore {
+      width: 100%;
+      height: 36px;
+      text-align: center;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #999999;
+      line-height: 36px;
+    }
     .at-tabs__header {
       height: 88px;
       background: #FFFFFF;
@@ -146,14 +156,11 @@
   }
 }
 .stopScroll {
-  position: fixed;
-  top: 0;
   height: 100vh;
-  width: 100%;
   overflow: hidden;
 }
 .detail {
-  position: relative;
+  position: fixed;
   height: 100%;
   width: 100%;
   .bottom-fixed {

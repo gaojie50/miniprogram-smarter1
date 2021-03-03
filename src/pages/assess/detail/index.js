@@ -7,9 +7,10 @@ import _cloneDeep from 'lodash/cloneDeep';
 import _merge from 'lodash/merge';
 import _debounce from 'lodash/debounce'
 import { set as setGlobalData, get as getGlobalData, set } from '../../../global_data'
-import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '../../../components/assess';
-import Indexes from '@components/indexes';
+import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';
 import FixedButton from '@components/fixedButton';
+import Indexes from '@components/indexes';
+
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import AtFloatLayout from '@components/m5/float-layout';
