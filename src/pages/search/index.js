@@ -80,7 +80,7 @@ class _C extends React.Component {
     const { maoyanId, projectId } = filterList;
 
     Taro.navigateTo({
-      url: `/pages/projectDetail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
+      url: `/pages/detail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
     })
   };
 
@@ -108,7 +108,7 @@ class _C extends React.Component {
           <View className="no-data">暂无数据</View>
         )}
         {inputVal != '' && !loading && (
-          <ScrollView className="search-list">
+          <ScrollView className="search-list" scrollY>
             {list.map((item, index) => {
               return (
                 <View

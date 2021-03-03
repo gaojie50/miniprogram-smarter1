@@ -1,0 +1,30 @@
+.keyInfo-title {
+  font-family: PingFangSC-Regular;
+  font-size: 26px;
+  color: #999999;
+  margin-left: 30px;
+}
+.keyInfo-content {
+  box-shadow: 0 2px 10px 0 rgba(0,0,0,0.02);
+  border-radius: 16px;
+  background-color: #FFFFFF;
+  margin: 20px 30px 154px;
+  .layout-body__content {
+    max-height: 90%;
+  }
+  .releaseTime-tag {
+    position: relative;
+    display: 'inline-block';
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 22px;
+    padding: 3px 6px;
+    border-radius: 4px;
+    box-sizing: 'border-box';
+    margin-right: 6px;
+    top: -3px;
+  }
+  .releaseTime-text {
+    display: 'inline-block';
+  }
+}

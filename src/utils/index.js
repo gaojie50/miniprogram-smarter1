@@ -255,6 +255,16 @@ const getFutureTimePeriod = (long = 365) => {
   }
 }
 
+const getDayPeriod = (begin = 0, end = 0) => {
+  const curDayBeginDate = new Date(new Date().setHours(0, 0, 0, 0))
+  const curDayEndDate = new Date(new Date().setHours(23, 59, 59, 999))
+
+  return {
+    startDate: curDayBeginDate.setDate(curDayBeginDate.getDate() + begin),
+    endDate: curDayEndDate.setDate(curDayEndDate.getDate() + end),
+  };
+}
+
 const calcWeek = (timeStamp) =>
   `周${
     ['日', '一', '二', '三', '四', '五', '六'][new Date(timeStamp).getDay()]
@@ -358,6 +368,86 @@ function arrayMinItem(arr) {
   return Math.min.apply(null, arr);
 };
 
+function hexColorToRgba(hexColor, alpha=1){
+  let color = hexColor.toLowerCase();
+  var pattern = /^#([0-9|a-f]{3}|[0-9|a-f]{6})$/;
+  if(color && pattern.test(color)) {
+    if(color.length == 4) {
+      // 将三位转换为六位
+      color = '#' + color[1] + color[1] + color[2] + color[2] + color[3] + color[3];
+    }
+    //处理六位的颜色值
+    let colorNew = [];
+    for (var i=1; i<7; i+=2) {
+      colorNew.push(parseInt("0x"+color.slice(i, i+2)));  
+    }
+    return `rgba(${colorNew.join(",")},${alpha})`;
+  }
+}
+
+function rgbaToHexColor(rgbaArray, alphaMaxVal = 1) {
+  //补位井号
+  return "#" + rgbaArray.map((chanel, index) => {
+    let hexNum="";
+    if (index === 3) {
+      //这是alpha通道
+      hexNum= Number(Math.round(chanel * 255/alphaMaxVal)).toString(16);
+    }else {
+      //普通通道直接转换
+      hexNum=Number(chanel).toString(16)
+    }
+    return hexNum.length===1?'0'+hexNum:hexNum;//这里解决了部分通道数字小于10的情况进行补位
+  }).join("");
+}
+
+function previewFile( url, name ){
+  const fileUrl = url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com');
+  const picExtensions = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff'];
+  const allExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'].concat(picExtensions);
+  let fileType = name.slice(name.lastIndexOf('.')+1);
+  const isPic = picExtensions.includes(fileType);
+  if( allExtensions.includes(fileType) ){
+    Taro.showLoading({title:'正在打开'})
+
+    if( isPic ){
+      Taro.previewImage({
+        current: fileUrl, // 当前显示图片的http链接
+        urls: [ fileUrl ],
+        success: function (res) {
+          Taro.hideLoading();
+        },
+        fail: function(res){
+          Taro.hideLoading()
+          errorHandle({ message: '打开失败' });
+        }
+      })
+      return;
+    }
+    Taro.downloadFile({
+      url: fileUrl,
+      success: function (res) {
+        var filePath = res.tempFilePath
+        Taro.openDocument({
+          filePath: filePath,
+          success: function (res) {
+            Taro.hideLoading()
+          },
+          fail: function(res){
+            Taro.hideLoading()
+            errorHandle({ message: '打开失败' });
+          }
+        })
+      }
+    });
+    return;
+  }
+
+  Taro.showModal({
+    content: '暂不支持该格式预览，请至PC端查看',
+    showCancel: false
+  })
+}
+
 export default {
   errorHandle,
   debounce,
@@ -367,6 +457,7 @@ export default {
   formatReleaseDate,
   formatDirector,
   getFutureTimePeriod,
+  getDayPeriod,
   calcWeek,
   assignDeep,
   checkDataType,
@@ -376,4 +467,7 @@ export default {
   formatCreateTime,
   arrayMinItem,
   arrayMaxItem,
+  hexColorToRgba,
+  rgbaToHexColor,
+  previewFile
 }

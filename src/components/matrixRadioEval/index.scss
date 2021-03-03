@@ -1,0 +1,26 @@
+.matrixRadioEval-wrap{
+
+  .matrix-radio-eval{
+    background: #FFFFFF;
+
+    .list{
+      .item{
+        padding: 20px 20px 30px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        background-color: rgba($color: #276FF0, $alpha: 0.1);
+
+        &:last-of-type{
+          margin-bottom: 0; 
+        }
+
+        .yTitle{font-weight: 600;
+          font-family: PingFangSC-Semibold;
+          font-size: 28px;
+          color: #333333;
+          line-height: 30px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,88 @@
+.add-project {
+  height: 100vh;
+  background-color: #f8f8f8;
+  box-sizing: border-box;
+  padding: 30px 0;
+  overflow: scroll;
+
+  .at-grid {
+    overflow: hidden;
+  }
+
+  &-input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &-content {
+      flex: 1;
+      padding: 40px 30px;
+      font-weight: 500;
+      font-family: PingFangSC-Medium;
+      font-size: 40rpx;
+      color: #333333;
+      line-height: 40rpx;
+
+      .add-project-input-placeholder {
+        color: #CCCCCC;
+      }
+    }
+    .movie-search-loading {
+      height: 54px;
+      margin-right: 25px;
+      .weui-loadmore {
+        margin: 0;
+        .weui-loading {
+          margin: 0;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+
+  .m5-grid-item-checked {
+    background-color: rgba(24, 144, 255, 0.1)!important;
+    border: 1px solid #276FF0;
+    box-sizing: border-box;
+    .content-inner__text {
+
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 26px;
+      color: #276FF0!important;
+      text-align: center;
+      line-height: 36px;
+    }
+  }
+
+  .add-project-confirm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    position: fixed;
+    bottom: 0;
+    height: 164px;
+    width: 100%;
+    &-btn {
+      width: 690px;
+      height: 80px;
+      margin: 16px 30px;
+    
+      text-align: center;
+      line-height: 80px;
+    
+      background: #276FF0;
+      color: #fff;
+      border-radius: 40px;
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 30px;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

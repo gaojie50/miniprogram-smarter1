@@ -3,21 +3,40 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import keepLogin from '../../utils/keepLogin.js'
 import { get as getGlobalData } from '../../global_data'
+import auth from '../../utils/auth'
 
 import './index.scss'
 
 const capsuleLocation = getGlobalData('capsuleLocation')
-const barHeight = getGlobalData('barHeight')
+const {statusBarHeight} = getGlobalData('systemInfo')
 class _C extends React.Component {
   state = {
     titleHeight: Math.floor(
-      capsuleLocation.bottom + capsuleLocation.top - barHeight,
+      capsuleLocation.bottom + capsuleLocation.top - statusBarHeight,
     ),
     code: null,
+    target: null,
+    isLogin: false,
+    loading: false
   }
 
-  onLoad = () => {
-    if (Taro.getStorageSync('token')) this.goList()
+  onLoad = ({token, target}) => {
+    // 校验登录状态
+    if(token){
+      Taro.setStorageSync('token', token);
+    }
+    let localToken = Taro.getStorageSync('token');
+    if( token || localToken ){
+      // 校验账号状态
+      auth.checkLogin().then(res=>{
+        const { authInfo } = res;
+        if(res.isLogin){
+          this.setState({ isLogin: true });
+          target && Taro.reLaunch({ url: decodeURIComponent(target) });
+        }
+      })
+    }
+    this.setState({ target })
   }
 
   goList = () => {
@@ -27,15 +46,18 @@ class _C extends React.Component {
   }
 
   getUserInfo = (e) => {
+    this.setState({ loading: true });
+    const that = this;
     Taro.getSetting({
       success: (res) => {
         if (res.authSetting['scope.userInfo'] && e.detail) {
           const { iv, encryptedData } = e.detail
-
-          if (Taro.getStorageSync('token'))
-            return Taro.redirectTo({ url: `/pages/list/index` })
-
-          return keepLogin({ iv, encryptedData })
+          keepLogin({ 
+            iv, encryptedData, target: this.state.target || `/pages/list/index` 
+          }).catch(()=>{
+            that.setState({ loading: false});
+          })
+          return;
         }
 
         Taro.showModal({
@@ -46,8 +68,9 @@ class _C extends React.Component {
       },
     })
   }
+
   render() {
-    const { titleHeight, isLogin } = this.state
+    const { titleHeight, isLogin, loading } = this.state
     return (
       <View className="welcome">
         <View style={'margin-top:' + titleHeight + 'px'}>
@@ -67,8 +90,10 @@ class _C extends React.Component {
             hoverClass="login-btn-hover"
             openType="getUserInfo"
             onGetuserinfo={this.getUserInfo}
+            disabled={loading}
+            loading={loading}
           >
-            立即登录
+            {loading ? '登录中' : '立即登录' }
           </Button>
         )}
         {isLogin && (

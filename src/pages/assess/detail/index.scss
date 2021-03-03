@@ -1,0 +1,84 @@
+.assess-page {
+  background: #f5f5f5;
+  padding-top: 20px;
+  .process-wrap {
+    position: relative;
+    width: 400px;
+    height: 40px;
+    background: rgba(39,111,240,.1);
+    margin: auto;
+    border-radius: 35px;
+    text-align: center;
+    font-size: 28px;
+    color: #333333;
+    line-height: 50px;
+    overflow: hidden;
+    .inner-bar {
+      height: 50px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background-color: #276FF0;
+    }
+  }
+  .pagination-button {
+    width: 128px;
+    height: 70px;
+    font-size: 28px;
+    color: #333333;
+    line-height: 70px;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    &.disable {
+      color: #ccc;
+    }
+    &.prev {
+      border-radius: 0 100px 100px 0;
+    }
+    &.next {
+      border-radius: 100px 0 0 100px;
+    }
+  }
+
+  .assess-content-wrap {
+    height: calc(100vh - 20px - 40px - 20px);
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 40px 40px 0 0;
+    box-sizing: border-box;
+    .gapFilling-text, .gapFilling-num, .matrix-scale, .radio-wrap, .matrix-radio{
+      margin-bottom: 80px;
+    }
+    .content {
+      padding: 30px 50px 100px 50px;
+      // 试题通用样式
+      .que-item{
+        position: relative;
+        margin-bottom: 60px;
+
+        // .required::before{
+        //   display: inline-block;
+        //   color: #f5222d;
+        //   font-size: 14px;
+        //   font-family: SimSun, sans-serif;
+        //   line-height: 1;
+        //   content: '*';
+        //   position: absolute;
+        //   left: -20px;
+        //   top: 6px;
+        // }
+
+        // .error-tip{
+        //   color: #f5222d;
+        //   font-size: 12px;
+        //   font-weight: 400;
+        //   text-align: left;
+        //   position: absolute;
+        // }
+      }
+    }
+    
+  }
+}

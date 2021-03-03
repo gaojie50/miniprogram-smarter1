@@ -1,0 +1,45 @@
+.project-info{
+  height: 172px;
+  background-image: linear-gradient(180deg, rgba(247,247,247,100%), rgba(240,240,240,100%));
+  box-sizing: border-box;
+  position: relative;
+  padding-left: 110px;
+  padding-top: 20px;
+
+  image{
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 8px;
+    width: 60px;
+    height: 82px;
+    position: absolute;
+    left: 30px;
+    top: 20px;
+  }
+
+  .title{
+    font-weight: 500;
+    font-family: PingFangSC-Medium;
+    font-size: 34px;
+    color: #333;
+    line-height: 46px;
+  }
+
+  .detail{
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 24px;
+    color: #333;
+    line-height: 36px;
+  }
+
+  .sign{
+    opacity: 0.2;
+    font-family: 'MaoYanHeiTi-H1';
+    font-size: 150px;
+    color: #276FF0;
+    line-height: 150px;
+    position: absolute;
+    right: 30px;
+    top: 0;
+  }
+}

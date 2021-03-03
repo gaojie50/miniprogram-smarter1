@@ -1,0 +1,43 @@
+.xItem{
+  margin-top: 30px;
+
+  .title{
+    margin-bottom: 16px;
+    height: 28px;
+
+    .xTitle{
+      display: inline-block;
+      width: 50%;
+      font-weight: 400;
+      opacity: 0.5;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #333333;
+      line-height: 28px;
+      vertical-align: top;
+    }
+    .xRatio{
+      display: inline-block;
+      width: 50%;
+      font-family: MaoYanHeiTi-H1;
+      text-align: right;
+      font-size: 28px;
+      color: #333333;
+      text-align: right;
+      line-height: 28px;
+      vertical-align: top;
+    }
+  }
+  .progress-outer{
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #FFF;
+
+    .progress-inner{
+      height: 100%;
+      background: #276FF0;
+      border-radius: inherit;
+    }
+  }
+}

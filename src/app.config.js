@@ -1,20 +1,53 @@
 export default {
   pages: [
-    'pages/welcome/index',
     'pages/list/index',
+    'pages/welcome/index',
+    'pages/loginRedirect/index',
+    'pages/searchProject/index',
     'pages/search/index',
-    'pages/projectDetail/index',
     'pages/searchCompany/index',
-    'pages/webview/index', 
   ],
   window: {
     navigationBarBackgroundColor: '#798CBA',
     backgroundTextStyle: 'light',
     navigationBarTitleText: ' ',
     navigationBarTextStyle: 'white',
-    enablePullDownRefresh: true
   },
   style: 'v2',
   sitemapLocation: 'sitemap.json',
-  useExtendedLib: { weui: true }
+  useExtendedLib: { weui: true },
+  subpackages: [
+    {
+      root: "pages/addProject",
+      pages: ["index"]
+    },
+    {
+      root: "pages/board",
+      pages: ["index"]
+    },
+    {
+      root: "pages/detail",
+      pages: ["index", "editProject/index"]
+    },
+    {
+      root: "pages/projectDetail",
+      pages: ["index"]
+    },
+    {
+      root: "pages/webview",
+      pages: ["index"]
+    },
+    {
+      root: "pages/checkProgress",
+      pages: ["index"]
+    },
+    {
+      root:"pages/result",
+      pages:["index"]
+    },
+    {
+      root: "pages/assess",
+      pages: [ "index/index", "create/index", "template/index", "detail/index"]
+    }
+  ]
 }

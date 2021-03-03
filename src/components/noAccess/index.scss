@@ -1,0 +1,49 @@
+/* 无权限 */
+.no-access-component {
+  width: 100%;
+  position: relative;
+  image {
+    width: 284px;
+    height: 386px;
+    margin: 220px auto 0;
+    display: block;
+  }
+  
+  .title {
+    height: 36px;
+    font-size: 34px;
+  
+    /* font-weight: 500; */
+    font-weight: bold;
+  
+    font-weight: bolder;
+    color: rgba(255, 255, 255, 1);
+    line-height: 36px;
+    margin-top: 40px;
+    text-align: center;
+  }
+  
+  .content {
+    height: 68px;
+    font-size: 24px;
+    font-weight: normal;
+    color: rgba(255, 255, 255, 1);
+    line-height: 68px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .btn {
+    width: 600px;
+    height: 90px;
+    line-height: 90px;
+    background: rgba(24, 144, 255, 1);
+    border-radius: 10px;
+    font-size: 32px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 1);
+    text-align: center;
+    margin: 0 auto;
+  }
+}
+

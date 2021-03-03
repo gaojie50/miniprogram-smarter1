@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./app.scss";
+import "../src/static/fonts/iconfont.css";
 
 class App extends React.Component {
   render() {
