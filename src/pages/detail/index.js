@@ -189,14 +189,9 @@ export default class Detail extends React.Component {
   }
 
   pageScroll = e => {
-    console.log(e, 222)
-    var query = wx.createSelectorQuery();
-    console.log(query.selectAll('#tabs').boundingClientRect())
-    query.selectAll('#tabs').boundingClientRect(rect => {
-        console.log(rect,111)
-    })
     const { top, topSet } = this.state;
     const { scrollTop } = e.detail;
+    const { isFixed } = this.state;
     if(scrollTop > 5 && topSet) {
       this.setState({
         top: scrollTop,
@@ -209,7 +204,29 @@ export default class Detail extends React.Component {
         topSet: true
       })
     }
-   
+
+    // let query = Taro.createSelectorQuery();
+    // let topBarHeight = 0;
+    // query.select('#top').boundingClientRect((res) => {
+    //   if(res.height !== 0) {
+    //     topBarHeight = res.height;
+    //   }
+	  // }).exec();
+    // query.select('#tabs').boundingClientRect((res) => {
+    //   if(res.top <= (topBarHeight + 15)) {
+    //     if(!isFixed) {
+    //       this.setState({
+    //         isFixed: true
+    //       })
+    //     }
+    //   } else {
+    //     if(isFixed) {
+    //       this.setState({
+    //         isFixed: false
+    //       })
+    //     }
+    //   }
+    // }).exec();
   }
 
   render() {
@@ -218,7 +235,7 @@ export default class Detail extends React.Component {
     return (
       <ScrollView scrollY={!stopScroll} className={stopScroll ? "detail stopScroll" : "detail"} onScroll={this.pageScroll}>
         <View className="detail-top">
-          <View className="fixed" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top > 5 ? '#FFFFFF':''}} >
+          <View className="fixed" id="top" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top > 5 ? '#FFFFFF':''}} >
             <View style={{height: statusBarHeight,}}></View>
             <View className="header">
               <View className="backPage" onClick={this.handleBack}>
@@ -286,6 +303,7 @@ export default class Detail extends React.Component {
             </AtTabsPane>
             <AtTabsPane current={current} index={1}>
               <EvaluationList projectId={ basicData.projectId } keyData={ keyData } />
+              <View className="noMore">没有更多了</View>
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>
               {basicData.projectId && <UseHistory projectId={ basicData.projectId } keyData={keyData}></UseHistory>}
