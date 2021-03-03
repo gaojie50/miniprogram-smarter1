@@ -135,6 +135,21 @@ export default function EditProject() {
       cooperType.splice(index, 1)
     }
 
+    const elseQuery = {};
+
+    if(movieList && movieList !== {}) {
+      if(movieList.maoyanId) {
+        elseQuery.maoyanId = movieList.maoyanId;
+      }
+  
+      elseQuery.director = movieList.director || [];
+      elseQuery.issuer = movieList.issuer || [];
+      elseQuery.mainControl = movieList.mainControl || {};
+      elseQuery.movieSource = movieList.filmSource || [];
+      elseQuery.producer = movieList.producer || [];
+      elseQuery.protagonist = movieList.protagonist || [];
+    }
+    
     reqPacking({
       url: 'api/management/editProjectInfo',
       data:{
@@ -144,7 +159,8 @@ export default function EditProject() {
         cooperStatus,
         cooperType,
         type,
-        ...query
+        ...query,
+        ...elseQuery
       },
       method: 'POST',
     })
@@ -153,7 +169,7 @@ export default function EditProject() {
         wx.navigateBack()
       }
     })
-  }, [keyDataRef, basicDateRef, projectId])
+  }, [keyDataRef, basicDateRef, projectId, movieList])
 
   const changeCategory = (category) => {
     let key = 0;
