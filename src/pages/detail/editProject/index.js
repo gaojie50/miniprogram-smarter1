@@ -148,6 +148,8 @@ export default function EditProject() {
       elseQuery.movieSource = movieList.filmSource || [];
       elseQuery.producer = movieList.producer || [];
       elseQuery.protagonist = movieList.protagonist || [];
+      handleFormatPeople(elseQuery.director);
+      handleFormatPeople(elseQuery.protagonist);
     }
     
     reqPacking({
@@ -208,5 +210,15 @@ function judgeNumToast(num, text) {
   if(!(/^[0-9]+([.]{1}[0-9]{1}){0,1}$/.test(num))) {
     toast(`${text}应为数字类型，可保留1位小数`);
     throw console.info()
+  }
+}
+
+function handleFormatPeople(people) {
+  if(people.length > 0) {
+    people.forEach(item => {
+      item.id = item.maoyanId;
+      delete item.maoyanId;
+      delete item.enName;
+    })
   }
 }
