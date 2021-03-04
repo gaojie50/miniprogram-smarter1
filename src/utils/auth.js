@@ -29,7 +29,7 @@ function checkLogin() {
         }
         resolve({ isLogin: success ? true : false, authInfo: data,  error});
       }).catch(res=>{
-        console.log('catch', res);
+        errorHandle(res);
         reject(res);
       })
     }else{

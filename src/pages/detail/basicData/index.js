@@ -33,7 +33,6 @@ export default class BasicData extends React.Component {
   }
 
   handleTouchMove(e) {
-    console.log(1111)
     e.preventDefault()
     e.stopPropagation()
   }
