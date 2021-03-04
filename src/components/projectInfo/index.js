@@ -12,16 +12,16 @@ export default function ProjectInfo({ projectId, roundId, info }) {
 
   const {
     name,
-    roundNum,
+    round,
     pic='',
     participantNumber='',
-    evaluationMethod=[],
+    evaluationMethod,
   } = info;
 
   return <View className='project-info'>
     <Image src={pic} alt/>
     <View className="title">{name}</View>
-    <View className="detail">第{roundNum}轮 / {getEvaluationLabel(evaluationMethod)} / {participantNumber}人参与</View>
-    <View className="sign">{fillZero(roundNum)}</View>
+    <View className="detail">第{round}轮 / {getEvaluationLabel(evaluationMethod)} / {participantNumber}人参与</View>
+    <View className="sign">{fillZero(round)}</View>
   </View>
 }
