@@ -18,7 +18,7 @@ const TYPE = {
 const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 const TYPE_MOVIE = 3 || 4;
 const DEFAULT_PROJECT_ROLE = 6;
-const NOT_DOKING_PERSON = 2;  //非对接人
+const isDockingPerson = (role)=> [0,1].includes(role); // 角色 0项目执行人、执行人架构上级 1项目管理员、管理员架构上级 2非项目对接人
 
 export function EvaluationList(props) {
   const [data, setData] = useState({});
@@ -106,7 +106,7 @@ function EvalutaionCard(props) {
     let value = '-';
     let unit = '';
 
-    if( !(judgeRole.role === NOT_DOKING_PERSON) ){ // 是对接人
+    if( isDockingPerson(judgeRole.role) ){ // 是对接人
       let list = [{
         title: '参与人数',
         value,
@@ -281,14 +281,14 @@ function EvalutaionCard(props) {
       </View>
       </View>
       <View className="evaluation-card-action">
-        <Button
+        {isDockingPerson(judgeRole.role) && <Button
           data-roundTitle={roundTitle}
           data-roundId={roundId}
           data-sign="invite"
           openType="share"
           className="evaluation-card-action-btn">
           邀请参与
-        </Button>
+        </Button>}
         <Button
           data-roundTitle={roundTitle}
           data-roundId={roundId}
