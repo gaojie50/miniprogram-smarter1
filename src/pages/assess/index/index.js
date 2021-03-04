@@ -75,7 +75,7 @@ export default function assessPage(){
           setResult && setResult(data);
         }
 
-        if (error) errorHandle(message);
+        if (error) errorHandle(error);
       });
   };
 
@@ -179,7 +179,7 @@ export default function assessPage(){
   }
 
   
-  const { projectFile=[], backColor, name='', pic, categoryType } = briefInfo;
+  const { projectFile=[], backColor, name='', pic, categoryType, description } = briefInfo;
   const { round, initiator, startDate, roundTitle } = curEvalObj;
   const defaultPicUrl = 'https://obj.pipi.cn/festatic/common/image/90f5be009a6f7852f14f9553a14a3e35.png';
   const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPicUrl;
@@ -211,6 +211,7 @@ export default function assessPage(){
 
           <View className="evaluation-info-wrap">
             <View className="round-title">{roundTitle}</View>
+            {description && <View className="desc">{description}</View>}
             <View className="project-file-wrap">
               {
                 (projectFile || []).map(item=>{

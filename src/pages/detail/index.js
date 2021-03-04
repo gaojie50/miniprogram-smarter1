@@ -19,7 +19,10 @@ import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import './index.scss';
 import '@components/m5/style/index.scss';
+import utils from '@utils/index';
 
+
+const { isDockingPerson } = utils;
 const reqPacking = getGlobalData('reqPacking');
 const {statusBarHeight} = getGlobalData('systemInfo');
 export default class Detail extends React.Component {
@@ -316,10 +319,10 @@ export default class Detail extends React.Component {
             </AtTabsPane>
           </AtTabs>
         </View>
-        <View className="bottom-fixed">
+        {isDockingPerson(judgeRole.role) && <View className="bottom-fixed">
           <View className="assess" style={{background: '#FD9C00', marginRight: '20px'}} onClick={this.bottomClick.bind(this, 'assess')}>发起评估</View>
           <View className="assess" style={{background: '#276FF0'}} onClick={this.bottomClick.bind(this, 'progress')}>添加进展</View>
-        </View>
+        </View>}
         {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}
         {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
         {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}

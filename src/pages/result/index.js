@@ -10,12 +10,13 @@ import MatrixRadioEval from '../../components/matrixRadioEval';
 import MatrixScaleEval from '../../components/matrixScaleEval';
 import OperationFooter from '../../components/operationFooter';
 import LoginNotice from '@components/loginNotice';
+import utils from '@utils/index';
 import { picFn } from '../../utils/pic';
 import './index.scss';
 
+const { isDockingPerson } = utils;
 const reqPacking = getGlobalData('reqPacking');
 const isLeader = id => [1, 3, 5].includes(id);
-const isDokingPerson = role => [0, 1].includes(role); //对接人
 
 export default function Result() {
   const { projectId, roundId } = getCurrentInstance().router.params;
@@ -168,7 +169,7 @@ export default function Result() {
     core = {},
   } = result;
   const noEvalText = isLeader(projectRole) ? "还没有人发布过评估内容" : "自行填答后，才能看到其他人的评估内容";
-  const showParticipantNumber = isDokingPerson(judgeRole);
+  const showParticipantNumber = isDockingPerson(judgeRole);
   return <View className="result">
     {!isLogin ? (
       <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />

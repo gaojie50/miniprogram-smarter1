@@ -448,6 +448,11 @@ function previewFile( url, name ){
   })
 }
 
+// 对接人
+function isDockingPerson(role){
+  return [0, 1].includes(role);
+}
+
 export default {
   errorHandle,
   debounce,
@@ -469,5 +474,6 @@ export default {
   arrayMaxItem,
   hexColorToRgba,
   rgbaToHexColor,
-  previewFile
+  previewFile,
+  isDockingPerson
 }
