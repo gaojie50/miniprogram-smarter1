@@ -308,7 +308,7 @@ export default class Detail extends React.Component {
               <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
             </AtTabsPane>
             <AtTabsPane current={current} index={1}>
-              <EvaluationList projectId={ basicData.projectId } keyData={ keyData } />
+              <EvaluationList projectId={ basicData.projectId } keyData={ keyData } judgeRole={ judgeRole } />
               <View className="noMore">没有更多了</View>
             </AtTabsPane>
             <AtTabsPane current={current} index={2}>

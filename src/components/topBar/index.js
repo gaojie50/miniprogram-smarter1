@@ -15,7 +15,6 @@ export default function TopBar(props){
 
   const back = () => {
     props.onBack();
-    Taro.navigateBack();
   }
 
 

@@ -18,11 +18,13 @@ const TYPE = {
 const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 const TYPE_MOVIE = 3 || 4;
 const DEFAULT_PROJECT_ROLE = 6;
+const NOT_DOKING_PERSON = 2;  //非对接人
+
 export function EvaluationList(props) {
   const [data, setData] = useState({});
   const [auth, setAuth] = useState(false);
   const [projectRole, setProjectRole] = useState(DEFAULT_PROJECT_ROLE);
-  const { projectId, keyData } = props;
+  const { projectId, keyData, judgeRole } = props;
 
   useEffect(() => {
     if (projectId) {
@@ -59,7 +61,7 @@ export function EvaluationList(props) {
   return  projectId ? (auth ? (
     <View>
       {
-        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectRole={projectRole} projectId={data.projectId} category={data.category}/>) : (
+        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectRole={projectRole} judgeRole={judgeRole} projectId={data.projectId} category={data.category}/>) : (
           <>
             <View className="no-eval-data">
               <Image src={NoFollow} alt=""></Image>
@@ -73,6 +75,7 @@ export function EvaluationList(props) {
 }
 
 function EvalutaionCard(props) {
+  
   const [realName, setRealName] = useState('');
 
   const {
@@ -82,6 +85,7 @@ function EvalutaionCard(props) {
     estimateBox, estimateScore, initiator = '-', projectId, roundId, pic,
     hasAssess, invitees,
     projectRole,
+    judgeRole
   } = props;
 
   const timeStr = useMemo(() => {
@@ -97,20 +101,28 @@ function EvalutaionCard(props) {
   
 
   const arr = useMemo(() => {
-    let __arr  = [
-      {
+
+    let __arr = [];
+    let value = '-';
+    let unit = '';
+
+    if( !(judgeRole.role === NOT_DOKING_PERSON) ){ // 是对接人
+      let list = [{
         title: '参与人数',
-        value: '-',
-        unit: '',
+        value,
+        unit,
+      }];
+      if (participantNumber) {
+        list[0].value = participantNumber;
+        list[0].unit = '人';
       }
-    ]
-    if (participantNumber) {
-      __arr[0].value = participantNumber;
-      __arr[0].unit = '人';
+      __arr = __arr.concat(list);
     }
+   
+    
     
     if( category === TYPE_MOVIE ) {
-      __arr = __arr.concat([
+      let list = [
         {
           title: '预估票房',
           value: '-',
@@ -121,30 +133,31 @@ function EvalutaionCard(props) {
           value: '-',
           unit: '',
         },
-      ])
+      ]
       if (estimateBox) {
         const rsl = formatNumber(Number(estimateBox), 'floor');
         if (rsl) {
-          __arr[1].value = rsl.num;
-          __arr[1].unit = rsl.unit;
+          list[0].value = rsl.num;
+          list[0].unit = rsl.unit;
         }
       }
       if (estimateScore) {
-        __arr[2].value = estimateScore;
-        __arr[2].unit = '分';
+        list[1].value = estimateScore;
+        list[1].unit = '分';
       }
+      __arr = __arr.concat(list);
+      
     } else {
-      __arr = __arr.concat([
-        {
-          title: '评估总得分',
-          value: '-',
-          unit: '',
-        },
-      ])
+      let list = [{
+        title: '评估总得分',
+        value: '-',
+        unit: '',
+      }];
       if (evaluationTotalScore) {
-        __arr[1].value = evaluationTotalScore;
-        __arr[1].unit = '分';
+        list[0].value = evaluationTotalScore;
+        list[0].unit = '分';
       }
+      __arr = __arr.concat(list);
     }
     
     return __arr;
