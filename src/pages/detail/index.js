@@ -1,4 +1,4 @@
-import { View, Image, Text, ScrollView } from '@tarojs/components'
+import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
 import React from 'react';
 import Taro from '@tarojs/taro';
 import { AtTabs, AtTabsPane } from '@components/m5';
@@ -44,6 +44,7 @@ export default class Detail extends React.Component {
       stopScroll: false,
       isFixed: false,
       navbarInitTop: 0, // 导航距顶部的距离
+      toView: ''
     }
   }
 
@@ -157,12 +158,6 @@ export default class Detail extends React.Component {
     })
   }
 
-  changeTabs = value => {
-    this.setState({
-      current: value
-    })
-  }
-
   handleBack = () => {
     if(Taro.getCurrentPages().length>1){
       Taro.navigateBack();
@@ -195,9 +190,10 @@ export default class Detail extends React.Component {
   }
 
   pageScroll = e => {
+    const that = this;
     const { top, topSet } = this.state;
     const { scrollTop } = e.detail;
-    const { isFixed } = this.state;
+    const { isFixed, stopScroll } = this.state;
     if(scrollTop > 5 && topSet) {
       this.setState({
         top: scrollTop,
@@ -210,36 +206,44 @@ export default class Detail extends React.Component {
         topSet: true
       })
     }
-
-    // let query = Taro.createSelectorQuery();
-    // let topBarHeight = 0;
-    // query.select('#top').boundingClientRect((res) => {
-    //   if(res.height !== 0) {
-    //     topBarHeight = res.height;
-    //   }
-	  // }).exec();
-    // query.select('#tabs').boundingClientRect((res) => {
-    //   if(res.top <= (topBarHeight + 15)) {
-    //     if(!isFixed) {
-    //       this.setState({
-    //         isFixed: true
-    //       })
-    //     }
-    //   } else {
-    //     if(isFixed) {
-    //       this.setState({
-    //         isFixed: false
-    //       })
-    //     }
-    //   }
-    // }).exec();
+    const query = wx.createSelectorQuery();
+    let topBarHeight;
+    query.select('#top').boundingClientRect(function (res){
+      console.log(res, 44)
+      topBarHeight = res.height;
+    }).exec();
+    query.select('#tabs').boundingClientRect(function (res){
+      // if(res.top <= topBarHeight && !stopScroll) {
+      //   that.setState({
+      //     stopScroll: true
+      //   })
+      // }
+      // if(res.top > topBarHeight && stopScroll) {
+      //   that.setState({
+      //     stopScroll: false
+      //   })
+      // }
+    }).exec();
   }
-
+  changeTabs = value => {
+    this.setState({
+      current: value
+    })
+  }
+  click = () => {
+    console.log(11111)
+    const query = wx.createSelectorQuery();
+    console.log(query.select('#body'),9999)
+    query.select('#body').boundingClientRect(function (res){
+      console.log(res)
+      res.top = 64
+    }).exec();
+  }
   render() {
-    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed } = this.state;
+    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed, toView } = this.state;
 
     return (
-      <ScrollView scrollY={!stopScroll} className={stopScroll ? "detail stopScroll" : "detail"} onScroll={this.pageScroll}>
+      <Block>
         <View className="detail-top">
           <View className="fixed" id="top" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top > 5 ? '#FFFFFF':''}} >
             <View style={{height: statusBarHeight,}}></View>
@@ -250,7 +254,9 @@ export default class Detail extends React.Component {
               <Text className="header-title">{top > 5 ? basicData.name : ''}</Text>
             </View>
           </View>
-          <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 44)+ 'px' }}>
+         </View>
+      <ScrollView scrollY={!stopScroll} scrollIntoView={toView} className={stopScroll ? "detail stopScroll" : "detail"} style={{top: (statusBarHeight + 44)+ 'px'}} onScroll={this.pageScroll}>
+          <View className="detail-top-icon">
             <View className="cooperStatus" style={ { 
               color: CooperStatus[ basicData.cooperStatus ].color
             } }
@@ -273,9 +279,8 @@ export default class Detail extends React.Component {
              <Image src={People} alt=""></Image>
              <Text>{peopleData.length}</Text>
              </View>
-           </View>
-         </View>
-         <BasicData 
+          </View>
+         <BasicData
           data={ basicData } 
           judgeRole={ judgeRole }
           keyData={ keyData }
@@ -291,30 +296,24 @@ export default class Detail extends React.Component {
             changeKeyData={ data => this.handleChangeKeyData(data)}
           /> : ''
         }
-        <View className="detail-tabs" id="tabs">
-          <AtTabs
-            current={current}
-            animated={false}
-            tabList={[
-              { title: '最新跟进' },
-              { title: '项目评估' },
-              { title: '变更历史' }
-            ]}
-            onClick={this.changeTabs}
-            className={(isFixed ? "tabFixed " : " ") + (basicData.cooperStatus === 2 && current === 0 ? "tabs nopaddingTab" : (current === 1 || current === 2)  ? "tabs bgHistory" : "tabs")}
-            swipeable={false}
-          >
-            <AtTabsPane current={current} index={0}>
-              <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
-            </AtTabsPane>
-            <AtTabsPane current={current} index={1}>
-              <EvaluationList projectId={ basicData.projectId } keyData={ keyData } />
-              <View className="noMore">没有更多了</View>
-            </AtTabsPane>
-            <AtTabsPane current={current} index={2}>
-              {basicData.projectId && <UseHistory projectId={ basicData.projectId } keyData={keyData}></UseHistory>}
-            </AtTabsPane>
-          </AtTabs>
+        <View className="detail-tabs" id={toView} >
+          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '0', zIndex: 99}}>
+            <View onClick={()=> this.setState({current: 0, toView: 'follow'})} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>最新跟进</View>
+            <View onClick={()=> this.setState({current: 1, toView: 'evaluation'})} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>项目评估</View>
+            <View onClick={()=> this.setState({current: 2, toView: 'history'})} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>变更历史</View>
+          </View>
+          <View className="detail-tabs-body"  style={{backgroundColor: basicData.cooperStatus === 2 && current === 0 ? '#ffffff' : '#F8F8F8',}}>
+              <View className={current === 0 ? "body-active" : "body-inactive"} id="follow">
+                <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
+              </View>
+              <View className={current === 1 ? "body-active" : "body-inactive"} id="evaluation">
+                <EvaluationList projectId={ basicData.projectId } keyData={ keyData } />
+                <View className="noMore">没有更多了</View>
+              </View>
+              <View className={current === 2 ? "body-active" : "body-inactive"} id="history">
+                <UseHistory projectId={ basicData.projectId } keyData={keyData}></UseHistory>
+              </View>
+          </View>
         </View>
         <View className="bottom-fixed">
           <View className="assess" style={{background: '#FD9C00', marginRight: '20px'}} onClick={this.bottomClick.bind(this, 'assess')}>发起评估</View>
@@ -325,6 +324,7 @@ export default class Detail extends React.Component {
         {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
         {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
       </ScrollView>
+      </Block>
     )
   }
 }

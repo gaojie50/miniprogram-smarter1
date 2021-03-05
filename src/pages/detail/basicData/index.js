@@ -32,12 +32,6 @@ export default class BasicData extends React.Component {
     })
   }
 
-  handleTouchMove(e) {
-    console.log(1111)
-    e.preventDefault()
-    e.stopPropagation()
-  }
-
   render() {
     const { data, keyData, judgeRole } = this.props;
     const newPic = data.pic ? `${data.pic.replace('/w.h/', '/')}@200w_274h_1e_1c` : Cover;
