@@ -22,62 +22,115 @@ export default function assessPage(){
   
   const [ briefInfo, setBriefInfo ] = useState({});
   const [ projectRole, setProjectRole ] = useState(6);
-  const [ loading, setLoading ] = useState(false);
   const [ curEvalObj, setCurEvalObj ] = useState({});
-  const [ canEvaluate, setCanEvaluate ] = useState( false )
-  const [ result, setResult ] = useState({});
-  const [ hasPermission, setHasPermission ] = useState( false );
+  const [ didAssessed, setDidAssessed ] = useState(false);  // 是否评估过
+  const [ canEvaluate, setCanEvaluate ] = useState(false);
+  const [ hasPermission, setHasPermission ] = useState(false);
   
   const isLogin = Taro.getStorageSync('token');
-  const { projectId, roundId } = getCurrentInstance().router.params;
+  const { projectId, roundId, inviteId, participationCode } = getCurrentInstance().router.params;
   const capsuleLocation = getGlobalData('capsuleLocation');
   const {statusBarHeight} = getGlobalData('systemInfo');
   const titleHeight= Math.floor(
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
-
+  
   useDidShow(()=>{
-    fetchData();
+    ( async ()=>{
+      if(isLogin){
+        const authInfo = Taro.getStorageSync('authinfo');
+        if( authInfo?.authIds?.includes(AUTH_ID)){
+          setHasPermission(true);
+          fetchData()
+        }
+      }
+    })()
   })
 
-  useEffect(()=>{
-    if(isLogin){
-      const authInfo = Taro.getStorageSync('authinfo');
-      console.log(authInfo);
-      if( authInfo?.authIds?.includes(AUTH_ID)){
-        setHasPermission(true);
-        fetchData();
-      }
+  const fetchData = async () => {
+    Taro.showLoading({
+      titile: '评估权限获取中'
+    })
+    const statusData = await fetchAccessStatus();
+    const { hasAssess, hasCodeInput } = statusData;
+    if( hasCodeInput ){
+      setDidAssessed( hasAssess );
+    }else{
+      const assessData = await setAssessPermission();
+      console.log(assessData);
+      setDidAssessed( assessData?.hasAssess );
     }
-  }, [])
-
-  const fetchData = () => {
-    setLoading( true );
-    fetchResult();
     fetchRole();
     fetchBrifInfo();
     fetchEveluationList();
   }
 
-  const fetchResult = () => {
+  const fetchAccessStatus = () => {
+    return new Promise((resolve, reject)=>{
+      reqPacking(
+        {
+          url: 'api/management/inviteInfo',
+          data: { 
+            inviteId,
+          },
+        },
+        'server',
+      ).then(res => {
+          const { data, success, error } = res;
+          if (success) {
+            resolve( data );
+          }
+          
+          if (error){
+            errorHandle(error);
+            reject(error);
+          } 
+        });
+    })
+  } 
+
+  const setAssessPermission = () => {
+    return new Promise((resolve, reject)=>{
+      reqPacking(
+        {
+          url: 'api/management/assessmentLink',
+          data: { 
+            inviteId,
+            participationCode
+          },
+        },
+        'server',
+      ).then(res => {
+        const { data, success, error } = res;
+        if (success) {
+          resolve(data);
+        }
+        if (error){
+          errorHandle(error); 
+          reject(error);
+        } 
+      });
+    })
+  }
+
+  const setPermission = () => {
     reqPacking(
       {
-        url: 'api/management/result',
+        url: 'api/management/assessmentLink',
         data: { 
-          projectId,
-          roundId,
+          inviteId,
+          participationCode
         },
       },
       'server',
     ).then(res => {
-        const { data, success, error } = res;
-        if (success) {
-          setResult && setResult(data);
-        }
-
-        if (error) errorHandle(error);
-      });
-  };
+      const { data, success, error } = res;
+      if (success) {
+        setDidAssessed(data.hasAssess);
+      }
+      if (error) errorHandle(message);
+    });
+  }
 
 
   const fetchRole = () => {
@@ -136,11 +189,9 @@ export default function assessPage(){
             setCanEvaluate(true);
           }
           setCurEvalObj(evalObj);
-          setLoading(false);
           return;
         }
         error.message && errorHandle(error);
-        setLoading(false);
         setCanEvaluate(false);
       }).finally(()=>{
         Taro.hideLoading();
@@ -157,7 +208,7 @@ export default function assessPage(){
       return;
     }
 
-    if(result.evaluated){
+    if(didAssessed){
       Taro.redirectTo({
         url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`,
       })
@@ -179,7 +230,7 @@ export default function assessPage(){
   }
 
   
-  const { projectFile=[], backColor, name='', pic, categoryType, description } = briefInfo;
+  const { projectFile=[], backColor, name='', pic, categoryType } = briefInfo;
   const { round, initiator, startDate, roundTitle } = curEvalObj;
   const defaultPicUrl = 'https://obj.pipi.cn/festatic/common/image/90f5be009a6f7852f14f9553a14a3e35.png';
   const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPicUrl;
@@ -211,7 +262,6 @@ export default function assessPage(){
 
           <View className="evaluation-info-wrap">
             <View className="round-title">{roundTitle}</View>
-            {description && <View className="desc">{description}</View>}
             <View className="project-file-wrap">
               {
                 (projectFile || []).map(item=>{
@@ -229,7 +279,7 @@ export default function assessPage(){
             </View>
           </View>
           
-          {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!result.evaluated? '开始评估': '您已填写，查看结果'}</Button>}
+          {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? '开始评估': '您已填写，查看结果'}</Button>}
         </View>
       </View>
       )}
