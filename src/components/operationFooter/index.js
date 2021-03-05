@@ -1,14 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Taro,{useShareAppMessage} from '@tarojs/taro';
 import { View, Text, Button, } from '@tarojs/components';
+import reqPacking from '@utils/reqPacking';
 import './index.scss';
+
 
 export default function OperationFooter({ projectId, roundId, evaluated, info }) {
   let { name,pic } = info;
+
+  const [ inviteId, setInviteId ] = useState('');
+  const [ participationCode, setParticipationCode ] = useState('')
+  
+  useEffect(()=>{
+    getShareMessage(projectId);
+  }, [])
+
+  const getShareMessage = (projectId) => {
+    reqPacking(
+      {
+        url: `api/management/shareEvaluation?roundId=${roundId}`,
+        method: 'POST'
+      },
+      'server',
+    ).then((res) => {
+      const { success, error, data } = res;
+      if(success){
+        setInviteId( data.inviteId );
+        setParticipationCode( data.participationCode );
+      }
+    })
+  }
   
   const goToAssess = () => {
     Taro.navigateTo({
-      url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
+      url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`,
     })
   }
 
@@ -24,7 +49,7 @@ export default function OperationFooter({ projectId, roundId, evaluated, info })
         return {
           title: `${realName} 邀请您参与《${name}》项目评估`,
           imageUrl: pic,
-          path: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`
+          path: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
         };
       };
 
