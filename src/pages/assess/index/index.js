@@ -49,7 +49,7 @@ export default function assessPage(){
 
   const fetchData = async () => {
     Taro.showLoading({
-      titile: '评估权限获取中'
+      title: '评估权限获取中'
     })
     const statusData = await fetchAccessStatus();
     const { hasAssess, hasCodeInput } = statusData;
@@ -57,7 +57,7 @@ export default function assessPage(){
       setDidAssessed( hasAssess );
     }else{
       const assessData = await setAssessPermission();
-      console.log(assessData);
+
       setDidAssessed( assessData?.hasAssess );
     }
     fetchRole();
