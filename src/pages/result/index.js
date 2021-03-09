@@ -154,6 +154,9 @@ export default function Result() {
         {
           !evaluated && !isLeader(projectRole) ? <View className="tip">为了保证评估客观公正，您需填答后才能看到他人的评估内容</View> : ""
         }
+        {
+          evaluated && projectRole == 4 ? <View className="tip">当前仅展示您自己的评估内容</View> : ""
+        }
         <View className="h2">{projectEvaluationName}</View>
   
         {
