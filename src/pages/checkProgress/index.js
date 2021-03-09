@@ -129,7 +129,7 @@ function TabItem (
   }
 
   return <View>
-    <View className="item-title">{updater} 添加于 {formatCreateTime(updateTime)}</View>
+    <View className="item-title"><Text>{updater}</Text> 添加于 {formatCreateTime(updateTime)}</View>
     <View className={`item-${value}`}>
       <View className="content-top">
         {stageStatus.map((item,index) => <Text key={index}>{item}</Text>)}

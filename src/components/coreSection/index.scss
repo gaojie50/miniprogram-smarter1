@@ -57,7 +57,6 @@
 
   .th{
     font-weight: 400;
-    font-family: PingFangSC-Regular;
     font-size: 24px;
     color: #999999;
     line-height: 76px;
@@ -65,12 +64,12 @@
 
   .td{
     font-weight: 400;
-    font-family: PingFangSC-Regular;
     font-size: 24px;
     color: #333;
     line-height: 36px;
     padding-left: 10px;
     box-sizing: border-box;
+    font-family: MaoYanHeiTi-H1;
 
     &:first-of-type{
       padding-left: 0;
@@ -116,7 +115,7 @@
 
     .dl{
       .dt{
-        font-family: MaoYanHeiTi-H1-H1;
+        font-family: MaoYanHeiTi-H1;
         font-size: 46px;
         color: #FD9C00;
         line-height: 46px;
@@ -127,10 +126,10 @@
         display: inline-block;
         font-weight: 400;
         opacity: 0.5;
-        font-family: PingFangSC-Regular;
         font-size: 28px;
         color: #333333;
         line-height: 30px;
+        font-family: PingFangSC-Regular;
 
         &:first-of-type{
           margin-right: 20px;
@@ -140,10 +139,11 @@
   }
 
   .process-box{
-    border-radius: 2px;
+    border-radius: 10px;
     display: inline-block;
     width: 690px;
     padding: 20px;
+    padding-bottom: 30px;
     box-sizing: border-box;
     display: inline-block;
     margin-bottom: 24px;
@@ -163,7 +163,7 @@
       }
 
       .span{
-        font-family: MaoYanHeiTi-H1-H1;
+        font-family: MaoYanHeiTi-H1;
         display: inline-block;
         color: #333333;
         margin-bottom: 16px;

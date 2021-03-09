@@ -66,17 +66,33 @@ export default function Result() {
   };
 
   const fetchInfo = () =>{
-    reqPacking({
-      url: 'api/management/briefInfo',
-      data: { projectId, roundId },
-      method: 'GET',
-    }).then(res => {
-      const { success, data = {}, error } = res;
+    Promise.all([
+      reqPacking({
+        url: 'api/management/evaluationList',
+        data: { projectId },
+        method: 'GET',
+      }),
+      reqPacking({
+        url: 'api/management/briefInfo',
+        data: { projectId,roundId },
+        method: 'GET',
+      })
+    ]).then(resList => {
+      const { success, data = {}, error } = resList[0];
+      const { pic } = resList[1].data;
 
-      if (success) {
-        setProjectEvaluationName(data.projectEvaluationName);
-        data.pic = data.pic ? picFn(data.pic) : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png';
-        return setInfo(data);
+      if(success){
+        const {evaluationList =[],name} = data;
+        const {roundTitle="",round,participantNumber,evaluationMethod} = evaluationList.filter(item => item.roundId == roundId)[0];
+        setProjectEvaluationName(roundTitle);
+        
+        return setInfo({
+          name,
+          round,
+          participantNumber,
+          evaluationMethod,
+          pic: pic ? picFn(pic) : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png',
+        });
       }
 
       Taro.showToast({
@@ -117,6 +133,9 @@ export default function Result() {
       <View className="result-cont">
         {
           !evaluated && !isLeader(projectRole) ? <View className="tip">为了保证评估客观公正，您需填答后才能看到他人的评估内容</View> : ""
+        }
+        {
+          evaluated && projectRole == 4 ? <View className="tip">当前仅展示您自己的评估内容</View> : ""
         }
         <View className="h2">{projectEvaluationName}</View>
   

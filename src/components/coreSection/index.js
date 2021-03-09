@@ -237,7 +237,7 @@ function Box({
     }}>
     <View className="h5">{headTitle}</View>
     <View className="dl">
-      <View className="dt" style={{ color: `${colorCalc(colorArr)}` }}>{average}</View>
+      <View className="dt" style={{ color: `${colorCalc(colorArr)}` }}>{!average && average!== 0 ? '-': average}</View>
       <View className="dt">
         {limitValHidden ? "" : <Text className="dd">最高{max}</Text>}
         {limitValHidden ? "" : <Text className="dd">最低{min}</Text>}

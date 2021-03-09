@@ -5,7 +5,6 @@ import './index.scss';
 
 export default function OperationFooter({ projectId, roundId, evaluated, info }) {
   let { name,pic } = info;
-  pic = pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png';
   
   const goToAssess = () => {
     Taro.navigateTo({
