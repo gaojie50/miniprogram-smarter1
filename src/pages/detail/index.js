@@ -54,6 +54,65 @@ export default class Detail extends React.Component {
     this.fetchBasicData();
   }
 
+  onShareAppMessage(res){
+    const { basicData } = this.state;
+    const { projectId, pic } = basicData
+    const { target, from } = res;
+    if (from != 'button') return;
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    const { dataset } = target;
+    const { realName = "" } = userInfo;
+    console.log(dataset);
+    console.log(basicData);
+    return new Promise((resolve, reject)=>{
+      Taro.showLoading({
+        title: '分享信息获取中',
+      })
+      reqPacking(
+        {
+          url: `api/management/shareEvaluation?roundId=${dataset.roundId}`,
+          method: 'POST'
+        },
+        'server',
+      ).then((res) => {
+        Taro.hideLoading();
+        const { success, error, data } = res;
+        if(success){
+          const { inviteId, participationCode } = data;
+          let shareMessage = {
+            title: '分享报告',
+            path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
+          };
+          switch (dataset.sign) {
+            case 'invite': {
+              shareMessage = {
+                title: `${realName} 邀请您参与《${dataset.roundTitle}》项目评估`,
+                imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+                path: `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
+              };
+            };
+    
+            case 'attend': {
+              shareMessage = {
+                title: `${realName} 分享给您关于《${dataset.roundTitle}》项目的报告`,
+                imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
+              }
+            }
+          }
+          console.log('分享信息为', `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`);
+          resolve(shareMessage)
+        }else{
+          reject('分享信息获取失败');
+        }
+      }).catch(res=>{
+        console.log(res);
+        reject('分享信息获取失败');
+      })
+    })
+  }
+
+
   fetchBasicData() {
     const page = Taro.getCurrentPages();
     let param = {};
@@ -213,29 +272,6 @@ export default class Detail extends React.Component {
         topSet: true
       })
     }
-
-    // let query = Taro.createSelectorQuery();
-    // let topBarHeight = 0;
-    // query.select('#top').boundingClientRect((res) => {
-    //   if(res.height !== 0) {
-    //     topBarHeight = res.height;
-    //   }
-	  // }).exec();
-    // query.select('#tabs').boundingClientRect((res) => {
-    //   if(res.top <= (topBarHeight + 15)) {
-    //     if(!isFixed) {
-    //       this.setState({
-    //         isFixed: true
-    //       })
-    //     }
-    //   } else {
-    //     if(isFixed) {
-    //       this.setState({
-    //         isFixed: false
-    //       })
-    //     }
-    //   }
-    // }).exec();
   }
 
   render() {

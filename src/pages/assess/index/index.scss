@@ -65,9 +65,13 @@ page image {
     border: 3px solid #eee;
     border-radius: 40px;
     height: 100%;
-    padding: 60px 45px;
     box-sizing: border-box;
-    overflow-y: scroll;
+    .inner-content-container {
+      box-sizing: border-box;
+      padding: 60px 45px 0 45px;
+      height: calc(100% - 180px);
+      overflow-y: scroll;
+    }
   }
   .briefinfo-wrap {
     text-align: center;
@@ -119,9 +123,6 @@ page image {
 
     .project-file-wrap {
       margin-top: 30px;
-      height: 264px;
-      overflow-x: hidden;
-      overflow-y: scroll;
       .file-item {
         width: 600px;
         height: 122px;
@@ -168,6 +169,8 @@ page image {
     text-align: center;
     position: fixed;
     bottom: 100px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
     
     &:active, &:visited {
       background: #276FF0;

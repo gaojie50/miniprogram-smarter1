@@ -229,7 +229,7 @@ export default function assessPage(){
            title: '提交成功',
            icon: 'success'
          });
-
+         Taro.eventCenter.trigger('didEvaluated');
          Taro.redirectTo({
            url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`
          })

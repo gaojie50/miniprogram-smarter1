@@ -1,4 +1,4 @@
-import Taro,{useShareAppMessage} from '@tarojs/taro';
+import Taro from '@tarojs/taro';
 import { Block, View, Image, Text, ScrollView, Button } from '@tarojs/components';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import NoFollow from '@static/detail/noFollows.png';
@@ -76,14 +76,12 @@ export function EvaluationList(props) {
 function EvalutaionCard(props) {
   
   const [realName, setRealName] = useState('');
-  const [ inviteId, setInviteId ] = useState('');
-  const [ participationCode, setParticipationCode ] = useState('');
 
   const {
     category,
     round = '-', participantNumber,
     roundTitle, startDate, evaluationMethod, evaluationTotalScore,
-    estimateBox, estimateScore, initiator = '-', projectId, roundId, pic,
+    estimateBox, estimateScore, initiator = '-', projectId, roundId,
     hasAssess, invitees,
     projectRole,
     judgeRole
@@ -167,63 +165,15 @@ function EvalutaionCard(props) {
   useEffect(() => {
     const { userInfo } = Taro.getStorageSync('authinfo');
     setRealName(userInfo.realName);
-    getShareMessage(roundId);
   }, [])
 
 
-
-  
-  useShareAppMessage((res) => {
-    const { target, from } = res;
-    if (from != 'button') return;
-    const { userInfo } = Taro.getStorageSync('authinfo');
-    const { dataset } = target;
-    const { realName = "" } = userInfo;
-
-    switch (dataset.sign) {
-      case 'invite': {
-        return {
-          title: `${realName} 邀请您参与《${dataset.roundTitle}》项目评估`,
-          imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
-          path: `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
-        };
-      };
-
-      case 'attend': {
-        return {
-          title: `${realName} 分享给您关于《${dataset.roundTitle}》项目的报告`,
-          path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
-        }
-      }
-    }
-
-    return {
-      title: '分享报告',
-      path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
-    }
-  })
-
-  const getShareMessage = (projectId) => {
-    reqPacking(
-      {
-        url: `api/management/shareEvaluation?roundId=${roundId}`,
-        method: 'POST'
-      },
-      'server',
-    ).then((res) => {
-      const { success, error, data } = res;
-      if(success){
-        setInviteId( data.inviteId );
-        setParticipationCode( data.participationCode );
-      }
-    })
-  }
 
   const handleJump=(e)=>{
     if( hasAssess || projectRole === 1){
       Taro.navigateTo({ url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`})
     }else{
-      Taro.navigateTo({ url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`})
+      Taro.navigateTo({ url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`})
     }
   }
 
@@ -305,8 +255,6 @@ function EvalutaionCard(props) {
           data-roundTitle={roundTitle}
           data-roundId={roundId}
           data-sign="invite"
-          data-inviteId={inviteId}
-          data-participationCode={participationCode}
           openType="share"
           className="evaluation-card-action-btn">
           邀请参与
@@ -314,8 +262,6 @@ function EvalutaionCard(props) {
         <Button
           data-roundTitle={roundTitle}
           data-roundId={roundId}
-          data-inviteId={inviteId}
-          data-participationCode={participationCode}
           data-sign="attend"
           openType="share"
           className="evaluation-card-action-btn">
@@ -326,7 +272,7 @@ function EvalutaionCard(props) {
             className="evaluation-card-action-btn evaluation-card-action-btn-eval"
             onClick={() => {
               Taro.navigateTo({
-                url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`,
+                url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
               })
             }}
             >
