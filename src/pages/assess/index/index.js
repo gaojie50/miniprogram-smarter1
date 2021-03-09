@@ -43,9 +43,10 @@ export default function assessPage(){
     if(isLogin){
       const authInfo = Taro.getStorageSync('authinfo');
       if( authInfo?.authIds?.includes(AUTH_ID)){
-        getEvaluationStatus();
         setHasPermission(true);
-        fetchData()
+        getEvaluationStatus().then(()=>{
+          fetchData()
+        })
       }
     }
   }, [])
