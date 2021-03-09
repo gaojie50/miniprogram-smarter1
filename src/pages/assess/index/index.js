@@ -34,32 +34,39 @@ export default function assessPage(){
   const titleHeight= Math.floor(
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
-  
-  useDidShow(()=>{
-    ( async ()=>{
-      if(isLogin){
-        const authInfo = Taro.getStorageSync('authinfo');
-        if( authInfo?.authIds?.includes(AUTH_ID)){
-          setHasPermission(true);
-          fetchData()
-        }
-      }
-    })()
+
+  Taro.eventCenter.on('didEvaluated', ()=>{
+    setDidAssessed(true);
   })
 
-  const fetchData = async () => {
-    Taro.showLoading({
-      title: '评估权限获取中'
-    })
-    const statusData = await fetchAccessStatus();
-    const { hasAssess, hasCodeInput } = statusData;
-    if( hasCodeInput ){
-      setDidAssessed( hasAssess );
-    }else{
-      const assessData = await setAssessPermission();
-
-      setDidAssessed( assessData?.hasAssess );
+  useEffect(()=>{
+    if(isLogin){
+      const authInfo = Taro.getStorageSync('authinfo');
+      if( authInfo?.authIds?.includes(AUTH_ID)){
+        getEvaluationStatus();
+        setHasPermission(true);
+        fetchData()
+      }
     }
+  }, [])
+
+  const getEvaluationStatus = async () => {
+    // 链接上有inviteId，先查看是否评估过
+    if(inviteId){
+      const statusData = await fetchAccessStatus();
+      const { hasAssess, hasCodeInput } = statusData;
+      if( hasCodeInput || hasAssess ){
+        setDidAssessed( hasAssess );
+      }else{
+        const assessData = await setAssessPermission();
+        setDidAssessed( assessData?.hasAssess );
+      }
+    }else{  // 兼容没有评估inviteId的情况
+      setDidAssessed(false)
+    }
+  }
+
+  const fetchData = async () => {
     fetchRole();
     fetchBrifInfo();
     fetchEveluationList();
@@ -209,7 +216,7 @@ export default function assessPage(){
     }
 
     if(didAssessed){
-      Taro.redirectTo({
+      Taro.navigateTo({
         url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`,
       })
     }else{
@@ -230,7 +237,7 @@ export default function assessPage(){
   }
 
   
-  const { projectFile=[], backColor, name='', pic, categoryType } = briefInfo;
+  const { projectFile=[], backColor, name='', pic, categoryType, description } = briefInfo;
   const { round, initiator, startDate, roundTitle } = curEvalObj;
   const defaultPicUrl = 'https://obj.pipi.cn/festatic/common/image/90f5be009a6f7852f14f9553a14a3e35.png';
   const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPicUrl;
@@ -253,32 +260,36 @@ export default function assessPage(){
       { isLogin && hasPermission && (
         <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`}}>
           <View className="content-container">
-          <View className="briefinfo-wrap">
-            <Image className="project-pic" src={coverPic}></Image>
-            {name && <View className="project-name">《{name}》</View>}
-            {round && <View className="project-round">第{round}轮 / {getEvaluationLabel(categoryType)}</View>}
-            { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
-          </View>
+            <View className="inner-content-container">
+              <View className="inner-content">
+                <View className="briefinfo-wrap">
+                  <Image className="project-pic" src={coverPic}></Image>
+                  {name && <View className="project-name">《{name}》</View>}
+                  {round && <View className="project-round">第{round}轮 / {getEvaluationLabel(categoryType)}</View>}
+                  { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
+                </View>
 
-          <View className="evaluation-info-wrap">
-            <View className="round-title">{roundTitle}</View>
-            <View className="project-file-wrap">
-              {
-                (projectFile || []).map(item=>{
-                  return (
-                    <View className="file-item" onClick={()=>{previewFile(item.url, item.title)}}>
-                      <Image className="logo" src={getEvaluationIcon(categoryType)} />
-                      <View className="file-info-wrap">
-                        <View className="file-name">{item.title}</View>
-                      </View>
-                      <View className='at-icon at-icon-chevron-right'></View>
-                    </View>
-                  )
-                })
-              }
+                <View className="evaluation-info-wrap">
+                <View className="round-title">{roundTitle}</View>
+                {description && <View className="desc">{description}</View>}
+                <View className="project-file-wrap">
+                  {
+                    (projectFile || []).map(item=>{
+                      return (
+                        <View className="file-item" onClick={()=>{previewFile(item.url, item.title)}}>
+                          <Image className="logo" src={getEvaluationIcon(categoryType)} />
+                          <View className="file-info-wrap">
+                            <View className="file-name">{item.title}</View>
+                          </View>
+                          <View className='at-icon at-icon-chevron-right'></View>
+                        </View>
+                      )
+                    })
+                  }
+                </View>
+              </View>
+              </View>
             </View>
-          </View>
-          
           {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? '开始评估': '您已填写，查看结果'}</Button>}
         </View>
       </View>

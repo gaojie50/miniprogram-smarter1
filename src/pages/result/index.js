@@ -255,7 +255,9 @@ export default function Result() {
         info={info}
         projectId={projectId}
         roundId={roundId}
-        evaluated={evaluated} />
+        evaluated={evaluated}
+        canInvite={isDockingPerson(judgeRole)}
+        />
       </Block>
     )}
   </View>
