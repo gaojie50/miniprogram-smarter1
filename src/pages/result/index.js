@@ -81,27 +81,7 @@ export default function Result() {
       const { success, data = {}, error } = resList[0];
       const { pic } = resList[1].data;
 
-      const {evaluationList =[],name} = data;
-      const {roundTitle="",round,participantNumber,evaluationMethod} = evaluationList.filter(item => item.roundId == roundId)[0];
-      setProjectEvaluationName(roundTitle);
-      
-      return setInfo({
-        name,
-        round,
-        participantNumber,
-        evaluationMethod,
-        pic: pic ? picFn(pic) : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png',
-      });
-
-    })
-    reqPacking({
-      url: 'api/management/evaluationList',
-      data: { projectId },
-      method: 'GET',
-    }).then(res => {
-      const { success, data = {}, error } = res;
-
-      if (success) {
+      if(success){
         const {evaluationList =[],name} = data;
         const {roundTitle="",round,participantNumber,evaluationMethod} = evaluationList.filter(item => item.roundId == roundId)[0];
         setProjectEvaluationName(roundTitle);
@@ -111,7 +91,7 @@ export default function Result() {
           round,
           participantNumber,
           evaluationMethod,
-          // data.pic = data.pic ? picFn(data.pic) : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png';
+          pic: pic ? picFn(pic) : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png',
         });
       }
 
