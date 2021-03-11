@@ -8,16 +8,18 @@
   .title {
     float: left;
     font-weight: 600;
+    white-space: nowrap;
     font-family: PingFangSC-Semibold;
   }
   .input {
     float: right;
     display: block;
-    width: 13.34%;
+    width: 60%;
     height: 28px;
     margin-top: 33px;
     margin-right: 25px;
     box-sizing: border-box;
+    text-align: right;
     .input-placeholder {
       height: 28px;
       font-weight: 400;

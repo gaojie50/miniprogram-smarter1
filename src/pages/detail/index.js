@@ -11,6 +11,7 @@ import { EvaluationList } from '../board/evaluate';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import AddingProcess from '@components/addingProcess';
+import utils from '@utils/index.js'
 import ProjectFile from './projectFile';
 import FacePeople from './people';
 import People from '@static/detail/people.png';
@@ -19,9 +20,14 @@ import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import './index.scss';
 import '@components/m5/style/index.scss';
+import { camelCase } from 'lodash';
 
 const reqPacking = getGlobalData('reqPacking');
-const {statusBarHeight} = getGlobalData('systemInfo');
+const capsuleLocation = getGlobalData('capsuleLocation');
+const { rpxTopx } = utils;
+const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
+const titleBarPadding = capsuleLocation.top;
+const titleBarHeight = capsuleLocation.bottom - capsuleLocation.top;
 export default class Detail extends React.Component {
   constructor(props) {
     super(props);
@@ -35,8 +41,7 @@ export default class Detail extends React.Component {
       keyData: {},
       current: 0,
       showProgress: false,
-      top: 0,
-      topSet: true,
+      top: false,
       showCooperStatus: false,
       showPeople: false,
       showProjectFile: false,
@@ -44,7 +49,10 @@ export default class Detail extends React.Component {
       stopScroll: false,
       isFixed: false,
       navbarInitTop: 0, // 导航距顶部的距离
-      toView: ''
+      toView: 'follow',
+      setBgColor: false,
+      evaluation: [],
+      history: []
     }
   }
 
@@ -191,71 +199,71 @@ export default class Detail extends React.Component {
 
   pageScroll = e => {
     const that = this;
-    const { top, topSet } = this.state;
+    const { top } = this.state;
     const { scrollTop } = e.detail;
     const { isFixed, stopScroll } = this.state;
-    if(scrollTop > 5 && topSet) {
+  
+    if(scrollTop > 5 && !top) {
       this.setState({
-        top: scrollTop,
-        topSet: false
+        top: true,
       })
     }
-    if(scrollTop < 5 && !topSet) {
+    if(scrollTop < 20 && top) {
       this.setState({
-        top: scrollTop,
-        topSet: true
+        top: false,
       })
     }
-    const query = wx.createSelectorQuery();
-    let topBarHeight;
-    query.select('#top').boundingClientRect(function (res){
-      console.log(res, 44)
-      topBarHeight = res.height;
-    }).exec();
-    query.select('#tabs').boundingClientRect(function (res){
-      // if(res.top <= topBarHeight && !stopScroll) {
-      //   that.setState({
-      //     stopScroll: true
-      //   })
-      // }
-      // if(res.top > topBarHeight && stopScroll) {
-      //   that.setState({
-      //     stopScroll: false
-      //   })
-      // }
-    }).exec();
   }
-  changeTabs = value => {
+
+  handleJudgeData = (data = [], type) => {
+    const { current } = this.state;
+
+    if(type === 'history') {
+      this.setState({
+        history: data
+      })
+    }
+    if(type === 'evaluation') {
+      this.setState({
+        evaluation: data.evaluationList
+      })
+    }
+  }
+
+  handleSwitch(param) {
+    const { evaluation, history, basicData } = this.state;
+    console.log(this.refs,33)
+    let hasFollowData = false;
+    const { followData } = this.refs.followStatus.state;
+    Object.keys(followData).forEach(i => {
+      if(followData[i] && followData[i].length > 0 && !hasFollowData){
+        hasFollowData = true;
+      }
+    })
+
     this.setState({
-      current: value
+      current: param,
+      toView: param === 0 && hasFollowData ? 'follow' : param === 1 && evaluation.length > 0 ? 'evaluation' : history.length > 0 ?'history' : '',
+      setBgColor: (param === 1 && evaluation.length > 0) || (param === 2 && history.length > 0) || (param === 0 && basicData.cooperStatus === 2) ? true :false
     })
   }
-  click = () => {
-    console.log(11111)
-    const query = wx.createSelectorQuery();
-    console.log(query.select('#body'),9999)
-    query.select('#body').boundingClientRect(function (res){
-      console.log(res)
-      res.top = 64
-    }).exec();
-  }
+
   render() {
-    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed, toView } = this.state;
+    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed, toView, setBgColor } = this.state;
 
     return (
       <Block>
         <View className="detail-top">
-          <View className="fixed" id="top" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top > 5 ? '#FFFFFF':''}} >
-            <View style={{height: statusBarHeight,}}></View>
-            <View className="header">
+          <View className={top ? "fixed" : ""} id="top" style={{height: `${headerBarHeight}px`, paddingTop: `${titleBarPadding}px`, backgroundColor: top ? '#FFFFFF':''}} >
+            <View className="header" style={{height: `${titleBarHeight}px`, lineHeight: `${titleBarHeight}px` }}>
               <View className="backPage" onClick={this.handleBack}>
                 <Image src={ArrowLeft} alt=""></Image>
               </View>
-              <Text className="header-title">{top > 5 ? basicData.name : ''}</Text>
+              <Text className="header-title">{top ? basicData.name : ''}</Text>
             </View>
           </View>
-         </View>
-      <ScrollView scrollY={!stopScroll} scrollIntoView={toView} className={stopScroll ? "detail stopScroll" : "detail"} style={{top: (statusBarHeight + 44)+ 'px'}} onScroll={this.pageScroll}>
+        </View>
+        <ScrollView scrollY={!stopScroll} enhanced bounces={false} scrollIntoView={toView} className={stopScroll ? "detail stopScroll" : "detail"} style={{top: `${headerBarHeight}px`,minHeight: `calc(100vh - ${headerBarHeight})px`}} onScroll={this.pageScroll}>
           <View className="detail-top-icon">
             <View className="cooperStatus" style={ { 
               color: CooperStatus[ basicData.cooperStatus ].color
@@ -297,34 +305,37 @@ export default class Detail extends React.Component {
           /> : ''
         }
         <View className="detail-tabs" id={toView} >
-          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '0', zIndex: 99}}>
-            <View onClick={()=> this.setState({current: 0, toView: 'follow'})} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>最新跟进</View>
-            <View onClick={()=> this.setState({current: 1, toView: 'evaluation'})} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>项目评估</View>
-            <View onClick={()=> this.setState({current: 2, toView: 'history'})} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>变更历史</View>
+          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '0', zIndex: 9}}>
+            <View onClick={()=> this.handleSwitch(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>最新跟进</View>
+            <View onClick={()=> this.handleSwitch(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>项目评估</View>
+            <View onClick={()=> this.handleSwitch(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>变更历史</View>
           </View>
-          <View className="detail-tabs-body"  style={{backgroundColor: basicData.cooperStatus === 2 && current === 0 ? '#ffffff' : '#F8F8F8',}}>
+          <View className="detail-tabs-body"  style={{backgroundColor: setBgColor ? '#F8F8F8' : '#ffffff',}}>
               <View className={current === 0 ? "body-active" : "body-inactive"} id="follow">
                 <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
               </View>
               <View className={current === 1 ? "body-active" : "body-inactive"} id="evaluation">
-                <EvaluationList projectId={ basicData.projectId } keyData={ keyData } />
-                <View className="noMore">没有更多了</View>
+                <EvaluationList judgeData={this.handleJudgeData} projectId={ basicData.projectId } keyData={ keyData } />
+                {this.state.evaluation.length > 0 ? <View className="noMore">没有更多了</View> : null}
               </View>
               <View className={current === 2 ? "body-active" : "body-inactive"} id="history">
-                <UseHistory projectId={ basicData.projectId } keyData={keyData}></UseHistory>
+                <UseHistory judgeData={this.handleJudgeData} projectId={ basicData.projectId } keyData={keyData}></UseHistory>
+                {this.state.history.length > 0 ? <View className="noMore">没有更多了</View> : null}
               </View>
+              <View className="bottom-relative" style={{backgroundColor: setBgColor ? '#F8F8F8' : '#ffffff'}}></View>
           </View>
         </View>
         <View className="bottom-fixed">
           <View className="assess" style={{background: '#FD9C00', marginRight: '20px'}} onClick={this.bottomClick.bind(this, 'assess')}>发起评估</View>
           <View className="assess" style={{background: '#276FF0'}} onClick={this.bottomClick.bind(this, 'progress')}>添加进展</View>
         </View>
-        {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}
-        {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
-        {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
-        {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
       </ScrollView>
-      </Block>
+     
+      {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}
+      {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
+      {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
+      {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
+    </Block>
     )
   }
 }

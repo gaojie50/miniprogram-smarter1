@@ -33,7 +33,7 @@ export default class KeyData extends React.Component {
     const { basicData, keyData, judgeRole } = this.props;
     return (
       <View className="keyData">
-        <ScrollView className="keyData-top" scrollX>
+        <ScrollView className="keyData-top" style={{borderBottomLeftRadius: judgeRole.role !== 1 ? '10rpx': '0',borderBottomRightRadius: judgeRole.role !== 1 ? '10rpx': '0',}} scrollX>
           {
             basicData.category === 3 && judgeRole.releaseStage === 1 ?
             <View className="item" style={{width: '33.33%'}}>
@@ -78,7 +78,12 @@ export default class KeyData extends React.Component {
                 <View className="title">评估总得分</View>
                 {
                   keyData.assessTotalScore && keyData.assessTotalScore.num ?
-                    <View className="number"><Text className="num" style={{fontSize: '36rpx'}}>{keyData.assessTotalScore.num}</Text>分</View> : <View className="num">-</View>
+                    <View className="number">
+                      <Text className="num" style={{fontSize: '36rpx'}}>{keyData.assessTotalScore.num}</Text>分
+                    </View> : 
+                    <View className="number">
+                      <View className="num" style={{fontSize: '36rpx'}}>-</View>
+                    </View>
                 }
                 {
                   keyData.assessTotalScore && keyData.assessTotalScore.compare && basicData.cooperStatus !== 2 ?
