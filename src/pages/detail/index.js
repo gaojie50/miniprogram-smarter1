@@ -79,10 +79,7 @@ export default class Detail extends React.Component {
         const { success, error, data } = res;
         if(success){
           const { inviteId, participationCode } = data;
-          let shareMessage = {
-            title: '分享报告',
-            path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
-          };
+          let shareMessage = {};
           switch (dataset.sign) {
             case 'invite': {
               shareMessage = {
@@ -90,6 +87,7 @@ export default class Detail extends React.Component {
                 imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
                 path: `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
               };
+              break;
             };
     
             case 'attend': {
@@ -98,6 +96,13 @@ export default class Detail extends React.Component {
                 imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
                 path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
               }
+              break;
+            }
+            default: {
+              shareMessage = {
+                title: '分享报告',
+                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
+              };
             }
           }
           console.log('分享信息为', `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`);

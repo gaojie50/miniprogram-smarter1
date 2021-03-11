@@ -281,6 +281,7 @@ export default function assessPage(){
                           <Image className="logo" src={getEvaluationIcon(categoryType)} />
                           <View className="file-info-wrap">
                             <View className="file-name">{item.title}</View>
+                            <View className="file-size">{item.size}</View>
                           </View>
                           <View className='at-icon at-icon-chevron-right'></View>
                         </View>
