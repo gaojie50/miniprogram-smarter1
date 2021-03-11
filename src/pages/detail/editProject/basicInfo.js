@@ -320,7 +320,7 @@ export default function AddProject(props, ref) {
               }}
             />
           </View>
-          <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => {setOpenCategorySelector(false);props.changeCategory(category);}}>确定</View></View>
+          {/* <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => {setOpenCategorySelector(false);props.changeCategory(category);}}>确定</View></View> */}
         </FloatCard>
         {divider}
         <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr || firstType.length > 0 && firstType.join(' / ') || textVoid} arrow onClick={() => setOpenTypeSelector(true)} />
@@ -350,7 +350,7 @@ export default function AddProject(props, ref) {
                 setTypes({ ...types });
               }}
             />
-            <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenTypeSelector(false)}>确定</View></View>
+            {/* <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenTypeSelector(false)}>确定</View></View> */}
           </View>
         </FloatCard>
         <Toast duration={1000} isOpened={showToast} text={showToast} onClose={() => setShowToast('')} />
@@ -393,7 +393,7 @@ export default function AddProject(props, ref) {
                 setCooperType({ ...cooperType });
               }}
             />
-            <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenCooperSelector(false)}>确定</View></View>
+            {/* <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenCooperSelector(false)}>确定</View></View> */}
           </View>
         </FloatCard>
         {divider}
@@ -415,7 +415,7 @@ export default function AddProject(props, ref) {
                 setCooperState(t);
               }}
             />
-            <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenCooperStateSelector(false)}>确定</View></View>
+            {/* <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenCooperStateSelector(false)}>确定</View></View> */}
           </View>
         </FloatCard>
       </View>
