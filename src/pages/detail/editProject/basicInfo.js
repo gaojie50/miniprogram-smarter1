@@ -308,43 +308,50 @@ export default function AddProject(props, ref) {
           title="选择品类"
           onClose={() => {setOpenCategorySelector(false);props.changeCategory(category);}}
         >
-          <M5Grid
-            hasBorder={false}
-            columnNum={2}
-            mode="rect"
-            data={CATAGORY.map((item) => ({ value: item.label, valueClassName: category === item.label ? 'm5-grid-item-checked' : '' }))}
-            onClick={({ value }) => {
-              setCategory(value);
-              setShowCategoryInput(true);
-            }}
-          />
+          <View className="M5Grid-wrap">
+            <M5Grid
+              hasBorder={false}
+              columnNum={4}
+              mode="rect"
+              data={CATAGORY.map((item) => ({ value: item.label, valueClassName: category === item.label ? 'm5-grid-item-checked' : '' }))}
+              onClick={({ value }) => {
+                setCategory(value);
+                setShowCategoryInput(true);
+              }}
+            />
+          </View>
+          <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => {setOpenCategorySelector(false);props.changeCategory(category);}}>确定</View></View>
         </FloatCard>
         {divider}
         <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr || firstType.length > 0 && firstType.join(' / ') || textVoid} arrow onClick={() => setOpenTypeSelector(true)} />
         <FloatCard
           isOpened={openTypeSelector}
           title="选择类型"
+          className="type-select-float"
           onClose={() => setOpenTypeSelector(false)}
         >
-          <M5Grid
-            hasBorder={false}
-            columnNum={4}
-            mode="rect"
-            data={MOVIE_TYPE_LIST.map((item) => ({ value: item.name, valueClassName: types[item.name] ? 'm5-grid-item-checked' : '' }))}
-            onClick={({ value }) => {
-              const keys = Object.keys(types);
-              if (!types[value]) {
-                if (keys.length < 3) {
-                  types[value] = true;
+          <View className="M5Grid-wrap">
+            <M5Grid
+              hasBorder={false}
+              columnNum={4}
+              mode="rect"
+              data={MOVIE_TYPE_LIST.map((item) => ({ value: item.name, valueClassName: types[item.name] ? 'm5-grid-item-checked' : '' }))}
+              onClick={({ value }) => {
+                const keys = Object.keys(types);
+                if (!types[value]) {
+                  if (keys.length < 3) {
+                    types[value] = true;
+                  } else {
+                    setShowToast('最多可以添加三个类型')
+                  }
                 } else {
-                  setShowToast('最多可以添加三个类型')
+                  delete types[value];
                 }
-              } else {
-                delete types[value];
-              }
-              setTypes({ ...types });
-            }}
-          />
+                setTypes({ ...types });
+              }}
+            />
+            <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenTypeSelector(false)}>确定</View></View>
+          </View>
         </FloatCard>
         <Toast duration={1000} isOpened={showToast} text={showToast} onClose={() => setShowToast('')} />
         {divider}
@@ -369,21 +376,25 @@ export default function AddProject(props, ref) {
           title="选择意向合作类型"
           onClose={() => setOpenCooperSelector(false)}
         >
-          <M5Grid
-            hasBorder={false}
-            className="grid-checkbox"
-            mode="rect"
-            data={COOPER_TYPE.map((item) => ({ value: item.label, valueClassName: cooperType[item.value] ? 'm5-grid-item-checked' : '' }))}
-            onClick={({ value }) => {
-              const keys = Object.keys(cooperType);
-              if (!cooperType[value]) {
-                cooperType[value] = true;
-              } else {
-                delete cooperType[value];
-              }
-              setCooperType({ ...cooperType });
-            }}
-          />
+          <View className="M5Grid-wrap">
+            <M5Grid
+              hasBorder={false}
+              className="grid-checkbox"
+              columnNum={4}
+              mode="rect"
+              data={COOPER_TYPE.map((item) => ({ value: item.label, valueClassName: cooperType[item.value] ? 'm5-grid-item-checked' : '' }))}
+              onClick={({ value }) => {
+                const keys = Object.keys(cooperType);
+                if (!cooperType[value]) {
+                  cooperType[value] = true;
+                } else {
+                  delete cooperType[value];
+                }
+                setCooperType({ ...cooperType });
+              }}
+            />
+            <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenCooperSelector(false)}>确定</View></View>
+          </View>
         </FloatCard>
         {divider}
         <ListItem title='合作状态' extraText={COOPER_STATE?.[cooperState]?.label || textVoid} arrow onClick={() => setOpenCooperStateSelector(true)} />
@@ -392,16 +403,20 @@ export default function AddProject(props, ref) {
           title="选择合作状态"
           onClose={() => setOpenCooperStateSelector(false)}
         >
-          <M5Grid
-            hasBorder={false}
-            className="grid-checkbox"
-            mode="rect"
-            data={COOPER_STATE.map((item, idx) => ({ value: item.value, valueClassName: idx === cooperState ? 'm5-grid-item-checked' : '' }))}
-            onClick={({ value }) => {
-              const t = COOPER_STATE.findIndex((item) => item.value === value)
-              setCooperState(t);
-            }}
-          />
+          <View className="M5Grid-wrap">
+            <M5Grid
+              hasBorder={false}
+              className="grid-checkbox"
+              mode="rect"
+              columnNum={4}
+              data={COOPER_STATE.map((item, idx) => ({ value: item.value, valueClassName: idx === cooperState ? 'm5-grid-item-checked' : '' }))}
+              onClick={({ value }) => {
+                const t = COOPER_STATE.findIndex((item) => item.value === value)
+                setCooperState(t);
+              }}
+            />
+            <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenCooperStateSelector(false)}>确定</View></View>
+          </View>
         </FloatCard>
       </View>
       {/* <View className="add-project-confirm">

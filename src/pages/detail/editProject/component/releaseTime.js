@@ -168,7 +168,7 @@ export default function ReleaseTime(props, ref) {
             {customStartDate.week}
           </Text>
         </View>
-        <View>
+        <View className="text">
           <Text>至</Text>
         </View>
         <View
