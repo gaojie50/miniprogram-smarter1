@@ -1,7 +1,7 @@
 .add-project {
   background-color: #f8f8f8;
   box-sizing: border-box;
-  padding: 30px 0;
+  padding-top: 30px;
   overflow: scroll;
 
   .at-grid {
@@ -14,7 +14,7 @@
     justify-content: space-between;
     &-content {
       flex: 1;
-      padding: 40px 30px;
+      padding: 30px 30px;
       font-weight: 500;
       font-family: PingFangSC-Medium;
       font-size: 40rpx;
@@ -86,7 +86,70 @@
   color: transparent;
 }
 .basicInfo {
+  .M5Grid-wrap {
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .at-float-layout__container {
+    padding: 40px 0 0;
+    min-height: 504px !important;
+    .layout-header {
+      margin-left: 30px;
+    }
+    .layout-body {
+      min-height: 0 !important;
+      margin-bottom: 184px;
+      .layout-body__content {
+        min-height: 10px !important;
+      }
+    }
+  }
+  .type-select-float {
+    .at-float-layout__container {
+      height: 83.2%;
+      max-height: none;
+    }
+  }
   .at-list__item {
     height: 108px;
+    .at-list__item-content {
+      overflow: visible;
+    }
+    .at-list__item-extra {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .item-extra__info {
+      max-width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      padding-left: 30px;
+    }
+    .item-extra__icon-arrow {
+      height: 26rpx;
+      width: 24rpx;
+    }
   }
+  .float-bottom{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    height: 164px;
+    background: #FFFFFF;
+    box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
+    text-align: center;
+    &-confirm {
+      width: 690px;
+      height: 80px;
+      line-height: 80px;
+      margin: 16px auto 0;
+      background: #276FF0;
+      border-radius: 40px;
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 30px;
+      color: #FFFFFF;
+    }
+  }
+  
 }
