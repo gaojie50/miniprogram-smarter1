@@ -402,7 +402,7 @@ function rgbaToHexColor(rgbaArray, alphaMaxVal = 1) {
 
 function previewFile( url, name ){
   const fileUrl = url.replace('s3plus.vip.sankuai.com', 's3plus.sankuai.com');
-  const picExtensions = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'svg', 'tiff'];
+  const picExtensions = ['png', 'jpg', 'jpeg', 'bmp', 'gif', 'webp', 'psd', 'tiff'];
   const allExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'].concat(picExtensions);
   let fileType = name.slice(name.lastIndexOf('.')+1);
   const isPic = picExtensions.includes(fileType);

@@ -23,7 +23,7 @@ const noData = function(props){
         </View>
       </View>
       {roundNum && <View className="right number-text">
-        {roundNum}
+        {roundNum<10 ? `0${roundNum}`:roundNum}
       </View>}
     </View>
   )

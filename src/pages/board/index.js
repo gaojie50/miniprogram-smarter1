@@ -115,7 +115,15 @@ export default function Board() {
 
   useEffect(()=>{
     const authInfo = Taro.getStorageSync('authinfo');
-    if( authInfo?.authIds?.includes(AUTH_ID)){
+    if(  authInfo &&
+      authInfo.authIds &&
+      authInfo.authIds.length > 0 &&
+      authInfo.authIds.includes(AUTH_ID) &&
+      authInfo.authEndTime &&
+      authInfo.authEndTime > +new Date() &&
+      authInfo.authStartTime &&
+      authInfo.authStartTime <= +new Date() 
+    ){
       setHasPagePermission(true);
     }
   }, [])

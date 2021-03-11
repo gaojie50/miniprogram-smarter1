@@ -399,7 +399,7 @@ export default class _C extends React.Component {
             <View className="title">
               {briefInfo.projectEvaluationName}
               <View className="edit-btn-wrap" onClick={this.editorTitle}>
-                <mp-icon type="outline" icon="pencil" size={24} onClick={ this.editorTitle }>编辑</mp-icon>
+                <View className="smarter-iconfont icon-edit" style={{ fontSize: '44rpx' }} />
               </View>
             </View>}
             {editorEvaluationName && <Input
@@ -414,6 +414,7 @@ export default class _C extends React.Component {
 
           <View className="desc-wrap">
             <Textarea
+              disableDefaultPadding={true}
               placeholder="请填写评估说明，最多200字"
               onInput={ this.despChangeEvt }
               className={ `desc-input ${despErrorTip ? "error" : ""} description` } 

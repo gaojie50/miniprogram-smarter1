@@ -61,7 +61,9 @@ export default class MatrixRadio extends React.Component {
           <View className="left" id="left">
             <View className="left-item"> </View>
             {
-              matrixRadio.axisY.map((item, index) => <View className="left-item" key={ index }>{ item }</View>)
+              matrixRadio.axisY.map((item, index) => <View className="left-item" key={ index }>
+                <View className="item-text">{ item }</View>
+              </View>)
             }
           </View>
           <View className="right-container" id="right-container">
