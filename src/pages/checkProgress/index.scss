@@ -14,6 +14,11 @@ $title:88px;
     line-height: $title;
     box-sizing: border-box;
     box-shadow: 0 2px 20px 0 rgba(0,0,0,0.05);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-color: #fff;
 
     view{
       display: inline-block;
@@ -51,6 +56,7 @@ $title:88px;
   }
 
   .tab-content{
+    padding-top: $title;
 
     .no-update{
       text-align: center;
@@ -78,14 +84,16 @@ $title:88px;
       position: relative;
       padding-left: 60px;
       padding-right: 30px;
+      padding-top: 41px;
+      box-sizing: border-box;
 
       &::before{
         content: "";
         background-color:  rgba(0,0,0,0.1);
         position: absolute;
-        left: 27.5px;
-        top: 30px;
-        height: 100%;
+        left: 27px;
+        top: 90px;
+        height: calc(100% - 90px);
         width: 1px;
         display: block;
       }
@@ -99,6 +107,10 @@ $title:88px;
         color: #999999;
         line-height: 84px;
         position: relative;
+
+        text{
+          font-weight: 500;
+        }
 
         &::before{
           content: "";
@@ -121,6 +133,7 @@ $title:88px;
           background-color: getColor($sign, 0.06);
           padding: 20px;
           position: relative;
+          margin-bottom: 10px;
 
           .delete{
             position: absolute;
@@ -133,6 +146,8 @@ $title:88px;
           .content-top{
             margin-bottom: 20px;
             max-width: 596px;
+            line-height: 48px;
+            padding: 0;
 
             text{
               display: inline-block;
@@ -145,7 +160,7 @@ $title:88px;
               font-size: 24px;
               color: getColor($sign);
               letter-spacing: 0;
-              margin-left: 10px;
+              margin-right: 10px;
               margin-bottom: 10px;
               padding: 0 12px;
             }

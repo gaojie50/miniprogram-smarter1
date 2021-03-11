@@ -20,8 +20,10 @@ import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import './index.scss';
 import '@components/m5/style/index.scss';
-import { camelCase } from 'lodash';
+// import { camelCase } from 'lodash';
 
+
+const { isDockingPerson } = utils;
 const reqPacking = getGlobalData('reqPacking');
 const capsuleLocation = getGlobalData('capsuleLocation');
 const { rpxTopx } = utils;
@@ -59,6 +61,70 @@ export default class Detail extends React.Component {
   componentDidShow(){
     this.fetchBasicData();
   }
+
+  onShareAppMessage(res){
+    const { basicData } = this.state;
+    const { projectId, pic } = basicData
+    const { target, from } = res;
+    if (from != 'button') return;
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    const { dataset } = target;
+    const { realName = "" } = userInfo;
+    console.log(dataset);
+    console.log(basicData);
+    return new Promise((resolve, reject)=>{
+      Taro.showLoading({
+        title: '分享信息获取中',
+      })
+      reqPacking(
+        {
+          url: `api/management/shareEvaluation?roundId=${dataset.roundId}`,
+          method: 'POST'
+        },
+        'server',
+      ).then((res) => {
+        Taro.hideLoading();
+        const { success, error, data } = res;
+        if(success){
+          const { inviteId, participationCode } = data;
+          let shareMessage = {};
+          switch (dataset.sign) {
+            case 'invite': {
+              shareMessage = {
+                title: `${realName} 邀请您参与《${dataset.roundTitle}》项目评估`,
+                imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+                path: `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
+              };
+              break;
+            };
+    
+            case 'attend': {
+              shareMessage = {
+                title: `${realName} 分享给您关于《${dataset.roundTitle}》项目的报告`,
+                imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
+              }
+              break;
+            }
+            default: {
+              shareMessage = {
+                title: '分享报告',
+                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
+              };
+            }
+          }
+          console.log('分享信息为', `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`);
+          resolve(shareMessage)
+        }else{
+          reject('分享信息获取失败');
+        }
+      }).catch(res=>{
+        console.log(res);
+        reject('分享信息获取失败');
+      })
+    })
+  }
+
 
   fetchBasicData() {
     const page = Taro.getCurrentPages();
@@ -232,7 +298,6 @@ export default class Detail extends React.Component {
 
   handleSwitch(param) {
     const { evaluation, history, basicData } = this.state;
-    console.log(this.refs,33)
     let hasFollowData = false;
     const { followData } = this.refs.followStatus.state;
     Object.keys(followData).forEach(i => {
@@ -315,7 +380,7 @@ export default class Detail extends React.Component {
                 <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
               </View>
               <View className={current === 1 ? "body-active" : "body-inactive"} id="evaluation">
-                <EvaluationList judgeData={this.handleJudgeData} projectId={ basicData.projectId } keyData={ keyData } />
+                <EvaluationList judgeData={this.handleJudgeData} judgeRole={ judgeRole }  projectId={ basicData.projectId } keyData={ keyData } />
                 {this.state.evaluation.length > 0 ? <View className="noMore">没有更多了</View> : null}
               </View>
               <View className={current === 2 ? "body-active" : "body-inactive"} id="history">
@@ -325,10 +390,11 @@ export default class Detail extends React.Component {
               <View className="bottom-relative" style={{backgroundColor: setBgColor ? '#F8F8F8' : '#ffffff'}}></View>
           </View>
         </View>
-        <View className="bottom-fixed">
+        {isDockingPerson(judgeRole.role) && <View className="bottom-fixed">
           <View className="assess" style={{background: '#FD9C00', marginRight: '20px'}} onClick={this.bottomClick.bind(this, 'assess')}>发起评估</View>
           <View className="assess" style={{background: '#276FF0'}} onClick={this.bottomClick.bind(this, 'progress')}>添加进展</View>
         </View>
+        }
       </ScrollView>
      
       {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}

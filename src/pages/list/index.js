@@ -31,7 +31,6 @@ const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
 const {statusBarHeight} = getGlobalData('systemInfo')
 
-console.log('list页中', capsuleLocation, statusBarHeight);
 function strip(num, precision = 12) {
   return +parseFloat(num.toPrecision(precision));
 }

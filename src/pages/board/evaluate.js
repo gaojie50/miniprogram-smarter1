@@ -1,4 +1,4 @@
-import Taro,{useShareAppMessage} from '@tarojs/taro';
+import Taro from '@tarojs/taro';
 import { Block, View, Image, Text, ScrollView, Button } from '@tarojs/components';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import NoFollow from '@static/detail/noFollows.png';
@@ -7,7 +7,7 @@ import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking'
 import NoData from '../../components/noData';
 
-const { formatNumber } = utils;
+const { formatNumber, isDockingPerson } = utils;
 
 const TYPE = {
   1: '大纲评估',
@@ -18,11 +18,12 @@ const TYPE = {
 const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 const TYPE_MOVIE = 3 || 4;
 const DEFAULT_PROJECT_ROLE = 6;
+
 export function EvaluationList(props) {
   const [data, setData] = useState({});
   const [auth, setAuth] = useState(false);
   const [projectRole, setProjectRole] = useState(DEFAULT_PROJECT_ROLE);
-  const { projectId, keyData, judgeData } = props;
+  const { projectId, keyData, judgeRole, judgeData } = props;
 
   useEffect(() => {
     if (projectId) {
@@ -60,7 +61,7 @@ export function EvaluationList(props) {
   return  projectId ? (auth ? (
     <View>
       {
-        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectRole={projectRole} projectId={data.projectId} category={data.category}/>) : (
+        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectRole={projectRole} judgeRole={judgeRole} projectId={data.projectId} category={data.category}/>) : (
           <>
             <View className="no-eval-data" style={{backgroundColor: '#ffffff'}}>
               <Image src={NoFollow} alt=""></Image>
@@ -74,15 +75,17 @@ export function EvaluationList(props) {
 }
 
 function EvalutaionCard(props) {
+  
   const [realName, setRealName] = useState('');
 
   const {
     category,
     round = '-', participantNumber,
     roundTitle, startDate, evaluationMethod, evaluationTotalScore,
-    estimateBox, estimateScore, initiator = '-', projectId, roundId, pic,
+    estimateBox, estimateScore, initiator = '-', projectId, roundId,
     hasAssess, invitees,
     projectRole,
+    judgeRole
   } = props;
 
   const timeStr = useMemo(() => {
@@ -98,20 +101,28 @@ function EvalutaionCard(props) {
   
 
   const arr = useMemo(() => {
-    let __arr  = [
-      {
+
+    let __arr = [];
+    let value = '-';
+    let unit = '';
+
+    if( isDockingPerson(judgeRole.role) ){ // 是对接人
+      let list = [{
         title: '参与人数',
-        value: '-',
-        unit: '',
+        value,
+        unit,
+      }];
+      if (participantNumber) {
+        list[0].value = participantNumber;
+        list[0].unit = '人';
       }
-    ]
-    if (participantNumber) {
-      __arr[0].value = participantNumber;
-      __arr[0].unit = '人';
+      __arr = __arr.concat(list);
     }
+   
+    
     
     if( category === TYPE_MOVIE ) {
-      __arr = __arr.concat([
+      let list = [
         {
           title: '预估票房',
           value: '-',
@@ -122,30 +133,31 @@ function EvalutaionCard(props) {
           value: '-',
           unit: '',
         },
-      ])
+      ]
       if (estimateBox) {
         const rsl = formatNumber(Number(estimateBox), 'floor');
         if (rsl) {
-          __arr[1].value = rsl.num;
-          __arr[1].unit = rsl.unit;
+          list[0].value = rsl.num;
+          list[0].unit = rsl.unit;
         }
       }
       if (estimateScore) {
-        __arr[2].value = estimateScore;
-        __arr[2].unit = '分';
+        list[1].value = estimateScore;
+        list[1].unit = '分';
       }
+      __arr = __arr.concat(list);
+      
     } else {
-      __arr = __arr.concat([
-        {
-          title: '评估总得分',
-          value: '-',
-          unit: '',
-        },
-      ])
+      let list = [{
+        title: '评估总得分',
+        value: '-',
+        unit: '',
+      }];
       if (evaluationTotalScore) {
-        __arr[1].value = evaluationTotalScore;
-        __arr[1].unit = '分';
+        list[0].value = evaluationTotalScore;
+        list[0].unit = '分';
       }
+      __arr = __arr.concat(list);
     }
     
     return __arr;
@@ -156,38 +168,7 @@ function EvalutaionCard(props) {
     setRealName(userInfo.realName);
   }, [])
 
-  
-  useShareAppMessage(({ target, from }) => {
-    if (from != 'button') return;
 
-    const { userInfo } = Taro.getStorageSync('authinfo');
-    const { dataset } = target;
-    const { realName = "" } = userInfo;
-
-
-
-    switch (dataset.sign) {
-      case 'invite': {
-        return {
-          title: `${realName} 邀请您参与《${roundTitle}》项目评估`,
-          imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
-          path: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`
-        };
-      };
-
-      case 'attend': {
-        return {
-          title: `${realName} 分享给您关于《${roundTitle}》项目的报告`,
-          path: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`
-        }
-      }
-    }
-
-    return {
-      title: '分享报告',
-      path: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`,
-    }
-  })
 
   const handleJump=(e)=>{
     if( hasAssess || projectRole === 1){
@@ -271,13 +252,17 @@ function EvalutaionCard(props) {
       </View>
       </View>
       <View className="evaluation-card-action">
-        <Button
+        {isDockingPerson(judgeRole.role) && <Button
+          data-roundTitle={roundTitle}
+          data-roundId={roundId}
           data-sign="invite"
           openType="share"
           className="evaluation-card-action-btn">
           邀请参与
-        </Button>
+        </Button>}
         <Button
+          data-roundTitle={roundTitle}
+          data-roundId={roundId}
           data-sign="attend"
           openType="share"
           className="evaluation-card-action-btn">
