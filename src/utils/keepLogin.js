@@ -33,8 +33,10 @@ export default function keepLogin(params) {
           ).then(({ success, error, data }) => {
             if (success) {
               let { accessToken, hasBindMobile } = data
-              if (hasBindMobile) {
+              if( accessToken ){
                 Taro.setStorageSync('token', accessToken);
+              }
+              if (hasBindMobile) {
                 // 校验账号状态
                 auth.checkLogin().then(res=>{
                   const { authInfo } = res;
