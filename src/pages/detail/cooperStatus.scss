@@ -3,7 +3,7 @@
     padding: 0 !important;
   }
   .layout-body {
-    padding: 40px 30px 98px !important;
+    padding: 40px 30px 68px !important;
     box-sizing: border-box;
   }
   .title {
@@ -44,23 +44,22 @@
       font-size: 30px;
       margin-bottom: 20px;
     }
-    .active::after {
+    .active:after {
       content: '';
       position: absolute;
       top: 4px;
       right: 4px;
-      display: block;
       width: 52px;
       height: 48px;
-      z-index: 99;
-      background: url('../../static/detail/active.svg');
+      background: url(../../static/detail/active.svg) no-repeat;
+      background-size: 100% 100%;
     }
   }
   .confirm {
     width: 100%;
     height: 80px;
     line-height: 80px;
-    margin-top: 52px;
+    margin-top: 32px;
     background: #276FF0;
     border-radius: 40px;
     font-weight: 600;

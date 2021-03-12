@@ -23,7 +23,7 @@ export function EvaluationList(props) {
   const [data, setData] = useState({});
   const [auth, setAuth] = useState(false);
   const [projectRole, setProjectRole] = useState(DEFAULT_PROJECT_ROLE);
-  const { projectId, keyData, judgeRole } = props;
+  const { projectId, keyData, judgeRole, judgeData } = props;
 
   useEffect(() => {
     if (projectId) {
@@ -34,6 +34,7 @@ export function EvaluationList(props) {
         if (success) {
           setData(data);
           setAuth(true);
+          judgeData(data, 'evaluation');
         } else {
           if (error && error.message === NO_AUTH_MESSAGE) {
             setAuth(false);
@@ -62,7 +63,7 @@ export function EvaluationList(props) {
       {
         evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectRole={projectRole} judgeRole={judgeRole} projectId={data.projectId} category={data.category}/>) : (
           <>
-            <View className="no-eval-data">
+            <View className="no-eval-data" style={{backgroundColor: '#ffffff'}}>
               <Image src={NoFollow} alt=""></Image>
               <View className="text">暂无评估记录</View>
             </View>
