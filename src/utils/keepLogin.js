@@ -50,9 +50,11 @@ export default function keepLogin(params) {
               }
   
               if (Taro.canIUse('web-view')) {
-                // can test by self via : const verifyPhoneNumUrl = `http://localhost:8411/keeper.html?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(`${addUrlArg(`/pages/loginRedirect/index?target=${encodeURIComponent(continueUrl)}`, 'token', accessToken)}`)}`;
-                const verifyPhoneNumUrl = `${keeper}/business/bindphone?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(`${addUrlArg(`/pages/loginRedirect/index?target=${encodeURIComponent(continueUrl)}`, 'token', accessToken)}`)}`;
-  
+                // can test by self via : 
+                // const verifyPhoneNumUrl = `http://localhost:8411/keeper.html?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(`${addUrlArg(`/pages/loginRedirect/index?target=${encodeURIComponent(continueUrl)}`, 'token', accessToken)}`)}`;
+                const verifyPhoneNumUrl = `${keeper}/business/bindphone?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(`/pages/loginRedirect/index?target=${encodeURIComponent(continueUrl)}`)}`;
+                console.log('verifyPhoneNumUrl', verifyPhoneNumUrl);
+                console.log('原token是', accessToken);
                 Taro.navigateTo({
                   url: `/pages/webview/index?url=${encodeURIComponent(
                     verifyPhoneNumUrl
@@ -68,7 +70,4 @@ export default function keepLogin(params) {
       }
     })
   })
-  
-
- 
 }

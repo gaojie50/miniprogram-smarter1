@@ -39,6 +39,10 @@ class _C extends React.Component {
     this.setState({ target })
   }
 
+  componentDidHide = ()=>{
+    this.setState({ loading: false });
+  }
+
   goList = () => {
     Taro.reLaunch({
       url: '../list/index',
@@ -60,6 +64,7 @@ class _C extends React.Component {
           return;
         }
 
+        this.setState({ loading: false });
         Taro.showModal({
           title: '提示',
           content:
@@ -68,6 +73,7 @@ class _C extends React.Component {
       },
     })
   }
+
 
   render() {
     const { titleHeight, isLogin, loading } = this.state
