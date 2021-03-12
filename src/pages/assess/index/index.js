@@ -251,7 +251,7 @@ export default function assessPage(){
       <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
       <TopBar background="transparent" hasBack={isLogin?true:false} onBack={ handleBack } />
       {!isLogin && (
-        <LoginNotice target={`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`} />
+        <LoginNotice target={`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`} />
       )}
       {
        isLogin && !hasPermission && (
