@@ -21,6 +21,7 @@ export default function EditProject() {
   const [projectInfoList, setProjectInfoList] = useState({});
   const [projectData, setProjectData] = useState({});
   const [judgeRole, setJudgeRole] = useState({});
+  const [scroll, setScroll] = useState(true);
 
   useEffect(() => {
     const url = Taro.getCurrentPages();
@@ -188,13 +189,16 @@ export default function EditProject() {
   }
 
   return (
-    <View className="editProject">
-      <BasicInfo ref={basicDateRef} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
+    <ScrollView scrollY={ scroll } className="editProject">
+      <BasicInfo ref={basicDateRef} changeScroll={param => setScroll(param)} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
       <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} projectData={projectData} />
-      <View className="releaseTime-submit">
+      <View style={{height: '124rpx'}}></View>
+      {
+        scroll ? <View className="releaseTime-submit">
           <View className="releaseTime-submit-btn" onClick={submit}>保存</View>
-      </View>
-    </View>
+        </View> : null
+      }
+    </ScrollView>
   )
 }
 

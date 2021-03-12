@@ -36,7 +36,7 @@ export function MovieList(props) {
   }
 
   return (
-    <ScrollView className="search-list" scrollY>
+    <ScrollView className="edit-search-list" scrollY>
       {data.map((item, index) => {
         return (
           <View

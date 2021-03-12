@@ -146,6 +146,7 @@ export default function ReleaseTime(props, ref) {
       onClose={props.onClose}
     >
       <View className="schedule-list">
+        <View style={{width: '1rpx'}}></View>
         {
           SCHEDULE_LIST.map((item, index) => {
             return item.key !== 4 ? <View key={index} onClick={() => setScheduleActive(index + 1)} className={scheduleActive === index + 1 ? "schedule-item active" : "schedule-item"}>{item.name}</View> : null
