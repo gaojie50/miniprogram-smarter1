@@ -159,6 +159,7 @@ export default function AddProject(props, ref) {
       keyword: val
     }).then((data) => {
       setData(data);
+      props.changeScroll(false);
     });
     setLoading(false);
   }, 800), []);
@@ -190,6 +191,7 @@ export default function AddProject(props, ref) {
     setTypes(typeObj);
 
     setData([]);
+    props.changeScroll(true);
   }, []);
 
   const isOtherCategory = useMemo(() => {
