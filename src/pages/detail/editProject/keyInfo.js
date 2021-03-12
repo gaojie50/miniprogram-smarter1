@@ -51,7 +51,7 @@ export default function KeyInfo(props, ref) {
   }
   
   return (
-    <Block>
+    <View className="keyInfo">
       <Text className="keyInfo-title">核心数据</Text>
       <View className="keyInfo-content">
         <ReleaseTimeWrap updateRef={updateRef} releaseTimeRef={releaseTimeRef} movieData={props.movieData} />
@@ -81,7 +81,7 @@ export default function KeyInfo(props, ref) {
           : null
         }
       </View>
-    </Block>
+    </View>
   )
 }
 

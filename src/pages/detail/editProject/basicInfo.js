@@ -66,6 +66,7 @@ const textVoid = <Text style={{ color: '#CCCCCC' }}>请选择</Text>;
 const divider = <Divider />
 
 export default function AddProject(props, ref) {
+  const { changeScroll = () => {} } = props;
   const pathParams = Taro.getCurrentInstance().router.params;
   const { name: passedName = '' } = pathParams;
   const [movieList, setMovieList] = useState({}); 
@@ -289,7 +290,7 @@ export default function AddProject(props, ref) {
           )
         }
         {divider}
-        <ListItem title='品类' extraText={category || textVoid} arrow onClick={() => setOpenCategorySelector(true)} />
+        <ListItem title='品类' extraText={category || textVoid} arrow onClick={() => {setOpenCategorySelector(true);changeScroll(false)}} />
         {
           isOtherCategory && showCategoryInput && (
             <View className="add-project-input-wrapper">
@@ -308,7 +309,7 @@ export default function AddProject(props, ref) {
         <FloatCard
           isOpened={openCategorySelector}
           title="选择品类"
-          onClose={() => {setOpenCategorySelector(false);props.changeCategory(category);}}
+          onClose={() => {setOpenCategorySelector(false);props.changeCategory(category);changeScroll(true)}}
         >
           <View className="M5Grid-wrap">
             <M5Grid
@@ -325,12 +326,12 @@ export default function AddProject(props, ref) {
           {/* <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => {setOpenCategorySelector(false);props.changeCategory(category);}}>确定</View></View> */}
         </FloatCard>
         {divider}
-        <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr || firstType.length > 0 && firstType.join(' / ') || textVoid} arrow onClick={() => setOpenTypeSelector(true)} />
+        <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr || firstType.length > 0 && firstType.join(' / ') || textVoid} arrow onClick={() => {setOpenTypeSelector(true);changeScroll(false)}} />
         <FloatCard
           isOpened={openTypeSelector}
           title="选择类型"
           className="type-select-float"
-          onClose={() => setOpenTypeSelector(false)}
+          onClose={() => {setOpenTypeSelector(false);changeScroll(true)}}
         >
           <View className="M5Grid-wrap">
             <M5Grid
@@ -357,7 +358,7 @@ export default function AddProject(props, ref) {
         </FloatCard>
         <Toast duration={1000} isOpened={showToast} text={showToast} onClose={() => setShowToast('')} />
         {divider}
-        <ListItem title='意向合作类型' extraText={cooperStr || firstCooperType.length > 0 && firstCooperType.join(' / ') || textVoid} arrow onClick={() => setOpenCooperSelector(true)} />
+        <ListItem title='意向合作类型' extraText={cooperStr || firstCooperType.length > 0 && firstCooperType.join(' / ') || textVoid} arrow onClick={() => {setOpenCooperSelector(true);changeScroll(false)}} />
         {
           hasOtherCooperType && (
             <View className="add-project-input-wrapper">
@@ -376,7 +377,7 @@ export default function AddProject(props, ref) {
         <FloatCard
           isOpened={openCooperSelector}
           title="选择意向合作类型"
-          onClose={() => setOpenCooperSelector(false)}
+          onClose={() => {setOpenCooperSelector(false);changeScroll(true)}}
         >
           <View className="M5Grid-wrap">
             <M5Grid
@@ -399,11 +400,11 @@ export default function AddProject(props, ref) {
           </View>
         </FloatCard>
         {divider}
-        <ListItem title='合作状态' extraText={COOPER_STATE?.[cooperState]?.label || textVoid} arrow onClick={() => setOpenCooperStateSelector(true)} />
+        <ListItem title='合作状态' extraText={COOPER_STATE?.[cooperState]?.label || textVoid} arrow onClick={() => {setOpenCooperStateSelector(true);changeScroll(false)}} />
         <FloatCard
           isOpened={openCooperStateSelector}
           title="选择合作状态"
-          onClose={() => setOpenCooperStateSelector(false)}
+          onClose={() => {setOpenCooperStateSelector(false);changeScroll(true)}}
         >
           <View className="M5Grid-wrap">
             <M5Grid

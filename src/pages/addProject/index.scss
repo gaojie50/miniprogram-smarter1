@@ -2,7 +2,7 @@
   height: 100vh;
   background-color: #f8f8f8;
   box-sizing: border-box;
-  padding: 30px 0;
+  padding: 30px 0 0;
   overflow: scroll;
   .at-list__item {
     height: 108px;
@@ -38,6 +38,7 @@
       min-height: 0 !important;
       .layout-body__content {
         min-height: 10px !important;
+        max-height: 70vh !important;
       }
     }
   }

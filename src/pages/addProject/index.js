@@ -86,6 +86,7 @@ export default function AddProject() {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [scroll, setScroll] = useState(true);
 
   const typeStr = useMemo(() => {
     const keys = Object.keys(types);
@@ -105,6 +106,7 @@ export default function AddProject() {
       if (success) { setData(data); }
       else {
         setData([]);
+        setScroll(false);
       }
     });
     setLoading(false);
@@ -137,6 +139,7 @@ export default function AddProject() {
     setTypes(typeObj);
 
     setData([]);
+    setScroll(true);
   }, []);
 
   const isOtherCategory = useMemo(() => {
@@ -222,7 +225,7 @@ export default function AddProject() {
   }, [category]);
 
   return (
-    <View className="add-project">
+    <ScrollView scrollY={ scroll } className="add-project">
       <View
         style={{
           boxShadow: '0 2px 10px 0 rgba(0,0,0,0.02)',
@@ -386,10 +389,12 @@ export default function AddProject() {
           </View>
         </FloatCard>
       </View>
-      <View className="add-project-confirm">
-        <View className="add-project-confirm-btn" onClick={handleSave}>保存</View>
-      </View>
-    </View>
+      {
+        scroll ? <View className="add-project-confirm">
+          <View className="add-project-confirm-btn" onClick={handleSave}>保存</View>
+        </View> : null
+      }
+    </ScrollView>
   )
 }
 
