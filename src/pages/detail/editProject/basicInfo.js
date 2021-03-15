@@ -192,7 +192,7 @@ export default function AddProject(props, ref) {
     setTypes(typeObj);
 
     setData([]);
-    props.changeScroll(true);
+    props.changeScroll(true, ref.current);
   }, []);
 
   const isOtherCategory = useMemo(() => {
@@ -283,6 +283,7 @@ export default function AddProject(props, ref) {
               <CustomName value={name} onChoose={() => {
                 setData([]);
                 resetOther();
+                changeScroll(true, ref.current)
               }} />
               {divider}
               <MovieList data={data} onChoose={handleChoose} right="user" />
@@ -309,7 +310,7 @@ export default function AddProject(props, ref) {
         <FloatCard
           isOpened={openCategorySelector}
           title="选择品类"
-          onClose={() => {setOpenCategorySelector(false);props.changeCategory(category);changeScroll(true)}}
+          onClose={() => {setOpenCategorySelector(false);props.changeCategory(category);changeScroll(true, ref.current)}}
         >
           <View className="M5Grid-wrap">
             <M5Grid
@@ -331,7 +332,7 @@ export default function AddProject(props, ref) {
           isOpened={openTypeSelector}
           title="选择类型"
           className="type-select-float"
-          onClose={() => {setOpenTypeSelector(false);changeScroll(true)}}
+          onClose={() => {setOpenTypeSelector(false);changeScroll(true, ref.current)}}
         >
           <View className="M5Grid-wrap">
             <M5Grid
@@ -377,7 +378,7 @@ export default function AddProject(props, ref) {
         <FloatCard
           isOpened={openCooperSelector}
           title="选择意向合作类型"
-          onClose={() => {setOpenCooperSelector(false);changeScroll(true)}}
+          onClose={() => {setOpenCooperSelector(false);changeScroll(true, ref.current)}}
         >
           <View className="M5Grid-wrap">
             <M5Grid
@@ -404,7 +405,7 @@ export default function AddProject(props, ref) {
         <FloatCard
           isOpened={openCooperStateSelector}
           title="选择合作状态"
-          onClose={() => {setOpenCooperStateSelector(false);changeScroll(true)}}
+          onClose={() => {setOpenCooperStateSelector(false);changeScroll(true, ref.current)}}
         >
           <View className="M5Grid-wrap">
             <M5Grid
