@@ -6,11 +6,14 @@ import { Search, projectSearch, searchRole } from './search.js';
 import Toast from '@components/m5/toast';
 import _BasicInfo from './basicInfo';
 import _KeyInfo from './keyInfo';
+// import _MakeInfo from './makeInfo';
 import { CATEGORY_LIST } from './lib';
 import './index.scss';
 
 const KeyInfo = forwardRef(_KeyInfo);
 const BasicInfo = forwardRef(_BasicInfo);
+// const MakeInfo = forwardRef(_MakeInfo);
+
 export default function EditProject() {
   const keyDataRef = useRef();
   const basicDateRef = useRef();
@@ -188,10 +191,35 @@ export default function EditProject() {
     setProjectData(newData)
   }
 
+  const handleChangeScroll = (param,newRef) => {
+    let newMovieList = {};
+    const itemList = ['cooperStatus', 'name', 'type', 'cooperType'];
+    if(newRef) {
+      if(newRef.cooperStatus) {
+        newMovieList.cooperStatus = newRef.cooperStatus;
+      }
+      if(newRef.name) {
+        newMovieList.movieName = newRef.name;
+      }
+      if(newRef.type) {
+        newMovieList.movieType = newRef.type;
+      }
+      if(newRef.cooperType) {
+        newMovieList.cooperType = newRef.cooperType;
+      }
+      if(newRef.category) {
+        setProjectInfoList({...projectInfoList,category: newRef.category})
+      }
+    }
+    setMovieList({...movieList, ...newMovieList})
+    setScroll(param);
+  }
+
   return (
     <ScrollView scrollY={ scroll } className="editProject">
-      <BasicInfo ref={basicDateRef} changeScroll={param => setScroll(param)} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
+      <BasicInfo ref={basicDateRef} changeScroll={(param, newRef) => handleChangeScroll(param, newRef)} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
       <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} projectData={projectData} />
+      {/* <MakeInfo movieData={movieList} changeScroll={param => setScroll(param)} /> */}
       <View style={{height: '124rpx'}}></View>
       {
         scroll ? <View className="releaseTime-submit">
