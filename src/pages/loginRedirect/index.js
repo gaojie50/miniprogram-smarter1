@@ -16,6 +16,7 @@ class _C extends React.Component {
       Taro.setStorageSync('token', token);
     }
     let localToken = Taro.getStorageSync('token');
+    console.log( '此时，本地的token是，', localToken );
     if( token || localToken ){
       // 校验账号状态
       auth.checkLogin().then(res=>{

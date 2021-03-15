@@ -1,4 +1,8 @@
+.keyInfo {
+  width: 100%;
+}
 .keyInfo-title {
+  font-weight: 400;
   font-family: PingFangSC-Regular;
   font-size: 26px;
   color: #999999;
@@ -8,7 +12,7 @@
   box-shadow: 0 2px 10px 0 rgba(0,0,0,0.02);
   border-radius: 16px;
   background-color: #FFFFFF;
-  margin: 20px 30px 154px;
+  margin: 20px 30px 174px;
   .layout-body__content {
     max-height: 90%;
   }

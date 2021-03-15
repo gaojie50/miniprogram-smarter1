@@ -2,7 +2,7 @@
   background-color: #f8f8f8;
   box-sizing: border-box;
   padding-top: 30px;
-  overflow: scroll;
+  // overflow: scroll;
 
   .at-grid {
     overflow: hidden;
@@ -92,23 +92,25 @@
   }
   .at-float-layout__container {
     padding: 40px 0 0;
-    min-height: 504px !important;
+    min-height: 405px !important;
     .layout-header {
       margin-left: 30px;
     }
     .layout-body {
       min-height: 0 !important;
-      margin-bottom: 184px;
       .layout-body__content {
         min-height: 10px !important;
+        max-height: 70vh !important;
       }
     }
   }
+
   .type-select-float {
     .at-float-layout__container {
       height: 83.2%;
       max-height: none;
     }
+   
   }
   .at-list__item {
     height: 108px;

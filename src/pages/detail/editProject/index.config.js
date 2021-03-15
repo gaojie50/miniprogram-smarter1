@@ -5,4 +5,5 @@ export default {
   navigationBarTitleText: '编辑项目基础信息',
   navigationBarBackgroundColor: '#fff',
   navigationBarTextStyle: 'black',
+  disableScroll: true,
 }
