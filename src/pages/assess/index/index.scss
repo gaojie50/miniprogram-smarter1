@@ -66,6 +66,7 @@ page image {
     border-radius: 40px;
     height: 100%;
     box-sizing: border-box;
+    position: relative;
     .inner-content-container {
       box-sizing: border-box;
       padding: 60px 45px 0 45px;
@@ -173,6 +174,7 @@ page image {
   }
 
   .start-btn {
+    position: absolute;
     margin: auto;
     padding: 0;
     width: 600px;
@@ -182,8 +184,7 @@ page image {
     font-size: 30px;
     line-height: 80px;
     text-align: center;
-    position: fixed;
-    bottom: 100px;
+    bottom: 90px;
     left: 50%;
     transform: translate3d(-50%, 0, 0);
     

@@ -53,11 +53,11 @@
       }
 
       &.active{
-        color: #1890FF;
+        color: #276FF0;
         background: rgba(39,111,240,0.10);
-        border: 1px solid #276FF0;
+        border: 1px solid rgba(39,111,240,0.1);
         .dot {
-          border-color: #1890FF;
+          border: 2px solid #276FF0;
           position: relative;
 
           &:after {

@@ -20,20 +20,24 @@ const Indexes = function(props){
       <View className='indexes-component'>
         <View className="indexes-menu">
           {showTop && <View
-            className={`indexes-menu-item top`}
+            className={`indexes-menu-item-wrapper`}
             onClick={()=>{handleItemClick(topKey)}}
           >
-            Top
+            <View className={`indexes-menu-item top`}>
+              Top
+            </View>
           </View>}
           {
             list.map(item=>{
               return (
                 <View
-                    className={`indexes-menu-item ${activeKey===item.key ? 'active': ''}`}
+                    className={`indexes-menu-item-wrapper`}
                     key={item.key}
                     onClick={()=>{handleItemClick(item.key)}}
                   >
+                  <View className={`indexes-menu-item ${activeKey===item.key ? 'active': ''}`}>
                     {item.title}
+                  </View>
                   </View>
               )
             })

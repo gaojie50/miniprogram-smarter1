@@ -14,9 +14,10 @@ import projectConfig from '../../../constant/project-config';
 import '../../../components/m5/style/components/icon.scss';
 import './index.scss';
 
-const { errorHandle, hexColorToRgba, previewFile } = utils;
+const { errorHandle, hexColorToRgba, previewFile, rpxTopx } = utils;
 const { getEvaluationLabel, getEvaluationIcon } = projectConfig;
 const AUTH_ID = 95130;
+
 
 export default function assessPage(){
   
@@ -30,10 +31,12 @@ export default function assessPage(){
   const isLogin = Taro.getStorageSync('token');
   const { projectId, roundId, inviteId, participationCode } = getCurrentInstance().router.params;
   const capsuleLocation = getGlobalData('capsuleLocation');
-  const {statusBarHeight} = getGlobalData('systemInfo');
+  const { statusBarHeight } = getGlobalData('systemInfo');
+  const blackBarBottom = getGlobalData('blackBarBottom');
   const titleHeight= Math.floor(
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
+  console.log(blackBarBottom);
 
   Taro.eventCenter.on('didEvaluated', ()=>{
     setDidAssessed(true);
@@ -259,7 +262,7 @@ export default function assessPage(){
        )
       }
       { isLogin && hasPermission && (
-        <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`}}>
+        <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`, paddingBottom: `${blackBarBottom>0? `${blackBarBottom}px`: `${rpxTopx(34)}px` }`}}>
           <View className="content-container">
             <View className="inner-content-container">
               <View className="inner-content">
@@ -292,7 +295,7 @@ export default function assessPage(){
               </View>
               </View>
             </View>
-          {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? '开始评估': '您已填写，查看结果'}</Button>}
+            {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? '开始评估': '您已填写，查看结果'}</Button>}
         </View>
       </View>
       )}
