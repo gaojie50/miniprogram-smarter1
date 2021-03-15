@@ -1,5 +1,6 @@
 import { Block, View, Text } from '@tarojs/components';
 import React, { useEffect, useState} from 'react';
+import Taro from '@tarojs/taro';
 import ListItem from '@components/m5/list/item';
 import FloatCard from '@components/m5/float-layout';
 import M5Grid from '@components/m5/grid';
@@ -36,7 +37,7 @@ export default function makeInfo(props) {
       </View>
       <View className="makeInfo-content">
         <View className="makeInfo-item">
-          <ListItem title='片源地' extraText={source.join(' / ') || textVoid} arrow onClick={() => {setOpenSource(true);changeScroll(false)}} />
+          <ListItem className="source-float" title='片源地' extraText={source.join(' / ') || textVoid} arrow onClick={() => {setOpenSource(true);changeScroll(false)}} />
           <FloatCard
             isOpened={openSource}
             title="片源地"
@@ -83,5 +84,14 @@ function listItemWrap(param, data) {
 
   const value = extraTextItem.map(i => <Text className="extraText-item">{i}</Text>)
 
-  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : textVoid} arrow onClick={() => {setOpenSource(true)}} />
+  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : textVoid} arrow onClick={() => moveToSearch()} />
+}
+
+function moveToSearch(param) {
+  Taro.navigateTo({
+    url: '/pages/detail/searchCompany/index',
+    success: function (res) {
+      res.eventChannel.emit('acceptDataFromOpenerPage', { type: param, data: 'test' })
+    }
+  })
 }

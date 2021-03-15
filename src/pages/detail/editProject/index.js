@@ -6,13 +6,13 @@ import { Search, projectSearch, searchRole } from './search.js';
 import Toast from '@components/m5/toast';
 import _BasicInfo from './basicInfo';
 import _KeyInfo from './keyInfo';
-// import _MakeInfo from './makeInfo';
+import _MakeInfo from './makeInfo';
 import { CATEGORY_LIST } from './lib';
 import './index.scss';
 
 const KeyInfo = forwardRef(_KeyInfo);
 const BasicInfo = forwardRef(_BasicInfo);
-// const MakeInfo = forwardRef(_MakeInfo);
+const MakeInfo = forwardRef(_MakeInfo);
 
 export default function EditProject() {
   const keyDataRef = useRef();
@@ -219,7 +219,7 @@ export default function EditProject() {
     <ScrollView scrollY={ scroll } className="editProject">
       <BasicInfo ref={basicDateRef} changeScroll={(param, newRef) => handleChangeScroll(param, newRef)} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
       <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} projectData={projectData} />
-      {/* <MakeInfo movieData={movieList} changeScroll={param => setScroll(param)} /> */}
+      <MakeInfo movieData={movieList} changeScroll={param => setScroll(param)} />
       <View style={{height: '124rpx'}}></View>
       {
         scroll ? <View className="releaseTime-submit">

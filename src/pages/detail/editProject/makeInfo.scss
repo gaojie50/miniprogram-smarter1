@@ -54,6 +54,19 @@
     margin-right: 10px;
   }
 
+  .source-float {
+      .at-list__item-extra {
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .item-extra__info {
+        max-width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        padding-left: 30rpx;
+      }
+  }
+  
   .extraText-item {
     display: inline-block;
     height: 60px;
