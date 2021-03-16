@@ -370,12 +370,12 @@ export default class Detail extends React.Component {
           /> : ''
         }
         <View className="detail-tabs" id={toView} >
-          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '0', zIndex: 9}}>
+          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '-1rpx', zIndex: 9}}>
             <View onClick={()=> this.handleSwitch(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>最新跟进</View>
             <View onClick={()=> this.handleSwitch(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>项目评估</View>
             <View onClick={()=> this.handleSwitch(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>变更历史</View>
           </View>
-          <View className="detail-tabs-body"  style={{backgroundColor: setBgColor ? '#F8F8F8' : '#ffffff',}}>
+          <View className="detail-tabs-body"  style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff',}}>
               <View className={current === 0 ? "body-active" : "body-inactive"} id="follow">
                 <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
               </View>
@@ -387,7 +387,7 @@ export default class Detail extends React.Component {
                 <UseHistory judgeData={this.handleJudgeData} projectId={ basicData.projectId } keyData={keyData}></UseHistory>
                 {this.state.history.length > 0 ? <View className="noMore">没有更多了</View> : null}
               </View>
-              <View className="bottom-relative" style={{backgroundColor: setBgColor ? '#F8F8F8' : '#ffffff'}}></View>
+              <View className="bottom-relative" style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff'}}></View>
           </View>
         </View>
         {isDockingPerson(judgeRole.role) && <View className="bottom-fixed">
