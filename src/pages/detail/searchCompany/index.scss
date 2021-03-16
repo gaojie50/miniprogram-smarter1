@@ -54,3 +54,66 @@
     }
   }
 }
+.edit-rearch-result {
+  width: 100%;
+  &-item {
+    width: 100%;
+    display: flex;
+    padding: 30px 0 30px 30px;
+    box-sizing: border-box;
+    align-items: center;
+    .right {
+      display: flex;
+      align-items: center;
+      width: calc(100% - 64px);
+      .border {
+        position: relative;
+        margin-left: 10px;
+        width: 120px;
+        height: 120px;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 10px;
+      }
+      .main::after {
+        content: '主出品';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 92px;
+        height: 36px;
+        background: #F1303D;
+        border-radius: 10px 0 10px 0;
+        font-size: 24px;
+        color: #FFFFFF;
+        text-align: center;
+        line-height: 36px;
+      }
+      .content {
+        width: calc(100% - 85px);
+        .name {
+          margin-left: 20px;
+          font-weight: 500;
+          font-family: PingFangSC-Medium;
+          font-size: 34px;
+          color: #333333;
+        }
+        .discrebe {
+          font-weight: 400;
+          font-family: PingFangSC-Regular;
+          font-size: 24px;
+          color: #666666;
+        }
+      }
+      .last {
+        height: 100%;
+        width: 85px;
+        image {
+          width: 44px;
+          height: 44px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}

@@ -84,14 +84,14 @@ function listItemWrap(param, data) {
 
   const value = extraTextItem.map(i => <Text className="extraText-item">{i}</Text>)
 
-  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : textVoid} arrow onClick={() => moveToSearch()} />
+  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : textVoid} arrow onClick={() => moveToSearch(param, data)} />
 }
 
-function moveToSearch(param) {
+function moveToSearch(param, data) {
   Taro.navigateTo({
     url: '/pages/detail/searchCompany/index',
     success: function (res) {
-      res.eventChannel.emit('acceptDataFromOpenerPage', { type: param, data: 'test' })
+      res.eventChannel.emit('acceptDataFromOpenerPage', { type: param, data: data })
     }
   })
 }
