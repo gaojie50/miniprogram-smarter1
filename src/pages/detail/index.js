@@ -20,7 +20,6 @@ import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import './index.scss';
 import '@components/m5/style/index.scss';
-// import { camelCase } from 'lodash';
 
 
 const { isDockingPerson } = utils;
