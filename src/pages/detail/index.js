@@ -398,7 +398,10 @@ export default class Detail extends React.Component {
         }
       </ScrollView>
      
-      <FloatLayout isOpened={showProgress}>
+      <FloatLayout 
+        isOpened={showProgress} onClose={
+          () => this.setState({ showProgress: false, stopScroll: false })
+        }>
         <AddingProcess 
           closeEvt ={() => this.setState({ showProgress: false, stopScroll: false }) }
           submitEvt={this.updateProcess} 
