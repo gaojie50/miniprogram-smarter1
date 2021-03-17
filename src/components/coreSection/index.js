@@ -57,9 +57,11 @@ export default function CoreSection({ categoryType, core }) {
     }, {});
   };
   const [packUp, setPackUp] = useState(true);
-  let evaluationList = core.evaluationList || [];
-  let recommendedList = core.recommendedList || [];
-  let commentList = core.commentList || [];
+  let {
+    evaluationList=[],
+    recommendedList=[],
+    commentList=[],
+  } = core;
 
   let scoreArr = [];
   let totalScoreArr = [];
@@ -147,7 +149,7 @@ export default function CoreSection({ categoryType, core }) {
                 <React.Fragment key={index}>
                   <View className="tr groupName">{groupName}</View>
                   {list.map(({
-                    name, totalScore,scoreFinished,
+                    name, totalScore,scoreFinished,score,
                   }, turn) => <View key={turn} className={`tr ${list.length == turn + 1 ? "no-line" : ""}`}>
                       <Text className="td">{name}</Text>
                       <Text className="td">
