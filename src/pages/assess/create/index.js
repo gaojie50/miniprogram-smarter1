@@ -436,7 +436,7 @@ export default class _C extends React.Component {
                   )
                 })
               }
-            </View>
+          </View>
           </View>
 
           <View className="upload-attachment">
@@ -448,7 +448,7 @@ export default class _C extends React.Component {
                   <Text className="file-size">{file.profileSize}</Text>
                 </View>
                 <View className="delete-btn" onClick={ () => this.handleDelete(file.profileId, "profile") }>
-                  <mp-icon type="outline" icon="delete" color="#333" size={20}></mp-icon>
+                  <View className="smarter-iconfont icon-delete" style={{ fontSize: '44rpx' }} />
                 </View>
               </View>
               )

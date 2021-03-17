@@ -453,6 +453,7 @@ function isDockingPerson(role){
   return [0, 1].includes(role);
 }
 
+
 export default {
   errorHandle,
   debounce,

@@ -130,7 +130,7 @@ export default function assessPage(){
             const query = Taro.createSelectorQuery();
             // 一次获取所有题的位置信息
             query.selectAll('.que-item').boundingClientRect(rect=>{
-              const topList = rect.map(item=>item.top);
+              const topList = rect.map(item=>parseInt(item.top));
               setQuesScrollTopList(topList.map(item=>item-topList[0]));
             }).exec();
 
@@ -248,7 +248,6 @@ export default function assessPage(){
     for( let i=0; i<quesLen; i++){
       let curTop = quesScrollTopList[i];
       let nextTop = quesScrollTopList[i+1];
-
       if( scrollTop >= curTop && scrollTop < nextTop){
         setActiveIndex(`${i+1}`);
         break;
