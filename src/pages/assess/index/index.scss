@@ -69,14 +69,20 @@ page image {
     position: relative;
     .inner-content-container {
       box-sizing: border-box;
-      padding: 60px 45px 0 45px;
-      height: calc(100% - 180px);
-      overflow-y: scroll;
+      padding: 60px 0px;
+      height: 100%;
+      position: relative;
+      .inner-content {
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+      }
     }
   }
   .briefinfo-wrap {
     text-align: center;
-    padding-bottom: 50px;
+    padding: 0 45px 50px 45px;
+    box-sizing: border-box;
     .project-pic {
       width: 200px;
       height: 275px;
@@ -106,7 +112,9 @@ page image {
 
   .evaluation-info-wrap {
     border-top: 1px solid rgba(255,255,255,0.2);
-
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 45px;
     .round-title {
       margin-top: 40px;
       font-weight: 400;
@@ -151,6 +159,7 @@ page image {
           font-size: 24px;
           color: #FFFFFF;
           line-height: 28px;
+          max-height: 56px;
           word-break: break-all;
           overflow: hidden;
           text-overflow: ellipsis;

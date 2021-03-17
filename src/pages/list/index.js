@@ -683,9 +683,6 @@ class _C extends React.Component {
     Taro.navigateTo({
       url: '/pages/search/index',
     })
-    // Taro.navigateTo({
-    //   url: '/pages/assess/index/index?projectId=14332&roundId=514',
-    // })
   }
 
   copyMail = () => {
