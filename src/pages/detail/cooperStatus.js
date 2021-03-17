@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, Image } from '@tarojs/components';
-import { AtFloatLayout } from '@components/m5';
+// import { AtFloatLayout } from '@components/m5';
+import FloatCard from '@components/m5/float-layout';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import Close from '@static/close.png';
@@ -29,7 +30,7 @@ export default function Cooper(props) {
   }, [cooperActive]) 
 
   return (
-    <AtFloatLayout className="cooper-status" onClose={() => props.cancelShow()} isOpened>
+    <FloatCard className="cooper-status" onClose={() => props.cancelShow()} isOpened>
       <View className="title">
         <Text>变更合作状态</Text>
         <View className="img" onClick={() => props.cancelShow()}>
@@ -54,6 +55,6 @@ export default function Cooper(props) {
         }
       </View>
       <View className="confirm" onClick={submit}>确定</View>
-    </AtFloatLayout>
+    </FloatCard>
   )
 }

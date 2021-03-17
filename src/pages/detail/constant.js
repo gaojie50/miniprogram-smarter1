@@ -187,10 +187,28 @@ const CooperStatus = [
   },
 ];
 
+const Source = [
+  { label: '中国大陆', value: '中国大陆' },
+  { label: '美国', value: '美国' },
+  { label: '英国', value: '英国' },
+  { label: '日本', value: '日本' },
+  { label: '法国', value: '法国' },
+  { label: '印度', value: '印度' },
+  { label: '德国', value: '德国' },
+  { label: '意大利', value: '意大利' },
+  { label: '加拿大', value: '加拿大' },
+  { label: '西班牙', value: '西班牙' },
+  { label: '韩国', value: '韩国' },
+  { label: '中国香港', value: '中国香港' },
+  { label: '中国台湾', value: '中国台湾' },
+  { label: '其他进口', value: '其他进口' },
+];
+
 export {
   CategoryList,
   ScheduleType,
   BasicItem,
   FollowList,
-  CooperStatus
+  CooperStatus,
+  Source
 }

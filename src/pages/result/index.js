@@ -10,18 +10,43 @@ import MatrixRadioEval from '../../components/matrixRadioEval';
 import MatrixScaleEval from '../../components/matrixScaleEval';
 import OperationFooter from '../../components/operationFooter';
 import LoginNotice from '@components/loginNotice';
+import utils from '@utils/index';
 import { picFn } from '../../utils/pic';
 import './index.scss';
 
+const { isDockingPerson } = utils;
 const reqPacking = getGlobalData('reqPacking');
 const isLeader = id => [1, 3, 5].includes(id);
+
 export default function Result() {
   const { projectId, roundId } = getCurrentInstance().router.params;
   const [projectRole, setProjectRole] = useState(undefined);
+  const [judgeRole, setJudgeRole]  = useState(undefined);
   const [result, setResult] = useState({});
   const [info, setInfo] = useState({});
   const [projectEvaluationName, setProjectEvaluationName] = useState('');
   const isLogin = Taro.getStorageSync('token');
+
+
+  const fetchJudgeRole = () => {
+    reqPacking({
+      url: 'api/management/judgeRole',
+      data: { projectId },
+      method: 'GET',
+    })
+      .then(res => {
+        const { success, data = {}, error } = res;
+        const { role } = data;
+
+        if (success) return setJudgeRole(role);
+
+        Taro.showToast({
+          title: error.message,
+          icon: 'none',
+          duration: 2000
+        });
+      });
+  }
 
   const fetchRole = () => {
     reqPacking({
@@ -104,6 +129,7 @@ export default function Result() {
   }
 
   useEffect(() => {
+    fetchJudgeRole();
     fetchRole();
     fetchResult();
     fetchInfo();
@@ -123,13 +149,13 @@ export default function Result() {
     core = {},
   } = result;
   const noEvalText = isLeader(projectRole) ? "还没有人发布过评估内容" : "自行填答后，才能看到其他人的评估内容";
-
+  const showParticipantNumber = isDockingPerson(judgeRole);
   return <View className="result">
     {!isLogin ? (
       <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
     ) : (
       <Block>
-      <ProjectInfo info={info} projectId={projectId} roundId={roundId} />
+      <ProjectInfo info={info} projectId={projectId} roundId={roundId} showParticipantNumber={showParticipantNumber}/>
       <View className="result-cont">
         {
           !evaluated && !isLeader(projectRole) ? <View className="tip">为了保证评估客观公正，您需填答后才能看到他人的评估内容</View> : ""
@@ -212,7 +238,9 @@ export default function Result() {
         info={info}
         projectId={projectId}
         roundId={roundId}
-        evaluated={evaluated} />
+        evaluated={evaluated}
+        canInvite={isDockingPerson(judgeRole)}
+        />
       </Block>
     )}
   </View>
