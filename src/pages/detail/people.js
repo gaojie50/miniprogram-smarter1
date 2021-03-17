@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
-import { AtFloatLayout } from '@components/m5';
+import FloatCard from '@components/m5/float-layout';
 import { CooperStatus } from './constant';
 import Crown from '@static/detail/crown.png';
 import MainPeople from '@static/detail/mainPeople.png';
@@ -11,10 +11,10 @@ import './people.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 export default function People(props) {
-  const { peopleData } = props;
+  const { peopleData, show } = props;
   
   return (
-    <AtFloatLayout className="people" onClose={() => props.cancelShow()} isOpened>
+    <FloatCard className="people" onClose={() => props.cancelShow()} isOpened={show}>
       <View className="title">
         <Text>对接人({peopleData.length})</Text>
         <View className="img" onClick={() => props.cancelShow()}>
@@ -36,6 +36,6 @@ export default function People(props) {
         }
         </ScrollView>
       </View>
-    </AtFloatLayout>
+    </FloatCard>
   )
 }
