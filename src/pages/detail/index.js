@@ -316,7 +316,7 @@ export default class Detail extends React.Component {
     const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed, toView, setBgColor } = this.state;
 
     return (
-      <Block>
+      <View>
         <View className="detail-top">
           <View className={top ? "fixed" : ""} id="top" style={{height: `${headerBarHeight}px`, paddingTop: `${titleBarPadding}px`, backgroundColor: top ? '#FFFFFF':''}} >
             <View className="header" style={{height: `${titleBarHeight}px`, lineHeight: `${titleBarHeight}px` }}>
@@ -369,7 +369,7 @@ export default class Detail extends React.Component {
           /> : ''
         }
         <View className="detail-tabs" id={toView} >
-          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '-1rpx', zIndex: 9}}>
+          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
             <View onClick={()=> this.handleSwitch(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>最新跟进</View>
             <View onClick={()=> this.handleSwitch(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>项目评估</View>
             <View onClick={()=> this.handleSwitch(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>变更历史</View>
@@ -396,11 +396,31 @@ export default class Detail extends React.Component {
         }
       </ScrollView>
      
-      {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}
-      {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
-      {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
-      {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
-    </Block>
+      {
+        showProgress ? 
+        <AddingProcess 
+          submitEvt={this.updateProcess} 
+          closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} 
+          projectId={basicData.projectId} 
+        /> : null
+      }
+      <Cooper 
+        show={showCooperStatus} 
+        basicData={basicData} 
+        fetchBasicData={() => this.fetchBasicData()} 
+        cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}
+      />
+      <FacePeople 
+        show={showPeople} 
+        peopleData={peopleData} 
+        cancelShow={() => this.setState({showPeople: false, stopScroll: false})}
+      />
+      <ProjectFile 
+        show={showProjectFile} 
+        fileData={fileData} 
+        cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})} 
+      />
+    </View>
     )
   }
 }
