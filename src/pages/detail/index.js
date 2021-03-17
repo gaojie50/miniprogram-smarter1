@@ -11,6 +11,8 @@ import { EvaluationList } from '../board/evaluate';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import AddingProcess from '@components/addingProcess';
+import FloatLayout from '@components/m5/float-layout';
+import '@components/m5/style/components/float-layout.scss';
 import utils from '@utils/index.js'
 import ProjectFile from './projectFile';
 import FacePeople from './people';
@@ -396,7 +398,13 @@ export default class Detail extends React.Component {
         }
       </ScrollView>
      
-      {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}
+      <FloatLayout isOpened={showProgress}>
+        <AddingProcess 
+          closeEvt ={() => this.setState({ showProgress: false, stopScroll: false }) }
+          submitEvt={this.updateProcess} 
+          projectId={basicData.projectId} />
+      </FloatLayout>
+
       {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
       {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
       {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
