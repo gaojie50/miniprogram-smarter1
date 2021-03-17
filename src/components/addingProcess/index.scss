@@ -10,137 +10,134 @@
   color: getColor($sign);
 }
 
-.adding-process-wrap{
-  position: fixed;
-  top: 0;
-  left: 0;
+.adding-process{
+  // height: 822px;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.6);
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border-radius: 20px 20px 0 0;
+  padding-left: 30px;
+  
+  .title{
+    height: 130px;
+    line-height: 130px;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 38px;
+    color: #333333;
+    padding-right: 30px;
 
-  .adding-process{
-    height: 822px;
-    width: 100%;
-    box-sizing: border-box;
-    background: #FFFFFF;
-    border-radius: 20px 20px 0 0;
-    padding-left: 30px;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    
-    .title{
-      height: 130px;
-      line-height: 130px;
-      font-weight: 600;
-      font-family: PingFangSC-Semibold;
-      font-size: 38px;
-      color: #333333;
-      padding-right: 30px;
+    .close-wrap {
+      width: 88px;
+      height: 88px;
+      line-height: 88px;
+      margin-top: 21px;
+      display: block;
+      text-align: center;
+      float: right;
 
-      .close-wrap {
-        width: 88px;
-        height: 88px;
-        line-height: 88px;
-        margin-top: 21px;
-        display: block;
-        text-align: center;
-        float: right;
-
-        image {
-          width: 28px;
-          height: 28px;
-        }
+      image {
+        width: 28px;
+        height: 28px;
       }
     }
+  }
 
-    .cont{
-      .label{
-        font-weight: 600;
-        font-family: PingFangSC-Semibold;
+  .cont{
+    .label{
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 26px;
+      color: #333333;
+      line-height: 36px;
+      margin-bottom: 20px;
+    }
+
+    scroll-view{
+      height: 120px;
+      word-break:keep-all;
+      white-space:nowrap;
+
+      text{
+        display: inline-block;
+        margin-right: 10px;
+        background: #F8F8F8;
+        border-radius: 10px;
+        min-width: 140px;
+        text-align: center;
+        height: 80px;
+        line-height: 80px;
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
         font-size: 26px;
-        color: #333333;
-        line-height: 36px;
-        margin-bottom: 20px;
+        color: #333;
+        box-sizing: border-box;
+        border: 1px solid #F8F8F8;
+
+        &:last-of-type{ margin-right: 30px }
+
+        @for $i from 1 through 6 { &.active-#{$i} { @include item($i) } }
+
       }
 
-      scroll-view{
-        height: 120px;
-        word-break:keep-all;
-        white-space:nowrap;
-
+      &.status{
         text{
-          display: inline-block;
-          margin-right: 10px;
-          background: #F8F8F8;
-          border-radius: 10px;
-          min-width: 140px;
-          text-align: center;
-          height: 80px;
-          line-height: 80px;
-          font-weight: 400;
-          font-family: PingFangSC-Regular;
-          font-size: 26px;
-          color: #333;
-          box-sizing: border-box;
-          border: 1px solid #F8F8F8;
+          padding: 0 30px;
 
-          &:last-of-type{ margin-right: 30px }
-
-          @for $i from 1 through 6 { &.active-#{$i} { @include item($i) } }
-
-        }
-
-        &.status{
-          text{
-            padding: 0 30px;
-
-            &.active{
-              background: rgba(39,111,240,0.10);
-              border: 2px solid #276FF0;
-              font-weight: 600;
-              font-family: PingFangSC-Semibold;
-              font-size: 26px;
-              color: #276FF0;
-            }
+          &.active{
+            background: rgba(39,111,240,0.10);
+            border: 2px solid #276FF0;
+            font-weight: 600;
+            font-family: PingFangSC-Semibold;
+            font-size: 26px;
+            color: #276FF0;
           }
         }
       }
     }
+  }
 
-    textarea{
-      background: #F8F8F8;
-      border-radius: 10px;
-      width: 690px;
-      height: 160px;
-      font-weight: 400;
-      font-family: PingFangSC-Regular;
-      font-size: 28px;
-      color: #333333;
-      line-height: 40px;
-      padding: 16px 20px;
-      box-sizing: border-box;
-      border: none;
-      margin-bottom: 30px;
-    }
+  textarea{
+    background: #F8F8F8;
+    border-radius: 10px;
+    width: 690px;
+    height: 160px;
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 28px;
+    color: #333333;
+    line-height: 40px;
+    padding: 16px 20px;
+    box-sizing: border-box;
+    border: none;
+    margin-bottom: 30px;
+  }
 
-    .btn{
-      background: #276FF0;
-      border-radius: 40px;
-      opacity: 0.4;
-      text-align: center;
-      height: 80px;
-      line-height: 80px;
-      width: 690px;
-      font-weight: 600;
-      font-family: PingFangSC-Semibold;
-      font-size: 30px;
-      color: #FFFFFF;
-      margin-bottom: 30px;
+  .btn{
+    background: #276FF0;
+    border-radius: 40px;
+    opacity: 0.4;
+    text-align: center;
+    height: 80px;
+    line-height: 80px;
+    width: 690px;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 30px;
+    color: #FFFFFF;
+    margin-bottom: 30px;
 
-      &.ownPower{
-        opacity:1;
-      }
+    &.ownPower{
+      opacity:1;
     }
   }
+}
+
+
+.layout-process .at-float-layout__container{
+  padding: 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
 }
