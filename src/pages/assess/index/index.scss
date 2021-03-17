@@ -62,20 +62,27 @@ page image {
   }
 
   .content-container {
-    border: 3px solid #eee;
+    border: 3px solid rgba(255,255,255,.2);
     border-radius: 40px;
     height: 100%;
     box-sizing: border-box;
+    position: relative;
     .inner-content-container {
       box-sizing: border-box;
-      padding: 60px 45px 0 45px;
-      height: calc(100% - 180px);
-      overflow-y: scroll;
+      padding: 60px 0px;
+      height: 100%;
+      position: relative;
+      .inner-content {
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+      }
     }
   }
   .briefinfo-wrap {
     text-align: center;
-    padding-bottom: 50px;
+    padding: 0 45px 50px 45px;
+    box-sizing: border-box;
     .project-pic {
       width: 200px;
       height: 275px;
@@ -105,7 +112,9 @@ page image {
 
   .evaluation-info-wrap {
     border-top: 1px solid rgba(255,255,255,0.2);
-
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 45px;
     .round-title {
       margin-top: 40px;
       font-weight: 400;
@@ -150,6 +159,7 @@ page image {
           font-size: 24px;
           color: #FFFFFF;
           line-height: 28px;
+          max-height: 56px;
           word-break: break-all;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -173,6 +183,7 @@ page image {
   }
 
   .start-btn {
+    position: absolute;
     margin: auto;
     padding: 0;
     width: 600px;
@@ -182,8 +193,7 @@ page image {
     font-size: 30px;
     line-height: 80px;
     text-align: center;
-    position: fixed;
-    bottom: 100px;
+    bottom: 90px;
     left: 50%;
     transform: translate3d(-50%, 0, 0);
     
