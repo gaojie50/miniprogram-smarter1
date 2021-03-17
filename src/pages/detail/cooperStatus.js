@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, Image } from '@tarojs/components';
 // import { AtFloatLayout } from '@components/m5';
 import FloatCard from '@components/m5/float-layout';
@@ -9,8 +9,14 @@ import './cooperStatus.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 export default function Cooper(props) {
-  const { basicData } = props;
+  const { basicData, show } = props;
   const [cooperActive, setCooperActive] = useState(basicData.cooperStatus);
+
+  useEffect(() => {
+    if(basicData.projectId) {
+      setCooperActive(basicData.cooperStatus)
+    }
+  },[basicData])
 
   const submit = useCallback(() => {
     reqPacking({
@@ -30,7 +36,7 @@ export default function Cooper(props) {
   }, [cooperActive]) 
 
   return (
-    <FloatCard className="cooper-status" onClose={() => props.cancelShow()} isOpened>
+    <FloatCard className="cooper-status" onClose={() => props.cancelShow()} isOpened={show}>
       <View className="title">
         <Text>变更合作状态</Text>
         <View className="img" onClick={() => props.cancelShow()}>
