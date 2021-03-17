@@ -18,7 +18,6 @@ const types = {
 }
 
 export default function makeInfo(props) {
-  console.log(props)
   const { changeScroll = () => {}, movieData } = props;
 
   const [openSource, setOpenSource] = useState(false);
