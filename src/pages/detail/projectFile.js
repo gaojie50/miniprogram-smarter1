@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
-import { AtFloatLayout } from '@components/m5';
+import FloatCard from '@components/m5/float-layout';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import utils from '@utils/index';
@@ -13,10 +13,10 @@ import dayjs from 'dayjs';
 const { previewFile } = utils;
 const reqPacking = getGlobalData('reqPacking');
 export default function ProjectFile(props) {
-  const { fileData } = props;
+  const { fileData, show } = props;
 
   return (
-    <AtFloatLayout scrollY={false} className="projectFile" onClose={() => props.cancelShow()} isOpened>
+    <FloatCard scrollY={false} className="projectFile" onClose={() => props.cancelShow()} isOpened={show}>
       <View className="title">
         <Text>项目文件({fileData.length})</Text>
         <View className="img" onClick={() => props.cancelShow()}>
@@ -45,7 +45,7 @@ export default function ProjectFile(props) {
         }
         </ScrollView>
       </View>
-    </AtFloatLayout>
+    </FloatCard>
   )
 }
 

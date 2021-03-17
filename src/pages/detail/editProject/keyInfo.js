@@ -51,7 +51,7 @@ export default function KeyInfo(props, ref) {
   }
   
   return (
-    <Block>
+    <View className="keyInfo">
       <Text className="keyInfo-title">核心数据</Text>
       <View className="keyInfo-content">
         <ReleaseTimeWrap updateRef={updateRef} releaseTimeRef={releaseTimeRef} movieData={props.movieData} />
@@ -62,14 +62,14 @@ export default function KeyInfo(props, ref) {
         }
         {
           category === 3 || category === '院线电影' ?
-          <KeyInput updateRef={updateRef} data={props.movieData} ref={keyRef} type="expectScore" name="预估评分" text="分"></KeyInput>
+          <Block><KeyInput updateRef={updateRef} data={props.movieData} ref={keyRef} type="expectScore" name="预估评分" text="分"></KeyInput>
+          {divider}</Block>
           : null
         }
         
         {
           props.judgeRole.role === 1 ? 
           <Block>
-            {divider}
             <KeyInput updateRef={updateRef} data={props.movieData} ref={keyRef} type="productionCosts" name="制作成本" text="万"></KeyInput>
             {divider}
             <KeyInput updateRef={updateRef} data={props.movieData} ref={keyRef} type="advertisingCosts" name="宣发费用" text="万"></KeyInput>
@@ -81,7 +81,7 @@ export default function KeyInfo(props, ref) {
           : null
         }
       </View>
-    </Block>
+    </View>
   )
 }
 
@@ -118,8 +118,8 @@ function _ReleaseTimeWrap(props) {
   return (
     <Block>
       <ListItem title='上映时间' extraText={value || textVoid} arrow onClick={() => setOpenReleaseTime(true)} />
-      {openReleaseTime ? <ReleaseTime updateReleaseTime={updateReleaseTime} updateRef={props.updateRef} ref={props.releaseTimeRef} movieData={props.movieData} onClose={() => setOpenReleaseTime(false)}></ReleaseTime> : null}
       {divider}
+      {openReleaseTime ? <ReleaseTime updateReleaseTime={updateReleaseTime} updateRef={props.updateRef} ref={props.releaseTimeRef} movieData={props.movieData} onClose={() => setOpenReleaseTime(false)}></ReleaseTime> : null}
     </Block>
   )
 }

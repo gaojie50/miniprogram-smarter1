@@ -4,14 +4,11 @@
   .process-wrap {
     position: relative;
     width: 400px;
-    height: 40px;
+    height: 20px;
     background: rgba(39,111,240,.1);
     margin: auto;
     border-radius: 35px;
-    text-align: center;
-    font-size: 28px;
     color: #333333;
-    line-height: 50px;
     overflow: hidden;
     .inner-bar {
       height: 50px;
@@ -48,11 +45,12 @@
     background-color: #fff;
     border-radius: 40px 40px 0 0;
     box-sizing: border-box;
+    padding-top: 40px;
     .gapFilling-text, .gapFilling-num, .matrix-scale, .radio-wrap, .matrix-radio{
       margin-bottom: 80px;
     }
     .content {
-      padding: 30px 50px 100px 50px;
+      padding: 0px 50px 100px 50px;
       // 试题通用样式
       .que-item{
         position: relative;

@@ -15,13 +15,16 @@ page image {
     border-radius: 40px 40px 0 0;
     padding: 40px 30px 180px 30px;
     .title,.title-input {
-      font-size: 46px;
-      font-weight: 500;
+      font-size: 38px;
+      font-weight: 600;
       color: #333;
-      line-height: 46px;
+      line-height: 50px;
     }
     .edit-btn-wrap {
       display: inline-block;
+      vertical-align: middle;
+      font-weight: 400;
+      margin-left: 10px;
     }
   
     .title-wrap {
@@ -53,6 +56,9 @@ page image {
         line-height: 36px;
         padding: 14px 20px;
         margin-top: 30px;
+      }
+      .textarea-placeholder {
+        color: #ccc;
       }
     }
   
@@ -112,6 +118,7 @@ page image {
         margin-bottom: 18px;
         .file-info {
           width: 572px;
+          font-size: 0;
           .file-name {
             font-size: 24px;
             line-height: 30px;
@@ -125,6 +132,7 @@ page image {
             line-height: 24px;
             margin-top: 10px;
             color: #999;
+            display: block;
           }
         }
       }
@@ -161,16 +169,18 @@ page image {
         width: 100%;
         box-sizing: border-box;
         font-size: 28px;
-        background: rgba(39,111,240,0.10);
-        border: 1px solid #276FF0;
+        line-height: 28px;
+        background: #F8F8F8;
         border-radius: 10px;
         padding: 0px 20px;
         display: flex;
         justify-content: space-between;
         margin-bottom: 20px;
         &.active {
+          background: rgba(39,111,240,0.10);
           color: #276FF0;
           font-weight: 600;
+          border: 1px solid #276FF0;
         }
         .template-name {
           padding: 20px 0;
@@ -181,6 +191,8 @@ page image {
         }
         .preview-btn {
           padding: 20px 0;
+          color: #276FF0;
+          font-weight: 600;
         }
       }
     }
@@ -191,6 +203,10 @@ page image {
       }
     }
     .file-select-list {
+      .at-float-layout__container {
+        height: 85% !important;
+        max-height: 85%;
+      }
       .layout-header {
         background: #fff;
       }
@@ -201,7 +217,9 @@ page image {
       }
   
       .content-wrap {
-        padding-bottom: 160px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 20px;
       }
       .file-item-wrap {
         display: flex;

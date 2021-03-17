@@ -6,11 +6,14 @@ import { Search, projectSearch, searchRole } from './search.js';
 import Toast from '@components/m5/toast';
 import _BasicInfo from './basicInfo';
 import _KeyInfo from './keyInfo';
+// import _MakeInfo from './makeInfo';
 import { CATEGORY_LIST } from './lib';
 import './index.scss';
 
 const KeyInfo = forwardRef(_KeyInfo);
 const BasicInfo = forwardRef(_BasicInfo);
+// const MakeInfo = forwardRef(_MakeInfo);
+
 export default function EditProject() {
   const keyDataRef = useRef();
   const basicDateRef = useRef();
@@ -21,6 +24,7 @@ export default function EditProject() {
   const [projectInfoList, setProjectInfoList] = useState({});
   const [projectData, setProjectData] = useState({});
   const [judgeRole, setJudgeRole] = useState({});
+  const [scroll, setScroll] = useState(true);
 
   useEffect(() => {
     const url = Taro.getCurrentPages();
@@ -187,14 +191,42 @@ export default function EditProject() {
     setProjectData(newData)
   }
 
+  const handleChangeScroll = (param,newRef) => {
+    let newMovieList = {};
+    const itemList = ['cooperStatus', 'name', 'type', 'cooperType'];
+    if(newRef) {
+      if(newRef.cooperStatus) {
+        newMovieList.cooperStatus = newRef.cooperStatus;
+      }
+      if(newRef.name) {
+        newMovieList.movieName = newRef.name;
+      }
+      if(newRef.type) {
+        newMovieList.movieType = newRef.type;
+      }
+      if(newRef.cooperType) {
+        newMovieList.cooperType = newRef.cooperType;
+      }
+      if(newRef.category) {
+        setProjectInfoList({...projectInfoList,category: newRef.category})
+      }
+    }
+    setMovieList({...movieList, ...newMovieList})
+    setScroll(param);
+  }
+
   return (
-    <View className="editProject">
-      <BasicInfo ref={basicDateRef} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
+    <ScrollView scrollY={ scroll } className="editProject">
+      <BasicInfo ref={basicDateRef} changeScroll={(param, newRef) => handleChangeScroll(param, newRef)} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
       <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} projectData={projectData} />
-      <View className="releaseTime-submit">
+      {/* <MakeInfo movieData={movieList} changeScroll={param => setScroll(param)} /> */}
+      <View style={{height: '124rpx'}}></View>
+      {
+        scroll ? <View className="releaseTime-submit">
           <View className="releaseTime-submit-btn" onClick={submit}>保存</View>
-      </View>
-    </View>
+        </View> : null
+      }
+    </ScrollView>
   )
 }
 

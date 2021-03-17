@@ -66,6 +66,7 @@ const textVoid = <Text style={{ color: '#CCCCCC' }}>请选择</Text>;
 const divider = <Divider />
 
 export default function AddProject(props, ref) {
+  const { changeScroll = () => {} } = props;
   const pathParams = Taro.getCurrentInstance().router.params;
   const { name: passedName = '' } = pathParams;
   const [movieList, setMovieList] = useState({}); 
@@ -159,6 +160,7 @@ export default function AddProject(props, ref) {
       keyword: val
     }).then((data) => {
       setData(data);
+      props.changeScroll(false);
     });
     setLoading(false);
   }, 800), []);
@@ -190,6 +192,7 @@ export default function AddProject(props, ref) {
     setTypes(typeObj);
 
     setData([]);
+    props.changeScroll(true, ref.current);
   }, []);
 
   const isOtherCategory = useMemo(() => {
@@ -280,6 +283,7 @@ export default function AddProject(props, ref) {
               <CustomName value={name} onChoose={() => {
                 setData([]);
                 resetOther();
+                changeScroll(true, ref.current)
               }} />
               {divider}
               <MovieList data={data} onChoose={handleChoose} right="user" />
@@ -287,7 +291,7 @@ export default function AddProject(props, ref) {
           )
         }
         {divider}
-        <ListItem title='品类' extraText={category || textVoid} arrow onClick={() => setOpenCategorySelector(true)} />
+        <ListItem title='品类' extraText={category || textVoid} arrow onClick={() => {setOpenCategorySelector(true);changeScroll(false)}} />
         {
           isOtherCategory && showCategoryInput && (
             <View className="add-project-input-wrapper">
@@ -306,49 +310,56 @@ export default function AddProject(props, ref) {
         <FloatCard
           isOpened={openCategorySelector}
           title="选择品类"
-          onClose={() => {setOpenCategorySelector(false);props.changeCategory(category);}}
+          onClose={() => {setOpenCategorySelector(false);props.changeCategory(category);changeScroll(true, ref.current)}}
         >
-          <M5Grid
-            hasBorder={false}
-            columnNum={2}
-            mode="rect"
-            data={CATAGORY.map((item) => ({ value: item.label, valueClassName: category === item.label ? 'm5-grid-item-checked' : '' }))}
-            onClick={({ value }) => {
-              setCategory(value);
-              setShowCategoryInput(true);
-            }}
-          />
+          <View className="M5Grid-wrap">
+            <M5Grid
+              hasBorder={false}
+              columnNum={4}
+              mode="rect"
+              data={CATAGORY.map((item) => ({ value: item.label, valueClassName: category === item.label ? 'm5-grid-item-checked' : '' }))}
+              onClick={({ value }) => {
+                setCategory(value);
+                setShowCategoryInput(true);
+              }}
+            />
+          </View>
+          {/* <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => {setOpenCategorySelector(false);props.changeCategory(category);}}>确定</View></View> */}
         </FloatCard>
         {divider}
-        <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr || firstType.length > 0 && firstType.join(' / ') || textVoid} arrow onClick={() => setOpenTypeSelector(true)} />
+        <ListItem disabled={isOtherCategory} title='类型' extraText={typeStr || firstType.length > 0 && firstType.join(' / ') || textVoid} arrow onClick={() => {setOpenTypeSelector(true);changeScroll(false)}} />
         <FloatCard
           isOpened={openTypeSelector}
           title="选择类型"
-          onClose={() => setOpenTypeSelector(false)}
+          className="type-select-float"
+          onClose={() => {setOpenTypeSelector(false);changeScroll(true, ref.current)}}
         >
-          <M5Grid
-            hasBorder={false}
-            columnNum={4}
-            mode="rect"
-            data={MOVIE_TYPE_LIST.map((item) => ({ value: item.name, valueClassName: types[item.name] ? 'm5-grid-item-checked' : '' }))}
-            onClick={({ value }) => {
-              const keys = Object.keys(types);
-              if (!types[value]) {
-                if (keys.length < 3) {
-                  types[value] = true;
+          <View className="M5Grid-wrap">
+            <M5Grid
+              hasBorder={false}
+              columnNum={4}
+              mode="rect"
+              data={MOVIE_TYPE_LIST.map((item) => ({ value: item.name, valueClassName: types[item.name] ? 'm5-grid-item-checked' : '' }))}
+              onClick={({ value }) => {
+                const keys = Object.keys(types);
+                if (!types[value]) {
+                  if (keys.length < 3) {
+                    types[value] = true;
+                  } else {
+                    setShowToast('最多可以添加三个类型')
+                  }
                 } else {
-                  setShowToast('最多可以添加三个类型')
+                  delete types[value];
                 }
-              } else {
-                delete types[value];
-              }
-              setTypes({ ...types });
-            }}
-          />
+                setTypes({ ...types });
+              }}
+            />
+            {/* <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenTypeSelector(false)}>确定</View></View> */}
+          </View>
         </FloatCard>
         <Toast duration={1000} isOpened={showToast} text={showToast} onClose={() => setShowToast('')} />
         {divider}
-        <ListItem title='意向合作类型' extraText={cooperStr || firstCooperType.length > 0 && firstCooperType.join(' / ') || textVoid} arrow onClick={() => setOpenCooperSelector(true)} />
+        <ListItem title='意向合作类型' extraText={cooperStr || firstCooperType.length > 0 && firstCooperType.join(' / ') || textVoid} arrow onClick={() => {setOpenCooperSelector(true);changeScroll(false)}} />
         {
           hasOtherCooperType && (
             <View className="add-project-input-wrapper">
@@ -367,41 +378,49 @@ export default function AddProject(props, ref) {
         <FloatCard
           isOpened={openCooperSelector}
           title="选择意向合作类型"
-          onClose={() => setOpenCooperSelector(false)}
+          onClose={() => {setOpenCooperSelector(false);changeScroll(true, ref.current)}}
         >
-          <M5Grid
-            hasBorder={false}
-            className="grid-checkbox"
-            mode="rect"
-            data={COOPER_TYPE.map((item) => ({ value: item.label, valueClassName: cooperType[item.value] ? 'm5-grid-item-checked' : '' }))}
-            onClick={({ value }) => {
-              const keys = Object.keys(cooperType);
-              if (!cooperType[value]) {
-                cooperType[value] = true;
-              } else {
-                delete cooperType[value];
-              }
-              setCooperType({ ...cooperType });
-            }}
-          />
+          <View className="M5Grid-wrap">
+            <M5Grid
+              hasBorder={false}
+              className="grid-checkbox"
+              columnNum={4}
+              mode="rect"
+              data={COOPER_TYPE.map((item) => ({ value: item.label, valueClassName: cooperType[item.value] ? 'm5-grid-item-checked' : '' }))}
+              onClick={({ value }) => {
+                const keys = Object.keys(cooperType);
+                if (!cooperType[value]) {
+                  cooperType[value] = true;
+                } else {
+                  delete cooperType[value];
+                }
+                setCooperType({ ...cooperType });
+              }}
+            />
+            {/* <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenCooperSelector(false)}>确定</View></View> */}
+          </View>
         </FloatCard>
         {divider}
-        <ListItem title='合作状态' extraText={COOPER_STATE?.[cooperState]?.label || textVoid} arrow onClick={() => setOpenCooperStateSelector(true)} />
+        <ListItem title='合作状态' extraText={COOPER_STATE?.[cooperState]?.label || textVoid} arrow onClick={() => {setOpenCooperStateSelector(true);changeScroll(false)}} />
         <FloatCard
           isOpened={openCooperStateSelector}
           title="选择合作状态"
-          onClose={() => setOpenCooperStateSelector(false)}
+          onClose={() => {setOpenCooperStateSelector(false);changeScroll(true, ref.current)}}
         >
-          <M5Grid
-            hasBorder={false}
-            className="grid-checkbox"
-            mode="rect"
-            data={COOPER_STATE.map((item, idx) => ({ value: item.value, valueClassName: idx === cooperState ? 'm5-grid-item-checked' : '' }))}
-            onClick={({ value }) => {
-              const t = COOPER_STATE.findIndex((item) => item.value === value)
-              setCooperState(t);
-            }}
-          />
+          <View className="M5Grid-wrap">
+            <M5Grid
+              hasBorder={false}
+              className="grid-checkbox"
+              mode="rect"
+              columnNum={4}
+              data={COOPER_STATE.map((item, idx) => ({ value: item.value, valueClassName: idx === cooperState ? 'm5-grid-item-checked' : '' }))}
+              onClick={({ value }) => {
+                const t = COOPER_STATE.findIndex((item) => item.value === value)
+                setCooperState(t);
+              }}
+            />
+            {/* <View className="float-bottom"><View className="float-bottom-confirm" onClick={() => setOpenCooperStateSelector(false)}>确定</View></View> */}
+          </View>
         </FloatCard>
       </View>
       {/* <View className="add-project-confirm">

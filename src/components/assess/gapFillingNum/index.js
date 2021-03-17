@@ -36,14 +36,20 @@ export default class GapFillingNum extends React.Component {
 
     return <View id={id}  className={ `gapFilling-num ${required ? "required" : ""}` }>
       <View className="ques-title">{questionNum}、{leftText}</View>
-      <Input
-        placeholder="请填写"
-        value={ this.state.value }
-        disabled={ isPreview }
-        className={ `num-input ${isPreview ? 'preview' : ''} ` }
-        onInput={ this.valueChange } />
-      {rightText}
-      { required && showError ? <View className="error-tip">请填写</View> : "" }
+      <View className="input-line">
+        <View className="input-label">{leftText}</View>
+        <View className="num-input-wrapper">
+          <Input
+            placeholder="请填写"
+            value={ this.state.value }
+            disabled={ isPreview }
+            className={ `num-input ${isPreview ? 'preview' : ''} ` }
+            onInput={ this.valueChange } />
+          {rightText}
+          { required && showError ? <View className="error-tip">请填写</View> : "" }
+        </View>
+      </View>
+     
     </View>;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Taro, { getCurrentInstance, useDidShow } from '@tarojs/taro';
 import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components';
 import TopBar from '@components/topBar';
@@ -14,70 +14,147 @@ import projectConfig from '../../../constant/project-config';
 import '../../../components/m5/style/components/icon.scss';
 import './index.scss';
 
-const { errorHandle, hexColorToRgba, previewFile } = utils;
+const { errorHandle, hexColorToRgba, previewFile, rpxTopx } = utils;
 const { getEvaluationLabel, getEvaluationIcon } = projectConfig;
 const AUTH_ID = 95130;
+
 
 export default function assessPage(){
   
   const [ briefInfo, setBriefInfo ] = useState({});
   const [ projectRole, setProjectRole ] = useState(6);
-  const [ loading, setLoading ] = useState(false);
   const [ curEvalObj, setCurEvalObj ] = useState({});
-  const [ canEvaluate, setCanEvaluate ] = useState( false )
-  const [ result, setResult ] = useState({});
-  const [ hasPermission, setHasPermission ] = useState( false );
-  
+  const [ didAssessed, setDidAssessed ] = useState(false);  // 是否评估过
+  const [ canEvaluate, setCanEvaluate ] = useState(false);
+  const [ hasPermission, setHasPermission ] = useState(false);
+  const [ briefContentHeight, setBriefContentHeight ] = useState(0);
+  const briefNodeRef = useRef( null ); 
+
   const isLogin = Taro.getStorageSync('token');
-  const { projectId, roundId } = getCurrentInstance().router.params;
+  const { projectId, roundId, inviteId, participationCode } = getCurrentInstance().router.params;
   const capsuleLocation = getGlobalData('capsuleLocation');
-  const {statusBarHeight} = getGlobalData('systemInfo');
+  const { statusBarHeight } = getGlobalData('systemInfo');
+  const blackBarBottom = getGlobalData('blackBarBottom');
   const titleHeight= Math.floor(
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
+  console.log(blackBarBottom);
 
-  useDidShow(()=>{
-    fetchData();
+  Taro.eventCenter.on('didEvaluated', ()=>{
+    setDidAssessed(true);
   })
 
   useEffect(()=>{
     if(isLogin){
       const authInfo = Taro.getStorageSync('authinfo');
-      console.log(authInfo);
       if( authInfo?.authIds?.includes(AUTH_ID)){
         setHasPermission(true);
-        fetchData();
+        getEvaluationStatus().then(()=>{
+          fetchData()
+        })
       }
     }
   }, [])
 
+  useEffect(()=>{
+    Taro.nextTick(()=>{
+      if(briefNodeRef.current){
+        const query = Taro.createSelectorQuery();
+        query.select('.briefinfo-wrap').boundingClientRect(rect=>{
+          setBriefContentHeight(rect.height);
+        }).exec();
+      }
+    })
+  }, [briefInfo, curEvalObj])
+
+  const getEvaluationStatus = async () => {
+    // 链接上有inviteId，先查看是否评估过
+    if(inviteId){
+      const statusData = await fetchAccessStatus();
+      const { hasAssess, hasCodeInput } = statusData;
+      if( hasCodeInput || hasAssess ){
+        setDidAssessed( hasAssess );
+      }else{
+        const assessData = await setAssessPermission();
+        setDidAssessed( assessData?.hasAssess );
+      }
+    }else{  // 兼容没有评估inviteId的情况
+      setDidAssessed(false)
+    }
+  }
+
   const fetchData = () => {
-    setLoading( true );
-    fetchResult();
     fetchRole();
     fetchBrifInfo();
     fetchEveluationList();
   }
 
-  const fetchResult = () => {
+  const fetchAccessStatus = () => {
+    return new Promise((resolve, reject)=>{
+      reqPacking(
+        {
+          url: 'api/management/inviteInfo',
+          data: { 
+            inviteId,
+          },
+        },
+        'server',
+      ).then(res => {
+          const { data, success, error } = res;
+          if (success) {
+            resolve( data );
+          }
+          
+          if (error){
+            errorHandle(error);
+            reject(error);
+          } 
+        });
+    })
+  } 
+
+  const setAssessPermission = () => {
+    return new Promise((resolve, reject)=>{
+      reqPacking(
+        {
+          url: 'api/management/assessmentLink',
+          data: { 
+            inviteId,
+            participationCode
+          },
+        },
+        'server',
+      ).then(res => {
+        const { data, success, error } = res;
+        if (success) {
+          resolve(data);
+        }
+        if (error){
+          errorHandle(error); 
+          reject(error);
+        } 
+      });
+    })
+  }
+
+  const setPermission = () => {
     reqPacking(
       {
-        url: 'api/management/result',
+        url: 'api/management/assessmentLink',
         data: { 
-          projectId,
-          roundId,
+          inviteId,
+          participationCode
         },
       },
       'server',
     ).then(res => {
-        const { data, success, error } = res;
-        if (success) {
-          setResult && setResult(data);
-        }
-
-        if (error) errorHandle(message);
-      });
-  };
+      const { data, success, error } = res;
+      if (success) {
+        setDidAssessed(data.hasAssess);
+      }
+      if (error) errorHandle(message);
+    });
+  }
 
 
   const fetchRole = () => {
@@ -136,11 +213,9 @@ export default function assessPage(){
             setCanEvaluate(true);
           }
           setCurEvalObj(evalObj);
-          setLoading(false);
           return;
         }
         error.message && errorHandle(error);
-        setLoading(false);
         setCanEvaluate(false);
       }).finally(()=>{
         Taro.hideLoading();
@@ -157,8 +232,8 @@ export default function assessPage(){
       return;
     }
 
-    if(result.evaluated){
-      Taro.redirectTo({
+    if(didAssessed){
+      Taro.navigateTo({
         url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`,
       })
     }else{
@@ -179,20 +254,19 @@ export default function assessPage(){
   }
 
   
-  const { projectFile=[], backColor, name='', pic, categoryType } = briefInfo;
+  const { projectFile=[], backColor, name='', pic, categoryType, description } = briefInfo;
   const { round, initiator, startDate, roundTitle } = curEvalObj;
   const defaultPicUrl = 'https://obj.pipi.cn/festatic/common/image/90f5be009a6f7852f14f9553a14a3e35.png';
   const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPicUrl;
   const coverPic = projectPic ? projectPic : defaultPicUrl;
   const rgbColor = hexColorToRgba(backColor||'#475975',0.9);
-
-
+  
   return (
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>
       <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
       <TopBar background="transparent" hasBack={isLogin?true:false} onBack={ handleBack } />
       {!isLogin && (
-        <LoginNotice target={`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`} />
+        <LoginNotice target={`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`} />
       )}
       {
        isLogin && !hasPermission && (
@@ -200,35 +274,40 @@ export default function assessPage(){
        )
       }
       { isLogin && hasPermission && (
-        <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`}}>
+        <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`, paddingBottom: `${blackBarBottom>0? `${blackBarBottom}px`: `${rpxTopx(34)}px` }`}}>
           <View className="content-container">
-          <View className="briefinfo-wrap">
-            <Image className="project-pic" src={coverPic}></Image>
-            {name && <View className="project-name">《{name}》</View>}
-            {round && <View className="project-round">第{round}轮 / {getEvaluationLabel(categoryType)}</View>}
-            { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
-          </View>
+            <View className="inner-content-container">
+              <View className="inner-content">
+                <View className="briefinfo-wrap" ref={briefNodeRef}>
+                  <Image className="project-pic" src={coverPic}></Image>
+                  {name && <View className="project-name">《{name}》</View>}
+                  {round && <View className="project-round">第{round}轮 / {getEvaluationLabel(categoryType)}</View>}
+                  { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
+                </View>
 
-          <View className="evaluation-info-wrap">
-            <View className="round-title">{roundTitle}</View>
-            <View className="project-file-wrap">
-              {
-                (projectFile || []).map(item=>{
-                  return (
-                    <View className="file-item" onClick={()=>{previewFile(item.url, item.title)}}>
-                      <Image className="logo" src={getEvaluationIcon(categoryType)} />
-                      <View className="file-info-wrap">
-                        <View className="file-name">{item.title}</View>
-                      </View>
-                      <View className='at-icon at-icon-chevron-right'></View>
-                    </View>
-                  )
-                })
-              }
+                <View className="evaluation-info-wrap" style={{height: `calc(100% - ${briefContentHeight}px - ${rpxTopx(130)}px)`}}>
+                <View className="round-title">{roundTitle}</View>
+                {description && <View className="desc">{description}</View>}
+                <View className="project-file-wrap">
+                  {
+                    (projectFile || []).map(item=>{
+                      return (
+                        <View className="file-item" onClick={()=>{previewFile(item.url, item.title)}}>
+                          <Image className="logo" src={getEvaluationIcon(categoryType)} />
+                          <View className="file-info-wrap">
+                            <View className="file-name">{item.title}</View>
+                            <View className="file-size">{item.size}</View>
+                          </View>
+                          <View className='at-icon at-icon-chevron-right'></View>
+                        </View>
+                      )
+                    })
+                  }
+                </View>
+              </View>
+              </View>
             </View>
-          </View>
-          
-          {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!result.evaluated? '开始评估': '您已填写，查看结果'}</Button>}
+            {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? '开始评估': '您已填写，查看结果'}</Button>}
         </View>
       </View>
       )}

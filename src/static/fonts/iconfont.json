@@ -6,6 +6,13 @@
   "description": "smarter小程序图标",
   "glyphs": [
     {
+      "icon_id": "20381466",
+      "name": "delete",
+      "font_class": "delete",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
       "icon_id": "20134572",
       "name": "大纲",
       "font_class": "dagang",

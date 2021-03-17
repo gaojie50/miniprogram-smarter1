@@ -5,35 +5,37 @@
     font-size: 34px;
     color: #19233B;
     letter-spacing: 0;
-    line-height: 34px;
+    line-height: 40px;
     margin-bottom: 20px;
   }
-  .content{
+  .matrix-content{
     border-radius: 10px;
     display: flex;
     background: #F8F8F8;
     .left{
       display: inline-block;
-      box-shadow: 10px 0 10px -6px rgba(0, 0, 0, 0.15);
+      box-shadow: 10px 0 40px -6px rgba(0, 0, 0, 0.15);
       .left-item{
         height: 86px;
         width: 160px;
         padding: 0 20px;
         box-sizing: border-box;
-        flex-shrink: 0;
         font-weight: 400;
         font-family: PingFangSC-Regular;
         font-size: 26px;
         color: #19233C;
         text-align: left;
-        line-height: 40px;
+        line-height: 36px;
         display: flex;
         align-items: center;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+        .item-text {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
       }
     }
     .right-container{
@@ -62,7 +64,7 @@
             flex-shrink: 0;
             align-items: center;
             justify-content: center;
-            text-align: center;
+            text-align: center
           }
           .item-radio{
             box-sizing: border-box;
@@ -111,6 +113,7 @@
             align-items: center;
             justify-content: center;
             >.radio{
+              box-sizing: border-box;
               width: 40px;
               height: 40px;
               border-radius: 20px;

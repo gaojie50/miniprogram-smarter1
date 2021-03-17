@@ -6,7 +6,9 @@ const ItemLimit = 5;
 const toFixed = (num, precision) => (+(`${Math.round(+(`${num}e${precision}`))}e${-precision}`)).toFixed(precision);
 
 export default function CoreSection({ categoryType, core }) {
-  const clacScore = (arr, digits = 1) => {
+  const clacScore = (arrOut=[], digits = 1) => {
+    const arr = arrOut.filter(item => item);
+
     if (!arr || arr.length == 0) return;
 
     if (arr.every(item => item === null)) {
@@ -72,10 +74,9 @@ export default function CoreSection({ categoryType, core }) {
       score, totalScore, box, comment, evaluation, groupName,scoreFinished,
     } = item;
 
-    if (scoreFinished !== false) {
-      scoreArr.push(score);
-      totalScoreArr.push(totalScore);
-    }
+    scoreArr.push(score);
+
+    if (scoreFinished !== false) totalScoreArr.push(totalScore);
 
     boxArr.push(box);
     commentArr.push(evaluation);
@@ -149,7 +150,16 @@ export default function CoreSection({ categoryType, core }) {
                     name, totalScore,scoreFinished,
                   }, turn) => <View key={turn} className={`tr ${list.length == turn + 1 ? "no-line" : ""}`}>
                       <Text className="td">{name}</Text>
-                      <Text className="td">{scoreFinished === false ? '未完成所有题目' : totalScore}</Text>
+                      <Text className="td">
+                        {
+                          scoreExistSign ? (
+                            score || score === 0 ? score : '-'
+                          ) :
+                            (
+                              scoreFinished === false ? '未完成所有题目' : totalScore
+                            )
+                        }
+                        </Text>
                     </View>)}
 
                 </React.Fragment>)}
