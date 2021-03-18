@@ -11,6 +11,7 @@ import { EvaluationList } from '../board/evaluate';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import AddingProcess from '@components/addingProcess';
+import FloatLayout from '@components/m5/float-layout';
 import utils from '@utils/index.js'
 import ProjectFile from './projectFile';
 import FacePeople from './people';
@@ -396,14 +397,16 @@ export default class Detail extends React.Component {
         }
       </ScrollView>
      
-      {
-        showProgress ? 
+      <FloatLayout 
+        isOpened={showProgress} 
+        className="layout-process"
+        onClose={() => this.setState({ showProgress: false, stopScroll: false })
+        }>
         <AddingProcess 
+          closeEvt ={() => this.setState({ showProgress: false, stopScroll: false }) }
           submitEvt={this.updateProcess} 
-          closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} 
-          projectId={basicData.projectId} 
-        /> : null
-      }
+          projectId={basicData.projectId} />
+      </FloatLayout>
       <Cooper 
         show={showCooperStatus} 
         basicData={basicData} 

@@ -84,44 +84,42 @@ export default function AddingProcess({projectId,closeEvt,submitEvt}){
 
   const inputDescribe = ({detail}) => setDescribe(detail.value);
 
-  return <View className="adding-process-wrap" >
-      <View className="adding-process">
-        <View className="title">添加最新进展
-          <View className="close-wrap" onClick={closeEvt}>
-            <Image src="../../static/close.png"/>
-          </View>
+  return <View className="adding-process">
+      <View className="title">添加最新进展
+        <View className="close-wrap" onClick={closeEvt}>
+          <Image src="../../static/close.png"/>
         </View>
-        
-        <View className="cont">
-          <View className='label'>项目阶段</View>
-          <ScrollView scrollX>
-            {ProjectStages.map(({label,value},index)=><Text 
-              className={ value == stage ? `active-${value}` : '' }
-              onClick={changeStage} 
-              data-value={value} 
-              key={index}>{label}</Text>)}
-          </ScrollView>
-        </View>
+      </View>
+      
+      <View className="cont">
+        <View className='label'>项目阶段</View>
+        <ScrollView scrollX>
+          {ProjectStages.map(({label,value},index)=><Text 
+            className={ value == stage ? `active-${value}` : '' }
+            onClick={changeStage} 
+            data-value={value} 
+            key={index}>{label}</Text>)}
+        </ScrollView>
+      </View>
 
-        <View className="cont">
-          <View className='label'>阶段动作</View>
-          <ScrollView scrollX className="status">
-            {stageStatus.map((item,index)=><Text 
-              className={ statusArr.includes(item) ? 'active' : '' }
-              onClick={setStatus}
-              data-item={item} 
-              key={index}>{item}</Text>)}
-          </ScrollView>
-        </View>
-        
-        <Textarea
-          onInput={inputDescribe}
-          placeholderStyle={'color:#ccc;'}
-          placeholder="添加进展描述" />
+      <View className="cont">
+        <View className='label'>阶段动作</View>
+        <ScrollView scrollX className="status">
+          {stageStatus.map((item,index)=><Text 
+            className={ statusArr.includes(item) ? 'active' : '' }
+            onClick={setStatus}
+            data-item={item} 
+            key={index}>{item}</Text>)}
+        </ScrollView>
+      </View>
+      
+      <Textarea
+        onInput={inputDescribe}
+        placeholderStyle={'color:#ccc;'}
+        placeholder="添加进展描述" />
 
-        <View 
-          onClick={ goSubmit }
-          className={`${submit ? 'ownPower' : ''} btn`}>提交</View>
-    </View>
+      <View 
+        onClick={ goSubmit }
+        className={`${submit ? 'ownPower' : ''} btn`}>提交</View>
   </View>
 }

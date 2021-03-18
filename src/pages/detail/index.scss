@@ -97,7 +97,7 @@
     display: flex;
     height: 88px;
     background: #FFFFFF;
-    box-shadow: 0 10px 20px 0 rgba(0,0,0,0.05);
+    box-shadow: 0 12px 20px 0 rgba(0,0,0,0.05);
     &-item {
       width: 33.33%;
       height: 88px;
@@ -110,6 +110,7 @@
       letter-spacing: 0;
     }
     .active {
+      font-weight: bold;
       color: #276FF0;
     }
     .active::after {
