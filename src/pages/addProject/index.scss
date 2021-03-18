@@ -2,8 +2,52 @@
   height: 100vh;
   background-color: #f8f8f8;
   box-sizing: border-box;
-  padding: 30px 0;
+  padding: 30px 0 0;
   overflow: scroll;
+  .at-list__item {
+    height: 108px;
+    .at-list__item-content {
+      overflow: visible;
+    }
+    .at-list__item-extra {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .item-extra__info {
+      max-width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      padding-left: 30px;
+    }
+    .item-extra__icon-arrow {
+      height: 26rpx;
+      width: 24rpx;
+    }
+  }
+  .M5Grid-wrap {
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  .at-float-layout__container {
+    padding: 40px 0 0;
+    min-height: 405px !important;
+    .layout-header {
+      margin-left: 30px;
+    }
+    .layout-body {
+      min-height: 0 !important;
+      .layout-body__content {
+        min-height: 10px !important;
+        max-height: 70vh !important;
+      }
+    }
+  }
+  .type-select-float {
+    .at-float-layout__container {
+      height: 83.2%;
+      max-height: none;
+    }
+  }
 
   .at-grid {
     overflow: hidden;
@@ -15,7 +59,7 @@
     justify-content: space-between;
     &-content {
       flex: 1;
-      padding: 40px 30px;
+      padding: 20px 30px;
       font-weight: 500;
       font-family: PingFangSC-Medium;
       font-size: 40rpx;
@@ -41,7 +85,7 @@
 
   .m5-grid-item-checked {
     background-color: rgba(24, 144, 255, 0.1)!important;
-    border: 1px solid #276FF0;
+    // border: 1PX solid #276FF0;
     box-sizing: border-box;
     .content-inner__text {
 

@@ -1,12 +1,23 @@
 .textEval-wrap{
   .table {
-    th,td{
+    .th, .td{
       &:first-of-type{
         width:190px;
       }
 
       &:last-of-type{
         width: 460px;
+        word-break:break-all;
+      }
+    }
+
+    .tr-line{
+      line-height: 30px;
+      padding-bottom: 20px;
+      margin-top: 20px;
+
+      .td{
+        vertical-align: top;
       }
     }
   } 

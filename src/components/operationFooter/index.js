@@ -1,15 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Taro,{useShareAppMessage} from '@tarojs/taro';
 import { View, Text, Button, } from '@tarojs/components';
+import reqPacking from '@utils/reqPacking';
 import './index.scss';
 
-export default function OperationFooter({ projectId, roundId, evaluated, info }) {
+
+export default function OperationFooter({ projectId, roundId, evaluated, info, canInvite }) {
   let { name,pic } = info;
-  pic = pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png';
+
+  const [ inviteId, setInviteId ] = useState('');
+  const [ participationCode, setParticipationCode ] = useState('')
+  
+  useEffect(()=>{
+    getShareMessage(projectId);
+  }, [])
+
+  const getShareMessage = (projectId) => {
+    reqPacking(
+      {
+        url: `api/management/shareEvaluation?roundId=${roundId}`,
+        method: 'POST'
+      },
+      'server',
+    ).then((res) => {
+      const { success, error, data } = res;
+      if(success){
+        setInviteId( data.inviteId );
+        setParticipationCode( data.participationCode );
+      }
+    })
+  }
   
   const goToAssess = () => {
     Taro.navigateTo({
-      url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
+      url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`,
     })
   }
 
@@ -25,7 +49,7 @@ export default function OperationFooter({ projectId, roundId, evaluated, info })
         return {
           title: `${realName} 邀请您参与《${name}》项目评估`,
           imageUrl: pic,
-          path: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`
+          path: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
         };
       };
 
@@ -45,9 +69,9 @@ export default function OperationFooter({ projectId, roundId, evaluated, info })
 
 
   return <View className="operation-footer">
-    <Button
+    {canInvite && <Button
       data-sign="invite"
-      openType="share">邀请参与</Button>
+      openType="share">邀请参与</Button>}
     {evaluated ?
       <Button
         className="attend"

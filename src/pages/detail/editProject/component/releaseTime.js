@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useImperativeHandle, useCallback } from 'react';
+import Taro from '@tarojs/taro';
 import { View, Block, Text, PickerView, PickerViewColumn } from '@tarojs/components';
 import ListItem from '@components/m5/list/item';
 import FloatCard from '@components/m5/float-layout';
 import { SCHEDULE_LIST } from '../lib';
 import utils from '@utils/index';
-import Toast from '@components/m5/toast';
-import '@components/m5/style/components/toast.scss';
 import './releaseTime.scss';
 
 const { handleNewDate, calcWeek } = utils;
@@ -34,7 +33,6 @@ export default function ReleaseTime(props, ref) {
   const [dateValue, setDateValue] = useState([10, 1, 21]);
   const [customStartDate, setCustomStartDate] = useState(startDate);
   const [customEndDate, setCustomEndDate] = useState(endDate);
-  const [showToast, setShowToast] = useState('');
 
   useEffect(() => {
     if(props.movieData.startShowDate) {
@@ -122,7 +120,11 @@ export default function ReleaseTime(props, ref) {
   const submit = async () => {
     const query = {};
     if(!scheduleActive) {
-      setShowToast('请选择档期类型')
+      Taro.showToast({
+        title: '请选择档期类型',
+        icon: 'none',
+        duration: 1000
+      })
       return
     }
     query.scheduleType = scheduleActive;
@@ -146,6 +148,7 @@ export default function ReleaseTime(props, ref) {
       onClose={props.onClose}
     >
       <View className="schedule-list">
+        <View style={{width: '1rpx'}}></View>
         {
           SCHEDULE_LIST.map((item, index) => {
             return item.key !== 4 ? <View key={index} onClick={() => setScheduleActive(index + 1)} className={scheduleActive === index + 1 ? "schedule-item active" : "schedule-item"}>{item.name}</View> : null
@@ -168,7 +171,7 @@ export default function ReleaseTime(props, ref) {
             {customStartDate.week}
           </Text>
         </View>
-        <View>
+        <View className="text">
           <Text>至</Text>
         </View>
         <View
@@ -233,7 +236,6 @@ export default function ReleaseTime(props, ref) {
       <View className="releaseTime-submit">
         <View className="releaseTime-submit-btn" onClick={submit}>确定</View>
       </View>
-      <Toast duration={1000} isOpened={showToast} text={showToast} onClose={() => setShowToast('')} />
     </FloatCard>
   )
 }

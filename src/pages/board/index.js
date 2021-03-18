@@ -1,6 +1,6 @@
-import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
+import { Block, View, Image, Text, ScrollView, } from '@tarojs/components'
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { useShareAppMessage } from '@tarojs/taro'
 import utils from '../../utils/index.js'
 import { picFn } from '../../utils/pic';
 import projectConfig from '../../constant/project-config.js'
@@ -12,7 +12,15 @@ import '../../components/m5/style/components/fab.scss';
 import './index.scss'
 import DefaultPic from '../../static/detail/cover.png';
 import NoData from '../../components/noData';
+import NoAccess from '@components/noAccess';
+import { fourTextLabel, threeTextLabel, twoTextLabel } from '@utils/imageUrl';
 
+
+const labelBgMap = {
+  2: twoTextLabel,
+  3: threeTextLabel,
+  4: fourTextLabel
+}
 const { getMaoyanSignLabel } = projectConfig
 const {
   rpxTopx,
@@ -98,6 +106,7 @@ const PROJECT_TYPE = [
   },
 ]
 
+const AUTH_ID = 95120;
 
 export default function Board() {
   const [data, setData] = useState({});
@@ -108,6 +117,24 @@ export default function Board() {
   const [member, setMember] = useState([]);
   const [department, setDepartment] = useState([]);
   const [permission, setPermission] = useState(2);
+  const [hasPagePermission, setHasPagePermission] = useState(false);
+
+
+  useEffect(()=>{
+    const authInfo = Taro.getStorageSync('authinfo');
+    if(  authInfo &&
+      authInfo.authIds &&
+      authInfo.authIds.length > 0 &&
+      authInfo.authIds.includes(AUTH_ID) &&
+      authInfo.authEndTime &&
+      authInfo.authEndTime > +new Date() &&
+      authInfo.authStartTime &&
+      authInfo.authStartTime <= +new Date() 
+    ){
+      setHasPagePermission(true);
+    }
+  }, [])
+
 
   const filterPanelProps = useMemo(() => {
     return {
@@ -380,7 +407,7 @@ export default function Board() {
             className="board-header-title"
             style={BOARD_HEAD_TITLE_STYLE}
           >
-            <Image
+            {hasPagePermission &&  <Image
               className="board-header-search"
               src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
               onClick={() => {
@@ -388,94 +415,97 @@ export default function Board() {
                   url: "/pages/searchProject/index",
                 });
               }}
-            />
+            />}
             <Text className="board-header-title-text">项目看板</Text>
           </View>
         </View>
       </View>
-      <ScrollView
-        id="board-list-scroll"
-        className="board"
-        scrollY
-        style={BOARD_CONTENT_STYLE}
-        onScroll={(e) => {
-          checkIfStickyImmediately(e.detail.scrollTop);
-          checkIfStickAfterAll();
-        }}
-      >
-        <View
-          style={{
-            opacity: sticky ? "0" : "initial",
+      { !hasPagePermission && <NoAccess titleColor="#333" contentColor="#333" />}
+      { hasPagePermission && (
+        <ScrollView
+          id="board-list-scroll"
+          className="board"
+          scrollY
+          style={BOARD_CONTENT_STYLE}
+          onScroll={(e) => {
+            checkIfStickyImmediately(e.detail.scrollTop);
+            checkIfStickAfterAll();
           }}
         >
-          {tab}
-          {filter}
-        </View>
-        <View
-          style={{
-            position: "fixed",
-            top: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
-            width: "100%",
-            zIndex: 4,
-            backgroundColor: "#fff",
-            visibility: sticky ? "visible" : "hidden",
-            boxShadow: '0px 20rpx 20rpx -20rpx rgba(0,0,0,0.08)'
-          }}
-        >
-          {tab_sticky}
-          {filter_sticky}
-        </View>
-        {noData ? (
-          <View>
-            <NoData />
-          </View>
-        ) : (
-          <View>
-            {PROJECT_TYPE.map(({ name, key }, idx_1) => {
-              if (!data?.[key]?.length > 0) return null;
-              const arr = data?.[key] || [];
-              return (
-                <View>
-                  <View className="project-add-text">
-                    <Text>{`${name} ${arr.length}个`}</Text>
-                  </View>
-                  {arr.map((obj, i) => {
-                    if (obj?.projectStageStep?.length > 0) {
-                      obj.hasUpdate = true;
-                    }
-                    if (
-                      idx_1 === PROJECT_TYPE.length - 1 &&
-                      i === arr.length - 1
-                    ) {
-                      obj.style = {
-                        paddingBottom: `${bottomBarHeight}px`
-                      };
-                    }
-                    return <ProjectItem {...obj} />;
-                  })}
-                </View>
-              );
-            })}
-          </View>
-        )}
-        <View
-          className="board-float-button"
-          style={{ bottom: `calc(${112 + 30 + 'rpx'} + ${bottomBarHeight}px)` }}
-        >
-          <FButton
-            onClick={() => {
-              Taro.navigateTo({
-                url: "/pages/addProject/index",
-              });
+          <View
+            style={{
+              opacity: sticky ? "0" : "initial",
             }}
           >
-            <Image
-              className="board-float-button-image"
-              src="https://p0.meituan.net/ingee/8d49c7b5fd67f053cb60b0bbf296d0a8588.png"
-            />
-          </FButton>
-        </View>
-      </ScrollView>
+            {tab}
+            {filter}
+          </View>
+          <View
+            style={{
+              position: "fixed",
+              top: `${HEAD_HEIGHT + SYSTEM_BAR_TOP_PADDING}px`,
+              width: "100%",
+              zIndex: 4,
+              backgroundColor: "#fff",
+              visibility: sticky ? "visible" : "hidden",
+              boxShadow: '0px 20rpx 20rpx -20rpx rgba(0,0,0,0.08)'
+            }}
+          >
+            {tab_sticky}
+            {filter_sticky}
+          </View>
+          {noData ? (
+            <View>
+              <NoData />
+            </View>
+          ) : (
+            <View>
+              {PROJECT_TYPE.map(({ name, key }, idx_1) => {
+                if (!data?.[key]?.length > 0) return null;
+                const arr = data?.[key] || [];
+                return (
+                  <View>
+                    <View className="project-add-text">
+                      <Text>{`${name} ${arr.length}个`}</Text>
+                    </View>
+                    {arr.map((obj, i) => {
+                      if (obj?.projectStageStep?.length > 0) {
+                        obj.hasUpdate = true;
+                      }
+                      if (
+                        idx_1 === PROJECT_TYPE.length - 1 &&
+                        i === arr.length - 1
+                      ) {
+                        obj.style = {
+                          paddingBottom: `${bottomBarHeight}px`
+                        };
+                      }
+                      return <ProjectItem {...obj} />;
+                    })}
+                  </View>
+                );
+              })}
+            </View>
+          )}
+          <View
+            className="board-float-button"
+            style={{ bottom: `calc(${112 + 30 + 'rpx'} + ${bottomBarHeight}px)` }}
+          >
+            <FButton
+              onClick={() => {
+                Taro.navigateTo({
+                  url: "/pages/addProject/index",
+                });
+              }}
+            >
+              <Image
+                className="board-float-button-image"
+                src="https://p0.meituan.net/ingee/8d49c7b5fd67f053cb60b0bbf296d0a8588.png"
+              />
+            </FButton>
+          </View>
+        </ScrollView>
+      )}
     </>
   );
 }
@@ -805,7 +835,7 @@ function ProjectItem(props) {
   return (
     <View className="project-item" style={style} onClick={ ()=>{jumpDetail(projectId)} }>
       <View className="project-item-type">
-        <View className="project-item-type-name">
+        <View className="project-item-type-name" style={{backgroundImage:`url(${OBJECT_TYPE[type] ? labelBgMap[OBJECT_TYPE[type].length]: twoTextLabel })`}}>
           {OBJECT_TYPE[type] || '-'}
         </View>
       </View>

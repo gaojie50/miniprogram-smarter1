@@ -8,6 +8,7 @@ const globalData = {
   reqPacking,
   capsuleLocation: null,
   systemInfo,
+  blackBarBottom: systemInfo.screenHeight - systemInfo.safeArea.bottom
 }
 
 let rect = null;

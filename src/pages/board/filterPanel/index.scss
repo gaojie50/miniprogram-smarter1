@@ -55,7 +55,7 @@
   height: 80px;
   text-align: center;
   line-height: 80px;
-  background: rgba(242, 243, 248, 1);
+  background: #F8F8F8;
   border-radius: 10px;
   white-space: nowrap;
   box-sizing: border-box;
@@ -200,10 +200,10 @@
 }
  
 .filterPanelActive {
-  background: rgba(24, 144, 255, 0.1) !important;
+  background: rgba(39,111,240,0.10) !important;
   border-radius: 10px;
-  border: 1px solid rgba(24, 144, 255, 1);
-  color: rgba(24, 144, 255, 1);
+  border: 1px solid rgba(39,111,240,0.10);
+  color:#276FF0;
   font-weight: 600!important;
 }
 

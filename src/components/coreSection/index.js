@@ -6,7 +6,9 @@ const ItemLimit = 5;
 const toFixed = (num, precision) => (+(`${Math.round(+(`${num}e${precision}`))}e${-precision}`)).toFixed(precision);
 
 export default function CoreSection({ categoryType, core }) {
-  const clacScore = (arr, digits = 1) => {
+  const clacScore = (arrOut=[], digits = 1) => {
+    const arr = arrOut.filter(item => item);
+
     if (!arr || arr.length == 0) return;
 
     if (arr.every(item => item === null)) {
@@ -55,9 +57,11 @@ export default function CoreSection({ categoryType, core }) {
     }, {});
   };
   const [packUp, setPackUp] = useState(true);
-  let evaluationList = core.evaluationList || [];
-  let recommendedList = core.recommendedList || [];
-  let commentList = core.commentList || [];
+  let {
+    evaluationList=[],
+    recommendedList=[],
+    commentList=[],
+  } = core;
 
   let scoreArr = [];
   let totalScoreArr = [];
@@ -72,10 +76,9 @@ export default function CoreSection({ categoryType, core }) {
       score, totalScore, box, comment, evaluation, groupName,scoreFinished,
     } = item;
 
-    if (scoreFinished !== false) {
-      scoreArr.push(score);
-      totalScoreArr.push(totalScore);
-    }
+    scoreArr.push(score);
+
+    if (scoreFinished !== false) totalScoreArr.push(totalScore);
 
     boxArr.push(box);
     commentArr.push(evaluation);
@@ -146,10 +149,19 @@ export default function CoreSection({ categoryType, core }) {
                 <React.Fragment key={index}>
                   <View className="tr groupName">{groupName}</View>
                   {list.map(({
-                    name, totalScore,scoreFinished,
+                    name, totalScore,scoreFinished,score,
                   }, turn) => <View key={turn} className={`tr ${list.length == turn + 1 ? "no-line" : ""}`}>
                       <Text className="td">{name}</Text>
-                      <Text className="td">{scoreFinished === false ? '未完成所有题目' : totalScore}</Text>
+                      <Text className="td">
+                        {
+                          scoreExistSign ? (
+                            score || score === 0 ? score : '-'
+                          ) :
+                            (
+                              scoreFinished === false ? '未完成所有题目' : totalScore
+                            )
+                        }
+                        </Text>
                     </View>)}
 
                 </React.Fragment>)}
@@ -237,7 +249,7 @@ function Box({
     }}>
     <View className="h5">{headTitle}</View>
     <View className="dl">
-      <View className="dt" style={{ color: `${colorCalc(colorArr)}` }}>{average}</View>
+      <View className="dt" style={{ color: `${colorCalc(colorArr)}` }}>{!average && average!== 0 ? '-': average}</View>
       <View className="dt">
         {limitValHidden ? "" : <Text className="dd">最高{max}</Text>}
         {limitValHidden ? "" : <Text className="dd">最低{min}</Text>}

@@ -4,6 +4,7 @@ import {
   View,
   Image,
 } from '@tarojs/components';
+import noAccessPic from '../../static/list/no-access.png';
 import './index.scss';
 
 const copyMail = () => {
@@ -16,7 +17,7 @@ const noAccess = function(props){
   const { title, content, showEmailBtn=true, titleColor="white", contentColor="white" } = props;
   return (
     <View className='no-access-component'>
-      <Image src="../../../static/list/no-access.png"></Image>
+      <Image src={noAccessPic}></Image>
       <View className="title" style={{color: titleColor}}>{title || '暂无权限查看相关数据'}</View>
       <View className="content" style={{color: contentColor}}>
         {content || '申请开通请联系zhiduoxing@maoyan.com'}

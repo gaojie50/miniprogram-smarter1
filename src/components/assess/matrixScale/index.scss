@@ -5,7 +5,7 @@
     font-size: 34px;
     color: #19233B;
     letter-spacing: 0;
-    line-height: 34px;
+    line-height: 40px;
     margin-bottom: 20px;
   }
   .tips{
@@ -22,7 +22,7 @@
       font-weight: 600;
       font-family: PingFangSC-Semibold;
       font-size: 28px;
-      color: #19233C;
+      color: #333;
       text-align: left;
       line-height: 30px;
       margin-bottom: 22px;
@@ -42,12 +42,13 @@
         background: #EFEFEF;
         border-radius: 2px;
         line-height: 86px;
-        font-family: MaoYanHeiTi-H1-H1;
+        font-family: MaoYanHeiTi-H1;
         font-weight: 600;
         font-size: 28px;
-        color: #19233C;
+        color: #333;
         text-align: center;
         border-radius: 10px;
+        flex-grow: 1;
         &:not(:last-child){
           margin-right: 8px;
         }
@@ -63,13 +64,14 @@
         display: inline-block;
         width: 134px;
         height: 86px;
-        background: #EFEFEF;
-        border-radius: 2px;
+        background: #F8F8F8;
+        border-radius: 10px;
         line-height: 86px;
-        font-family: MaoYanHeiTi-H1-H1;
+        font-family: MaoYanHeiTi-H1;
         font-weight: 600;
         font-size: 28px;
-        color: #C1C6D0 ;
+        color: #CCC ;
+        flex-grow: 1;
        
         &:not(:last-child){
           margin-right: 8px;

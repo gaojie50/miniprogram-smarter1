@@ -3,6 +3,9 @@ import { Component } from 'react'
 import Taro from '@tarojs/taro'
 import { Block } from '@tarojs/components'
 import reqPacking from '../../utils/reqPacking';
+import utils from '@utils/index';
+
+const { errorHandle } = utils;
 
 const accountVerify = (WrappedComponent) => {
   return class extends Component {
@@ -36,8 +39,7 @@ const accountVerify = (WrappedComponent) => {
             this.setState({didLogged: true});
           })
           .catch((err) => {
-            console.log('catch authinfo');
-            console.log(err);
+            errorHandle(err);
           });
     }
 

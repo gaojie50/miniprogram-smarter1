@@ -32,12 +32,6 @@ export default class BasicData extends React.Component {
     })
   }
 
-  handleTouchMove(e) {
-    console.log(1111)
-    e.preventDefault()
-    e.stopPropagation()
-  }
-
   render() {
     const { data, keyData, judgeRole } = this.props;
     const newPic = data.pic ? `${data.pic.replace('/w.h/', '/')}@200w_274h_1e_1c` : Cover;
@@ -84,22 +78,20 @@ export default class BasicData extends React.Component {
               </View>: ''
             }
         </View>
-        {
-          this.state.showFloat && 
-          <FloatCard className="float" isOpened onClose={this.handleClose} >
-            <View className="title">
-              <Text className="text">项目基础信息</Text>
-              <View className="img" onClick={this.handleClose}><Image src={Close} alt=""></Image></View>
-            </View>
-            <ScrollView className="content-scroll" scrollY>
-            {
-              BasicItem.map((item, index) => {
-                return data[item.key] && data[item.key].length > 0 ? <View key={index} className="line"><Text className="name">{item.name}：</Text>{Array.isArray(data[item.key]) ? data[item.key].join('/') : data[item.key]}</View> : ''
-              })
-            }
-            </ScrollView>
-          </FloatCard>
-        }
+
+        <FloatCard className="float" isOpened={this.state.showFloat} onClose={this.handleClose} >
+          <View className="title">
+            <Text className="text">项目基础信息</Text>
+            <View className="img" onClick={this.handleClose}><Image src={Close} alt=""></Image></View>
+          </View>
+          <ScrollView className="content-scroll" scrollY>
+          {
+            BasicItem.map((item, index) => {
+              return data[item.key] && data[item.key].length > 0 ? <View key={index} className="line"><Text className="name">{item.name}：</Text>{Array.isArray(data[item.key]) ? data[item.key].join('/') : data[item.key]}</View> : ''
+            })
+          }
+          </ScrollView>
+        </FloatCard>
       </View>
     )
   }

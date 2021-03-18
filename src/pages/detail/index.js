@@ -1,4 +1,4 @@
-import { View, Image, Text, ScrollView } from '@tarojs/components'
+import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
 import React from 'react';
 import Taro from '@tarojs/taro';
 import { AtTabs, AtTabsPane } from '@components/m5';
@@ -11,6 +11,8 @@ import { EvaluationList } from '../board/evaluate';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import AddingProcess from '@components/addingProcess';
+import FloatLayout from '@components/m5/float-layout';
+import utils from '@utils/index.js'
 import ProjectFile from './projectFile';
 import FacePeople from './people';
 import People from '@static/detail/people.png';
@@ -20,8 +22,14 @@ import Edit from '@static/detail/edit.png';
 import './index.scss';
 import '@components/m5/style/index.scss';
 
+
+const { isDockingPerson } = utils;
 const reqPacking = getGlobalData('reqPacking');
-const {statusBarHeight} = getGlobalData('systemInfo');
+const capsuleLocation = getGlobalData('capsuleLocation');
+const { rpxTopx } = utils;
+const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
+const titleBarPadding = capsuleLocation.top;
+const titleBarHeight = capsuleLocation.bottom - capsuleLocation.top;
 export default class Detail extends React.Component {
   constructor(props) {
     super(props);
@@ -35,8 +43,7 @@ export default class Detail extends React.Component {
       keyData: {},
       current: 0,
       showProgress: false,
-      top: 0,
-      topSet: true,
+      top: false,
       showCooperStatus: false,
       showPeople: false,
       showProjectFile: false,
@@ -44,12 +51,77 @@ export default class Detail extends React.Component {
       stopScroll: false,
       isFixed: false,
       navbarInitTop: 0, // 导航距顶部的距离
+      toView: 'follow',
+      setBgColor: false,
+      evaluation: [],
+      history: []
     }
   }
 
   componentDidShow(){
     this.fetchBasicData();
   }
+
+  onShareAppMessage(res){
+    const { basicData } = this.state;
+    const { projectId, pic } = basicData
+    const { target, from } = res;
+    if (from != 'button') return;
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    const { dataset } = target;
+    const { realName = "" } = userInfo;
+    return new Promise((resolve, reject)=>{
+      Taro.showLoading({
+        title: '分享信息获取中',
+      })
+      reqPacking(
+        {
+          url: `api/management/shareEvaluation?roundId=${dataset.roundId}`,
+          method: 'POST'
+        },
+        'server',
+      ).then((res) => {
+        Taro.hideLoading();
+        const { success, error, data } = res;
+        if(success){
+          const { inviteId, participationCode } = data;
+          let shareMessage = {};
+          switch (dataset.sign) {
+            case 'invite': {
+              shareMessage = {
+                title: `${realName} 邀请您参与《${dataset.roundTitle}》项目评估`,
+                imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+                path: `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
+              };
+              break;
+            };
+    
+            case 'attend': {
+              shareMessage = {
+                title: `${realName} 分享给您关于《${dataset.roundTitle}》项目的报告`,
+                imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
+              }
+              break;
+            }
+            default: {
+              shareMessage = {
+                title: '分享报告',
+                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
+              };
+            }
+          }
+          resolve(shareMessage)
+        }else{
+          reject('分享信息获取失败');
+        }
+      }).catch(res=>{
+        console.log(res);
+        reject('分享信息获取失败');
+      })
+    })
+  }
+
 
   fetchBasicData() {
     const page = Taro.getCurrentPages();
@@ -157,12 +229,6 @@ export default class Detail extends React.Component {
     })
   }
 
-  changeTabs = value => {
-    this.setState({
-      current: value
-    })
-  }
-
   handleBack = () => {
     if(Taro.getCurrentPages().length>1){
       Taro.navigateBack();
@@ -195,62 +261,72 @@ export default class Detail extends React.Component {
   }
 
   pageScroll = e => {
-    const { top, topSet } = this.state;
+    const that = this;
+    const { top } = this.state;
     const { scrollTop } = e.detail;
-    const { isFixed } = this.state;
-    if(scrollTop > 5 && topSet) {
+    const { isFixed, stopScroll } = this.state;
+  
+    if(scrollTop > 5 && !top) {
       this.setState({
-        top: scrollTop,
-        topSet: false
+        top: true,
       })
     }
-    if(scrollTop < 5 && !topSet) {
+    if(scrollTop < 20 && top) {
       this.setState({
-        top: scrollTop,
-        topSet: true
+        top: false,
       })
     }
+  }
 
-    // let query = Taro.createSelectorQuery();
-    // let topBarHeight = 0;
-    // query.select('#top').boundingClientRect((res) => {
-    //   if(res.height !== 0) {
-    //     topBarHeight = res.height;
-    //   }
-	  // }).exec();
-    // query.select('#tabs').boundingClientRect((res) => {
-    //   if(res.top <= (topBarHeight + 15)) {
-    //     if(!isFixed) {
-    //       this.setState({
-    //         isFixed: true
-    //       })
-    //     }
-    //   } else {
-    //     if(isFixed) {
-    //       this.setState({
-    //         isFixed: false
-    //       })
-    //     }
-    //   }
-    // }).exec();
+  handleJudgeData = (data = [], type) => {
+    const { current } = this.state;
+
+    if(type === 'history') {
+      this.setState({
+        history: data
+      })
+    }
+    if(type === 'evaluation') {
+      this.setState({
+        evaluation: data.evaluationList
+      })
+    }
+  }
+
+  handleSwitch(param) {
+    const { evaluation, history, basicData } = this.state;
+    let hasFollowData = false;
+    const { followData } = this.refs.followStatus.state;
+    Object.keys(followData).forEach(i => {
+      if(followData[i] && followData[i].length > 0 && !hasFollowData){
+        hasFollowData = true;
+      }
+    })
+
+    this.setState({
+      current: param,
+      toView: param === 0 && hasFollowData ? 'follow' : param === 1 && evaluation.length > 0 ? 'evaluation' : history.length > 0 ?'history' : '',
+      setBgColor: (param === 1 && evaluation.length > 0) || (param === 2 && history.length > 0) || (param === 0 && basicData.cooperStatus === 2) ? true :false
+    })
   }
 
   render() {
-    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed } = this.state;
+    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed, toView, setBgColor } = this.state;
 
     return (
-      <ScrollView scrollY={!stopScroll} className={stopScroll ? "detail stopScroll" : "detail"} onScroll={this.pageScroll}>
+      <View>
         <View className="detail-top">
-          <View className="fixed" id="top" style={{height: (statusBarHeight + 44)+ 'px', backgroundColor: top > 5 ? '#FFFFFF':''}} >
-            <View style={{height: statusBarHeight,}}></View>
-            <View className="header">
+          <View className={top ? "fixed" : ""} id="top" style={{height: `${headerBarHeight}px`, paddingTop: `${titleBarPadding}px`, backgroundColor: top ? '#FFFFFF':''}} >
+            <View className="header" style={{height: `${titleBarHeight}px`, lineHeight: `${titleBarHeight}px` }}>
               <View className="backPage" onClick={this.handleBack}>
                 <Image src={ArrowLeft} alt=""></Image>
               </View>
-              <Text className="header-title">{top > 5 ? basicData.name : ''}</Text>
+              <Text className="header-title">{top ? basicData.name : ''}</Text>
             </View>
           </View>
-          <View className="detail-top-icon" style={{marginTop: (statusBarHeight + 44)+ 'px' }}>
+        </View>
+        <ScrollView scrollY={!stopScroll} enhanced bounces={false} scrollIntoView={toView} className={stopScroll ? "detail stopScroll" : "detail"} style={{top: `${headerBarHeight}px`,minHeight: `calc(100vh - ${headerBarHeight})px`}} onScroll={this.pageScroll}>
+          <View className="detail-top-icon">
             <View className="cooperStatus" style={ { 
               color: CooperStatus[ basicData.cooperStatus ].color
             } }
@@ -273,9 +349,8 @@ export default class Detail extends React.Component {
              <Image src={People} alt=""></Image>
              <Text>{peopleData.length}</Text>
              </View>
-           </View>
-         </View>
-         <BasicData 
+          </View>
+         <BasicData
           data={ basicData } 
           judgeRole={ judgeRole }
           keyData={ keyData }
@@ -291,40 +366,61 @@ export default class Detail extends React.Component {
             changeKeyData={ data => this.handleChangeKeyData(data)}
           /> : ''
         }
-        <View className="detail-tabs" id="tabs">
-          <AtTabs
-            current={current}
-            animated={false}
-            tabList={[
-              { title: '最新跟进' },
-              { title: '项目评估' },
-              { title: '变更历史' }
-            ]}
-            onClick={this.changeTabs}
-            className={(isFixed ? "tabFixed " : " ") + (basicData.cooperStatus === 2 && current === 0 ? "tabs nopaddingTab" : (current === 1 || current === 2)  ? "tabs bgHistory" : "tabs")}
-            swipeable={false}
-          >
-            <AtTabsPane current={current} index={0}>
-              <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
-            </AtTabsPane>
-            <AtTabsPane current={current} index={1}>
-              <EvaluationList projectId={ basicData.projectId } keyData={ keyData } />
-              <View className="noMore">没有更多了</View>
-            </AtTabsPane>
-            <AtTabsPane current={current} index={2}>
-              {basicData.projectId && <UseHistory projectId={ basicData.projectId } keyData={keyData}></UseHistory>}
-            </AtTabsPane>
-          </AtTabs>
+        <View className="detail-tabs" id={toView} >
+          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
+            <View onClick={()=> this.handleSwitch(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>最新跟进</View>
+            <View onClick={()=> this.handleSwitch(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>项目评估</View>
+            <View onClick={()=> this.handleSwitch(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>变更历史</View>
+          </View>
+          <View className="detail-tabs-body"  style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff',}}>
+              <View className={current === 0 ? "body-active" : "body-inactive"} id="follow">
+                <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
+              </View>
+              <View className={current === 1 ? "body-active" : "body-inactive"} id="evaluation">
+                <EvaluationList judgeData={this.handleJudgeData} judgeRole={ judgeRole }  projectId={ basicData.projectId } keyData={ keyData } />
+                {this.state.evaluation.length > 0 ? <View className="noMore">没有更多了</View> : null}
+              </View>
+              <View className={current === 2 ? "body-active" : "body-inactive"} id="history">
+                <UseHistory judgeData={this.handleJudgeData} projectId={ basicData.projectId } keyData={keyData}></UseHistory>
+                {this.state.history.length > 0 ? <View className="noMore">没有更多了</View> : null}
+              </View>
+              <View className="bottom-relative" style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff'}}></View>
+          </View>
         </View>
-        <View className="bottom-fixed">
+        {isDockingPerson(judgeRole.role) && <View className="bottom-fixed">
           <View className="assess" style={{background: '#FD9C00', marginRight: '20px'}} onClick={this.bottomClick.bind(this, 'assess')}>发起评估</View>
           <View className="assess" style={{background: '#276FF0'}} onClick={this.bottomClick.bind(this, 'progress')}>添加进展</View>
         </View>
-        {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}
-        {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
-        {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
-        {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
+        }
       </ScrollView>
+     
+      <FloatLayout 
+        isOpened={showProgress} 
+        className="layout-process"
+        onClose={() => this.setState({ showProgress: false, stopScroll: false })
+        }>
+        <AddingProcess 
+          closeEvt ={() => this.setState({ showProgress: false, stopScroll: false }) }
+          submitEvt={this.updateProcess} 
+          projectId={basicData.projectId} />
+      </FloatLayout>
+      <Cooper 
+        show={showCooperStatus} 
+        basicData={basicData} 
+        fetchBasicData={() => this.fetchBasicData()} 
+        cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}
+      />
+      <FacePeople 
+        show={showPeople} 
+        peopleData={peopleData} 
+        cancelShow={() => this.setState({showPeople: false, stopScroll: false})}
+      />
+      <ProjectFile 
+        show={showProjectFile} 
+        fileData={fileData} 
+        cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})} 
+      />
+    </View>
     )
   }
 }
