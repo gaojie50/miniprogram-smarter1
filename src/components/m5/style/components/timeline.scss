@@ -30,7 +30,7 @@
   &__dot,
   &__icon {
     position: absolute;
-    left: 5.5px;
+    left: 3.5px;
     top: 5px;
     width: $at-timeline-dot-size;
     height: $at-timeline-dot-size;
@@ -133,7 +133,7 @@
       }
 
       .at-timeline-item__tail {
-        border-left-style: dotted;
+        border-left-style: solid;
       }
     }
   }

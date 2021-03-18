@@ -81,8 +81,9 @@ page image {
   }
   .briefinfo-wrap {
     text-align: center;
-    padding: 0 45px 50px 45px;
-    box-sizing: border-box;
+    padding-bottom: 50px;
+    margin: 0 45px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
     .project-pic {
       width: 200px;
       height: 275px;
@@ -111,7 +112,6 @@ page image {
   }
 
   .evaluation-info-wrap {
-    border-top: 1px solid rgba(255,255,255,0.2);
     overflow-y: auto;
     overflow-x: hidden;
     padding: 0 45px;

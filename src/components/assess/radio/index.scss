@@ -19,7 +19,7 @@
       font-weight: 400;
       font-size: 28px;
       line-height: 30px;
-      color: #19233C;
+      color: #333;
       text-align: left;
       padding: 0 20px;
       margin-bottom: 20px;
@@ -42,7 +42,7 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        border: 1px solid #C1C6D0;
+        border: 3px solid #C1C6D0;
         vertical-align: middle;
         margin-right: 20px;
         background-color: #fff;
@@ -55,7 +55,7 @@
       &.active{
         color: #276FF0;
         background: rgba(39,111,240,0.10);
-        border: 1px solid rgba(39,111,240,0.1);
+        border: 2px solid rgba(39,111,240,0.1);
         .dot {
           border: 2px solid #276FF0;
           position: relative;
@@ -64,12 +64,13 @@
             content: '';
             width: 20px;
             height: 20px;
+            box-sizing: border-box;
             border-radius: 50%;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #1890FF;
+            background-color: #276FF0;
           }
         }
       }

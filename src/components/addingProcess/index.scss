@@ -2,7 +2,7 @@
 
 @mixin item($sign){
   background: getColor($sign, 0.10);
-  border: 2px solid getColor($sign);
+  // border: 2px solid getColor($sign);
   border-radius: 10px;
   font-weight: 600;
   font-family: PingFangSC-Semibold;
@@ -97,7 +97,7 @@
 
             &.active{
               background: rgba(39,111,240,0.10);
-              border: 2px solid #276FF0;
+              // border: 2px solid #276FF0;
               font-weight: 600;
               font-family: PingFangSC-Semibold;
               font-size: 26px;
