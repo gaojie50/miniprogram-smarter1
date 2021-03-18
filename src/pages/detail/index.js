@@ -70,8 +70,6 @@ export default class Detail extends React.Component {
     const { userInfo } = Taro.getStorageSync('authinfo');
     const { dataset } = target;
     const { realName = "" } = userInfo;
-    console.log(dataset);
-    console.log(basicData);
     return new Promise((resolve, reject)=>{
       Taro.showLoading({
         title: '分享信息获取中',
@@ -113,7 +111,6 @@ export default class Detail extends React.Component {
               };
             }
           }
-          console.log('分享信息为', `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`);
           resolve(shareMessage)
         }else{
           reject('分享信息获取失败');

@@ -38,7 +38,6 @@ export default function assessPage(){
   const titleHeight= Math.floor(
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
-  console.log(blackBarBottom);
 
   Taro.eventCenter.on('didEvaluated', ()=>{
     setDidAssessed(true);
