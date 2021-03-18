@@ -90,7 +90,7 @@
 }
 
 .table-right .listTr:nth-child(1) .listTd {
-  min-width: 195rpx;
+  min-width: 236rpx;
   height: 70rpx;
   padding-left: 30rpx;
   line-height: 70rpx;
@@ -99,7 +99,7 @@
 }
 
 .table-right .listTr:not(:first-child) .listTd {
-  min-width: 195rpx;
+  min-width: 236rpx;
   display: inline-flex;
   flex-direction: row;
   align-items: center;
