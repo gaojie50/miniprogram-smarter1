@@ -71,54 +71,56 @@ export default class Detail extends React.Component {
     const { dataset } = target;
     const { realName = "" } = userInfo;
     return new Promise((resolve, reject)=>{
-      Taro.showLoading({
-        title: '分享信息获取中',
-      })
-      reqPacking(
-        {
-          url: `api/management/shareEvaluation?roundId=${dataset.roundId}`,
-          method: 'POST'
-        },
-        'server',
-      ).then((res) => {
-        Taro.hideLoading();
-        const { success, error, data } = res;
-        if(success){
-          const { inviteId, participationCode } = data;
-          let shareMessage = {};
-          switch (dataset.sign) {
-            case 'invite': {
+      let shareMessage = {}
+      switch (dataset.sign) {
+        case 'invite': {
+          Taro.showLoading({
+            title: '分享信息获取中',
+          })
+          reqPacking(
+            {
+              url: `api/management/shareEvaluation?roundId=${dataset.roundId}`,
+              method: 'POST'
+            },
+            'server',
+          ).then((res) => {
+            Taro.hideLoading();
+            const { success, error, data } = res;
+            if(success){
+              const { inviteId, participationCode } = data;
               shareMessage = {
                 title: `${realName} 邀请您参与《${dataset.roundTitle}》项目评估`,
                 imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
                 path: `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
               };
-              break;
-            };
-    
-            case 'attend': {
-              shareMessage = {
-                title: `${realName} 分享给您关于《${dataset.roundTitle}》项目的报告`,
-                imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
-                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
-              }
-              break;
+              resolve(shareMessage)
+            }else{
+              reject('分享信息获取失败');
             }
-            default: {
-              shareMessage = {
-                title: '分享报告',
-                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
-              };
-            }
+          }).catch(res=>{
+            console.log(res);
+            reject('分享信息获取失败');
+          })
+          break;
+        };
+        case 'attend': {
+          shareMessage = {
+            title: `${realName} 分享给您关于《${dataset.roundTitle}》项目的报告`,
+            imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+            path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`
           }
           resolve(shareMessage)
-        }else{
-          reject('分享信息获取失败');
+          break;
         }
-      }).catch(res=>{
-        console.log(res);
-        reject('分享信息获取失败');
-      })
+        default: {
+          shareMessage = {
+            title: '分享报告',
+            path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
+          };
+          resolve(shareMessage);
+        }
+      }
+      
     })
   }
 
@@ -255,7 +257,8 @@ export default class Detail extends React.Component {
 
   updateProcess = () => {
     this.setState({
-      showProgress: false
+      showProgress: false,
+      stopScroll: false,
     })
     this.refs.followStatus.fetFollowStatus();
   }
