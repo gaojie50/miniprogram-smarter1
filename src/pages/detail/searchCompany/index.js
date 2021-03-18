@@ -10,6 +10,7 @@ export default function SearchCompany() {
   const [focus, setFocus] = useState(false);
   const [type, setType] = useState('producer');
   const [inputValue, setInputValue] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [firstDataList, setFirstDataList] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
@@ -37,6 +38,7 @@ export default function SearchCompany() {
   },[])
 
   const handleSearch = e => {
+    setLoading(true);
     setInputValue(e.detail.value);
     requestSearch({keyword: e.detail.value})
     .then(res => {
@@ -50,6 +52,7 @@ export default function SearchCompany() {
           icon: 'none',
         })
       }
+      setLoading(false)
     })
   }
 
@@ -63,7 +66,7 @@ export default function SearchCompany() {
   const submit = () => {
 
   }
-  console.log(openSheet)
+
   return (
     <View className="edit-search-company"> 
       <View className="edit-search-company-box">
@@ -71,6 +74,7 @@ export default function SearchCompany() {
           <View className="edit-search-company-bar" style={{width: focus || inputValue !== '' ? '612rpx' : '690rpx'}}>
             <Image src="../../../static/icon/search.png" alt=""></Image>
             <Input value={inputValue} onInput={e => handleSearch(e)} placeholder={type === 'producer' ? '搜索并添加出品方' : '搜索并添加发行方'} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} className="edit-search-company-bar-input"></Input>
+            {loading && (<View className="loading"><mpLoading type="circle" show={true} tips="" /></View>)}
             {focus || inputValue !== '' ? <View className="cancel" onClick={()=> setInputValue('')}>取消</View> : null}
           </View>
         </View>
@@ -100,7 +104,7 @@ export default function SearchCompany() {
           })
         }
       </ScrollView>
-      <AtActionSheet isOpened={openSheet}>
+      <AtActionSheet isOpened={openSheet} onCancel={() => setOpenSheet(false)} onClose={() => setOpenSheet(false)}>
         <AtActionSheetItem>1123</AtActionSheetItem>
       </AtActionSheet>
       <View className="bottom-confirm">
