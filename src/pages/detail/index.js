@@ -255,7 +255,8 @@ export default class Detail extends React.Component {
 
   updateProcess = () => {
     this.setState({
-      showProgress: false
+      showProgress: false,
+      stopScroll: false,
     })
     this.refs.followStatus.fetFollowStatus();
   }
