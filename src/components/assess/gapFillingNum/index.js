@@ -34,7 +34,7 @@ export default class GapFillingNum extends React.Component {
     } = this.props;
     const { leftText, rightText } = gapFilling;
 
-    return <View id={id}  className={ `gapFilling-num ${required ? "required" : ""}` }>
+    return <View id={id}  className={ `gapFilling-num ${required ? "required" : ""} ${isPreview ? 'preview' : ''}` }>
       <View className="ques-title">{questionNum}、{leftText}</View>
       <View className="input-line">
         <View className="input-label">{leftText}</View>
