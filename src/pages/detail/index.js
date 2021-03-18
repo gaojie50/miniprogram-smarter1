@@ -316,6 +316,8 @@ export default class Detail extends React.Component {
 
   render() {
     const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed, toView, setBgColor } = this.state;
+    const releaseTimeArry = keyData?.releaseTime?.time?.match(/-/g);
+    const textFn = () => <View className='launch-text'><Text>+</Text>发起机器预测票房</View>;
 
     return (
       <View>
@@ -369,6 +371,21 @@ export default class Detail extends React.Component {
             judgeRole={ judgeRole }
             changeKeyData={ data => this.handleChangeKeyData(data)}
           /> : ''
+        }
+        {
+          releaseTimeArry && releaseTimeArry.length === 2 ? <View className="mini-box">
+            <View className="machine-eval-mini">
+              {textFn()}
+            </View>
+            <View className="release-week-mini">
+              <View className="title">上映当周预估大盘</View>
+              <View className="box">34.5亿 <Text>12:20更新</Text></View>
+              <View className="num">9部 <Text className="arrow" /></View>
+            </View>
+          </View> :
+          <View className="machine-eval-btn">
+            {textFn()}
+          </View>
         }
         <View className="detail-tabs" id={toView} >
           <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
