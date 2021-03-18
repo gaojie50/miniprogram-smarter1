@@ -14,7 +14,7 @@
     background: #F8F8F8;
     .left{
       display: inline-block;
-      box-shadow: 10px 0 40px -6px rgba(0, 0, 0, 0.15);
+      box-shadow: 10px 0 30px 0px rgba(0, 0, 0, 0.04);
       .left-item{
         height: 86px;
         width: 160px;
@@ -23,7 +23,7 @@
         font-weight: 400;
         font-family: PingFangSC-Regular;
         font-size: 26px;
-        color: #19233C;
+        color: #333;
         text-align: left;
         line-height: 36px;
         display: flex;

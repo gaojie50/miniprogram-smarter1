@@ -45,12 +45,11 @@
     background-color: #fff;
     border-radius: 40px 40px 0 0;
     box-sizing: border-box;
-    padding-top: 40px;
     .gapFilling-text, .gapFilling-num, .matrix-scale, .radio-wrap, .matrix-radio{
       margin-bottom: 80px;
     }
     .content {
-      padding: 0px 50px 100px 50px;
+      padding: 40px 50px 100px 50px;
       // 试题通用样式
       .que-item{
         position: relative;

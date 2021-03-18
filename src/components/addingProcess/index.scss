@@ -2,7 +2,7 @@
 
 @mixin item($sign){
   background: getColor($sign, 0.10);
-  border: 2px solid getColor($sign);
+  // border: 2px solid getColor($sign);
   border-radius: 10px;
   font-weight: 600;
   font-family: PingFangSC-Semibold;
@@ -80,17 +80,18 @@
 
       }
 
-      &.status{
-        text{
-          padding: 0 30px;
+        &.status{
+          text{
+            padding: 0 30px;
 
-          &.active{
-            background: rgba(39,111,240,0.10);
-            border: 2px solid #276FF0;
-            font-weight: 600;
-            font-family: PingFangSC-Semibold;
-            font-size: 26px;
-            color: #276FF0;
+            &.active{
+              background: rgba(39,111,240,0.10);
+              // border: 2px solid #276FF0;
+              font-weight: 600;
+              font-family: PingFangSC-Semibold;
+              font-size: 26px;
+              color: #276FF0;
+            }
           }
         }
       }
