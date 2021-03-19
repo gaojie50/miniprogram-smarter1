@@ -13,6 +13,7 @@ import { set as setGlobalData, get as getGlobalData } from '../../global_data'
 import Tab from '../../components/tab';
 import auth from '@utils/auth';
 import './index.scss'
+import lx from '@analytics/wechat-sdk';
 
 const { getMaoyanSignLabel } = projectConfig
 
@@ -189,6 +190,10 @@ class _C extends React.Component {
     },()=>{
       this._fetchData(this.state.dateSelect)
     });
+  }
+
+  componentDidShow = () => {
+    lx.pageView('c_movie_b_i71nil35')
   }
 
   fetchfilmDistribution = () => {

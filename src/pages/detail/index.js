@@ -1,6 +1,7 @@
 import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
 import React from 'react';
 import Taro from '@tarojs/taro';
+import lx from '@analytics/wechat-sdk';
 import { AtTabs, AtTabsPane } from '@components/m5';
 import BasicData from './basicData';
 import KeyData from './keyData';
@@ -22,6 +23,7 @@ import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import './index.scss';
 import '@components/m5/style/index.scss';
+
 
 
 const { isDockingPerson } = utils;
@@ -60,6 +62,11 @@ export default class Detail extends React.Component {
   }
 
   componentDidShow(){
+    lx.pageView('c_movie_b_z5wvew69', {
+      custom: {
+        product_id: Taro.getCurrentInstance().router.params.projectId
+      }
+    });
     this.fetchBasicData();
   }
 
