@@ -148,10 +148,9 @@
         }
       }
       .last {
-        z-index: 100;
-        border: 1px solid red;
         height: 100%;
         width: 85px;
+        z-index: 1;
         image {
           width: 44px;
           height: 44px;

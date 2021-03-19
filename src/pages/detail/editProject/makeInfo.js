@@ -1,5 +1,5 @@
 import { Block, View, Text } from '@tarojs/components';
-import React, { useEffect, useState} from 'react';
+import React, { forwardRef, useEffect, useState} from 'react';
 import Taro from '@tarojs/taro';
 import ListItem from '@components/m5/list/item';
 import FloatCard from '@components/m5/float-layout';
@@ -17,17 +17,16 @@ const types = {
   protagonist: '主演',
 }
 
-export default function makeInfo(props) {
+export default function makeInfo(props, ref) {
   const { changeScroll = () => {}, movieData } = props;
-
   const [openSource, setOpenSource] = useState(false);
   const [source, setSource] = useState([]);
 
   useEffect(() => {
-    if(movieData.filmSource) {
-      setSource(movieData.filmSource)
+    if(ref.current && ref.current.filmSource) {
+      setSource(ref.current.filmSource)
     }
-  }, [props])
+  }, [ref.current])
 
   return (
     <Block>
@@ -62,35 +61,58 @@ export default function makeInfo(props) {
           </FloatCard>
           {divider}
         </View>
-        {listItemWrap('producer', movieData)}
+        {listItemWrap('producer', ref)}
         {divider}
-        {listItemWrap('issuer', movieData)}
+        {listItemWrap('issuer', ref)}
         {divider}
-        {listItemWrap('director', movieData)}
+        {listItemWrap('director', ref)}
         {divider}
-        {listItemWrap('protagonist', movieData)}
+        {listItemWrap('protagonist', ref)}
       </View>
     </Block>
   )
 }
 
-function listItemWrap(param, data) {
-  let extraTextItem = [];
-  data[param] && data[param].length > 0 &&
-  data[param].forEach(item => {
-    extraTextItem.push(item.name)
-  })
+function listItemWrap(param, ref) {
+  const [extraTextItem, setExtraTextItem] = useState([]);
+
+  useEffect(() => {
+    const subList = handleCon(param, ref.current);
+    setExtraTextItem(subList)
+  }, [ref.current])
+
+  const updateCon = () => {
+    const subList = handleCon(param, ref.current);
+    setExtraTextItem(subList)
+  }
 
   const value = extraTextItem.map(i => <Text className="extraText-item">{i}</Text>)
 
-  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : textVoid} arrow onClick={() => moveToSearch(param, data)} />
+  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : textVoid} arrow onClick={() => moveToSearch(param, ref, updateCon)} />
 }
 
-function moveToSearch(param, data) {
+function handleCon(param, data) {
+  let list = [];
+  if(data) {
+    data[param] && data[param].length > 0 &&
+    data[param].forEach(item => {
+      list.push(item.name)
+    })
+  }
+  return list;
+}
+
+function moveToSearch(param, ref, mm) {
   Taro.navigateTo({
     url: '/pages/detail/searchCompany/index',
+    events: {
+      submitData: function(data) {
+        ref.current[param] = data;
+        mm(ref)
+      },
+    },
     success: function (res) {
-      res.eventChannel.emit('acceptDataFromOpenerPage', { type: param, data: data })
+      res.eventChannel.emit('acceptDataFromOpenerPage', { type: param, data: ref.current, ref })
     }
   })
 }
