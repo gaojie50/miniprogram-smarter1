@@ -12,11 +12,9 @@ class _C extends React.Component {
   onLoad = ({token, target}) => {
     // 校验登录状态
     if(token){
-      console.log('登录成功新token是', token);
       Taro.setStorageSync('token', token);
     }
     let localToken = Taro.getStorageSync('token');
-    console.log( '此时，本地的token是，', localToken );
     if( token || localToken ){
       // 校验账号状态
       auth.checkLogin().then(res=>{
@@ -24,7 +22,6 @@ class _C extends React.Component {
         if(res.isLogin){
           target && Taro.reLaunch({ url: decodeURIComponent(target) });
         }else{
-          console.log('res', res);
           errorHandle(res.error || '登录失败');
           setTimeout(()=>{
             Taro.redirectTo({ url: `/pages/welcome/index?target=${target}`})
