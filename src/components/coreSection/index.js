@@ -57,11 +57,9 @@ export default function CoreSection({ categoryType, core }) {
     }, {});
   };
   const [packUp, setPackUp] = useState(true);
-  let {
-    evaluationList=[],
-    recommendedList=[],
-    commentList=[],
-  } = core;
+  let evaluationList = core.evaluationList || [];
+  let recommendedList = core.recommendedList || [];
+  let commentList = core.commentList || [];
 
   let scoreArr = [];
   let totalScoreArr = [];
