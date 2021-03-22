@@ -16,6 +16,7 @@ import '@components/m5/style/components/float-layout.scss';
 import utils from '@utils/index.js'
 import ProjectFile from './projectFile';
 import FacePeople from './people';
+import dayjs from 'dayjs';
 import People from '@static/detail/people.png';
 import File from '@static/detail/file.png';
 import ArrowLeft from '@static/detail/arrow-left.png';
@@ -24,7 +25,7 @@ import './index.scss';
 import '@components/m5/style/index.scss';
 
 
-const { isDockingPerson } = utils;
+const { isDockingPerson,formatNumber, } = utils;
 const reqPacking = getGlobalData('reqPacking');
 const capsuleLocation = getGlobalData('capsuleLocation');
 const { rpxTopx } = utils;
@@ -55,7 +56,8 @@ export default class Detail extends React.Component {
       toView: 'follow',
       setBgColor: false,
       evaluation: [],
-      history: []
+      history: [],
+      releaseDataList: {}
     }
   }
 
@@ -71,8 +73,7 @@ export default class Detail extends React.Component {
     const { userInfo } = Taro.getStorageSync('authinfo');
     const { dataset } = target;
     const { realName = "" } = userInfo;
-    console.log(dataset);
-    console.log(basicData);
+
     return new Promise((resolve, reject)=>{
       Taro.showLoading({
         title: '分享信息获取中',
@@ -187,6 +188,61 @@ export default class Detail extends React.Component {
     })
   }
 
+  fetchCompetitiveSituation() {
+    const { releaseTime = {} } = this.state.keyData;
+    const releaseTimeArry = releaseTime.time && releaseTime.time.match(/-/g);
+    if ((releaseTimeArry && releaseTimeArry.length === 2)) {
+      // 获取该周的第几天
+      const index = dayjs(releaseTime.time).format('d') || 7;
+  
+      // 自然周的周一到周日
+      const releaseStartDate = dayjs(releaseTime.time).subtract(index < 5 ? parseInt(index) + 2 : index - 5, 'd').format('YYYY-MM-DD');
+      const releaseEndDate = dayjs(releaseTime.time).add(index < 5 ? 4 - index : 11 - index,'d').format('YYYY-MM-DD');
+
+
+      const startDt = dayjs(releaseStartDate).unix();
+      const endDt = dayjs(releaseEndDate).unix();
+
+      const query = {
+        projectId: this.state.basicData?.projectId,
+        startDt,
+        endDt,
+        hasConfirmed: true
+      };
+      
+      reqPacking({
+        url: 'api/management/searchcompetitivesituation',
+        data: query,
+      }).then(res =>{
+        const { success, data = {},error } = res;
+        
+        let insert = 0;
+
+        if (success) {
+          data.competitiveSituationDetailList && data.competitiveSituationDetailList.forEach((item, index) => {
+            const newIndex = index + 1;
+            item.order = newIndex < 10 ? `0${newIndex}` : `${newIndex}`;
+            if (index > 5 && item.projectId === this.props.projectId) {
+              insert = index;
+            }
+          });
+          if (insert !== 0) {
+            data.competitiveSituationDetailList.unshift(data.competitiveSituationDetailList[ insert ]);
+          }
+          this.setState({
+            releaseDataList: data,
+          });
+        } else {
+          Taro.showToast({
+            title: error.message,
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      })
+    }
+  }
+
   fetchProjectFile() {
     const { basicData } = this.state;
     reqPacking({
@@ -230,7 +286,7 @@ export default class Detail extends React.Component {
   handleChangeKeyData(data) {
     this.setState({
       keyData: data
-    })
+    },this.fetchCompetitiveSituation)
   }
 
   handleBack = () => {
@@ -314,8 +370,32 @@ export default class Detail extends React.Component {
     })
   }
 
+  goToBoxForecasting(){
+    Taro.navigateTo({
+      url: '/pages/boxForecasting/index'
+    });
+  }
+
   render() {
-    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed, toView, setBgColor } = this.state;
+    const { 
+      stopScroll, 
+      loading, 
+      basicData, 
+      fileData, 
+      peopleData, 
+      judgeRole, 
+      keyData, 
+      current, 
+      showProgress, 
+      top, 
+      showCooperStatus, 
+      showPeople, 
+      showProjectFile, 
+      isFixed, 
+      toView, 
+      setBgColor,
+      releaseDataList,
+    } = this.state;
     const releaseTimeArry = keyData?.releaseTime?.time?.match(/-/g);
     const textFn = () => <View className='launch-text'><Text>+</Text>发起机器预测票房</View>;
 
@@ -372,21 +452,29 @@ export default class Detail extends React.Component {
             changeKeyData={ data => this.handleChangeKeyData(data)}
           /> : ''
         }
-        {
+        {basicData.category === 3 && judgeRole?.releaseStage === 1 ? (
           releaseTimeArry && releaseTimeArry.length === 2 ? <View className="mini-box">
-            <View className="machine-eval-mini">
-              {textFn()}
-            </View>
-            <View className="release-week-mini">
-              <View className="title">上映当周预估大盘</View>
-              <View className="box">34.5亿 <Text>12:20更新</Text></View>
-              <View className="num">9部 <Text className="arrow" /></View>
-            </View>
-          </View> :
-          <View className="machine-eval-btn">
-            {textFn()}
+          <View className="machine-eval-mini" onClick={this.goToBoxForecasting}>
+            { !keyData?.estimateBox?.machineEstimateBoxDetail?.estimateNum ? 
+              textFn():
+              <View>
+                <View className="title">上映当周预估大盘</View>
+                <View className="box">{formatNumber(keyData.estimateBox.machineEstimateBoxDetail.estimateNum, 'floor').text}<Text> {keyData.estimateBox.describe || ''}</Text></View>
+                <View className="num"><Text className="arrow" /></View>
+              </View>
+            }
+            
           </View>
-        }
+          <View className="release-week-mini">
+            <View className="title">上映当周预估大盘</View>
+            <View className="box">{formatNumber(releaseDataList.estimateTotalNum, 'floor').text}<Text> {keyData.releaseTime.describe || ''}</Text></View>
+            <View className="num">{releaseDataList.releaseNum || '-'}部 <Text className="arrow" /></View>
+          </View>
+        </View> :
+        <View className="machine-eval-btn">
+          {textFn()}
+        </View>
+        ) : "" }
         <View className="detail-tabs" id={toView} >
           <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
             <View onClick={()=> this.handleSwitch(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>最新跟进</View>
