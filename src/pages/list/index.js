@@ -3,8 +3,7 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
-
-import FilmDetailList from '../../components/filmDetailList/index'
+import FilmMarket from '../../components/filmMarket/index'
 import CostumListItem from '../../components/costomListItem/index'
 import FilterPanel from '../../components/filterPanel/index'
 import Backdrop from '../../components/backdrop/index'
@@ -92,7 +91,7 @@ class _C extends React.Component {
     dateText: '未来1年',
     filterItemHidden10: true,
     filterItemHidden11: true,
-    isShowFilmDetailList: false,
+    isShowFilmMarket: false,
     filmDistributionList: [],
     filmDistributionItem: {},
     filmLoading: false,
@@ -489,7 +488,7 @@ class _C extends React.Component {
       backdropShow: '',
       filterActive: '',
       costomShow: false,
-      isShowFilmDetailList: false,
+      isShowFilmMarket: false,
       isScroll: true,
     })
   }
@@ -498,7 +497,7 @@ class _C extends React.Component {
     const dataList = this.state
     dataList.backdropShow = ''
     dataList.costomShow = false
-    dataList.isShowFilmDetailList = false
+    dataList.isShowFilmMarket = false
     dataList.toView = ''
     if (Array.isArray(e)) {
       dataList.filterItemHidden = e
@@ -708,7 +707,7 @@ class _C extends React.Component {
       this.setState({
         filmDistributionItem,
         backdropShow: 'costom',
-        isShowFilmDetailList: true,
+        isShowFilmMarket: true,
       })
   }
 
@@ -799,7 +798,7 @@ class _C extends React.Component {
       filterItemHidden12,
       costomShow,
       filmDistributionItem,
-      isShowFilmDetailList,
+      isShowFilmMarket,
       curPagePermission,
       isScroll,
       yMaxLength,
@@ -1142,10 +1141,10 @@ class _C extends React.Component {
                 costomShow={costomShow}
               ></CostumListItem>
             </View>
-            <FilmDetailList
+            <FilmMarket
               filmDistributionItem={filmDistributionItem}
               ongetCostom={this.ongetCostom}
-              show={isShowFilmDetailList}
+              show={isShowFilmMarket}
               titleHeight={titleHeight} />
           </View>
         )}
