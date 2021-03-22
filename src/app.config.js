@@ -18,6 +18,10 @@ export default {
   useExtendedLib: { weui: true },
   subpackages: [
     {
+      root:"pages/boxForecasting",
+      pages: ["index"]
+    },
+    {
       root: "pages/addProject",
       pages: ["index"]
     },

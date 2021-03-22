@@ -38,7 +38,6 @@ export default function assessPage(){
   const titleHeight= Math.floor(
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
-  console.log(blackBarBottom);
 
   Taro.eventCenter.on('didEvaluated', ()=>{
     setDidAssessed(true);
@@ -254,13 +253,12 @@ export default function assessPage(){
   }
 
   
-  const { projectFile=[], backColor, name='', pic, categoryType, description } = briefInfo;
+  const { projectFile=[], backColor, name='', pic, evaluationMethod, description } = briefInfo;
   const { round, initiator, startDate, roundTitle } = curEvalObj;
   const defaultPicUrl = 'https://obj.pipi.cn/festatic/common/image/90f5be009a6f7852f14f9553a14a3e35.png';
   const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPicUrl;
   const coverPic = projectPic ? projectPic : defaultPicUrl;
   const rgbColor = hexColorToRgba(backColor||'#475975',0.9);
-  
   return (
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>
       <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
@@ -281,7 +279,7 @@ export default function assessPage(){
                 <View className="briefinfo-wrap" ref={briefNodeRef}>
                   <Image className="project-pic" src={coverPic}></Image>
                   {name && <View className="project-name">《{name}》</View>}
-                  {round && <View className="project-round">第{round}轮 / {getEvaluationLabel(categoryType)}</View>}
+                  {round && <View className="project-round">第{round}轮 / {getEvaluationLabel(evaluationMethod)}</View>}
                   { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
                 </View>
 
@@ -293,7 +291,7 @@ export default function assessPage(){
                     (projectFile || []).map(item=>{
                       return (
                         <View className="file-item" onClick={()=>{previewFile(item.url, item.title)}}>
-                          <Image className="logo" src={getEvaluationIcon(categoryType)} />
+                          <Image className="logo" src={getEvaluationIcon(evaluationMethod)} />
                           <View className="file-info-wrap">
                             <View className="file-name">{item.title}</View>
                             <View className="file-size">{item.size}</View>

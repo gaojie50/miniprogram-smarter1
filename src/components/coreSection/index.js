@@ -147,7 +147,7 @@ export default function CoreSection({ categoryType, core }) {
                 <React.Fragment key={index}>
                   <View className="tr groupName">{groupName}</View>
                   {list.map(({
-                    name, totalScore,scoreFinished,
+                    name, totalScore,scoreFinished,score,
                   }, turn) => <View key={turn} className={`tr ${list.length == turn + 1 ? "no-line" : ""}`}>
                       <Text className="td">{name}</Text>
                       <Text className="td">
@@ -210,9 +210,16 @@ export default function CoreSection({ categoryType, core }) {
                     name, score, box, comment, evaluation, totalScore, scoreFinished,
                   }, turn) => <View key={turn} className={`tr ${list.length == turn + 1 ? "no-line" : ""}`}>
                       <Text className="td">{name}</Text>
-                      <Text className="td">{
-                        scoreFinished === false ? '未完成所有题目' :
-                          scoreExistSign ? score : totalScore}</Text>
+                      <Text className="td">
+                        {
+                            scoreExistSign ? (
+                              score || score === 0 ? score : '-'
+                            ) :
+                              (
+                                scoreFinished === false ? '未完成所有题目' : totalScore
+                              )
+                          }
+                        </Text>
                       <Text className="td">{box === null ? "-" : `${box}亿`}</Text>
                       {
                         commentExistSign ? <React.Fragment>
