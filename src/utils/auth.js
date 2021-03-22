@@ -11,7 +11,6 @@ const { keeper } = envConfig
 
 function checkLogin() {
   return new Promise((resolve, reject)=>{
-    console.log('checkLogin时，token是', Taro.getStorageSync('token'));
     if( Taro.getStorageSync('token') ){
       reqPacking(
         {
