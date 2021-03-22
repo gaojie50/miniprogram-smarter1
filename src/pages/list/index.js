@@ -235,6 +235,7 @@ class _C extends React.Component {
               item2.wishNum = formatNumber(item2.wishNum)
             })
           }
+          item.originalReleaseDate = item.releaseDate;
           item.releaseDate = formatWeekDate(item.releaseDate)
         })
 
@@ -1142,6 +1143,7 @@ class _C extends React.Component {
               ></CostumListItem>
             </View>
             <FilmMarket
+                
               filmDistributionItem={filmDistributionItem}
               ongetCostom={this.ongetCostom}
               show={isShowFilmMarket}

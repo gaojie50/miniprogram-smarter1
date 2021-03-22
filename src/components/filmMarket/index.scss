@@ -1,15 +1,8 @@
 .film-market-component {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding: 40px 30px 60px;
-  font-family: PingFangSC-Regular;
-  color: #333;
-  background: #FFF;
-  border-radius: 20px 20px 0 0;
-  z-index: 71;
-  box-sizing: border-box;
-
+  .at-float-layout__container {
+    height: 85% !important;
+    max-height: 85%;
+  }
   .no-estimate-box-list {
     margin-top: 30px;
     .title-text {
@@ -27,27 +20,15 @@
   .title-top{
     height: 40px;
     line-height: 40px;
-    text-align: center;
+    text-align: left;
     position: relative;
     margin-bottom: 28px;
 
-    .close-wrap {
-      width: 88px;
-      height: 88px;
-      line-height: 88px;
-      position: absolute;
-      left: -24px;
-      top: -24px;
-      text-align: center;
-
-      image {
-        width: 28px;
-        height: 28px;
-      }
-    }
-
     .num {
-      font-family: MaoYanHeiTi-H1;
+      font-weight: 400;
+      font-size: 24px;
+      color: #333333;
+      line-height: 36px;
     }
 
     .schedule{
@@ -100,56 +81,50 @@
     }
   }
 
-  .title-bottom{
+  .overview {
     margin-bottom: 50px;
-
-    &>view{
-      background: #EEE;
-      border-radius: 10px;
-      width: 335px;
-      display: inline-block;
-      text-align: center;
-      padding: 20px;
-      box-sizing: border-box;
-
-      &:last-of-type{
-        margin-left: 20px;
+    display: flex;
+    .cur-week-data {
+      width: 336px;
+      background: #F8F8F8;
+      padding: 0 20px;
+      margin-right: 20px;
+      .predict-panel, .onshow-number {
+        padding-top: 20px;
+        padding-bottom: 20px;
       }
-
-      .p{
+      .predict-panel {
+        border-bottom: 1PX solid #E5E5E5;
+      }
+      .title {
         font-weight: 400;
         font-size: 24px;
         color: #333333;
-        text-align: center;
-        line-height: 36px;
-        margin-bottom: 10px;
+        line-height: 28px;
       }
-
-      .val{
-        .detailVal{
+      .val {
+        font-weight: 400;
+        color: #333333;
+        line-height: 46px;
+        margin-top: 16px;
+        .detailVal {
+          font-size: 36px;
           font-family: MaoYanHeiTi-H1;
-          font-size: 46px;
-          color: #333333;
-          text-align: center;
-          line-height: 46px;
+          font-weight: 600;
         }
-  
-        .unit{
+        .unit {
           font-size: 24px;
         }
       }
-
-      .maybe{
+      .maybe {
         font-weight: 400;
-        font-family: PingFangSC-Regular;
-        font-size: 24px;
-        color: #666666;
-        text-align: center;
-        margin-top: 20px;
-        height: 33px;
-        line-height: 33px;
+        font-size: 20px;
+        color: #999999;
+        line-height: 24px;
+        margin-top: 10px;
       }
     }
+    
   }
 }
 
@@ -157,6 +132,7 @@
 .film-market-component .title text:first-child {
   margin-right: 10px;
 }
+
 
 
 
