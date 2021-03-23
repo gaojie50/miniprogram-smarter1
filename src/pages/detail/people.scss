@@ -34,13 +34,14 @@
     }
   }
   .people-item {
+    // padding-bottom: 350px;
     .scroll {
-      padding-bottom: 350px;
       width: 100%;
-      height: 100vh;
+      height: 65vh;
       box-sizing: border-box;
     }
     .item {
+      position: relative;
       display: flex;
       align-items: center;
       width: 100%;
@@ -82,6 +83,19 @@
           font-family: PingFangSC-Regular;
           font-size: 24px;
           color: #999999;
+        }
+      }
+      .last {
+        position: absolute;
+        top: 0;
+        right: -30px;
+        width: 85px;
+        height: 100%;
+        margin-left: 11px;
+        margin-top: 45px;
+        image {
+          width: 44px;
+          height: 44px;
         }
       }
     }

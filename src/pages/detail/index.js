@@ -131,7 +131,7 @@ export default class Detail extends React.Component {
     let param = {};
 
     page.forEach(x => {
-      if(x.route === 'pages/detail/index') {
+      if(x.__route__ === 'pages/detail/index') {
         if(x.options.projectId && x.options.projectId !== '' && x.options.projectId !== '0') {
           param.projectId = x.options.projectId
         } else {
@@ -139,6 +139,7 @@ export default class Detail extends React.Component {
         }
       }
     })
+    console.log(page, param, 124)
     reqPacking({
       url: 'api/management/projectInfo',
       data: param
@@ -399,7 +400,7 @@ export default class Detail extends React.Component {
      
       {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}
       {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
-      {showPeople ? <FacePeople peopleData={peopleData} cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
+      {showPeople ? <FacePeople peopleData={peopleData} judgeRole={ judgeRole }  cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
       {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
     </Block>
     )

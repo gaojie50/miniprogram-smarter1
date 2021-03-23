@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, Image, ScrollView } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import { AtFloatLayout } from '@components/m5';
 import { CooperStatus } from './constant';
+import BottomSubmit from '@components/bottomSubmit';
+import AtActionSheet from '@components/m5/action-sheet';
+import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import Crown from '@static/detail/crown.png';
 import MainPeople from '@static/detail/mainPeople.png';
 import CooperPeople from '@static/detail/cooperPeople.png';
@@ -11,7 +15,21 @@ import './people.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 export default function People(props) {
-  const { peopleData } = props;
+  const { peopleData, judgeRole={ judgeRole } } = props;
+  const [openSheet, setOpenSheet] = useState(false);
+
+  const addPeople = () => {
+    Taro.navigateTo({
+      url: `/pages/detail/addPeople/index?projectId=${peopleData[0].projectId}`,
+      events: {
+        "selectedPeople": data => {
+          if(data) {
+       
+          }
+        }
+      }
+    })
+  }
   
   return (
     <AtFloatLayout className="people" onClose={() => props.cancelShow()} isOpened>
@@ -31,10 +49,20 @@ export default function People(props) {
               <View className="name">{item.userName}</View>
               <View className="describe">{item.userDesc}</View>
             </View>
+            <View className="last" onClick={() => setOpenSheet(true)}>
+              <Image src="../../static/detail/company-edit.png" alt=""></Image>
+            </View>
           </View>
           })
         }
         </ScrollView>
+        <AtActionSheet isOpened={openSheet} cancelText='取消' onCancel={() => setOpenSheet(false)} onClose={() => setOpenSheet(false)}>
+          <AtActionSheetItem onClick={changeMain}>取消负责人</AtActionSheetItem>
+          <AtActionSheetItem onClick={changeMain}>设置备注名</AtActionSheetItem>
+          <AtActionSheetItem onClick={changeMain}>设为负责人</AtActionSheetItem>
+          <AtActionSheetItem onClick={changeMain}>移出该项目</AtActionSheetItem>
+        </AtActionSheet>
+        <BottomSubmit name="添加对接人" onClick={addPeople} />
       </View>
     </AtFloatLayout>
   )
