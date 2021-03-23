@@ -33,8 +33,10 @@ export default function keepLogin(params) {
           ).then(({ success, error, data }) => {
             if (success) {
               let { accessToken, hasBindMobile } = data
-              if (hasBindMobile) {
+              if( accessToken ){
                 Taro.setStorageSync('token', accessToken);
+              }
+              if (hasBindMobile) {
                 // 校验账号状态
                 auth.checkLogin().then(res=>{
                   const { authInfo } = res;
@@ -50,9 +52,9 @@ export default function keepLogin(params) {
               }
   
               if (Taro.canIUse('web-view')) {
-                // can test by self via : const verifyPhoneNumUrl = `http://localhost:8411/keeper.html?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(`${addUrlArg(`/pages/loginRedirect/index?target=${encodeURIComponent(continueUrl)}`, 'token', accessToken)}`)}`;
-                const verifyPhoneNumUrl = `${keeper}/business/bindphone?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(`${addUrlArg(`/pages/loginRedirect/index?target=${encodeURIComponent(continueUrl)}`, 'token', accessToken)}`)}`;
-  
+                // can test by self via : 
+                // const verifyPhoneNumUrl = `http://localhost:8411/keeper.html?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(`${addUrlArg(`/pages/loginRedirect/index?target=${encodeURIComponent(continueUrl)}`, 'token', accessToken)}`)}`;
+                const verifyPhoneNumUrl = `${keeper}/business/bindphone?token=${accessToken}&appkey=${appkey}&backToMiniprogram=true&continueUrl=${encodeURIComponent(`/pages/loginRedirect/index?target=${encodeURIComponent(continueUrl)}`)}`;
                 Taro.navigateTo({
                   url: `/pages/webview/index?url=${encodeURIComponent(
                     verifyPhoneNumUrl
@@ -68,7 +70,4 @@ export default function keepLogin(params) {
       }
     })
   })
-  
-
- 
 }

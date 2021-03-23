@@ -114,10 +114,6 @@ export default function AddPeople() {
       }
     })
     submitPeople(projectId, item);
-    const current = pages[pages.length - 1];
-    const eventChannel = current.getOpenerEventChannel();
-    eventChannel.emit('selectedPeople', item);
-
   }, [])
 
   return (

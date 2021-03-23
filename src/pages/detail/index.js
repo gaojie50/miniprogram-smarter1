@@ -11,19 +11,20 @@ import { EvaluationList } from '../board/evaluate';
 import { CooperStatus } from './constant';
 import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import AddingProcess from '@components/addingProcess';
+import FloatLayout from '@components/m5/float-layout';
 import utils from '@utils/index.js'
 import ProjectFile from './projectFile';
 import FacePeople from './people';
+import dayjs from 'dayjs';
 import People from '@static/detail/people.png';
 import File from '@static/detail/file.png';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import './index.scss';
 import '@components/m5/style/index.scss';
-// import { camelCase } from 'lodash';
 
 
-const { isDockingPerson } = utils;
+const { isDockingPerson,formatNumber, } = utils;
 const reqPacking = getGlobalData('reqPacking');
 const capsuleLocation = getGlobalData('capsuleLocation');
 const { rpxTopx } = utils;
@@ -54,7 +55,8 @@ export default class Detail extends React.Component {
       toView: 'follow',
       setBgColor: false,
       evaluation: [],
-      history: []
+      history: [],
+      releaseDataList: {}
     }
   }
 
@@ -70,58 +72,57 @@ export default class Detail extends React.Component {
     const { userInfo } = Taro.getStorageSync('authinfo');
     const { dataset } = target;
     const { realName = "" } = userInfo;
-    console.log(dataset);
-    console.log(basicData);
     return new Promise((resolve, reject)=>{
-      Taro.showLoading({
-        title: '分享信息获取中',
-      })
-      reqPacking(
-        {
-          url: `api/management/shareEvaluation?roundId=${dataset.roundId}`,
-          method: 'POST'
-        },
-        'server',
-      ).then((res) => {
-        Taro.hideLoading();
-        const { success, error, data } = res;
-        if(success){
-          const { inviteId, participationCode } = data;
-          let shareMessage = {};
-          switch (dataset.sign) {
-            case 'invite': {
+      let shareMessage = {}
+      switch (dataset.sign) {
+        case 'invite': {
+          Taro.showLoading({
+            title: '分享信息获取中',
+          })
+          reqPacking(
+            {
+              url: `api/management/shareEvaluation?roundId=${dataset.roundId}`,
+              method: 'POST'
+            },
+            'server',
+          ).then((res) => {
+            Taro.hideLoading();
+            const { success, error, data } = res;
+            if(success){
+              const { inviteId, participationCode } = data;
               shareMessage = {
                 title: `${realName} 邀请您参与《${dataset.roundTitle}》项目评估`,
                 imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
                 path: `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
               };
-              break;
-            };
-    
-            case 'attend': {
-              shareMessage = {
-                title: `${realName} 分享给您关于《${dataset.roundTitle}》项目的报告`,
-                imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
-                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
-              }
-              break;
+              resolve(shareMessage)
+            }else{
+              reject('分享信息获取失败');
             }
-            default: {
-              shareMessage = {
-                title: '分享报告',
-                path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
-              };
-            }
+          }).catch(res=>{
+            console.log(res);
+            reject('分享信息获取失败');
+          })
+          break;
+        };
+        case 'attend': {
+          shareMessage = {
+            title: `${realName} 分享给您关于《${dataset.roundTitle}》项目的报告`,
+            imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+            path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`
           }
-          console.log('分享信息为', `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`);
           resolve(shareMessage)
-        }else{
-          reject('分享信息获取失败');
+          break;
         }
-      }).catch(res=>{
-        console.log(res);
-        reject('分享信息获取失败');
-      })
+        default: {
+          shareMessage = {
+            title: '分享报告',
+            path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`,
+          };
+          resolve(shareMessage);
+        }
+      }
+      
     })
   }
 
@@ -139,7 +140,7 @@ export default class Detail extends React.Component {
         }
       }
     })
-    console.log(page, param, 124)
+  
     reqPacking({
       url: 'api/management/projectInfo',
       data: param
@@ -187,6 +188,61 @@ export default class Detail extends React.Component {
     })
   }
 
+  fetchCompetitiveSituation() {
+    const { releaseTime = {} } = this.state.keyData;
+    const releaseTimeArry = releaseTime.time && releaseTime.time.match(/-/g);
+    if ((releaseTimeArry && releaseTimeArry.length === 2)) {
+      // 获取该周的第几天
+      const index = dayjs(releaseTime.time).format('d') || 7;
+  
+      // 自然周的周一到周日
+      const releaseStartDate = dayjs(releaseTime.time).subtract(index < 5 ? parseInt(index) + 2 : index - 5, 'd').format('YYYY-MM-DD');
+      const releaseEndDate = dayjs(releaseTime.time).add(index < 5 ? 4 - index : 11 - index,'d').format('YYYY-MM-DD');
+
+
+      const startDt = dayjs(releaseStartDate).unix();
+      const endDt = dayjs(releaseEndDate).unix();
+
+      const query = {
+        projectId: this.state.basicData?.projectId,
+        startDt,
+        endDt,
+        hasConfirmed: true
+      };
+      
+      reqPacking({
+        url: 'api/management/searchcompetitivesituation',
+        data: query,
+      }).then(res =>{
+        const { success, data = {},error } = res;
+        
+        let insert = 0;
+
+        if (success) {
+          data.competitiveSituationDetailList && data.competitiveSituationDetailList.forEach((item, index) => {
+            const newIndex = index + 1;
+            item.order = newIndex < 10 ? `0${newIndex}` : `${newIndex}`;
+            if (index > 5 && item.projectId === this.props.projectId) {
+              insert = index;
+            }
+          });
+          if (insert !== 0) {
+            data.competitiveSituationDetailList.unshift(data.competitiveSituationDetailList[ insert ]);
+          }
+          this.setState({
+            releaseDataList: data,
+          });
+        } else {
+          Taro.showToast({
+            title: error.message,
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      })
+    }
+  }
+
   fetchProjectFile() {
     const { basicData } = this.state;
     reqPacking({
@@ -230,7 +286,7 @@ export default class Detail extends React.Component {
   handleChangeKeyData(data) {
     this.setState({
       keyData: data
-    })
+    },this.fetchCompetitiveSituation)
   }
 
   handleBack = () => {
@@ -259,7 +315,8 @@ export default class Detail extends React.Component {
 
   updateProcess = () => {
     this.setState({
-      showProgress: false
+      showProgress: false,
+      stopScroll: false,
     })
     this.refs.followStatus.fetFollowStatus();
   }
@@ -314,11 +371,37 @@ export default class Detail extends React.Component {
     })
   }
 
+  goToBoxForecasting(){
+    Taro.navigateTo({
+      url: '/pages/boxForecasting/index'
+    });
+  }
+
   render() {
-    const { stopScroll, loading, basicData, fileData, peopleData, judgeRole, keyData, current, showProgress, top, showCooperStatus, showPeople, showProjectFile, isFixed, toView, setBgColor } = this.state;
+    const { 
+      stopScroll, 
+      loading, 
+      basicData, 
+      fileData, 
+      peopleData, 
+      judgeRole, 
+      keyData, 
+      current, 
+      showProgress, 
+      top, 
+      showCooperStatus, 
+      showPeople, 
+      showProjectFile, 
+      isFixed, 
+      toView, 
+      setBgColor,
+      releaseDataList,
+    } = this.state;
+    const releaseTimeArry = keyData?.releaseTime?.time?.match(/-/g);
+    const textFn = () => <View className='launch-text'><Text>+</Text>发起机器预测票房</View>;
 
     return (
-      <Block>
+      <View>
         <View className="detail-top">
           <View className={top ? "fixed" : ""} id="top" style={{height: `${headerBarHeight}px`, paddingTop: `${titleBarPadding}px`, backgroundColor: top ? '#FFFFFF':''}} >
             <View className="header" style={{height: `${titleBarHeight}px`, lineHeight: `${titleBarHeight}px` }}>
@@ -370,13 +453,36 @@ export default class Detail extends React.Component {
             changeKeyData={ data => this.handleChangeKeyData(data)}
           /> : ''
         }
+        {basicData.category === 3 && judgeRole?.releaseStage === 1 ? (
+          releaseTimeArry && releaseTimeArry.length === 2 ? <View className="mini-box">
+          <View className="machine-eval-mini" onClick={this.goToBoxForecasting}>
+            { !keyData?.estimateBox?.machineEstimateBoxDetail?.estimateNum ? 
+              textFn():
+              <View>
+                <View className="title">上映当周预估大盘</View>
+                <View className="box">{formatNumber(keyData.estimateBox.machineEstimateBoxDetail.estimateNum, 'floor').text}<Text> {keyData.estimateBox.describe || ''}</Text></View>
+                <View className="num"><Text className="arrow" /></View>
+              </View>
+            }
+            
+          </View>
+          <View className="release-week-mini">
+            <View className="title">上映当周预估大盘</View>
+            <View className="box">{formatNumber(releaseDataList.estimateTotalNum, 'floor').text}<Text> {keyData.releaseTime.describe || ''}</Text></View>
+            <View className="num">{releaseDataList.releaseNum || '-'}部 <Text className="arrow" /></View>
+          </View>
+        </View> :
+        <View className="machine-eval-btn">
+          {textFn()}
+        </View>
+        ) : "" }
         <View className="detail-tabs" id={toView} >
-          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '0', zIndex: 9}}>
+          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
             <View onClick={()=> this.handleSwitch(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>最新跟进</View>
             <View onClick={()=> this.handleSwitch(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>项目评估</View>
             <View onClick={()=> this.handleSwitch(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>变更历史</View>
           </View>
-          <View className="detail-tabs-body"  style={{backgroundColor: setBgColor ? '#F8F8F8' : '#ffffff',}}>
+          <View className="detail-tabs-body"  style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff',}}>
               <View className={current === 0 ? "body-active" : "body-inactive"} id="follow">
                 <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
               </View>
@@ -388,7 +494,7 @@ export default class Detail extends React.Component {
                 <UseHistory judgeData={this.handleJudgeData} projectId={ basicData.projectId } keyData={keyData}></UseHistory>
                 {this.state.history.length > 0 ? <View className="noMore">没有更多了</View> : null}
               </View>
-              <View className="bottom-relative" style={{backgroundColor: setBgColor ? '#F8F8F8' : '#ffffff'}}></View>
+              <View className="bottom-relative" style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff'}}></View>
           </View>
         </View>
         {isDockingPerson(judgeRole.role) && <View className="bottom-fixed">
@@ -398,11 +504,34 @@ export default class Detail extends React.Component {
         }
       </ScrollView>
      
-      {showProgress ? <AddingProcess submitEvt={this.updateProcess} closeEvt={() => {this.setState({ showProgress: false, stopScroll: false })}} projectId={basicData.projectId} /> : null}
-      {showCooperStatus ? <Cooper basicData={basicData} fetchBasicData={() => this.fetchBasicData()} cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}></Cooper> : null}
-      {showPeople ? <FacePeople peopleData={peopleData} judgeRole={ judgeRole }  cancelShow={() => this.setState({showPeople: false, stopScroll: false})}></FacePeople> : null}
-      {showProjectFile ? <ProjectFile fileData={fileData} cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})}></ProjectFile> : null}
-    </Block>
+      <FloatLayout 
+        isOpened={showProgress} 
+        className="layout-process"
+        onClose={() => this.setState({ showProgress: false, stopScroll: false })
+        }>
+        <AddingProcess 
+          closeEvt ={() => this.setState({ showProgress: false, stopScroll: false }) }
+          submitEvt={this.updateProcess} 
+          projectId={basicData.projectId} />
+      </FloatLayout>
+      <Cooper 
+        show={showCooperStatus} 
+        basicData={basicData} 
+        fetchBasicData={() => this.fetchBasicData()} 
+        cancelShow={() => this.setState({showCooperStatus: false, stopScroll: false})}
+      />
+      <FacePeople 
+        show={showPeople} 
+        peopleData={peopleData} 
+        judgeRole={judgeRole}
+        cancelShow={() => this.setState({showPeople: false, stopScroll: false})}
+      />
+      <ProjectFile 
+        show={showProjectFile} 
+        fileData={fileData} 
+        cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})} 
+      />
+    </View>
     )
   }
 }

@@ -13,7 +13,14 @@ import './index.scss'
 import DefaultPic from '../../static/detail/cover.png';
 import NoData from '../../components/noData';
 import NoAccess from '@components/noAccess';
+import { fourTextLabel, threeTextLabel, twoTextLabel } from '@utils/imageUrl';
 
+
+const labelBgMap = {
+  2: twoTextLabel,
+  3: threeTextLabel,
+  4: fourTextLabel
+}
 const { getMaoyanSignLabel } = projectConfig
 const {
   rpxTopx,
@@ -115,7 +122,15 @@ export default function Board() {
 
   useEffect(()=>{
     const authInfo = Taro.getStorageSync('authinfo');
-    if( authInfo?.authIds?.includes(AUTH_ID)){
+    if(  authInfo &&
+      authInfo.authIds &&
+      authInfo.authIds.length > 0 &&
+      authInfo.authIds.includes(AUTH_ID) &&
+      authInfo.authEndTime &&
+      authInfo.authEndTime > +new Date() &&
+      authInfo.authStartTime &&
+      authInfo.authStartTime <= +new Date() 
+    ){
       setHasPagePermission(true);
     }
   }, [])
@@ -820,7 +835,7 @@ function ProjectItem(props) {
   return (
     <View className="project-item" style={style} onClick={ ()=>{jumpDetail(projectId)} }>
       <View className="project-item-type">
-        <View className="project-item-type-name">
+        <View className="project-item-type-name" style={{backgroundImage:`url(${OBJECT_TYPE[type] ? labelBgMap[OBJECT_TYPE[type].length]: twoTextLabel })`}}>
           {OBJECT_TYPE[type] || '-'}
         </View>
       </View>

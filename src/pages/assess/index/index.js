@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Taro, { getCurrentInstance, useDidShow } from '@tarojs/taro';
 import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components';
 import TopBar from '@components/topBar';
@@ -14,9 +14,10 @@ import projectConfig from '../../../constant/project-config';
 import '../../../components/m5/style/components/icon.scss';
 import './index.scss';
 
-const { errorHandle, hexColorToRgba, previewFile } = utils;
+const { errorHandle, hexColorToRgba, previewFile, rpxTopx } = utils;
 const { getEvaluationLabel, getEvaluationIcon } = projectConfig;
 const AUTH_ID = 95130;
+
 
 export default function assessPage(){
   
@@ -26,11 +27,14 @@ export default function assessPage(){
   const [ didAssessed, setDidAssessed ] = useState(false);  // 是否评估过
   const [ canEvaluate, setCanEvaluate ] = useState(false);
   const [ hasPermission, setHasPermission ] = useState(false);
-  
+  const [ briefContentHeight, setBriefContentHeight ] = useState(0);
+  const briefNodeRef = useRef( null ); 
+
   const isLogin = Taro.getStorageSync('token');
   const { projectId, roundId, inviteId, participationCode } = getCurrentInstance().router.params;
   const capsuleLocation = getGlobalData('capsuleLocation');
-  const {statusBarHeight} = getGlobalData('systemInfo');
+  const { statusBarHeight } = getGlobalData('systemInfo');
+  const blackBarBottom = getGlobalData('blackBarBottom');
   const titleHeight= Math.floor(
     capsuleLocation.bottom + capsuleLocation.top - statusBarHeight*2,
   );
@@ -51,6 +55,17 @@ export default function assessPage(){
     }
   }, [])
 
+  useEffect(()=>{
+    Taro.nextTick(()=>{
+      if(briefNodeRef.current){
+        const query = Taro.createSelectorQuery();
+        query.select('.briefinfo-wrap').boundingClientRect(rect=>{
+          setBriefContentHeight(rect.height);
+        }).exec();
+      }
+    })
+  }, [briefInfo, curEvalObj])
+
   const getEvaluationStatus = async () => {
     // 链接上有inviteId，先查看是否评估过
     if(inviteId){
@@ -67,7 +82,7 @@ export default function assessPage(){
     }
   }
 
-  const fetchData = async () => {
+  const fetchData = () => {
     fetchRole();
     fetchBrifInfo();
     fetchEveluationList();
@@ -238,20 +253,18 @@ export default function assessPage(){
   }
 
   
-  const { projectFile=[], backColor, name='', pic, categoryType, description } = briefInfo;
+  const { projectFile=[], backColor, name='', pic, evaluationMethod, description } = briefInfo;
   const { round, initiator, startDate, roundTitle } = curEvalObj;
   const defaultPicUrl = 'https://obj.pipi.cn/festatic/common/image/90f5be009a6f7852f14f9553a14a3e35.png';
   const projectPic = pic ? `${pic.replace('/w.h/', '/')}@416w_592h_1e_1c` : defaultPicUrl;
   const coverPic = projectPic ? projectPic : defaultPicUrl;
   const rgbColor = hexColorToRgba(backColor||'#475975',0.9);
-
-
   return (
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>
       <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
       <TopBar background="transparent" hasBack={isLogin?true:false} onBack={ handleBack } />
       {!isLogin && (
-        <LoginNotice target={`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`} />
+        <LoginNotice target={`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`} />
       )}
       {
        isLogin && !hasPermission && (
@@ -259,18 +272,18 @@ export default function assessPage(){
        )
       }
       { isLogin && hasPermission && (
-        <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`}}>
+        <View className="all-container" style={{height: `calc(100vh - ${(titleHeight+statusBarHeight)}px)`, paddingBottom: `${blackBarBottom>0? `${blackBarBottom}px`: `${rpxTopx(34)}px` }`}}>
           <View className="content-container">
             <View className="inner-content-container">
               <View className="inner-content">
-                <View className="briefinfo-wrap">
+                <View className="briefinfo-wrap" ref={briefNodeRef}>
                   <Image className="project-pic" src={coverPic}></Image>
                   {name && <View className="project-name">《{name}》</View>}
-                  {round && <View className="project-round">第{round}轮 / {getEvaluationLabel(categoryType)}</View>}
+                  {round && <View className="project-round">第{round}轮 / {getEvaluationLabel(evaluationMethod)}</View>}
                   { initiator && <View className="project-creator">{initiator} {dayjs(startDate).format('YYYY-MM-DD HH:mm')}</View>}
                 </View>
 
-                <View className="evaluation-info-wrap">
+                <View className="evaluation-info-wrap" style={{height: `calc(100% - ${briefContentHeight}px - ${rpxTopx(130)}px)`}}>
                 <View className="round-title">{roundTitle}</View>
                 {description && <View className="desc">{description}</View>}
                 <View className="project-file-wrap">
@@ -278,7 +291,7 @@ export default function assessPage(){
                     (projectFile || []).map(item=>{
                       return (
                         <View className="file-item" onClick={()=>{previewFile(item.url, item.title)}}>
-                          <Image className="logo" src={getEvaluationIcon(categoryType)} />
+                          <Image className="logo" src={getEvaluationIcon(evaluationMethod)} />
                           <View className="file-info-wrap">
                             <View className="file-name">{item.title}</View>
                             <View className="file-size">{item.size}</View>
@@ -292,7 +305,7 @@ export default function assessPage(){
               </View>
               </View>
             </View>
-          {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? '开始评估': '您已填写，查看结果'}</Button>}
+            {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? '开始评估': '您已填写，查看结果'}</Button>}
         </View>
       </View>
       )}

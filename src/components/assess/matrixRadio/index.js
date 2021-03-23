@@ -57,11 +57,13 @@ export default class MatrixRadio extends React.Component {
     return (
       <View id={id} className={ `matrix-radio ${required ? "required" : ""}` }>
         <View className="ques-title">{questionNum}、{title}</View>
-        <View className={`content ${isPreview ? 'disable': ''}`}>
+        <View className={`matrix-content ${isPreview ? 'disable': ''}`}>
           <View className="left" id="left">
             <View className="left-item"> </View>
             {
-              matrixRadio.axisY.map((item, index) => <View className="left-item" key={ index }>{ item }</View>)
+              matrixRadio.axisY.map((item, index) => <View className="left-item" key={ index }>
+                <View className="item-text">{ item }</View>
+              </View>)
             }
           </View>
           <View className="right-container" id="right-container">

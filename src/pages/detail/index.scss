@@ -1,3 +1,35 @@
+@mixin addIcon($fontSize:32px,$marginRight:8px,$color:#276FF0){
+  text.add{
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 32px;
+    color: $color;
+  }
+}
+
+@mixin arrow() {
+  width: 12px;
+  height: 24px;
+  display: inline-block;
+  background-image: url('../../static/detail/gray.png');
+  background-size: 12px 24px;
+  position: relative;
+  top: 4px;
+}
+
+@mixin launchText ($lineHeight:80px){
+  .launch-text{
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 24px;
+    color: #276FF0;
+    text-align: center;
+    line-height: $lineHeight;
+
+    @include addIcon;
+  }
+}
+
 .detail-top {
   width: 100%;
   box-sizing: border-box;
@@ -90,6 +122,86 @@
     }
   }
 }
+
+.machine-eval-btn{
+  background: #F8F8F8;
+  border-radius: 10px;
+  width: 690px;
+  margin: 0 auto 20px;
+
+  @include launchText(80px);
+}
+
+.mini-box{
+  height: 118px;
+  margin: 0 30px 20px;
+  &>view{
+    background: #F8F8F8;
+    border-radius: 10px;
+    display: inline-block;
+    height: 100%;
+    width: 335px;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+
+    .title{
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #333333;
+      line-height: 28px;
+      margin-bottom: 20px;
+    }
+
+    .box{
+      font-weight: 400;
+      font-family: MaoYanHeiTi-H1;
+      font-size: 30px;
+      color: #333333;
+      line-height: 30px;
+
+      text{
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 20px;
+        color: #999999;
+        line-height: 24px;
+        vertical-align: bottom;
+      }      
+    }
+
+    .num{
+      position: absolute;
+      top: 0;
+      right: 20px;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 20px;
+      color: #333333;
+      line-height: 118px;
+      height: 100%;
+
+      .arrow{
+        @include arrow;
+      }
+    }
+  }
+
+  .machine-eval-mini{
+    float: left;
+
+    @include launchText(78px);
+  }
+
+  .release-week-mini{
+    float: right;
+
+
+  }
+}
+
+
 .detail-tabs {
   width: 100%;
   box-sizing: border-box;
@@ -97,7 +209,7 @@
     display: flex;
     height: 88px;
     background: #FFFFFF;
-    box-shadow: 0 2px 20px 0 rgba(0,0,0,0.05);
+    box-shadow: 0 30px 18px 0 rgba(0,0,0,0.03);
     &-item {
       width: 33.33%;
       height: 88px;
@@ -109,15 +221,19 @@
       color: #333333;
       letter-spacing: 0;
     }
+    .active {
+      font-weight: bold;
+      color: #276FF0;
+    }
     .active::after {
       content: '';
       display: block;
       margin: 0 auto;
       margin-top: -6px;
-      width: 40px;
+      width: 36px;
       height: 6px;
       background: #276FF0;
-      border-radius: 3px;
+      border-radius: 6px;
     }
   }
   &-body {
@@ -153,6 +269,12 @@
     }
   }
 }
+
+#history {
+  .detail-tabs-body {
+    padding-left: 20px !important;
+  }
+}
 .stopScroll {
   height: 100vh;
   overflow: hidden;
@@ -161,7 +283,7 @@
   position: fixed;
   height: 100vh;
   width: 100%;
-  z-index: 2;
+  // z-index: 2;
   .bottom-relative {
     position: relative;
     width: 100%;

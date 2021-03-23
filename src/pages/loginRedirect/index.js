@@ -29,6 +29,7 @@ class _C extends React.Component {
          
         }
       }).catch(e=>{
+        console.log('e', e);
         errorHandle(e);
       })
     }

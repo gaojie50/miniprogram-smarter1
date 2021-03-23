@@ -45,7 +45,7 @@ export default function TextEval({ title, questionNum, texts }) {
             <React.Fragment key={ turn }>
               <View className="tr groupName">{groupName}</View>
               {memberList.map(({ name, content }, index) =>
-                <View key={ index } className={ `tr ${memberList.length == index + 1 ? "no-line" : ""}` }>
+                <View key={ index } className={ `tr tr-line ${memberList.length == index + 1 ? "no-line" : ""}` }>
                   <Text className="td">{name}</Text>
                   <Text className="td">{content}</Text>
                 </View>)}

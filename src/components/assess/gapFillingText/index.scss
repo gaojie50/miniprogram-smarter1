@@ -5,10 +5,10 @@
     font-size: 34px;
     color: #19233B;
     letter-spacing: 0;
-    line-height: 34px;
+    line-height: 40px;
     margin-bottom: 20px;
   }
-  .fill-textarea{
+  .fill-textarea {
     box-sizing: border-box;
     height: 160px;
     background: #F8F8F8;
@@ -25,11 +25,11 @@
     outline: none;
     resize: vertical;
     padding: 20px 14px;
-    &.preview{
-      background: #F6F6F6;
-      &::placeholder{
-        color: #CCCCCC;
-      }
+    &.preview {
+      background: #f8f8f8;
     }
+  }
+  .textarea-placeholder {
+    color: #ccc;
   }
 }

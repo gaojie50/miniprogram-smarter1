@@ -8,7 +8,7 @@
   /* elements */
   &__content {
     margin-left: $at-timeline-offset-left;
-    margin-left: 36px;
+    margin-left: 32px;
     min-height: 56px;
     color: $at-timeline-title-color;
     font-size: $at-timeline-title-font-size;
@@ -30,8 +30,8 @@
   &__dot,
   &__icon {
     position: absolute;
-    left: 5.5px;
-    top: 6px;
+    left: 3.5px;
+    top: 5px;
     width: $at-timeline-dot-size;
     height: $at-timeline-dot-size;
     width: 16px;
@@ -78,7 +78,7 @@
     top: $at-timeline-dot-size / 2;
     bottom: -$at-timeline-dot-size / 2;
     left: $at-timeline-dot-size / 2 - 2px;
-    border-left: 1PX solid $at-timeline-line-color;
+    border-left: 1PX solid rgba(0,0,0,.06);
   }
 
   /* modifiers */
@@ -133,7 +133,7 @@
       }
 
       .at-timeline-item__tail {
-        border-left-style: dotted;
+        border-left-style: solid;
       }
     }
   }
