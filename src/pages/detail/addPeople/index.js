@@ -91,7 +91,7 @@ export default function AddPeople() {
     })
   }, []);
 
-  const handleSearch = useCallback(value => {
+  const handleSearch = value => {
     setLoading(true);
     setSearchValue(value);
     setList([]);
@@ -103,7 +103,7 @@ export default function AddPeople() {
 
     setList(searchList)
     setLoading(false);
-  }, [searchValue])
+  }
 
   const handleSelected = useCallback((item) => {
     let projectId;

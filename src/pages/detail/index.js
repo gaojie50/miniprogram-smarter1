@@ -524,6 +524,7 @@ export default class Detail extends React.Component {
         show={showPeople} 
         peopleData={peopleData} 
         judgeRole={judgeRole}
+        fetchPeople={() => this.fetchBasicData()}
         cancelShow={() => this.setState({showPeople: false, stopScroll: false})}
       />
       <ProjectFile 
