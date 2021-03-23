@@ -1,0 +1,160 @@
+.film-compare-panel-component {
+  .at-float-layout__container {
+    height: 85% !important;
+    max-height: 85%;
+  }
+  .no-estimate-box-list {
+    margin-top: 30px;
+    .title-text {
+      font-weight: 400;
+      font-size: 24px;
+      color: #999999;
+      line-height: 24px;
+      margin-bottom: 10px;
+    }
+  }
+  .week-type-btn {
+    width: 316px;
+    height: 64px;
+    background: #EEEEEE;
+    border-radius: 16px;
+    font-weight: 400;
+    font-size: 26px;
+    color: #333333;
+    line-height: 36px;  
+    padding: 6px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    .type-item {
+      display: inline-block;
+      height:  52px;
+      width: 50%;
+      text-align: center;
+      &.active {
+        font-weight: 600;
+        font-size: 26px;
+        color: #333333;
+        line-height: 52px;
+        background: #fff;
+        border-radius: 10px;
+      }
+    }
+  }
+}
+
+.film-compare-panel-component .title {
+  .title-top{
+    height: 40px;
+    line-height: 40px;
+    text-align: left;
+    margin-bottom: 28px;
+    overflow: hidden;
+
+    .num {
+      font-weight: 400;
+      font-size: 24px;
+      color: #333333;
+      line-height: 36px;
+    }
+
+    .releaseDate-section {
+      font-weight: 400;
+      font-size: 24px;
+      color: #333333;
+      line-height: 36px;
+    }
+
+    .schedule-btn-wrap {
+     float: right;
+     font-size: 0;
+     padding-bottom: 34px;
+     .radio-btn {
+       width: 26px;
+       height: 26px;
+       display: inline-block;
+       border: 2px solid #E5E5E5;
+       border-radius: 100%;
+       vertical-align: middle;
+       margin-right: 8px;
+       &.checked {
+         background-image: url('https://obj.pipi.cn/festatic/common/image/4fbca6628c4a75e92be99c2c0d1e27c1.png');
+         border: none;
+         background-position: center;
+         background-size: cover;
+       }
+     }
+     .text {
+        display: inline-block;
+        font-size: 24px;
+        color: #333333;
+        line-height: 36px;
+        vertical-align: middle;
+     }
+   }
+  }
+
+  .overview {
+    margin-bottom: 50px;
+    display: flex;
+    .cur-week-data {
+      width: 336px;
+      background: #F8F8F8;
+      padding: 0 20px;
+      margin-right: 20px;
+      .predict-panel, .onshow-number {
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+      .predict-panel {
+        border-bottom: 1PX solid #E5E5E5;
+      }
+      .title {
+        font-weight: 400;
+        font-size: 24px;
+        color: #333333;
+        line-height: 28px;
+      }
+      .val {
+        font-weight: 400;
+        color: #333333;
+        line-height: 46px;
+        margin-top: 16px;
+        .detailVal {
+          font-size: 36px;
+          font-family: MaoYanHeiTi-H1;
+          font-weight: 600;
+        }
+        .unit {
+          font-size: 24px;
+        }
+      }
+      .maybe {
+        font-weight: 400;
+        font-size: 20px;
+        color: #999999;
+        line-height: 24px;
+        margin-top: 10px;
+      }
+    }
+    
+  }
+}
+
+
+.film-compare-panel-component .title text:first-child {
+  margin-right: 10px;
+}
+
+
+
+
+
+
+
+.noMore {
+  height: 90px;
+  line-height: 150px;
+  text-align: center;
+  font-size: 24px;
+  color: #999999;
+}

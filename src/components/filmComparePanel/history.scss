@@ -11,10 +11,13 @@
   flex-shrink: 0;
   .content-wrap {
     display: flex;
+    justify-content: space-between;
     .column {
-      padding-right: 22px;
       .text {
         margin-top: 20px;
+      }
+      .value {
+        font-family: MaoYanHeiTi-H1;
       }
     }
   }

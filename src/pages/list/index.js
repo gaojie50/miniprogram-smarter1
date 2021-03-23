@@ -3,7 +3,7 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
-import FilmMarket from '../../components/filmMarket/index'
+import FilmMarket from './filmMarket/index'
 import CostumListItem from '../../components/costomListItem/index'
 import FilterPanel from '../../components/filterPanel/index'
 import Backdrop from '../../components/backdrop/index'
@@ -225,9 +225,6 @@ class _C extends React.Component {
               }
               if (!item2.maoyanId) {
                 item2.maoyanId = 0
-              }
-              if (item2.estimateBox) {
-                item2.estimateBox = formatNumber(item2.estimateBox)
               }
               item2.pic = item2.pic
                 ? `${item2.pic.replace('/w.h/', '/460.660/')}`
@@ -1142,12 +1139,11 @@ class _C extends React.Component {
                 costomShow={costomShow}
               ></CostumListItem>
             </View>
-            <FilmMarket
-                
-              filmDistributionItem={filmDistributionItem}
-              ongetCostom={this.ongetCostom}
+            {isShowFilmMarket && <FilmMarket
+              data={filmDistributionItem}
+              closeFn={this.ongetCostom}
               show={isShowFilmMarket}
-              titleHeight={titleHeight} />
+              titleHeight={titleHeight} />}
           </View>
         )}
         <Tab isLogin={isLogin} />

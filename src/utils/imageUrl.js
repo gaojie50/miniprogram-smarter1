@@ -6,6 +6,8 @@ export const fourTextLabel = 'https://obj.pipi.cn/festatic/common/image/bc2c2961
 export const threeTextLabel = 'https://obj.pipi.cn/festatic/common/image/31d351d0084779bfbdfdb5b73bac5df9.png';
 export const twoTextLabel = 'https://obj.pipi.cn/festatic/common/image/6195393c57c64347cf3222e4d1708dee.png';
 
+
+export const redCheck = 'https://obj.pipi.cn/festatic/common/image/4fbca6628c4a75e92be99c2c0d1e27c1.png';
 export default {
   defaultMovieCover
 }

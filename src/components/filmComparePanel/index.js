@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView } from '@tarojs/components'
+import { View, Text, ScrollView } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import History from './history';
 import './index.scss'
 
-const { formatNumber } = utils;
+const { formatNumber, calcWeek } = utils;
 
 class _C extends React.Component {
   static defaultProps = {
@@ -17,26 +17,26 @@ class _C extends React.Component {
     filmDistributionItem: {},
   }
 
-  state = {
-    isSetSchedule:true,
-  }
-
-  handleSetSchedule = () =>{
-    this.setState({ isSetSchedule : !this.state.isSetSchedule});
-  }
-
   closeFn = () =>{
-    this.props.ongetCostom({});
-    this.setState({
-      isSetSchedule:true,
-    });
+    this.props.closeFn();
   }
 
 
   render() {
-    const { isSetSchedule} = this.state;
-    const { filmDistributionItem, show, titleHeight } = this.props;
-    const { originalReleaseDate, releaseDate,estimateBox, hasFixEstimateBox, keyFilms=[] } = filmDistributionItem;
+    const { 
+      showWeekType,
+      weekType,
+      data,
+      show,
+      titleHeight,
+      isSetSchedule,
+      hasFixEstimateBox,
+      estimateBox,
+      releaseDate,
+      historyList,
+    } = this.props;
+    const { keyFilms=[] } = data;
+    const { startDate, endDate } = releaseDate;
     const estimateBoxVal = formatNumber(isSetSchedule ? hasFixEstimateBox : estimateBox,'floor');
     const establishedFilmsNum = keyFilms.filter(v => v.scheduleType == 1).length;
     const hasEstimateBoxList = [];
@@ -48,24 +48,35 @@ class _C extends React.Component {
         noEstimateBoxList.push(item);
       }
     })
-    console.log(originalReleaseDate)
+
+
     return (
-      show &&
-      filmDistributionItem.length !== 0 && (
+      show && (
         <AtFloatLayout 
-          className='film-market-component'
-          isOpened={ show && filmDistributionItem.length !== 0 }
+          className='film-compare-panel-component'
+          isOpened={ show }
           scrollY={false}
           title='预估大盘'
           onClose={this.closeFn}
         >
+          {showWeekType && (
+            <View className="week-type-btn">
+              <View className={`release-week type-item ${weekType=='releaseWeek'?'active':''}`} onClick={()=>this.props.onWeekTypeChange('releaseWeek')}>按上映周</View>
+              <View className={`nature-week type-item ${weekType=='natureWeek'?'active':''}`} onClick={()=>this.props.onWeekTypeChange('natureWeek')}>按自然周</View>
+            </View>
+          )}
           <View className='title'>
             <View className='title-top'>
-              <Text className='releaseDate-section'>{dayjs(originalReleaseDate.startDate).format('YYYY-MM-DD')} - {dayjs(originalReleaseDate.endDate).format('YYYY-MM-DD')}</Text>
+              <Text className='releaseDate-section'>
+              {dayjs(startDate).format('YYYY.MM.DD')}&nbsp;({calcWeek(startDate)}) - {dayjs(endDate).format('YYYY.MM.DD')}&nbsp;({calcWeek(endDate)})
+              </Text>
               <View 
-                className={`schedule ${isSetSchedule ? 'already' : 'notYet'}`}
-                onClick={this.handleSetSchedule}
-              >已定档</View>
+                className={'schedule-btn-wrap'}
+                onClick={this.props.onChangeScheduleType}
+              >
+               <View className={`radio-btn ${isSetSchedule ? 'checked' : ''}`} />
+               <View className="text">已定档</View>
+              </View>
             </View>
             
             <View className='overview'>
@@ -87,19 +98,19 @@ class _C extends React.Component {
                   { !isSetSchedule && <View className='maybe'>含可能定档{keyFilms.length - establishedFilmsNum}部</View>}
                 </View>
               </View>
-              <History startDate={originalReleaseDate.startDate} endDate={originalReleaseDate.endDate} />
+              <History  dataList={historyList} />
             </View>
           </View>
 
           <ScrollView
             className='film-list'
-            style={`max-height: calc(100vh - 60rpx - 289rpx - ${isSetSchedule ? 0 : 53 }rpx - ${titleHeight}px)`}
+            style={{height: `1000rpx`}}
             scrollY
           >
             <View className='has-estimate-box-list'>
               {(isSetSchedule ? hasEstimateBoxList.filter(v => v.scheduleType == 1) : hasEstimateBoxList).map((item, index) => {
                 return (
-                  <ListItem item={item} key={index} orderNum={index+1} showNumber />
+                  <ListItem item={item} key={index} orderNum={index+1} showNumber totalBox={isSetSchedule ? hasFixEstimateBox : estimateBox} />
                 )
               })}
             </View>
@@ -107,12 +118,12 @@ class _C extends React.Component {
               <Text className='title-text'>以下{noEstimateBoxList.length}部影片暂无预估票房</Text>
               {(isSetSchedule ? noEstimateBoxList.filter(v => v.scheduleType == 1) : noEstimateBoxList).map((item, index) => {
                 return (
-                  <ListItem item={item} key={index} />
+                  <ListItem item={item} key={index} totalBox={isSetSchedule ? hasFixEstimateBox : estimateBox} />
                 )
               })}
             </View>
           </ScrollView>
-          {filmDistributionItem.keyFilms.length === 1 && (
+          {data.keyFilms.length === 1 && (
             <View className='noMore'>没有更多了</View>
           )}
         </AtFloatLayout>
