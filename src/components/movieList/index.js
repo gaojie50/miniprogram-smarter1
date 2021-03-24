@@ -22,6 +22,7 @@ Component({
     filterItemHidden10: Boolean,
     filterItemHidden11: Boolean,
     filterItemHidden12: Boolean,
+    filterItemHidden13: Boolean,
   },
   data: {
     scheduleType: {
