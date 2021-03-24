@@ -9,7 +9,10 @@ import "../src/static/fonts/iconfont.css";
 class App extends React.Component {
 
   componentDidShow(){
-    console.log('启动灵犀');
+    const accountInfo = Taro.getAccountInfoSync();
+    if([ 'develop', 'trial'].includes(accountInfo.miniProgram.envVersion)){
+      lx.dev(true);
+    }
     this.initReport()
     lx.setLch();
     lx.start(); // 应用启动
