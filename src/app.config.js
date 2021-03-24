@@ -1,12 +1,27 @@
 export default {
   pages: [
     'pages/list/index',
+    'pages/board/index',
     'pages/welcome/index',
     'pages/loginRedirect/index',
     'pages/searchProject/index',
     'pages/search/index',
     'pages/searchCompany/index',
   ],
+  tabBar: {
+    list: [{
+      'iconPath': 'static/tab/market.png',
+      'selectedIconPath': 'static/tab/market_active.png',
+      pagePath: 'pages/list/index',
+      text: '市场情报'
+    }, {
+      'iconPath': 'static/tab/board.png',
+      'selectedIconPath': 'static/tab/board_active.png',
+      pagePath: 'pages/board/index',
+      text: '项目看板'
+    }],
+    custom: true
+  },
   window: {
     navigationBarBackgroundColor: '#798CBA',
     backgroundTextStyle: 'light',
@@ -23,10 +38,6 @@ export default {
     },
     {
       root: "pages/addProject",
-      pages: ["index"]
-    },
-    {
-      root: "pages/board",
       pages: ["index"]
     },
     {

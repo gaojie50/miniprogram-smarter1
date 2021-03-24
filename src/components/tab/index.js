@@ -38,9 +38,16 @@ export default (props) => {
       fixed
       onClick={(val) => {
         if (val !== current) {
-          Taro.redirectTo({
-            url: isLogin ? `${ROUTER[val]}`: `/pages/welcome/index?target=${encodeURIComponent(ROUTER[val])}`
-          });
+          if( isLogin ){
+            Taro.switchTab({
+              url: `${ROUTER[val]}`
+            });
+          }else{
+            Taro.redirectTo({
+              url: `/pages/welcome/index?target=${encodeURIComponent(ROUTER[val])}`
+            })
+          }
+          
         }
       }}
     />
