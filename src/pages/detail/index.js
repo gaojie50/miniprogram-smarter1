@@ -551,12 +551,12 @@ export default class Detail extends React.Component {
         fileData={fileData} 
         cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})} 
       />
-      {showCompetePanel && <CompeteMarket
+      <CompeteMarket
         projectId={basicData?.projectId}
         releaseTime={keyData?.releaseTime}
         show={showCompetePanel}
         closeFn={this.handleCloseCompetePanel}
-      />}
+      />
     </View>
     )
   }

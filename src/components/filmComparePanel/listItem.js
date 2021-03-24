@@ -4,6 +4,8 @@ import Taro from '@tarojs/taro';
 import NumberLabel from '@components/numberLabel';
 import { scheduleType } from './constant';
 import utils from '@utils/index';
+import { picFn } from '@utils/pic';
+import { defaultMovieCover } from '@utils/imageUrl';
 import './listItem.scss';
 
 const { formatNumber } = utils;
@@ -29,7 +31,7 @@ export default function ListItem(props){
       key={item.maoyanId}
     >
     {showNumber && <NumberLabel number={orderNum} />}
-    <Image src={item.pic} alt></Image>
+    <Image src={item.pic ? picFn(item.pic) : defaultMovieCover} alt></Image>
     <View className='content-wrap'>
       <View className="main-info-wrap flex-item">
         <View className='movie-name'>{item.movieName}</View>
@@ -68,7 +70,7 @@ export default function ListItem(props){
         )}
         {item.wishNum && item.wishNum !== '-' && (
           <View className={`wishNum ${item.estimateBox ? '': 'first-line'}`}>
-            <Text className="value">{item.wishNum.num}{item.wishNum.unit}</Text>
+            <Text className="value">{formatNumber(item.wishNum).num}{formatNumber(item.wishNum).unit}</Text>
             <Text className="text">人想看</Text>
           </View>
         )}

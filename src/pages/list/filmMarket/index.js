@@ -1,4 +1,3 @@
-import { View, Text, ScrollView } from '@tarojs/components'
 import React, { useEffect, useState } from 'react'
 import Taro from '@tarojs/taro'
 import FilmComparePanel from '@components/filmComparePanel/index';
@@ -6,7 +5,7 @@ import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
 import './index.scss'
 
-const { errorHandle, formatNumber } = utils;
+const { errorHandle, rpxTopx } = utils;
 
 const FilmMarket=(props)=>{
   const [ isSetSchedule, setIsSetSchedule ] = useState(true);
@@ -62,7 +61,7 @@ const FilmMarket=(props)=>{
       scheduledFilmsNum={scheduledFilmsNum}
       closeFn={props.closeFn}
       historyList={historyList}
-      titleHeight={200}
+      filmListHeight={`calc(90vh - ${rpxTopx(460+150+20)}px)`}
     />
   )
 }

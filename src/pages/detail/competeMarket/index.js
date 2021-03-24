@@ -1,4 +1,3 @@
-import { View, Text, ScrollView } from '@tarojs/components'
 import React, { useEffect, useState } from 'react'
 import Taro from '@tarojs/taro'
 import FilmComparePanel from '@components/filmComparePanel/index';
@@ -9,7 +8,7 @@ import { defaultMovieCover } from '@utils/imageUrl';
 import { picFn } from '@utils/pic';
 import './index.scss'
 
-const { errorHandle } = utils;
+const { errorHandle, rpxTopx } = utils;
 
 const CompeteMarket=(props)=>{
   const [ isSetSchedule, setIsSetSchedule ] = useState(true);
@@ -23,7 +22,7 @@ const CompeteMarket=(props)=>{
   const [ releaseNum, setReleaseNum ] = useState(0);
   const [ possiblyReleaseNum, setPossiblyReleaseNum ] = useState(0);
   
-  const { data, show } = props;
+  const { show } = props;
 
   function handleChangeScheduleType(){
     setIsSetSchedule(!isSetSchedule);
@@ -79,7 +78,7 @@ const CompeteMarket=(props)=>{
     }).then(res =>{
       const { success, data = {},error } = res;
       if (success) {
-        const filmList = (data.competitiveSituationDetailList || []).map(item=>{
+        const newFilmList = (data.competitiveSituationDetailList || []).map(item=>{
           return {
             projectId: item.projectId,
             movieName: item.name,
@@ -89,9 +88,10 @@ const CompeteMarket=(props)=>{
             estimateBox: item.estimateNum,
             releaseDesc: item.time,
             maoyanSign: item.maoyanSign || [],
+            wishNum: item.wishNum || null
           }
         })
-        setFilmList(filmList)
+        setFilmList(newFilmList)
         setEstimateTotalNum(data.estimateTotalNum || 0);
         setPossiblyEstimateTotalNum(data.possiblyEstimateTotalNum || 0);
         setReleaseNum(data.releaseNum || 0);
@@ -150,6 +150,7 @@ const CompeteMarket=(props)=>{
       closeFn={props.closeFn}
       historyList={historyList}
       titleHeight={200}
+      filmListHeight={`calc(90vh - ${rpxTopx(460+150+20+70)}px)`}
     />
   )
 }

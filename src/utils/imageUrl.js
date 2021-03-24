@@ -9,5 +9,8 @@ export const twoTextLabel = 'https://obj.pipi.cn/festatic/common/image/6195393c5
 
 export const redCheck = 'https://obj.pipi.cn/festatic/common/image/4fbca6628c4a75e92be99c2c0d1e27c1.png';
 export default {
-  defaultMovieCover
+  defaultMovieCover,
+  fourTextLabel,
+  threeTextLabel,
+  twoTextLabel,
 }

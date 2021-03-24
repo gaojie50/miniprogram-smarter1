@@ -226,10 +226,6 @@ class _C extends React.Component {
               if (!item2.maoyanId) {
                 item2.maoyanId = 0
               }
-              item2.pic = item2.pic
-                ? `${item2.pic.replace('/w.h/', '/460.660/')}`
-                : `../../static/icon/default-pic.svg`
-              item2.wishNum = formatNumber(item2.wishNum)
             })
           }
           item.originalReleaseDate = item.releaseDate;
@@ -1139,11 +1135,12 @@ class _C extends React.Component {
                 costomShow={costomShow}
               ></CostumListItem>
             </View>
-            {isShowFilmMarket && <FilmMarket
+            <FilmMarket
               data={filmDistributionItem}
               closeFn={this.ongetCostom}
               show={isShowFilmMarket}
-              titleHeight={titleHeight} />}
+              titleHeight={titleHeight}
+            />
           </View>
         )}
         <Tab isLogin={isLogin} />

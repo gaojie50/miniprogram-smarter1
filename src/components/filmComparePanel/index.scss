@@ -1,10 +1,16 @@
 .film-compare-panel-component {
   .at-float-layout__container {
-    height: 85% !important;
-    max-height: 85%;
+    min-height: 50vh !important;
+    max-height: 90vh !important;
+    height: 90vh !important;
+    .layout-body__content {
+      min-height: 10px !important;
+      max-height: calc(90vh - 150px) !important;
+      height: calc(90vh - 150px) !important;
+    }
   }
-  .no-estimate-box-list {
-    margin-top: 30px;
+  
+  .list-item {
     .title-text {
       font-weight: 400;
       font-size: 24px;
@@ -13,6 +19,11 @@
       margin-bottom: 10px;
     }
   }
+  .no-estimate-box-list {
+    padding-top: 30px;
+  }
+  
+
   .week-type-btn {
     width: 316px;
     height: 64px;
@@ -107,6 +118,8 @@
       }
       .predict-panel {
         border-bottom: 1PX solid #E5E5E5;
+        height: 174px;
+        box-sizing: border-box;
       }
       .title {
         font-weight: 400;
@@ -151,10 +164,11 @@
 
 
 
-.noMore {
+.no-more {
   height: 90px;
   line-height: 150px;
   text-align: center;
   font-size: 24px;
   color: #999999;
+  padding-bottom: 100px;
 }
