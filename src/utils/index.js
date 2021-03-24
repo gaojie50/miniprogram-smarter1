@@ -453,6 +453,11 @@ function isDockingPerson(role){
   return [0, 1].includes(role);
 }
 
+const formatPercent = (value, decimals = 0) => {
+  if (value == null) return '-';
+  value = (value * 100).toFixed(decimals);
+  return +value == 0 ? '-' : `${value}%`;
+};
 
 export default {
   errorHandle,
@@ -476,5 +481,6 @@ export default {
   hexColorToRgba,
   rgbaToHexColor,
   previewFile,
-  isDockingPerson
+  isDockingPerson,
+  formatPercent,
 }
