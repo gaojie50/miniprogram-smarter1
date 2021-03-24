@@ -549,7 +549,9 @@ export default class Detail extends React.Component {
       <ProjectFile 
         show={showProjectFile} 
         fileData={fileData} 
+        projectId={basicData.projectId}
         cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})} 
+        fetchProjectFile={()=>this.fetchProjectFile()}
       />
       <CompeteMarket
         projectId={basicData?.projectId}
