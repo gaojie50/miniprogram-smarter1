@@ -119,7 +119,6 @@ class _C extends React.Component {
     if( token || localToken ){
       // 校验账号状态
       auth.checkLogin().then(res=>{
-        const { authInfo } = res;
         if(res.isLogin){
           target && Taro.navigateTo({ url: decodeURIComponent(target) });
 
@@ -171,7 +170,7 @@ class _C extends React.Component {
           })
         }else{
           Taro.redirectTo({
-            url: `/pages/welcome/index?target=${encodeURIComponent(`/pages/assess/index/index?projectId=14332&roundId=382`)}`
+            url: this.state.loginUrl
           })
         }
       }).catch(err=>{
