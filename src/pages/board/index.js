@@ -1,11 +1,11 @@
-import { Block, View, Image, Text, ScrollView, } from '@tarojs/components';
+import { View, Image, Text, ScrollView, } from '@tarojs/components';
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
-import Taro, { useShareAppMessage, useDidShow } from '@tarojs/taro';
+import Taro, { useDidShow } from '@tarojs/taro';
 import lx from '@analytics/wechat-sdk';
 import utils from '../../utils/index.js';
 import { picFn } from '../../utils/pic';
 import projectConfig from '../../constant/project-config.js';
-import { set as setGlobalData, get as getGlobalData } from '../../global_data';
+import { get as getGlobalData } from '../../global_data';
 import { useFilterPanel, PROJECT_STAGE_MAPPING } from './filterPanel';
 import Tab from '../../components/tab';
 import FButton from '../../components/m5/fab';
@@ -22,20 +22,15 @@ const labelBgMap = {
   3: threeTextLabel,
   4: fourTextLabel
 }
-const { getMaoyanSignLabel } = projectConfig
+
 const {
   rpxTopx,
   formatNumber,
-  formatDirector,
-  getFutureTimePeriod,
-  handleReleaseDesc,
   handleNewDate,
-  formatWeekDate,
   debounce,
 } = utils
 const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
-const barHeight = getGlobalData('barHeight')
 
 function strip(num, precision = 12) {
   return +parseFloat(num.toPrecision(precision));
