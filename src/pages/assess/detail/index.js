@@ -7,10 +7,6 @@ import _merge from 'lodash/merge';
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';
 import FixedButton from '@components/fixedButton';
 import Indexes from '@components/indexes';
-
-
-import '@components/m5/style/components/action-sheet.scss';
-import '@components/m5/style/components/float-layout.scss';
 import './index.scss'
 
 const { errorHandle } = utils;
