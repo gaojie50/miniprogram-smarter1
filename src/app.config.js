@@ -2,11 +2,6 @@ export default {
   pages: [
     'pages/list/index',
     'pages/board/index',
-    'pages/welcome/index',
-    'pages/loginRedirect/index',
-    'pages/searchProject/index',
-    'pages/search/index',
-    'pages/searchCompany/index',
   ],
   tabBar: {
     list: [{
@@ -32,6 +27,26 @@ export default {
   sitemapLocation: 'sitemap.json',
   useExtendedLib: { weui: true },
   subpackages: [
+    {
+      root: 'pages/welcome',
+      pages: ["index"]
+    },
+    {
+      root:"pages/loginRedirect",
+      pages: ["index"]
+    },
+    {
+      root:"pages/searchProject",
+      pages: ["index"]
+    },
+    {
+      root:"pages/search",
+      pages: ["index"]
+    },
+    {
+      root:"pages/searchCompany",
+      pages: ["index"]
+    },
     {
       root:"pages/boxForecasting",
       pages: ["index"]

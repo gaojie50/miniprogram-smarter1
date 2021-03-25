@@ -8,7 +8,7 @@ import CostumListItem from '../../components/costomListItem/index'
 import FilterPanel from '../../components/filterPanel/index'
 import Backdrop from '../../components/backdrop/index'
 import FilmDistribution from '../../components/filmDistribution/index'
-import { set as setGlobalData, get as getGlobalData } from '../../global_data'
+import { get as getGlobalData } from '../../global_data'
 import Tab from '../../components/tab';
 import auth from '@utils/auth';
 import './index.scss'

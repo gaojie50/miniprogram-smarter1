@@ -1,8 +1,7 @@
-import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
+import { View, Image, Text, ScrollView } from '@tarojs/components'
 import React from 'react';
 import Taro from '@tarojs/taro';
 import lx from '@analytics/wechat-sdk';
-import { AtTabs, AtTabsPane } from '@components/m5';
 import BasicData from './basicData';
 import KeyData from './keyData';
 import FollowStatus from './followStatus';
@@ -10,7 +9,7 @@ import Cooper from './cooperStatus';
 import { UseHistory } from '../board/history';
 import { EvaluationList } from '../board/evaluate';
 import { CooperStatus } from './constant';
-import { set as setGlobalData, get as getGlobalData } from '../../global_data';
+import { get as getGlobalData } from '../../global_data';
 import AddingProcess from '@components/addingProcess';
 import FloatLayout from '@components/m5/float-layout';
 import utils from '@utils/index.js'
