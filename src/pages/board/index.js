@@ -1,15 +1,16 @@
-import { Block, View, Image, Text, ScrollView, } from '@tarojs/components'
-import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
-import Taro, { useShareAppMessage } from '@tarojs/taro'
-import utils from '../../utils/index.js'
+import { View, Image, Text, ScrollView, } from '@tarojs/components';
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
+import Taro, { useDidShow } from '@tarojs/taro';
+import lx from '@analytics/wechat-sdk';
+import utils from '../../utils/index.js';
 import { picFn } from '../../utils/pic';
-import projectConfig from '../../constant/project-config.js'
-import { set as setGlobalData, get as getGlobalData } from '../../global_data'
+import projectConfig from '../../constant/project-config.js';
+import { get as getGlobalData } from '../../global_data';
 import { useFilterPanel, PROJECT_STAGE_MAPPING } from './filterPanel';
 import Tab from '../../components/tab';
-import FButton from '../../components/m5/fab'
+import FButton from '../../components/m5/fab';
 import '../../components/m5/style/components/fab.scss';
-import './index.scss'
+import './index.scss';
 import DefaultPic from '../../static/detail/cover.png';
 import NoData from '../../components/noData';
 import NoAccess from '@components/noAccess';
@@ -21,20 +22,15 @@ const labelBgMap = {
   3: threeTextLabel,
   4: fourTextLabel
 }
-const { getMaoyanSignLabel } = projectConfig
+
 const {
   rpxTopx,
   formatNumber,
-  formatDirector,
-  getFutureTimePeriod,
-  handleReleaseDesc,
   handleNewDate,
-  formatWeekDate,
   debounce,
 } = utils
 const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
-const barHeight = getGlobalData('barHeight')
 
 function strip(num, precision = 12) {
   return +parseFloat(num.toPrecision(precision));
@@ -120,6 +116,11 @@ export default function Board() {
   const [hasPagePermission, setHasPagePermission] = useState(false);
 
 
+  useDidShow(() => {
+    lx.pageView('c_movie_b_u8nui5w0');
+  })
+  
+  
   useEffect(()=>{
     const authInfo = Taro.getStorageSync('authinfo');
     if(  authInfo &&

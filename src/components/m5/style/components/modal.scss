@@ -37,7 +37,7 @@ $at-modal-duration: 200ms;
     @include hairline-bottom-relative($color: $color-grey-4);
     @include line(1);
 
-    padding: $spacing-v-md $spacing-h-lg;
+    padding: 30px 30px 50px;
     color: $at-modal-header-text-color;
     font-size: $font-size-lg;
     text-align: center;

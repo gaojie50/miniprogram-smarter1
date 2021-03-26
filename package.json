@@ -18,6 +18,7 @@
     "build:qq": "taro build --type qq",
     "build:jd": "taro build --type jd",
     "build:quickapp": "taro build --type quickapp",
+    "ci-build": "npm run build:weapp",
     "dev:weapp": "npm run build:weapp -- --watch",
     "dev:swan": "npm run build:swan -- --watch",
     "dev:alipay": "npm run build:alipay -- --watch",
@@ -35,6 +36,7 @@
   ],
   "author": "",
   "dependencies": {
+    "@analytics/wechat-sdk": "^3.1.2",
     "@babel/runtime": "^7.7.7",
     "@tarojs/components": "3.0.13",
     "@tarojs/react": "3.0.13",

@@ -1,0 +1,105 @@
+.list-item-wrap {
+  display: flex;
+  font-size: 24px;
+  color: #666666;
+  padding: 30px 0;
+  position: relative;;
+  .number-label-component {
+    top: 30px;
+    border-radius: 10px 0 10px 0;
+  }
+  image {
+    width: 100px;
+    height: 140px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    margin-right: 24px;
+    flex-shrink: 0;
+  }
+
+  .content-wrap {
+    display: flex;
+    justify-content: space-between;
+    width: 690px;
+    .main-info-wrap {
+      max-width: 400px;
+    }
+    .value-info-wrap {
+      text-align: right;
+    }
+    .movie-name {
+      font-weight: 500;
+      font-size: 34px;
+      color: #333333;
+      line-height: 36px;
+    }
+    .movie-sign-wrap {
+      margin-top: 20px;
+      .sign-item {
+        display: inline-block;
+        font-weight: 400;
+        font-size: 22px;
+        color: #F1303D;
+        line-height: 24px;
+        padding: 6px 10px;
+        border: 1PX solid #F1303D;
+        border-radius: 4px;
+        margin-right: 6px;
+      }
+    }
+    .director {
+      font-weight: 400;
+      font-size: 24px;
+      color: #666666;
+      line-height: 34px;
+      margin-top: 15px;
+    }
+    .schedule-info {
+      font-weight: 400;
+      font-size: 24px;
+      color: #666666;
+      line-height: 34px;
+      margin-top: 4px;
+      scheduletype {
+        display: inline-block;
+      }
+    }
+
+    .estimate-box {
+      color: #F1303D;
+      line-height: 36px;
+      margin-bottom: 24px;
+      .text {
+        font-size: 24px;
+      }
+      .value {
+        font-size: 34px;
+        font-family: MaoYanHeiTi-H1;
+      }
+    }
+    .estimate-rate, .wishNum {
+      font-weight: 400;
+      font-size: 24px;
+      color: #666666;
+      text-align: right;
+      line-height: 34px;
+      margin-bottom: 4px;
+      .value {
+        font-size: 24px;
+        font-family: MaoYanHeiTi-H1;
+      }
+    }
+    .wishNum.first-line {
+      font-weight: 400;
+      font-size: 24px;
+      color: #FF9034;
+      text-align: right;
+      line-height: 36px;
+      .value {
+        font-size: 34px;
+        font-family: MaoYanHeiTi-H1;
+      }
+    }
+  }
+  
+}

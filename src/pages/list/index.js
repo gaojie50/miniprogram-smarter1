@@ -3,16 +3,16 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
-
-import FilmDetailList from '../../components/filmDetailList/index'
+import FilmMarket from './filmMarket/index'
 import CostumListItem from '../../components/costomListItem/index'
 import FilterPanel from '../../components/filterPanel/index'
 import Backdrop from '../../components/backdrop/index'
 import FilmDistribution from '../../components/filmDistribution/index'
-import { set as setGlobalData, get as getGlobalData } from '../../global_data'
+import { get as getGlobalData } from '../../global_data'
 import Tab from '../../components/tab';
 import auth from '@utils/auth';
 import './index.scss'
+import lx from '@analytics/wechat-sdk';
 
 const { getMaoyanSignLabel } = projectConfig
 
@@ -91,7 +91,7 @@ class _C extends React.Component {
     dateText: '未来1年',
     filterItemHidden10: true,
     filterItemHidden11: true,
-    isShowFilmDetailList: false,
+    isShowFilmMarket: false,
     filmDistributionList: [],
     filmDistributionItem: {},
     filmLoading: false,
@@ -119,7 +119,6 @@ class _C extends React.Component {
     if( token || localToken ){
       // 校验账号状态
       auth.checkLogin().then(res=>{
-        const { authInfo } = res;
         if(res.isLogin){
           target && Taro.navigateTo({ url: decodeURIComponent(target) });
 
@@ -171,7 +170,7 @@ class _C extends React.Component {
           })
         }else{
           Taro.redirectTo({
-            url: `/pages/welcome/index?target=${encodeURIComponent(`/pages/assess/index/index?projectId=14332&roundId=382`)}`
+            url: this.state.loginUrl
           })
         }
       }).catch(err=>{
@@ -189,6 +188,10 @@ class _C extends React.Component {
     },()=>{
       this._fetchData(this.state.dateSelect)
     });
+  }
+
+  componentDidShow = () => {
+    lx.pageView('c_movie_b_i71nil35')
   }
 
   fetchfilmDistribution = () => {
@@ -222,15 +225,9 @@ class _C extends React.Component {
               if (!item2.maoyanId) {
                 item2.maoyanId = 0
               }
-              if (item2.estimateBox) {
-                item2.estimateBox = formatNumber(item2.estimateBox)
-              }
-              item2.pic = item2.pic
-                ? `${item2.pic.replace('/w.h/', '/460.660/')}`
-                : `../../static/icon/default-pic.svg`
-              item2.wishNum = formatNumber(item2.wishNum)
             })
           }
+          item.originalReleaseDate = item.releaseDate;
           item.releaseDate = formatWeekDate(item.releaseDate)
         })
 
@@ -484,16 +481,17 @@ class _C extends React.Component {
       backdropShow: '',
       filterActive: '',
       costomShow: false,
-      isShowFilmDetailList: false,
+      isShowFilmMarket: false,
       isScroll: true,
     })
   }
 
   ongetCostom = (e) => {
+ 
     const dataList = this.state
     dataList.backdropShow = ''
     dataList.costomShow = false
-    dataList.isShowFilmDetailList = false
+    dataList.isShowFilmMarket = false
     dataList.toView = ''
     if (Array.isArray(e)) {
       dataList.filterItemHidden = e
@@ -517,7 +515,7 @@ class _C extends React.Component {
     dataList.filterItemHidden.map((item, index) => {
       dataList[`filterItemHidden${item}`] = true
     })
-    for (let i = 1; i < 13; i++) {
+    for (let i = 1; i < 14; i++) {
       if (dataList.filterItemHidden.indexOf(i) === -1) {
         dataList[`filterItemHidden${i}`] = false
       }
@@ -703,7 +701,7 @@ class _C extends React.Component {
       this.setState({
         filmDistributionItem,
         backdropShow: 'costom',
-        isShowFilmDetailList: true,
+        isShowFilmMarket: true,
       })
   }
 
@@ -792,9 +790,10 @@ class _C extends React.Component {
       filterItemHidden10,
       filterItemHidden11,
       filterItemHidden12,
+      filterItemHidden13,
       costomShow,
       filmDistributionItem,
-      isShowFilmDetailList,
+      isShowFilmMarket,
       curPagePermission,
       isScroll,
       yMaxLength,
@@ -1121,6 +1120,7 @@ class _C extends React.Component {
                           filterItemHidden10={filterItemHidden10}
                           filterItemHidden11={filterItemHidden11}
                           filterItemHidden12={filterItemHidden12}
+                          filterItemHidden13={filterItemHidden13}
                         />
                       </View>
                     )}
@@ -1137,11 +1137,12 @@ class _C extends React.Component {
                 costomShow={costomShow}
               ></CostumListItem>
             </View>
-            <FilmDetailList
-              filmDistributionItem={filmDistributionItem}
-              ongetCostom={this.ongetCostom}
-              show={isShowFilmDetailList}
-              titleHeight={titleHeight} />
+            <FilmMarket
+              data={filmDistributionItem}
+              closeFn={this.ongetCostom}
+              show={isShowFilmMarket}
+              titleHeight={titleHeight}
+            />
           </View>
         )}
         <Tab isLogin={isLogin} />
