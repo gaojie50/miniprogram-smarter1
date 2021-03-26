@@ -30,12 +30,12 @@ export default function ReferenceConditions({ basicData, formData, changeFormDat
     <View className="conditions">
       <View className="detail">
         <View className="title">上映时间</View>
-        <View className="cont">{dayjs(releaseTime).format('YYYY.MM.DD')}</View>
+        <View className="cont">{releaseTime ? dayjs(releaseTime).format('YYYY.MM.DD') : '-'}</View>
       </View>
 
       <View className="detail">
         <View className="title">制作成本</View>
-        <View className="cont">{cost || '-'}</View>
+        <View className="cont">{cost ? `${cost}万` : '-'}</View>
       </View>
 
       <View className="detail">
@@ -45,7 +45,7 @@ export default function ReferenceConditions({ basicData, formData, changeFormDat
 
       <View className="detail">
         <View className="title">猫眼想看</View>
-        <View className="cont">{wishNum || '-'}</View>
+        <View className="cont">{wishNum ? `${wishNum}万` : '-'}</View>
       </View>
 
       <View className="detail">
@@ -55,12 +55,20 @@ export default function ReferenceConditions({ basicData, formData, changeFormDat
 
       <View className="detail">
         <View className="title">导演</View>
-        <View className="cont">{newDirector.join(' / ')}</View>
+        <View className="cont">{
+          newDirector.length > 0 ?
+            newDirector.join(' / ') :
+            '-'
+        }</View>
       </View>
 
       <View className="detail">
         <View className="title">主演</View>
-        <View className="cont">{newMainRole.join(' / ')}</View>
+        <View className="cont">{
+          newMainRole.length > 0 ?
+            newMainRole.join(' / ') :
+            '-'
+        }</View>
       </View>
     </View>
 
@@ -73,7 +81,7 @@ export default function ReferenceConditions({ basicData, formData, changeFormDat
       <Conditions
         changeFormData={changeFormData}
         formData={formData}
-        closeEvt={()=>controlModal(false)} />
+        controlModal={(val=false)=>controlModal(val)} />
 
     </FloatLayout>
   </View>
