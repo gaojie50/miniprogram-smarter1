@@ -18,7 +18,7 @@ class _C extends React.Component {
     const costomWrap = this.state
     const costomActiveList = []
     costomWrap[`costom${num}`] = !costomWrap[`costom${num}`]
-    for (let i = 1; i < 13; i++) {
+    for (let i = 1; i < 14; i++) {
       if (costomWrap[`costom${i}`]) {
         costomActiveList.push(costomWrap[`costom${i}`])
       }
@@ -54,11 +54,12 @@ class _C extends React.Component {
 
   tapDefined = () => {
     const costomList = []
-    for (let i = 1; i < 13; i++) {
+    for (let i = 1; i < 14; i++) {
       if (this.state[`costom${i}`]) {
         costomList.push(i)
       }
     }
+
     if (costomList.length < 9) {
       this.props.ongetCostom(costomList)
     }
@@ -82,6 +83,7 @@ class _C extends React.Component {
       costom10,
       costom11,
       costom12,
+      costom13,
     } = this.state
     const { costomShow } = this.props;
     return (
@@ -127,9 +129,17 @@ class _C extends React.Component {
               预估评分
             </View>
             <View
+              data-num="13"
+              onClick={this.tapCostom}
+              className={'listWrapItem ' + (costom13 ? 'costomActive' : '')}
+            >
+              主控方
+            </View>
+            <View
               data-num="5"
               onClick={this.tapCostom}
               className={'listWrapItem ' + (costom5 ? 'costomActive' : '')}
+              style="margin-right: 0;"
             >
               主出品
             </View>
@@ -137,7 +147,6 @@ class _C extends React.Component {
               data-num="6"
               onClick={this.tapCostom}
               className={'listWrapItem ' + (costom6 ? 'costomActive' : '')}
-              style="margin-right: 0;"
             >
               主发行
             </View>
