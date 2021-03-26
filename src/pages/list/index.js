@@ -487,6 +487,7 @@ class _C extends React.Component {
   }
 
   ongetCostom = (e) => {
+ 
     const dataList = this.state
     dataList.backdropShow = ''
     dataList.costomShow = false
@@ -514,7 +515,7 @@ class _C extends React.Component {
     dataList.filterItemHidden.map((item, index) => {
       dataList[`filterItemHidden${item}`] = true
     })
-    for (let i = 1; i < 13; i++) {
+    for (let i = 1; i < 14; i++) {
       if (dataList.filterItemHidden.indexOf(i) === -1) {
         dataList[`filterItemHidden${i}`] = false
       }
@@ -789,6 +790,7 @@ class _C extends React.Component {
       filterItemHidden10,
       filterItemHidden11,
       filterItemHidden12,
+      filterItemHidden13,
       costomShow,
       filmDistributionItem,
       isShowFilmMarket,
@@ -1118,6 +1120,7 @@ class _C extends React.Component {
                           filterItemHidden10={filterItemHidden10}
                           filterItemHidden11={filterItemHidden11}
                           filterItemHidden12={filterItemHidden12}
+                          filterItemHidden13={filterItemHidden13}
                         />
                       </View>
                     )}

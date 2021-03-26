@@ -139,7 +139,7 @@ export default class Detail extends React.Component {
     let param = {};
 
     page.forEach(x => {
-      if(x.route === 'pages/detail/index') {
+      if(x.__route__ === 'pages/detail/index') {
         if(x.options.projectId && x.options.projectId !== '' && x.options.projectId !== '0') {
           param.projectId = x.options.projectId
         } else {
@@ -147,6 +147,7 @@ export default class Detail extends React.Component {
         }
       }
     })
+  
     reqPacking({
       url: 'api/management/projectInfo',
       data: param
@@ -543,6 +544,8 @@ export default class Detail extends React.Component {
       <FacePeople 
         show={showPeople} 
         peopleData={peopleData} 
+        judgeRole={judgeRole}
+        fetchPeople={() => this.fetchBasicData()}
         cancelShow={() => this.setState({showPeople: false, stopScroll: false})}
       />
       <ProjectFile 
