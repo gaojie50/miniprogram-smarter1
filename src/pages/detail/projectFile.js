@@ -127,7 +127,6 @@ export default function ProjectFile(props) {
   }
 
   return (
-    <View><View className="ss">sdds</View>
     <FloatCard scrollY={false} className="projectFile" onClose={() => props.cancelShow()} isOpened={show}>
       <View className="title">
         <Text>项目文件({fileData.length})</Text>
@@ -176,7 +175,6 @@ export default function ProjectFile(props) {
       </View>
       <FixedButton onClick={addFile}>添加文件</FixedButton>
     </FloatCard>
-    </View>
   )
 }
 
