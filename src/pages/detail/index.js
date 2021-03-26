@@ -479,7 +479,7 @@ export default class Detail extends React.Component {
             <View className="num">{releaseDataList.releaseNum || '-'}部 <Text className="arrow" /></View>
           </View>
         </View> :
-        <View className="machine-eval-btn">
+        <View className="machine-eval-btn" onClick={this.goToBoxForecasting}>
           {textFn()}
         </View>
         ) : "" }

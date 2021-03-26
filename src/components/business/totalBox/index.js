@@ -5,16 +5,23 @@ import './index.scss';
 
 const {formatNumber,formatPercent} = utils;
 
-export default function TotalBox({keyData,handleInsteadBox}) {
-  const {describe,machineEstimateBoxDetail,num} = keyData?.estimateBox||{};
-  const {estimateNum,boxSectionRatio=[]} = machineEstimateBoxDetail || {};
+export default function TotalBox({totalData = {}, handleInsteadBox}) {
+  const {
+    estimateNum,
+    dateShow,
+    boxSectionRatio=[],
+    model,
+  } = totalData;
 
   return <View className="total-box">
-    <View className="h2">预估总票房</View>
+    <View className="h2">
+      预估总票房
+      <Text className="model">{model}</Text>
+    </View>
 
     <View className="box">{formatNumber(estimateNum)?.num}
       <Text className="unit">{formatNumber(estimateNum)?.unit}</Text>
-      <Text className="time">{describe}</Text>
+      <Text className="time">{dateShow}</Text>
     </View>
     <View className="change-btn" onClick={handleInsteadBox}>替换为最新预估总票房</View>
 
