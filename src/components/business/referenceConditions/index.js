@@ -1,10 +1,80 @@
 import React, { useState } from 'react';
 import { View, Image, Text } from '@tarojs/components';
+import FloatLayout from '@components/m5/float-layout';
+import dayjs from 'dayjs';
+import Conditions from './conditions';
 import './index.scss';
 
 
-export default function ReferenceConditions() {
+export default function ReferenceConditions({ basicData, formData, changeFormData,stopScrollEvt }) {
+  const { newMainRole = [], newDirector = [] } = basicData;
+  const {
+    wishNum,
+    estimateScore,
+    cost,
+    ticketExponent,
+    releaseTime,
+  } = formData || {};
+  const [showConditions, setShowConditions] = useState(false);
+
+  const controlModal = (bool=false) => {
+    stopScrollEvt(bool);
+    setShowConditions(bool);
+  }
+
   return <View className="reference-conditions">
-    123
+    <View className="h2">预测参考条件
+      <View className="modify-btn" onClick={ () => controlModal(true)}>修改条件</View>
+    </View>
+
+    <View className="conditions">
+      <View className="detail">
+        <View className="title">上映时间</View>
+        <View className="cont">{dayjs(releaseTime).format('YYYY.MM.DD')}</View>
+      </View>
+
+      <View className="detail">
+        <View className="title">制作成本</View>
+        <View className="cont">{cost || '-'}</View>
+      </View>
+
+      <View className="detail">
+        <View className="title">猫眼评分</View>
+        <View className="cont">{estimateScore || '-'}</View>
+      </View>
+
+      <View className="detail">
+        <View className="title">猫眼想看</View>
+        <View className="cont">{wishNum || '-'}</View>
+      </View>
+
+      <View className="detail">
+        <View className="title">购票指数</View>
+        <View className="cont">{ticketExponent || '-'}</View>
+      </View>
+
+      <View className="detail">
+        <View className="title">导演</View>
+        <View className="cont">{newDirector.join(' / ')}</View>
+      </View>
+
+      <View className="detail">
+        <View className="title">主演</View>
+        <View className="cont">{newMainRole.join(' / ')}</View>
+      </View>
+    </View>
+
+    <FloatLayout
+      // scrollY={false}
+      isOpened={showConditions}
+      className="conditions-modal"
+      onClose={()=>controlModal(false)}>
+
+      <Conditions
+        changeFormData={changeFormData}
+        formData={formData}
+        closeEvt={()=>controlModal(false)} />
+
+    </FloatLayout>
   </View>
 }
