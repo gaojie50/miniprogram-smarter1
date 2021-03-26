@@ -104,7 +104,7 @@ const CompeteMarket=(props)=>{
 
   const fetchHistoryList = () => {
     const reqParams = {
-      closeNum: 6,
+      closeNum: 5,
       startDt: startDate,
       endDt: endDate,
       projectId: props.projectId

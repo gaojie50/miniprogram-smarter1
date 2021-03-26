@@ -22,7 +22,7 @@ export default function ListItem(props){
       url: `/pages/detail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
     })
   }
-  
+
   return (
     <View
       className='list-item-wrap'
