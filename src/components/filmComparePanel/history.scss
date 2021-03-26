@@ -1,0 +1,24 @@
+.history-list-wrap {
+  width: 336px;
+  background: #F8F8F8;
+  border-radius: 10px;
+  font-weight: 400;
+  font-size: 24px;
+  color: #333333;
+  line-height: 28px;
+  box-sizing: border-box;
+  padding: 30px 20px;
+  flex-shrink: 0;
+  .content-wrap {
+    display: flex;
+    justify-content: space-between;
+    .column {
+      .text {
+        margin-top: 20px;
+      }
+      .value {
+        font-family: MaoYanHeiTi-H1;
+      }
+    }
+  }
+}

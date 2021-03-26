@@ -43,7 +43,7 @@ export default function keepLogin(params) {
                   if(res.isLogin){
                     setGlobalData('authinfo', authInfo)
                     Taro.setStorageSync('authinfo', authInfo);
-                    Taro.redirectTo({ url: addUrlArg(continueUrl, 'token', accessToken) })
+                    Taro.reLaunch({ url: addUrlArg(continueUrl, 'token', accessToken) })
                   }
                 }).catch(res=>{
                   errorHandle(res);
