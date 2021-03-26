@@ -6,6 +6,12 @@ import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import './index.scss';
 
+const types = {
+  mainControl: '主控方',
+  producer: '出品方',
+  issuer: '发行方',
+}
+
 export default function SearchCompany() {
   const [focus, setFocus] = useState(false);
   const [type, setType] = useState('producer');
@@ -29,14 +35,14 @@ export default function SearchCompany() {
 
     eventChannel.on("acceptDataFromOpenerPage",(res)=>{
       if(res.type) {
-        const title = res.type === 'producer' ? '出品方' : '发行方';
+        const title = types[res.type];
         Taro.setNavigationBarTitle({title});
         setType(res.type);
       }
       if(res.data) {
-        setFirstDataList(res.data[res.type]);
-        setList(res.data[res.type]);
-        res.data[res.type].map((item, index) => {
+        setFirstDataList(res.data[res.type] || []);
+        setList(res.data[res.type] || []);
+        res.data[res.type] && res.data[res.type].map((item, index) => {
           radioChecked.push(index);
         })
       }
@@ -105,7 +111,7 @@ export default function SearchCompany() {
             return
           }
         }
-    
+
         firstDataList.push(list[item]);
         radioChecked.push(radioChecked.length);
       })
@@ -114,10 +120,17 @@ export default function SearchCompany() {
       setInputValue('');
       setSearchChecked([]);
     } else {
+      const newList = list.filter((item, index) => radioChecked.indexOf(index) !== -1);
+      if(type === 'mainControl' && newList.length > 1) {
+        Taro.showToast({
+          title: '只能选择一个主控方',
+          icon: 'none'
+        })
+        return
+      }
       const pages =Taro.getCurrentPages();
       const current = pages[pages.length - 1];
       const eventChannel = current.getOpenerEventChannel();
-      const newList = list.filter((item, index) => radioChecked.indexOf(index) !== -1);
 
       eventChannel.emit('submitData', newList)
       Taro.navigateBack()
@@ -130,9 +143,9 @@ export default function SearchCompany() {
         <View className="edit-search-company-wrap">
           <View className="edit-search-company-bar" style={{width: focus || inputValue !== '' ? '612rpx' : '690rpx'}}>
             <Image src="../../../static/icon/search.png" alt=""></Image>
-            <Input value={inputValue} onInput={e => handleSearch(e)} placeholder={type === 'producer' ? '搜索并添加出品方' : '搜索并添加发行方'} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} className="edit-search-company-bar-input"></Input>
+            <Input value={inputValue} onInput={e => handleSearch(e)} placeholder={`搜索并添加${types[type]}`} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} className="edit-search-company-bar-input"></Input>
             {loading && (<View className="loading"><mpLoading type="circle" show={true} tips="" /></View>)}
-            {focus || inputValue !== '' ? <View className="cancel" onClick={()=> {setInputValue(''); setList(firstDataList);setSearchChecked([]);}}>取消</View> : null}
+            {(focus || inputValue !== '') ? <View className="cancel" onClick={()=> {setInputValue(''); setList(firstDataList);setSearchChecked([]);}}>取消</View> : null}
           </View>
         </View>
       </View>
@@ -142,8 +155,9 @@ export default function SearchCompany() {
             return <View className="edit-rearch-result-item" key={ index }>
               <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={inputValue === '' && radioChecked.indexOf(index) !== -1} />
               <View className="right">
-                <label className={(mainIndex === index) && (inputValue === '') ? "border main" : "border"}>
+                <label className="border">
                   <Image></Image>
+                  {(type !== 'mainControl') && (mainIndex === index) && (inputValue === '') ? <View className="tag">{type === 'producer' ? '主出品' : '主发行'}</View> : null} 
                 </label>
                 <View className="content">
                   <View className="name">{item.name}</View>
@@ -151,7 +165,7 @@ export default function SearchCompany() {
                   <View className="describe"></View> */}
                 </View>
                 {
-                  inputValue === '' ? 
+                  inputValue === '' && type !== 'mainControl' ? 
                   <View className="last" onClick={() => {setOpenSheet(true);setOpenIndex(index)}}>
                     <Image src="../../../static/detail/company-edit.png" alt=""></Image>
                   </View> : null

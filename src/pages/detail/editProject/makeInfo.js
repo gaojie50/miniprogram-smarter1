@@ -11,6 +11,7 @@ import './makeInfo.scss';
 const textVoid = <Text style={{ color: '#CCCCCC' }}>请选择</Text>;
 const divider = <Divider />
 const types = {
+  mainControl: '主控方',
   producer: '出品方',
   issuer: '发行方',
   director: '导演',
@@ -35,6 +36,8 @@ export default function makeInfo(props, ref) {
       </View>
       <View className="makeInfo-content">
         <View className="makeInfo-item">
+          {listItemWrap('mainControl', ref)}
+          {divider}
           <ListItem className="source-float" title='片源地' extraText={source.join(' / ') || textVoid} arrow onClick={() => {setOpenSource(true);changeScroll(false)}} />
           <FloatCard
             isOpened={openSource}
@@ -78,12 +81,12 @@ function listItemWrap(param, ref) {
 
   useEffect(() => {
     const subList = handleCon(param, ref.current);
-    setExtraTextItem(subList)
+    setExtraTextItem(subList);
   }, [ref.current])
 
   const updateCon = () => {
     const subList = handleCon(param, ref.current);
-    setExtraTextItem(subList)
+    setExtraTextItem(subList);
   }
 
   const value = extraTextItem.map(i => <Text className="extraText-item">{i}</Text>)
@@ -102,13 +105,13 @@ function handleCon(param, data) {
   return list;
 }
 
-function moveToSearch(param, ref, mm) {
+function moveToSearch(param, ref, update) {
   Taro.navigateTo({
     url: '/pages/detail/searchCompany/index',
     events: {
       submitData: function(data) {
         ref.current[param] = data;
-        mm(ref)
+        update(ref)
       },
     },
     success: function (res) {

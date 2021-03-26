@@ -55,6 +55,7 @@
   }
   .at-list__item-extra {
     align-items: center;
+    overflow: hidden;
   }
 
   .source-float {
@@ -63,13 +64,16 @@
         white-space: nowrap;
       }
       .item-extra__info {
-        max-width: 100%;
+        max-width: 90%;
         text-overflow: ellipsis;
         overflow: hidden;
         padding-left: 30rpx;
       }
   }
-  
+   .item-extra__info {
+        max-width: 90%;
+        overflow: hidden;
+   }
   .extraText-item {
     display: inline-block;
     height: 60px;
@@ -80,5 +84,10 @@
     border-radius: 10px;
     padding: 0 20px;
     box-sizing: border-box;
+    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+    text-overflow: ellipsis;
   }
 }
