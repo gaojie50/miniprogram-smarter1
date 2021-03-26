@@ -378,10 +378,18 @@ export default class Detail extends React.Component {
     })
   }
 
-  goToBoxForecasting(){
-    Taro.navigateTo({
-      url: '/pages/boxForecasting/index'
-    });
+  goToBoxForecasting = () =>{
+    const {basicData, keyData} = this.state;
+    
+    Taro.setStorage({
+      key:'acceptDataFromDetail',
+      data:{basicData,keyData },
+      success:()=>{
+        Taro.navigateTo({
+          url: '/pages/boxForecasting/index',
+        });
+      }
+    })
   }
 
   handleShowCompetePanel=()=>{
@@ -478,9 +486,9 @@ export default class Detail extends React.Component {
             { !keyData?.estimateBox?.machineEstimateBoxDetail?.estimateNum ? 
               textFn():
               <View>
-                <View className='title'>上映当周预估大盘</View>
-                <View className='box'>{formatNumber(keyData.estimateBox.machineEstimateBoxDetail.estimateNum, 'floor').text}<Text> {keyData.estimateBox.describe || ''}</Text></View>
-                <View className='num'><Text className='arrow' /></View>
+                <View className="title">实时机器预测票房</View>
+                <View className="box">{formatNumber(keyData.estimateBox.machineEstimateBoxDetail.estimateNum, 'floor').text}<Text> {keyData.estimateBox.describe || ''}</Text></View>
+                <View className="num"><Text className="arrow" /></View>
               </View>
             }
             
