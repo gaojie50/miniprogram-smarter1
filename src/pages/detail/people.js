@@ -139,7 +139,6 @@ export default function People(props) {
 }
 
 function handlePeopleOption(itemInfo, param, closeSheet) {
-  // console.log(itemInfo, 333)
   const { projectId, id } = itemInfo;
   if (param === 'setMajor' || param === 'cancelMajor') {
     Taro.showModal({
@@ -147,7 +146,6 @@ function handlePeopleOption(itemInfo, param, closeSheet) {
       content: param === 'setMajor' ? '确认设置为负责人吗？' : '确认取消负责人吗？',
       success: res => {
         if(res.confirm) {
-          console.log(id, projectId, param,222)
           reqPacking({
             url: '/api/management/user/edit',
             data: {

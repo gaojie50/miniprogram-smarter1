@@ -6,6 +6,7 @@ export default {
     'pages/searchProject/index',
     'pages/search/index',
     'pages/searchCompany/index',
+    'pages/searchActor/index',
   ],
   window: {
     navigationBarBackgroundColor: '#798CBA',
