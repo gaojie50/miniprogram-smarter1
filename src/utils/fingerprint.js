@@ -7,7 +7,7 @@ const { rpxTopx, } = utils;
 const width = 200;
 const height = 100;
 
-export default function FingerPrint({text=13810059073,}){
+export default function FingerPrint({text=Taro.getStorageSync('authinfo')?.userInfo?.mis,}){
   const styleStr = () =>{
     return `
       pointer-events: none;

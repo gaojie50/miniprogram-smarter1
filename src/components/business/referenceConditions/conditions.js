@@ -66,11 +66,26 @@ export default function Conditions({
     changeFormData(data);
   };
 
-  const updateReleaseTime = () => {
+  function updateReleaseTime () {
     const { scheduleType, startDate, endDate } = releaseTimeRef.current;
 
     data.releaseTime = startDate;
     setData(data);
+  }
+
+  function toSearchEvent (param,data){
+    Taro.navigateTo({
+      url:'/pages/searchActor/index',
+      events: {
+        submitData: function(data) {
+          //back data
+
+        },
+      },
+      success: function (res) {
+        // res.eventChannel.emit('acceptDataFromOpenerPage', { type: param, data: ref.current, ref })
+      }
+    })
   }
 
   return <View className="adding-conditions">
@@ -124,6 +139,7 @@ export default function Conditions({
         required={false}
         contType="btn"
         value={director}
+        event={toSearchEvent('director',director)}
         arrow={true} />
 
       <ConditionsItems
@@ -131,6 +147,7 @@ export default function Conditions({
         required={false}
         contType="btn"
         value={mainRole}
+        event={toSearchEvent('protagonist',mainRole)}
         arrow={true} />
     </View>
 
@@ -191,7 +208,7 @@ function ConditionsItems({
       className="input" 
       type={type}
       placeholder="请填写" />}
-    {contType === 'btn' && <View className="actor">
+    {contType === 'btn' && <View className="actor" onClick={event}>
       {
         (value || []).length > 0 ? 
           value.map(item =><Text className="star">{item}</Text>) :
