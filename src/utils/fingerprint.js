@@ -17,6 +17,7 @@ export default function FingerPrint({ text = Taro.getStorageSync('authinfo')?.us
       left:0;
     `
   };
+
   useEffect(() => {
     const ctx = Taro.createCanvasContext('fingerprint');
 
@@ -31,18 +32,28 @@ export default function FingerPrint({ text = Taro.getStorageSync('authinfo')?.us
       for (let j = 0; j < 6; j++) ctx.fillText(text, rpxTopx(-440 + j * 260), rpxTopx((1 + i) * 100));
     }
 
-    ctx.draw();
+    ctx.draw(false, () => {
+      Taro.canvasToTempFilePath({
+        canvasId: 'fingerprint',
+        fileType: 'png',
+        success: function (res) {
+          const fingerprintBoxDom = document.getElementById('fingerprintBox');
+          const fingerprintCanvasDom = document.getElementById('fingerprint');
+
+          fingerprintBoxDom.setAttribute('src', res.tempFilePath);
+          fingerprintCanvasDom.style.display = 'none';
+        },
+      });
+    })
   }, []);
 
   return <View style={styleStr()} >
+    <Image id="fingerprintBox" style="width:100%; height:100%;" />
     <Canvas
       canvasId="fingerprint"
       className="finger-print"
       id="fingerprint"
-      style={`
-        width: 100%;
-        height: 100%;
-      `}
+      style="width: 100%;height: 100%;"
     />
   </View>
 }
