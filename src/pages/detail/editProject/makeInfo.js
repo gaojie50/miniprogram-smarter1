@@ -101,7 +101,11 @@ function handleCon(param, data) {
     data[param].forEach(item => {
       list.push(item.name)
     })
+    if(param === 'mainControl' && data[param]) {
+      list.push(data[param].name)
+    }
   }
+
   return list;
 }
 

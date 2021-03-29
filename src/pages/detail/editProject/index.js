@@ -44,7 +44,9 @@ export default function EditProject() {
       projectSearch(projectId)
       .then(res => {
         setProjectInfoList(res);
-        setProjectData(res)
+        setProjectData(res);
+        makeDataRef.current.director = res.director;
+        makeDataRef.current.protagonist = res.mainRole;
       })
       searchRole(projectId)
       .then(res => {
