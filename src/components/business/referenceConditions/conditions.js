@@ -65,6 +65,7 @@ export default function Conditions({
     }
 
     controlModal(false);
+    console.log(data);
     changeFormData(data);
   };
 
