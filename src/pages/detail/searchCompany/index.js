@@ -42,9 +42,11 @@ export default function SearchCompany() {
         setType(res.type);
       }
       if(res.data) {
-        setFirstDataList(res.data[res.type] || []);
-        setList(res.data[res.type] || []);
-        res.data[res.type] && res.data[res.type].map((item, index) => {
+        const newData = res.type === 'mainControl' ? [res.data[res.type]] : res.data[res.type];
+        setFirstDataList(newData || []);
+        setList(newData || []);
+
+        newData && newData.map((item, index) => {
           radioChecked.push(index);
         })
       }
@@ -129,11 +131,12 @@ export default function SearchCompany() {
         })
         return
       }
+
       const pages =Taro.getCurrentPages();
       const current = pages[pages.length - 1];
       const eventChannel = current.getOpenerEventChannel();
 
-      eventChannel.emit('submitData', newList)
+      eventChannel.emit('submitData', type === 'mainControl' ? (newList[0] || {}) : newList)
       Taro.navigateBack()
     }
   }
