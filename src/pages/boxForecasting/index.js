@@ -97,7 +97,7 @@ export default class BoxForecasting extends React.Component {
       data: formData
     }).then(res => {
       const { success, error, data } = res;
-      const { estimateNum, boxSectionRatio,model } = data;
+      const { estimateNum, boxSectionRatio,model } = data || {};
       let totalData = {
         estimateNum,
         boxSectionRatio,
