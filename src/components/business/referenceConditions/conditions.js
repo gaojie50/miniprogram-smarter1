@@ -1,21 +1,20 @@
-import React, { useState, forwardRef,useRef} from 'react';
+import React, { useState, forwardRef, useRef } from 'react';
 import Taro from '@tarojs/taro';
-import { View, Image, Text, Input,} from '@tarojs/components';
+import { View, Image, Text, Input, } from '@tarojs/components';
 import dayjs from 'dayjs';
 import utils from '@utils/index';
 import _ReleaseTime from '../../../pages/detail/editProject/component/releaseTime';
 import closeIco from '@static/close.png';
-import { set } from 'lodash';
 
-const {assignDeep} = utils;
+const { assignDeep } = utils;
 const ReleaseTime = forwardRef(_ReleaseTime);
 export default function Conditions({
   controlModal,
   formData,
+  basicData,
   changeFormData,
 }) {
-  
-  if(!formData.projectId) return "";
+  if (!formData.projectId) return "";
 
   const releaseTimeRef = useRef({});
   function handleReleaseDate() {
@@ -23,28 +22,31 @@ export default function Conditions({
     controlModal(true);
   };
   const [openReleaseTime, setOpenReleaseTime] = useState(false);
-  const [data,setData] = useState(assignDeep(formData));
+  const [data, setData] = useState(assignDeep(formData));
+  const [refresh,setRefresh] = useState(true);
   const {
     releaseTime,
     cost,
     estimateScore,
     wishNum,
     mainRole,
+    mainRoleIds,
     director,
-  } =data;
-  const [noLimit,setNoLimit] = useState( Boolean(releaseTime && estimateScore) );
+    directorIds,
+  } = data;
+  const [noLimit, setNoLimit] = useState(Boolean(releaseTime && estimateScore));
 
-  function changeInputVal(val,key){
+  function changeInputVal(val, key) {
     data[key] = val;
     setData(data);
 
-    if(key === 'estimateScore') {
+    if (key === 'estimateScore') {
       setNoLimit(Boolean(val && releaseTime));
     };
   }
 
-  function startEvt(){
-    if(!noLimit) return ;
+  function startEvt() {
+    if (!noLimit) return;
 
     if (!(/^[0-9]+([.]{1}[0-9]{1}){0,1}$/.test(data.estimateScore))) {
       return Taro.showToast({
@@ -63,20 +65,57 @@ export default function Conditions({
     }
 
     controlModal(false);
+    console.log(data);
     changeFormData(data);
   };
 
-  const updateReleaseTime = () => {
+  function updateReleaseTime() {
     const { scheduleType, startDate, endDate } = releaseTimeRef.current;
 
     data.releaseTime = startDate;
     setData(data);
   }
 
+  function toSearchEvent(sendData, isDirector,) {
+    Taro.navigateTo({
+      url: '/pages/searchActor/index',
+      events: {
+        submitData: backData => {
+          let ids = [];
+          let names = [];
+
+          backData.map(({maoyanId,name}) =>{
+            ids.push(maoyanId);
+            names.push(name);
+          });
+
+          data[isDirector ? 'director' : 'mainRole'] = names;
+          data[isDirector ? 'directorIds':'mainRoleIds'] = ids;
+          
+          setData(data);
+          setRefresh(!refresh);
+        },
+      },
+      success: res => {
+        let paramData = {};
+        let type = isDirector ? 'director' : 'protagonist';
+
+        paramData[type] = sendData.map((item,index) =>{
+          return {
+            maoyanId:(isDirector ? directorIds : mainRoleIds)[index] ,
+            name:item,
+          };
+        })
+
+        res.eventChannel.emit('acceptDataFromOpenerPage',{ type, data: paramData, });
+      }
+    })
+  }
+
   return <View className="adding-conditions">
     <View className="main">
       <View className="title">添加预测参考条件
-        <View className="close-wrap" onClick={()=>controlModal(false)}>
+        <View className="close-wrap" onClick={() => controlModal(false)}>
           <Image src={closeIco} />
         </View>
       </View>
@@ -94,7 +133,7 @@ export default function Conditions({
         required={false}
         contType="input"
         type='number'
-        changeInputVal={val => changeInputVal(val,'cost')}
+        changeInputVal={val => changeInputVal(val, 'cost')}
         value={cost}
         arrow={false}
         unit="万" />
@@ -104,7 +143,7 @@ export default function Conditions({
         required={true}
         contType="input"
         type='digit'
-        changeInputVal={val => changeInputVal(val,'estimateScore')}
+        changeInputVal={val => changeInputVal(val, 'estimateScore')}
         value={estimateScore}
         arrow={false}
         unit="分" />
@@ -114,7 +153,7 @@ export default function Conditions({
         required={false}
         contType="input"
         type='number'
-        changeInputVal={val => changeInputVal(val,'wishNum')}
+        changeInputVal={val => changeInputVal(val, 'wishNum')}
         value={wishNum}
         arrow={false}
         unit="万" />
@@ -124,6 +163,7 @@ export default function Conditions({
         required={false}
         contType="btn"
         value={director}
+        event={() => toSearchEvent(director,true,)}
         arrow={true} />
 
       <ConditionsItems
@@ -131,24 +171,25 @@ export default function Conditions({
         required={false}
         contType="btn"
         value={mainRole}
+        event={() => toSearchEvent(mainRole,false, )}
         arrow={true} />
     </View>
 
     <View className="start-wrap">
-      <View 
+      <View
         onClick={startEvt}
         className={`${noLimit ? "" : "gray"} start-btn`}>开始预测</View>
     </View>
 
-    {openReleaseTime ? <ReleaseTime 
-      ref={releaseTimeRef} 
-      updateReleaseTime={updateReleaseTime} 
+    {openReleaseTime ? <ReleaseTime
+      ref={releaseTimeRef}
+      updateReleaseTime={updateReleaseTime}
       scheduleExist={true}
-      updateRef={()=>{}} 
+      updateRef={() => { }}
       movieData={{
-        scheduleType:1,
-        startShowDate:releaseTime || +dayjs()
-      }} 
+        scheduleType: 1,
+        startShowDate: releaseTime || +dayjs()
+      }}
 
       onClose={() => {
         setOpenReleaseTime(false);
@@ -179,23 +220,23 @@ function ConditionsItems({
     </View>
 
     {contType === 'text' && (
-      value ? 
-        <View className="value"> {value} </View> : 
+      value ?
+        <View className="value"> {value} </View> :
         <View className="placeholder">请选择</View>
     )}
 
-    {contType === 'input' && <Input 
-      cursor-spacing="15" 
-      onInput={e => changeInputVal(e.detail.value,)} 
-      value={value} 
-      className="input" 
+    {contType === 'input' && <Input
+      cursor-spacing="15"
+      onInput={e => changeInputVal(e.detail.value,)}
+      value={value}
+      className="input"
       type={type}
       placeholder="请填写" />}
-    {contType === 'btn' && <View className="actor">
+    {contType === 'btn' && <View className="actor" onClick={event}>
       {
-        (value || []).length > 0 ? 
-          value.map(item =><Text className="star">{item}</Text>) :
-          <View className="placeholder">请选择</View>  
+        (value || []).length > 0 ?
+          value.map(item => <Text className="star">{item}</Text>) :
+          <View className="placeholder">请选择</View>
       }
     </View>}
     {arrow && <View className="arrow" />}
