@@ -29,7 +29,7 @@ const FilmMarket=(props)=>{
 
   const fetchHistoryList = () => {
     const reqParams = {
-      closeNum: 6,
+      closeNum: 5,
       startDt: originalReleaseDate.startDate,
       endDt: originalReleaseDate.endDate,
     }
