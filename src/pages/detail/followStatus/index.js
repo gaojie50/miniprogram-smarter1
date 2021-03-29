@@ -1,11 +1,11 @@
 import { View, Image, Text, Block } from '@tarojs/components';
 import React from 'react';
 import dayjs from 'dayjs';
-import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
-import NoFollow from '@static/detail/noFollows.png';
-import { FollowList } from '../constant';
+import { noDataPic } from '@utils/imageUrl'
 import Gray from '@static/detail/gray.png';
 import Path from '@static/detail/path.png';
+import { get as getGlobalData } from '../../../global_data';
+import { FollowList } from '../constant';
 import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking'); 
@@ -78,7 +78,7 @@ export default class FollowStatus extends React.Component {
               loading ? '' :
               showFollows.length === 0 ? 
               <View className="nodata">
-                <Image src={ NoFollow } alt=""></Image>
+                <Image src={ noDataPic } alt=""></Image>
                 <View className="text">暂无跟进记录</View>
               </View>
               : <Block>
