@@ -78,6 +78,10 @@ export default {
     {
       root: "pages/assess",
       pages: [ "index/index", "create/index", "template/index", "detail/index"]
-    }
+    },
+    {
+      root:"pages/searchActor",
+      pages:["index"]
+    },
   ]
 }
