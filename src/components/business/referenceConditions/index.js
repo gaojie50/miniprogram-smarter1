@@ -7,13 +7,14 @@ import './index.scss';
 
 
 export default function ReferenceConditions({ basicData, formData, changeFormData,stopScrollEvt }) {
-  const { newMainRole = [], newDirector = [] } = basicData;
   const {
     wishNum,
     estimateScore,
     cost,
     ticketExponent,
     releaseTime,
+    director,
+    mainRole,
   } = formData || {};
   const [showConditions, setShowConditions] = useState(false);
 
@@ -55,20 +56,12 @@ export default function ReferenceConditions({ basicData, formData, changeFormDat
 
       <View className="detail">
         <View className="title">导演</View>
-        <View className="cont">{
-          newDirector.length > 0 ?
-            newDirector.join(' / ') :
-            '-'
-        }</View>
+        <View className="cont">{ director?.length > 0 ? director.join(' / ') : '-' }</View>
       </View>
 
       <View className="detail">
         <View className="title">主演</View>
-        <View className="cont">{
-          newMainRole.length > 0 ?
-            newMainRole.join(' / ') :
-            '-'
-        }</View>
+        <View className="cont">{ mainRole?.length > 0 ? mainRole.join(' / ') : '-' }</View>
       </View>
     </View>
 
