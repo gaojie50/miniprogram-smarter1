@@ -14,6 +14,10 @@ const types = {
   producer: '出品方',
   issuer: '发行方',
 }
+const mainTypes = {
+  producer: '主出品',
+  issuer: '主发行',
+}
 
 export default function SearchCompany() {
   const [focus, setFocus] = useState(false);
@@ -182,7 +186,7 @@ export default function SearchCompany() {
         }
       </ScrollView>
       <AtActionSheet isOpened={openSheet} cancelText='取消' onCancel={() => setOpenSheet(false)} onClose={() => setOpenSheet(false)}>
-        <AtActionSheetItem onClick={changeMain}>{openIndex === 0 ? '取消主出品' : '设置为主出品'}</AtActionSheetItem>
+        <AtActionSheetItem onClick={changeMain}>{openIndex === 0 ? `取消${mainTypes[type]}` : `设置为${mainTypes[type]}`}</AtActionSheetItem>
       </AtActionSheet>
       <View className="bottom-confirm">
         <View className="bottom-confirm-btn" onClick={submit}>确定（{inputValue === '' ? radioChecked.length : searchChecked.length}）</View>
