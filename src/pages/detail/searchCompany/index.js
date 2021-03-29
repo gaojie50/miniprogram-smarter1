@@ -4,6 +4,7 @@ import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
+import '@components/m5/style/components/action-sheet.scss';
 import util from '@utils';
 import './index.scss';
 
@@ -42,9 +43,12 @@ export default function SearchCompany() {
         setType(res.type);
       }
       if(res.data) {
-        setFirstDataList(res.data[res.type] || []);
-        setList(res.data[res.type] || []);
-        res.data[res.type] && res.data[res.type].map((item, index) => {
+        const newData = res.type === 'mainControl' ? [res.data[res.type]] : res.data[res.type];
+
+        setFirstDataList(newData || []);
+        setList(newData || []);
+
+        newData && newData.map((item, index) => {
           radioChecked.push(index);
         })
       }
@@ -129,15 +133,16 @@ export default function SearchCompany() {
         })
         return
       }
+
       const pages =Taro.getCurrentPages();
       const current = pages[pages.length - 1];
       const eventChannel = current.getOpenerEventChannel();
 
-      eventChannel.emit('submitData', newList)
+      eventChannel.emit('submitData', type === 'mainControl' ? (newList[0] || {}) : newList)
       Taro.navigateBack()
     }
   }
-
+console.log(openSheet, openIndex)
   return (
     <View className="edit-search-company"> 
       <View className="edit-search-company-box">
