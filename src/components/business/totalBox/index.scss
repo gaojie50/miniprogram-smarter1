@@ -16,6 +16,10 @@
     color: #CCCCCC;
     text-align: right;
     float: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 520px;
   }  
 
   .box{
