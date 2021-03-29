@@ -142,7 +142,7 @@ export default function SearchCompany() {
       Taro.navigateBack()
     }
   }
-console.log(openSheet, openIndex)
+
   return (
     <View className="edit-search-company"> 
       <View className="edit-search-company-box">
