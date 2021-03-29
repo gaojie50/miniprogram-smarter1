@@ -35,9 +35,10 @@ export default function FingerPrint({text=Taro.getStorageSync('authinfo')?.userI
       canvasId: 'fingerprint',
       fileType: 'png',
       success: function (res) {
-        document.getElementById('fingerprintBox')
-          .style
-          .background = `url(${res.tempFilePath}) repeat`;
+        const fingerprintBoxDom = document.getElementById('fingerprintBox');
+        
+        fingerprintBoxDom.style.backgroundImage = `url(${res.tempFilePath})`;
+        fingerprintBoxDom.style.backgroundRepeat = 'repeat';
       },
     });
   });
