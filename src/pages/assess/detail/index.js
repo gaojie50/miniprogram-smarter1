@@ -1,65 +1,32 @@
-import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/components'
+import { View, ScrollView } from '@tarojs/components'
 import React, { useState, useEffect } from 'react';
-import Taro, { getCurrentInstance, nextTick, useShareAppMessage } from '@tarojs/taro';
+import Taro, { getCurrentInstance } from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
-import _cloneDeep from 'lodash/cloneDeep';
 import _merge from 'lodash/merge';
-import _debounce from 'lodash/debounce'
-import { set as setGlobalData, get as getGlobalData, set } from '../../../global_data'
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';
 import FixedButton from '@components/fixedButton';
 import Indexes from '@components/indexes';
-
-import AtActionSheet from '@components/m5/action-sheet';
-import AtActionSheetItem from '@components/m5/action-sheet/body/item';
-import AtFloatLayout from '@components/m5/float-layout';
-
-import '@components/m5/style/components/action-sheet.scss';
-import '@components/m5/style/components/float-layout.scss';
 import './index.scss'
 
 const { errorHandle } = utils;
 
-export default function assessPage(){
-  
-  const [ briefInfo, setBriefInfo ] = useState({});
-  const [ projectRole, setProjectRole ] = useState(6);
-  const [ loading, setLoading ] = useState(true);
+export default function AssessPage(){
   const [ questions, setQuestions ] = useState([]);
   const [ finishNum, setFinishNum ] = useState(0);
   const [ rate, setRate ] = useState(0);
-  const [ curEvalObj, setCurEvalObj ] = useState({});
   const [ contentHeight, setContentHeight ] = useState();
   const [ scrollHeight, setScrollHeight ] = useState();
   const [ quesScrollTopList, setQuesScrollTopList ] = useState([]);
   const [ activeIndex, setActiveIndex ] = useState(1)
   const [ scrollTop, setScrollTop ] = useState(0);
-  const [ submitDisabled, setSubmitDisabled ] = useState(true);
 
   const { projectId, roundId } = getCurrentInstance().router.params;
 
   useEffect(()=>{
     Taro.showLoading({title: '加载中'});
-    fetchRole();
     fetchBrifInfo();
-    fetchEveluationList();
   }, [])
-
-  function fetchRole(){
-    reqPacking(
-      {
-        url: 'api/management/projectRole',
-        data: { projectId: projectId },
-      },
-      'server',
-    ).then(res => {
-        const { data, success, error } = res;
-        const { projectRole } = data;
-        if (success) return setProjectRole(projectRole);
-        if (error) errorHandle(message);
-      });
-  };
 
   function fetchBrifInfo(){
     reqPacking(
@@ -78,27 +45,6 @@ export default function assessPage(){
         }
 
         errorHandle(error);
-      });
-  }
-
-  function fetchEveluationList(){
-    reqPacking(
-      {
-        url: 'api/management/evaluationList',
-        data: { projectId: projectId },
-      },
-      'server',
-    ).then(res => {
-        const { data, error } = res;
-        const { evaluationList } = data;
-        if (!error) {
-          setCurEvalObj(evaluationList.filter(item => item.roundId == roundId)[ 0 ] || {})
-          setLoading(false)
-          return;
-        }
-        error.message && errorHandle(error);
-        setQuestions([]);
-        setLoading(false);
       });
   }
 
@@ -124,7 +70,6 @@ export default function assessPage(){
 
           setQuestions(ques);
           setActiveIndex('1');
-          setLoading(false);
 
           Taro.nextTick(() => {
             const query = Taro.createSelectorQuery();
@@ -149,7 +94,6 @@ export default function assessPage(){
 
         error.message && errorHandle(error);
         setQuestions([]);
-        setLoading(false);
     }).finally(()=>{
       Taro.hideLoading();
     })

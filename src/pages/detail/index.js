@@ -1,7 +1,7 @@
-import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
+import { View, Image, Text, ScrollView } from '@tarojs/components'
 import React from 'react';
 import Taro from '@tarojs/taro';
-import { AtTabs, AtTabsPane } from '@components/m5';
+import lx from '@analytics/wechat-sdk';
 import BasicData from './basicData';
 import KeyData from './keyData';
 import FollowStatus from './followStatus';
@@ -9,7 +9,7 @@ import Cooper from './cooperStatus';
 import { UseHistory } from '../board/history';
 import { EvaluationList } from '../board/evaluate';
 import { CooperStatus } from './constant';
-import { set as setGlobalData, get as getGlobalData } from '../../global_data';
+import { get as getGlobalData } from '../../global_data';
 import AddingProcess from '@components/addingProcess';
 import FloatLayout from '@components/m5/float-layout';
 import utils from '@utils/index.js'
@@ -20,6 +20,7 @@ import People from '@static/detail/people.png';
 import File from '@static/detail/file.png';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
+import CompeteMarket from './competeMarket';
 import './index.scss';
 import '@components/m5/style/index.scss';
 
@@ -56,11 +57,17 @@ export default class Detail extends React.Component {
       setBgColor: false,
       evaluation: [],
       history: [],
-      releaseDataList: {}
+      releaseDataList: {},
+      showCompetePanel: false
     }
   }
 
   componentDidShow(){
+    lx.pageView('c_movie_b_z5wvew69', {
+      custom: {
+        product_id: Taro.getCurrentInstance().router.params.projectId
+      }
+    });
     this.fetchBasicData();
   }
 
@@ -371,10 +378,30 @@ export default class Detail extends React.Component {
     })
   }
 
-  goToBoxForecasting(){
-    Taro.navigateTo({
-      url: '/pages/boxForecasting/index'
-    });
+  goToBoxForecasting = () =>{
+    const {basicData, keyData} = this.state;
+    
+    Taro.setStorage({
+      key:'acceptDataFromDetail',
+      data:{basicData,keyData },
+      success:()=>{
+        Taro.navigateTo({
+          url: '/pages/boxForecasting/index',
+        });
+      }
+    })
+  }
+
+  handleShowCompetePanel=()=>{
+    this.setState({
+      showCompetePanel: true
+    })
+  }
+
+  handleCloseCompetePanel=()=>{
+    this.setState({
+      showCompetePanel: false
+    })
   }
 
   render() {
@@ -392,127 +419,129 @@ export default class Detail extends React.Component {
       showCooperStatus, 
       showPeople, 
       showProjectFile, 
-      isFixed, 
       toView, 
       setBgColor,
       releaseDataList,
+      showCompetePanel,
     } = this.state;
     const releaseTimeArry = keyData?.releaseTime?.time?.match(/-/g);
     const textFn = () => <View className='launch-text'><Text>+</Text>发起机器预测票房</View>;
-
     return (
       <View>
-        <View className="detail-top">
-          <View className={top ? "fixed" : ""} id="top" style={{height: `${headerBarHeight}px`, paddingTop: `${titleBarPadding}px`, backgroundColor: top ? '#FFFFFF':''}} >
-            <View className="header" style={{height: `${titleBarHeight}px`, lineHeight: `${titleBarHeight}px` }}>
-              <View className="backPage" onClick={this.handleBack}>
-                <Image src={ArrowLeft} alt=""></Image>
+        <View className='detail-top'>
+          <View className={top ? "fixed" : ""} id='top' style={{height: `${headerBarHeight}px`, paddingTop: `${titleBarPadding}px`, backgroundColor: top ? '#FFFFFF':''}} >
+            <View className='header' style={{height: `${titleBarHeight}px`, lineHeight: `${titleBarHeight}px` }}>
+              <View className='backPage' onClick={this.handleBack}>
+                <Image src={ArrowLeft} alt=''></Image>
               </View>
-              <Text className="header-title">{top ? basicData.name : ''}</Text>
+              <Text className='header-title'>{top ? basicData.name : ''}</Text>
             </View>
           </View>
         </View>
         <ScrollView scrollY={!stopScroll} enhanced bounces={false} scrollIntoView={toView} className={stopScroll ? "detail stopScroll" : "detail"} style={{top: `${headerBarHeight}px`,minHeight: `calc(100vh - ${headerBarHeight})px`}} onScroll={this.pageScroll}>
-          <View className="detail-top-icon">
-            <View className="cooperStatus" style={ { 
+          <View className='detail-top-icon'>
+            <View className='cooperStatus' style={{ 
               color: CooperStatus[ basicData.cooperStatus ].color
-            } }
+            }}
               onClick={() => this.setState({showCooperStatus: !showCooperStatus, stopScroll: true})}
             >
               {loading ? '' : CooperStatus[ basicData.cooperStatus ].name}
-              {loading ? '' : <Image className="cooper-img" src={basicData.cooperStatus < 3 ? `../../static/detail/cooper-arrow${basicData.cooperStatus}.png` : '../../static/detail/cooper-arrow3.png'} ></Image>}
+              {loading ? '' : <Image className='cooper-img' src={basicData.cooperStatus < 3 ? `../../static/detail/cooper-arrow${basicData.cooperStatus}.png` : '../../static/detail/cooper-arrow3.png'} ></Image>}
             </View>
           {
             judgeRole.role === 2 ? null 
-             : <View className="edit" onClick={() => wx.navigateTo({
+             : <View className='edit' onClick={() => wx.navigateTo({
               url: `/pages/detail/editProject/index?projectId=${basicData.projectId}`,
-            })}><Image src={Edit} alt=""></Image></View>
+            })}
+             ><Image src={Edit} alt=''></Image></View>
           }
-            <View className="opt" onClick={() => this.setState({showProjectFile: true,stopScroll: true})}>
-               <Image src={File} alt=""></Image>
+            <View className='opt' onClick={() => this.setState({showProjectFile: true,stopScroll: true})}>
+               <Image src={File} alt=''></Image>
                <Text>{fileData.length}</Text>
              </View>
-             <View className="opt" onClick={() => this.setState({showPeople: true, stopScroll: true})}>
-             <Image src={People} alt=""></Image>
+             <View className='opt' onClick={() => this.setState({showPeople: true, stopScroll: true})}>
+             <Image src={People} alt=''></Image>
              <Text>{peopleData.length}</Text>
              </View>
           </View>
          <BasicData
-          data={ basicData } 
-          judgeRole={ judgeRole }
-          keyData={ keyData }
-          changeStopScroll= { () => this.setState({stopScroll: !stopScroll})}
-        />
+           data={basicData} 
+           judgeRole={judgeRole}
+           keyData={keyData}
+           changeStopScroll={() => this.setState({stopScroll: !stopScroll})}
+         />
         {
           judgeRole.role && judgeRole.role !== 2 ? 
           <KeyData 
-            ref="keyData"
-            basicData={ basicData } 
-            keyData={ keyData } 
-            judgeRole={ judgeRole }
-            changeKeyData={ data => this.handleChangeKeyData(data)}
+            ref='keyData'
+            basicData={basicData} 
+            keyData={keyData} 
+            judgeRole={judgeRole}
+            changeKeyData={data => this.handleChangeKeyData(data)}
           /> : ''
         }
         {basicData.category === 3 && judgeRole?.releaseStage === 1 ? (
-          releaseTimeArry && releaseTimeArry.length === 2 ? <View className="mini-box">
-          <View className="machine-eval-mini" onClick={this.goToBoxForecasting}>
+          releaseTimeArry && releaseTimeArry.length === 2 ? <View className='mini-box'>
+          <View className='machine-eval-mini' onClick={this.goToBoxForecasting}>
             { !keyData?.estimateBox?.machineEstimateBoxDetail?.estimateNum ? 
               textFn():
               <View>
-                <View className="title">上映当周预估大盘</View>
+                <View className="title">实时机器预测票房</View>
                 <View className="box">{formatNumber(keyData.estimateBox.machineEstimateBoxDetail.estimateNum, 'floor').text}<Text> {keyData.estimateBox.describe || ''}</Text></View>
                 <View className="num"><Text className="arrow" /></View>
               </View>
             }
             
           </View>
-          <View className="release-week-mini">
-            <View className="title">上映当周预估大盘</View>
-            <View className="box">{formatNumber(releaseDataList.estimateTotalNum, 'floor').text}<Text> {keyData.releaseTime.describe || ''}</Text></View>
-            <View className="num">{releaseDataList.releaseNum || '-'}部 <Text className="arrow" /></View>
+          <View className='release-week-mini' onClick={this.handleShowCompetePanel}>
+            <View className='title'>上映当周预估大盘</View>
+            <View className='box'>{formatNumber(releaseDataList.estimateTotalNum, 'floor').text}<Text> {keyData.releaseTime.describe || ''}</Text></View>
+            <View className='num'>{releaseDataList.releaseNum || '-'}部 <Text className='arrow' /></View>
           </View>
         </View> :
-        <View className="machine-eval-btn">
+        <View className="machine-eval-btn" onClick={this.goToBoxForecasting}>
           {textFn()}
         </View>
         ) : "" }
-        <View className="detail-tabs" id={toView} >
-          <View className="detail-tabs-header" onClick={this.click}  id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
+        <View className='detail-tabs' id={toView} >
+          <View className='detail-tabs-header' onClick={this.click}  id='tabs' style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
             <View onClick={()=> this.handleSwitch(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>最新跟进</View>
             <View onClick={()=> this.handleSwitch(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>项目评估</View>
             <View onClick={()=> this.handleSwitch(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>变更历史</View>
           </View>
-          <View className="detail-tabs-body"  style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff',}}>
-              <View className={current === 0 ? "body-active" : "body-inactive"} id="follow">
-                <FollowStatus ref="followStatus" judgeRole={ judgeRole } basicData={ basicData } />
+          <View className='detail-tabs-body'  style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff',}}>
+              <View className={current === 0 ? "body-active" : "body-inactive"} id='follow'>
+                <FollowStatus ref='followStatus' judgeRole={judgeRole} basicData={basicData} />
               </View>
-              <View className={current === 1 ? "body-active" : "body-inactive"} id="evaluation">
-                <EvaluationList judgeData={this.handleJudgeData} judgeRole={ judgeRole }  projectId={ basicData.projectId } keyData={ keyData } />
-                {this.state.evaluation.length > 0 ? <View className="noMore">没有更多了</View> : null}
+              <View className={current === 1 ? "body-active" : "body-inactive"} id='evaluation'>
+                <EvaluationList judgeData={this.handleJudgeData} judgeRole={judgeRole}  projectId={basicData.projectId} keyData={keyData} />
+                {this.state.evaluation.length > 0 ? <View className='noMore'>没有更多了</View> : null}
               </View>
-              <View className={current === 2 ? "body-active" : "body-inactive"} id="history">
-                <UseHistory judgeData={this.handleJudgeData} projectId={ basicData.projectId } keyData={keyData}></UseHistory>
-                {this.state.history.length > 0 ? <View className="noMore">没有更多了</View> : null}
+              <View className={current === 2 ? "body-active" : "body-inactive"} id='history'>
+                <UseHistory judgeData={this.handleJudgeData} projectId={basicData.projectId} keyData={keyData}></UseHistory>
+                {this.state.history.length > 0 ? <View className='noMore'>没有更多了</View> : null}
               </View>
-              <View className="bottom-relative" style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff'}}></View>
+              <View className='bottom-relative' style={{backgroundColor: setBgColor || (current === 0 && basicData.cooperStatus === 2) ? '#F8F8F8' : '#ffffff'}}></View>
           </View>
         </View>
-        {isDockingPerson(judgeRole.role) && <View className="bottom-fixed">
-          <View className="assess" style={{background: '#FD9C00', marginRight: '20px'}} onClick={this.bottomClick.bind(this, 'assess')}>发起评估</View>
-          <View className="assess" style={{background: '#276FF0'}} onClick={this.bottomClick.bind(this, 'progress')}>添加进展</View>
+        {isDockingPerson(judgeRole.role) && <View className='bottom-fixed'>
+          <View className='assess' style={{background: '#FD9C00', marginRight: '20px'}} onClick={this.bottomClick.bind(this, 'assess')}>发起评估</View>
+          <View className='assess' style={{background: '#276FF0'}} onClick={this.bottomClick.bind(this, 'progress')}>添加进展</View>
         </View>
         }
       </ScrollView>
      
       <FloatLayout 
         isOpened={showProgress} 
-        className="layout-process"
+        className='layout-process'
         onClose={() => this.setState({ showProgress: false, stopScroll: false })
-        }>
+        }
+      >
         <AddingProcess 
-          closeEvt ={() => this.setState({ showProgress: false, stopScroll: false }) }
+          closeEvt={() => this.setState({ showProgress: false, stopScroll: false })}
           submitEvt={this.updateProcess} 
-          projectId={basicData.projectId} />
+          projectId={basicData.projectId}
+        />
       </FloatLayout>
       <Cooper 
         show={showCooperStatus} 
@@ -530,7 +559,15 @@ export default class Detail extends React.Component {
       <ProjectFile 
         show={showProjectFile} 
         fileData={fileData} 
+        projectId={basicData.projectId}
         cancelShow={() => this.setState({showProjectFile: false, stopScroll: false})} 
+        fetchProjectFile={()=>this.fetchProjectFile()}
+      />
+      <CompeteMarket
+        projectId={basicData?.projectId}
+        releaseTime={keyData?.releaseTime}
+        show={showCompetePanel}
+        closeFn={this.handleCloseCompetePanel}
       />
     </View>
     )

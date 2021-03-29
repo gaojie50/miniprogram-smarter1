@@ -6,6 +6,22 @@ export const fourTextLabel = 'https://obj.pipi.cn/festatic/common/image/bc2c2961
 export const threeTextLabel = 'https://obj.pipi.cn/festatic/common/image/31d351d0084779bfbdfdb5b73bac5df9.png';
 export const twoTextLabel = 'https://obj.pipi.cn/festatic/common/image/6195393c57c64347cf3222e4d1708dee.png';
 
+
+export const redCheck = 'https://obj.pipi.cn/festatic/common/image/4fbca6628c4a75e92be99c2c0d1e27c1.png';
+
+// tabBar
+export const marketIcon = 'https://p0.meituan.net/ingee/618771a1bcebae82663a09ee4bdca3291948.png';
+export const marketActiveIcon = 'https://obj.pipi.cn/festatic/common/image/97bf70a8bc9be23a8802bfe5e09b2cb1.png';
+export const boardIcon = 'https://obj.pipi.cn/festatic/common/image/381f808e0c16930d152852b8f11570ad.png';
+export const boardActiveIcon = 'https://obj.pipi.cn/festatic/common/image/ee0bb63fde65490304c89a9ac105fe8a.png';
+
 export default {
-  defaultMovieCover
+  defaultMovieCover,
+  fourTextLabel,
+  threeTextLabel,
+  twoTextLabel,
+  marketIcon,
+  marketActiveIcon,
+  boardIcon,
+  boardActiveIcon
 }
