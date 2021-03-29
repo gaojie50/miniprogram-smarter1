@@ -4,6 +4,7 @@ import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
+import '@components/m5/style/components/action-sheet.scss';
 import util from '@utils';
 import './index.scss';
 
@@ -43,6 +44,7 @@ export default function SearchCompany() {
       }
       if(res.data) {
         const newData = res.type === 'mainControl' ? [res.data[res.type]] : res.data[res.type];
+
         setFirstDataList(newData || []);
         setList(newData || []);
 
@@ -140,7 +142,7 @@ export default function SearchCompany() {
       Taro.navigateBack()
     }
   }
-
+console.log(openSheet, openIndex)
   return (
     <View className="edit-search-company"> 
       <View className="edit-search-company-box">
