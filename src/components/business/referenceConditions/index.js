@@ -73,7 +73,6 @@ export default function ReferenceConditions({ basicData, formData, changeFormDat
     </View>
 
     <FloatLayout
-      // scrollY={false}
       isOpened={showConditions}
       className="conditions-modal"
       onClose={()=>controlModal(false)}>
@@ -81,6 +80,7 @@ export default function ReferenceConditions({ basicData, formData, changeFormDat
       <Conditions
         changeFormData={changeFormData}
         formData={formData}
+        basicData={basicData}
         controlModal={(val=false)=>controlModal(val)} />
 
     </FloatLayout>
