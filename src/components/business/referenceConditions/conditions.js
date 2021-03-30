@@ -103,6 +103,13 @@ export default function Conditions({
           data[isDirector ? 'directorIds' : 'mainRoleIds'] = ids;
 
           setData(data);
+          setDetialData({
+            ...detialData,
+            ...{
+              [isDirector ? 'director' : 'protagonist']:backData
+            }
+          });
+
           setRefresh(!refresh);
         },
       },

@@ -36,7 +36,6 @@ export default function SearchActor() {
         setType(res.type);
       }
       if(res.data) {
-        console.log(res.data, 111)
         setFirstDataList(res.data[res.type] || []);
         setList(res.data[res.type] || []);
         res.data[res.type] && res.data[res.type].map((item, index) => {
