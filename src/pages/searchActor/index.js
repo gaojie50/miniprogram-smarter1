@@ -91,9 +91,8 @@ export default function SearchActor() {
           }
         }
 
+        radioChecked.push(firstDataList.length);
         firstDataList.push(list[item]);
-        radioChecked.push(radioChecked.length);
-    
       })
       setList(firstDataList);
       setInputValue('');

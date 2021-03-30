@@ -87,7 +87,7 @@ export default function People(props) {
               return  <View className="item" key={index}>
               <Image className={item.role === 1 ? "item-left crown" : "item-left"} src={item.role === 1 ? MainPeople : CooperPeople} alt=""></Image>
               <View className="item-right">
-                <View className="name">{item.userName}</View>
+                <View className="name">{item.userName || item.userMis }</View>
                 <View className="describe">{item.userDesc}</View>
               </View>
               {
