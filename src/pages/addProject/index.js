@@ -5,12 +5,10 @@ import {
   Text,
   Textarea,
 } from '@tarojs/components';
-import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useMemo, useEffect, useCallback } from 'react'
 import Taro from '@tarojs/taro'
 import reqPacking from '../../utils/reqPacking.js'
-import List from '../../components/m5/list';
 import ListItem from '../../components/m5/list/item';
-import M5Input from '../../components/m5/input';
 import FloatCard from '../../components/m5/float-layout';
 import M5Grid from '../../components/m5/grid';
 import Toast from '../../components/m5/toast';
@@ -22,7 +20,6 @@ import '../../components/m5/style/components/toast.scss';
 import './index.scss'
 import { MOVIE_TYPE_LIST, TV_TYPE_LIST, VARIETY_TYPE_LIST } from './lib';
 import utils from '../../utils/index.js'
-import { get as getGlobalData } from '../../global_data'
 import { CustomName } from './component/custom-project';
 import { MovieList } from './component/movie-list';
 import Divider from './component/divider';
