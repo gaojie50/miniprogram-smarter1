@@ -101,13 +101,17 @@ function handleCon(param, data) {
     data[param].forEach(item => {
       list.push(item.name)
     })
+    if(param === 'mainControl' && data[param]) {
+      list.push(data[param].name)
+    }
   }
+
   return list;
 }
 
 function moveToSearch(param, ref, update) {
   Taro.navigateTo({
-    url: '/pages/detail/searchCompany/index',
+    url: (param === 'director' || param === 'protagonist') ? '/pages/searchActor/index' : '/pages/detail/searchCompany/index',
     events: {
       submitData: function(data) {
         ref.current[param] = data;
@@ -115,7 +119,7 @@ function moveToSearch(param, ref, update) {
       },
     },
     success: function (res) {
-      res.eventChannel.emit('acceptDataFromOpenerPage', { type: param, data: ref.current, ref })
+      res.eventChannel.emit('acceptDataFromOpenerPage', { type: param, data: ref.current })
     }
   })
 }

@@ -69,6 +69,7 @@
     bottom: 0;
     width: 100%;
     overflow: hidden;
+    max-height: 100vh;
   }
 }
 
@@ -83,8 +84,12 @@
   background: #FFFFFF;
   border-radius: 20px 20px 0 0;
   
+  view.at-float-layout__container{
+    padding-top: 40px;
+  }
+
   .main{
-    padding: 0 30px;
+    padding: 0 30px 206px;
   }
 
   .title{
@@ -143,6 +148,15 @@
       // font-family: MaoYanHeiTi-H1;
       font-size: 28px;
       color: #333333;
+      text-align: right;
+      line-height: 108px;
+    }
+
+    .placeholder{
+      width: 100px;
+      position: absolute;
+      top: 0;
+      right: 48px;
       text-align: right;
       line-height: 108px;
     }
@@ -214,6 +228,8 @@
     background: #FFFFFF;
     box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
     padding-top: 16px;
+    position: fixed;
+    bottom: 0;
 
     .start-btn{
       background: #276FF0;
@@ -223,6 +239,11 @@
       text-align: center;
       width: 690px;
       color: #fff;
+      margin: 0 auto;
+
+      &.gray{
+        opacity: .4;
+      }
     }
   }
 }

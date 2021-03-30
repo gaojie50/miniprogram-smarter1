@@ -2,19 +2,18 @@ import { View, Image, Text, ScrollView, } from '@tarojs/components';
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Taro, { useDidShow } from '@tarojs/taro';
 import lx from '@analytics/wechat-sdk';
-import utils from '../../utils/index.js';
-import { picFn } from '../../utils/pic';
-import projectConfig from '../../constant/project-config.js';
+import utils from '@utils/index.js';
+import NoData from '@components/noData';
+import NoAccess from '@components/noAccess';
+import { fourTextLabel, threeTextLabel, twoTextLabel, defaultMovieCover as DefaultPic } from '@utils/imageUrl';
+import { picFn } from '@utils/pic';
+import Tab from '@components/tab';
+import FButton from '@components/m5/fab';
+import '@components/m5/style/components/fab.scss';
 import { get as getGlobalData } from '../../global_data';
 import { useFilterPanel, PROJECT_STAGE_MAPPING } from './filterPanel';
-import Tab from '../../components/tab';
-import FButton from '../../components/m5/fab';
-import '../../components/m5/style/components/fab.scss';
 import './index.scss';
-import DefaultPic from '../../static/detail/cover.png';
-import NoData from '../../components/noData';
-import NoAccess from '@components/noAccess';
-import { fourTextLabel, threeTextLabel, twoTextLabel } from '@utils/imageUrl';
+
 
 
 const labelBgMap = {

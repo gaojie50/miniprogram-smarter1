@@ -8,8 +8,9 @@ import Close from '@static/close.png';
 import dayjs from 'dayjs';
 import reqPacking from '@utils/reqPacking.js';
 import FixedButton from '@components/fixedButton';
-import AtSwipeAction from '../../components/m5/swipe-action';
 import '@components/m5/style/components/swipe-action.scss';
+import { noDataPic } from '@utils/imageUrl';
+import AtSwipeAction from '../../components/m5/swipe-action';
 import envConfig from '../../constant/env-config';
 import './projectFile.scss';
 
@@ -138,7 +139,7 @@ export default function ProjectFile(props) {
         <ScrollView className="scroll" scrollY>
         {
           fileData.length ===0 ? <View className="noFiles">
-            <Image className="img" src="../../static/detail/noFollows.png"></Image>
+            <Image className="img" src={noDataPic}></Image>
             <View className="text">暂无项目文件</View>
           </View> 
           : fileData.map((item, index) => {

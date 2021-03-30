@@ -4,9 +4,11 @@ import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
+import util from '@utils';
 import './index.scss';
 
 const UserIdInfoMapper = {};
+const { debounce } = util;
 
 function formatDataSource(data = []) {
   const res = [];
@@ -91,7 +93,7 @@ export default function AddPeople() {
     })
   }, []);
 
-  const handleSearch = value => {
+  const handleSearch = debounce(value => {
     setLoading(true);
     setSearchValue(value);
     setList([]);
@@ -103,7 +105,7 @@ export default function AddPeople() {
 
     setList(searchList)
     setLoading(false);
-  }
+  })
 
   const handleSelected = useCallback((item) => {
     let projectId;

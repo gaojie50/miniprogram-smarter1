@@ -882,7 +882,7 @@ class _C extends React.Component {
                       ></Image>
                       {redTextShow && (
                         <Image
-                          src="../../static/list/bubble.png"
+                          src="https://obj.pipi.cn/festatic/common/image/a7c6a672912136b5d28bd6353ee029b0.png"
                           className="redPrompt"
                         ></Image>
                       )}

@@ -145,16 +145,15 @@ export default function ReleaseTime(props, ref) {
     <FloatCard
       isOpened={true}
       title="上映时间"
-      onClose={props.onClose}
-    >
-      <View className="schedule-list">
+      onClose={props.onClose}>
+      { props.scheduleExist? '' : <View className="schedule-list">
         <View style={{width: '1rpx'}}></View>
         {
           SCHEDULE_LIST.map((item, index) => {
             return item.key !== 4 ? <View key={index} onClick={() => setScheduleActive(index + 1)} className={scheduleActive === index + 1 ? "schedule-item active" : "schedule-item"}>{item.name}</View> : null
           })
         }
-      </View>
+      </View>}
       <View className="date-show" style={{display: scheduleActive === 1 || scheduleActive === 5 ? 'none' : 'block'}}>
         <View
           className={

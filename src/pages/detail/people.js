@@ -6,6 +6,7 @@ import { CooperStatus } from './constant';
 import BottomSubmit from '@components/bottomSubmit';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
+import '@components/m5/style/components/action-sheet.scss';
 import AtModal from '@components/m5/modal';
 import AtModalContent from '@components/m5/modal/content';
 import '@components/m5/style/components/modal.scss';
@@ -124,11 +125,11 @@ export default function People(props) {
           <AtModalContent>
             <View className="name-title">
               <Text>设置备注名</Text>
-              <View className="right-image">
+              <View className="right-image" onClick={() => setOpenModal(false)}>
                 <Image src={Close} alt=""></Image>
               </View>
             </View>
-            <Input value={inputValue} onInput={e => setInputValue(e.detail.value)} placeholder="请填写角色名称，最多10个字" maxlength="10" className="name-input"></Input>
+            {openModal && <Input value={inputValue} onInput={e => setInputValue(e.detail.value)} placeholder={openModal ? "请填写角色名称，最多10个字" : ''} maxlength="10" className="name-input"></Input>}
             <View className="name-confirm" onClick={() => nameSubmit()}>确定</View>
           </AtModalContent>
         </AtModal>
@@ -139,7 +140,6 @@ export default function People(props) {
 }
 
 function handlePeopleOption(itemInfo, param, closeSheet) {
-  // console.log(itemInfo, 333)
   const { projectId, id } = itemInfo;
   if (param === 'setMajor' || param === 'cancelMajor') {
     Taro.showModal({
@@ -147,7 +147,6 @@ function handlePeopleOption(itemInfo, param, closeSheet) {
       content: param === 'setMajor' ? '确认设置为负责人吗？' : '确认取消负责人吗？',
       success: res => {
         if(res.confirm) {
-          console.log(id, projectId, param,222)
           reqPacking({
             url: '/api/management/user/edit',
             data: {

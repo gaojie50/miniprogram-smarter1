@@ -7,6 +7,7 @@ import _merge from 'lodash/merge';
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';
 import FixedButton from '@components/fixedButton';
 import Indexes from '@components/indexes';
+import FingerPrint from '@utils/fingerprint';
 import './index.scss'
 
 const { errorHandle } = utils;
@@ -219,6 +220,8 @@ export default function AssessPage(){
   const showIndexes = scrollHeight > contentHeight *2;
   return (
     <View className="assess-page">
+      <FingerPrint />
+      
       <View className="process-wrap">
         <View className="inner-bar" style={{width:`${rate}`}} />
       </View>

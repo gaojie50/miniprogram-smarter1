@@ -11,7 +11,8 @@ import MatrixScaleEval from '../../components/matrixScaleEval';
 import OperationFooter from '../../components/operationFooter';
 import LoginNotice from '@components/loginNotice';
 import utils from '@utils/index';
-import { picFn } from '../../utils/pic';
+import { picFn } from '@utils/pic';
+import FingerPrint from '@utils/fingerprint';
 import './index.scss';
 
 const { isDockingPerson } = utils;
@@ -243,5 +244,7 @@ export default function Result() {
         />
       </Block>
     )}
+    
+    <FingerPrint />
   </View>
 }
