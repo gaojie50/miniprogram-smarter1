@@ -300,7 +300,7 @@ export default class Detail extends React.Component {
     if (Taro.getCurrentPages().length > 1) {
       Taro.navigateBack();
     } else {
-      Taro.redirectTo({
+      Taro.switchTab({
         url: `/pages/board/index`
       })
     }

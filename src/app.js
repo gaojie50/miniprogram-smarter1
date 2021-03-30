@@ -33,6 +33,7 @@ class App extends React.Component {
     if(userInfo) {
       lx.set('wxid', userInfo.keeperUserId);
       lx.set('user_id', userInfo.mis);
+      lx.set('uid', userInfo.keeperUserId);
       lx.set('keep_user_id', userInfo.keeperUserId);
     }
   }

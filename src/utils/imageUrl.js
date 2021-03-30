@@ -26,6 +26,9 @@ export const noDataPic = 'https://obj.pipi.cn/festatic/common/image/0b4e331836c4
 export const smartLogo = 'https://obj.pipi.cn/festatic/common/image/9d854ccda0d97f75d02110556fdbc847.png';
 export const welcomeSlogan = 'https://obj.pipi.cn/festatic/common/image/85143f248e546488db7c0e1161215a7e.png';
 
+// 变更历史前后logo
+export const beforeIcon = 'https://obj.pipi.cn/festatic/common/image/266cd33df47acb2603879e4e8328cd1d.png';
+export const afterIcon = 'https://obj.pipi.cn/festatic/common/image/066776d38ea3df9088d640259fb5785a.png';
 
 export default {
   defaultMovieCover,
@@ -39,5 +42,7 @@ export default {
   noAccessPic,
   noDataPic,
   smartLogo,
-  welcomeSlogan
+  welcomeSlogan,
+  beforeIcon,
+  afterIcon
 }
