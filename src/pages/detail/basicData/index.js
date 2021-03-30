@@ -4,6 +4,7 @@ import FloatCard from '@components/m5/float-layout';
 import { defaultMovieCover as Cover } from '@utils/imageUrl';
 import Close from '@static/close.png';
 import OmitTip from '@components/omitTip';
+import '@components/m5/style/components/float-layout.scss';
 import { CategoryList, BasicItem } from '../constant';
 import ReaseTime from './releaseTime';
 import './index.scss';
