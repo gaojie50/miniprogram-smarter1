@@ -299,8 +299,8 @@ export default class Detail extends React.Component {
   handleBack = () => {
     if(Taro.getCurrentPages().length>1){
       Taro.navigateBack();
-    }else{
-      Taro.redirectTo({
+    } else {
+      Taro.switchTab({
         url: `/pages/board/index`
       })
     }

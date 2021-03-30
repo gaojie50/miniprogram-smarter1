@@ -1,12 +1,8 @@
 import {
-    Block,
     View,
-    Label,
     Image,
-    Input,
     ScrollView,
     Text,
-    Picker
   } from '@tarojs/components'
 import React from 'react';
 import { CATEGORY_LIST } from '../lib';
@@ -36,7 +32,7 @@ export function MovieList(props) {
     }
 
     return (
-      <ScrollView className="search-list" scrollY>
+      <ScrollView className="search-project-list" scrollY>
         {data.map((item, index) => {
           return (
             <View
