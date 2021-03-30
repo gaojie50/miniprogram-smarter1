@@ -6,6 +6,7 @@ import Cover from '@static/detail/cover.png';
 import Close from '@static/close.png';
 import ReaseTime from './releaseTime';
 import OmitTip from '@components/omitTip';
+import '@components/m5/style/components/float-layout.scss';
 import './index.scss';
 
 export default class BasicData extends React.Component {
