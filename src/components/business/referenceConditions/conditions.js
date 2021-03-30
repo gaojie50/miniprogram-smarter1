@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useRef } from 'react';
+import React, { useState, forwardRef, useRef, useEffect } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Image, Text, Input, } from '@tarojs/components';
 import dayjs from 'dayjs';
@@ -23,7 +23,18 @@ export default function Conditions({
   };
   const [openReleaseTime, setOpenReleaseTime] = useState(false);
   const [data, setData] = useState(assignDeep(formData));
-  const [refresh,setRefresh] = useState(true);
+  const [refresh, setRefresh] = useState(true);
+  const [detialData, setDetialData] = useState({});
+
+  useEffect(() => {
+    const { director, mainRole } = basicData || {};
+
+    setDetialData({
+      director,
+      protagonist: mainRole
+    })
+  }, basicData);
+
   const {
     releaseTime,
     cost,
@@ -82,31 +93,23 @@ export default function Conditions({
         submitData: backData => {
           let ids = [];
           let names = [];
-
-          backData.map(({maoyanId,name}) =>{
+          
+          backData.map(({ maoyanId, name }) => {
             ids.push(maoyanId);
             names.push(name);
           });
 
           data[isDirector ? 'director' : 'mainRole'] = names;
-          data[isDirector ? 'directorIds':'mainRoleIds'] = ids;
-          
+          data[isDirector ? 'directorIds' : 'mainRoleIds'] = ids;
+
           setData(data);
           setRefresh(!refresh);
         },
       },
       success: res => {
-        let paramData = {};
         let type = isDirector ? 'director' : 'protagonist';
 
-        paramData[type] = sendData.map((item,index) =>{
-          return {
-            maoyanId:(isDirector ? directorIds : mainRoleIds)[index] ,
-            name:item,
-          };
-        })
-
-        res.eventChannel.emit('acceptDataFromOpenerPage',{ type, data: paramData, });
+        res.eventChannel.emit('acceptDataFromOpenerPage', { type, data: detialData, });
       }
     })
   }
@@ -162,7 +165,7 @@ export default function Conditions({
         required={false}
         contType="btn"
         value={director}
-        event={() => toSearchEvent(director,true,)}
+        event={() => toSearchEvent(director, true,)}
         arrow={true} />
 
       <ConditionsItems
@@ -170,7 +173,7 @@ export default function Conditions({
         required={false}
         contType="btn"
         value={mainRole}
-        event={() => toSearchEvent(mainRole,false, )}
+        event={() => toSearchEvent(mainRole, false,)}
         arrow={true} />
     </View>
 
