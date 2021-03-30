@@ -1,11 +1,10 @@
 import Taro from '@tarojs/taro';
-import { Block, View, Image, Text, ScrollView, Button } from '@tarojs/components';
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import NoFollow from '@static/detail/noFollows.png';
+import { View, Image, Text, Button } from '@tarojs/components';
+import React, { useEffect, useMemo, useState } from 'react';
+import { noDataPic } from '@utils/imageUrl';
 import './evaluate.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking'
-import NoData from '../../components/noData';
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -64,7 +63,7 @@ export function EvaluationList(props) {
         evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectRole={projectRole} judgeRole={judgeRole} projectId={data.projectId} category={data.category}/>) : (
           <>
             <View className="no-eval-data" style={{backgroundColor: '#ffffff'}}>
-              <Image src={NoFollow} alt=""></Image>
+              <Image src={noDataPic} alt=""></Image>
               <View className="text">暂无评估记录</View>
             </View>
           </>

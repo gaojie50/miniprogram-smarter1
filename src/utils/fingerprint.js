@@ -7,7 +7,7 @@ const { rpxTopx, } = utils;
 const width = 200;
 const height = 100;
 
-export default function FingerPrint({text=13810059073,}){
+export default function FingerPrint({text=Taro.getStorageSync('authinfo')?.userInfo?.mis,}){
   const styleStr = () =>{
     return `
       pointer-events: none;
@@ -35,9 +35,10 @@ export default function FingerPrint({text=13810059073,}){
       canvasId: 'fingerprint',
       fileType: 'png',
       success: function (res) {
-        document.getElementById('fingerprintBox')
-          .style
-          .background = `url(${res.tempFilePath}) repeat`;
+        const fingerprintBoxDom = document.getElementById('fingerprintBox');
+        
+        fingerprintBoxDom.style.backgroundImage = `url(${res.tempFilePath})`;
+        fingerprintBoxDom.style.backgroundRepeat = 'repeat';
       },
     });
   });

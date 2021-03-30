@@ -40,11 +40,12 @@
       height: 84px;
       margin: 350px auto 30px;
       display: block;
-      animation: keepRotate 2s linear infinite;
+      animation: keepRotate 1s linear infinite;
     }
 
     @keyframes keepRotate {
       0% { transform: rotateZ(0deg) }
+      60% { transform: rotateZ(180deg) }
       100% { transform: rotateZ(360deg) }
     }
 

@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, Image, Radio, Text, Input } from '@tarojs/components';
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, Image, Radio, Input } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import util from '@utils';
+import { defaultMovieCover } from '@utils/imageUrl';
 import './index.scss';
 
 const { debounce } = util;
@@ -127,7 +128,7 @@ export default function SearchActor() {
               <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={inputValue === '' && radioChecked.indexOf(index) !== -1} />
               <View className="right">
                 <label className="border">
-                  <Image src={item.pic ? item.pic.replace(/w.h\//, '') : '../../static/detail/cover.png'}></Image>
+                  <Image src={item.pic ? item.pic.replace(/w.h\//, '') : defaultMovieCover}></Image>
                 </label>
                 <View className="content">
                   <View className="name" style={{marginBottom: item.roleStr || item.representativeWork  ? '20rpx' : '0'}}>{item.name}</View>
