@@ -15,6 +15,18 @@ export const marketActiveIcon = 'https://obj.pipi.cn/festatic/common/image/97bf7
 export const boardIcon = 'https://obj.pipi.cn/festatic/common/image/381f808e0c16930d152852b8f11570ad.png';
 export const boardActiveIcon = 'https://obj.pipi.cn/festatic/common/image/ee0bb63fde65490304c89a9ac105fe8a.png';
 
+
+// 无权限
+export const noAccessPic = 'https://obj.pipi.cn/festatic/common/image/2ecf03af2a5b1716f3558bf2195b110f.png';
+
+// 无数据
+export const noDataPic = 'https://obj.pipi.cn/festatic/common/image/0b4e331836c4e403fa15a9c9d5e19ce2.png';
+
+// 首页智多星标志
+export const smartLogo = 'https://obj.pipi.cn/festatic/common/image/9d854ccda0d97f75d02110556fdbc847.png';
+export const welcomeSlogan = 'https://obj.pipi.cn/festatic/common/image/85143f248e546488db7c0e1161215a7e.png';
+
+
 export default {
   defaultMovieCover,
   fourTextLabel,
@@ -23,5 +35,9 @@ export default {
   marketIcon,
   marketActiveIcon,
   boardIcon,
-  boardActiveIcon
+  boardActiveIcon,
+  noAccessPic,
+  noDataPic,
+  smartLogo,
+  welcomeSlogan
 }
