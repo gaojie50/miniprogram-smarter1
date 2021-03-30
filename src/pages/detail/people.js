@@ -72,70 +72,73 @@ export default function People(props) {
   }, [inputValue])
   
   return (
-    <FloatCard className="people" onClose={() => props.cancelShow()} isOpened={show}>
-      <View className="title">
-        <Text>对接人({peopleData.length})</Text>
-        <View className="img" onClick={() => props.cancelShow()}>
-          <Image src={Close} alt=""></Image>
-        </View>
-      </View>
-      <View className="people-item">
-      <ScrollView className="scroll" scrollY>
-        {
-          peopleData.map((item, index) => {
-            return  <View className="item" key={index}>
-            <Image className={item.role === 1 ? "item-left crown" : "item-left"} src={item.role === 1 ? MainPeople : CooperPeople} alt=""></Image>
-            <View className="item-right">
-              <View className="name">{item.userName}</View>
-              <View className="describe">{item.userDesc}</View>
-            </View>
-            {
-              judgeRole.role !== 1 && item.userId !== userInfo.id ? null 
-              : <View className="last" onClick={() => {setOpenSheet(true);setItemInfo(item)}}>
-                  <Image src="../../static/detail/company-edit.png" alt=""></Image>
-                </View>
-            }
+    <View>
+      <FloatCard className="people" onClose={() => props.cancelShow()} isOpened={show}>
+        <View className="title">
+          <Text>对接人({peopleData.length})</Text>
+          <View className="img" onClick={() => props.cancelShow()}>
+            <Image src={Close} alt=""></Image>
           </View>
-          })
-        }
-        </ScrollView>
-        <AtActionSheet isOpened={openSheet} cancelText='取消' onCancel={() => setOpenSheet(false)} onClose={() => setOpenSheet(false)}>
+        </View>
+        <View className="people-item">
+        <ScrollView className="scroll" scrollY>
           {
-            judgeRole.role === 1 && itemInfo.role === 0 && itemInfo.userId !== userInfo.id ?
-            <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'setMajor', closeSheet)}>设为负责人</AtActionSheetItem> : null
-          }
-          {
-            judgeRole.role === 1 && itemInfo.role === 1 ?
-            <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'cancelMajor', closeSheet)}>取消负责人</AtActionSheetItem> : null
-          }
-            <AtActionSheetItem onClick={() => {setOpenSheet(false);setOpenModal(true)}}>设置备注名</AtActionSheetItem>
-          {
-            (judgeRole.role === 1 && itemInfo.userId !== userInfo.id) || (judgeRole.role === 0 && itemInfo.userId === userInfo.id) ?
-            <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'moveOut', closeSheet)}>移出该项目</AtActionSheetItem> : null
-          }
-          {
-            judgeRole.role === 1 && itemInfo.userId === userInfo.id ?
-            <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'dropOut', closeSheet)}>退出该项目</AtActionSheetItem> : null
-          }
-        </AtActionSheet>
-        <AtModal
-          isOpened={openModal}
-          className="nameModal"
-        >
-          <AtModalContent>
-            <View className="name-title">
-              <Text>设置备注名</Text>
-              <View className="right-image" onClick={() => setOpenModal(false)}>
-                <Image src={Close} alt=""></Image>
+            peopleData.map((item, index) => {
+              return  <View className="item" key={index}>
+              <Image className={item.role === 1 ? "item-left crown" : "item-left"} src={item.role === 1 ? MainPeople : CooperPeople} alt=""></Image>
+              <View className="item-right">
+                <View className="name">{item.userName || item.userMis }</View>
+                <View className="describe">{item.userDesc}</View>
               </View>
+              {
+                judgeRole.role !== 1 && item.userId !== userInfo.id ? null 
+                : <View className="last" onClick={() => {setOpenSheet(true);setItemInfo(item)}}>
+                    <Image src="../../static/detail/company-edit.png" alt=""></Image>
+                  </View>
+              }
             </View>
-            {openModal && <Input value={inputValue} onInput={e => setInputValue(e.detail.value)} placeholder={openModal ? "请填写角色名称，最多10个字" : ''} maxlength="10" className="name-input"></Input>}
-            <View className="name-confirm" onClick={() => nameSubmit()}>确定</View>
-          </AtModalContent>
-        </AtModal>
-        {judgeRole.role === 2 ? null : <BottomSubmit name="添加对接人" onClick={addPeople} />}
-      </View>
-    </FloatCard>
+            })
+          }
+          </ScrollView>
+          
+          <AtModal
+            isOpened={openModal}
+            className="nameModal"
+          >
+            <AtModalContent>
+              <View className="name-title">
+                <Text>设置备注名</Text>
+                <View className="right-image" onClick={() => setOpenModal(false)}>
+                  <Image src={Close} alt=""></Image>
+                </View>
+              </View>
+              {openModal && <Input value={inputValue} onInput={e => setInputValue(e.detail.value)} placeholder={openModal ? "请填写角色名称，最多10个字" : ''} maxlength="10" className="name-input"></Input>}
+              <View className="name-confirm" onClick={() => nameSubmit()}>确定</View>
+            </AtModalContent>
+          </AtModal>
+          {judgeRole.role === 2 ? null : <BottomSubmit name="添加对接人" onClick={addPeople} />}
+        </View>
+      </FloatCard>
+      <AtActionSheet isOpened={openSheet} cancelText='取消' onCancel={() => setOpenSheet(false)} onClose={() => setOpenSheet(false)}>
+        {
+          judgeRole.role === 1 && itemInfo.role === 0 && itemInfo.userId !== userInfo.id ?
+          <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'setMajor', closeSheet)}>设为负责人</AtActionSheetItem> : null
+        }
+        {
+          judgeRole.role === 1 && itemInfo.role === 1 ?
+          <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'cancelMajor', closeSheet)}>取消负责人</AtActionSheetItem> : null
+        }
+          <AtActionSheetItem onClick={() => {setOpenSheet(false);setOpenModal(true)}}>设置备注名</AtActionSheetItem>
+        {
+          (judgeRole.role === 1 && itemInfo.userId !== userInfo.id) || (judgeRole.role === 0 && itemInfo.userId === userInfo.id) ?
+          <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'moveOut', closeSheet)}>移出该项目</AtActionSheetItem> : null
+        }
+        {
+          judgeRole.role === 1 && itemInfo.userId === userInfo.id ?
+          <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'dropOut', closeSheet)}>退出该项目</AtActionSheetItem> : null
+        }
+      </AtActionSheet>
+    </View>
   )
 }
 
