@@ -22,7 +22,7 @@ import ArrowLeft from '@static/detail/arrow-left.png';
 import Edit from '@static/detail/edit.png';
 import CompeteMarket from './competeMarket';
 import './index.scss';
-import '@components/m5/style/index.scss';
+import '@components/m5/style/components/float-layout.scss';
 
 
 const { isDockingPerson, formatNumber, } = utils;

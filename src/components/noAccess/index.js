@@ -4,7 +4,7 @@ import {
   View,
   Image,
 } from '@tarojs/components';
-import noAccessPic from '../../static/list/no-access.png';
+import { noAccessPic } from '@utils/imageUrl';
 import './index.scss';
 
 const copyMail = () => {

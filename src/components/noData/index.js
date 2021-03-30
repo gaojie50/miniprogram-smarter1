@@ -4,8 +4,9 @@ import {
   View,
   Image,
 } from '@tarojs/components';
+import { noDataPic } from '@utils/imageUrl';
 import './index.scss';
-import noDataPic from '../../static/zwgxjl.png'
+
 
 const noData = function(props){
   const { text } = props;
