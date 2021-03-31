@@ -163,7 +163,7 @@ export default function SearchCompany() {
         {
           list.length > 0 && list.map((item, index) => {
             return <View className="edit-rearch-result-item" key={ index }>
-              <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={inputValue === '' && radioChecked.indexOf(index) !== -1} />
+              <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={(inputValue === '' && radioChecked.indexOf(index) !== -1) || (inputValue !== '' && searchChecked.indexOf(index) !== -1) ? true : ''} />
               <View className="right">
                 <label className="border">
                   <Image src="https://obj.pipi.cn/festatic/common/image/29e659011b1dc61a23b6c8158c152037.png" alt=""></Image>
