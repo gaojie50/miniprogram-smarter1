@@ -14,7 +14,7 @@ const types = {
 
 export default function SearchActor() {
   const [focus, setFocus] = useState(false);
-  const [type, setType] = useState('producer');
+  const [type, setType] = useState('director');
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -93,7 +93,6 @@ export default function SearchActor() {
 
         radioChecked.push(firstDataList.length);
         firstDataList.push(list[item]);
-        console.log(radioChecked, 334)
       })
       setList(firstDataList);
       setInputValue('');
@@ -126,7 +125,6 @@ export default function SearchActor() {
           list.length > 0 && list.map((item, index) => {
 
             return <View className="edit-rearch-result-item" key={ index }>
-                 {console.log(item.name,radioChecked, index, radioChecked.indexOf(index) !== -1)}
               <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={ (inputValue === '' && radioChecked.indexOf(index) !== -1) || (inputValue !== '' && searchChecked.indexOf(index) !== -1) ? true : ''} />
               <View className="right">
                 <label className="border">
