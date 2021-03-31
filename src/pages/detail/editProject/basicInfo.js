@@ -1,15 +1,10 @@
 import {
-  Block,
   View,
-  Label,
-  Image,
   Input,
-  ScrollView,
   Text,
-  Picker,
   Textarea,
 } from '@tarojs/components';
-import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useMemo, useEffect, useCallback } from 'react'
 import Taro from '@tarojs/taro'
 import reqPacking from '@utils/reqPacking.js'
 import ListItem from '@components/m5/list/item';
