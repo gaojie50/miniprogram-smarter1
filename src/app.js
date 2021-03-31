@@ -10,9 +10,9 @@ class App extends React.Component {
 
   componentDidShow(){
     const accountInfo = Taro.getAccountInfoSync();
-    if([ 'develop', 'trial'].includes(accountInfo.miniProgram.envVersion)){
-      lx.dev(true);
-    }
+    // if([ 'develop', 'trial'].includes(accountInfo.miniProgram.envVersion)){
+    //   lx.dev(true);
+    // }
     // let validCode = Math.random().toString().slice(2, 8); //生成6-12位纯数字验证码
     // console.log(validCode);
     // lx.debug(true, {  //打开验证开关，并设置验证码
