@@ -14,7 +14,7 @@ const types = {
 
 export default function SearchActor() {
   const [focus, setFocus] = useState(false);
-  const [type, setType] = useState('producer');
+  const [type, setType] = useState('director');
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +30,7 @@ export default function SearchActor() {
     const eventChannel = current.getOpenerEventChannel();
 
     eventChannel.on("acceptDataFromOpenerPage",(res)=>{
+      console.log(res,"RES");
       if(res.type) {
         const title = types[res.type];
         Taro.setNavigationBarTitle({title});
@@ -46,6 +47,14 @@ export default function SearchActor() {
   },[])
 
   const handleSearch = debounce(e => {
+    if(e.detail.value.trim() === '') {
+      setInputValue(''); 
+      setList(firstDataList);
+      setSearchChecked([]);
+      
+      return;
+    };
+
     setLoading(true);
     setInputValue(e.detail.value);
     setList([]);
