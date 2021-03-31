@@ -1,6 +1,5 @@
 import { View, Text } from '@tarojs/components';
 import React from 'react';
-import Taro from '@tarojs/taro';
 import utils from '@utils/index';
 import dayjs from 'dayjs';
 import './history.scss';
