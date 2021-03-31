@@ -14,6 +14,10 @@ const types = {
   producer: '出品方',
   issuer: '发行方',
 }
+const mainTypes = {
+  producer: '主出品',
+  issuer: '主发行',
+}
 
 export default function SearchCompany() {
   const [focus, setFocus] = useState(false);
@@ -117,8 +121,8 @@ export default function SearchCompany() {
           }
         }
 
+        radioChecked.push(firstDataList.length);
         firstDataList.push(list[item]);
-        radioChecked.push(radioChecked.length);
       })
 
       setList(firstDataList);
@@ -142,7 +146,7 @@ export default function SearchCompany() {
       Taro.navigateBack()
     }
   }
-console.log(openSheet, openIndex)
+
   return (
     <View className="edit-search-company"> 
       <View className="edit-search-company-box">
@@ -159,7 +163,7 @@ console.log(openSheet, openIndex)
         {
           list.length > 0 && list.map((item, index) => {
             return <View className="edit-rearch-result-item" key={ index }>
-              <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={inputValue === '' && radioChecked.indexOf(index) !== -1} />
+              <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={(inputValue === '' && radioChecked.indexOf(index) !== -1) || (inputValue !== '' && searchChecked.indexOf(index) !== -1) ? true : ''} />
               <View className="right">
                 <label className="border">
                   <Image src="https://obj.pipi.cn/festatic/common/image/29e659011b1dc61a23b6c8158c152037.png" alt=""></Image>
@@ -182,7 +186,7 @@ console.log(openSheet, openIndex)
         }
       </ScrollView>
       <AtActionSheet isOpened={openSheet} cancelText='取消' onCancel={() => setOpenSheet(false)} onClose={() => setOpenSheet(false)}>
-        <AtActionSheetItem onClick={changeMain}>{openIndex === 0 ? '取消主出品' : '设置为主出品'}</AtActionSheetItem>
+        <AtActionSheetItem onClick={changeMain}>{openIndex === 0 ? `取消${mainTypes[type]}` : `设置为${mainTypes[type]}`}</AtActionSheetItem>
       </AtActionSheet>
       <View className="bottom-confirm">
         <View className="bottom-confirm-btn" onClick={submit}>确定（{inputValue === '' ? radioChecked.length : searchChecked.length}）</View>

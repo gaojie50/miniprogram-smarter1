@@ -26,6 +26,7 @@ const config = {
     '@utils': path.resolve(__dirname, '..', 'src/utils'),
     '@static': path.resolve(__dirname, '..', 'src/static'),
     '@pages':path.resolve(__dirname, '..', 'src/pages'),
+    '@constant':path.resolve(__dirname, '..', 'src/constant'),
 
   },
   mini: {

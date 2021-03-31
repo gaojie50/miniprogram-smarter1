@@ -123,13 +123,7 @@
   
   }
   .float {
-    position: relative;
-    .at-float-layout__container {
-      max-height: 83.4% !important;
-      min-height: 0 !important;
-      padding: 40px 0 0 !important;
-      box-sizing: border-box;
-    }
+
     .line {
       font-weight: 400;
       font-family: PingFangSC-Regular;
@@ -178,7 +172,7 @@
     }
   }
   .content-scroll {
-    height: 100vh;
+    height: 600px;
     width: 100%;
     padding: 0 30px;
     box-sizing: border-box;
