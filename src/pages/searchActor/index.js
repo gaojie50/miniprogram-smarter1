@@ -93,6 +93,7 @@ export default function SearchActor() {
 
         radioChecked.push(firstDataList.length);
         firstDataList.push(list[item]);
+        console.log(radioChecked, 334)
       })
       setList(firstDataList);
       setInputValue('');
@@ -123,8 +124,10 @@ export default function SearchActor() {
       <ScrollView scrollY className="edit-rearch-result">
         {
           list.length > 0 && list.map((item, index) => {
+
             return <View className="edit-rearch-result-item" key={ index }>
-              <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={inputValue === '' && radioChecked.indexOf(index) !== -1} />
+                 {console.log(item.name,radioChecked, index, radioChecked.indexOf(index) !== -1)}
+              <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={ (inputValue === '' && radioChecked.indexOf(index) !== -1) || (inputValue !== '' && searchChecked.indexOf(index) !== -1) ? true : ''} />
               <View className="right">
                 <label className="border">
                   <Image src={item.pic ? item.pic.replace(/w.h\//, '') : defaultMovieCover}></Image>

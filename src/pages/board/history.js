@@ -1,6 +1,6 @@
 import { View, Image, Text } from '@tarojs/components';
 import React, { useEffect, useMemo, useState } from 'react';
-import { noDataPic } from '@utils/imageUrl';
+import { noDataPic, beforeIcon, afterIcon } from '@utils/imageUrl';
 import M5Timeline from '../../components/m5/timeline'
 import '../../components/m5/style/components/timeline.scss';
 import './history.scss';
