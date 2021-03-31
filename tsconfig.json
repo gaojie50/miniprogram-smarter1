@@ -19,6 +19,7 @@
       "@utils/*": ["./src/utils/*"],
       "@static/*": ["./src/static/*"],
       "@pages/*":["./src/pages/*"],
+      "@constant/*":["./src/constant/*"],
     },
     "rootDir": ".",
     "jsx": "react",

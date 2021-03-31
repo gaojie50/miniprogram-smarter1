@@ -1,14 +1,12 @@
 import {
-  Block,
   View,
   Label,
   Image,
   Input,
-  ScrollView,
-  Text
 } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
+import { defaultMovieCover } from '@utils/imageUrl';
 import reqPacking from '../../utils/reqPacking.js'
 import utils from '../../utils/index.js'
 import projectConfig from '../../constant/project-config.js'
@@ -18,6 +16,7 @@ import { MovieList } from '../addProject/component/movie-list';
 import Divider from '../addProject/component/divider';
 
 import './index.scss'
+
 const { debounce } = utils
 const { getScheduleType } = projectConfig
 
@@ -52,7 +51,7 @@ function fn(e, _this) {
               item.scheduleObj = getScheduleType(item.scheduleType)
               item.pic = item.pic
                 ? `${item.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`
-                : `../../static/icon/default-pic.svg`
+                : defaultMovieCover
 
               return item
             })

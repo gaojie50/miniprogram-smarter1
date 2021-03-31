@@ -1,12 +1,8 @@
 import {
-  Block,
   View,
-  Label,
-  Image,
   Input,
   ScrollView,
   Text,
-  Picker,
   Textarea,
 } from '@tarojs/components';
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react'
@@ -30,6 +26,7 @@ import { get as getGlobalData } from '../../global_data'
 import { CustomName } from './component/custom-project';
 import { MovieList } from './component/movie-list';
 import Divider from './component/divider';
+import { defaultMovieCover } from '@utils/imageUrl';
 
 const {
   debounce
@@ -440,7 +437,7 @@ function onHandleResponse(res) {
       data.forEach(item => {
         item.pic = item.pic
           ? `${item.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`
-          : `../../static/icon/default-pic.svg`
+          : defaultMovieCover
       });
     }
     return {

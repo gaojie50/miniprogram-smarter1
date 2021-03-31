@@ -69,6 +69,7 @@
     bottom: 0;
     width: 100%;
     overflow: hidden;
+    max-height: 100vh;
   }
 }
 
@@ -88,7 +89,7 @@
   }
 
   .main{
-    padding: 0 30px;
+    padding: 0 30px 206px;
   }
 
   .title{
@@ -227,6 +228,8 @@
     background: #FFFFFF;
     box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
     padding-top: 16px;
+    position: fixed;
+    bottom: 0;
 
     .start-btn{
       background: #276FF0;
@@ -236,6 +239,7 @@
       text-align: center;
       width: 690px;
       color: #fff;
+      margin: 0 auto;
 
       &.gray{
         opacity: .4;

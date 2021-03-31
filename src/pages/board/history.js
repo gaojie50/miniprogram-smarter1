@@ -85,7 +85,6 @@ export function ChangeHistory(props) {
         oldFiledValue,
         updateTime,
         operateAppendMessage,
-        updateType,
       } = item;
 
       const time = new Date(updateTime);
@@ -168,9 +167,7 @@ export function ChangeCard(props) {
       </View>
       <View className="change-card-wrapper">
         <View className="change-card-pre">
-          <View className="change-card-pre-symbol">
-            前
-          </View>
+          <View className="change-card-pre-symbol" style={{backgroundImage: `url(${beforeIcon})`}} />
           <View className={`change-card-pre-content ${pre === '-' || !pre ? 'change-card-pre-content-no-line' : ''}`}>
             <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
               {pre}
@@ -178,9 +175,7 @@ export function ChangeCard(props) {
         </View>
         </View>
         <View className="change-card-cur">
-          <View className="change-card-cur-symbol">
-            后
-          </View>
+          <View className="change-card-cur-symbol" style={{backgroundImage: `url(${afterIcon})`}} />
           <View className={`change-card-cur-content`}>
             <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
               {cur}
@@ -202,10 +197,4 @@ function PureReq_Projectoperatelog({ projectId }) {
     },
     'server',
   ).then((res) => res)
-}
-
-function onHandleResponse(res) {
-  const { success, data, error } = res;
-  if (success) return data;
-  return error;
 }
