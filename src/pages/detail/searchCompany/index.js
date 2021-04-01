@@ -21,7 +21,7 @@ const mainTypes = {
 
 export default function SearchCompany() {
   const [focus, setFocus] = useState(false);
-  const [type, setType] = useState('producer');
+  const [type, setType] = useState('mainControl');
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -47,8 +47,7 @@ export default function SearchCompany() {
         setType(res.type);
       }
       if(res.data) {
-        const newData = res.type === 'mainControl' ? [res.data[res.type]] : res.data[res.type];
-
+        const newData = res.type === 'mainControl' && res.data.mainControl ? (JSON.stringify(res.data.mainControl) === '{}' ? null : [res.data[res.type]]) : res.data[res.type];
         setFirstDataList(newData || []);
         setList(newData || []);
 
@@ -60,10 +59,14 @@ export default function SearchCompany() {
   },[])
 
   const handleSearch = debounce(e => {
+    const { value } = e.target;
+    if(value.trim() === '') {
+      return
+    }
     setLoading(true);
-    setInputValue(e.detail.value);
+    setInputValue(value);
     setList([]);
-    requestSearch({keyword: e.detail.value})
+    requestSearch({keyword: value})
     .then(res => {
       const { success, data, error } = res;
       if(success) {
@@ -196,12 +199,14 @@ export default function SearchCompany() {
 }
 
 function requestSearch({keyword = ''}) {
-  return reqPacking({
-    url: 'api/company/search',
-    data: {
-      keyword
-    }
-  }).then(res => res)
+  if(keyword !== ''){
+    return reqPacking({
+      url: 'api/company/search',
+      data: {
+        keyword
+      }
+    }).then(res => res)
+  }
 }
 
 
