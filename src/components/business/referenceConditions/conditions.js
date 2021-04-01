@@ -228,8 +228,8 @@ function ConditionsItems({
 
     {contType === 'text' && (
       value ?
-        <View className="value"> {value} </View> :
-        <View className="placeholder">请选择</View>
+        <View className="value" onClick={event}> {value} </View> :
+        <View className="placeholder" onClick={event}>请选择</View>
     )}
 
     {contType === 'input' && <Input

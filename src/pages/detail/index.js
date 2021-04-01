@@ -483,7 +483,7 @@ export default class Detail extends React.Component {
                 changeKeyData={data => this.handleChangeKeyData(data)}
               /> : ''
           }
-          {basicData.category === 3 && judgeRole?.releaseStage === 1 ? (
+          {basicData.category === 3 && judgeRole?.releaseStage === 1 && judgeRole?.role !== 2? (
             releaseTimeArry && releaseTimeArry.length === 2 ? <View className='mini-box'>
               <View className='machine-eval-mini' onClick={this.goToBoxForecasting}>
                 {!keyData?.estimateBox?.machineEstimateBoxDetail?.estimateNum ?
