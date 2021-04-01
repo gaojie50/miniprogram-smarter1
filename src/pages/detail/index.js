@@ -196,6 +196,8 @@ export default class Detail extends React.Component {
   }
 
   fetchCompetitiveSituation() {
+    if(this.state.basicData.category !== 3) return;
+    
     const { releaseTime = {} } = this.state.keyData;
     const releaseTimeArry = releaseTime.time && releaseTime.time.match(/-/g);
     if ((releaseTimeArry && releaseTimeArry.length === 2)) {

@@ -16,7 +16,9 @@ export default function TotalBox({totalData = {}, handleInsteadBox}) {
   return <View className="total-box">
     <View className="h2">
       预估总票房
-      <Text className="model">{model}</Text>
+      <Text className="model">{
+        model.trim().includes('无热度预测模型') ? '无热度预测模型' : model
+        }</Text>
     </View>
 
     <View className="box">{formatNumber(estimateNum)?.num}
