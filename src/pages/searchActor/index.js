@@ -23,6 +23,7 @@ export default function SearchActor() {
   const [list, setList] = useState([]);
   const [radioChecked, setRadioChecked] = useState([]);
   const [searchChecked, setSearchChecked] = useState([]);
+  const [refresh,setRefresh] = useState(false);
 
   useEffect(()=>{
     const pages =Taro.getCurrentPages();
@@ -30,7 +31,6 @@ export default function SearchActor() {
     const eventChannel = current.getOpenerEventChannel();
 
     eventChannel.on("acceptDataFromOpenerPage",(res)=>{
-      console.log(res,"RES");
       if(res.type) {
         const title = types[res.type];
         Taro.setNavigationBarTitle({title});
@@ -41,7 +41,10 @@ export default function SearchActor() {
         setList(res.data[res.type] || []);
         res.data[res.type] && res.data[res.type].map((item, index) => {
           radioChecked.push(index);
-        })
+        });
+
+        setRadioChecked(radioChecked);
+        setRefresh(!refresh);
       }
     })
   },[])

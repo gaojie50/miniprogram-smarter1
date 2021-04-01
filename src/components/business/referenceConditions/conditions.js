@@ -219,9 +219,7 @@ function ConditionsItems({
   type,
   changeInputVal,
 }) {
-  return <View
-    onClick={event}
-    className="conditions-items">
+  return <View className="conditions-items">
 
     <View className="name">
       {title}

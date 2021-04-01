@@ -94,44 +94,49 @@ export default class BoxForecasting extends React.Component {
     reqPacking({
       url: 'api/management/submitmachineestimateboxtask',
       method: 'POST',
-      data: formData
+      data: {
+        ...formData,
+        wishNum: Math.trunc(formData.wishNum * 1e4)
+      }
     }).then(res => {
       const { success, error, data } = res;
-      const { estimateNum, boxSectionRatio,model } = data || {};
-      let totalData = {
-        estimateNum,
-        boxSectionRatio,
-        model,
-        dateShow: `${dayjs(data.releaseTime).format('YYYY-MM-DD')}更新`,
-      };
 
-      const conditionsData = Object.assign(
-        { projectId: formData?.projectId },
-        data,
-      )
+      if (success) {
+        const { estimateNum, boxSectionRatio, model } = data || {};
+        let totalData = {
+          estimateNum,
+          boxSectionRatio,
+          model,
+          dateShow: `刚刚更新`,
+        };
 
-      this.setState({
-        totalData,
-        formData,
-        conditionsData,
-        loading: false,
+        const conditionsData = Object.assign(
+          { projectId: formData?.projectId },
+          data,
+        )
+
+        return this.setState({
+          totalData,
+          formData,
+          conditionsData,
+          loading: false,
+        });
+      }
+
+      this.setState({ loading: false }, () => {
+        Taro.showToast({
+          title: error.message,
+          icon: 'none',
+          duration: 2000
+        });
       });
-
-      if (success) return;
-
-      Taro.showToast({
-        title: error.message,
-        icon: 'none',
-        duration: 2000
-      });
-
     });
   }
 
   stopScrollEvt = stopScroll => this.setState({ stopScroll });
 
   render() {
-    const { keyData, basicData, formData, stopScroll, totalData,loading } = this.state;
+    const { keyData, basicData, formData, stopScroll, totalData, loading } = this.state;
 
     return (<View className="bg">
       <ScrollView className="box-forecasting" scrollY={!stopScroll}>
