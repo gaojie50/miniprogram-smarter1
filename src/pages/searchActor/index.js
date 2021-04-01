@@ -160,13 +160,15 @@ export default function SearchActor() {
 }
 
 function requestSearch({keyword = ''}, type = 105) {
-  return reqPacking({
-    url: 'api/home/search',
-    data: {
-      keyword,
-      type,
-    }
-  }).then(res => res)
+  if(keyword !== ''){
+    return reqPacking({
+      url: 'api/home/search',
+      data: {
+        keyword,
+        type,
+      }
+    }).then(res => res)
+  }
 }
 
 
