@@ -10,8 +10,7 @@ import Divider from './component/divider';
 import { Source } from '../constant';
 import './makeInfo.scss';
 
-const textVoid = <Text style={{ color: '#CCCCCC' }}>请选择</Text>;
-const mainControlVoid = <View style={{ color: '#CCCCCC' }}>请选择</View>;
+const textVoid = <View style={{ color: '#CCCCCC' }}>请选择</View>;
 const divider = <Divider />
 const types = {
   mainControl: '主控方',
@@ -95,7 +94,7 @@ function listItemWrap(param, ref) {
 
   const value = extraTextItem.map(i => <Text className="extraText-item">{i}</Text>);
 
-  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : param === 'mainControl' ? mainControlVoid : textVoid} arrow onClick={() => moveToSearch(param, ref, updateCon)} />
+  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : textVoid} arrow onClick={() => moveToSearch(param, ref, updateCon)} />
 }
 
 function handleCon(param, data) {
