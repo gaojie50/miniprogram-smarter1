@@ -5,7 +5,7 @@ import utils from './index.js'
 
 const { rpxTopx, } = utils;
 
-export default function FingerPrint({ text = Taro.getStorageSync('authinfo')?.userInfo?.mis, }) {
+export default function FingerPrint({ text = Taro.getStorageSync('authinfo')?.userInfo?.id, }) {
   const styleStr = () => {
     return `
       pointer-events: none;
@@ -15,6 +15,7 @@ export default function FingerPrint({ text = Taro.getStorageSync('authinfo')?.us
       position:fixed;
       top:0;
       left:0;
+      zIndex:10;
     `
   };
 
@@ -29,7 +30,7 @@ export default function FingerPrint({ text = Taro.getStorageSync('authinfo')?.us
     ctx.rotate(-20 * Math.PI / 180);
 
     for (let i = 0; i < 20; i++) {
-      for (let j = 0; j < 6; j++) ctx.fillText(text, rpxTopx(-440 + j * 260), rpxTopx((1 + i) * 100));
+      for (let j = 0; j < 8; j++) ctx.fillText(text, rpxTopx(-360 + j * 180), rpxTopx((1 + i) * 100));
     }
 
     ctx.draw(false, () => {
