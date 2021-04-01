@@ -33,7 +33,7 @@ const CompeteMarket=(props)=>{
     const releaseTimeArry = releaseTime.time && releaseTime.time.match(/-/g);
     if ((releaseTimeArry && releaseTimeArry.length === 2)) {
       // 获取该周的第几天
-      const index = dayjs(releaseTime.time).day();
+      const index = dayjs(releaseTime.time).day() + 1;
 
       // 自然周的周一到周日
       const natureStartDate = +dayjs(releaseTime.time).subtract(index - 1, 'days');
