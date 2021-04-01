@@ -1,14 +1,17 @@
 import { Block, View, Text } from '@tarojs/components';
-import React, { forwardRef, useEffect, useState} from 'react';
+import React, { forwardRef, useEffect, useReducer, useState} from 'react';
 import Taro from '@tarojs/taro';
 import ListItem from '@components/m5/list/item';
 import FloatCard from '@components/m5/float-layout';
+import '@components/m5/style/components/float-layout.scss';
+import '@components/m5/style/components/grid.scss';
 import M5Grid from '@components/m5/grid';
 import Divider from './component/divider';
 import { Source } from '../constant';
 import './makeInfo.scss';
 
 const textVoid = <Text style={{ color: '#CCCCCC' }}>请选择</Text>;
+const mainControlVoid = <View style={{ color: '#CCCCCC' }}>请选择</View>;
 const divider = <Divider />
 const types = {
   mainControl: '主控方',
@@ -48,7 +51,7 @@ export default function makeInfo(props, ref) {
                 hasBorder={false}
                 columnNum={4}
                 mode="rect"
-                data={Source.map((item) => ({ value: item.label, valueClassName: source === item.label ? 'm5-grid-item-checked' : '' }))}
+                data={Source.map((item) => ({ value: item.label, valueClassName: source.indexOf(item.label) !== -1 ? 'm5-grid-item-checked' : '' }))}
                 onClick={({ value }) => {
                   let newSource = JSON.parse(JSON.stringify(source));
                   const index = source.indexOf(value);
@@ -58,6 +61,7 @@ export default function makeInfo(props, ref) {
                     newSource.splice(index, 1);
                   }
     
+                  ref.current.filmSource = newSource;
                   setSource(newSource);
                 }}
               />
@@ -89,20 +93,21 @@ function listItemWrap(param, ref) {
     setExtraTextItem(subList);
   }
 
-  const value = extraTextItem.map(i => <Text className="extraText-item">{i}</Text>)
+  const value = extraTextItem.map(i => <Text className="extraText-item">{i}</Text>);
 
-  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : textVoid} arrow onClick={() => moveToSearch(param, ref, updateCon)} />
+  return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : param === 'mainControl' ? mainControlVoid : textVoid} arrow onClick={() => moveToSearch(param, ref, updateCon)} />
 }
 
 function handleCon(param, data) {
   let list = [];
   if(data) {
-    data[param] && data[param].length > 0 &&
-    data[param].forEach(item => {
-      list.push(item.name)
-    })
-    if(param === 'mainControl' && data[param]) {
+    if(param === 'mainControl' && data[param] && data[param].name) {
       list.push(data[param].name)
+    } else {
+      Array.isArray(data[param]) && data[param].length > 0 &&
+      data[param].forEach(item => {
+        list.push(item.name)
+      })
     }
   }
 
@@ -114,8 +119,8 @@ function moveToSearch(param, ref, update) {
     url: (param === 'director' || param === 'protagonist') ? '/pages/searchActor/index' : '/pages/detail/searchCompany/index',
     events: {
       submitData: function(data) {
-        ref.current[param] = data;
-        update(ref)
+          ref.current[param] = data;
+          update(ref)
       },
     },
     success: function (res) {

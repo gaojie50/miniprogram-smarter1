@@ -43,10 +43,12 @@ export default function EditProject() {
       })
       projectSearch(projectId)
       .then(res => {
-        setProjectInfoList(res);
-        setProjectData(res);
-        makeDataRef.current.director = res.director;
-        makeDataRef.current.protagonist = res.mainRole;
+          setProjectInfoList(res);
+          setProjectData(res);
+          if(makeDataRef.current) {
+            makeDataRef.current.director = res.director || [];
+            makeDataRef.current.protagonist = res.mainRole || [];
+          }
       })
       searchRole(projectId)
       .then(res => {
