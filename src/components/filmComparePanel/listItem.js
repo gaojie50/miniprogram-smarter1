@@ -58,8 +58,8 @@ export default function ListItem(props){
         {item.estimateBox && (
           <View className='estimate-box'>
             <Text className='text'>预估</Text>
-            <Text className="value">{formatNumber(item.estimateBox).num}</Text>
-            <Text className="text">{formatNumber(item.estimateBox).unit}</Text>
+            <Text className="value">{formatNumber(item.estimateBox, 'floor').num}</Text>
+            <Text className="text">{formatNumber(item.estimateBox, 'floor').unit}</Text>
           </View>
         )}
         {item.estimateBox && (
