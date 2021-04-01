@@ -105,7 +105,6 @@ export default function SearchActor() {
 
         radioChecked.push(firstDataList.length);
         firstDataList.push(list[item]);
-        console.log(radioChecked, 334)
       })
       setList(firstDataList);
       setInputValue('');
@@ -164,13 +163,15 @@ export default function SearchActor() {
 }
 
 function requestSearch({keyword = ''}, type = 105) {
-  return reqPacking({
-    url: 'api/home/search',
-    data: {
-      keyword,
-      type,
-    }
-  }).then(res => res)
+  if(keyword !== ''){
+    return reqPacking({
+      url: 'api/home/search',
+      data: {
+        keyword,
+        type,
+      }
+    }).then(res => res)
+  }
 }
 
 

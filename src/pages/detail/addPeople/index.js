@@ -99,9 +99,9 @@ export default function AddPeople() {
     setList([]);
 
     const searchList = options.filter(i =>
-      i.label.indexOf(searchValue) > -1
-      || (UserIdInfoMapper[ i.value ].mis || '').indexOf(searchValue) > -1
-      || (UserIdInfoMapper[ i.value ].mobile || '').indexOf(searchValue) > -1);
+      i.label.indexOf(value) > -1
+      || (UserIdInfoMapper[ i.value ].mis || '').indexOf(value) > -1
+      || (UserIdInfoMapper[ i.value ].mobile || '').indexOf(value) > -1);
 
     setList(searchList)
     setLoading(false);
