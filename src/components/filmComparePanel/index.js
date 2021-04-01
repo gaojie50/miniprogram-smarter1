@@ -39,14 +39,20 @@ class _C extends React.Component {
     const { startDate, endDate } = releaseDate;
     const estimateBoxVal = formatNumber(isSetSchedule ? hasFixEstimateBox : estimateBox,'floor');
     const establishedFilmsNum = keyFilms.filter(v => v.scheduleType == 1).length;
-    const hasEstimateBoxList = [];
-    const noEstimateBoxList = [];
+    let hasEstimateBoxList = [];
+    let noEstimateBoxList = [];
     (isSetSchedule ? keyFilms.filter(v => v.scheduleType == 1) : keyFilms).forEach(item=>{
       if( item.estimateBox ){
         hasEstimateBoxList.push(item);
       }else{
         noEstimateBoxList.push(item);
       }
+    })
+    hasEstimateBoxList = hasEstimateBoxList.sort((a,b)=> {
+      return b.estimateBox-a.estimateBox;
+    })
+    noEstimateBoxList = noEstimateBoxList.sort((a,b )=>{
+      return b.wishNum-a.wishNum
     })
 
 
