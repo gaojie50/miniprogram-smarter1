@@ -49,7 +49,7 @@ export default function FingerPrint({ text = Taro.getStorageSync('authinfo')?.us
   }, []);
 
   return <View style={styleStr()} >
-    <Image id="fingerprintBox" style="width:100%; height:100%;" />
+    <Image id="fingerprintBox" style="width:100%; height:100%; opacity:0.4;" />
     <Canvas
       canvasId="fingerprint"
       className="finger-print"
