@@ -32,7 +32,7 @@ export default function History(props){
         <View className="release-num-column column">
           {dataList.map(item=>{
             return <View className="text release-num">
-            <Text className="value">{item.releaseNum}</Text>
+            <Text className="value">{item.releaseNum ? item.releaseNum : '-'}</Text>
             部</View>
           })}
         </View>
