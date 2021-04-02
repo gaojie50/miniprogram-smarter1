@@ -67,8 +67,7 @@
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden4? 'itemHidden':''}}">{{item.estimateScore === null ? '-': item.estimateScore}}</view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden13? 'itemHidden':''}}">
                     <view style="">
-                        <text wx:if="{{item.mainControl === null || item.mainControl.length === 0}}">-</text>
-                        <text >{{item.mainControl[0]}}</text>
+                        <text>{{item.mainControl || '-'}}</text>
                     </view>
                 </view>
                 <view style="height: {{item.trHeight}}rpx" class="listTd tdPadding {{filterItemHidden5? 'itemHidden':''}}">
