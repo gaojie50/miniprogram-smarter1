@@ -18,9 +18,9 @@ const CompeteMarket=(props)=>{
   const [ endDate, setEndDate ] = useState('');
   const [ filmList, setFilmList ] = useState([]);
   const [ estimateTotalNum, setEstimateTotalNum] = useState(0);
-  const [ possiblyEstimateTotalNum, setPossiblyEstimateTotalNum ] = useState(0);
+  const [ possiblyEstimateTotalNum, setPossiblyEstimateTotalNum ] = useState(null);
   const [ releaseNum, setReleaseNum ] = useState(0);
-  const [ possiblyReleaseNum, setPossiblyReleaseNum ] = useState(0);
+  const [ possiblyReleaseNum, setPossiblyReleaseNum ] = useState(null);
   
   const { show } = props;
 
@@ -63,13 +63,19 @@ const CompeteMarket=(props)=>{
     }
   }, [show, startDate, endDate])
 
+  useEffect(()=>{
+    if(show && startDate && endDate){
+      fetchCompetitiveSituation();
+    }
+  }, [isSetSchedule])
+
   const fetchCompetitiveSituation=()=>{
     const { projectId } = props;
     const query = {
       projectId: projectId,
       startDt: startDate,
       endDt: endDate,
-      hasConfirmed: false
+      hasConfirmed: isSetSchedule
     };
     
     reqPacking({
@@ -93,9 +99,9 @@ const CompeteMarket=(props)=>{
         })
         setFilmList(newFilmList)
         setEstimateTotalNum(data.estimateTotalNum || 0);
-        setPossiblyEstimateTotalNum(data.possiblyEstimateTotalNum || 0);
+        setPossiblyEstimateTotalNum(data.possiblyEstimateTotalNum);
         setReleaseNum(data.releaseNum || 0);
-        setPossiblyReleaseNum(data.possiblyReleaseNum || 0);
+        setPossiblyReleaseNum(data.possiblyReleaseNum);
       } else {
         errorHandle(error)
       }
@@ -146,7 +152,9 @@ const CompeteMarket=(props)=>{
       }}
       estimateBox={estimateTotalNum}
       hasFixEstimateBox={estimateTotalNum-possiblyEstimateTotalNum}
+      possiblyEstimateBox={possiblyEstimateTotalNum}
       scheduledFilmsNum={releaseNum-possiblyReleaseNum}
+      possiblyReleaseNum={possiblyReleaseNum}
       closeFn={props.closeFn}
       historyList={historyList}
       titleHeight={200}

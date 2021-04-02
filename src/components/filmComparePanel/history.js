@@ -24,7 +24,7 @@ export default function History(props){
         <View className="total-box-column column">
           {dataList.map(item=>{
             return <View className="text total-box">
-              <Text className="value">{formatNumber(item.showTotalNum).text}</Text>
+              <Text className="value">{formatNumber(item.showTotalNum, 'floor').text}</Text>
             </View>;
           })}
         </View>
@@ -32,7 +32,7 @@ export default function History(props){
         <View className="release-num-column column">
           {dataList.map(item=>{
             return <View className="text release-num">
-            <Text className="value">{item.releaseNum}</Text>
+            <Text className="value">{item.releaseNum ? item.releaseNum : '-'}</Text>
             部</View>
           })}
         </View>
