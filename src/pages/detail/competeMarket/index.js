@@ -32,9 +32,10 @@ const CompeteMarket=(props)=>{
     const { releaseTime = {} } = props;
     const releaseTimeArry = releaseTime.time && releaseTime.time.match(/-/g);
     if ((releaseTimeArry && releaseTimeArry.length === 2)) {
-      // 获取该周的第几天
-      const index = dayjs(releaseTime.time).day();
-
+      // 获取该周的第几天，0-6, 0是星期天，所以需要做转换
+      let index = dayjs(releaseTime.time).day();
+      index = index===0 ? 7 : index+1;
+      console.log(index);
       // 自然周的周一到周日
       const natureStartDate = +dayjs(releaseTime.time).subtract(index - 1, 'days');
       const natureEndDate = +dayjs(releaseTime.time).add(7 - index, 'days');
@@ -117,7 +118,7 @@ const CompeteMarket=(props)=>{
     }
     reqPacking(
       {
-        url: '/api/management/searchoveryearsschedulebox',
+        url: 'api/management/searchoveryearsschedulebox',
         data: reqParams
       },
       'server',
