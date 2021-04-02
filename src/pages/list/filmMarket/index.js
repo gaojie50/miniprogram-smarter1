@@ -35,7 +35,7 @@ const FilmMarket=(props)=>{
     }
     reqPacking(
       {
-        url: '/api/management/searchoveryearsschedulebox',
+        url: 'api/management/searchoveryearsschedulebox',
         data: reqParams
       },
       'server',

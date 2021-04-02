@@ -202,7 +202,7 @@ export default class Detail extends React.Component {
     const releaseTimeArry = releaseTime.time && releaseTime.time.match(/-/g);
     if ((releaseTimeArry && releaseTimeArry.length === 2)) {
       // 获取该周的第几天
-      const index = dayjs(releaseTime.time).format('d') || 7;
+      let index = dayjs(releaseTime.time).format('d') || 7;
 
       // 自然周的周一到周日
       const releaseStartDate = dayjs(releaseTime.time).subtract(index < 5 ? parseInt(index) + 2 : index - 5, 'd').format('YYYY-MM-DD');
