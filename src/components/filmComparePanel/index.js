@@ -30,7 +30,9 @@ class _C extends React.Component {
       show,
       isSetSchedule,
       hasFixEstimateBox,
+      possiblyEstimateBox,
       estimateBox,
+      possiblyReleaseNum,
       releaseDate,
       historyList,
       filmListHeight
@@ -92,7 +94,7 @@ class _C extends React.Component {
                   <Text className='detailVal'>{estimateBoxVal.posNum}</Text>
                   <Text className='unit'>{estimateBoxVal.unit}</Text>
                 </View>
-                { !isSetSchedule && <View className='maybe'>含可能定档{formatNumber(estimateBox - hasFixEstimateBox,'floor').text}</View>}
+                { !isSetSchedule && <View className='maybe'>含可能定档{formatNumber(possiblyEstimateBox,'floor').text}</View>}
               </View>
               <View className='onshow-number'>
                 <View className='title'>上映影片</View>
@@ -100,7 +102,7 @@ class _C extends React.Component {
                   <Text className='detailVal'>{isSetSchedule ? establishedFilmsNum : keyFilms.length}</Text>
                   <Text className='unit'>部</Text>
                 </View>
-                { !isSetSchedule && <View className='maybe'>含可能定档{keyFilms.length - establishedFilmsNum}部</View>}
+                { !isSetSchedule && <View className='maybe'>含可能定档{formatNumber(possiblyReleaseNum).num}部</View>}
               </View>
             </View>
             <History  dataList={historyList} />

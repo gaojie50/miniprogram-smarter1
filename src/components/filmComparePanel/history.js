@@ -24,7 +24,7 @@ export default function History(props){
         <View className="total-box-column column">
           {dataList.map(item=>{
             return <View className="text total-box">
-              <Text className="value">{formatNumber(item.showTotalNum).text}</Text>
+              <Text className="value">{formatNumber(item.showTotalNum, 'floor').text}</Text>
             </View>;
           })}
         </View>
