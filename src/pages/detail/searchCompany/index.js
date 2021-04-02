@@ -178,7 +178,7 @@ export default function SearchCompany() {
                   <View className="describe"></View> */}
                 </View>
                 {
-                  inputValue === '' && type !== 'mainControl' ? 
+                  inputValue === '' && type !== 'mainControl' && index !== 0 ? 
                   <View className="last" onClick={() => {setOpenSheet(true);setOpenIndex(index)}}>
                     <Image src="../../../static/detail/company-edit.png" alt=""></Image>
                   </View> : null
