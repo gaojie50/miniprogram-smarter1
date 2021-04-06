@@ -282,7 +282,6 @@ export default class Detail extends React.Component {
         this.setState({
           judgeRole: data
         });
-        console.log(this.refs.keyData.fetchKeyData,111)
         this.refs.keyData.fetchKeyData();
         if (data.role === 2) {
           this.setState({
@@ -474,16 +473,13 @@ export default class Detail extends React.Component {
             keyData={keyData}
             changeStopScroll={() => this.setState({ stopScroll: !stopScroll })}
           />
-          {
-            judgeRole.role && judgeRole.role !== 2 ?
-              <KeyData
-                ref='keyData'
-                basicData={basicData}
-                keyData={keyData}
-                judgeRole={judgeRole}
-                changeKeyData={data => this.handleChangeKeyData(data)}
-              /> : ''
-          }
+          <KeyData
+            ref='keyData'
+            basicData={basicData}
+            keyData={keyData}
+            judgeRole={judgeRole}
+            changeKeyData={data => this.handleChangeKeyData(data)}
+          /> 
           {basicData.category === 3 && judgeRole?.releaseStage === 1 && judgeRole?.role !== 2? (
             releaseTimeArry && releaseTimeArry.length === 2 ? <View className='mini-box'>
               <View className='machine-eval-mini' onClick={this.goToBoxForecasting}>
