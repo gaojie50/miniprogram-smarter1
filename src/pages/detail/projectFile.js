@@ -163,7 +163,7 @@ export default function ProjectFile(props) {
       <View className="file-item">
         <ScrollView className="scroll" scrollY>
         {
-          fileData.length ===0 && !isDockingPerson(judgeRole.role) ? <View className="noFiles">
+          fileData.length ===0 || !isDockingPerson(judgeRole.role) ? <View className="noFiles">
             <Image className="img" src={noDataPic}></Image>
             <View className="text">暂无项目文件</View>
           </View> 
