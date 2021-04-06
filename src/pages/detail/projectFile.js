@@ -10,55 +10,66 @@ import reqPacking from '@utils/reqPacking.js';
 import FixedButton from '@components/fixedButton';
 import '@components/m5/style/components/swipe-action.scss';
 import { noDataPic } from '@utils/imageUrl';
-import AtSwipeAction from '../../components/m5/swipe-action';
 import envConfig from '../../constant/env-config';
 import './projectFile.scss';
 
+const { isDockingPerson } = utils;
 
 const { previewFile, rpxTopx, errorHandle } = utils;
 
 export default function ProjectFile(props) {
-  const { fileData, show, projectId, fetchProjectFile } = props;
+  const { fileData, show, projectId, fetchProjectFile, judgeRole } = props;
 
   function handleDelete( data ){
-    const { profileId, profileName } = data;
-    Taro.showModal({
-      title: '提示',
-      content: `确定要删除${profileName}吗？`,
-      success: function (res) {
-        if (res.confirm) {
-          reqPacking(
-            {
-              url: 'api/management/file/delete',
-              data:{
-                projectId,
-                profileId
-              },
-            }, 
-            'server'
-            )
-            .then(resData => {
-              const { success, error } = resData;
-              if( success ){
-                Taro.showToast({
-                  title: '删除成功',
-                  icon: 'success',
-                  duration: 2000
-                })
-                fetchProjectFile();
-                return;
-              }
-              errorHandle(error);
-            })
-            .catch((err) => {
-              errorHandle(err);
-            });
-        } else if (res.cancel) {
-          console.log('用户点击取消')
+    const { profileId, profileName, editorUserId } = data;
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    if(judgeRole==1 || (judgeRole !== 1 && editorUserId === userInfo.id)){
+      Taro.showModal({
+        title: '提示',
+        content: `确定要删除${profileName}吗？`,
+        success: function (res) {
+          if (res.confirm) {
+            reqPacking(
+              {
+                url: 'api/management/file/delete',
+                data:{
+                  projectId,
+                  profileId
+                },
+              }, 
+              'server'
+              )
+              .then(resData => {
+                const { success, error } = resData;
+                if( success ){
+                  Taro.showToast({
+                    title: '删除成功',
+                    icon: 'success',
+                    duration: 2000
+                  })
+                  fetchProjectFile();
+                  return;
+                }
+                errorHandle(error);
+              })
+              .catch((err) => {
+                errorHandle(err);
+              });
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
         }
-      }
-    })
+      })
+    }else{
+      Taro.showModal({
+        title: '提示',
+        content: '对不起，您没有删除权限',
+        showCancel: false
+      })
+    }
+    
   }
+
 
   function addFile(){
     Taro.chooseMessageFile({
@@ -138,7 +149,7 @@ export default function ProjectFile(props) {
       <View className="file-item">
         <ScrollView className="scroll" scrollY>
         {
-          fileData.length ===0 ? <View className="noFiles">
+          fileData.length ===0 && !isDockingPerson(judgeRole.role) ? <View className="noFiles">
             <Image className="img" src={noDataPic}></Image>
             <View className="text">暂无项目文件</View>
           </View> 
@@ -174,7 +185,7 @@ export default function ProjectFile(props) {
         }
         </ScrollView>
       </View>
-      <FixedButton onClick={addFile}>添加文件</FixedButton>
+      {isDockingPerson( judgeRole.role ) && <FixedButton onClick={addFile}>添加文件</FixedButton>}
     </FloatCard>
   )
 }
