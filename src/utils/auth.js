@@ -1,13 +1,9 @@
 import Taro from '@tarojs/taro'
-import projectConfig from '../constant/project-config.js'
-import envConfig from '../constant/env-config.js'
 import reqPacking from './reqPacking.js'
 import utils from './index.js'
-import { set as setGlobalData, get as getGlobalData } from '../global_data';
+import { set as setGlobalData } from '../global_data';
 
-const { appkey, weixinAppTypeEnum } = projectConfig
 const { errorHandle } = utils
-const { keeper } = envConfig
 
 function checkLogin() {
   return new Promise((resolve, reject)=>{
@@ -23,6 +19,7 @@ function checkLogin() {
           Taro.removeStorageSync('token');
           Taro.removeStorageSync('authinfo');
           setGlobalData('authinfo', null);
+          errorHandle(error);
         }else{
           Taro.setStorageSync('authinfo', data);
           setGlobalData('authinfo', data);

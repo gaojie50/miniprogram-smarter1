@@ -557,6 +557,7 @@ export default class Detail extends React.Component {
           cancelShow={() => this.setState({ showPeople: false, stopScroll: false })}
         />
         <ProjectFile
+          judgeRole={judgeRole}
           show={showProjectFile}
           fileData={fileData}
           projectId={basicData.projectId}
