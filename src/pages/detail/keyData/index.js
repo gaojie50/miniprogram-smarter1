@@ -14,7 +14,7 @@ export default class KeyData extends React.Component {
   fetchKeyData = () => {
     const { basicData, changeKeyData } = this.props;
     reqPacking({
-      url: '/api/management/keyData',
+      url: 'api/management/keyData',
       data: { 
         projectId: basicData.projectId,
       }

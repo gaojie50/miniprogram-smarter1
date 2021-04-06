@@ -282,6 +282,7 @@ export default class Detail extends React.Component {
         this.setState({
           judgeRole: data
         });
+        console.log(this.refs.keyData.fetchKeyData,111)
         this.refs.keyData.fetchKeyData();
         if (data.role === 2) {
           this.setState({
