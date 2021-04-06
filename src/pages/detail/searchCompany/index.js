@@ -61,6 +61,10 @@ export default function SearchCompany() {
   const handleSearch = debounce(e => {
     const { value } = e.target;
     if(value.trim() === '') {
+      setInputValue(''); 
+      setList(firstDataList);
+      setSearchChecked([]);
+      
       return
     }
     setLoading(true);
