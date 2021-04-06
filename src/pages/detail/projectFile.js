@@ -8,6 +8,7 @@ import Close from '@static/close.png';
 import dayjs from 'dayjs';
 import reqPacking from '@utils/reqPacking.js';
 import FixedButton from '@components/fixedButton';
+import AtSwipeAction from '@components/m5/swipe-action';
 import '@components/m5/style/components/swipe-action.scss';
 import { noDataPic } from '@utils/imageUrl';
 import envConfig from '../../constant/env-config';
