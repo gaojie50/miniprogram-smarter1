@@ -24,7 +24,7 @@ export default function ProjectFile(props) {
   function handleDelete( data ){
     const { profileId, profileName, editorUserId } = data;
     const { userInfo } = Taro.getStorageSync('authinfo');
-    if(judgeRole==1 || (judgeRole !== 1 && editorUserId === userInfo.id)){
+    if(judgeRole.role==1 || (judgeRole.role !== 1 && editorUserId === userInfo.id)){
       Taro.showModal({
         title: '提示',
         content: `确定要删除${profileName}吗？`,
@@ -78,6 +78,19 @@ export default function ProjectFile(props) {
       success (res) {
         const tempFile = res.tempFiles[0];
         const tempFilePath = tempFile.path;
+        let tempName = tempFile.name;
+        let fileName = tempName;
+        // 重新拼扩展名
+        let originExtension = tempName.lastIndexOf('.') > -1 ? tempName.slice(tempName.lastIndexOf('.')+1) : '';
+        console.log('originExtension', originExtension);
+        let pathExtension = tempFilePath.lastIndexOf('.') > -1 ?  tempFilePath.slice(tempFilePath.lastIndexOf('.')+1) : '';
+        console.log('pathExtension', pathExtension);
+        if( (!originExtension || originExtension==='temp') && pathExtension  ){
+          fileName = tempName.replace(originExtension, pathExtension);
+        }
+
+        console.log(tempFile);
+        console.log('fileName', fileName);
         if (tempFile.size > 1024 * 1024 * 20) {
           Taro.showModal({
             title: '提示',
@@ -98,7 +111,7 @@ export default function ProjectFile(props) {
           },
           formData: {
             projectId: projectId,
-            name: tempFile.name
+            name: fileName
           },
           success (res){
             if(res.statusCode===200){
