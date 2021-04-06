@@ -94,6 +94,11 @@ export default function AddPeople() {
   }, []);
 
   const handleSearch = debounce(value => {
+    if(value.trim() === '') {
+      setList([]);
+      setSearchValue('');
+      return
+    }
     setLoading(true);
     setSearchValue(value);
     setList([]);
@@ -126,7 +131,7 @@ export default function AddPeople() {
             <Image src="../../../static/icon/search.png" alt=""></Image>
             <Input value={searchValue} onInput={ e => handleSearch(e.detail.value) } placeholder="搜索对接人" onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} className="add-people-bar-input"></Input>
             {loading && (<View className="loading"><mpLoading type="circle" show={true} tips="" /></View>)}
-            {focus || searchValue !== '' ? <View className="cancel" onClick={()=> {setInputValue(''); setList(firstDataList);setSearchChecked([]);}}>取消</View> : null}
+            {focus || searchValue !== '' ? <View className="cancel" onClick={()=> {setSearchValue(''); setList([])}}>取消</View> : null}
           </View>
         </View>
       </View>
@@ -137,7 +142,7 @@ export default function AddPeople() {
               {/* <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={searchValue === '' && radioChecked.indexOf(index) !== -1} /> */}
               <View className="right">
                 <label className="border">
-                  <Image></Image>
+                  {/* <Image></Image> */}
                 </label>
                 <View className="content">
                   <View className="name">{item.label}</View>
