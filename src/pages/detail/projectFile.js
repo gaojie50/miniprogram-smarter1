@@ -86,7 +86,7 @@ export default function ProjectFile(props) {
         let pathExtension = tempFilePath.lastIndexOf('.') > -1 ?  tempFilePath.slice(tempFilePath.lastIndexOf('.')+1) : '';
         console.log('pathExtension', pathExtension);
         if( (!originExtension || originExtension==='temp') && pathExtension  ){
-          fileName = tempName.replace(originExtension, pathExtension);
+          fileName = tempName.replace(originExtension, pathExtension).replace('SERVERID://', '');
         }
 
         console.log(tempFile);
