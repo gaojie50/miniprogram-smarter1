@@ -38,8 +38,8 @@
       }
 
       .cont{
-        font-weight: 300;
-        font-family: MaoYanHeiTi-H1;
+        font-family: 'MaoYanHeiTi-Light', 'PingFangSC-Regular';
+        font-weight: 400;
         font-size: 28px;
         color: #333333;
       }
@@ -144,8 +144,8 @@
     .value{
       position: absolute;
       right: 48px;
-      // font-weight: 300;
-      // font-family: MaoYanHeiTi-H1;
+      // font-family: 'MaoYanHeiTi-Light','PingFangSC-Regular';
+      font-weight: 500;
       font-size: 28px;
       color: #333333;
       text-align: right;
@@ -164,8 +164,8 @@
     .input{
       position: absolute;
       right: 48px;
-      // font-weight: 300;
-      // font-family: MaoYanHeiTi-H1;
+      // font-family: 'MaoYanHeiTi-Light', 'PingFangSC-Regular';
+      font-weight: 500;
       font-size: 28px;
       color: #333333;
       text-align: right;
