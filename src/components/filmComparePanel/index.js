@@ -118,6 +118,7 @@ class _C extends React.Component {
 
           }
           {hasEstimateBoxList.length > 0 && <View className='has-estimate-box-list list-item'>
+            <Text className='title-text'>以下{hasEstimateBoxList.length}部影片有预估票房</Text>
             {hasEstimateBoxList.map((item, index) => {
               return (
                 <ListItem item={item} key={index} orderNum={index+1} showNumber totalBox={isSetSchedule ? hasFixEstimateBox : estimateBox} />

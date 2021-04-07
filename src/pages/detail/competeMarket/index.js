@@ -85,6 +85,7 @@ const CompeteMarket=(props)=>{
       if (success) {
         const newFilmList = (data.competitiveSituationDetailList || []).map(item=>{
           return {
+            ...item,
             projectId: item.projectId,
             movieName: item.name,
             pic: item.pic ? picFn(item.pic) : defaultMovieCover,

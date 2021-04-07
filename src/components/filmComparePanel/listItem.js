@@ -17,9 +17,9 @@ export default function ListItem(props){
 
   function jumpDetail(e){
     const { item:data } = e.currentTarget.dataset
-    const { maoyanId, projectId } = data
+    const { libraryId, projectId } = data
     Taro.navigateTo({
-      url: `/pages/detail/index?maoyanId=${maoyanId}&projectId=${projectId}`,
+      url: `/pages/detail/index?maoyanId=${libraryId}&projectId=${projectId}`,
     })
   }
 

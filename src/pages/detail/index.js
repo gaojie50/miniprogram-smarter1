@@ -137,12 +137,12 @@ export default class Detail extends React.Component {
   fetchBasicData() {
     const page = Taro.getCurrentPages();
     let param = {};
-
     page.forEach(x => {
       if (x.__route__ === 'pages/detail/index') {
         if (x.options.projectId && x.options.projectId !== '' && x.options.projectId !== '0') {
           param.projectId = x.options.projectId
         } else {
+          param.projectId = ''
           param.maoyanId = x.options.maoyanId
         }
       }
