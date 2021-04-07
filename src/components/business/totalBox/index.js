@@ -21,8 +21,8 @@ export default function TotalBox({totalData = {}, handleInsteadBox}) {
         }</Text>
     </View>
 
-    <View className="box">{formatNumber(estimateNum)?.num}
-      <Text className="unit">{formatNumber(estimateNum)?.unit}</Text>
+    <View className="box">{formatNumber(estimateNum,'floor')?.num}
+      <Text className="unit">{formatNumber(estimateNum,'floor')?.unit}</Text>
       <Text className="time">{dateShow}</Text>
     </View>
     <View className="change-btn" onClick={handleInsteadBox}>替换为最新预估总票房</View>
