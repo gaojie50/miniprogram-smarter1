@@ -48,14 +48,19 @@
       }
     }
   }
-
+  .at-list__item-container {
+    align-items: flex-start;
+    .item-content__info-title {
+      margin-top: 12px;
+    }
+  }
   .at-list__item-content {
     overflow: visible;
     margin-right: 10px;
   }
   .at-list__item-extra {
     width: 90%;
-    align-items: center;
+    align-items: flex-start;
     overflow: hidden;
   }
 
@@ -69,17 +74,18 @@
         text-overflow: ellipsis;
         overflow: hidden;
         padding-left: 30rpx;
+        margin-top: 12px;
       }
   }
    .item-extra__info {
         overflow: hidden;
+        // margin-top: 12px;
    }
   .extraText-item {
     display: inline-block;
     height: 60px;
     line-height: 60px;
     margin-right: 10px;
-    margin-bottom: 10px;
     background: #F8F8F8;
     border-radius: 10px;
     padding: 0 20px;
