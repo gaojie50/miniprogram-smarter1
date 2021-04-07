@@ -128,7 +128,7 @@ export default function People(props) {
           judgeRole.role === 1 && itemInfo.role === 1 ?
           <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'cancelMajor', closeSheet)}>取消负责人</AtActionSheetItem> : null
         }
-          <AtActionSheetItem onClick={() => {setOpenSheet(false);setOpenModal(true)}}>设置备注名</AtActionSheetItem>
+          <AtActionSheetItem onClick={() => {setOpenSheet(false);setOpenModal(true);setInputValue(itemInfo.userDesc)}}>设置备注名</AtActionSheetItem>
         {
           (judgeRole.role === 1 && itemInfo.userId !== userInfo.id) || (judgeRole.role === 0 && itemInfo.userId === userInfo.id) ?
           <AtActionSheetItem onClick={() => handlePeopleOption(itemInfo, 'moveOut', closeSheet)}>移出该项目</AtActionSheetItem> : null
