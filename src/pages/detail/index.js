@@ -495,7 +495,9 @@ export default class Detail extends React.Component {
               </View>
               <View className='release-week-mini' onClick={this.handleShowCompetePanel}>
                 <View className='title'>上映当周预估大盘</View>
-                <View className='box'>{formatNumber(releaseDataList.estimateTotalNum, 'floor').text}<Text> {keyData.releaseTime.describe || ''}</Text></View>
+                <View className='box'>{formatNumber(releaseDataList.estimateTotalNum, 'floor').text}
+                  {/* <Text> {keyData.releaseTime.describe || ''}</Text> */}
+                </View>
                 <View className='num'>{releaseDataList.releaseNum || '-'}部 <Text className='arrow' /></View>
               </View>
             </View> :
