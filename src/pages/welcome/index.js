@@ -51,26 +51,15 @@ class _C extends React.Component {
   getUserInfo = (e) => {
     this.setState({ loading: true });
     const that = this;
-    Taro.getSetting({
-      success: (res) => {
-        if (res.authSetting['scope.userInfo'] && e.detail) {
-          const { iv, encryptedData } = e.detail
-          keepLogin({ 
-            iv, encryptedData, target: this.state.target || `/pages/list/index` 
-          }).catch(()=>{
-            that.setState({ loading: false});
-          })
-          return;
-        }
-
-        this.setState({ loading: false });
-        Taro.showModal({
-          title: '提示',
-          content:
-            '您点击了拒绝授权，将无法正常使用智多星。请重新授权，或者删除小程序重新进入。',
-        })
-      },
-    })
+    if (e.detail) {
+      const { iv, encryptedData } = e.detail
+      keepLogin({ 
+        iv, encryptedData, target: this.state.target || `/pages/list/index` 
+      }).catch(()=>{
+        that.setState({ loading: false});
+      })
+      return;
+    }
   }
 
 

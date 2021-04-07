@@ -202,7 +202,7 @@ export default class Detail extends React.Component {
     const releaseTimeArry = releaseTime.time && releaseTime.time.match(/-/g);
     if ((releaseTimeArry && releaseTimeArry.length === 2)) {
       // 获取该周的第几天
-      const index = dayjs(releaseTime.time).format('d') || 7;
+      let index = dayjs(releaseTime.time).format('d') || 7;
 
       // 自然周的周一到周日
       const releaseStartDate = dayjs(releaseTime.time).subtract(index < 5 ? parseInt(index) + 2 : index - 5, 'd').format('YYYY-MM-DD');
@@ -473,16 +473,13 @@ export default class Detail extends React.Component {
             keyData={keyData}
             changeStopScroll={() => this.setState({ stopScroll: !stopScroll })}
           />
-          {
-            judgeRole.role && judgeRole.role !== 2 ?
-              <KeyData
-                ref='keyData'
-                basicData={basicData}
-                keyData={keyData}
-                judgeRole={judgeRole}
-                changeKeyData={data => this.handleChangeKeyData(data)}
-              /> : ''
-          }
+          <KeyData
+            ref='keyData'
+            basicData={basicData}
+            keyData={keyData}
+            judgeRole={judgeRole}
+            changeKeyData={data => this.handleChangeKeyData(data)}
+          /> 
           {basicData.category === 3 && judgeRole?.releaseStage === 1 && judgeRole?.role !== 2? (
             releaseTimeArry && releaseTimeArry.length === 2 ? <View className='mini-box'>
               <View className='machine-eval-mini' onClick={this.goToBoxForecasting}>
@@ -562,6 +559,7 @@ export default class Detail extends React.Component {
           cancelShow={() => this.setState({ showPeople: false, stopScroll: false })}
         />
         <ProjectFile
+          judgeRole={judgeRole}
           show={showProjectFile}
           fileData={fileData}
           projectId={basicData.projectId}

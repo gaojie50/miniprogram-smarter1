@@ -5,7 +5,7 @@ import reqPacking from './reqPacking.js'
 import utils from './index.js'
 import { addUrlArg } from './url.js';
 import auth from './auth.js';
-import { set as setGlobalData, get as getGlobalData } from '../global_data.js'
+import { set as setGlobalData } from '../global_data.js'
 
 const { errorHandle } = utils;
 const { appkey, weixinAppTypeEnum } = projectConfig
@@ -13,21 +13,22 @@ const { keeper } = envConfig
 
 export default function keepLogin(params) {
   let continueUrl = decodeURIComponent(params.target);
-
+  let reqParams = {
+    appkey,
+    weixinAppTypeEnum,
+    iv: params.iv,
+    encryptedData: params.encryptedData
+  };
   return new Promise((resovle, reject)=>{
     Taro.login({
       success: ({ code }) => {
         if (code) {
-          params.code = code
+          reqParams.code = code
   
           return reqPacking(
             {
               url: `getTokenByCode`,
-              data: {
-                appkey,
-                weixinAppTypeEnum,
-                ...params
-              }
+              data: reqParams
             },
             'keeper'
           ).then(({ success, error, data }) => {

@@ -18,9 +18,9 @@ const CompeteMarket=(props)=>{
   const [ endDate, setEndDate ] = useState('');
   const [ filmList, setFilmList ] = useState([]);
   const [ estimateTotalNum, setEstimateTotalNum] = useState(0);
-  const [ possiblyEstimateTotalNum, setPossiblyEstimateTotalNum ] = useState(0);
+  const [ possiblyEstimateTotalNum, setPossiblyEstimateTotalNum ] = useState(null);
   const [ releaseNum, setReleaseNum ] = useState(0);
-  const [ possiblyReleaseNum, setPossiblyReleaseNum ] = useState(0);
+  const [ possiblyReleaseNum, setPossiblyReleaseNum ] = useState(null);
   
   const { show } = props;
 
@@ -32,9 +32,8 @@ const CompeteMarket=(props)=>{
     const { releaseTime = {} } = props;
     const releaseTimeArry = releaseTime.time && releaseTime.time.match(/-/g);
     if ((releaseTimeArry && releaseTimeArry.length === 2)) {
-      // 获取该周的第几天
-      const index = dayjs(releaseTime.time).day();
-
+      // 获取该周的第几天，0-6, 0是星期天
+      let index = dayjs(releaseTime.time).format('d') || 7;
       // 自然周的周一到周日
       const natureStartDate = +dayjs(releaseTime.time).subtract(index - 1, 'days');
       const natureEndDate = +dayjs(releaseTime.time).add(7 - index, 'days');
@@ -63,13 +62,19 @@ const CompeteMarket=(props)=>{
     }
   }, [show, startDate, endDate])
 
+  useEffect(()=>{
+    if(show && startDate && endDate){
+      fetchCompetitiveSituation();
+    }
+  }, [isSetSchedule])
+
   const fetchCompetitiveSituation=()=>{
     const { projectId } = props;
     const query = {
       projectId: projectId,
       startDt: startDate,
       endDt: endDate,
-      hasConfirmed: false
+      hasConfirmed: isSetSchedule
     };
     
     reqPacking({
@@ -93,9 +98,9 @@ const CompeteMarket=(props)=>{
         })
         setFilmList(newFilmList)
         setEstimateTotalNum(data.estimateTotalNum || 0);
-        setPossiblyEstimateTotalNum(data.possiblyEstimateTotalNum || 0);
+        setPossiblyEstimateTotalNum(data.possiblyEstimateTotalNum);
         setReleaseNum(data.releaseNum || 0);
-        setPossiblyReleaseNum(data.possiblyReleaseNum || 0);
+        setPossiblyReleaseNum(data.possiblyReleaseNum);
       } else {
         errorHandle(error)
       }
@@ -111,7 +116,7 @@ const CompeteMarket=(props)=>{
     }
     reqPacking(
       {
-        url: '/api/management/searchoveryearsschedulebox',
+        url: 'api/management/searchoveryearsschedulebox',
         data: reqParams
       },
       'server',
@@ -146,7 +151,9 @@ const CompeteMarket=(props)=>{
       }}
       estimateBox={estimateTotalNum}
       hasFixEstimateBox={estimateTotalNum-possiblyEstimateTotalNum}
+      possiblyEstimateBox={possiblyEstimateTotalNum}
       scheduledFilmsNum={releaseNum-possiblyReleaseNum}
+      possiblyReleaseNum={possiblyReleaseNum}
       closeFn={props.closeFn}
       historyList={historyList}
       titleHeight={200}

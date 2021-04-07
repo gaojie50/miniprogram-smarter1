@@ -35,7 +35,7 @@ const FilmMarket=(props)=>{
     }
     reqPacking(
       {
-        url: '/api/management/searchoveryearsschedulebox',
+        url: 'api/management/searchoveryearsschedulebox',
         data: reqParams
       },
       'server',
@@ -58,7 +58,9 @@ const FilmMarket=(props)=>{
       data={data}
       estimateBox={estimateBox}
       hasFixEstimateBox={hasFixEstimateBox}
+      possiblyEstimateBox={estimateBox - hasFixEstimateBox}
       scheduledFilmsNum={scheduledFilmsNum}
+      possiblyReleaseNum={(data.keyFilms||[]).length - scheduledFilmsNum}
       closeFn={props.closeFn}
       historyList={historyList}
       filmListHeight={`calc(90vh - ${rpxTopx(460+150+20)}px)`}
