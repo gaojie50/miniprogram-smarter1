@@ -16,6 +16,7 @@ import utils from '@utils/index.js'
 import ProjectFile from './projectFile';
 import FacePeople from './people';
 import dayjs from 'dayjs';
+import isToday from 'dayjs/plugin/isToday';
 import People from '@static/detail/people.png';
 import File from '@static/detail/file.png';
 import ArrowLeft from '@static/detail/arrow-left.png';
@@ -24,7 +25,7 @@ import CompeteMarket from './competeMarket';
 import './index.scss';
 import '@components/m5/style/components/float-layout.scss';
 
-
+dayjs.extend(isToday);
 const { isDockingPerson, formatNumber, } = utils;
 const reqPacking = getGlobalData('reqPacking');
 const capsuleLocation = getGlobalData('capsuleLocation');
@@ -428,6 +429,7 @@ export default class Detail extends React.Component {
     } = this.state;
     const releaseTimeArry = keyData?.releaseTime?.time?.match(/-/g);
     const textFn = () => <View className='launch-text'><Image src="https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/eidt.png" />发起机器预测票房</View>;
+    const {updateTime, estimateNum} = keyData?.estimateBox?.machineEstimateBoxDetail || {};
     
     return (
       <View>
@@ -483,11 +485,17 @@ export default class Detail extends React.Component {
           {basicData.category === 3 && judgeRole?.releaseStage === 1 && judgeRole?.role !== 2? (
             releaseTimeArry && releaseTimeArry.length === 2 ? <View className='mini-box'>
               <View className='machine-eval-mini' onClick={this.goToBoxForecasting}>
-                {!keyData?.estimateBox?.machineEstimateBoxDetail?.estimateNum ?
+                {!estimateNum ?
                   textFn() :
                   <View>
-                    <View className="title">实时机器预测票房</View>
-                    <View className="box">{formatNumber(keyData.estimateBox.machineEstimateBoxDetail.estimateNum, 'floor').text}<Text> {keyData.estimateBox.describe || ''}</Text></View>
+                    <View className="title">最新机器预测票房</View>
+                    <View className="box">{formatNumber(estimateNum, 'floor').text}
+                      <Text> {`${ 
+                        dayjs(updateTime).isToday() ? 
+                          dayjs(updateTime).format('HH:mm') : 
+                          dayjs(updateTime).format('YYYY-MM-DD')}更新` || ''}
+                      </Text>
+                    </View>
                     <View className="num"><Text className="arrow" /></View>
                   </View>
                 }
