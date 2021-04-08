@@ -20,6 +20,7 @@
       width: 200px;
       height: 274px;
       border-radius: 20px;
+      box-sizing: border-box;
     }
     .label {
       padding:  8px 16px 4px 12px;
@@ -33,6 +34,7 @@
       font-size: 24px;
       color: #FFFFFF;
       z-index: 10;
+      box-sizing: border-box;
     }
     image {
       width: 200px;

@@ -222,6 +222,7 @@ export default function EditProject() {
   }
 
   return (
+    
     <ScrollView scrollY={ scroll } className="editProject">
       <BasicInfo ref={basicDateRef} changeScroll={(param, newRef) => handleChangeScroll(param, newRef)} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
       <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} projectData={projectData} />
@@ -233,6 +234,7 @@ export default function EditProject() {
         </View> : null
       }
     </ScrollView>
+    
   )
 }
 
