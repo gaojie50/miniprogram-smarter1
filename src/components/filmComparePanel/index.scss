@@ -8,6 +8,9 @@
       max-height: calc(90vh - 150px) !important;
       height: calc(90vh - 150px) !important;
     }
+    .layout-header {
+      margin-bottom: 30px;
+    }
   }
   
   .list-item {
@@ -58,7 +61,7 @@
     height: 40px;
     line-height: 40px;
     text-align: left;
-    margin-bottom: 28px;
+    margin-bottom: 30px;
     overflow: hidden;
 
     .num {
@@ -83,7 +86,8 @@
        width: 26px;
        height: 26px;
        display: inline-block;
-       border: 2px solid #E5E5E5;
+       box-sizing: border-box;
+       border: 2px solid #ccc;
        border-radius: 100%;
        vertical-align: middle;
        margin-right: 8px;
@@ -105,7 +109,7 @@
   }
 
   .overview {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     display: flex;
     .cur-week-data {
       width: 336px;

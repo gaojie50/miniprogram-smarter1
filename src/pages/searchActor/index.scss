@@ -132,10 +132,14 @@
           color: #333333;
         }
         .describe {
+          width: 86%;
           font-weight: 400;
           font-family: PingFangSC-Regular;
           font-size: 24px;
           color: #666666;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
       .last {

@@ -185,7 +185,7 @@ export default class _C extends React.Component {
       success (res) {
         const tempFile = res.tempFiles[0];
         const tempFilePath = tempFile.path;
-        if (tempFile.size > 1024 * 1024 * 1) {
+        if (tempFile.size > 1024 * 1024 * 20) {
           Taro.showModal({
             title: '提示',
             content: '上传的文件应小于20M'

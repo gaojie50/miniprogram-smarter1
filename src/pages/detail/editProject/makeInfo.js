@@ -10,7 +10,8 @@ import Divider from './component/divider';
 import { Source } from '../constant';
 import './makeInfo.scss';
 
-const textVoid = <View style={{ color: '#CCCCCC' }}>请选择</View>;
+const textVoid = <View style={{ color: '#CCCCCC', marginTop: '12rpx' }}>请选择</View>;
+const sourceTextVoid = <View style={{ color: '#CCCCCC' }}>请选择</View>;
 const divider = <Divider />
 const types = {
   mainControl: '主控方',
@@ -40,7 +41,7 @@ export default function makeInfo(props, ref) {
         <View className="makeInfo-item">
           {listItemWrap('mainControl', ref)}
           {divider}
-          <ListItem className="source-float" title='片源地' extraText={source.join(' / ') || textVoid} arrow onClick={() => {setOpenSource(true);changeScroll(false)}} />
+          <ListItem className="source-float" title='片源地' extraText={source.join(' / ') || sourceTextVoid} arrow onClick={() => {setOpenSource(true);changeScroll(false)}} />
           <FloatCard
             isOpened={openSource}
             title="片源地"
@@ -92,7 +93,7 @@ function listItemWrap(param, ref) {
     setExtraTextItem(subList);
   }
 
-  const value = extraTextItem.map(i => <Text className="extraText-item">{i}</Text>);
+  const value = extraTextItem.map(i => <Text className="extraText-item" style={{marginBottom: extraTextItem.length === 1 ? '0' : '10rpx'}}>{i}</Text>);
 
   return <ListItem title={types[param]} extraText={extraTextItem.length > 0 ? value : textVoid} arrow onClick={() => moveToSearch(param, ref, updateCon)} />
 }
