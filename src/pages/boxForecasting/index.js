@@ -47,8 +47,14 @@ export default class BoxForecasting extends React.Component {
     });
 
     let totalData = keyData?.estimateBox?.machineEstimateBoxDetail || {};
-    totalData.dateShow = keyData?.estimateBox?.describe;
-
+    const {updateTime} = keyData?.estimateBox?.machineEstimateBoxDetail || {};
+    totalData.dateShow = updateTime ? 
+      (`${ 
+        dayjs(updateTime).isToday() ? 
+          dayjs(updateTime).format('HH:mm') : 
+          dayjs(updateTime).format('YYYY-MM-DD')}更新`) : 
+        '';
+        
     const conditionsData = Object.assign({
       projectId: basicData?.projectId,
     },
