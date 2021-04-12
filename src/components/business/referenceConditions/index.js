@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import FloatLayout from '@components/m5/float-layout';
 import dayjs from 'dayjs';
 import Conditions from './conditions';

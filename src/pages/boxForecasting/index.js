@@ -22,10 +22,15 @@ export default class BoxForecasting extends React.Component {
     Taro.removeStorageSync('acceptDataFromDetail');
 
     const { basicData, keyData } = data || {};
-
+     // 当上映时间为时间段，取首日为上映日期
+     const rIndex = keyData?.releaseTime?.time.indexOf('~');
+     let newReleaseTime = keyData?.releaseTime?.time;
+     if (rIndex !== -1) {
+       newReleaseTime = newReleaseTime.substr(0, rIndex);
+     }
     let formData = {
       projectId: basicData?.projectId,
-      releaseTime: +dayjs(keyData?.releaseTime?.time),
+      releaseTime: +dayjs(newReleaseTime),
       cost: keyData.cost ? keyData.cost / 1e4 : undefined,
       wishNum: keyData?.wishNum?.num ? keyData?.wishNum?.num / 1e4 : undefined,
       estimateScore: keyData?.estimateScore?.num,
