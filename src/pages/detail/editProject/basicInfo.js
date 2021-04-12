@@ -152,11 +152,10 @@ export default function AddProject(props, ref) {
     await PureReq_Search_Movie({
       keyword: val
     }).then((data) => {
-      setData(data, () => {
-        if(data.length > 0) {
-          props.changeScroll(false);
-        }
-      });
+      setData(data);
+      if(data.length > 0) {
+        props.changeScroll(false);
+      }
     });
     setLoading(false);
   }, 800), []);
