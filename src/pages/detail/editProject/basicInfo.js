@@ -155,6 +155,8 @@ export default function AddProject(props, ref) {
       setData(data);
       if(data.length > 0) {
         props.changeScroll(false);
+      } else {
+        props.changeScroll(true);
       }
     });
     setLoading(false);
