@@ -34,13 +34,14 @@
     }
   }
   .people-item {
+    // padding-bottom: 350px;
     .scroll {
-      padding-bottom: 350px;
       width: 100%;
-      height: 100vh;
+      height: 65vh;
       box-sizing: border-box;
     }
     .item {
+      position: relative;
       display: flex;
       align-items: center;
       width: 100%;
@@ -84,6 +85,69 @@
           color: #999999;
         }
       }
+      .last {
+        position: absolute;
+        top: 0;
+        right: -30px;
+        width: 85px;
+        height: 100%;
+        margin-left: 11px;
+        margin-top: 45px;
+        image {
+          width: 44px;
+          height: 44px;
+        }
+      }
+    }
+  }
+  .nameModal {
+    .at-modal__container {
+      width: 92%;
+      border-radius: 20px;
+    }
+    .name-title {
+      position: relative;
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 38px;
+      color: #333333;
+      .right-image {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 60px;
+        height: 60px;
+        image {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+    .name-input {
+      margin-top: 30px;
+      margin-bottom: 40px;
+      width: 100%;
+      height: 96px;
+      padding: 0 30px;
+      background: #F8F8F8;
+      border-radius: 20px;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 30px;
+      box-sizing: border-box;
+    }
+    .name-confirm {
+      width: 100%;
+      height: 80px;
+      line-height: 80px;
+      text-align: center;
+      background: #276FF0;
+      border-radius: 40px;
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 30px;
+      color: #FFFFFF;
+      box-sizing: border-box;
     }
   }
 }

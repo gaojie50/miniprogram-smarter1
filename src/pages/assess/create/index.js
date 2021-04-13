@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components'
+import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components'
 import Taro, { getCurrentInstance } from '@tarojs/taro';
-import envConfig from '../../../constant/env-config';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
 import _cloneDeep from 'lodash/cloneDeep';
@@ -10,15 +9,15 @@ import Nodata from '@components/noData';
 import NoAccess from '@components/noAccess';
 import BriefInfo from '@components/briefInfo';
 import FixedButton from '@components/fixedButton';
-import projectConfig from '../../../constant/project-config';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import AtFloatLayout from '@components/m5/float-layout';
 import '@components/m5/style/components/action-sheet.scss';
 import '@components/m5/style/components/float-layout.scss';
+import envConfig from '../../../constant/env-config';
 import './index.scss'
+
 const { errorHandle } = utils;
-const { getEvaluationIcon } = projectConfig;
 
 const METHOD_LIST = [
   {
@@ -186,7 +185,7 @@ export default class _C extends React.Component {
       success (res) {
         const tempFile = res.tempFiles[0];
         const tempFilePath = tempFile.path;
-        if (tempFile.size > 1024 * 1024 * 1) {
+        if (tempFile.size > 1024 * 1024 * 20) {
           Taro.showModal({
             title: '提示',
             content: '上传的文件应小于20M'
@@ -361,7 +360,6 @@ export default class _C extends React.Component {
 
   render() {
     const {
-      projectId,
       briefInfo,
       editorEvaluationName,
       evaluationMethod,

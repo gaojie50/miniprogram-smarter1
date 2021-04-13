@@ -1,0 +1,106 @@
+.h2{
+  font-weight: 500;
+  font-family: PingFangSC-Medium;
+  font-size: 34px;
+  color: #333333;
+  line-height: 34px;
+}
+
+.total-box{
+  padding:40px 30px;
+
+  .model{
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 28px;
+    color: #CCCCCC;
+    text-align: right;
+    float: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 520px;
+  }  
+
+  .box{
+    font-weight: 700;
+    font-family: MaoYanHeiTi-H1;
+    font-size: 100px;
+    color: #276FF0;
+    line-height: 100px;
+    vertical-align: bottom;
+    position: relative;
+    margin-bottom: 30px;
+    margin-top: 40px;
+
+    .unit{
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 28px;
+      color: #276FF0;
+      line-height: 28px;
+    }
+
+    .time{
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #999999;
+      line-height: 28px;
+      position: absolute;
+      right: 0;
+      bottom: 6px;
+    }
+  }
+
+  .change-btn{
+    background-color: rgba($color: #276FF0, $alpha: 0.06);
+    border-radius: 40px;
+    text-align: center;
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 24px;
+    color: #276FF0;
+    line-height: 80px;
+    margin-bottom: 80px;
+  }
+
+  .ratio-wrap{
+    margin-top: 30px;
+    margin-bottom: 40px;
+
+    .item{
+      position: relative;
+      height: 40px;
+      margin-bottom: 20px;
+      font-family: 'MaoYanHeiTi-Light', 'PingFangSC-Regular';
+      font-weight: 400;
+      font-size: 24px;
+      color: #333333;
+      line-height: 40px;
+  
+      .process{
+        position: absolute;
+        left: 170px;
+        top: 15px;
+        width: 410px;
+        height: 10px;
+        border-radius: 5px;
+        background: #EEEEEE;
+
+        .inner{
+          background: #276FF0;
+          border-radius: inherit;
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%; 
+        }
+      }
+  
+      .ratio{
+        float: right;
+      }
+    }
+  }
+}

@@ -1,12 +1,11 @@
-import { Block, View, Image, Text, ScrollView } from '@tarojs/components';
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import { View, Image, Text } from '@tarojs/components';
+import React, { useEffect, useMemo, useState } from 'react';
+import { noDataPic, beforeIcon, afterIcon } from '@utils/imageUrl';
 import M5Timeline from '../../components/m5/timeline'
 import '../../components/m5/style/components/timeline.scss';
 import './history.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking'
-import NoFollow from '@static/detail/noFollows.png';
-import NoData from '../../components/noData';
 
 const { formatNumber } = utils;
 
@@ -53,7 +52,7 @@ export function UseHistory(props) {
 
   return projectId ? (auth ? data.length ? <ChangeHistory data={data} /> : (
     <View className="no-eval-data">
-      <Image src={NoFollow} alt=""></Image>
+      <Image src={noDataPic} alt=""></Image>
       <View className="text">暂无变更历史</View>
     </View>
   ) : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
@@ -86,7 +85,6 @@ export function ChangeHistory(props) {
         oldFiledValue,
         updateTime,
         operateAppendMessage,
-        updateType,
       } = item;
 
       const time = new Date(updateTime);
@@ -169,9 +167,7 @@ export function ChangeCard(props) {
       </View>
       <View className="change-card-wrapper">
         <View className="change-card-pre">
-          <View className="change-card-pre-symbol">
-            前
-          </View>
+          <View className="change-card-pre-symbol" style={{backgroundImage: `url(${beforeIcon})`}} />
           <View className={`change-card-pre-content ${pre === '-' || !pre ? 'change-card-pre-content-no-line' : ''}`}>
             <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
               {pre}
@@ -179,9 +175,7 @@ export function ChangeCard(props) {
         </View>
         </View>
         <View className="change-card-cur">
-          <View className="change-card-cur-symbol">
-            后
-          </View>
+          <View className="change-card-cur-symbol" style={{backgroundImage: `url(${afterIcon})`}} />
           <View className={`change-card-cur-content`}>
             <Text style={isDate ? { fontFamily: 'MaoYanHeiTi-H1' } : {}}>
               {cur}
@@ -203,10 +197,4 @@ function PureReq_Projectoperatelog({ projectId }) {
     },
     'server',
   ).then((res) => res)
-}
-
-function onHandleResponse(res) {
-  const { success, data, error } = res;
-  if (success) return data;
-  return error;
 }

@@ -12,7 +12,7 @@
   box-shadow: 0 2px 10px 0 rgba(0,0,0,0.02);
   border-radius: 16px;
   background-color: #FFFFFF;
-  margin: 20px 30px 174px;
+  margin: 20px 30px 0;
   .layout-body__content {
     max-height: 90%;
   }
@@ -32,5 +32,9 @@
   }
   .releaseTime-text {
     display: 'inline-block';
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 28px;
+    color: #333333;
   }
 }

@@ -25,6 +25,9 @@ const config = {
     '@components': path.resolve(__dirname, '..', 'src/components'),
     '@utils': path.resolve(__dirname, '..', 'src/utils'),
     '@static': path.resolve(__dirname, '..', 'src/static'),
+    '@pages':path.resolve(__dirname, '..', 'src/pages'),
+    '@constant':path.resolve(__dirname, '..', 'src/constant'),
+
   },
   mini: {
     imageUrlLoaderOption: {

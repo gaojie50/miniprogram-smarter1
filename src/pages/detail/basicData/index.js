@@ -1,11 +1,12 @@
 import { View, Image, Text, ScrollView } from '@tarojs/components';
 import React from 'react';
-import { CategoryList, BasicItem } from '../constant';
 import FloatCard from '@components/m5/float-layout';
-import Cover from '@static/detail/cover.png';
+import { defaultMovieCover as Cover } from '@utils/imageUrl';
 import Close from '@static/close.png';
-import ReaseTime from './releaseTime';
 import OmitTip from '@components/omitTip';
+import '@components/m5/style/components/float-layout.scss';
+import { CategoryList, BasicItem } from '../constant';
+import ReaseTime from './releaseTime';
 import './index.scss';
 
 export default class BasicData extends React.Component {

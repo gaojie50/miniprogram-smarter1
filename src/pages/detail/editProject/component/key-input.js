@@ -21,7 +21,7 @@ export default function KeyInput(props, ref) {
     <View className="key-input" >
       <View className="title">{name}</View>
       <View className="param">{text}</View>
-      <Input cursor-spacing="15" onInput={e => setInputValue(e.detail.value)} value={inputValue} className="input" placeholder="请填写"></Input>
+      <Input cursor-spacing="15" always-embed={true} onInput={e => setInputValue(e.detail.value)} value={inputValue} className="input" placeholder="请填写"></Input>
     </View>
   )
 }
