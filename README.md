@@ -9,9 +9,13 @@ taro 版本 3.0.13
 ！！！taro全局安装  yarn global add @tarojs/cli@3.0.13
 通过 taro info 查看版本号，如果不是3.0.13的话，可以卸载后再重新安装
 
+先配置安装源
+yarn config set registry http://r.npm.sankuai.com
 
-yarn --registry=http://r.npm.sankuai.com
+安装
+yarn install
 
+启动
 npm run dev:weapp  
 
 <!-- env-config.js -->
