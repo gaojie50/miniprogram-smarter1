@@ -84,8 +84,12 @@ export default {
       pages:["index"]
     },
     {
-      root:"pages/test",
-      pages:["index"]
+      root: "pages/hotMovieSortingList",
+      pages: ["index/index", "city/index"]
+    },
+    {
+      root: "pages/coreData",
+      pages: ["index", "realTime/index"]
     }
   ]
 }

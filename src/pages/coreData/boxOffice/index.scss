@@ -1,0 +1,121 @@
+.pre-income {
+  margin-top: 10px;
+  margin-bottom: 40px;
+  height: 34px;
+  font-weight: 500;
+  font-family: PingFangSC-Medium;
+  font-size: 34px;
+  color: #333333;
+  letter-spacing: 0;
+  line-height: 34px;
+}
+.income-num {
+  height: 100px;
+  width: 364px;
+  font-weight: 700;
+  font-family: MaoYanHeiTi-H1;
+  font-size: 100px;
+  color: #276FF0;
+  line-height: 100px;
+  margin-bottom: 40px;
+  .unit {
+    margin-left: 6px;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 28px;
+    color: #276FF0;
+  }
+}
+.office-income-box {
+  display: flex;
+  flex-wrap: wrap;
+  .office-income:nth-child(2n+1) {
+    margin-right: 20px;
+  }
+  .office-income {
+    background: #F8F8F8;
+    border-radius: 10px;
+    width: 295px;
+    height: 78px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    .office-income-left {
+      width: 293px;
+      .office-income-name {
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        color: #333333;
+        line-height: 28px;
+        margin-bottom: 20px;
+      }
+      .office-income-num {
+        font-weight: 400;
+        font-family: MaoYanHeiTi-H1;
+        font-size: 30px;
+        color: #333333;
+        line-height: 30px;
+        .unit {
+          font-family: PingFangSC-Regular;
+        }
+      }
+    }
+    Image {
+      width: 12px;
+      height: 24px;
+    }
+  }
+}
+.param-header {
+  display: flex;
+  margin-top: 60px;
+  margin-bottom: 10px;
+  align-items: center;
+  .param-left {
+    width: 594px;
+    height: 34px;
+    font-weight: 500;
+    font-family: PingFangSC-Medium;
+    font-size: 34px;
+    color: #333333;
+    letter-spacing: 0;
+    line-height: 34px;
+  }
+  .param-right {
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 24px;
+    color: #276FF0;
+    line-height: 28px;
+  }
+}
+.param {
+  padding: 39px 0px;
+  display: flex;
+  border-bottom: 1px solid #E5E5E5;
+  .param-header-left {
+    font-weight: 400;
+    width: 590px;
+    font-family: PingFangSC-Regular;
+    font-size: 28px;
+    color: #333333;
+    line-height: 28px;
+  }
+  .param-header-right {
+    font-weight: 400;
+    width: 78px;
+    height: 26px;
+    margin-right: 10px;
+    font-family: PingFangSC-Regular;
+    font-size: 26px;
+    color: #999999;
+    text-align: right;
+    line-height: 26px;
+  }
+  Image {
+    width: 12px;
+    height: 24px;
+  }
+}
