@@ -1,5 +1,6 @@
 import { View, Image, Text, ScrollView } from '@tarojs/components';
 import React from 'react';
+import Taro from '@tarojs/taro'
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
 import utils from '@utils/index.js';
 import './index.scss';
@@ -27,6 +28,12 @@ export default class KeyData extends React.Component {
           });
         } 
       });
+  }
+  goCoreData = () =>{
+    console.log(this.props);
+    Taro.redirectTo({
+      url: `/pages/coreData/index?name=${this.props.basicData.name}`,
+    })
   }
 
   render() {
@@ -173,9 +180,18 @@ export default class KeyData extends React.Component {
                 <Text className="right-label">猫眼份额</Text>
                 <Text className='num'>{keyData.share || '-'}{keyData.share ? '%' : ''}</Text>
               </View>
+              <View className=''></View>
             </View>
           </View>
         }
+        <View className="keyData-detail" onClick={this.goCoreData}>
+          <View className="detail-box">
+            <View className="detail-left">累计收入预估</View>
+            <View className="detail-middle">1.3亿</View>
+            <View className="detail-right">查看详情</View>
+            <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
+          </View>
+        </View>
       </View>
     )
   }

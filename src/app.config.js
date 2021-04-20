@@ -48,6 +48,14 @@ export default {
     {
       root: "pages/assess",
       pages: [ "index/index", "create/index", "template/index", "detail/index"]
+    },
+    {
+      root: "pages/hotMovieSortingList",
+      pages: ["index/index", "city/index"]
+    },
+    {
+      root: "pages/coreData",
+      pages: ["index", "realTime/index"]
     }
   ]
 }
