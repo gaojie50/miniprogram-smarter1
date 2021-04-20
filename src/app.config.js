@@ -83,5 +83,9 @@ export default {
       root:"pages/searchActor",
       pages:["index"]
     },
+    {
+      root:"pages/test",
+      pages:["index"]
+    }
   ]
 }
