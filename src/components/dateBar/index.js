@@ -8,26 +8,49 @@ import backIcon from '../../static/detail/arrow-left.png';
 import backWhiteIcon from '../../static/detail/arrow-left.png';
 import './index.scss';
 
+let aInterval;
 export default function dateBar(props){
-  const {  } = props;
-  const [time, setTime] = useState(dayjs(new Date()).format('HH:mm:ss'));
-  const [day, setDay] = useState(dayjs(new Date()).format('HH:mm:ss'));
+  const { callBack } = props;
+  const [time, setTime] = useState('');
+  const [day, setDay] = useState('');
+  const [now, setNow] = useState('');
+  const [thatTime, setThatTime] = useState('');
   const [isShowSelect, setIsShowSelect] = useState(false);
   const [isShowButton, setIsShowButton] = useState(false);
   const [dateRange, setDateRange] = useState([]);
-  useEffect(() => {
-    const weeks = ['天', '一', '二', '三', '四', '五', '六']
-    setInterval(() => {
-      const showDate = dayjs(new Date()).format('HH:mm:ss')
-      const showDay = dayjs(new Date()).format(`YYYY年M月D日/周d`)
-      showDay.replace(/^周d+$/g, ($,$1) => {console.log($,$1); return weeks[$]})
-      setTime(showDate)
-      setDay(showDay);
-    }, 1000)
-  },[])
 
-  const changeDay = () => {
-    console.log(time)
+  useEffect(() => {
+    clearInterval(aInterval);
+    calculateTime(new Date());
+    aInterval = setInterval(() => {calculateTime(new Date())}, 1000);
+  },[thatTime])
+
+  const calculateTime = (now) => {
+    const weeks = ['周天', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const showTime = dayjs(now).format('HH:mm:ss');
+    const showDay = dayjs(thatTime || now).format(`YYYY年M月D日/周d`);
+    setTime(showTime);
+    setDay(showDay.replace(/周./, ($) => {
+      const str = $.split('');
+      const weekDay = weeks[str[1]];
+      return weekDay;
+    }));
+    setNow(now);
+  }
+  
+  const changeDay = (passDay) => {
+    const originTime = thatTime || new Date();
+    const changeTime = originTime.setTime(originTime.getTime()+passDay*24*60*60*1000);
+    const selectDate = dayjs(changeTime).format('YYYY-MM-DD');
+    if(dayjs(now).format('YYYY-MM-DD') === selectDate) {
+      setThatTime(null)
+    } else {
+      calculateTime(now, new Date(changeTime))
+      setThatTime(new Date(changeTime))
+    }
+    if(callBack) {
+      callBack(selectDate)
+    }
   }
 
   const showSelect = () => {
@@ -36,7 +59,6 @@ export default function dateBar(props){
   }
 
   const selectedDate = (e) => {
-    console.log(e)
     setDateRange(e.value)
     if(e.value.end) {
       setIsShowButton(true);
@@ -46,7 +68,7 @@ export default function dateBar(props){
   }
 
   const confirm = () => {
-    console.log(dateRange)
+    callBack(dateRange);
     showSelect()
   }
   const cancel = () => {
@@ -57,32 +79,31 @@ export default function dateBar(props){
     <View className="date-bar-component">
       <View className="left-button" onClick={() => changeDay(-1)}>前一天</View>
       <View className="middle-block">
-        <View className="date"  onClick={() => showSelect()} src={'https://obj.pipi.cn/festatic/common/media/1618902553455-arrow-down%403x.png'}> 
+        <View className="date"  onClick={() => showSelect()}> 
           {day}
-          <Image className="tap"></Image>
+          <Image className="tap" src={'https://obj.pipi.cn/festatic/common/media/1618902553455-arrow-down%403x.png'}></Image>
         </View>
         <View className="time" >
           <Text className="tips">更新时间</Text>{time}
-          <Image className="tap" src={'https://obj.pipi.cn/festatic/common/media/1618902559393-i%403x.png'}></Image>
         </View>
       </View>
-      <View className="right-button" onClick={() => changeDay(-1)}>后一天</View>
+      <View className="right-button" onClick={() => changeDay(+1)}>后一天</View>
       {isShowSelect && (
         <View className="time-selector">
           <Calendar isMultiSelect isVertical onSelectDate={(e) => selectedDate(e)}/>
-          {isShowButton && (
+          
             <View>
-              <Button className="button" onClick={() => confirm()}>确认时间</Button>,
+            {isShowButton && (
+              <Button className="button" onClick={() => confirm()}>确认时间</Button>
+            )}
               <Button className="button" onClick={() => cancel()}>取消</Button>
             </View>
-          )}
         </View>
       )}
-      {/* <AtCalendar isMultiSelect currentDate={{start: '2018/10/28', end: '2018/11/11'}}/> */}
     </View>
   )
 }
 
 dateBar.defaultProps = {
-  
+  callBack: (time) => {console.log(time)} 
 }
