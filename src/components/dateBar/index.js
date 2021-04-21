@@ -10,7 +10,7 @@ import './index.scss';
 
 let aInterval;
 export default function dateBar(props){
-  const { callBack } = props;
+  const { callBack, minDate, maxDate } = props;
   const [time, setTime] = useState('');
   const [day, setDay] = useState('');
   const [now, setNow] = useState('');
@@ -60,11 +60,7 @@ export default function dateBar(props){
 
   const selectedDate = (e) => {
     setDateRange(e.value)
-    if(e.value.end) {
-      setIsShowButton(true);
-    } else {
-      setIsShowButton(false);
-    }
+    setIsShowButton(true);
   }
 
   const confirm = () => {
@@ -90,7 +86,7 @@ export default function dateBar(props){
       <View className="right-button" onClick={() => changeDay(+1)}>后一天</View>
       {isShowSelect && (
         <View className="time-selector">
-          <Calendar isMultiSelect isVertical onSelectDate={(e) => selectedDate(e)}/>
+          <Calendar minDate={minDate} maxDate={maxDate} isVertical onDayClick={(e) => selectedDate(e)}/>
           
             <View>
             {isShowButton && (
@@ -105,5 +101,7 @@ export default function dateBar(props){
 }
 
 dateBar.defaultProps = {
-  callBack: (time) => {console.log(time)} 
+  callBack: (time) => {console.log(time)},
+  minDate: '',
+  maxDate: ''
 }
