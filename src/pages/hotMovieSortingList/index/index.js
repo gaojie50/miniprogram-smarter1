@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Image, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import  Calendar from '@components/calendar'
+import DateBar from '../../../components/dateBar';
 import  AtTag from '@components/m5/tag'
 import '@components/m5/style/components/tag.scss'
 import ArrowLeft from '@static/detail/arrow-left.png';
@@ -31,6 +32,7 @@ export default function hotMovieList() {
             <Text className='header-title'>热映影片排序</Text>
           </View>
         </View>
+        <DateBar />
       </View>
       <View className='list-header'>
         <View className='list-header-left'>全国</View>

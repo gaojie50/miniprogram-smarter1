@@ -3,6 +3,7 @@ import { View, Image, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import utils from '@utils/index.js'
 import  Calendar from '@components/calendar'
+import DateBar from '../../../components/dateBar';
 import '@components/m5/style/components/tag.scss'
 import ArrowLeft from '@static/detail/arrow-left.png';
 import './index.scss'
@@ -28,7 +29,7 @@ export default function hotMovieList() {
   // useEffect(pageScroll);
 
   return (
-    <View>
+    <View className="page-content">
       {/* <Calendar /> */}
       <View className='detail-top'>
         <View className='top'>
@@ -39,6 +40,7 @@ export default function hotMovieList() {
             <Text className='header-title'>你好，李焕英</Text>
           </View>
         </View>
+        <DateBar />
       </View>
       <View className='list-header'>
         <View className='list-header-left'>城市</View>

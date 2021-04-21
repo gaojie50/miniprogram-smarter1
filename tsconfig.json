@@ -14,6 +14,13 @@
     "strictNullChecks": true,
     "sourceMap": true,
     "baseUrl": ".",
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@static/*": ["./src/static/*"],
+      "@pages/*":["./src/pages/*"],
+      "@constant/*":["./src/constant/*"],
+    },
     "rootDir": ".",
     "jsx": "react",
     "jsxFactory": "React.createElement",
@@ -22,7 +29,7 @@
     "typeRoots": [
       "node_modules/@types",
       "global.d.ts"
-    ]
+    ],
   },
   "exclude": [
     "node_modules",

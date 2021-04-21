@@ -1,122 +1,124 @@
-.detail-top {
-  width: 100%;
-  box-sizing: border-box;
-  height: 176px;
-  background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
-  z-index: -1;
-  padding-top: 105px;
-  .header {
-    position: relative;
+.page-content {
+  .detail-top {
     width: 100%;
-    text-align: center;
-    .header-title {
-      font-weight: 500;
-      font-family: PingFangSC-Medium;
-      font-size: 36px;
-      color: #19233B;
+    box-sizing: border-box;
+    // height: 176px;
+    background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
+    z-index: -1;
+    padding-top: 95px;
+    .header {
+      position: relative;
+      width: 100%;
+      text-align: center;
+      .header-title {
+        font-weight: 500;
+        font-family: PingFangSC-Medium;
+        font-size: 36px;
+        color: #19233B;
+      }
+    }
+    .backPage {
+      position: absolute;
+      left: 28px;
+      width: 80px;
+      image {
+        width: 44px;
+        height: 44px;
+        vertical-align: middle;
+      }
     }
   }
-  .backPage {
-    position: absolute;
-    left: 28px;
-    width: 80px;
-    image {
-      width: 44px;
-      height: 44px;
-      vertical-align: middle;
+  .list-header {
+    height: 24px;
+    display: flex;
+    padding: 30px;
+    border-bottom: 1px #CFCFCF solid;
+    .list-header-left {
+      width: 48px;
+      height: 24px;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #999999;
+      line-height: 24px;
+    }
+    .list-header-middle {
+      width: 96px;
+      height: 24px;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #999999;
+      text-align: right;
+      line-height: 24px;
+      margin-left: 390px;
+    }
+    .list-header-right {
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #999999;
+      width: 96px;
+      height: 24px;
+      line-height: 24px;
+      margin-left: 60px;
     }
   }
-}
-.list-header {
-  height: 24px;
-  display: flex;
-  padding: 30px;
-  border-bottom: 1px #CFCFCF solid;
-  .list-header-left {
-    width: 48px;
-    height: 24px;
-    font-weight: 400;
-    font-family: PingFangSC-Regular;
-    font-size: 24px;
-    color: #999999;
-    line-height: 24px;
-  }
-  .list-header-middle {
-    width: 96px;
-    height: 24px;
-    font-weight: 400;
-    font-family: PingFangSC-Regular;
-    font-size: 24px;
-    color: #999999;
-    text-align: right;
-    line-height: 24px;
-    margin-left: 390px;
-  }
-  .list-header-right {
-    font-weight: 400;
-    font-family: PingFangSC-Regular;
-    font-size: 24px;
-    color: #999999;
-    width: 96px;
-    height: 24px;
-    line-height: 24px;
-    margin-left: 60px;
-  }
-}
-.list {
-  height: 30px;
-  padding: 30px;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-around;
-  .list-index {
-    width: 10px;
-    height: 24px;
-    font-family: MaoYanHeiTi-H1;
-    font-size: 24px;
-    color: #999999;
-    line-height: 24px;
-    top: 0px;
-  }
-  .index-0 {
-    color: #F1303D;
-  }
-  .inde-1 {
-    color: #FD9C00;
-  }
-  .index-2 {
-    color: #88A6DA;
-  }
-  .list-city {
-    width: 393px;
-    height: 28px;
-    font-weight: 400;
-    font-family: PingFangSC-Regular;
-    font-size: 28px;
-    color: #333333;
-    line-height: 28px;
-    margin-left: 35px;
-    top: 0px;
-  }
-  .list-money {
-    width: 96px;
+  .list {
     height: 30px;
-    font-weight: 300;
-    font-family: MaoYanHeiTi-H1;
-    font-size: 28px;
-    color: #F1303D;
-    text-align: right;
-    line-height: 30px;
-  }
-  .list-percentage {
-    width: 96px;
-    height: 30px;
-    font-weight: 300;
-    font-family: MaoYanHeiTi-H1;
-    font-size: 28px;
-    color: #333333;
-    text-align: right;
-    line-height: 30px;
-    margin-left: 60px;
+    padding: 30px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    .list-index {
+      width: 10px;
+      height: 24px;
+      font-family: MaoYanHeiTi-H1;
+      font-size: 24px;
+      color: #999999;
+      line-height: 24px;
+      top: 0px;
+    }
+    .index-0 {
+      color: #F1303D;
+    }
+    .inde-1 {
+      color: #FD9C00;
+    }
+    .index-2 {
+      color: #88A6DA;
+    }
+    .list-city {
+      width: 393px;
+      height: 28px;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #333333;
+      line-height: 28px;
+      margin-left: 35px;
+      top: 0px;
+    }
+    .list-money {
+      width: 96px;
+      height: 30px;
+      font-weight: 300;
+      font-family: MaoYanHeiTi-H1;
+      font-size: 28px;
+      color: #F1303D;
+      text-align: right;
+      line-height: 30px;
+    }
+    .list-percentage {
+      width: 96px;
+      height: 30px;
+      font-weight: 300;
+      font-family: MaoYanHeiTi-H1;
+      font-size: 28px;
+      color: #333333;
+      text-align: right;
+      line-height: 30px;
+      margin-left: 60px;
+    }
   }
 }

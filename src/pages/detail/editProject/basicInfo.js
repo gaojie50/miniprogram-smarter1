@@ -1,20 +1,13 @@
 import {
-  Block,
   View,
-  Label,
-  Image,
   Input,
-  ScrollView,
   Text,
-  Picker,
   Textarea,
 } from '@tarojs/components';
-import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useMemo, useEffect, useCallback } from 'react'
 import Taro from '@tarojs/taro'
 import reqPacking from '@utils/reqPacking.js'
-import List from '@components/m5/list';
 import ListItem from '@components/m5/list/item';
-import M5Input from '@components/m5/input';
 import FloatCard from '@components/m5/float-layout';
 import M5Grid from '@components/m5/grid';
 import Toast from '@components/m5/toast';
@@ -26,10 +19,10 @@ import '@components/m5/style/components/toast.scss';
 import './basicInfo.scss';
 import { MOVIE_TYPE_LIST } from './lib';
 import utils from '@utils/index.js'
-import { get as getGlobalData } from '../../../global_data'
 import { CustomName } from './component/custom-project';
 import { MovieList } from './component/movie-list';
 import Divider from './component/divider';
+import { defaultMovieCover } from '@utils/imageUrl';
 
 const {
   debounce
@@ -160,7 +153,11 @@ export default function AddProject(props, ref) {
       keyword: val
     }).then((data) => {
       setData(data);
-      props.changeScroll(false);
+      if(data.length > 0) {
+        props.changeScroll(false);
+      } else {
+        props.changeScroll(true);
+      }
     });
     setLoading(false);
   }, 800), []);
@@ -472,7 +469,7 @@ function onHandleResponse(res) {
       data.forEach(item => {
         item.pic = item.pic
           ? `${item.pic.replace('/w.h/', '/')}@460w_660h_1e_1c`
-          : `../../static/icon/default-pic.svg`
+          : defaultMovieCover
       });
     }
     return data;

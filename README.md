@@ -3,9 +3,19 @@
 ## 开发
 
 ```
-npm install
+node 版本 12.14.1
+taro 版本 3.0.13
 
+！！！taro全局安装  yarn global add @tarojs/cli@3.0.13
+通过 taro info 查看版本号，如果不是3.0.13的话，可以卸载后再重新安装
 
+先配置安装源
+yarn config set registry http://r.npm.sankuai.com
+
+安装
+yarn install
+
+启动
 npm run dev:weapp  
 
 <!-- env-config.js -->
@@ -30,9 +40,9 @@ module.exports = {
 ```
 
 ## 构建 
-
-npm run build:weapp
-
+```
+npm run ci-build
+```
 
 ## 持续集成
 
@@ -41,12 +51,12 @@ http://wxappci.maoyan.info/
 
 appeid wx2e4c3da0429e46ce
 
-如果有指定源错误需运行：
+
+### 其他
+npm安装（不推荐）
 npm install --registry=http://r.npm.sankuai.com
 
 如果有node-sass错误需安装：
 npm i node-sass --sass_binary_site=https://npm.taobao.org/mirrors/node-sass/
 
-！！！Taro需要全局安装
 
-node 版本 12.14.1

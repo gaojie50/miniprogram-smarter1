@@ -1,4 +1,4 @@
-import { View, Button, Input, Textarea, Text, Block, ScrollView } from '@tarojs/components';
+import { View } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';

@@ -1,6 +1,7 @@
 import { View, Image, Button } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
+import { smartLogo, welcomeSlogan } from '@utils/imageUrl';
 import keepLogin from '../../utils/keepLogin.js'
 import { get as getGlobalData } from '../../global_data'
 import auth from '../../utils/auth'
@@ -14,7 +15,6 @@ class _C extends React.Component {
     titleHeight: Math.floor(
       capsuleLocation.bottom + capsuleLocation.top - statusBarHeight,
     ),
-    code: null,
     target: null,
     isLogin: false,
     loading: false
@@ -29,7 +29,6 @@ class _C extends React.Component {
     if( token || localToken ){
       // 校验账号状态
       auth.checkLogin().then(res=>{
-        const { authInfo } = res;
         if(res.isLogin){
           this.setState({ isLogin: true });
           target && Taro.reLaunch({ url: decodeURIComponent(target) });
@@ -52,26 +51,15 @@ class _C extends React.Component {
   getUserInfo = (e) => {
     this.setState({ loading: true });
     const that = this;
-    Taro.getSetting({
-      success: (res) => {
-        if (res.authSetting['scope.userInfo'] && e.detail) {
-          const { iv, encryptedData } = e.detail
-          keepLogin({ 
-            iv, encryptedData, target: this.state.target || `/pages/list/index` 
-          }).catch(()=>{
-            that.setState({ loading: false});
-          })
-          return;
-        }
-
-        this.setState({ loading: false });
-        Taro.showModal({
-          title: '提示',
-          content:
-            '您点击了拒绝授权，将无法正常使用智多星。请重新授权，或者删除小程序重新进入。',
-        })
-      },
-    })
+    if (e.detail) {
+      const { iv, encryptedData } = e.detail
+      keepLogin({ 
+        iv, encryptedData, target: this.state.target || `/pages/list/index` 
+      }).catch(()=>{
+        that.setState({ loading: false});
+      })
+      return;
+    }
   }
 
 
@@ -80,10 +68,10 @@ class _C extends React.Component {
     return (
       <View className="welcome">
         <View style={'margin-top:' + titleHeight + 'px'}>
-          <Image className="logo" src="../../static/welcome/logo.png"></Image>
+          <Image className="logo" src={smartLogo}></Image>
           <Image
             className="slogan"
-            src="../../static/welcome/slogan.png"
+            src={welcomeSlogan}
           ></Image>
           <View
             className="show"

@@ -4,11 +4,8 @@ import { picFn } from '@utils/pic';
 import { defaultMovieCover } from '@utils/imageUrl';
 import {
   View,
-  Image,
-  Text
 } from '@tarojs/components';
 import './index.scss';
-import coverPng from '@static/detail/cover.png';
 
 const noData = function(props){
   const { name, roundNum, pic, text } = props;

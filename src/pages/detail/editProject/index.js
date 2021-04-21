@@ -6,17 +6,18 @@ import { Search, projectSearch, searchRole } from './search.js';
 import Toast from '@components/m5/toast';
 import _BasicInfo from './basicInfo';
 import _KeyInfo from './keyInfo';
-// import _MakeInfo from './makeInfo';
+import _MakeInfo from './makeInfo';
 import { CATEGORY_LIST } from './lib';
 import './index.scss';
 
 const KeyInfo = forwardRef(_KeyInfo);
 const BasicInfo = forwardRef(_BasicInfo);
-// const MakeInfo = forwardRef(_MakeInfo);
+const MakeInfo = forwardRef(_MakeInfo);
 
 export default function EditProject() {
   const keyDataRef = useRef();
   const basicDateRef = useRef();
+  const makeDataRef = useRef();
 
   const [showToast, setShowToast] = useState('');
   const [projectId, setProjectId] = useState();
@@ -38,11 +39,16 @@ export default function EditProject() {
       Search(projectId)
       .then(res => {
         setMovieList(res[0]);
+        makeDataRef.current = res[0];
       })
       projectSearch(projectId)
       .then(res => {
-        setProjectInfoList(res);
-        setProjectData(res)
+          setProjectInfoList(res);
+          setProjectData(res);
+          if(makeDataRef.current) {
+            makeDataRef.current.director = res.director || [];
+            makeDataRef.current.protagonist = res.mainRole || [];
+          }
       })
       searchRole(projectId)
       .then(res => {
@@ -141,19 +147,19 @@ export default function EditProject() {
 
     const elseQuery = {};
 
-    if(movieList && movieList !== {}) {
-      if(movieList.maoyanId) {
-        elseQuery.maoyanId = movieList.maoyanId;
+    if(makeDataRef.current) {
+      if(makeDataRef.current.maoyanId) {
+        elseQuery.maoyanId = makeDataRef.current.maoyanId;
       }
   
-      elseQuery.director = movieList.director || [];
-      elseQuery.issuer = movieList.issuer || [];
-      elseQuery.mainControl = movieList.mainControl || {};
-      elseQuery.movieSource = movieList.filmSource || [];
-      elseQuery.producer = movieList.producer || [];
-      elseQuery.protagonist = movieList.protagonist || [];
-      handleFormatPeople(elseQuery.director);
-      handleFormatPeople(elseQuery.protagonist);
+      elseQuery.director = makeDataRef.current.director || [];
+      elseQuery.issuer = makeDataRef.current.issuer || [];
+      elseQuery.mainControl = makeDataRef.current.mainControl || {};
+      elseQuery.movieSource = makeDataRef.current.filmSource || [];
+      elseQuery.producer = makeDataRef.current.producer || [];
+      elseQuery.protagonist = makeDataRef.current.protagonist || [];
+      handleFormatPeople(makeDataRef.current.director);
+      handleFormatPeople(makeDataRef.current.protagonist);
     }
     
     reqPacking({
@@ -175,7 +181,7 @@ export default function EditProject() {
         wx.navigateBack()
       }
     })
-  }, [keyDataRef, basicDateRef, projectId, movieList])
+  }, [keyDataRef, basicDateRef, projectId, makeDataRef])
 
   const changeCategory = (category) => {
     let key = 0;
@@ -216,10 +222,11 @@ export default function EditProject() {
   }
 
   return (
+    
     <ScrollView scrollY={ scroll } className="editProject">
       <BasicInfo ref={basicDateRef} changeScroll={(param, newRef) => handleChangeScroll(param, newRef)} movieData={movieList} changeCategory={changeCategory} projectData={projectInfoList} />
       <KeyInfo ref={keyDataRef} movieData={movieList} judgeRole={judgeRole} projectData={projectData} />
-      {/* <MakeInfo movieData={movieList} changeScroll={param => setScroll(param)} /> */}
+      <MakeInfo ref={makeDataRef} movieData={movieList} changeScroll={param => setScroll(param)} />
       <View style={{height: '124rpx'}}></View>
       {
         scroll ? <View className="releaseTime-submit">
@@ -227,6 +234,7 @@ export default function EditProject() {
         </View> : null
       }
     </ScrollView>
+    
   )
 }
 
