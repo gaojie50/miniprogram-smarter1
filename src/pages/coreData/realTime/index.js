@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'; 
-import { View, Image, Text, ScrollView, Input } from '@tarojs/components';
+import { View, Image, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import ArrowLeft from '@static/detail/arrow-left.png';
+import FloatLayout from '@components/m5/float-layout';
+import M5Input from '@components/m5/input';
+import '@components/m5/style/components/input.scss';
 import './index.scss'
+import BoxCalculate from '../boxCalculate';
 
 export default  function realTime({}) {
 
@@ -17,6 +21,15 @@ export default  function realTime({}) {
   }
 
   const paramIndex = 0;
+  const [showProgress, setShowProgress] = useState(true);
+  const [officeIncomeIndex, setOfficeIncomeIndex] = useState(0);
+  const incomeName = ['', '总发行代理费', '猫眼发行代理费', '主创分红']
+
+  const changeShowProgress =(index)=> {
+    setShowProgress(true);
+    setOfficeIncomeIndex(index);
+    console.log(index);
+  }
   const lists=[
     [
       {
@@ -93,68 +106,78 @@ export default  function realTime({}) {
     ],
     [
       {
-        title: '净票房',
+        title: '宣发费用',
         money: 3445.1,
-        unit: '万',
+        unit: '万元',
       },
       {
-        title: '片方应得收入',
-        remarks: '43%净票房',
+        title: '总发行代理费',
+        remarks: '一般为片方应得收入的15%或净票房的5%',
         money: 3445.1,
-        unit: '万',
+        toCalculate: '去计算',
+        unit: '万元',
       },
       {
-        title: '扣除中影代理费',
-        remarks: '默认1%的片方应得收入，200万封顶',
+        title: '猫眼发行代理费',
+        remarks: '以合同为准',
+        toCalculate: '去计算',
         money: 3445.1,
-        unit: '万',
+        unit: '万元',
       },
       {
-        title: '扣除宣发费用',
-        remarks: '片方应得收入*相应比例，计算公式为宣发你费用*(1-影片已产生票房/票房收入预测)',
+        title: '主创分红',
+        remarks: '以合同为准',
+        toCalculate: '去计算',
         money: 3445.1,
-        unit: '万',
+        unit: '万元',
       },
       {
-        title: '扣除发行代理费（除网络外）',
-        remarks: '比例以合同为准',
+        title: '猫眼投资成本',
+        remarks: '',
         money: 3445.1,
-        unit: '万',
+        unit: '万元',
       },
       {
-        title: '扣除主创分红',
-        remarks: '比例以合同为准，计算公式为主创分红*（1-影片已产生票房/票房收入预测）',
+        title: '投资方成本',
+        remarks: '',
         money: 3445.1,
-        unit: '万',
+        unit: '万元',
       },
       {
-        title: '扣除投资方回本',
-        remarks: '3.3%票房',
+        title: '猫眼份额',
+        remarks: '',
         money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '总扣除',
-        remarks: '计算公式：上述5项扣除费用之和',
-        money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '净收入',
-        remarks: '计算公式：片方应得收入+总扣除',
-        money: 3445.1,
-        unit: '万',
+        unit: '%',
       },
       {
         title: '猫眼份额转让费',
+        remarks: '',
         money: 3445.1,
         unit: '万',
       },
       {
-        title: '投资回收',
-        remarks: '含回收成本，计算公式：净收入*猫眼份额+猫眼投资成本',
+        title: '宣发费用中猫眼票补收入',
+        remarks: '',
         money: 3445.1,
-        unit: '万',
+        unit: '万元',
+      },
+      {
+        title: '宣发费用中已花费片方票补',
+        remarks: '',
+        money: 3445.1,
+        unit: '万元',
+      },
+      {
+        title: '宣发费用中猫眼平台资源收入',
+        remarks: '',
+        money: 3445.1,
+        unit: '万元',
+      },
+      {
+        title: '宣发费用中猫眼平台已获得资源收入',
+        remarks: '',
+        money: 3445.1,
+        unit: '万元',
       },
     ],
     [
@@ -206,7 +229,7 @@ export default  function realTime({}) {
         </View>
       </View>
       <ScrollView className='detail' scrollY>
-        {lists[0].map((list, index)=>{
+        {lists[1].map((list, index)=>{
           return(
             (paramIndex !== 0 ?
                 <View className='param-list' key={index}>
@@ -222,15 +245,38 @@ export default  function realTime({}) {
                     <View className='param-title'>{list.title}</View>
                     <View className='param-remarks'>{list.remarks}</View>
                   </View>
-                  <View className='param-money'><Input type='number' placeholder='请输入' /><Text className='unit'>{list.unit}</Text></View>
+                  {list.toCalculate ? 
+                    <View className='param-to' onClick={()=>{changeShowProgress(index)}}>
+                      <View className='param-header-right'>{list.toCalculate}</View>
+                      <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png' />
+                    </View> 
+                    :
+                    <View className='param-money'><M5Input type='number' placeholder='请输入' /><Text className='unit1'>{list.unit}</Text></View>
+                  }
                 </View>
             )
           )
         })}
       </ScrollView>
-      <View className='bottom-box'>
+      <View className='bottom-box' onClick={()=>{console.log('123')}}>
         <View className='button'>提交</View>
       </View>
+      {showProgress ?
+        <View className='float-bottom-box' onClick={()=>{console.log('333')}}>
+          <View className='button'>计算</View>
+        </View> : ''
+      }
+      <FloatLayout 
+        isOpened={showProgress}
+        className='layout-process'
+        onClose={() => setShowProgress(false)}
+        title={incomeName[officeIncomeIndex]}
+      >
+        <BoxCalculate
+          closeEvt={() => setShowProgress(false)}
+          officeIncomeIndex={officeIncomeIndex}
+        ></BoxCalculate>
+      </FloatLayout>
     </View>
   )
 }

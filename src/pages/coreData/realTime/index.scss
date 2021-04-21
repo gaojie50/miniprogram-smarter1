@@ -44,7 +44,7 @@
   align-items: center;
   justify-content: space-between;
   .param-left {
-    width: 540px;
+    width: 614px;
     margin-right: 31px;
     .param-title {
       font-weight: 600;
@@ -69,8 +69,57 @@
     color: #333333;
     line-height: 28px;
     text-align: right;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    input {
+      width: 83px;
+      height: 28px;
+      font-weight: 400;
+      font-size: 28px;
+      color: #CCCCCC;
+      line-height: 28px;
+      margin-right: 12px;
+      font-family: MaoYanHeiTi-H1;
+      color: #333333;
+    }
+    .at-input__input {
+      padding: 0px;
+    }
     .unit {
       font-family: PingFangSC-Regular;
+    }
+    .unit1{
+      width: 56px;
+      height: 28px;
+      font-weight: 300;
+      // font-family: PingFangSC-Light;
+      font-size: 28px;
+      color: #333333;
+      text-align: right;
+      line-height: 28px;
+    }
+    .at-input {
+      padding: 0px;
+    }
+  }
+  .param-to {
+    display: flex;
+    align-items: center;
+    .param-header-right {
+      font-weight: 400;
+      width: 78px;
+      height: 26px;
+      margin-right: 10px;
+      font-family: PingFangSC-Regular;
+      font-size: 26px;
+      color: #999999;
+      text-align: right;
+      line-height: 26px;
+    }
+    Image {
+      width: 12px;
+      height: 24px;
     }
   }
 }
@@ -103,3 +152,35 @@
     margin: 16px 30px 0px 30px;
   }
 }
+
+.float-bottom-box {
+  z-index: 999;
+  position: fixed;
+  bottom: 0;
+  padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+  height: 8%;
+  display: flex;
+  // align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
+  .button {
+    opacity: 0.4;
+    background: #276FF0;
+    border-radius: 40px;
+    height: 80px;
+    width: 690px;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 30px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 24px;
+    margin: 16px 30px 0px 30px;
+  }
+}
+
