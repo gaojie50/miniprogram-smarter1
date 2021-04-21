@@ -37,6 +37,12 @@ export default function BoxOfficeData({current, isMovieScreening}) {
     console.log(index);
   }
 
+  const gotoParam = (index) => {
+    Taro.redirectTo({
+      url: `/pages/coreData/realTime/index?paramIndex=${index}`
+    })
+  }
+
 
   // useEffect(handleBack);
   // useEffect(pageScroll);
@@ -60,19 +66,19 @@ export default function BoxOfficeData({current, isMovieScreening}) {
       </View>
       <View className='param-header'>
         <View className='param-left'>参数与条件</View>
-        <View className='param-right'>变更记录</View>
+        {/* <View className='param-right'>变更记录</View> */}
       </View>
-      <View className='param'>
+      <View className='param' onClick={()=>{gotoParam(0)}}>
         <View className='param-header-left'>合同参数</View>
         <View className='param-header-right'>去更改</View>
         <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
       </View>
-      <View className='param'>
+      <View className='param' onClick={()=>{gotoParam(1)}}>
         <View className='param-header-left'>实时参数</View>
         <View className='param-header-right'>去查看</View>
         <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
       </View>
-      <View className='param'>
+      <View className='param' onClick={()=>{gotoParam(2)}}>
         <View className='param-header-left'>假定条件</View>
         <View className='param-header-right'>去查看</View>
         <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
@@ -85,6 +91,8 @@ export default function BoxOfficeData({current, isMovieScreening}) {
       >
         <BoxIncome
           closeEvt={() => setShowProgress(false)}
+          current={current}
+          isMovieScreening={isMovieScreening}
           officeIncomeIndex={officeIncomeIndex}
         ></BoxIncome>
       </FloatLayout>

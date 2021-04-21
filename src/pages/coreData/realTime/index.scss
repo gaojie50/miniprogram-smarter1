@@ -73,15 +73,14 @@
     display: flex;
     align-items: center;
     input {
-      width: 83px;
+      width: 131px;
       height: 28px;
-      font-weight: 400;
-      font-size: 28px;
-      color: #CCCCCC;
-      line-height: 28px;
+      font-weight: 400 !important;
+      font-size: 28px !important;
+      line-height: 28px !important;
       margin-right: 12px;
-      font-family: MaoYanHeiTi-H1;
-      color: #333333;
+      font-family: MaoYanHeiTi-H1 !important;
+      color: #333333 !important;
     }
     .at-input__input {
       padding: 0px;

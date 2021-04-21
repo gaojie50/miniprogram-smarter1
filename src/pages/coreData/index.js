@@ -3,6 +3,7 @@ import { View, Image, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import ArrowLeft from '@static/detail/arrow-left.png';
 import BoxOfficeData from './boxOffice/index'
+import DateBar from '@components/dateBar';
 import './index.scss'
 
 export default function hotMovieList() {
@@ -31,6 +32,12 @@ export default function hotMovieList() {
       url: `/pages/coreData/realTime/index?paramIndex=1`
     })
   }
+
+  const gotoCityList = () => {
+    Taro.redirectTo({
+      url: `/pages/hotMovieSortingList/city/index`
+    })
+  }
   return (
     <View>
       <View className='detail-top'>
@@ -43,16 +50,17 @@ export default function hotMovieList() {
           </View>
         </View>
       </View>
+      {/* <DateBar /> */}
       { (isMovieScreening && current !== 2) ?
         <View>
-          <View className='list-header'>
+          {/* <View className='list-header'>
             <View className='list-header-left'>全国</View>
             <View className='list-header-img'>
               <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
             </View>
-            <View className='list-header-right'>各地区产生票房及占比</View>
+            <View className='list-header-right' onClick={()=>{gotoCityList()}} >各地区产生票房及占比</View>
             <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
-          </View>
+          </View> */}
           <View className='box-office'>
             <View className='office'>
               <View className='office-title'>预测日票房</View>

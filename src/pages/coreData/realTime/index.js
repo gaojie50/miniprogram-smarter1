@@ -15,15 +15,16 @@ export default  function realTime({}) {
       Taro.navigateBack();
     }else{
       Taro.redirectTo({
-        url: `/pages/board/index`
+        url: `/pages/coreData/index`
       })
     }
   }
-
-  const paramIndex = 0;
-  const [showProgress, setShowProgress] = useState(true);
+  const url = Taro.getCurrentPages();
+  const paramIndex = url[0].options.paramIndex;
+  const [showProgress, setShowProgress] = useState(false);
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState(0);
   const incomeName = ['', '总发行代理费', '猫眼发行代理费', '主创分红']
+  const paramTitle = ['合作参数', '实时参数', '假定条件']
 
   const changeShowProgress =(index)=> {
     setShowProgress(true);
@@ -33,115 +34,42 @@ export default  function realTime({}) {
   const lists=[
     [
       {
-        title: '中国大陆境内地区票房收入预测(元)',
-        remarks: '机器预测，含服务费',
-        money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '未来票房空间(元)',
-        remarks: '中国大陆境内地区票房收入预测扣除已产生票房',
-        money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '中国大陆境内地区未来分账票房空间(元)',
-        remarks: '去除约9%的手续费',
-        money: 13.5,
-        unit: '万',
-      },
-      {
-        title: '已产生票房(元)',
-        remarks: '含服务费',
-        money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '净票房(元)',
-        remarks: '中国大陆境内地区未来分账票房空间扣除国家电影专项基金和增值税税金及附加',
-        money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '猫眼选座交易额占比',
-        remarks: '计算公式；实时已产生的猫眼交易额/已产生票房',
-        money: 3,
-        unit: '%',
-      },
-      {
-        title: '猫眼票务收入占比',
-        remarks: '计算公式；实时已产生的票务收入/实时猫眼交易额',
-        money: 9.2,
-        unit: '%',
-      },
-      {
-        title: '宣发费用中已花费片方票补(元)',
-        remarks: '',
-        money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '宣发费用中已花费片方票补(元)',
-        remarks: '计算公式：（已产生票房/票房收入预测）*宣发费用中猫眼平台资源收入',
-        money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '净收入',
-        remarks: '计算公式：片方应得收入+总扣除',
-        money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '猫眼份额转让费',
-        money: 3445.1,
-        unit: '万',
-      },
-      {
-        title: '投资回收',
-        remarks: '含回收成本，计算公式：净收入*猫眼份额+猫眼投资成本',
-        money: 3445.1,
-        unit: '万',
-      },
-    ],
-    [
-      {
         title: '宣发费用',
         money: 3445.1,
-        unit: '万元',
+        unit: '万',
       },
       {
         title: '总发行代理费',
-        remarks: '一般为片方应得收入的15%或净票房的5%',
+        remarks: '以合同为准，一般为片方应得收入的15%或净票房的5%',
         money: 3445.1,
         toCalculate: '去计算',
-        unit: '万元',
+        unit: '万',
       },
       {
         title: '猫眼发行代理费',
         remarks: '以合同为准',
         toCalculate: '去计算',
         money: 3445.1,
-        unit: '万元',
+        unit: '万',
       },
       {
         title: '主创分红',
         remarks: '以合同为准',
         toCalculate: '去计算',
         money: 3445.1,
-        unit: '万元',
+        unit: '万',
       },
       {
         title: '猫眼投资成本',
         remarks: '',
         money: 3445.1,
-        unit: '万元',
+        unit: '万',
       },
       {
         title: '投资方成本',
-        remarks: '',
+        remarks: '以合同为准',
         money: 3445.1,
-        unit: '万元',
+        unit: '万',
       },
       {
         title: '猫眼份额',
@@ -150,7 +78,7 @@ export default  function realTime({}) {
         unit: '%',
       },
       {
-        title: '猫眼份额转让费',
+        title: '猫眼份额转让收入',
         remarks: '',
         money: 3445.1,
         unit: '万',
@@ -159,59 +87,101 @@ export default  function realTime({}) {
         title: '宣发费用中猫眼票补收入',
         remarks: '',
         money: 3445.1,
-        unit: '万元',
-      },
-      {
-        title: '宣发费用中已花费片方票补',
-        remarks: '',
-        money: 3445.1,
-        unit: '万元',
+        unit: '万',
       },
       {
         title: '宣发费用中猫眼平台资源收入',
         remarks: '',
         money: 3445.1,
-        unit: '万元',
+        unit: '万',
       },
       {
-        title: '宣发费用中猫眼平台已获得资源收入',
+        title: '其它收入',
         remarks: '',
-        money: 3445.1,
-        unit: '万元',
-      },
-    ],
-    [
-      {
-        title: '发行代理费',
-        remarks: '计算公式：发行代理费*（1-影片已产生票房/票房收入预测）',
         money: 3445.1,
         unit: '万',
       },
     ],
     [
       {
-        title: '票补收入',
+        title: '中国大陆境内地区票房收入预测(元)',
+        remarks: '机器预测，含服务费',
+        money: 3445.1,
+        unit: '万',
+      },
+      {
+        title: '已产生票房',
+        remarks: '含服务费',
+        money: 3445.1,
+        unit: '万',
+      },
+      {
+        title: '未来票房空间',
+        remarks: '中国大陆境内地区票房收入预测扣除已产生票房',
+        money: 3445.1,
+        unit: '万',
+      },
+      {
+        title: '中国大陆境内地区未来分账票房空间',
+        remarks: '去除约9%的手续费',
+        money: 13.5,
+        unit: '万',
+      },
+      {
+        title: '净票房',
+        remarks: '中国大陆境内地区未来分账票房空间扣除国家电影专项基金和增值税税金及附加',
+        money: 3445.1,
+        unit: '万',
+      },
+      {
+        title: '猫眼选座交易额占比',
+        remarks: '计算公式：实时猫眼选座交易额/已产生的票房',
+        money: 3,
+        unit: '%',
+      },
+      {
+        title: '猫眼票务收入占比',
+        remarks: '计算公式：实时已产生的票务收入/实时猫眼选座交易额',
+        money: 9.2,
+        unit: '%',
+      },
+      {
+        title: '宣发费用中已花费片方票补',
         remarks: '',
         money: 3445.1,
         unit: '万',
       },
       {
-        title: '平台资源收入',
-        remarks: '',
+        title: '宣发费用中猫眼平台已获得的资源收入',
+        remarks: '计算公式：(已产生票房/票房收入预测)*宣发费用中猫眼平台资源收入',
         money: 3445.1,
         unit: '万',
+      }
+    ],
+    [
+      {
+        title: '国家电影专项基金',
+        remarks: '默认5%的票房',
+        money: 3445.1,
+        unit: '%',
       },
       {
-        title: '扣除已花片方票补',
-        remarks: '计算公式：平台资源收入*（影片已产生票房/票房收入预测）',
+        title: '增值税税金及附加',
+        remarks: '默认3.3%的票房',
         money: 3445.1,
-        unit: '万',
+        unit: '%',
       },
       {
-        title: '扣除：已获得资源收入',
-        remarks: '计算公式：票补收入+平台资源收入+扣除：已花片方票补+扣除：已获得资源收入',
+        title: '中影代理费/片方应得收入',
+        remarks: '默认1%的片方应得收入，200万元封顶',
         money: 3445.1,
-        unit: '万',
+        unit: '%',
+      },
+      {
+        title: '片方应得收入/净票房',
+        remarks: '默认43%',
+        money: 3445.1,
+        unit: '%',
       },
     ]
   ]
@@ -224,14 +194,14 @@ export default  function realTime({}) {
             <View className='backPage' onClick={handleBack}>
               <Image src={ArrowLeft}></Image>
             </View>
-            <Text className='header-title'>实时参数</Text>
+            <Text className='header-title'>{paramTitle[paramIndex]}</Text>
           </View>
         </View>
       </View>
       <ScrollView className='detail' scrollY>
-        {lists[1].map((list, index)=>{
+        {lists[paramIndex].map((list, index)=>{
           return(
-            (paramIndex !== 0 ?
+            (paramIndex !== '0' ?
                 <View className='param-list' key={index}>
                   <View className='param-left'>
                     <View className='param-title'>{list.title}</View>
