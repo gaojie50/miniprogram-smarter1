@@ -10,7 +10,7 @@ import './index.scss';
 
 let aInterval;
 export default function dateBar(props){
-  const { callBack, minDate, maxDate } = props;
+  const { callBack, minDate, maxDate, needButtons, needInterval } = props;
   const [time, setTime] = useState('');
   const [day, setDay] = useState('');
   const [now, setNow] = useState('');
@@ -22,7 +22,9 @@ export default function dateBar(props){
   useEffect(() => {
     clearInterval(aInterval);
     calculateTime(new Date());
-    aInterval = setInterval(() => {calculateTime(new Date())}, 1000);
+    if(needInterval) {
+      aInterval = setInterval(() => {calculateTime(new Date())}, 1000);
+    }
   },[thatTime])
 
   const calculateTime = (now) => {
@@ -73,17 +75,17 @@ export default function dateBar(props){
 
   return (
     <View className="date-bar-component">
-      <View className="left-button" onClick={() => changeDay(-1)}>前一天</View>
+      <View className="left-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() => changeDay(-1)}>前一天</View>
       <View className="middle-block">
         <View className="date"  onClick={() => showSelect()}> 
           {day}
-          <Image className="tap" src={'https://obj.pipi.cn/festatic/common/media/1618902553455-arrow-down%403x.png'}></Image>
+          <Image className="tap" style={{visibility: needButtons ? '' : 'hidden'}} src={'https://obj.pipi.cn/festatic/common/media/1618902553455-arrow-down%403x.png'}></Image>
         </View>
         <View className="time" >
           <Text className="tips">更新时间</Text>{time}
         </View>
       </View>
-      <View className="right-button" onClick={() => changeDay(+1)}>后一天</View>
+      <View className="right-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() => changeDay(+1)}>后一天</View>
       {isShowSelect && (
         <View className="time-selector">
           <Calendar minDate={minDate} maxDate={maxDate} isVertical onDayClick={(e) => selectedDate(e)}/>
@@ -103,5 +105,7 @@ export default function dateBar(props){
 dateBar.defaultProps = {
   callBack: (time) => {console.log(time)},
   minDate: '',
-  maxDate: ''
+  maxDate: '',
+  needButtons: false,
+  needInterval: false
 }

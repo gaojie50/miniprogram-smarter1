@@ -49,8 +49,8 @@ export default function hotMovieList() {
             <Text className='header-title'>{name}</Text>
           </View>
         </View>
+        <DateBar />
       </View>
-      {/* <DateBar /> */}
       { (isMovieScreening && current !== 2) ?
         <View>
           {/* <View className='list-header'>
