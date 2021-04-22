@@ -4,13 +4,15 @@ import Tab from '../m5/tab-bar';
 import MarketActive from '../../static/tab/market_active.svg';
 import Board from '../../static/tab/board.svg';
 import BoardActive from '../../static/tab/board_active.svg';
-// import Assessment from '../../static/tab/assessment.svg';
-// import AssessmentActive from '../../static/tab/assessment_active.svg';
+import Assessment from '../../static/tab/assessment.svg';
+import AssessmentActive from '../../static/tab/assessment_active.svg';
 import '../m5/style/components/tab-bar.scss';
 
 const TAB_ACTIVE = {
   '/pages/list/index': 0,
-  '/pages/board/index': 1,
+  // '/pages/board/index': 1,
+  '/pages/assessList/index': 2,
+  '/pages/board/index': 3,
 };
 
 const ROUTER = {};
@@ -21,8 +23,9 @@ Object.keys(TAB_ACTIVE).forEach((url) => {
 
 const TAB_LIST = [
   { title: '市场情报', image: 'https://p0.meituan.net/ingee/618771a1bcebae82663a09ee4bdca3291948.png', selectedImage: MarketActive },
+  { title: '收入测算', image: Board, selectedImage: BoardActive },
+  { title: '评估列表', image: Assessment, selectedImage: AssessmentActive },
   { title: '项目看板', image: Board, selectedImage: BoardActive },
-  // { title: '项目评估', image: Assessment, selectedImage: AssessmentActive }
 ];
 
 

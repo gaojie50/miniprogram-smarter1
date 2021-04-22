@@ -2,6 +2,7 @@ export default {
   pages: [
     'pages/list/index',
     'pages/board/index',
+    'pages/assessList/index',
   ],
   tabBar: {
     list: [{
@@ -9,7 +10,13 @@ export default {
       'selectedIconPath': 'static/tab/market_active.png',
       pagePath: 'pages/list/index',
       text: '市场情报'
-    }, {
+    },{
+      pagePath: 'pages/list/index',
+      text: '收入测算'
+    },{
+      pagePath: 'pages/assessList/index',
+      text: '评估列表'
+    },{
       'iconPath': 'static/tab/board.png',
       'selectedIconPath': 'static/tab/board_active.png',
       pagePath: 'pages/board/index',
