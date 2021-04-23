@@ -73,15 +73,15 @@
 
 .box-office {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   height: 136px;
   padding: 20px 10px 10px 10px;
   background: #FFFFFF;
   .office {
-    width: 182px;
+    // width: 182px;
     display: flex;
-    margin: 30px 0px 30px 20px;
+    margin: 30px 0px 30px 0px;
     flex-direction: column;
     justify-self: start;
     // align-items: center;

@@ -31,8 +31,9 @@ export default class KeyData extends React.Component {
   }
   goCoreData = () =>{
     console.log(this.props);
+    const { basicData } = this.props;
     Taro.redirectTo({
-      url: `/pages/coreData/index?name=${this.props.basicData.name}`,
+      url: `/pages/coreData/index?name=${basicData.name}&projectId=${basicData.projectId}`,
     })
   }
 
@@ -163,39 +164,46 @@ export default class KeyData extends React.Component {
             </ScrollView>
             {
               judgeRole.role !== 1 ? ''  
-              :<View className="keyData-bottom">
-                <View className="left">
-                  <View className="first-line">
-                    <Text className="left-label">制作成本</Text>
-                    <Text><Text className='num'>{formatNumber(keyData.cost, 'floor').num}</Text>{formatNumber(keyData.cost, 'floor').unit}</Text>
+              : 
+              <View>
+                <View className="keyData-bottom">
+                  <View className="left">
+                    <View className="first-line">
+                      <Text className="left-label">制作成本</Text>
+                      <Text><Text className='num'>{formatNumber(keyData.cost, 'floor').num}</Text>{formatNumber(keyData.cost, 'floor').unit}</Text>
+                    </View>
+                    <View className="second-line">
+                      <Text className="left-label">猫眼投资成本</Text>
+                      <Text><Text className='num'>{formatNumber(keyData.investingCost, 'floor').num}</Text>{formatNumber(keyData.investingCost, 'floor').unit}</Text>
+                    </View>
                   </View>
-                  <View className="second-line">
-                    <Text className="left-label">猫眼投资成本</Text>
-                    <Text><Text className='num'>{formatNumber(keyData.investingCost, 'floor').num}</Text>{formatNumber(keyData.investingCost, 'floor').unit}</Text>
+                  <View className="right">
+                    <View className="first-line">
+                      <Text className="right-label">宣发费用</Text>
+                      <Text><Text className='num'>{formatNumber(keyData.advertisingCost, 'floor').num}</Text>{formatNumber(keyData.advertisingCost, 'floor').unit}</Text>
+                    </View>
+                    <View className="second-line">
+                      <Text className="right-label">猫眼份额</Text>
+                      <Text className='num'>{keyData.share || '-'}{keyData.share ? '%' : ''}</Text>
+                    </View>
                   </View>
                 </View>
-                <View className="right">
-                  <View className="first-line">
-                    <Text className="right-label">宣发费用</Text>
-                    <Text><Text className='num'>{formatNumber(keyData.advertisingCost, 'floor').num}</Text>{formatNumber(keyData.advertisingCost, 'floor').unit}</Text>
-                  </View>
-                  <View className="second-line">
-                    <Text className="right-label">猫眼份额</Text>
-                    <Text className='num'>{keyData.share || '-'}{keyData.share ? '%' : ''}</Text>
+                <View className="keyData-detail" onClick={this.goCoreData}>
+                  <View className="detail-box">
+                    <View className="detail-box-left">
+                      <View className="detail-left">总收入</View>
+                      <View className="detail-middle">1.3万</View>
+                    </View>
+                    <View className="detail-box-right">
+                      <View className="detail-right">查看详情</View>
+                      <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
+                    </View>
                   </View>
                 </View>
               </View>
             }
           </Block>
         }
-        <View className="keyData-detail" onClick={this.goCoreData}>
-          <View className="detail-box">
-            <View className="detail-left">累计收入预估</View>
-            <View className="detail-middle">1.3亿</View>
-            <View className="detail-right">查看详情</View>
-            <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
-          </View>
-        </View>
       </View>
     )
   }
