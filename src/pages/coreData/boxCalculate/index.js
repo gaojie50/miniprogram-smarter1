@@ -83,7 +83,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, cha
       setIsSubmit(false);
     }
     // setLists(lists);
-  });
+  }, []);
 
   return(
     <View className='box-calculate'>

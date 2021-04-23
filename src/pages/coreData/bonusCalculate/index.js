@@ -35,7 +35,7 @@ export default function BonusCalculate({calculateIndex}) {
 
   useEffect(()=>{
     console.log('lists, calculateIndex', lists, calculateIndex);
-  });
+  }, []);
 
   return(
     <View className='box-calculate'>
