@@ -9,6 +9,7 @@ import Taro from '@tarojs/taro';
 import reqPacking from '../../utils/reqPacking.js';
 import Tab from '@components/tab';
 import { get as getGlobalData } from '../../global_data';
+import { EvaluationList } from './evaluate';
 import './index.scss';
 
 const { height, top } = getGlobalData('capsuleLocation');
@@ -54,6 +55,9 @@ export default function AssessList() {
                 </View>
             })
           }
+        </View>
+        <View className="assess-list-content-body">
+          <EvaluationList />
         </View>
       </ScrollView>
       <Tab />

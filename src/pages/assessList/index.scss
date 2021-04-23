@@ -23,6 +23,7 @@
 }
 .assess-list-content {
     height: 100vh;
+    background-color: rgba(248, 248, 248, 1);
     &-title {
         width: 100%;
         position: static;
@@ -31,8 +32,8 @@
         height: 88px;
         background: #FFFFFF;
         box-shadow: 0 2px 20px 0 rgba(0,0,0,0.05);
+
         &-item {
-            
             height: 88px;
             line-height: 88px;
             text-align: center;
@@ -58,5 +59,8 @@
             border-radius: 3px;
             margin: -6px auto 0;
         }
+    }
+    &-body {
+        padding: 30px 30px 164px;
     }
 }
