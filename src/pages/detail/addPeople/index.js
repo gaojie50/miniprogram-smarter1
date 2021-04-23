@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { View, ScrollView, Image, Radio, Text, Input } from '@tarojs/components';
+import { View, ScrollView, Image, Input, Label } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
-import AtActionSheet from '@components/m5/action-sheet';
-import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import util from '@utils';
 import './index.scss';
 
@@ -124,28 +122,28 @@ export default function AddPeople() {
   }, [])
 
   return (
-    <View className="add-people"> 
-      <View className="add-people-box">
-        <View className="add-people-wrap">
-          <View className="add-people-bar" style={{width: focus || searchValue !== '' ? '612rpx' : '690rpx'}}>
-            <Image src="../../../static/icon/search.png" alt=""></Image>
-            <Input value={searchValue} onInput={ e => handleSearch(e.detail.value) } placeholder="搜索对接人" onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} className="add-people-bar-input"></Input>
-            {loading && (<View className="loading"><mpLoading type="circle" show={true} tips="" /></View>)}
-            {focus || searchValue !== '' ? <View className="cancel" onClick={()=> {setSearchValue(''); setList([])}}>取消</View> : null}
+    <View className='add-people'> 
+      <View className='add-people-box'>
+        <View className='add-people-wrap'>
+          <View className='add-people-bar' style={{width: focus || searchValue !== '' ? '612rpx' : '690rpx'}}>
+            <Image src='../../../static/icon/search.png' alt=''></Image>
+            <Input value={searchValue} onInput={e => handleSearch(e.detail.value)} placeholder='搜索对接人' onFocus={() => setFocus(true)} onBlur={() => setFocus(false)} className='add-people-bar-input'></Input>
+            {loading && (<View className='loading'><mpLoading type='circle' show tips='' /></View>)}
+            {focus || searchValue !== '' ? <View className='cancel' onClick={()=> {setSearchValue(''); setList([])}}>取消</View> : null}
           </View>
         </View>
       </View>
-      <ScrollView scrollY className="edit-rearch-result">
+      <ScrollView scrollY className='edit-rearch-result'>
         {
           list.length > 0 && list.map((item, index) => {
-            return <View className="edit-rearch-result-item" key={ index } onClick={() => handleSelected(item)}>
+            return <View className='edit-rearch-result-item' key={index} onClick={() => handleSelected(item)}>
               {/* <Radio color="#F1303D" onClick={() => selectedList(item,index)} checked={searchValue === '' && radioChecked.indexOf(index) !== -1} /> */}
-              <View className="right">
-                <label className="border">
+              <View className='right'>
+                <Label className='border'>
                   {/* <Image></Image> */}
-                </label>
-                <View className="content">
-                  <View className="name">{item.label}</View>
+                </Label>
+                <View className='content'>
+                  <View className='name'>{item.label}</View>
                 </View>
               </View>
             </View>
