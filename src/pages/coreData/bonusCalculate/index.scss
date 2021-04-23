@@ -78,15 +78,13 @@
     padding: 0px;
   }
   input {
-    width: 560px !important;
-    height: 28px !important;
-    font-weight: 400 !important;
-    font-size: 24px !important;
-    color: #CCCCCC !important;
-    line-height: 24px !important;
-    margin-right: 12px !important;
-    font-family: MaoYanHeiTi-H1 !important;
-    color: #333333 !important;
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 28px;
+    color: #CCCCCC;
+    line-height: 28px;
+    width: 560px;
+    height: 28px;
   }
 }
 .remark-text {
@@ -169,25 +167,4 @@
     text-align: right !important;
     line-height: 24px !important;
   }
-}
-
-.modal-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .modal-title {
-    text-align: center;
-    font-weight: 600;
-    font-family: PingFangSC-Semibold;
-    font-size: 38px;
-    color: #333333;
-    line-height: 50px;
-  }
-  .modal-text {
-    text-align: center;
-  }
-}
-
-.at-modal__footer .at-modal__action > button {
-  line-height: 60px !important;
 }
