@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'; 
-import { View, Image, Text, ScrollView } from '@tarojs/components';
+import React, { useState, useEffect, useCallback } from 'react'; 
+import { View, Image, Text, ScrollView, Input } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import ArrowLeft from '@static/detail/arrow-left.png';
 import FloatLayout from '@components/m5/float-layout';
@@ -7,44 +7,22 @@ import M5Input from '@components/m5/input';
 import '@components/m5/style/components/input.scss';
 import './index.scss'
 import BoxCalculate from '../boxCalculate';
+import BonusCalculate from '../bonusCalculate';
 import { get as getGlobalData } from '../../../global_data';
 
-const reqPacking = getGlobalData('reqPacking');
-
 export default  function realTime({}) {
-
-  const handleBack = () => {
-    if(Taro.getCurrentPages().length>1){
-      Taro.navigateBack();
-    }else{
-      Taro.redirectTo({
-        url: `/pages/coreData/index`
-      })
-    }
-  }
-  const url = Taro.getCurrentPages();
-  const paramIndex = url[0].options.paramIndex;
-  const [showProgress, setShowProgress] = useState(false);
-  const [officeIncomeIndex, setOfficeIncomeIndex] = useState(0);
-  const [valueData, setValueData] = useState(0);
-  const incomeName = ['', '总发行代理费', '猫眼发行代理费', '主创分红']
-  const paramTitle = ['合作参数', '实时参数', '假定条件']
-  const changeShowProgress =(index)=> {
-    setShowProgress(true);
-    setOfficeIncomeIndex(index);
-    console.log(index);
-  }
-  const lists=[
+  const reqPacking = getGlobalData('reqPacking');
+  const listsInfo = [
     [
       {
         title: '宣发费用',
-        money: 3445.1,
+        money: '',
         unit: '万',
       },
       {
         title: '总发行代理费',
         remarks: '以合同为准，一般为片方应得收入的15%或净票房的5%',
-        money: 3445.1,
+        money: '',
         toCalculate: '去计算',
         unit: '万',
       },
@@ -52,56 +30,56 @@ export default  function realTime({}) {
         title: '猫眼发行代理费',
         remarks: '以合同为准',
         toCalculate: '去计算',
-        money: 3445.1,
+        money: '',
         unit: '万',
       },
       {
         title: '主创分红',
         remarks: '以合同为准',
         toCalculate: '去计算',
-        money: 3445.1,
+        money: '',
         unit: '万',
       },
       {
         title: '猫眼投资成本',
         remarks: '',
-        money: 3445.1,
+        money: '',
         unit: '万',
       },
       {
         title: '投资方成本',
         remarks: '以合同为准',
-        money: 3445.1,
+        money: '',
         unit: '万',
       },
       {
         title: '猫眼份额',
         remarks: '',
-        money: 3445.1,
+        money: '',
         unit: '%',
       },
       {
         title: '猫眼份额转让收入',
         remarks: '',
-        money: 3445.1,
+        money: '',
         unit: '万',
       },
       {
         title: '宣发费用中猫眼票补收入',
         remarks: '',
-        money: 3445.1,
+        money: '',
         unit: '万',
       },
       {
         title: '宣发费用中猫眼平台资源收入',
         remarks: '',
-        money: 3445.1,
+        money: '',
         unit: '万',
       },
       {
         title: '其它收入',
         remarks: '',
-        money: 3445.1,
+        money: '',
         unit: '万',
       },
     ],
@@ -188,6 +166,64 @@ export default  function realTime({}) {
       },
     ]
   ]
+  const incomeName = ['', '总发行代理费', '猫眼发行代理费', '主创分红']
+  const paramTitle = ['合同参数', '实时参数', '假定条件']
+ 
+  const url = Taro.getCurrentPages();
+  const paramIndex = url[0].options.paramIndex;
+  const [showProgress, setShowProgress] = useState(false);
+  const [officeIncomeIndex, setOfficeIncomeIndex] = useState();
+  const [lists, setLists] = useState(listsInfo);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [calculate, setCalculate] =useState(1);
+  const [valueData, setValueData] = useState(0);
+  const changeCalculate = useCallback((calculateValue)=>setCalculate(calculateValue), []);
+  const childChangeShowProgress = useCallback((childShowProgress)=>setShowProgress(childShowProgress),[]);
+  
+
+  const handleBack = () => {
+    if(Taro.getCurrentPages().length>1){
+      Taro.navigateBack();
+    }else{
+      Taro.redirectTo({
+        url: `/pages/coreData/index`
+      })
+    }
+  }
+
+  const changeShowProgress =(index)=> {
+    setShowProgress(true);
+    setOfficeIncomeIndex(index);
+    console.log(index);
+  }
+
+  const ChangeValue = (e, index) => {
+    const val = e.detail.value;
+    console.log(index, val, lists);
+    var newList = lists.concat();
+    newList[0][index].money = val;
+    console.log(newList, newList[0]);
+    setLists(newList);
+    let count = 0;
+    lists[0].map((item)=>{
+      if(item.money !== '') {
+        count++;
+        console.log(item.money)
+      }
+    })
+    if(count == 11) {
+      setIsSubmit(true);
+    }
+  }
+
+  const bottomSubmit = () => {
+    
+  }
+
+  useEffect(()=>{
+    console.log('useEffect', calculate);
+  }, []);
+
   const getRealTimeData = (projectId) => {
     reqPacking({
       url:'api/management/finance/defaultParameter/get',
@@ -224,7 +260,7 @@ export default  function realTime({}) {
         </View>
       </View>
       <ScrollView className='detail' scrollY>
-        {lists[paramIndex].map((list, index)=>{
+        {listsInfo[paramIndex].map((list, index)=>{
           return(
             (paramIndex !== '0' ?
                 <View className='param-list' key={index}>
@@ -246,31 +282,46 @@ export default  function realTime({}) {
                       <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png' />
                     </View> 
                     :
-                    <View className='param-money'><M5Input type='number' placeholder='请输入' /><Text className='unit1'>{list.unit}</Text></View>
+                    <View className='param-money'><Input type='number' placeholder='请输入' value={list.money} onInput={(e)=>{ChangeValue(e, index)}} />
+                    <Text className='unit1'>{list.unit}</Text></View>
                   }
                 </View>
             )
           )
         })}
       </ScrollView>
-      <View className='bottom-box' onClick={()=>{console.log('123')}}>
-        <View className='button'>提交</View>
+      <View className='bottom-box' onClick={()=>{bottomSubmit()}}>
+        <View className='button' style={{opacity: `${isSubmit ? '1 !important':''}`}}>提交</View>
       </View>
-      {showProgress ?
+      {/* {showProgress ?
         <View className='float-bottom-box' onClick={()=>{console.log('333')}}>
           <View className='button'>计算</View>
         </View> : ''
-      }
+      } */}
       <FloatLayout 
         isOpened={showProgress}
         className='layout-process'
         onClose={() => setShowProgress(false)}
         title={incomeName[officeIncomeIndex]}
       >
-        <BoxCalculate
-          closeEvt={() => setShowProgress(false)}
-          officeIncomeIndex={officeIncomeIndex}
-        ></BoxCalculate>
+        {
+          officeIncomeIndex == 3 ? 
+          <BonusCalculate
+            closeEvt={() => setShowProgress(false)}
+            calculateIndex={officeIncomeIndex}
+            incomeName={incomeName[officeIncomeIndex]}
+          ></BonusCalculate>
+          : 
+          <BoxCalculate
+            closeEvt={() => setShowProgress(false)}
+            calculateIndex={officeIncomeIndex}
+            incomeName={incomeName[officeIncomeIndex]}
+            calculate={calculate}
+            changeCalculate={changeCalculate}
+            // showProgress={showProgress}
+            childChangeShowProgress={childChangeShowProgress}
+          ></BoxCalculate>
+        }
       </FloatLayout>
     </View>
   )

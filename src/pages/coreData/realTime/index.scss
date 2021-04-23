@@ -3,7 +3,7 @@
   box-sizing: border-box;
   background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
   z-index: -1;
-  padding: 10% 0px;
+  padding: 14% 0px;
   .header {
     position: relative;
     width: 100%;
@@ -72,8 +72,8 @@
     display: flex;
     align-items: center;
     input {
-      width: 131px;
-      height: 28px;
+      width: 156px !important;
+      height: 28px !important;
       font-weight: 400 !important;
       font-size: 28px !important;
       line-height: 28px !important;
@@ -155,6 +155,7 @@
   z-index: 999;
   position: fixed;
   bottom: 0;
+  left: 0;
   padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
   padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
   height: 8%;

@@ -9,14 +9,15 @@ import './index.scss'
 export default function hotMovieList() {
   const url = Taro.getCurrentPages();
   const name = url[0].options.name;
-  const isMovieScreening = url[0].options.isMovieScreening;
+  const isMovieScreening = (url[0].options.isMovieScreening == 'true');
   const [current, setCurrent] = useState(0);
   useEffect(()=>{
-    console.log(name);
+    console.log(name, isMovieScreening);
   }, [name])
   useEffect(()=>{
     console.log(current);
-  }, [current])
+    console.log(isMovieScreening)
+  })
 
   const handleBack = () => {
     if(Taro.getCurrentPages().length>1){
@@ -33,11 +34,11 @@ export default function hotMovieList() {
     })
   }
 
-  const gotoCityList = () => {
-    Taro.redirectTo({
-      url: `/pages/hotMovieSortingList/city/index`
-    })
-  }
+  // const gotoCityList = () => {
+  //   Taro.redirectTo({
+  //     url: `/pages/hotMovieSortingList/city/index`
+  //   })
+  // }
   return (
     <View>
       <View className='detail-top'>
@@ -49,9 +50,10 @@ export default function hotMovieList() {
             <Text className='header-title'>{name}</Text>
           </View>
         </View>
+        <DateBar />
       </View>
-      {/* <DateBar /> */}
-      { (isMovieScreening && current !== 2) ?
+      <DateBar />
+      { isMovieScreening ?
         <View>
           {/* <View className='list-header'>
             <View className='list-header-left'>全国</View>
