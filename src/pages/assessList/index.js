@@ -4,9 +4,8 @@ import {
     Text,
     Image
   } from '@tarojs/components';
-import React, { useState, useMemo, useEffect, useCallback,Fragment } from 'react';
+import React, { useState, Fragment } from 'react';
 import Taro from '@tarojs/taro';
-import reqPacking from '../../utils/reqPacking.js';
 import Tab from '@components/tab';
 import { get as getGlobalData } from '../../global_data';
 import { EvaluationList } from './evaluate';
@@ -32,17 +31,18 @@ export default function AssessList() {
   const [current, setCurrent] = useState(0);
 
   return <Fragment>
-      <View className="assess-list-title" style={{height: height, marginTop: top,}}>
-        <Image className="assess-list-title-image" src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
+      <View className='assess-list-title' style={{height: height, marginTop: top,}}>
+        <Image className='assess-list-title-image' src='https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png'
           onClick={() => {
             Taro.navigateTo({
               url: "/pages/searchProject/index",
             });
-        }}></Image>
-        <Text className="assess-list-title-text">评估列表</Text>
+        }}
+        ></Image>
+        <Text className='assess-list-title-text'>评估列表</Text>
       </View>
-      <ScrollView className="assess-list-content">
-        <View className="assess-list-content-title">
+      <ScrollView className='assess-list-content'>
+        <View className='assess-list-content-title'>
           {
             HEADER_LIST.map((item, index) => {
               return <View 
@@ -50,13 +50,13 @@ export default function AssessList() {
                 key={index} 
                 style={{width: `${100/HEADER_LIST.length}%`}}
                 onClick={() => setCurrent(index)}
-                >
+              >
                   {item.value}
                 </View>
             })
           }
         </View>
-        <View className="assess-list-content-body">
+        <View className='assess-list-content-body'>
           <EvaluationList />
         </View>
       </ScrollView>

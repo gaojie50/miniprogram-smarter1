@@ -2,9 +2,10 @@ import Taro from '@tarojs/taro';
 import { View, Image, Text, Button } from '@tarojs/components';
 import React, { useEffect, useMemo, useState } from 'react';
 import { noDataPic } from '@utils/imageUrl';
+import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
-import reqPacking from '../../utils/reqPacking'
+// import reqPacking from '../../utils/reqPacking'
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -15,6 +16,35 @@ const TYPE = {
 }
 
 const test = {evaluationList: [
+  {
+    "roundId": 6,
+    "round": 4,
+    "roundTitle": "《离天空这么近》项目第4轮评估",
+    "roundDesc": "《离天空这么近》项目第4轮评估",
+    "estimateBox": 1325000000,
+    "estimateScore": 5,
+    "evaluationTotalScore": 33,
+    "participantNumber": 2,
+    "invitees": "刘娟",
+    "hasAssess": true,
+    "evaluationMethod": 1,
+    "projectFileTitle": [
+      "测试.csv",
+      "测试.csv",
+      "7508.mp4"
+    ],
+    "startDate": 1614686114000,
+    "initiator": "兰厅",
+    "projectId": 12345,
+    "name": "离天空这么近",
+    "evaluationRole": 1,
+    "category": 3,
+    "evaluationTimes": 4,
+    "imageUrl": "http://p0.meituan.net/w.h/movie/2691e395bb04c937cdfc9dd20d2dfcb436337.jpg",
+    "deadline": 1622189490000,
+    "role": 1,
+    "projectRole": 1
+  },
   {
     "roundId": 6,
     "round": 4,
@@ -37,39 +67,10 @@ const test = {evaluationList: [
     "projectId": 12345,
     "name": "离天空这么近",
     "evaluationRole": 1,
-    "category": 3,
+    "category": 6,
     "evaluationTimes": 4,
     "imageUrl": "http://p0.meituan.net/w.h/movie/2691e395bb04c937cdfc9dd20d2dfcb436337.jpg",
-    "deadline": "评估结束时间",
-    "role": 1,
-    "projectRole": 1
-  },
-  {
-    "roundId": 6,
-    "round": 4,
-    "roundTitle": "《离天空这么近》项目第4轮评估",
-    "roundDesc": "《离天空这么近》项目第4轮评估",
-    "estimateBox": 1325000000,
-    "estimateScore": 5,
-    "evaluationTotalScore": 33,
-    "participantNumber": 2,
-    "invitees": "兰厅",
-    "hasAssess": false,
-    "evaluationMethod": 1,
-    "projectFileTitle": [
-      "测试.csv",
-      "测试.csv",
-      "7508.mp4"
-    ],
-    "startDate": 1614686114000,
-    "initiator": "刘娟",
-    "projectId": 12345,
-    "name": "离天空这么近",
-    "evaluationRole": 1,
-    "category": 3,
-    "evaluationTimes": 4,
-    "imageUrl": "http://p0.meituan.net/w.h/movie/2691e395bb04c937cdfc9dd20d2dfcb436337.jpg",
-    "deadline": "评估结束时间",
+    "deadline": 1622189490000,
     "role": 1,
     "projectRole": 1
   }
@@ -81,12 +82,11 @@ const TYPE_MOVIE = 3 || 4;
 
 export function EvaluationList() {
   const [data, setData] = useState({});
-  // const [projectRole, setProjectRole] = useState(DEFAULT_PROJECT_ROLE);
-  // const { projectId, keyData, judgeRole, judgeData } = props;
 
+  console.log(dayjs().valueOf(), dayjs().valueOf() < 1622189490000, 124)
   useEffect(() => {
     setData(test)
-    reqPacking()
+    // reqPacking()
   }, [])
 
   const [evaluationList] = useMemo(() => {
@@ -122,7 +122,8 @@ function EvalutaionCard(props) {
     projectRole,
     role,
     imageUrl,
-    name
+    name,
+    deadline
   } = props;
 
   const timeStr = useMemo(() => {
@@ -214,6 +215,10 @@ function EvalutaionCard(props) {
     }
   }
 
+  const jumpDetail = () => {
+    Taro.navigateTo( {url: `/pages/detail/index?projectId=${projectId}`})
+  }
+
   const [statusType, statusText] = useMemo(() => {
     if (hasAssess) {
       let prefix = '';
@@ -227,7 +232,12 @@ function EvalutaionCard(props) {
       if (initiator === realName) prefix = '自己发起 ';
       if (typeof invitees === 'string' && invitees.includes(realName)) {
         // prefix = `${initiator}邀评 `;
-        prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
+        if(dayjs().valueOf() > deadline) {
+          prefix = '未参与'
+        } else {
+          prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
+        }
+        
         return [3, prefix]
       }
       prefix = `${initiator}邀评 `;
@@ -238,15 +248,16 @@ function EvalutaionCard(props) {
         return [2, `${prefix}未评估`]
       }
     }
-  }, [hasAssess, initiator, invitees, realName]);
+  }, [deadline, hasAssess, initiator, invitees, realName]);
 
   return (
     <View className='assess-list-evaluation-card'>
       <View onClick={handleJump} >
         <Image className='assess-list-evaluation-card-image' src={imageUrl.replace('/w.h', '')}></Image>
         <View className='assess-list-evaluation-card-title'>
-          <View className='assess-list-evaluation-card-title-left'>
+          <View className='assess-list-evaluation-card-title-left' onClick={jumpDetail}>
             {name}
+            <Image className='name-arrow' src='../../static/detail/gray.png' alt='' />
           </View>
           <View className='assess-list-evaluation-card-title-right'>
             {statusText}
@@ -297,14 +308,14 @@ function EvalutaionCard(props) {
         <Button
           data-roundTitle={roundTitle}
           data-roundId={roundId}
-          data-sign='attend'
+          data-sign='attend' 
           openType='share'
           className='assess-list-evaluation-card-action-btn'
         >
           分享结果
         </Button>
         {
-          statusType !== 0 && <Button
+          dayjs().valueOf() < deadline && invitees.includes(realName) && <Button
             className='assess-list-evaluation-card-action-btn assess-list-evaluation-card-action-btn-eval'
             onClick={() => {
               Taro.navigateTo({
@@ -312,7 +323,7 @@ function EvalutaionCard(props) {
               })
             }}
           >
-             去评估
+             {statusType === 0 ? '去评估' : '修改评估' }
         </Button>
         }
       </View>
