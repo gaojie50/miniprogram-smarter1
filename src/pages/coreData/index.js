@@ -12,7 +12,7 @@ export default function hotMovieList() {
   const isMovieScreening = (url[0].options.isMovieScreening == 'true');
   const [current, setCurrent] = useState(0);
   useEffect(()=>{
-    console.log(name);
+    console.log(name, isMovieScreening);
   }, [name])
   useEffect(()=>{
     console.log(current);
@@ -50,6 +50,7 @@ export default function hotMovieList() {
             <Text className='header-title'>{name}</Text>
           </View>
         </View>
+        <DateBar />
       </View>
       <DateBar />
       { isMovieScreening ?
