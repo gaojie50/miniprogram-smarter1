@@ -2,7 +2,6 @@
   "miniprogramRoot": "dist/",
   "projectname": "taroConvert",
   "description": "",
-  "appid": "wx2e4c3da0429e46ce",
   "setting": {
     "urlCheck": true,
     "es6": true,
