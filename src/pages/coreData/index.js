@@ -12,7 +12,7 @@ export default function hotMovieList() {
   const isMovieScreening = url[0].options.isMovieScreening;
   const [current, setCurrent] = useState(0);
   useEffect(()=>{
-    console.log(name);
+    console.log(name, isMovieScreening);
   }, [name])
   useEffect(()=>{
     console.log(current);
@@ -51,7 +51,7 @@ export default function hotMovieList() {
         </View>
         <DateBar />
       </View>
-      { (isMovieScreening && current !== 2) ?
+      { (isMovieScreening === 'true' && current !== 2) ?
         <View>
           {/* <View className='list-header'>
             <View className='list-header-left'>全国</View>
@@ -81,7 +81,7 @@ export default function hotMovieList() {
           </View> 
         </View> : ''
       }
-      { isMovieScreening ? 
+      { isMovieScreening === 'true' ? 
         <View className="detail-tabs" >
           <View className="detail-tabs-header" id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
             <View onClick={()=> setCurrent(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>未来收入</View>
@@ -92,19 +92,19 @@ export default function hotMovieList() {
               <View className={current === 0 ? "body-active" : "body-inactive"}>
                 <BoxOfficeData
                   current={current}
-                  isMovieScreening={isMovieScreening}
+                  isMovieScreening={isMovieScreening === 'true'}
                 ></BoxOfficeData>
               </View>
               <View className={current === 1 ? "body-active" : "body-inactive"}>
                 <BoxOfficeData
                   current={current}
-                  isMovieScreening={isMovieScreening}
+                  isMovieScreening={isMovieScreening === 'true'}
                 ></BoxOfficeData>
               </View>
               <View className={current === 2 ? "body-active" : "body-inactive"}>
                 <BoxOfficeData
                   current={current}
-                  isMovieScreening={isMovieScreening}
+                  isMovieScreening={isMovieScreening === 'true'}
                 ></BoxOfficeData>
               </View>
           </View>
@@ -112,7 +112,7 @@ export default function hotMovieList() {
         <View className='screened-box'>
           <BoxOfficeData
             current={current}
-            isMovieScreening={isMovieScreening}
+            isMovieScreening={isMovieScreening === 'true'}
           ></BoxOfficeData>
         </View>
       }

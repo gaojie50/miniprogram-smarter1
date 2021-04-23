@@ -21,7 +21,7 @@
         {
           "name": "pages/coreData/index",
           "pathName": "pages/coreData/index",
-          "query": "name=三傻大闹宝莱坞&isMovieScreening=false",
+          "query": "name=三傻大闹宝莱坞&isMovieScreening=true",
           "scene": null
         }
       ]
