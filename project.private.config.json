@@ -29,6 +29,24 @@
           "pathName": "pages/hotMovieSortingList/index/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "核心数据",
+          "pathName": "pages/coreData/index",
+          "query": "name=三傻大闹宝莱坞&isMovieScreening=true",
+          "scene": null
+        },
+        {
+          "name": "假定条件",
+          "pathName": "/pages/coreData/realTime/index",
+          "query": "paramIndex=2",
+          "scene": null
+        },
+        {
+          "name": "实时参数",
+          "pathName": "pages/coreData/realTime/index",
+          "query": "paramIndex=1",
+          "scene": null
         }
       ]
     }

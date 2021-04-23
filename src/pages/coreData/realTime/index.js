@@ -7,6 +7,9 @@ import M5Input from '@components/m5/input';
 import '@components/m5/style/components/input.scss';
 import './index.scss'
 import BoxCalculate from '../boxCalculate';
+import { get as getGlobalData } from '../../../global_data';
+
+const reqPacking = getGlobalData('reqPacking');
 
 export default  function realTime({}) {
 
@@ -23,9 +26,9 @@ export default  function realTime({}) {
   const paramIndex = url[0].options.paramIndex;
   const [showProgress, setShowProgress] = useState(false);
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState(0);
+  const [valueData, setValueData] = useState(0);
   const incomeName = ['', '总发行代理费', '猫眼发行代理费', '主创分红']
   const paramTitle = ['合作参数', '实时参数', '假定条件']
-
   const changeShowProgress =(index)=> {
     setShowProgress(true);
     setOfficeIncomeIndex(index);
@@ -162,29 +165,51 @@ export default  function realTime({}) {
       {
         title: '国家电影专项基金',
         remarks: '默认5%的票房',
-        money: 3445.1,
+        dataIndex: 'movieSpecialFunds',
         unit: '%',
       },
       {
         title: '增值税税金及附加',
         remarks: '默认3.3%的票房',
-        money: 3445.1,
+        dataIndex: 'addedValueTax',
         unit: '%',
       },
       {
         title: '中影代理费/片方应得收入',
         remarks: '默认1%的片方应得收入，200万元封顶',
-        money: 3445.1,
+        dataIndex: 'cfgcAgencyFeeDividePianDueIncome',
         unit: '%',
       },
       {
         title: '片方应得收入/净票房',
         remarks: '默认43%',
-        money: 3445.1,
+        dataIndex: 'pianDueIncomeDividePureBox',
         unit: '%',
       },
     ]
   ]
+  const getRealTimeData = (projectId) => {
+    reqPacking({
+      url:'api/management/finance/defaultParameter/get',
+      data: {
+        projectId,
+      }
+    }).then(res => {
+      const { success, error } = res;
+      if (success) {
+        const { data } = res;
+        setValueData(data);
+      } else {
+        Taro.showToast({
+          title: error && error.message,
+          icon: 'none',
+          duration: 2000,
+        });
+      }
+    })
+  }
+
+  getRealTimeData();
 
   return (
     <View className='detail-page'>
@@ -207,7 +232,7 @@ export default  function realTime({}) {
                     <View className='param-title'>{list.title}</View>
                     <View className='param-remarks'>{list.remarks}</View>
                   </View>
-                  <View className='param-money'>{list.money}<Text className='unit'>{list.unit}</Text></View>
+                  <View className='param-money'>{valueData[list.dataIndex]}<Text className='unit'>{list.unit}</Text></View>
                 </View>
                 :
                 <View className='param-list' key={index}>
