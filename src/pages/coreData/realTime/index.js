@@ -8,8 +8,10 @@ import '@components/m5/style/components/input.scss';
 import './index.scss'
 import BoxCalculate from '../boxCalculate';
 import BonusCalculate from '../bonusCalculate';
+import { get as getGlobalData } from '../../../global_data';
 
 export default  function realTime({}) {
+  const reqPacking = getGlobalData('reqPacking');
   const listsInfo = [
     [
       {
@@ -141,25 +143,25 @@ export default  function realTime({}) {
       {
         title: '国家电影专项基金',
         remarks: '默认5%的票房',
-        money: 3445.1,
+        dataIndex: 'movieSpecialFunds',
         unit: '%',
       },
       {
         title: '增值税税金及附加',
         remarks: '默认3.3%的票房',
-        money: 3445.1,
+        dataIndex: 'addedValueTax',
         unit: '%',
       },
       {
         title: '中影代理费/片方应得收入',
         remarks: '默认1%的片方应得收入，200万元封顶',
-        money: 3445.1,
+        dataIndex: 'cfgcAgencyFeeDividePianDueIncome',
         unit: '%',
       },
       {
         title: '片方应得收入/净票房',
         remarks: '默认43%',
-        money: 3445.1,
+        dataIndex: 'pianDueIncomeDividePureBox',
         unit: '%',
       },
     ]
@@ -173,15 +175,12 @@ export default  function realTime({}) {
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState();
   const [lists, setLists] = useState(listsInfo);
   const [isSubmit, setIsSubmit] = useState(false);
-  const [calculate, setCalculate] =useState(1)
+  const [calculate, setCalculate] =useState(1);
+  const [valueData, setValueData] = useState(0);
   const changeCalculate = useCallback((calculateValue)=>setCalculate(calculateValue), []);
   const childChangeShowProgress = useCallback((childShowProgress)=>setShowProgress(childShowProgress),[]);
+  
 
-  const changeShowProgress =(index)=> {
-    setShowProgress(true);
-    setOfficeIncomeIndex(index);
-    console.log(index);
-  }
   const handleBack = () => {
     if(Taro.getCurrentPages().length>1){
       Taro.navigateBack();
@@ -190,6 +189,12 @@ export default  function realTime({}) {
         url: `/pages/coreData/index`
       })
     }
+  }
+
+  const changeShowProgress =(index)=> {
+    setShowProgress(true);
+    setOfficeIncomeIndex(index);
+    console.log(index);
   }
 
   const ChangeValue = (e, index) => {
@@ -217,8 +222,30 @@ export default  function realTime({}) {
 
   useEffect(()=>{
     console.log('useEffect', calculate);
-  })
+  }, []);
 
+  const getRealTimeData = (projectId) => {
+    reqPacking({
+      url:'api/management/finance/defaultParameter/get',
+      data: {
+        projectId,
+      }
+    }).then(res => {
+      const { success, error } = res;
+      if (success) {
+        const { data } = res;
+        setValueData(data);
+      } else {
+        Taro.showToast({
+          title: error && error.message,
+          icon: 'none',
+          duration: 2000,
+        });
+      }
+    })
+  }
+
+  getRealTimeData();
 
   return (
     <View className='detail-page'>
@@ -233,7 +260,7 @@ export default  function realTime({}) {
         </View>
       </View>
       <ScrollView className='detail' scrollY>
-        {lists[paramIndex].map((list, index)=>{
+        {listsInfo[paramIndex].map((list, index)=>{
           return(
             (paramIndex !== '0' ?
                 <View className='param-list' key={index}>
@@ -241,7 +268,7 @@ export default  function realTime({}) {
                     <View className='param-title'>{list.title}</View>
                     <View className='param-remarks'>{list.remarks}</View>
                   </View>
-                  <View className='param-money'>{list.money}<Text className='unit'>{list.unit}</Text></View>
+                  <View className='param-money'>{valueData[list.dataIndex]}<Text className='unit'>{list.unit}</Text></View>
                 </View>
                 :
                 <View className='param-list' key={index}>
