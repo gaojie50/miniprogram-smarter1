@@ -15,9 +15,10 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     [ {text: '固定比例', isOnclick: true}, {text: '固定金额', isOnclick: false}, {text: '阶梯', isOnclick: false} ],
     [ {text: '超额累进', isOnclick: true}, {text: '全额累进', isOnclick: false} ],
     [ {text: '制作成本', isOnclick: false}, {text: '票房', isOnclick: true} ],
+    [ {text: '比例1', isOnclick: false}, {text: '比例2', isOnclick: true}, {text: '比例3', isOnclick: false} ]
   ]
   const ladderListsInfo = [
-    {name:'A', unit:'万', value:'', dataName: 'boxLevelA'}, 
+    {name:'A', unit:'万', value:'', dataName: 'boxLevelA'},
     {name:'B', unit:'万', value:'', dataName: 'boxLevelB'}, 
     {name:'C', unit:'万', value:'', dataName: 'boxLevelC'},
     {name:'a', unit:'%', value:'', dataName: 'ratioLevelA'},
@@ -30,6 +31,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   const [ladderLists, setladderLists] = useState(ladderListsInfo);
   const [coefficient, setCoefficient] = useState(''); // 系数
   const [amount, setAmount] = useState(''); // 金额
+  const [proportionA, setProportionA] = useState('');
   const [count, setCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
@@ -53,15 +55,18 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       console.log('/computeRule/ge', res);
       if (success) {
         const { data } = res;
-        const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
+        const {progressionBase, computeType, progressionType, progressionValue, fixedRatioValue, fixedRatioBoxValue, fixedAmountValue, fixedRatioType} = data;
         lists[0].map((item, index)=>{
-          item.isOnclick = (baseType === index+1)
-        })
-        lists[1].map((item, index)=>{
           item.isOnclick = (computeType === index+1)
         })
-        lists[2].map((item, index)=>{
+        lists[1].map((item, index)=>{
           item.isOnclick = (progressionType === index+1)
+        })
+        lists[2].map((item, index)=>{
+          item.isOnclick = (progressionBase === index+1)
+        })
+        lists[3].map((item, index)=>{
+          item.isOnclick = (fixedRatioType === index+1)
         })
         ladderLists.map((item)=> {
           item.value = progressionValue[item.dataName]
@@ -69,6 +74,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         })
         setAmount(fixedAmountValue);
         setCoefficient(fixedRatioValue);
+        setProportionA(fixedRatioBoxValue);
       } else {
         Taro.showToast({
           title: error && error.message || '',
@@ -132,6 +138,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   }, [ladderLists, coefficient, amount, lists]);
 
   useEffect(()=>{
+    getComputeRule()
     console.log('lists, calculateIndex', lists, calculateIndex);
   }, []);
 
@@ -145,6 +152,18 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           )
         })}
       </View>
+      {lists[0][0].isOnclick ? 
+        <View>
+          <View className='calculate-title'>比例类型</View>
+          <View className='calculate-btn'>
+          {lists[3].map((list, index)=>{
+            return(
+              <View onClick={()=>{changeCalculateButton(3, index)}} key={index} className={`${list.isOnclick ?'calculate-button1' : 'calculate-button2'} `}>{list.text}</View>
+            )
+          })}
+          </View>
+        </View> : ''
+      }
       {lists[0][2].isOnclick ? 
         <View className='other'>
           <View className='calculate-title'>阶梯类型</View>
@@ -186,8 +205,29 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           </View>
         </View> :
         <View>
-          { lists[0][0].isOnclick ? 
-            <View className='prance'><Input placeholder='请输入固定比例系数' value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}}></Input><Text className='unit1'>%</Text></View> 
+          {lists[0][0].isOnclick ? 
+            <View>
+              <View className='remark-text'>
+              {lists[3][0].isOnclick ? '净利润>0，净利润*a%' 
+              : (lists[3][1].isOnclick ?'净利润>0时对应票房，此后票房每增长A，分红增加a' : '票房>制作成本*(100+A)%，(票房-制作成本*(100+A)%)*a%')}
+              </View>
+              <View className='ladder-lists'>
+                {!lists[3][0].isOnclick &&
+                  <View className='param-list'>
+                    <View className='param-left'>
+                    <View className='param-title'>A</View>
+                    </View>
+                    <View className='param-money'><Input type='number' placeholder='请输入'  value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}} /><Text className='unit1'></Text></View>
+                  </View>
+                }
+                <View className='param-list'>
+                  <View className='param-left'>
+                  <View className='param-title'>a</View>
+                  </View>
+                  <View className='param-money'><Input type='number' placeholder='请输入'  value={proportionA} onInput={(e)=>{setProportionA(e.detail.value)}} /><Text className='unit1'>%</Text></View>
+                </View>
+              </View>
+            </View>
             : <View className='prance'><Input placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value)}}></Input><Text className='unit1'>万</Text></View> 
           }
         </View>

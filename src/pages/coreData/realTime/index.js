@@ -381,7 +381,7 @@ export default  function realTime({}) {
           officeIncomeIndex == 3 ? 
           <BonusCalculate
             closeEvt={() => setShowProgress(false)}
-            officeIncomeIndex={officeIncomeIndex}
+            calculateIndex={officeIncomeIndex}
             incomeName={incomeName[officeIncomeIndex]}
             calculate={calculate}
             changeCalculate={changeCalculate}
@@ -392,7 +392,7 @@ export default  function realTime({}) {
           : 
           <BoxCalculate
             closeEvt={() => setShowProgress(false)}
-            officeIncomeIndex={officeIncomeIndex}
+            calculateIndex={officeIncomeIndex}
             isBonusCalculate={false}
             incomeName={incomeName[officeIncomeIndex]}
             calculate={calculate}

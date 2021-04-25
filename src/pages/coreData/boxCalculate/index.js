@@ -7,7 +7,7 @@ import AtModalContent from '@components/m5/modal/content';
 import AtModalAction from '@components/m5/modal/action'
 import '@components/m5/style/components/modal.scss';
 import './index.scss'
-import {numberFormat} from '../common'
+import {numberFormat, centChangeTenThousand} from '../common'
 import { get as getGlobalData } from '../../../global_data';
 
 export default function BoxCalculate({calculateIndex, incomeName, calculate, showProgress, changeCalculate, childChangeShowProgress, projectId}) {
@@ -16,7 +16,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   const bonusButList = [
     [ {text: '票房分账收入', isOnclick: true}, {text: '净票房收入', isOnclick: false} ],
     [ {text: '固定比例', isOnclick: false}, {text: '固定金额', isOnclick: false}, {text: '阶梯', isOnclick: true} ],
-    [ {text: '超额累进', isOnclick: false}, {text: '全额累进', isOnclick: true} ],
+    [ {text: '超额累进', isOnclick: false}, {text: '全额累进', isOnclick: true} ]
   ]
   const ladderListsInfo = [
     {name:'A', unit:'万', value:'', dataName: 'boxLevelA'}, 
@@ -26,17 +26,18 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'}, 
     {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
   ];
-  // const {name, btnlist, ladderLists} = calculateInfo;
-  // const [isOnclick, setIsOnclick] = useState(false);
-  // const [calculate, setCalculate] = useState(calculateInfo);
+
   const [lists, setLists] = useState(bonusButList);
   const [isSubmit, setIsSubmit] = useState(false);
   const [ladderLists, setladderLists] = useState(ladderListsInfo);
   const [coefficient, setCoefficient] = useState(''); // 系数
   const [amount, setAmount] = useState(''); // 金额
+  const [fixedAmountValue, setFixedAmountValue] = useState('');
   const [count, setCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [computeResults, setComputeResults] = useState('');
 
+  // 清空数据
   const cleanAllValue =() => {
     // setLists(bonusButList);
     setCoefficient('');
@@ -71,7 +72,8 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
           item.value = progressionValue[item.dataName]
 
         })
-        setAmount(fixedAmountValue);
+        // setAmount(fixedAmountValue);
+        setFixedAmountValue(fixedAmountValue);
         setCoefficient(fixedRatioValue);
       } else {
         Taro.showToast({
@@ -85,8 +87,61 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
 
   }
 
+  const postCompute = () => {
+    console.log(calculateIndex);
+    let baseType = lists[0].findIndex((item)=>item.isOnclick) + 1;
+    let computeType = lists[1].findIndex((item)=>item.isOnclick) + 1;
+    let progressionType = lists[2].findIndex((item)=>item.isOnclick) + 1;
+    let progressionValue = {};
+    ladderLists.map((item)=>{
+      progressionValue[item.dataName] = item.value
+    })
+    console.log(progressionValue);
+
+    let postData = {};
+    // 固定比例
+    if(lists[1][0].isOnclick) {
+      postData = {
+        baseType,
+        computeType,
+        fixedAmountValue: Number(coefficient),
+      }
+    } else if(lists[1][1].isOnclick){ // 固定金额
+      postData = {
+        baseType,
+        computeType,
+        fixedRatioValue: centChangeTenThousand(Number(amount)),
+      }
+    } else if(lists[1][2].isOnclick){ // 阶梯
+      postData = {
+        baseType,
+        computeType,
+        progressionType,
+        progressionValue
+      }
+    }
+
+    console.log('baseType', baseType, computeType, progressionType, postData);
+    reqPacking({
+      url: 'app/mock/69/api/management/finance/contractData/compute',
+      data: {
+        projectId,
+        dataType: calculateIndex,
+        // baseType: lists[1],
+      },
+      method: 'POST',
+    }, 'mapi').then((res)=>{
+      console.log(res)
+      const {data, success} = res;
+      if(success) {
+        setComputeResults(data);
+      }
+    });
+
+  }
+
   const changeCalculateButton = (index, param) => {
-    console.log(index, param, lists[index][param]);
+    // console.log(index, param, lists[index][param]);
     var newList = lists.concat();
     newList[index].forEach((item, i)=>{
       console.log('item', item);
@@ -96,12 +151,12 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         item.isOnclick = false;
       }
     })
-    console.log(newList);
+    // console.log(newList);
     setLists(newList);
   }
   const changeLadderValue = (e, index) => {
     const val = e.detail.value;
-    console.log(index, val, ladderLists, count);
+    // console.log(index, val, ladderLists, count);
     var NewLadderLists = ladderLists.concat();
     NewLadderLists[index].value = val;
     console.log(NewLadderLists);
@@ -115,12 +170,23 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     setCount(count1);
   }
 
+  // 计算按钮
   const bottomSubmit = () => {
-    setShowModal('提交成功');
+    if(isSubmit){
+      postCompute();
+      setShowModal(true);
+    } else {
+      Taro.showToast({
+        title: '请填写完全',
+        icon: 'none',
+        duration: 2000,
+      });
+    }
   }
 
+  // 确定返回参数页（关闭弹窗）
   const recalculate = useCallback(()=>{
-    changeCalculate(1000);
+    changeCalculate(computeResults);
     setShowModal(false);
     childChangeShowProgress(false);
   }, [changeCalculate, calculate])
@@ -130,6 +196,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     console.log('123', showProgress);
   }, [showProgress])
 
+  // 计算按钮是否可以计算
   useEffect(()=>{
     if((lists[1][2].isOnclick && count == 6) || (lists[1][0].isOnclick && coefficient) || (lists[1][1].isOnclick && amount) ) {
       setIsSubmit(true);
@@ -138,8 +205,10 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     }
     // setLists(lists);
   }, [ladderLists, coefficient, amount, lists]);
-
-
+  
+  useEffect(()=>{
+    console.log('showModal', showModal);
+  },[showModal])
   return(
     <View className='box-calculate'>
       <View className='calculate-title'>计算基数</View>
@@ -178,22 +247,25 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
                 <View className='param-left'>
                 <View className='param-title'>{item.name}</View>
                 </View>
-                <View className='param-money'><Input type='number' placeholder='请输入' value={item.value} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
+                <View className='param-money'><Input type='number' placeholder='请输入' value={numberFormat(item.value)} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
               </View>
             )})}
           </View>
         </View> :
         <View>
           { lists[1][0].isOnclick ? 
-            <View className='prance'><Input placeholder='请输入固定比例系数' value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}}></Input><Text className='unit1'>%</Text></View> 
-            : <View className='prance'><Input placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value)}}></Input><Text className='unit1'>万</Text></View> 
+            <View className='122'>
+              <View className='remark-text'>基数*a%</View>
+              <View className='prance'><Input placeholder='请输入固定比例系数' value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}}></Input><Text className='unit1'>%</Text></View> 
+            </View>
+            : <View className='prance'><Input placeholder='请输入固定金额' value={amount || numberFormat(fixedAmountValue)} onInput={(e)=>{setAmount(e.detail.value)}}></Input><Text className='unit1'>万</Text></View> 
           }
         </View>
       }
-      <AtModal isOpened={showModal}>
+      <AtModal isOpened={showModal} closeOnClickOverlay={false}>
         <AtModalContent className='modal-box'>
           <View className='modal-title'>{incomeName}</View>
-          <View className='modal-text'>计算值为:</View>
+          <View className='modal-text'>计算值为:{computeResults}</View>
         </AtModalContent>
         <AtModalAction><Button onClick={cleanAllValue}>重新计算</Button> <Button onClick={recalculate}>确定</Button> </AtModalAction>
       </AtModal>

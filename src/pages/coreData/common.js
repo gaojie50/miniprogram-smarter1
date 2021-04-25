@@ -3,3 +3,6 @@ export const numberFormat = (number) => {
   let resNumber = number/1000000;
   return parseFloat(resNumber.toFixed(2));
 }
+export const centChangeTenThousand = (number) => {
+  return number = number * 1000000
+}
