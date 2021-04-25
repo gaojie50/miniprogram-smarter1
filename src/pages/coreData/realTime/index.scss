@@ -68,9 +68,10 @@
     font-size: 28px;
     color: #333333;
     line-height: 28px;
-    text-align: right;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
+    width: 200rpx;
     input {
       width: 156px !important;
       height: 28px !important;

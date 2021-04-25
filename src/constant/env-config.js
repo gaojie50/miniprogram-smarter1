@@ -6,7 +6,8 @@ const ApiBaseSet = {
     // server: 'http://10.59.74.226:8080',
     server: 'https://mapi.maoyan.com/app/mock/69/',
     passport: 'http://10.59.86.166:8080',
-    keeper: 'http://keeper.movie.st.sankuai.com'
+    keeper: 'http://keeper.movie.st.sankuai.com',
+    mapi: 'https://mapi.maoyan.com',
   },
 
   //测试环境
