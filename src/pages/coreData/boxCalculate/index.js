@@ -7,33 +7,83 @@ import AtModalContent from '@components/m5/modal/content';
 import AtModalAction from '@components/m5/modal/action'
 import '@components/m5/style/components/modal.scss';
 import './index.scss'
+import {numberFormat} from '../common'
+import { get as getGlobalData } from '../../../global_data';
 
-export default function BoxCalculate({calculateIndex, incomeName, calculate, changeCalculate, childChangeShowProgress}) {
+export default function BoxCalculate({calculateIndex, incomeName, calculate, showProgress, changeCalculate, childChangeShowProgress, projectId}) {
+  const reqPacking = getGlobalData('reqPacking');
+
   const bonusButList = [
     [ {text: '票房分账收入', isOnclick: true}, {text: '净票房收入', isOnclick: false} ],
     [ {text: '固定比例', isOnclick: false}, {text: '固定金额', isOnclick: false}, {text: '阶梯', isOnclick: true} ],
     [ {text: '超额累进', isOnclick: false}, {text: '全额累进', isOnclick: true} ],
   ]
-  const ladderListsInfo = [{name:'A', unit:'万', value:''}, {name:'B', unit:'万', value:''}, {name:'C', unit:'万',  value:''}, {name:'a', unit:'%', value:''}, {name:'b', unit:'%',  value:''}, {name:'c', unit:'%',  value:''}];
+  const ladderListsInfo = [
+    {name:'A', unit:'万', value:'', dataName: 'boxLevelA'}, 
+    {name:'B', unit:'万', value:'', dataName: 'boxLevelB'}, 
+    {name:'C', unit:'万', value:'', dataName: 'boxLevelC'},
+    {name:'a', unit:'%', value:'', dataName: 'ratioLevelA'},
+    {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'}, 
+    {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
+  ];
   // const {name, btnlist, ladderLists} = calculateInfo;
   // const [isOnclick, setIsOnclick] = useState(false);
   // const [calculate, setCalculate] = useState(calculateInfo);
   const [lists, setLists] = useState(bonusButList);
   const [isSubmit, setIsSubmit] = useState(false);
   const [ladderLists, setladderLists] = useState(ladderListsInfo);
-  const [coefficient, setCoefficient] = useState('');
-  const [amount, setAmount] = useState('');
+  const [coefficient, setCoefficient] = useState(''); // 系数
+  const [amount, setAmount] = useState(''); // 金额
   const [count, setCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
   const cleanAllValue =() => {
     // setLists(bonusButList);
     setCoefficient('');
-    setCoefficient('');
+    setAmount('');
     setladderLists(ladderListsInfo);
     setShowModal(false);
   }
+  const getComputeRule = () => {
+    reqPacking({
+      url: 'app/mock/69/api/management/finance/contractData/computeRule/get',
+      data: {
+        projectId,
+        dataType: calculateIndex ? 1 : 2
 
+      }
+    }, 'mapi').then((res)=>{
+      const { success, error } = res;
+      console.log('/computeRule/ge', res);
+      if (success) {
+        const { data } = res;
+        const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
+        lists[0].map((item, index)=>{
+          item.isOnclick = (baseType === index+1)
+        })
+        lists[1].map((item, index)=>{
+          item.isOnclick = (computeType === index+1)
+        })
+        lists[2].map((item, index)=>{
+          item.isOnclick = (progressionType === index+1)
+        })
+        ladderLists.map((item)=> {
+          item.value = progressionValue[item.dataName]
+
+        })
+        setAmount(fixedAmountValue);
+        setCoefficient(fixedRatioValue);
+      } else {
+        Taro.showToast({
+          title: error && error.message || '',
+          icon: 'none',
+          duration: 2000,
+        });
+      }
+    })
+
+
+  }
 
   const changeCalculateButton = (index, param) => {
     console.log(index, param, lists[index][param]);
@@ -74,16 +124,21 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, cha
     setShowModal(false);
     childChangeShowProgress(false);
   }, [changeCalculate, calculate])
+  
+  useEffect(()=>{
+    getComputeRule();
+    console.log('123', showProgress);
+  }, [showProgress])
 
   useEffect(()=>{
-    console.log('lists, calculateIndex, count', lists, calculateIndex, count);
     if((lists[1][2].isOnclick && count == 6) || (lists[1][0].isOnclick && coefficient) || (lists[1][1].isOnclick && amount) ) {
       setIsSubmit(true);
     }else{
       setIsSubmit(false);
     }
     // setLists(lists);
-  });
+  }, [ladderLists, coefficient, amount]);
+
 
   return(
     <View className='box-calculate'>

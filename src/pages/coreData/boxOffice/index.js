@@ -5,7 +5,7 @@ import FloatLayout from '@components/m5/float-layout';
 import BoxIncome from '../boxIncome/index'
 import './index.scss'
 
-export default function BoxOfficeData({current, isMovieScreening}) {
+export default function BoxOfficeData({current, isMovieScreening, projectId, name}) {
 
   const lists =[
     {
@@ -39,7 +39,7 @@ export default function BoxOfficeData({current, isMovieScreening}) {
 
   const gotoParam = (index) => {
     Taro.redirectTo({
-      url: `/pages/coreData/realTime/index?paramIndex=${index}`
+      url: `/pages/coreData/realTime/index?paramIndex=${index}&projectId=${projectId}&isMovieScreening=${isMovieScreening}&name=${name}`
     })
   }
 
