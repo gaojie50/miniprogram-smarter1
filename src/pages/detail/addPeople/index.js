@@ -113,9 +113,9 @@ export default function AddPeople() {
   const handleSelected = useCallback((item) => {
     let projectId;
     const pages =Taro.getCurrentPages();
-    pages.forEach(item => {
-      if(item.route = 'pages/detail/addPeople/index') {
-        projectId = item.options.projectId
+    pages.forEach(i => {
+      if(i.route = 'pages/detail/addPeople/index') {
+        projectId = i.options.projectId
       }
     })
     submitPeople(projectId, item);

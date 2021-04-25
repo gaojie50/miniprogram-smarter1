@@ -26,7 +26,7 @@ const test = {evaluationList: [
     "evaluationTotalScore": 33,
     "participantNumber": 2,
     "invitees": "刘娟",
-    "hasAssess": true,
+    "hasAssess": false,
     "evaluationMethod": 1,
     "projectFileTitle": [
       "测试.csv",
@@ -36,7 +36,7 @@ const test = {evaluationList: [
     "startDate": 1614686114000,
     "initiator": "兰厅",
     "projectId": 12345,
-    "name": "离天空这么近",
+    "name": "离天空这么近离天空这么近离天空这么近",
     "evaluationRole": 1,
     "category": 3,
     "evaluationTimes": 4,
@@ -206,11 +206,10 @@ function EvalutaionCard(props) {
   }, [])
 
 
-
   const handleJump = () => {
-    if( hasAssess || projectRole === 1){
+    if( hasAssess || projectRole === 1) {
       Taro.navigateTo({ url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`})
-    }else{
+    } else {
       Taro.navigateTo({ url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`})
     }
   }
@@ -221,31 +220,27 @@ function EvalutaionCard(props) {
 
   const [statusType, statusText] = useMemo(() => {
     if (hasAssess) {
-      let prefix = '';
-      if (initiator === realName) prefix = '自己发起 ';
-      if (typeof invitees === 'string' && invitees.includes(realName)) {
-        prefix = `${initiator}邀评 `;
-      }
-      return [0, `${prefix}已评估`]
+      return [0, '已评估']
     } else {
       let prefix = '';
-      if (initiator === realName) prefix = '自己发起 ';
       if (typeof invitees === 'string' && invitees.includes(realName)) {
-        // prefix = `${initiator}邀评 `;
         if(dayjs().valueOf() > deadline) {
           prefix = '未参与'
         } else {
           prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
         }
         
-        return [3, prefix]
+        return [1, prefix]
       }
-      prefix = `${initiator}邀评 `;
 
-      if (invitees) {
-        return [1, `${prefix}未评估`]
-      } else {
-        return [2, `${prefix}未评估`]
+      if (initiator === realName) {
+        if(dayjs().valueOf() > deadline) {
+          prefix = '未参与'
+        } else {
+          prefix = '自己发起 ';
+        }
+        
+        return [2, prefix]
       }
     }
   }, [deadline, hasAssess, initiator, invitees, realName]);
@@ -256,7 +251,7 @@ function EvalutaionCard(props) {
         <Image className='assess-list-evaluation-card-image' src={imageUrl.replace('/w.h', '')}></Image>
         <View className='assess-list-evaluation-card-title'>
           <View className='assess-list-evaluation-card-title-left' onClick={jumpDetail}>
-            {name}
+            <View className='assess-list-evaluation-card-title-left-name'>{name}</View>
             <Image className='name-arrow' src='../../static/detail/gray.png' alt='' />
           </View>
           <View className='assess-list-evaluation-card-title-right'>
@@ -296,7 +291,7 @@ function EvalutaionCard(props) {
       </View>
       </View>
       <View className='assess-list-evaluation-card-action'>
-        {isDockingPerson(role) && <Button
+        {isDockingPerson(role) && judgeDeadLine(deadline) && <Button
           data-roundTitle={roundTitle}
           data-roundId={roundId}
           data-sign='invite'
@@ -315,7 +310,7 @@ function EvalutaionCard(props) {
           分享结果
         </Button>
         {
-          dayjs().valueOf() < deadline && invitees.includes(realName) && <Button
+          (isDockingPerson(role) || invitees.includes(realName)) && judgeDeadLine(deadline) && <Button
             className='assess-list-evaluation-card-action-btn assess-list-evaluation-card-action-btn-eval'
             onClick={() => {
               Taro.navigateTo({
@@ -323,9 +318,14 @@ function EvalutaionCard(props) {
               })
             }}
           >
-             {statusType === 0 ? '去评估' : '修改评估' }
+             {statusType === 0 ? '修改评估' : '去评估' }
         </Button>
         }
       </View>
     </View>
 )}
+
+function judgeDeadLine(time) {
+
+  return dayjs().valueOf() < time
+}
