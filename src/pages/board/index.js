@@ -1,4 +1,4 @@
-import { View, Image, Text, ScrollView, } from '@tarojs/components';
+import { View, Image, Text, ScrollView, Label, Input } from '@tarojs/components';
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Taro, { useDidShow } from '@tarojs/taro';
 import lx from '@analytics/wechat-sdk';
@@ -432,6 +432,18 @@ export default function Board() {
             checkIfStickAfterAll();
           }}
         >
+          <View className='board-search-box'>
+            <View className='board-search-bar'>
+              <Label onClick={() => Taro.navigateTo({url: '/pages/addProject/index'})}>
+                <Image
+                  className='board-searchIco'
+                  src='../../static/icon/search.png'
+                ></Image>
+                <Input placeholder='搜索项目'></Input>
+            </Label>
+            </View>
+          </View>
+
           <View
             style={{
               opacity: sticky ? "0" : "initial",

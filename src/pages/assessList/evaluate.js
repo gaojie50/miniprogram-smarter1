@@ -83,7 +83,6 @@ const TYPE_MOVIE = 3 || 4;
 export function EvaluationList() {
   const [data, setData] = useState({});
 
-  console.log(dayjs().valueOf(), dayjs().valueOf() < 1622189490000, 124)
   useEffect(() => {
     setData(test)
     // reqPacking()
