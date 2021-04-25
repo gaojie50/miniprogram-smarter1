@@ -15,12 +15,13 @@ export default class KeyData extends React.Component {
   fetchKeyData = () => {
     const { basicData, changeKeyData } = this.props;
     reqPacking({
-      url: 'api/management/keyData',
+      url: 'app/mock/69/api/management/keyData',
       data: { 
         projectId: basicData.projectId,
       }
-    }).then(res => {
+    }, 'mapi').then(res => {
         const { success, data = {} } = res;
+        console.log(res);
         if (success) {
           changeKeyData(data);
           this.setState({
@@ -30,10 +31,10 @@ export default class KeyData extends React.Component {
       });
   }
   goCoreData = () =>{
-    console.log(this.props);
-    const { basicData } = this.props;
+    const { basicData, keyData } = this.props;
+    console.log(this.props, basicData, this.state.keyData);
     Taro.redirectTo({
-      url: `/pages/coreData/index?name=${basicData.name}&projectId=${basicData.projectId}`,
+      url: `/pages/coreData/index?name=${basicData.name}&projectId=${basicData.projectId}&isMovieScreening=${!keyData.afterShowing}`,
     })
   }
 
@@ -192,7 +193,7 @@ export default class KeyData extends React.Component {
                   <View className="detail-box">
                     <View className="detail-box-left">
                       <View className="detail-left">总收入</View>
-                      <View className="detail-middle">1.3万</View>
+                      <View className="detail-middle">{`${formatNumber(keyData.totalIncome, 'floor').num} ${formatNumber(keyData.totalIncome, 'floor').unit}`}</View>
                     </View>
                     <View className="detail-box-right">
                       <View className="detail-right">查看详情</View>

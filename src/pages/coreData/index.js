@@ -133,18 +133,24 @@ export default function hotMovieList() {
                 <BoxOfficeData
                   current={current}
                   isMovieScreening={isMovieScreening}
+                  projectId={projectId}
+                  name={name}
                 ></BoxOfficeData>
               </View>
               <View className={current === 1 ? "body-active" : "body-inactive"}>
                 <BoxOfficeData
                   current={current}
                   isMovieScreening={isMovieScreening}
+                  projectId={projectId}
+                  name={name}
                 ></BoxOfficeData>
               </View>
               <View className={current === 2 ? "body-active" : "body-inactive"}>
                 <BoxOfficeData
                   current={current}
                   isMovieScreening={isMovieScreening}
+                  projectId={projectId}
+                  name={name}
                 ></BoxOfficeData>
               </View>
           </View>
@@ -153,6 +159,8 @@ export default function hotMovieList() {
           <BoxOfficeData
             current={current}
             isMovieScreening={isMovieScreening}
+            projectId={projectId}
+            name={name}
           ></BoxOfficeData>
         </View>
       }
