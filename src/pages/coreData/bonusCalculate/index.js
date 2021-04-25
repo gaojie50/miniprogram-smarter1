@@ -135,9 +135,6 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     console.log('lists, calculateIndex', lists, calculateIndex);
   }, []);
 
-
-
-
   return(
     <View className='box-calculate'>
       <View className='calculate-title'>计算方式</View>

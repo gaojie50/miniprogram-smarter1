@@ -137,7 +137,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       setIsSubmit(false);
     }
     // setLists(lists);
-  }, [ladderLists, coefficient, amount]);
+  }, [ladderLists, coefficient, amount, lists]);
 
 
   return(
