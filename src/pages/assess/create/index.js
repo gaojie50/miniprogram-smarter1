@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components'
+import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
@@ -15,7 +15,7 @@ import AtFloatLayout from '@components/m5/float-layout';
 import '@components/m5/style/components/action-sheet.scss';
 import '@components/m5/style/components/float-layout.scss';
 import envConfig from '../../../constant/env-config';
-import './index.scss'
+import './index.scss';
 
 const { errorHandle } = utils;
 
@@ -23,26 +23,28 @@ const METHOD_LIST = [
   {
     name: '大纲评估',
     type: 1,
-    icon: "icon-dagang"
+    icon: 'icon-dagang',
   },
   {
     name: '剧本评估',
     type: 2,
-    icon: "icon-juben"
+    icon: 'icon-juben',
   },
   {
     name: '成片评估',
     type: 3,
-    icon: "icon-chengpian"
-  }
-]
+    icon: 'icon-chengpian',
+  },
+];
+
 const AUTH_ID = 95130;
-export default class _C extends React.Component {
+
+export default class AC extends React.Component {
   state = {
     projectId: '',
     briefInfo: {},
     editorEvaluationName: false,
-    evaluationMethod: 1,
+    evaluationMethod: '',
     tempId: '',
     titleErrorTip: false,
     despErrorTip: false,
@@ -52,15 +54,17 @@ export default class _C extends React.Component {
     isSubmitting: false,
     uploadSelectorIsOpen: false,
     fileSelectorIsOpen: false,
-    hasPermission: false
+    hasPermission: false,
   }
 
-  componentDidMount(){
+  componentDidMount() {
     const { projectId } = getCurrentInstance().router.params;
+
     this.setState({ projectId });
     const authInfo = Taro.getStorageSync('authinfo');
-    if( authInfo?.authIds?.includes(AUTH_ID)){
-      this.setState({hasPermission: true});
+
+    if (authInfo?.authIds?.includes(AUTH_ID)) {
+      this.setState({ hasPermission: true });
       this.fetchBriefInfo(projectId);
       this.fetchProjectProfile(projectId);
     }
@@ -70,80 +74,93 @@ export default class _C extends React.Component {
     reqPacking(
       {
         url: 'api/management/file/list',
-        data: { projectId: projectId },
+        data: { projectId },
       },
       'server',
     ).then(res => {
-        const { error, data = [] } = res;
+      const { error, data = [] } = res;
 
-        if (!error) {
-          return this.setState({
-            projectProfile: data
-          });
-        }
-        errorHandle(error);
-      })
+      if (!error) {
+        return this.setState({
+          projectProfile: data,
+        });
+      }
+      errorHandle(error);
+    });
   };
 
-  fetchBriefInfo=(projectId)=>{
+  fetchBriefInfo=projectId => {
     Taro.showLoading({
-      title: '加载中'
+      title: '加载中',
     });
     reqPacking(
       {
-        url: 'api/management/briefInfo',
-        data: { projectId: projectId },
+        url: 'api/applet/management/briefInfo',
+        data: { projectId },
       },
-      'server',
-    ).then(res => {
-        const { error, data } = res;
-        if (!error) {
-          const briefInfo = data;
-          const { tempList = [] } = briefInfo;
-          if (!briefInfo.projectEvaluationName) briefInfo.projectEvaluationName = `《${briefInfo.name}》项目第${briefInfo.roundNum}轮评估`;
 
-          return this.setState({
-            briefInfo,
-            tempId: tempList && tempList.length > 0 ? tempList[ 0 ].tempId : "",
-          });
+      // 'server',
+      'mock'
+    ).then(res => {
+      const { error, data } = res;
+
+      if (!error) {
+        const briefInfo = data;
+        const { tempList = [] } = briefInfo;
+
+        if (!briefInfo.projectEvaluationName) {
+          briefInfo.projectEvaluationName = `《${briefInfo.name}》项目第${briefInfo.roundNum}轮评估`;
         }
 
-        errorHandle(error);
-      }).finally(res=>{
-        Taro.hideLoading();
-      });
+        let evaluationMethod = tempList[0]?.type;
+        let curTempId = tempList[0]?.tempV2[0].tempId;
+
+        return this.setState({
+          briefInfo,
+          evaluationMethod,
+          tempId: curTempId,
+        });
+      }
+      errorHandle(error);
+    }).catch(err => {
+      errorHandle(err);
+    }).finally(() => {
+      Taro.hideLoading();
+    });
   }
 
   editorTitle = (editorEvaluationName = true) => this.setState({ editorEvaluationName });
 
   titleChangeEvt = ({ target }) => {
-    const curVal = target.value.replace(/\s+/g, "");
-    return this.setState({ 
-      titleErrorTip: (curVal.length > 20 || curVal.length == 0), 
+    const curVal = target.value.replace(/\s+/g, '');
+
+    return this.setState({
+      titleErrorTip: (curVal.length > 20 || curVal.length == 0),
       briefInfo: {
         ...this.state.briefInfo,
         projectEvaluationName: curVal,
-      }
+      },
     });
   };
 
   despChangeEvt = ({ target }) => {
-    const curVal = target.value.replace(/\s+/g, "");
+    const curVal = target.value.replace(/\s+/g, '');
     const { briefInfo } = this.state;
+
     return this.setState({
       despErrorTip: curVal.length > 200,
       briefInfo: {
         ...briefInfo,
         description: curVal,
-      }
+      },
     });
   };
 
   titleBlurEvt = ({ target }) => {
-    const projectEvaluationName = target.value.replace(/\s+/g, "");
+    const projectEvaluationName = target.value.replace(/\s+/g, '');
 
     if (projectEvaluationName.length > 20) return;
-    
+
     this.editorTitle(false);
 
     if (!projectEvaluationName) return;
@@ -153,18 +170,21 @@ export default class _C extends React.Component {
       briefInfo: {
         ...this.state.briefInfo,
         projectEvaluationName,
-      }
+      },
     });
   };
 
-  evalMethodChange = (methodType) => {
+  evalMethodChange = methodType => {
+    const { tempList } = this.state.briefInfo;
 
     if (methodType == this.state.evaluationMethod) return;
+    let curTempId = tempList.filter(item => item.type == methodType)[0].tempV2[0].tempId;
 
     this.setState({
       evaluationMethod: methodType,
       primaryFilesChecked: [],
       filesChecked: [],
+      tempId: curTempId,
     });
   };
 
@@ -176,45 +196,48 @@ export default class _C extends React.Component {
     this.setState({ uploadSelectorIsOpen: false });
   }
 
-  uploadFromMessage = ()=>{
+  uploadFromMessage = () => {
     this.setState({ uploadSelectorIsOpen: false });
     const { projectId, filesChecked, primaryFilesChecked } = this.state;
     const that = this;
+
     Taro.chooseMessageFile({
       count: 1,
-      success (res) {
+      success(res) {
         const tempFile = res.tempFiles[0];
         const tempFilePath = tempFile.path;
+
         if (tempFile.size > 1024 * 1024 * 20) {
           Taro.showModal({
             title: '提示',
-            content: '上传的文件应小于20M'
-          })
+            content: '上传的文件应小于20M',
+          });
           return false;
         }
         Taro.showLoading({
-          title: '上传中'
+          title: '上传中',
         });
         Taro.uploadFile({
           url: `${envConfig.server}/api/management/file/upload`,
           filePath: tempFilePath,
           name: 'projectFile',
           header: {
-            "Content-Type": "multipart/form-data",
-            "token": Taro.getStorageSync('token'),
+            'Content-Type': 'multipart/form-data',
+            token: Taro.getStorageSync('token'),
           },
           formData: {
-            projectId: projectId,
-            name: tempFile.name
+            projectId,
+            name: tempFile.name,
           },
-          success (res){
-            if(res.statusCode===200){
-              const { success, data, error } = JSON.parse(res.data);
+          success(uploadRes) {
+            if (uploadRes.statusCode === 200) {
+              const { success, data, error } = JSON.parse(uploadRes.data);
+
               if (success) {
                 Taro.hideLoading();
                 Taro.showToast({
                   title: '上传成功',
-                  duration: 1000
+                  duration: 1000,
                 });
 
 
@@ -227,31 +250,32 @@ export default class _C extends React.Component {
               }
               Taro.hideLoading();
               errorHandle({
-                message: error.message || '上传失败'
+                message: error.message || '上传失败',
               });
               return;
-            }else{
+            } else {
               Taro.hideLoading();
               errorHandle({
-                message: '上传失败'
+                message: '上传失败',
               });
             }
           },
-          fail(res){
-            const { errMsg } = res;
+          fail(err) {
+            const { errMsg } = err;
+
             Taro.hideLoading();
-            if( errMsg ){
-              errorHandle( {
-                message: errMsg
-              } );
+            if (errMsg) {
+              errorHandle({
+                message: errMsg,
+              });
             }
-          }
+          },
         });
-      }
-    })
+      },
+    });
   }
 
-  uploadFromProjectFile = ()=>{
+  uploadFromProjectFile = () => {
     this.setState({ fileSelectorIsOpen: true, uploadSelectorIsOpen: false });
   }
 
@@ -259,32 +283,35 @@ export default class _C extends React.Component {
   handleDelete = (uid, sign) => {
     let { filesChecked } = this.state;
 
-    if (sign == 'profile') {
-      let valueArr = filesChecked.filter(file => file != uid);
+    if (sign === 'profile') {
+      let valueArr = filesChecked.filter(file => file !== uid);
 
       return this.setState({
         primaryFilesChecked: valueArr,
-        filesChecked: valueArr
+        filesChecked: valueArr,
       });
     }
   };
 
-  handleChangeTemp=(tempId)=>{
+  handleChangeTemp=tempId => {
     this.setState({ tempId });
   }
 
 
-  handlePreview=(e, tempId)=>{
+  handlePreview=(e, tempId) => {
     e.stopPropagation();
     const that = this;
+
     Taro.navigateTo({
       url: `/pages/assess/template/index?tempId=${tempId}`,
       events: {
-        selectTempId: function(data){
-          data && that.setState({ tempId: Number(data) });
-        }
-      }
-    })
+        selectTempId(data) {
+          if (data) {
+            that.setState({ tempId: Number(data) });
+          }
+        },
+      },
+    });
   }
 
   handleFinish = () => {
@@ -304,7 +331,7 @@ export default class _C extends React.Component {
       evaluationMethod,
       tempId,
       fileIdArr: filesChecked || [],
-      description: description,
+      description,
     };
 
     if (titleErrorTip || despErrorTip) return;
@@ -313,7 +340,7 @@ export default class _C extends React.Component {
       {
         url: 'api/management/appletevaluation',
         data: params,
-        method: 'POST'
+        method: 'POST',
       },
       'server',
     ).then(res => {
@@ -323,38 +350,42 @@ export default class _C extends React.Component {
         return Taro.showToast({
           title: '提交成功',
           duration: 1000,
-          success: ()=>{
+          success: () => {
             Taro.redirectTo({
-              url: `/pages/result/index?projectId=${projectId}&roundId=${data}`
-            })
-          }
-        })
+              url: `/pages/result/index?projectId=${projectId}&roundId=${data}`,
+            });
+          },
+        });
       }
       this.setState({ isSubmitting: false });
-      error.message && errorHandle({message : error.message || '提交失败'});
+      if (error.message) {
+        errorHandle({ message: error.message || '提交失败' });
+      }
     });
   };
 
-  fileChecked = (profileId) => {
+  fileChecked = profileId => {
     let { primaryFilesChecked } = this.state;
+
     primaryFilesChecked.includes(profileId) ?
-    primaryFilesChecked = primaryFilesChecked.filter(item => item != profileId)
-    :primaryFilesChecked.push(profileId)
+      primaryFilesChecked = primaryFilesChecked.filter(item => item !== profileId)
+      : primaryFilesChecked.push(profileId);
     this.setState({ primaryFilesChecked });
   };
 
   checkedFiles = () => {
     this.setState({
       filesChecked: _cloneDeep(this.state.primaryFilesChecked),
-      fileSelectorIsOpen: false
+      fileSelectorIsOpen: false,
     });
   };
 
-  handleFileSelectorClose = ()=>{
+  handleFileSelectorClose = () => {
     const { filesChecked } = this.state;
+
     this.setState({
-      primaryFilesChecked: _cloneDeep(filesChecked)
-    })
+      primaryFilesChecked: _cloneDeep(filesChecked),
+    });
     this.setState({ fileSelectorIsOpen: false });
   }
 
@@ -372,185 +403,193 @@ export default class _C extends React.Component {
       isSubmitting,
       uploadSelectorIsOpen,
       fileSelectorIsOpen,
-      hasPermission
+      hasPermission,
     } = this.state;
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
-    const templateList = briefInfo.tempList || [];
+    const { tempList = [] } = briefInfo;
+    const [curTemplateType] = tempList.filter(tempType => tempType.type == evaluationMethod);
+    const curTempList = curTemplateType?.tempV2 || [];
     const { name, roundNum, pic } = briefInfo;
+
     return (
       <View className="assess-create-page">
-      {
-        !hasPermission && (<NoAccess tittle="暂无项目管理权限" titleColor="#333" contentColor="#333" />)
-      }
-      {
-        hasPermission && (
-          <Block>
-            <BriefInfo 
-            name={ name }
-            pic={ pic }
-            roundNum={ roundNum }
-            text = {`第${roundNum || '-'}轮`}
-          />
-          <View className="create-wrap">
-          <View  className="title-wrap">
-            {!editorEvaluationName && 
+        {
+          !hasPermission && (<NoAccess tittle="暂无项目管理权限" titleColor="#333" contentColor="#333" />)
+        }
+        {
+          hasPermission && (
+            <Block>
+              <BriefInfo
+                name={name}
+                pic={pic}
+                roundNum={roundNum}
+                text={`第${roundNum || '-'}轮`}
+              />
+              <View className="create-wrap">
+                <View className="title-wrap">
+                  {!editorEvaluationName &&
             <View className="title">
               {briefInfo.projectEvaluationName}
               <View className="edit-btn-wrap" onClick={this.editorTitle}>
                 <View className="smarter-iconfont icon-edit" style={{ fontSize: '44rpx' }} />
               </View>
             </View>}
-            {editorEvaluationName && <Input
-              className={ `title-input ${titleErrorTip ? "error" : ""}` }
-              type="text"
-              autoFocus
-              value={ briefInfo.projectEvaluationName }
-              onInput={ this.titleChangeEvt }
-              onBlur={ this.titleBlurEvt } />}
-            {titleErrorTip ? <View className="error-tip">请输入1-20个字</View> : ""}
-          </View>
-
-          <View className="desc-wrap">
-            <Textarea
-              disableDefaultPadding={true}
-              placeholder="请填写评估说明，最多200字"
-              onInput={ this.despChangeEvt }
-              className={ `desc-input ${despErrorTip ? "error" : ""} description` } 
-              maxlength={250}
-            />
-          {despErrorTip ? <View className="error-tip">请输入200个字以内</View> : ""}
-          </View>
-
-          <View className="evaluation-method-wrap">
-            <Text className="evaluation-title">选择评估方式</Text>
-            <View className="method-list-wrap">
-              {
-                METHOD_LIST.map(item=>{
-                  return (
-                    <View className={`method-item ${item.type === evaluationMethod ? 'active':''}`} onClick={()=>{this.evalMethodChange(item.type)}}>
-                    <View className={`smarter-iconfont ${item.icon}`} style={{fontSize: '28rpx'}}/>
-                    {item.name}
-                    </View>
-                  )
-                })
-              }
-          </View>
-          </View>
-
-          <View className="upload-attachment">
-          {
-            filesCheckedInfoArr.length > 0 && filesCheckedInfoArr.map(file =>
-              <View key={ 1 } className="file-wrap">
-                <View className="file-info">
-                  <Text className="file-name">{file.profileName}</Text>
-                  <Text className="file-size">{file.profileSize}</Text>
+                  {editorEvaluationName && <Input
+                    className={`title-input ${titleErrorTip ? 'error' : ''}`}
+                    type="text"
+                    autoFocus
+                    value={briefInfo.projectEvaluationName}
+                    onInput={this.titleChangeEvt}
+                    onBlur={this.titleBlurEvt}
+                  />}
+                  {titleErrorTip ? <View className="error-tip">请输入1-20个字</View> : ''}
                 </View>
-                <View className="delete-btn" onClick={ () => this.handleDelete(file.profileId, "profile") }>
-                  <View className="smarter-iconfont icon-delete" style={{ fontSize: '44rpx' }} />
+
+                <View className="desc-wrap">
+                  <Textarea
+                    disableDefaultPadding
+                    placeholder="请填写评估说明，最多200字"
+                    onInput={this.despChangeEvt}
+                    className={`desc-input ${despErrorTip ? 'error' : ''} description`}
+                    maxlength={250}
+                  />
+                  {despErrorTip ? <View className="error-tip">请输入200个字以内</View> : ''}
                 </View>
-              </View>
-              )
-          }
-          {
-            evaluationMethod != 3 ?
-              <Block>
-                <View className={`upload-btn ${filesCheckedInfoArr.length>0 ? 'mini' : ''}`} onClick={this.handleUpload}>{filesCheckedInfoArr.length > 0 ? '继续添加':'上传附件'}</View>
-              </Block> :
-              <Text className="no-need">确保您已组织线下观看，此处无需上传附件</Text>
-          }
-          </View>
-          
-          <View className="template-select-wrap">
-            <View className="title">选择评估模板</View>
-            {
-              templateList.length > 0 ? 
-              templateList.map((item,index)=>{
-                return (
-                  <View className={`template-item ${tempId===item.tempId? 'active':''}`} key={item.tempId} onClick={()=>{this.handleChangeTemp(item.tempId)}}>
-                    <View className="template-name">{index+1}、{item.title}</View>
-                    <View className="preview-btn" onClick={(event)=>{this.handlePreview(event, item.tempId)}}>预览</View>
+
+                <View className="evaluation-method-wrap">
+                  <Text className="evaluation-title">选择评估方式</Text>
+                  <View className="method-list-wrap">
+                    {
+                      tempList.map(item => {
+                        const { icon } = METHOD_LIST.filter(method => method.type == item.type)[0];
+
+                        return (
+                          <View
+                            key={item.type}
+                            className={`method-item ${item.type === evaluationMethod ? 'active' : ''}`}
+                            onClick={() => { this.evalMethodChange(item.type); }}
+                          >
+                            <View className={`smarter-iconfont ${icon}`} style={{ fontSize: '28rpx' }} />
+                            {item.name}
+                          </View>
+                        );
+                      })
+                    }
                   </View>
-                );
-              })
-              :(
-                <View className="no-template-note">
-                  <Nodata text="暂无模板可选" />
                 </View>
-              )
-            }
-          </View>
 
-          <FixedButton 
-            className="publish-btn" 
-            disabled={isSubmitting || titleErrorTip || despErrorTip ? true : false} 
-            onClick={this.handleFinish}
-            loading={ isSubmitting }
-          >发布评估</FixedButton>
-
-          <AtActionSheet 
-            className="uplaod-action-sheet"
-            isOpened={uploadSelectorIsOpen} 
-            cancelText='取消'
-            onClose={ this.handleUploadSelectorClose }
-            onCancel={ this.handleUploadSelectorClose } 
-          >
-            <AtActionSheetItem onClick={ this.uploadFromProjectFile}>
-              从项目文件中选择
-            </AtActionSheetItem>
-            <AtActionSheetItem onClick={ this.uploadFromMessage }>
-              从聊天中选择
-            </AtActionSheetItem>
-          </AtActionSheet>
-
-          <AtFloatLayout
-            className="file-select-list"
-            isOpened={ fileSelectorIsOpen }
-            title="从项目文件中选择"
-            onClose={this.handleFileSelectorClose}
-            footer={<View className="btn-wrap">
-                      <Button 
-                        className="select-sure-btn" 
-                        onClick={this.checkedFiles}
-                      >确定</Button>
-                    </View>
+                <View className="upload-attachment">
+                  {
+                    filesCheckedInfoArr.length > 0 && filesCheckedInfoArr.map(file =>
+                      <View key={1} className="file-wrap">
+                        <View className="file-info">
+                          <Text className="file-name">{file.profileName}</Text>
+                          <Text className="file-size">{file.profileSize}</Text>
+                        </View>
+                        <View className="delete-btn" onClick={() => this.handleDelete(file.profileId, 'profile')}>
+                          <View className="smarter-iconfont icon-delete" style={{ fontSize: '44rpx' }} />
+                        </View>
+                      </View>
+                    )
                   }
-          >
-            <View className="content-wrap">
-            {
-              projectProfile.length === 0 && (
-                <Nodata text="暂无文件可选" />
-              )
-            }
-            {
-              projectProfile.map(({
-                profileId, profileName, uploader, uploadTime, profileSize
-              }) => <View key={ profileId } className="file-item-wrap">
-                <View className="left-info-wrap">
-                  <Text className="file-name">{profileName}</Text>
-                  <View className="message">
-                    <Text className="uploader">{uploader}</Text>
-                    <Text className="upload-time">{dayjs(uploadTime).format('YYYY-MM-DD HH:mm')}</Text>
-                    <Text className="upload-size">{profileSize}</Text>
-                  </View>
+                  {
+                    evaluationMethod != 3 ?
+                      <Block>
+                        <View className={`upload-btn ${filesCheckedInfoArr.length > 0 ? 'mini' : ''}`} onClick={this.handleUpload}>{filesCheckedInfoArr.length > 0 ? '继续添加' : '上传附件'}</View>
+                      </Block> :
+                      <Text className="no-need">确保您已组织线下观看，此处无需上传附件</Text>
+                  }
                 </View>
-                <Button 
-                  onClick={() => this.fileChecked(profileId)}
-                  className={`select-btn ${primaryFilesChecked.includes(profileId)? 'selected':''}`}
+
+                <View className="template-select-wrap">
+                  <View className="title">选择评估模板</View>
+                  {
+                    curTempList.length > 0 ?
+                      curTempList.map((item, index) => (
+                        <View className={`template-item ${tempId === item.tempId ? 'active' : ''}`} key={item.tempId} onClick={() => { this.handleChangeTemp(item.tempId); }}>
+                          <View className="template-name">{index + 1}、{item.title}</View>
+                          <View className="preview-btn" onClick={event => { this.handlePreview(event, item.tempId); }}>预览</View>
+                        </View>
+                      ))
+                      : (
+                        <View className="no-template-note">
+                          <Nodata text="暂无模板可选" />
+                        </View>
+                      )
+                  }
+                </View>
+
+                <FixedButton
+                  className="publish-btn"
+                  disabled={isSubmitting || titleErrorTip || despErrorTip ? true : false}
+                  onClick={this.handleFinish}
+                  loading={isSubmitting}
+                >发布评估</FixedButton>
+
+                <AtActionSheet
+                  className="uplaod-action-sheet"
+                  isOpened={uploadSelectorIsOpen}
+                  cancelText="取消"
+                  onClose={this.handleUploadSelectorClose}
+                  onCancel={this.handleUploadSelectorClose}
                 >
-                  {primaryFilesChecked.includes(profileId) ?'取消':'选择'}
-                </Button>
-              </View>)
-            }
-            </View>
-          </AtFloatLayout>
-          
-        </View>
-        
-          </Block>
-        )
-      }
-        </View>
-    )
+                  <AtActionSheetItem onClick={this.uploadFromProjectFile}>
+              从项目文件中选择
+                  </AtActionSheetItem>
+                  <AtActionSheetItem onClick={this.uploadFromMessage}>
+              从聊天中选择
+                  </AtActionSheetItem>
+                </AtActionSheet>
+
+                <AtFloatLayout
+                  className="file-select-list"
+                  isOpened={fileSelectorIsOpen}
+                  title="从项目文件中选择"
+                  onClose={this.handleFileSelectorClose}
+                  footer={<View className="btn-wrap">
+                    <Button
+                      className="select-sure-btn"
+                      onClick={this.checkedFiles}
+                    >确定</Button>
+                  </View>
+                  }
+                >
+                  <View className="content-wrap">
+                    {
+                      projectProfile.length === 0 && (
+                        <Nodata text="暂无文件可选" />
+                      )
+                    }
+                    {
+                      projectProfile.map(({
+                        profileId, profileName, uploader, uploadTime, profileSize,
+                      }) => <View key={profileId} className="file-item-wrap">
+                        <View className="left-info-wrap">
+                          <Text className="file-name">{profileName}</Text>
+                          <View className="message">
+                            <Text className="uploader">{uploader}</Text>
+                            <Text className="upload-time">{dayjs(uploadTime).format('YYYY-MM-DD HH:mm')}</Text>
+                            <Text className="upload-size">{profileSize}</Text>
+                          </View>
+                        </View>
+                        <Button
+                          onClick={() => this.fileChecked(profileId)}
+                          className={`select-btn ${primaryFilesChecked.includes(profileId) ? 'selected' : ''}`}
+                        >
+                          {primaryFilesChecked.includes(profileId) ? '取消' : '选择'}
+                        </Button>
+                      </View>)
+                    }
+                  </View>
+                </AtFloatLayout>
+
+              </View>
+
+            </Block>
+          )
+        }
+      </View>
+    );
   }
 }
 
