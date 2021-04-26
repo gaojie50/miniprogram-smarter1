@@ -19,19 +19,22 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     [ {text: '超额累进', isOnclick: false}, {text: '全额累进', isOnclick: true} ]
   ]
   const ladderListsInfo = [
-    {name:'A', unit:'万', value:'', dataName: 'boxLevelA'}, 
-    {name:'B', unit:'万', value:'', dataName: 'boxLevelB'}, 
-    {name:'C', unit:'万', value:'', dataName: 'boxLevelC'},
-    {name:'a', unit:'%', value:'', dataName: 'ratioLevelA'},
-    {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'}, 
-    {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
+    {name:'A', unit:'万', value:'', dataName: 'boxLevelA', isChange: false}, 
+    {name:'B', unit:'万', value:'', dataName: 'boxLevelB', isChange: false}, 
+    {name:'C', unit:'万', value:'', dataName: 'boxLevelC', isChange: false},
+    {name:'a', unit:'%', value:'', dataName: 'ratioLevelA', isChange: false},
+    {name:'b', unit:'%', value:'', dataName: 'ratioLevelB', isChange: false}, 
+    {name:'c', unit:'%', value:'', dataName: 'ratioLevelC', isChange: false}
   ];
 
   const [lists, setLists] = useState(bonusButList);
   const [isSubmit, setIsSubmit] = useState(false);
   const [ladderLists, setladderLists] = useState(ladderListsInfo);
+  const [getValue, setGetValue] = useState('');
   const [coefficient, setCoefficient] = useState(''); // 系数
   const [amount, setAmount] = useState(''); // 金额
+  const [amountIsChange, setAmountIsChange] = useState(false);
+  // const [getProgressionValue, setGetProgressionValue] = useState('');
   const [fixedAmountValue, setFixedAmountValue] = useState('');
   const [count, setCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -69,11 +72,17 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
           item.isOnclick = (progressionType === index+1)
         })
         ladderLists.map((item)=> {
-          item.value = progressionValue[item.dataName]
-
+          if(item.dataName.includes('boxLevel')) {
+            console.log('123');
+            item.value = numberFormat(progressionValue[item.dataName]);
+          } else{
+            item.value = progressionValue[item.dataName];
+          }
         })
-        // setAmount(fixedAmountValue);
-        setFixedAmountValue(fixedAmountValue);
+        setAmount(numberFormat(fixedAmountValue));
+        setGetValue(res.data);
+        // setGetProgressionValue(progressionValue);
+        // setFixedAmountValue(fixedAmountValue);
         setCoefficient(fixedRatioValue);
       } else {
         Taro.showToast({
@@ -94,9 +103,14 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     let progressionType = lists[2].findIndex((item)=>item.isOnclick) + 1;
     let progressionValue = {};
     ladderLists.map((item)=>{
-      progressionValue[item.dataName] = item.value
+      if(item.dataName.includes('boxLevel')) {
+        console.log('getValue.progressionValue[item.name]',getValue, getValue.progressionValue[item.dataName]);
+        progressionValue[item.dataName] = item.isChange ? centChangeTenThousand(item.value) : getValue.progressionValue[item.dataName]
+      }else{
+        progressionValue[item.dataName] = item.value
+      }
     })
-    console.log(progressionValue);
+    console.log('progressionValue', progressionValue);
 
     let postData = {};
     // 固定比例
@@ -110,7 +124,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       postData = {
         baseType,
         computeType,
-        fixedRatioValue: centChangeTenThousand(Number(amount)),
+        fixedRatioValue: amountIsChange ? centChangeTenThousand(amount) : getValue.fixedRatioValue,
       }
     } else if(lists[1][2].isOnclick){ // 阶梯
       postData = {
@@ -127,7 +141,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       data: {
         projectId,
         dataType: calculateIndex,
-        // baseType: lists[1],
+        postData,
       },
       method: 'POST',
     }, 'mapi').then((res)=>{
@@ -137,7 +151,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         setComputeResults(data);
       }
     });
-
   }
 
   const changeCalculateButton = (index, param) => {
@@ -157,10 +170,11 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   const changeLadderValue = (e, index) => {
     const val = e.detail.value;
     // console.log(index, val, ladderLists, count);
-    var NewLadderLists = ladderLists.concat();
-    NewLadderLists[index].value = val;
-    console.log(NewLadderLists);
-    setladderLists(NewLadderLists);
+    var newLadderLists = ladderLists.concat();
+    newLadderLists[index].value = val;
+    newLadderLists[index].isChange = true;
+    console.log(newLadderLists);
+    setladderLists(newLadderLists);
     let count1 = 0;
     ladderLists.map((item)=>{
       if(item.value !== '') {
@@ -247,7 +261,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
                 <View className='param-left'>
                 <View className='param-title'>{item.name}</View>
                 </View>
-                <View className='param-money'><Input type='number' placeholder='请输入' value={numberFormat(item.value)} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
+                <View className='param-money'><Input type='number' placeholder='请输入' value={item.value} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
               </View>
             )})}
           </View>
@@ -258,7 +272,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
               <View className='remark-text'>基数*a%</View>
               <View className='prance'><Input placeholder='请输入固定比例系数' value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}}></Input><Text className='unit1'>%</Text></View> 
             </View>
-            : <View className='prance'><Input placeholder='请输入固定金额' value={amount || numberFormat(fixedAmountValue)} onInput={(e)=>{setAmount(e.detail.value)}}></Input><Text className='unit1'>万</Text></View> 
+            : <View className='prance'><Input placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value); setAmountIsChange(true)}}></Input><Text className='unit1'>万</Text></View> 
           }
         </View>
       }

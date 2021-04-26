@@ -7,7 +7,7 @@ import '@components/m5/style/components/input.scss';
 import './index.scss'
 import BoxCalculate from '../boxCalculate';
 import BonusCalculate from '../bonusCalculate';
-import { numberFormat } from '../common'
+import { numberFormat, centChangeTenThousand } from '../common'
 import { get as getGlobalData } from '../../../global_data';
 import { REALTIME_DATA_LISTS as listsInfo } from '../constant';
 
@@ -33,8 +33,10 @@ export default  function realTime({}) {
   const [valueData, setValueData] = useState(0);
   const [clickIndex, setClickIndex] = useState('');
   const [isBonusCalculate, setIsBonusCalculate] = useState(false)
+  const [getValue, setGetValue] =useState('');
   const changeCalculate = useCallback((calculateValue)=>setCalculate(calculateValue), []);
   const childChangeShowProgress = useCallback((childShowProgress)=>setShowProgress(childShowProgress),[]);
+  const isChangeCalculate =  useCallback((isChangeCalculate) => {console.log(123, isChangeCalculate)}, [])
 
   const handleBack = () => {
     if(Taro.getCurrentPages().length>1){
@@ -56,7 +58,7 @@ export default  function realTime({}) {
     console.log(index, val, lists);
     var newList = lists.concat();
     newList[index].money = val;
-    console.log(newList, newList);
+    newList[index].isChange = true;
     setLists(newList);
     let count = 0;
     lists.map((item)=>{
@@ -64,6 +66,7 @@ export default  function realTime({}) {
         count++
       }
     })
+    console.log('lists', lists, newList);
     console.log(count);
     if(count == 11) {
       setIsSubmit(true);
@@ -71,14 +74,21 @@ export default  function realTime({}) {
   }
 
   const bottomSubmit = () => {
+    postDataValue();
     
   }
   const postDataValue = () => {
+    console.log(getValue, lists);
+    const data = getValue;
+    for(let item of lists) {
+      if (item.isChange) {
+        data[item.dataIndex] = centChangeTenThousand(item.money);
+      }
+    }
+    console.log(data);
     reqPacking({
       url: 'api/management/editProjectInfo',
-      data:{
-        [lists.dataIndex]: Number(lists.money*1000)
-      },
+      data,
       method: 'POST',
     })
     .then(res => {
@@ -88,11 +98,12 @@ export default  function realTime({}) {
     })
   }
 
+
   const getValueData = () => {
     reqPacking({
       url: requestUrls[paramIndex],
       data: {
-        // projectId,
+        projectId,
       }
     }, 'mapi').then(res => {
       const { success, error } = res;
@@ -112,30 +123,39 @@ export default  function realTime({}) {
 
 
   useEffect(()=>{
-    getContractData();
-    getValueData();
-    console.log('useEffect', calculate);
+    if(paramIndex !== '0') {
+      getValueData();
+    } else {
+      getContractData();
+    }
+    console.log('useEffect', calculate, paramIndex);
   }, []);
+
+  useEffect(()=>{
+    console.log(calculate);
+  },[calculate])
 
   const getContractData = () => {
     reqPacking({
       url:`app/mock/69/api/management/finance/contractData/get`,
       data: {
-        // projectId,
+        projectId,
       }
     }, 'mapi').then(res => {
       const { success, error } = res;
-      console.log(res);
+      console.log('res!!!!!!!!!!1', res);
       if (success) {
         const { data } = res;
-        for(let key in data) {
-          data[key] = numberFormat(data[key])
+        let newData = Object.assign('', data);
+        setGetValue(res.data);
+        for(let key in newData) {
+          newData[key] = numberFormat(newData[key])
         }
         for(let key in lists) {
-          lists[key].money = data[lists[key].dataIndex];
+          lists[key].money = newData[lists[key].dataIndex];
         }
-        console.log('data', data, lists);
-        setValueData(data);
+        setValueData(newData);
+        console.log('data', data, lists, newData);
         setLists(lists);
       } else {
         Taro.showToast({
@@ -201,11 +221,6 @@ export default  function realTime({}) {
           <View className='button' style={{opacity: `${isSubmit ? '1 !important':''}`}}>提交</View>
         </View> : ''
       }
-      {/* {showProgress ?
-        <View className='float-bottom-box' onClick={()=>{console.log('333')}}>
-          <View className='button'>计算</View>
-        </View> : ''
-      } */}
       <FloatLayout 
         isOpened={showProgress}
         className='layout-process'

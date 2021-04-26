@@ -4,5 +4,5 @@ export const numberFormat = (number) => {
   return Number.isNaN(parseFloat(resNumber.toFixed(2))) ? '' : parseFloat(resNumber.toFixed(2));
 }
 export const centChangeTenThousand = (number) => {
-  return number = number * 10000
+  return Number(number) * 10000
 }
