@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import Taro from '@tarojs/taro'
 import FilmComparePanel from '@components/filmComparePanel/index';
 import reqPacking from '@utils/reqPacking.js';
@@ -49,9 +49,26 @@ const CompeteMarket=(props)=>{
       }
     }
 
-  }, [props, show, weekType])
+  }, [show, weekType])
 
-  const fetchCompetitiveSituation=useCallback(()=>{
+  
+  useEffect(()=>{
+    if(show && startDate && endDate) {
+      fetchHistoryList();
+      fetchCompetitiveSituation();
+    }else{
+      setHistoryList([])
+      setFilmList([]);
+    }
+  }, [show, startDate, endDate])
+
+  useEffect(()=>{
+    if(show && startDate && endDate){
+      fetchCompetitiveSituation();
+    }
+  }, [isSetSchedule])
+
+  const fetchCompetitiveSituation=()=>{
     const { projectId } = props;
     const query = {
       projectId: projectId,
@@ -89,7 +106,7 @@ const CompeteMarket=(props)=>{
         errorHandle(error)
       }
     })
-  })
+  }
 
   const fetchHistoryList = () => {
     const reqParams = {
@@ -113,22 +130,6 @@ const CompeteMarket=(props)=>{
         errorHandle(error);
       })
   };
-
-  useEffect(()=>{
-    if(show && startDate && endDate) {
-      fetchHistoryList();
-      fetchCompetitiveSituation();
-    }else{
-      setHistoryList([])
-      setFilmList([]);
-    }
-  }, [show, startDate, endDate, fetchHistoryList, fetchCompetitiveSituation])
-
-  useEffect(()=>{
-    if(show && startDate && endDate){
-      fetchCompetitiveSituation();
-    }
-  }, [endDate, fetchCompetitiveSituation, isSetSchedule, show, startDate])
 
   const handleWeekTypeChange = (type) => {
     setWeekType(type);
