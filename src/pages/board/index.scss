@@ -19,11 +19,20 @@
   }
 
   &-search {
-    height: 44px;
-    width: 44px;
+    height: 28px;
+    width: 28px;
   
     position: absolute;
     left: 28px;
+  }
+
+  &-text {
+    position: absolute;
+    left: 58px;
+    font-weight: 500;
+    font-family: PingFangSC-Medium;
+    font-size: 28px;
+    color: #333333;
   }
 
   position: fixed;

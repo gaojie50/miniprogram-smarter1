@@ -407,15 +407,23 @@ export default function Board() {
             className="board-header-title"
             style={BOARD_HEAD_TITLE_STYLE}
           >
-            {hasPagePermission &&  <Image
-              className="board-header-search"
-              src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
+            {hasPagePermission && <Image
+              className='board-header-search'
+              src='https://obj.pipi.cn/festatic/common/image/983789fd24e8d39069daa427331b8d05.png'
               onClick={() => {
                 Taro.navigateTo({
                   url: "/pages/searchProject/index",
                 });
               }}
             />}
+            <Text className='board-header-text' onClick={() => {
+                Taro.navigateTo({
+                  url: '/pages/searchProject/index',
+                });
+              }} 
+            >
+              挖掘新项目
+            </Text>
             <Text className="board-header-title-text">项目看板</Text>
           </View>
         </View>
