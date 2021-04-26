@@ -19,7 +19,7 @@ export default function hotMovieList() {
     if(isMovieScreening) {
       switchTab(0)
     } else {
-      switchTab(2)
+      switchTab(3)
     }
   }, [name])
   useEffect(()=>{
