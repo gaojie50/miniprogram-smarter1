@@ -5,8 +5,7 @@ import FloatLayout from '@components/m5/float-layout';
 import BoxIncome from '../boxIncome/index'
 import './index.scss'
 
-export default function BoxOfficeData({current, isMovieScreening, projectId, name}) {
-
+export default function BoxOfficeData({current, isMovieScreening, projectId, name, response}) {
   const lists =[
     {
       name: '票务收入',
@@ -50,7 +49,7 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
   return (
     <View>
       <View className='pre-income'>{isMovieScreening ? preIncome[current] : '总收入'}</View>
-      <View className='income-num'>2380.2<Text className='unit'>万</Text></View>
+      <View className='income-num'>{response.totalIncome || '2380.2'}<Text className='unit'>万</Text></View>
       <View className='office-income-box'>
         {lists.map((list, index)=>{
           return (
@@ -94,6 +93,7 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
           current={current}
           isMovieScreening={isMovieScreening}
           officeIncomeIndex={officeIncomeIndex}
+          response={response}
         ></BoxIncome>
       </FloatLayout>
     </View>

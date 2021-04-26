@@ -6,6 +6,8 @@ import BoxOfficeData from './boxOffice/index'
 import { get as getGlobalData } from '../../global_data';
 import DateBar from '@components/dateBar';
 import {numberFormat} from './common'
+import { get as getGlobalData } from '../../global_data';
+// const reqPacking = getGlobalData('reqPacking');
 import './index.scss'
 
 export default function hotMovieList() {
@@ -14,8 +16,9 @@ export default function hotMovieList() {
   const name = url[0].options.name;
   const projectId = url[0].options.projectId;
   const isMovieScreening = (url[0].options.isMovieScreening == 'true');
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(1);
   const [boxOffice, setBoxOffice] = useState({});
+  const [response, setResponse] = useState({});
 
   // const numberFormat = (number) => {
   //   let resNumber = number/1000000;
@@ -56,6 +59,19 @@ export default function hotMovieList() {
     console.log(current);
     console.log(isMovieScreening)
   })
+  
+  useEffect(()=>{
+    console.log(name, isMovieScreening);
+    if(isMovieScreening) {
+      switchTab(0)
+    } else {
+      switchTab(3)
+    }
+  }, [name])
+  useEffect(()=>{
+    console.log(current);
+    
+  }, [current])
 
   const handleBack = () => {
     if(Taro.getCurrentPages().length>1){
@@ -72,11 +88,39 @@ export default function hotMovieList() {
     })
   }
 
+
   // const gotoCityList = () => {
   //   Taro.redirectTo({
   //     url: `/pages/hotMovieSortingList/city/index`
   //   })
   // }
+  const gotoCityList = () => {
+    Taro.redirectTo({
+      url: `/pages/hotMovieSortingList/city/index`
+    })
+  }
+
+  const switchTab = (current) => {
+    console.log(current)
+    setCurrent(current)
+    reqPacking({
+      url:'/api/management/finance/various/income',
+      data:{projectId: name, type: (current + 1)},
+      method: 'GET',
+    }).then(res => {
+        const { success, data = {}, message='' } = res;
+        if (success) {
+          setResponse(data)
+        } else {
+          Taro.showToast({
+            title: message,
+            icon: 'none',
+            duration: 1000
+          });
+        }
+      });
+  }
+
   return (
     <View>
       <View className='detail-top'>
@@ -124,12 +168,12 @@ export default function hotMovieList() {
       { isMovieScreening ? 
         <View className="detail-tabs" >
           <View className="detail-tabs-header" id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
-            <View onClick={()=> setCurrent(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>未来收入</View>
-            <View onClick={()=> setCurrent(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>已实现收入</View>
-            <View onClick={()=> setCurrent(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>总收入</View>
+            <View onClick={()=> switchTab(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>未来收入</View>
+            <View onClick={()=> switchTab(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>已实现收入</View>
+            <View onClick={()=> switchTab(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>总收入</View>
           </View>
           <View className="detail-tabs-body">
-              <View className={current === 0 ? "body-active" : "body-inactive"}>
+              {/* <View className={current === 0 ? "body-active" : "body-inactive"}>
                 <BoxOfficeData
                   current={current}
                   isMovieScreening={isMovieScreening}
@@ -152,11 +196,19 @@ export default function hotMovieList() {
                   projectId={projectId}
                   name={name}
                 ></BoxOfficeData>
-              </View>
+              </View> */}
+            <View>
+              <BoxOfficeData
+                response={response}
+                current={current}
+                isMovieScreening={isMovieScreening === 'true'}
+              ></BoxOfficeData>
+            </View>
           </View>
         </View> :
         <View className='screened-box'>
           <BoxOfficeData
+            response={response}
             current={current}
             isMovieScreening={isMovieScreening}
             projectId={projectId}
