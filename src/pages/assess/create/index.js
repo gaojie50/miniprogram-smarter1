@@ -12,12 +12,14 @@ import FixedButton from '@components/fixedButton';
 import AtActionSheet from '@components/m5/action-sheet';
 import AtActionSheetItem from '@components/m5/action-sheet/body/item';
 import AtFloatLayout from '@components/m5/float-layout';
+import EndTimePicker from '@components/endtime-picker';
 import '@components/m5/style/components/action-sheet.scss';
 import '@components/m5/style/components/float-layout.scss';
 import envConfig from '../../../constant/env-config';
 import './index.scss';
 
-const { errorHandle } = utils;
+
+const { errorHandle, getDefaultEndTime } = utils;
 
 const METHOD_LIST = [
   {
@@ -55,7 +57,11 @@ export default class AC extends React.Component {
     uploadSelectorIsOpen: false,
     fileSelectorIsOpen: false,
     hasPermission: false,
+    endTime: getDefaultEndTime(),
+    endtimePickerOpen: false,
   }
+
+
 
   componentDidMount() {
     const { projectId } = getCurrentInstance().router.params;
@@ -69,6 +75,7 @@ export default class AC extends React.Component {
       this.fetchProjectProfile(projectId);
     }
   }
+
 
   fetchProjectProfile = projectId => {
     reqPacking(
@@ -335,6 +342,7 @@ export default class AC extends React.Component {
     };
 
     if (titleErrorTip || despErrorTip) return;
+    return;
     this.setState({ isSubmitting: true });
     reqPacking(
       {
@@ -389,6 +397,18 @@ export default class AC extends React.Component {
     this.setState({ fileSelectorIsOpen: false });
   }
 
+  handleEndTime = () => {
+    this.setState({ endtimePickerOpen: true });
+  }
+
+  handleEndTimePickerClose = () => {
+    this.setState({ endtimePickerOpen: false });
+  }
+
+  handleEndTimeChange = time => {
+    this.setState({ endTime: time });
+  }
+
   render() {
     const {
       briefInfo,
@@ -404,6 +424,8 @@ export default class AC extends React.Component {
       uploadSelectorIsOpen,
       fileSelectorIsOpen,
       hasPermission,
+      endTime,
+      endtimePickerOpen,
     } = this.state;
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
     const { tempList = [] } = briefInfo;
@@ -518,6 +540,18 @@ export default class AC extends React.Component {
                       )
                   }
                 </View>
+
+                <View className="endtime-wrap">
+                  <View className="title">评估结束时间</View>
+                  <View className="time" onClick={this.handleEndTime}>{endTime || '暂未选择'}</View>
+                </View>
+
+                <EndTimePicker
+                  endTime={endTime}
+                  isOpened={endtimePickerOpen}
+                  onEndTimeChange={this.handleEndTimeChange}
+                  onClose={this.handleEndTimePickerClose}
+                />
 
                 <FixedButton
                   className="publish-btn"

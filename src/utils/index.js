@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro'
+import dayjs from 'dayjs';
 
 const errorHandle = err => {
   if(err && err.message ){
@@ -459,6 +460,20 @@ const formatPercent = (value, decimals = 0) => {
   return +value == 0 ? '-' : `${value}%`;
 };
 
+// 设置DEFAULT_HOURS后的第一个整点
+function getDefaultEndTime(futureHours = 48) {
+  const now = dayjs();
+  const curMinutes = now.format('mm');
+  let moreFlag = false;
+
+  if (curMinutes !== '00') {
+    moreFlag = true;
+  }
+  let endTime = dayjs().add(moreFlag ? (futureHours + 1) : futureHours, 'hours').minute(0).second(0);
+
+  return endTime.valueOf();
+}
+
 export default {
   errorHandle,
   debounce,
@@ -483,4 +498,5 @@ export default {
   previewFile,
   isDockingPerson,
   formatPercent,
+  getDefaultEndTime,
 }
