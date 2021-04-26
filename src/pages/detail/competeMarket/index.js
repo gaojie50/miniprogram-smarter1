@@ -122,7 +122,7 @@ const CompeteMarket=(props)=>{
       setHistoryList([])
       setFilmList([]);
     }
-  }, [show, startDate, endDate, fetchHistoryList, fetchCompetitiveSituation])
+  }, [show, startDate, endDate,])
 
   useEffect(()=>{
     if(show && startDate && endDate){
