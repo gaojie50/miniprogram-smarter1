@@ -3,33 +3,44 @@ import { View, Image, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import FloatLayout from '@components/m5/float-layout';
 import BoxIncome from '../boxIncome/index'
+import {numberFormat} from '../common'
 import './index.scss'
 
 export default function BoxOfficeData({current, isMovieScreening, projectId, name, response}) {
-  const lists =[
+  const listsInfo =[
     {
       name: '票务收入',
-      num: 9092.5
+      num: '',
+      dataName: 'ticketIncome',
     },
     {
       name: '片方分账收入',
-      num: 12.8
+      num: '',
+      dataName: 'splitIncome'
     },
     {
       name: '发行代理收入',
-      num: 893.4
+      num: '',
+      dataName: 'distributionAgencyIncome'
     },
     {
       name: '宣发收入',
-      num: 203.6
+      num: '',
+      dataName: 'advertisingIncome'
     },
   ]
   const preIncome = ['未来收入预估', '已实现收入预估', '总收入预估']
   const incomeName = ['票务收入(元)', '片方分账收入(元)', '发行代理收入(元)', '宣发收入(元)']
-
-
+  const [lists, setLists] = useState(listsInfo);
   const [showProgress, setShowProgress] = useState(false);
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState(0);
+  
+  useEffect(()=>{
+    lists.map((item)=>{
+      item.num = response[item.dataName] ? response[item.dataName].total : ''
+    })
+    setLists(lists);
+  }, [response])
   const changeShowProgress =(index)=> {
     setShowProgress(true);
     setOfficeIncomeIndex(index);
@@ -42,21 +53,17 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
     })
   }
 
-
-  // useEffect(handleBack);
-  // useEffect(pageScroll);
-
   return (
     <View>
       <View className='pre-income'>{isMovieScreening ? preIncome[current] : '总收入'}</View>
-      <View className='income-num'>{response.totalIncome || '2380.2'}<Text className='unit'>万</Text></View>
+      <View className='income-num'>{numberFormat(response.totalIncome)}<Text className='unit'>万</Text></View>
       <View className='office-income-box'>
         {lists.map((list, index)=>{
           return (
             <View className='office-income' key={index} onClick={()=>{changeShowProgress(index)}}>
               <View className='office-income-left'>
                 <View className='office-income-name'>{list.name}</View>
-                <View className='office-income-num'>{list.num}<Text className='unit'>万</Text></View>
+                <View className='office-income-num'>{numberFormat(list.num)}<Text className='unit'>万</Text></View>
               </View>
               <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
             </View>

@@ -17,12 +17,12 @@ export default  function realTime({}) {
   const paramTitle = ['合同参数', '实时参数', '假定条件']
   const requestUrls = [
     '',
-    'app/mock/69/api/management/finance/realTimeData/get',
-    'app/mock/69/api/management/finance/defaultParameter/get',
+    'api/management/finance/realTimeData/get',
+    'api/management/finance/defaultParameter/get',
   ]
   const url = Taro.getCurrentPages();
   const paramIndex = url[0].options.paramIndex;
-  const projectId = url[0].options.projectId;
+  const projectId = Number(url[0].options.projectId);
   const name = url[0].options.name;
   const isMovieScreening = url[0].options.isMovieScreening;
   const [showProgress, setShowProgress] = useState(false);
@@ -78,22 +78,38 @@ export default  function realTime({}) {
     
   }
   const postDataValue = () => {
-    console.log(getValue, lists);
-    const data = getValue;
+    console.log('getValue, lists', getValue, lists);
+    const data = getValue || {};
     for(let item of lists) {
       if (item.isChange) {
-        data[item.dataIndex] = centChangeTenThousand(item.money);
+        if(item.dataIndex !== 'myShare'){
+          data[item.dataIndex] = centChangeTenThousand(item.money);
+        }else{
+          data[item.dataIndex] = Number(item.money);
+        }
       }
     }
-    console.log(data);
+    console.log('post合同参数', data);
     reqPacking({
-      url: 'api/management/editProjectInfo',
-      data,
+      url: 'api/management/finance/contractData/saveOrUpdate',
+      data:{
+        ...data,
+        projectId,
+      },
       method: 'POST',
     })
     .then(res => {
-      if(res.success) {
+      const { success, error } = res;
+      console.log(res);
+      if(success) {
+        console.log(res.data);
         // wx.navigateBack()
+      }else {
+        Taro.showToast({
+          title: error && error.message || '',
+          icon: 'none',
+          duration: 2000,
+        });
       }
     })
   }
@@ -105,9 +121,9 @@ export default  function realTime({}) {
       data: {
         projectId,
       }
-    }, 'mapi').then(res => {
+    }).then(res => {
       const { success, error } = res;
-      console.log('---------', res);
+      console.log('实时参数&假定参数', res);
       if (success) {
         const { data } = res;
         setValueData(data);
@@ -137,13 +153,14 @@ export default  function realTime({}) {
 
   const getContractData = () => {
     reqPacking({
-      url:`app/mock/69/api/management/finance/contractData/get`,
+      // url:`app/mock/69/api/management/finance/contractData/get`,
+      url:`api/management/finance/contractData/get`,
       data: {
         projectId,
       }
-    }, 'mapi').then(res => {
+    }).then(res => {
       const { success, error } = res;
-      console.log('res!!!!!!!!!!1', res);
+      console.log('合同参数', res);
       if (success) {
         const { data } = res;
         let newData = Object.assign('', data);
@@ -189,7 +206,7 @@ export default  function realTime({}) {
                     <View className='param-remarks'>{list.remarks}</View>
                   </View>
                   <View className='param-money'>
-                    { list.unit ? `${valueData[list.dataIndex]}${list.unit}` : `${numberFormat(valueData[list.dataIndex])}万` }
+                    { list.unit ? `${valueData[list.dataIndex] || '-'}${list.unit}` : `${numberFormat(valueData[list.dataIndex])}万` }
                   </View>
                 </View>
                 :

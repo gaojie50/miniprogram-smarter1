@@ -49,15 +49,15 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   }
   const getComputeRule = () => {
     reqPacking({
-      url: 'app/mock/69/api/management/finance/contractData/computeRule/get',
+      url: 'api/management/finance/contractData/computeRule/get',
       data: {
         projectId,
         dataType: calculateIndex ? 1 : 2
 
       }
-    }, 'mapi').then((res)=>{
+    }).then((res)=>{
       const { success, error } = res;
-      console.log('/computeRule/ge', res);
+      console.log('规则数据get', res);
       if (success) {
         const { data } = res;
         const {progressionBase, computeType, progressionType, progressionValue, fixedRatioValue, fixedRatioBoxValue, fixedAmountValue, fixedRatioType} = data;
@@ -97,15 +97,15 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       fixedRatioValue: amountIsChange ? centChangeTenThousand(amount) : getValue.fixedRatioValue,
     }
     reqPacking({
-      url: 'app/mock/69/api/management/finance/contractData/compute',
+      url: 'api/management/finance/contractData/compute',
       data: {
         projectId,
         dataType: calculateIndex,
         postData
       },
       method: 'POST',
-    }, 'mapi').then((res)=>{
-      console.log(res)
+    }).then((res)=>{
+      console.log('提交规则', res)
       const {data, success} = res;
       if(success) {
         setComputeResults(amountIsChange ? centChangeTenThousand(amount) : getValue.fixedRatioValue);

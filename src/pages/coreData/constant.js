@@ -78,7 +78,7 @@ export const REALTIME_DATA_LISTS = [
         title: '宣发费用中猫眼平台资源收入',
         remarks: '',
         money: '',
-        dataIndex: 'ticketAllowanceIncome',
+        dataIndex: 'platformResourceIncome',
         isChange: false,
         unit: '万',
       },

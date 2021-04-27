@@ -50,17 +50,16 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   }
   const getComputeRule = () => {
     reqPacking({
-      url: 'app/mock/69/api/management/finance/contractData/computeRule/get',
+      url: 'api/management/finance/contractData/computeRule/get',
       data: {
         projectId,
         dataType: calculateIndex ? 1 : 2
 
       }
-    }, 'mapi').then((res)=>{
-      const { success, error } = res;
-      console.log('/computeRule/ge', res);
-      if (success) {
-        const { data } = res;
+    }).then((res)=>{
+      const { success, error, data } = res;
+      console.log('发行代理', res);
+      if (success && data) {
         const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
         lists[0].map((item, index)=>{
           item.isOnclick = (baseType === index+1)
@@ -71,14 +70,17 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         lists[2].map((item, index)=>{
           item.isOnclick = (progressionType === index+1)
         })
-        ladderLists.map((item)=> {
-          if(item.dataName.includes('boxLevel')) {
-            console.log('123');
-            item.value = numberFormat(progressionValue[item.dataName]);
-          } else{
-            item.value = progressionValue[item.dataName];
-          }
-        })
+        if(lists[1][2].isOnclick) {
+          ladderLists.map((item)=> {
+            if(item.dataName.includes('boxLevel')) {
+              console.log('123');
+              item.value = numberFormat(progressionValue[item.dataName]);
+            } else{
+              item.value = progressionValue[item.dataName];
+            }
+          })
+        }
+        
         setAmount(numberFormat(fixedAmountValue));
         setGetValue(res.data);
         // setGetProgressionValue(progressionValue);
@@ -97,19 +99,22 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   }
 
   const postCompute = () => {
-    console.log(calculateIndex);
+    console.log(calculateIndex, getValue, ladderLists);
     let baseType = lists[0].findIndex((item)=>item.isOnclick) + 1;
     let computeType = lists[1].findIndex((item)=>item.isOnclick) + 1;
     let progressionType = lists[2].findIndex((item)=>item.isOnclick) + 1;
     let progressionValue = {};
-    ladderLists.map((item)=>{
-      if(item.dataName.includes('boxLevel')) {
-        console.log('getValue.progressionValue[item.name]',getValue, getValue.progressionValue[item.dataName]);
-        progressionValue[item.dataName] = item.isChange ? centChangeTenThousand(item.value) : getValue.progressionValue[item.dataName]
-      }else{
-        progressionValue[item.dataName] = item.value
-      }
-    })
+    if(lists[1][2].isOnclick) {
+      ladderLists.map((item)=>{
+        if(item.dataName.includes('boxLevel')) {
+          // console.log('getValue.progressionValue[item.name]',getValue, getValue.progressionValue[item.dataName]);
+          progressionValue[item.dataName] = item.isChange ? centChangeTenThousand(item.value) : getValue.progressionValue[item.dataName]
+        }else{
+          progressionValue[item.dataName] = item.value
+        }
+      })
+    }
+    
     console.log('progressionValue', progressionValue);
 
     let postData = {};
@@ -118,13 +123,13 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       postData = {
         baseType,
         computeType,
-        fixedAmountValue: Number(coefficient),
+        fixedRatioValue: Number(coefficient),
       }
     } else if(lists[1][1].isOnclick){ // 固定金额
       postData = {
         baseType,
         computeType,
-        fixedRatioValue: amountIsChange ? centChangeTenThousand(amount) : getValue.fixedRatioValue,
+        fixedAmountValue: amountIsChange ? centChangeTenThousand(amount) : getValue.fixedRatioValue,
       }
     } else if(lists[1][2].isOnclick){ // 阶梯
       postData = {
@@ -137,15 +142,15 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
 
     console.log('baseType', baseType, computeType, progressionType, postData);
     reqPacking({
-      url: 'app/mock/69/api/management/finance/contractData/compute',
+      url: 'api/management/finance/contractData/compute',
       data: {
         projectId,
         dataType: calculateIndex,
-        postData,
+        ...postData,
       },
       method: 'POST',
-    }, 'mapi').then((res)=>{
-      console.log(res)
+    }).then((res)=>{
+      console.log('post发行代理', res)
       const {data, success} = res;
       if(success) {
         setComputeResults(data);

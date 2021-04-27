@@ -6,7 +6,6 @@ import BoxOfficeData from './boxOffice/index'
 import { get as getGlobalData } from '../../global_data';
 import DateBar from '@components/dateBar';
 import {numberFormat} from './common'
-import { get as getGlobalData } from '../../global_data';
 // const reqPacking = getGlobalData('reqPacking');
 import './index.scss'
 
@@ -20,94 +19,36 @@ export default function hotMovieList() {
   const [boxOffice, setBoxOffice] = useState({});
   const [response, setResponse] = useState({});
 
-  // const numberFormat = (number) => {
-  //   let resNumber = number/1000000;
-  //   return parseFloat(resNumber.toFixed(2));
-  // }
 
-
-  const fetchBoxOffice = () => {
+  const fetchBoxOfficeValue = () => {
     reqPacking({
-      url:'app/mock/69/api/management/finance/various/boxOffice',
+      url:'api/management/finance/various/boxOffice',
       data: {projectId},
       method: 'GET',
-    }, 'mapi').then(res => {
+    }, ).then(res => {
         const { success, data = {}, message } = res;
-        console.log(res);
+        console.log('票房数据', res);
 
         if (success){
-          // let newBoxOffice = boxOffice;
           for(let key in data) {
             data[key] = numberFormat(data[key])
           }
-          console.log(numberFormat(data.estimateBoxByDay), boxOffice);
           setBoxOffice(data);
+        }else {
+          Taro.showToast({
+            title: message,
+            icon: 'none',
+            duration: 2000
+          });
         } 
-
-        // Taro.showToast({
-        //   title: message,
-        //   icon: 'none',
-        //   duration: 2000
-        // });
       });
   }
-  useEffect(()=>{
-    fetchBoxOffice();
-    console.log(name, isMovieScreening, boxOffice);
-  }, []);
-  useEffect(()=>{
-    console.log(current);
-    console.log(isMovieScreening)
-  })
-  
-  useEffect(()=>{
-    console.log(name, isMovieScreening);
-    if(isMovieScreening) {
-      switchTab(0)
-    } else {
-      switchTab(3)
-    }
-  }, [name])
-  useEffect(()=>{
-    console.log(current);
-    
-  }, [current])
-
-  const handleBack = () => {
-    if(Taro.getCurrentPages().length>1){
-      Taro.navigateBack();
-    }else{
-      Taro.redirectTo({
-        url: `/pages/board/index`
-      })
-    }
-  }
-  const handleParam = () => {
-    Taro.redirectTo({
-      url: `/pages/coreData/realTime/index?paramIndex=1`
-    })
-  }
-
-
-  // const gotoCityList = () => {
-  //   Taro.redirectTo({
-  //     url: `/pages/hotMovieSortingList/city/index`
-  //   })
-  // }
-  const gotoCityList = () => {
-    Taro.redirectTo({
-      url: `/pages/hotMovieSortingList/city/index`
-    })
-  }
-
-  const switchTab = (current) => {
-    console.log(current)
-    setCurrent(current)
+  const fetchIncomeValue = (current) => {
     reqPacking({
-      url:'/api/management/finance/various/income',
-      data:{projectId: name, type: (current + 1)},
+      url:'api/management/finance/various/income',
+      data:{projectId, type: (current + 1)},
       method: 'GET',
-    }).then(res => {
+    }, 'mapi').then(res => {
         const { success, data = {}, message='' } = res;
         if (success) {
           setResponse(data)
@@ -119,6 +60,50 @@ export default function hotMovieList() {
           });
         }
       });
+  }
+  useEffect(()=>{
+    fetchBoxOfficeValue();
+    
+    console.log(name, isMovieScreening, boxOffice);
+  }, []);
+  
+  useEffect(()=>{
+    if(isMovieScreening) {
+      switchTab(0)
+    } else {
+      switchTab(3)
+    }
+  }, [name])
+
+  useEffect(()=>{
+    fetchIncomeValue(1);
+  }, [current])
+
+  const handleBack = () => {
+    if(Taro.getCurrentPages().length>1){
+      Taro.navigateBack();
+    }else{
+      Taro.redirectTo({
+        url: `/pages/board/index`
+      })
+    }
+  }
+
+  // const handleParam = () => {
+  //   Taro.redirectTo({
+  //     url: `/pages/coreData/realTime/index?paramIndex=1`
+  //   })
+  // }
+
+  // const gotoCityList = () => {
+  //   Taro.redirectTo({
+  //     url: `/pages/hotMovieSortingList/city/index`
+  //   })
+  // }
+
+  const switchTab = (current) => {
+    setCurrent(current)
+    fetchIncomeValue(current);
   }
 
   return (
@@ -173,35 +158,13 @@ export default function hotMovieList() {
             <View onClick={()=> switchTab(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>总收入</View>
           </View>
           <View className="detail-tabs-body">
-              {/* <View className={current === 0 ? "body-active" : "body-inactive"}>
-                <BoxOfficeData
-                  current={current}
-                  isMovieScreening={isMovieScreening}
-                  projectId={projectId}
-                  name={name}
-                ></BoxOfficeData>
-              </View>
-              <View className={current === 1 ? "body-active" : "body-inactive"}>
-                <BoxOfficeData
-                  current={current}
-                  isMovieScreening={isMovieScreening}
-                  projectId={projectId}
-                  name={name}
-                ></BoxOfficeData>
-              </View>
-              <View className={current === 2 ? "body-active" : "body-inactive"}>
-                <BoxOfficeData
-                  current={current}
-                  isMovieScreening={isMovieScreening}
-                  projectId={projectId}
-                  name={name}
-                ></BoxOfficeData>
-              </View> */}
             <View>
               <BoxOfficeData
                 response={response}
                 current={current}
-                isMovieScreening={isMovieScreening === 'true'}
+                projectId={projectId}
+                isMovieScreening={isMovieScreening}
+                name={name}
               ></BoxOfficeData>
             </View>
           </View>

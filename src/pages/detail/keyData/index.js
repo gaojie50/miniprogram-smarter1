@@ -15,11 +15,11 @@ export default class KeyData extends React.Component {
   fetchKeyData = () => {
     const { basicData, changeKeyData } = this.props;
     reqPacking({
-      url: 'app/mock/69/api/management/keyData',
+      url: 'api/management/keyData',
       data: { 
         projectId: basicData.projectId,
       }
-    }, 'mapi').then(res => {
+    }).then(res => {
         const { success, data = {} } = res;
         console.log(res);
         if (success) {
