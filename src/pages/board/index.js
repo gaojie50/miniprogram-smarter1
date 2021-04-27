@@ -420,7 +420,7 @@ export default function Board() {
                 Taro.navigateTo({
                   url: '/pages/searchProject/index',
                 });
-              }} 
+              }}
             >
               挖掘新项目
             </Text>

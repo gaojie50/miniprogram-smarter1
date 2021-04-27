@@ -5,7 +5,7 @@ import { noDataPic } from '@utils/imageUrl';
 import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
-// import reqPacking from '../../utils/reqPacking'
+import reqPacking from '../../utils/reqPacking';
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -79,14 +79,27 @@ const test = {evaluationList: [
 // const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 const TYPE_MOVIE = 3 || 4;
 // const DEFAULT_PROJECT_ROLE = 6;
+const { userInfo } = Taro.getStorageSync('authinfo');
 
-export function EvaluationList() {
+export function EvaluationList({type}) {
   const [data, setData] = useState({});
 
   useEffect(() => {
     setData(test)
-    // reqPacking()
-  }, [])
+    reqPacking({
+      url: '/api/applet/management/allEvaluationList',
+      data: {
+        type: type + 1,
+        userId: userInfo.id
+      }
+    }).then(res => {
+      console.log(res, 123)
+      const { success } = res;
+      if(success) {
+        setData(res.data)
+      }
+    })
+  }, [type])
 
   const [evaluationList] = useMemo(() => {
     const { evaluationList: __evaluationList = [] } = data;
@@ -97,7 +110,7 @@ export function EvaluationList() {
       {
         evaluationList.length ? evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />) : (
           <>
-            <View className='no-eval-data' style={{backgroundColor: '#ffffff'}}>
+            <View className='no-eval-data'>
               <Image src={noDataPic} alt=''></Image>
               <View className='text'>暂无评估记录</View>
             </View>
@@ -197,10 +210,10 @@ function EvalutaionCard(props) {
     }
     
     return __arr;
-  }, [role, category, participantNumber, estimateBox, estimateScore, evaluationTotalScore])
+  }, [participantNumber, estimateBox, estimateScore])
 
   useEffect(() => {
-    const { userInfo } = Taro.getStorageSync('authinfo');
+
     setRealName(userInfo.realName);
   }, [])
 
@@ -222,8 +235,8 @@ function EvalutaionCard(props) {
       return [0, '已评估']
     } else {
       let prefix = '';
-      if (typeof invitees === 'string' && invitees.includes(realName)) {
-        if(dayjs().valueOf() > deadline) {
+      if (judgeInvitee(invitees, realName)) {
+        if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
         } else {
           prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
@@ -233,7 +246,7 @@ function EvalutaionCard(props) {
       }
 
       if (initiator === realName) {
-        if(dayjs().valueOf() > deadline) {
+        if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
         } else {
           prefix = '自己发起 ';
@@ -309,11 +322,11 @@ function EvalutaionCard(props) {
           分享结果
         </Button>
         {
-          (isDockingPerson(role) || invitees.includes(realName)) && judgeDeadLine(deadline) && <Button
+          (isDockingPerson(role) || judgeInvitee(invitees, realName)) && judgeDeadLine(deadline) && <Button
             className='assess-list-evaluation-card-action-btn assess-list-evaluation-card-action-btn-eval'
             onClick={() => {
               Taro.navigateTo({
-                url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
+                url: statusType === 0 ? `/pages/assess/detail/index?projectId=${projectId}&roundId=${roundId}` : `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
               })
             }}
           >
@@ -326,5 +339,10 @@ function EvalutaionCard(props) {
 
 function judgeDeadLine(time) {
 
-  return dayjs().valueOf() < time
+  return !(time && dayjs().valueOf() > time)
+}
+
+function judgeInvitee(invitees, realName) {
+
+  return typeof invitees === 'string' && invitees.includes(realName)
 }

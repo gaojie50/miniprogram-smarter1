@@ -57,7 +57,7 @@ export default function AssessList() {
           }
         </View>
         <View className='assess-list-content-body'>
-          <EvaluationList />
+          <EvaluationList type={current} />
         </View>
       </ScrollView>
       <Tab />
