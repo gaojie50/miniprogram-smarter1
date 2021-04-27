@@ -197,6 +197,29 @@ page image {
         }
       }
     }
+
+
+    .endtime-wrap {
+      margin-top: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      .title {
+        font-weight: 500;
+        font-size: 34px;
+        color: #333333;
+        line-height: 34px;
+      }
+      .time {
+        float: right;
+        font-weight: 400;
+        font-size: 28px;
+        color: #333333;
+        text-align: right;
+        line-height: 28px;
+      }
+    }
   
     .uplaod-action-sheet {
       .at-action-sheet__container {

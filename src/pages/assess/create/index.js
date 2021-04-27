@@ -60,7 +60,7 @@ export default class AC extends React.Component {
     uploadSelectorIsOpen: false,
     fileSelectorIsOpen: false,
     hasPermission: false,
-    endTime: getDefaultEndTime(0),
+    endTime: getDefaultEndTime(48),
     endtimePickerOpen: false,
   }
 
