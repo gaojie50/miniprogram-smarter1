@@ -40,6 +40,8 @@ export default class KeyData extends React.Component {
 
   render() {
     const { basicData, keyData, judgeRole } = this.props;
+    const {totalIncome} = keyData;
+    const newTotalIncome = totalIncome/100 || ''; // totalIncome返回的是以分为计算单位的值
     return (
       <View className="keyData">
         {
@@ -193,7 +195,7 @@ export default class KeyData extends React.Component {
                   <View className="detail-box">
                     <View className="detail-box-left">
                       <View className="detail-left">总收入</View>
-                      <View className="detail-middle">{`${formatNumber(keyData.totalIncome, 'floor').num} ${formatNumber(keyData.totalIncome, 'floor').unit}`}</View>
+                      <View className="detail-middle">{`${formatNumber(newTotalIncome, 'floor').num} ${formatNumber(newTotalIncome, 'floor').unit}`}</View>
                     </View>
                     <View className="detail-box-right">
                       <View className="detail-right">查看详情</View>

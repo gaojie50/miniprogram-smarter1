@@ -26,7 +26,7 @@ export default function hotMovieList() {
       data: {projectId},
       method: 'GET',
     }, ).then(res => {
-        const { success, data = {}, message } = res;
+        const { success, data = {}, error } = res;
         console.log('票房数据', res);
 
         if (success){
@@ -36,7 +36,7 @@ export default function hotMovieList() {
           setBoxOffice(data);
         }else {
           Taro.showToast({
-            title: message,
+            title: error ? error.message : '',
             icon: 'none',
             duration: 2000
           });
@@ -48,24 +48,25 @@ export default function hotMovieList() {
       url:'api/management/finance/various/income',
       data:{projectId, type: (current + 1)},
       method: 'GET',
-    }, 'mapi').then(res => {
-        const { success, data = {}, message='' } = res;
+    }).then(res => {
+        const { success, data = {}, error } = res;
+        console.log('多种收入数据', res);
         if (success) {
           setResponse(data)
         } else {
           Taro.showToast({
-            title: message,
+            title: error ? error.message : '',
             icon: 'none',
             duration: 1000
           });
         }
       });
   }
-  useEffect(()=>{
-    fetchBoxOfficeValue();
+  // useEffect(()=>{
+  //   fetchBoxOfficeValue();
     
-    console.log(name, isMovieScreening, boxOffice);
-  }, []);
+  //   console.log(name, isMovieScreening, boxOffice);
+  // }, []);
   
   useEffect(()=>{
     if(isMovieScreening) {
@@ -73,11 +74,12 @@ export default function hotMovieList() {
     } else {
       switchTab(3)
     }
-  }, [name])
+    fetchBoxOfficeValue();
+  }, [isMovieScreening])
 
-  useEffect(()=>{
-    fetchIncomeValue(1);
-  }, [current])
+  // useEffect(()=>{
+  //   fetchIncomeValue(1);
+  // }, [current])
 
   const handleBack = () => {
     if(Taro.getCurrentPages().length>1){
@@ -133,19 +135,19 @@ export default function hotMovieList() {
           <View className='box-office'>
             <View className='office'>
               <View className='office-title'>预测日票房</View>
-              <View className='office-num'>{boxOffice.estimateBoxByDay}<Text className='unit'>万</Text></View>
+              <View className='office-num'>{numberFormat(boxOffice.estimateBoxByDay)}<Text className='unit'>万</Text></View>
             </View>
             <View className='office'>
               <View className='office-title'>预测总票房</View>
-              <View className='office-num'>{boxOffice.estimateBox}<Text className='unit'>万</Text></View>
+              <View className='office-num'>{numberFormat(boxOffice.estimateBox)}<Text className='unit'>万</Text></View>
             </View>
             <View className='office'>
               <View className='office-title'>已产生票房</View>
-              <View className='office-num'>{boxOffice.cumulateBox}<Text className='unit'>万</Text></View>
+              <View className='office-num'>{numberFormat(boxOffice.cumulateBox)}<Text className='unit'>万</Text></View>
             </View>
             <View className='office'>
               <View className='office-title'>未来票房</View>
-              <View className='office-num'>{boxOffice.futureBox}<Text className='unit'>万</Text></View>
+              <View className='office-num'>{numberFormat(boxOffice.futureBox)}<Text className='unit'>万</Text></View>
             </View>
           </View> 
         </View> : ''

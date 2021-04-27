@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { lists, listsAfter } from './constants.js'
+import {numberFormat} from '../common'
 import './index.scss';
 
 export default function BoxIncome({current, officeIncomeIndex, isMovieScreening, response}) {
@@ -50,7 +51,7 @@ export default function BoxIncome({current, officeIncomeIndex, isMovieScreening,
               <View className='income-title'>{list.title}</View>
               <View className='income-remarks'>{list.remarks}</View>
             </View>
-            <View className='income-money'>{list.money}<Text className='unit'>{list.unit}</Text></View>
+            <View className='income-money'>{numberFormat(list.money)}<Text className='unit'>{list.unit}</Text></View>
           </View>
         )
       })}
