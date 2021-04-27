@@ -105,7 +105,8 @@ export default function Result() {
       })
     ]).then(resList => {
       const { success, data = {}, error } = resList[0];
-      const { pic } = resList[1].data;
+      //fakeData: userId 
+      const { pic,userId=132 } = resList[1].data;
 
       if(success){
         const {evaluationList =[],name} = data;
@@ -117,6 +118,7 @@ export default function Result() {
           round,
           participantNumber,
           evaluationMethod,
+          userId,
           pic: pic ? picFn(pic) : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png',
         });
       }
@@ -148,6 +150,7 @@ export default function Result() {
     coreExist,
     categoryType,
     core = {},
+    deadLine,
   } = result;
   const noEvalText = isLeader(projectRole) ? "还没有人发布过评估内容" : "自行填答后，才能看到其他人的评估内容";
   const showParticipantNumber = isDockingPerson(judgeRole);
@@ -156,7 +159,12 @@ export default function Result() {
       <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
     ) : (
       <Block>
-      <ProjectInfo info={info} projectId={projectId} roundId={roundId} showParticipantNumber={showParticipantNumber}/>
+      <ProjectInfo 
+        deadLine={deadLine}
+        info={info} 
+        projectId={projectId} 
+        roundId={roundId} 
+        showParticipantNumber={showParticipantNumber}/>
       <View className="result-cont">
         {
           !evaluated && !isLeader(projectRole) ? <View className="tip">为了保证评估客观公正，您需填答后才能看到他人的评估内容</View> : ""
