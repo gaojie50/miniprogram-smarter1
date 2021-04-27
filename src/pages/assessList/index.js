@@ -5,8 +5,9 @@ import {
     Image
   } from '@tarojs/components';
 import React, { useState, Fragment } from 'react';
-import Taro from '@tarojs/taro';
+import Taro, { useDidShow } from '@tarojs/taro';
 import Tab from '@components/tab';
+import lx from '@analytics/wechat-sdk';
 import { get as getGlobalData } from '../../global_data';
 import { EvaluationList } from './evaluate';
 import './index.scss';
@@ -29,6 +30,16 @@ const HEADER_LIST = [
 
 export default function AssessList() {
   const [current, setCurrent] = useState(0);
+
+  useDidShow(() => {
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    lx.pageView('c_movie_b_8gwiwttn', {
+      custom: {
+        user_id: userInfo.id,
+        keeper_user_id: userInfo.keeperUserId
+      }
+    });
+  })
 
   return <Fragment>
       <View className='assess-list-title' style={{height: height, marginTop: top,}}>

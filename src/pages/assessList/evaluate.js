@@ -79,12 +79,13 @@ const test = {evaluationList: [
 // const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 const TYPE_MOVIE = 3 || 4;
 // const DEFAULT_PROJECT_ROLE = 6;
-const { userInfo } = Taro.getStorageSync('authinfo');
+
 
 export function EvaluationList({type}) {
   const [data, setData] = useState({});
 
   useEffect(() => {
+    const { userInfo } = Taro.getStorageSync('authinfo');
     setData(test)
     reqPacking({
       url: '/api/applet/management/allEvaluationList',
@@ -213,7 +214,7 @@ function EvalutaionCard(props) {
   }, [participantNumber, estimateBox, estimateScore])
 
   useEffect(() => {
-
+    const { userInfo } = Taro.getStorageSync('authinfo');
     setRealName(userInfo.realName);
   }, [])
 
@@ -245,11 +246,13 @@ function EvalutaionCard(props) {
         return [1, prefix]
       }
 
-      if (initiator === realName) {
+      if (isDockingPerson(role)) {
         if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
         } else {
-          prefix = '自己发起 ';
+          if(initiator === realName) {
+            prefix = '自己发起 ';
+          }
         }
         
         return [2, prefix]

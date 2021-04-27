@@ -5,7 +5,7 @@ import { noDataPic } from '@utils/imageUrl';
 import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
-import reqPacking from '../../utils/reqPacking'
+import reqPacking from '../../utils/reqPacking';
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -77,7 +77,7 @@ export function EvaluationList(props) {
 function EvalutaionCard(props) {
   
   const [realName, setRealName] = useState('');
- 
+
   const {
     category,
     round = '-', participantNumber,
@@ -120,7 +120,7 @@ function EvalutaionCard(props) {
       __arr = __arr.concat(list);
     }
    
-
+    
     
     if( category === TYPE_MOVIE ) {
       let list = [
@@ -178,7 +178,7 @@ function EvalutaionCard(props) {
       Taro.navigateTo({ url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`})
     }
   }
-
+console.log(hasAssess,deadline)
   const [statusType, statusText] = useMemo(() => {
     if (hasAssess) {
       return [0, '已评估']
@@ -194,19 +194,20 @@ function EvalutaionCard(props) {
         return [1, prefix]
       }
 
-      if (initiator === realName) {
+      if (isDockingPerson(judgeRole.role)) {
         if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
         } else {
-          prefix = '自己发起 ';
+          if(initiator === realName) {
+            prefix = '自己发起 ';
+          }
         }
-        console.log(12333333)
+        
         return [2, prefix]
       }
-
     }
-  }, [hasAssess, initiator, realName, deadline, invitees]);
-console.log(invitees, realName,111)
+  }, [deadline, hasAssess, initiator, invitees, realName]);
+
   return (
     <View className="evaluation-card">
       <View onClick={handleJump} >
@@ -259,15 +260,15 @@ console.log(invitees, realName,111)
       </View>
       </View>
       <View className="evaluation-card-action">
-        {isDockingPerson(judgeRole.role) && judgeDeadLine(deadline) && <Button
-          data-roundTitle={roundTitle}
-          data-roundId={roundId}
-          data-sign='invite'
-          openType='share'
-          className='evaluation-card-action-btn'
-        >
-            邀请参与
-          </Button>}
+      {isDockingPerson(judgeRole.role) && judgeDeadLine(deadline) && <Button
+        data-roundTitle={roundTitle}
+        data-roundId={roundId}
+        data-sign='invite'
+        openType='share'
+        className='evaluation-card-action-btn'
+      >
+          邀请参与
+        </Button>}
         <Button
           data-roundTitle={roundTitle}
           data-roundId={roundId}
