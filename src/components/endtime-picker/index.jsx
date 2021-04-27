@@ -18,13 +18,15 @@ const { calcWeek, rpxTopx } = utils;
 
 const LIMIT_FUTURE_DAYS = 7;
 
+
 const EndTimePicker = function(props) {
-  const [dayList, setDayList] = useState([]);
+  const dayList = getDefaultDayList();
+  const allHourList = getDefaultAllHourList();
+
   const [hourList, setHourList] = useState([]);
-  const [allHourList, setAllHourList] = useState([]);
   const [value, setValue] = useState([0, 0]);
 
-  useEffect(() => {
+  function getDefaultDayList() {
     let curDay = dayjs();
     let list = [];
 
@@ -32,43 +34,89 @@ const EndTimePicker = function(props) {
       list.push(curDay.add(i, 'day').startOf('day').valueOf());
     }
     list.push(-1); // 不限时
-    setDayList(list);
-  }, []);
+    return list;
+  }
 
-  useEffect(() => {
+  function getDefaultAllHourList() {
     let list = [];
 
     for (let i = 0; i <= 23; i++) {
       list.push(i);
     }
-    setHourList(list);
-    setAllHourList(list);
-  }, []);
+    return list;
+  }
+
+  useEffect(() => {
+    const newHourList = getNewHourList(props.endTime);
+    const selectDayIndex = getDayIndex(dayList, props.endTime);
+    const selectHourIndex = getHourIndex(newHourList, props.endTime);
+
+    setHourList(newHourList);
+    setValue([selectDayIndex, selectHourIndex]);
+  }, [props.endTime]);
+
 
 
   const onChange = e => {
     const val = e.detail.value;
     let curSelectDay = dayList[val[0]];
 
-    if (dayjs(curSelectDay).isToday()) {
-      const nowHour = new Date().getHours();
-      let newHourList = allHourList.slice(nowHour);
+    setValue(val);
 
-      setHourList(newHourList);
+    if (dayjs(curSelectDay).isToday()) {
+      setHourList(getNewHourList(curSelectDay));
     } else if (curSelectDay === -1) {
       setHourList([]);
     } else {
       setHourList(allHourList);
     }
-    setValue(val);
+  };
+
+  const getNewHourList = day => {
+    if (!day) {
+      return [];
+    }
+    if (dayjs(day).isToday()) {
+      const nowHour = new Date().getHours();
+      let newHourList = allHourList.slice(nowHour + 1);
+
+      return newHourList;
+    }
+    return allHourList;
+  };
+
+  const getDayIndex = (dList, day) => {
+    let selectDayIndex = 0;
+
+    if (!props.endTime) {
+      selectDayIndex = dList.length - 1;
+    } else {
+      selectDayIndex = dList.findIndex(item => {
+        if (dayjs(item).startOf('day').valueOf() === dayjs(day).startOf('day').valueOf()) {
+          return true;
+        }
+        return false;
+      });
+    }
+    return selectDayIndex === -1 ? 0 : selectDayIndex;
+  };
+
+  const getHourIndex = (hList, day) => {
+    let selectHourIndex = 0;
+
+    selectHourIndex = hList.findIndex(hour => {
+      if (hour === dayjs(day).hour()) {
+        return true;
+      }
+      return false;
+    });
+    return selectHourIndex === -1 ? 0 : selectHourIndex;
   };
 
   const handleEndTimeChange = () => {
+    let newTime = dayList[value[0]] === -1 ? '' : dayjs(dayList[value[0]]).add(hourList[value[1]], 'hours').valueOf();
 
-    console.log(hourList, value[1]);
-    let newTime = dayjs(dayList[value[0]]).add(hourList[value[1]], 'hours').format('YYYY-MM-DD HH:mm');
-
-    props.onEndTimeChange(newTime.valueOf());
+    props.onEndTimeChange(newTime);
     props.onClose();
   };
 

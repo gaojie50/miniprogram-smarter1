@@ -5,6 +5,7 @@ import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
 import _cloneDeep from 'lodash/cloneDeep';
 import dayjs from 'dayjs';
+import isToday from 'dayjs/plugin/isToday';
 import Nodata from '@components/noData';
 import NoAccess from '@components/noAccess';
 import BriefInfo from '@components/briefInfo';
@@ -18,8 +19,10 @@ import '@components/m5/style/components/float-layout.scss';
 import envConfig from '../../../constant/env-config';
 import './index.scss';
 
+dayjs.extend(isToday);
 
-const { errorHandle, getDefaultEndTime } = utils;
+
+const { errorHandle, getDefaultEndTime, formatEndTime } = utils;
 
 const METHOD_LIST = [
   {
@@ -57,7 +60,7 @@ export default class AC extends React.Component {
     uploadSelectorIsOpen: false,
     fileSelectorIsOpen: false,
     hasPermission: false,
-    endTime: getDefaultEndTime(),
+    endTime: getDefaultEndTime(0),
     endtimePickerOpen: false,
   }
 
@@ -543,7 +546,9 @@ export default class AC extends React.Component {
 
                 <View className="endtime-wrap">
                   <View className="title">评估结束时间</View>
-                  <View className="time" onClick={this.handleEndTime}>{endTime || '暂未选择'}</View>
+                  <View className="time" onClick={this.handleEndTime}>
+                    {formatEndTime(endTime).text || '不限时'}
+                  </View>
                 </View>
 
                 <EndTimePicker
