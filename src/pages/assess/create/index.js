@@ -1,3 +1,4 @@
+/* eslint-disable jsx-quotes */
 import React from 'react';
 import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
@@ -116,14 +117,14 @@ export default class AC extends React.Component {
 
       if (!error) {
         const briefInfo = data;
-        const { tempList = [] } = briefInfo;
+        const { templateList = [] } = briefInfo;
 
         if (!briefInfo.projectEvaluationName) {
           briefInfo.projectEvaluationName = `《${briefInfo.name}》项目第${briefInfo.roundNum}轮评估`;
         }
 
-        let evaluationMethod = tempList[0]?.type;
-        let curTempId = tempList[0]?.tempV2[0].tempId;
+        let evaluationMethod = templateList[0]?.medium;
+        let curTempId = templateList[0]?.templateNode[0].tempId;
 
         return this.setState({
           briefInfo,
@@ -185,10 +186,10 @@ export default class AC extends React.Component {
   };
 
   evalMethodChange = methodType => {
-    const { tempList } = this.state.briefInfo;
+    const { templateList } = this.state.briefInfo;
 
     if (methodType == this.state.evaluationMethod) return;
-    let curTempId = tempList.filter(item => item.type == methodType)[0].tempV2[0].tempId;
+    let curTempId = templateList.filter(item => item.type == methodType)[0].templateNode[0].tempId;
 
     this.setState({
       evaluationMethod: methodType,
@@ -431,9 +432,9 @@ export default class AC extends React.Component {
       endtimePickerOpen,
     } = this.state;
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
-    const { tempList = [] } = briefInfo;
-    const [curTemplateType] = tempList.filter(tempType => tempType.type == evaluationMethod);
-    const curTempList = curTemplateType?.tempV2 || [];
+    const { templateList = [] } = briefInfo;
+    const [curTemplateType] = templateList.filter(tempType => tempType.medium == evaluationMethod);
+    const curTempList = curTemplateType?.templateNode || [];
     const { name, roundNum, pic } = briefInfo;
 
     return (
@@ -485,17 +486,17 @@ export default class AC extends React.Component {
                   <Text className="evaluation-title">选择评估方式</Text>
                   <View className="method-list-wrap">
                     {
-                      tempList.map(item => {
-                        const { icon } = METHOD_LIST.filter(method => method.type == item.type)[0];
+                      templateList.map(item => {
+                        const { icon, name:typeName } = METHOD_LIST.filter(method => method.type == item.medium)[0];
 
                         return (
                           <View
                             key={item.type}
-                            className={`method-item ${item.type === evaluationMethod ? 'active' : ''}`}
+                            className={`method-item ${item.medium === evaluationMethod ? 'active' : ''}`}
                             onClick={() => { this.evalMethodChange(item.type); }}
                           >
                             <View className={`smarter-iconfont ${icon}`} style={{ fontSize: '28rpx' }} />
-                            {item.name}
+                            {typeName}
                           </View>
                         );
                       })
