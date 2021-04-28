@@ -52,7 +52,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       url: 'api/management/finance/contractData/computeRule/get',
       data: {
         projectId,
-        dataType: calculateIndex ? 1 : 2
+        dataType: 3
 
       }
     }).then((res)=>{
