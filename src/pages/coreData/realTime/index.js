@@ -167,23 +167,23 @@ export default  function realTime({}) {
     })
   }
 
+  // 合同参数数据请求
   useEffect(()=>{
-    console.log('paramIndex', paramIndex);
-    if(paramIndex == '0') {
+    if (paramIndex === '0') {
       getContractData();
-    } else {
+    }
+  }, [showProgress]);
+
+  // 实时参数 & 假定参数tab 数据请求 
+  useEffect(()=>{
+    if (paramIndex !== '0') {
       getValueData();
     }
-    console.log('useEffect', calculate, paramIndex);
-  }, [paramIndex]);
+  }, []);
 
   useEffect(()=>{
     console.log(calculate);
   },[calculate]);
-
-  useEffect(()=>{
-    getContractData();
-  }, [showProgress]);
 
   const getContractData = () => {
     reqPacking({
@@ -288,6 +288,7 @@ export default  function realTime({}) {
             showProgress={showProgress}
             childChangeShowProgress={childChangeShowProgress}
             projectId={projectId}
+            paramIndex={paramIndex}
           ></BonusCalculate>
           : 
           <BoxCalculate
@@ -300,6 +301,7 @@ export default  function realTime({}) {
             showProgress={showProgress}
             childChangeShowProgress={childChangeShowProgress}
             projectId={projectId}
+            paramIndex={paramIndex}
           ></BoxCalculate>
         }
       </FloatLayout>

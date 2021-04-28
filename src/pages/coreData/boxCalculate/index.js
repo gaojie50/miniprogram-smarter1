@@ -10,9 +10,9 @@ import './index.scss'
 import {numberFormat, centChangeTenThousand} from '../common'
 import { get as getGlobalData } from '../../../global_data';
 
-export default function BoxCalculate({calculateIndex, incomeName, calculate, showProgress, changeCalculate, childChangeShowProgress, projectId}) {
+export default function BoxCalculate({calculateIndex, incomeName, calculate, showProgress, changeCalculate, childChangeShowProgress, projectId, paramIndex}) {
+  if (paramIndex !== '0') return null;
   const reqPacking = getGlobalData('reqPacking');
-
   const bonusButList = [
     [ {text: '票房分账收入', isOnclick: true}, {text: '净票房收入', isOnclick: false} ],
     [ {text: '固定比例', isOnclick: false}, {text: '固定金额', isOnclick: false}, {text: '阶梯', isOnclick: true} ],
@@ -26,7 +26,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'},
     {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
   ];
-
   const [lists, setLists] = useState(bonusButList);
   const [isSubmit, setIsSubmit] = useState(false);
   const [ladderLists, setladderLists] = useState(ladderListsInfo);
@@ -52,8 +51,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       url: 'api/management/finance/contractData/computeRule/get',
       data: {
         projectId,
-        dataType: calculateIndex
-
+        dataType: calculateIndex,
       }
     }).then((res)=>{
       const { success, error, data } = res;
@@ -72,7 +70,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         if(lists[1][2].isOnclick) {
           ladderLists.map((item)=> {
             if(item.dataName.includes('boxLevel')) {
-              console.log('123');
               item.value = numberFormat(progressionValue[item.dataName], false);
             } else{
               item.value = progressionValue[item.dataName];
@@ -94,7 +91,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       }
     })
   }
-
   const postCompute = () => {
     console.log(calculateIndex, getValue, ladderLists);
     let baseType = lists[0].findIndex((item)=>item.isOnclick) + 1;
@@ -154,7 +150,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       }
     });
   }
-
   const changeCalculateButton = (index, param) => {
     // console.log(index, param, lists[index][param]);
     var newList = lists.concat();
@@ -296,7 +291,9 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   }, [changeCalculate, calculate])
   
   useEffect(()=>{
-    getComputeRule();
+    if (calculateIndex) {
+      getComputeRule();
+    }
     console.log('123showProgress', showProgress, calculateIndex);
   }, [showProgress, calculateIndex])
 
