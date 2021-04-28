@@ -78,8 +78,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         
         setAmount(numberFormat(fixedAmountValue, false));
         setGetValue(res.data);
-        // setGetProgressionValue(progressionValue);
-        // setFixedAmountValue(fixedAmountValue);
         setCoefficient(fixedRatioValue);
       } else {
         Taro.showToast({
@@ -142,15 +140,20 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       method: 'POST',
     }).then((res)=>{
       console.log('post发行代理', res)
-      const {data, success} = res;
+      const {data, success, error} = res;
       if(success) {
         setShowModal(true);
         setComputeResults(data);
+      }else {
+        Taro.showToast({
+          title: error && error.message || '',
+          icon: 'none',
+          duration: 2000,
+        });
       }
     });
   }
   const changeCalculateButton = (index, param) => {
-    // console.log(index, param, lists[index][param]);
     var newList = lists.concat();
     newList[index].forEach((item, i)=>{
       console.log('item', item);
@@ -160,24 +163,15 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         item.isOnclick = false;
       }
     })
-    // console.log(newList);
     setLists(newList);
   }
   const changeLadderValue = (e, index) => {
     const val = e.detail.value;
-    // console.log(index, val, ladderLists, count);
     var newLadderLists = ladderLists.concat();
     newLadderLists[index].value = val;
     console.log(newLadderLists);
     setladderLists(newLadderLists);
-    // judgeIsSubmit();
-    // let count1 = 0;
-    // ladderLists.map((item)=>{
-    //   if(item.value !== '') {
-    //     count1 = count1 + 1;
-    //   }
-    // })
-    // setCount(count1);
+
   }
 
   // 计算按钮
@@ -185,15 +179,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     judgeIsSubmit('hasToast')
     if(isSubmit){
       postCompute();
-      // setShowModal(true);
     }
-    // } else {
-    //   Taro.showToast({
-    //     title: '请填写完全',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    // }
   }
 
   const judgeIsSubmit = (hasToast) => {
