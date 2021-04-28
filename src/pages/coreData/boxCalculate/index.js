@@ -40,7 +40,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
 
   // 清空数据
   const cleanAllValue =() => {
-    // setLists(bonusButList);
     setCoefficient('');
     setAmount('');
     setladderLists(ladderListsInfo);
@@ -234,6 +233,15 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
               return;
             }
           }
+          if(Number(ladderLists[0].value)-Number(ladderLists[1].value) > 0 || Number(ladderLists[1].value)-Number(ladderLists[2].value) > 0){
+            hasToast && Taro.showToast({
+              title: `请填写A<=B<=C的值`,
+              icon: 'none',
+              duration: 2000,
+            });
+            setIsSubmit(false);
+            return;
+          }
         }
       }
     }
@@ -291,28 +299,18 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   }, [changeCalculate, calculate])
   
   useEffect(()=>{
-    if (calculateIndex) {
+    cleanAllValue();
+    if (showProgress && calculateIndex) {
       getComputeRule();
     }
-    console.log('123showProgress', showProgress, calculateIndex);
   }, [showProgress, calculateIndex])
 
-  useEffect(()=>{
-    cleanAllValue();
-    console.log('123calculateIndex', calculateIndex);
-  }, [calculateIndex])
-  // useEffect(()=>{
-  //   judgeIsSubmit();
-  // },[lists])
 
   // 计算按钮是否可以计算
   useEffect(()=>{
     judgeIsSubmit();
   }, [ladderLists, coefficient, amount, lists]);
   
-  useEffect(()=>{
-    console.log('showModal', showModal);
-  },[showModal])
 
   return(
     <View className='box-calculate'>

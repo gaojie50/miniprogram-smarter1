@@ -30,9 +30,6 @@ export default function hotMovieList() {
         console.log('票房数据', res);
 
         if (success){
-          for(let key in data) {
-            data[key] = numberFormat(data[key])
-          }
           setBoxOffice(data);
         } else {
           Taro.showToast({
@@ -131,19 +128,19 @@ export default function hotMovieList() {
           <View className='box-office'>
             <View className='office'>
               <View className='office-title'>预测日票房</View>
-              <View className='office-num'>{boxOffice.estimateBoxByDay}<Text className='unit'>万</Text></View>
+              <View className='office-num'>{numberFormat(boxOffice.estimateBoxByDay)}<Text className='unit'>万</Text></View>
             </View>
             <View className='office'>
               <View className='office-title'>预测总票房</View>
-              <View className='office-num'>{boxOffice.estimateBox}<Text className='unit'>万</Text></View>
+              <View className='office-num'>{numberFormat(boxOffice.estimateBox)}<Text className='unit'>万</Text></View>
             </View>
             <View className='office'>
               <View className='office-title'>已产生票房</View>
-              <View className='office-num'>{boxOffice.cumulateBox}<Text className='unit'>万</Text></View>
+              <View className='office-num'>{numberFormat(boxOffice.cumulateBox)}<Text className='unit'>万</Text></View>
             </View>
             <View className='office'>
               <View className='office-title'>未来票房</View>
-              <View className='office-num'>{boxOffice.futureBox}<Text className='unit'>万</Text></View>
+              <View className='office-num'>{numberFormat(boxOffice.futureBox)}<Text className='unit'>万</Text></View>
             </View>
           </View> 
         </View> : ''
