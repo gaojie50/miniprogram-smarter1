@@ -22,7 +22,7 @@ export default  function realTime({}) {
   ]
   const url = Taro.getCurrentPages();
   const paramIndex = url[url.length-1].options.paramIndex;
-  const projectId = Number(url[0].options.projectId);
+  const projectId = Number(url[url.length-1].options.projectId);
   const name = url[url.length-1].options.name;
   const isMovieScreening = url[url.length-1].options.isMovieScreening;
   const [showProgress, setShowProgress] = useState(false);
@@ -39,13 +39,16 @@ export default  function realTime({}) {
   // const isChangeCalculate =  useCallback((isChangeCalculate) => {console.log(123, isChangeCalculate)}, [])
 
   const handleBack = () => {
-    if(Taro.getCurrentPages().length>1){
-      Taro.navigateBack();
-    }else{
-      Taro.redirectTo({
-        url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`,
-      })
-    }
+    Taro.redirectTo({
+      url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`,
+    })
+    // if(Taro.getCurrentPages().length>1){
+    //   Taro.navigateBack();
+    // }else{
+    //   Taro.redirectTo({
+    //     url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`,
+    //   })
+    // }
   }
 
   const changeShowProgress =(index)=> {
@@ -259,7 +262,7 @@ export default  function realTime({}) {
                       <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png' />
                     </View> 
                     :
-                    <View className='param-money'><Input type='number' placeholder='请输入' value={list.money} onInput={(e)=>{ChangeValue(e, index)}} />
+                    <View className='param-money'><Input type='digit' placeholder='请输入' value={list.money} onInput={(e)=>{ChangeValue(e, index)}} />
                     <Text className='unit'>{list.unit}</Text></View>
                   }
                 </View>

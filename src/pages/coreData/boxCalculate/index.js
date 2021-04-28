@@ -78,8 +78,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         
         setAmount(numberFormat(fixedAmountValue, false));
         setGetValue(res.data);
-        // setGetProgressionValue(progressionValue);
-        // setFixedAmountValue(fixedAmountValue);
         setCoefficient(fixedRatioValue);
       } else {
         Taro.showToast({
@@ -142,15 +140,20 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       method: 'POST',
     }).then((res)=>{
       console.log('post发行代理', res)
-      const {data, success} = res;
+      const {data, success, error} = res;
       if(success) {
         setShowModal(true);
         setComputeResults(data);
+      }else {
+        Taro.showToast({
+          title: error && error.message || '',
+          icon: 'none',
+          duration: 2000,
+        });
       }
     });
   }
   const changeCalculateButton = (index, param) => {
-    // console.log(index, param, lists[index][param]);
     var newList = lists.concat();
     newList[index].forEach((item, i)=>{
       console.log('item', item);
@@ -160,24 +163,15 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         item.isOnclick = false;
       }
     })
-    // console.log(newList);
     setLists(newList);
   }
   const changeLadderValue = (e, index) => {
     const val = e.detail.value;
-    // console.log(index, val, ladderLists, count);
     var newLadderLists = ladderLists.concat();
     newLadderLists[index].value = val;
     console.log(newLadderLists);
     setladderLists(newLadderLists);
-    // judgeIsSubmit();
-    // let count1 = 0;
-    // ladderLists.map((item)=>{
-    //   if(item.value !== '') {
-    //     count1 = count1 + 1;
-    //   }
-    // })
-    // setCount(count1);
+
   }
 
   // 计算按钮
@@ -185,15 +179,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     judgeIsSubmit('hasToast')
     if(isSubmit){
       postCompute();
-      // setShowModal(true);
     }
-    // } else {
-    //   Taro.showToast({
-    //     title: '请填写完全',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    // }
   }
 
   const judgeIsSubmit = (hasToast) => {
@@ -215,7 +201,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
             let judge = ladderLists[i].value.toString().split(".");
             if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
               hasToast && Taro.showToast({
-                title: `小数点${ladderLists[i].name}`,
+                title: `${ladderLists[i].name}小数点后最多6位`,
                 icon: 'none',
                 duration: 2000,
               });
@@ -223,7 +209,8 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
               return;
             }
           }else{
-            if(Number(ladderLists[i].value)< 0 || Number(ladderLists[i].value)>100 ){
+            let judge = ladderLists[i].value.toString().split(".");
+            if(Number(ladderLists[i].value)< 0 || Number(ladderLists[i].value)>100 || (judge[1] && judge[1].length > 2)){
               hasToast && Taro.showToast({
                 title: `${ladderLists[i].name}填写0~100数值`,
                 icon: 'none',
@@ -350,7 +337,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
                 <View className='param-left'>
                 <View className='param-title'>{item.name}</View>
                 </View>
-                <View className='param-money'><Input type='number' placeholder='请输入' value={item.value} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
+                <View className='param-money'><Input type='digit' placeholder='请输入' value={item.value} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
               </View>
             )})}
           </View>
@@ -359,9 +346,9 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
           { lists[1][0].isOnclick ? 
             <View className='122'>
               <View className='remark-text'>基数*a%</View>
-              <View className='prance'><Input placeholder='请输入固定比例系数' value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value); judgeIsSubmit()}}></Input><Text className='unit1'>%</Text></View> 
+              <View className='prance'><Input type='digit' placeholder='请输入固定比例系数' value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value); judgeIsSubmit()}}></Input><Text className='unit1'>%</Text></View> 
             </View>
-            : <View className='prance'><Input placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value); judgeIsSubmit()}}></Input><Text className='unit1'>万</Text></View> 
+            : <View className='prance'><Input type='digit' placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value); judgeIsSubmit()}}></Input><Text className='unit1'>万</Text></View> 
           }
         </View>
       }
