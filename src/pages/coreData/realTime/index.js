@@ -145,7 +145,6 @@ export default  function realTime({}) {
     })
   }
 
-
   const getValueData = () => {
     reqPacking({
       url: requestUrls[paramIndex],
@@ -168,7 +167,6 @@ export default  function realTime({}) {
     })
   }
 
-
   useEffect(()=>{
     console.log('paramIndex', paramIndex);
     if(paramIndex == '0') {
@@ -181,15 +179,14 @@ export default  function realTime({}) {
 
   useEffect(()=>{
     console.log(calculate);
-  },[calculate])
+  },[calculate]);
 
   useEffect(()=>{
     getContractData();
-  },[showProgress])
+  }, [showProgress]);
 
   const getContractData = () => {
     reqPacking({
-      // url:`app/mock/69/api/management/finance/contractData/get`,
       url:`api/management/finance/contractData/get`,
       data: {
         projectId,

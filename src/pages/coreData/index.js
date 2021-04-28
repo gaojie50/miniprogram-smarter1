@@ -23,7 +23,7 @@ export default function hotMovieList() {
   const fetchBoxOfficeValue = () => {
     reqPacking({
       url:'api/management/finance/various/boxOffice',
-      data: {projectId},
+      data: { projectId },
       method: 'GET',
     }, ).then(res => {
         const { success, data = {}, error } = res;
@@ -34,7 +34,7 @@ export default function hotMovieList() {
             data[key] = numberFormat(data[key])
           }
           setBoxOffice(data);
-        }else {
+        } else {
           Taro.showToast({
             title: error ? error.message : '',
             icon: 'none',
@@ -46,7 +46,7 @@ export default function hotMovieList() {
   const fetchIncomeValue = (current) => {
     reqPacking({
       url:'api/management/finance/various/income',
-      data:{projectId, type: (current + 1)},
+      data:{ projectId, type: (current + 1) },
       method: 'GET',
     }).then(res => {
         const { success, data = {}, error } = res;
@@ -70,7 +70,8 @@ export default function hotMovieList() {
       switchTab(3)
     }
     fetchBoxOfficeValue();
-  }, [])
+  }, []);
+
 
   // useEffect(()=>{
   //   fetchIncomeValue(0);
@@ -98,9 +99,9 @@ export default function hotMovieList() {
   //   })
   // }
 
-  const switchTab = (current) => {
-    setCurrent(current)
-    fetchIncomeValue(current);
+  const switchTab = tab => {
+    setCurrent(tab)
+    fetchIncomeValue(tab);
   }
 
   return (
