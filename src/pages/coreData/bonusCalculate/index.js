@@ -94,14 +94,14 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     console.log(getValue);
     let postData = {
       computeType: 2,
-      fixedRatioValue: centChangeTenThousand(amount)
+      fixedAmountValue: centChangeTenThousand(amount)
     }
     reqPacking({
       url: 'api/management/finance/contractData/compute',
       data: {
         projectId,
         dataType: calculateIndex,
-        postData
+        ...postData
       },
       method: 'POST',
     }).then((res)=>{
@@ -109,6 +109,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       const {data, success} = res;
       if(success) {
         setComputeResults(centChangeTenThousand(amount));
+        setShowModal(true);
       }
     });
   }
@@ -173,7 +174,6 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     judgeIsSubmit('hasToast');
     if(isSubmit){
       postCompute();
-      setShowModal('提交成功');
     }
   }
 
