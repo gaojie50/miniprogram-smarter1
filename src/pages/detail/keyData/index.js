@@ -32,7 +32,7 @@ export default class KeyData extends React.Component {
   }
   goCoreData = () =>{
     const { basicData, keyData } = this.props;
-    console.log(this.props, basicData, this.state.keyData);
+    console.log(this.props, basicData, this.state.keyData, keyData.afterShowing, !keyData.afterShowing);
     Taro.redirectTo({
       url: `/pages/coreData/index?name=${basicData.name}&projectId=${basicData.projectId}&isMovieScreening=${!keyData.afterShowing}`,
     })

@@ -36,7 +36,7 @@ export default  function realTime({}) {
   const [getValue, setGetValue] =useState('');
   const changeCalculate = useCallback((calculateValue)=>setCalculate(calculateValue), []);
   const childChangeShowProgress = useCallback((childShowProgress)=>setShowProgress(childShowProgress),[]);
-  const isChangeCalculate =  useCallback((isChangeCalculate) => {console.log(123, isChangeCalculate)}, [])
+  // const isChangeCalculate =  useCallback((isChangeCalculate) => {console.log(123, isChangeCalculate)}, [])
 
   const handleBack = () => {
     if(Taro.getCurrentPages().length>1){
@@ -58,168 +58,66 @@ export default  function realTime({}) {
     console.log(index, val, lists);
     var newList = lists.concat();
     newList[index].money = val;
-    newList[index].isChange = true;
     setLists(newList);
-    let count = 0;
-    lists.map((item)=>{
-      if(item.money !== '') {
-        count++
-      }
-    })
-    console.log('lists', lists, newList);
-    console.log(count);
-    if(count == 11) {
-      setIsSubmit(true);
-    }
+    judgeIsSubmit();
   }
 
-  const bottomSubmit = () => {
-    console.log(lists, lists);
+  const judgeIsSubmit = (hasToast) => {
     for(let i = 0; i<11; i++) {
-      if(i != 3 || i != 2 || i!=1 ) {
+      if(i != 3) {
         if(!lists[i].money){
-          Taro.showToast({
+          hasToast && Taro.showToast({
             title: `请填写${lists[i].title}`,
             icon: 'none',
             duration: 2000,
           });
+          setIsSubmit(false);
           return;
         } 
       }
     }
     for(let i = 0; i<11; i++) {
       if(lists[i].money){
-        console.log('lists[i].money', lists[i].money, i);
-        if(lists[i].money.toString().split(".")[1].length>6){
-          Taro.showToast({
-            title: `小数点${lists[i].title}`,
-            icon: 'none',
-            duration: 2000,
-          });
+        if(i!=6) {
+          let judge = lists[i].money.toString().split(".");
+          if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
+            hasToast && Taro.showToast({
+              title: `小数点${lists[i].title}`,
+              icon: 'none',
+              duration: 2000,
+            });
+            setIsSubmit(false);
+            return;
+          }
+        }else{
+          if(Number(lists[i].money)< 0 || Number(lists[i].money)>100 ){
+            hasToast && Taro.showToast({
+              title: `${lists[i].title}填写0~100数值`,
+              icon: 'none',
+              duration: 2000,
+            });
+            setIsSubmit(false);
+            return;
+          }
         }
       }
     }
-
-    
-    // if(!lists[6].money){
-    //   if(+lists[6].money > 100 || +lists[6].money < 0) {
-    //     Taro.showToast({
-    //       title: '请填写0-100直接的数字',
-    //       icon: 'none',
-    //       duration: 2000,
-    //     });
-    //   }
-    //   console.log('!!!!!!!!!!!!!!!!!1', lists[6].money);
-    //   Taro.showToast({
-    //     title: '请填写猫眼份额',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[0].money){
-    //   Taro.showToast({
-    //     title: '请填写票房费用',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[1].money){
-    //   Taro.showToast({
-    //     title: '请先去计算总发行代理费',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[2].money){
-    //   Taro.showToast({
-    //     title: '请先去计算猫眼总发行代理费',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[4].money){
-    //   Taro.showToast({
-    //     title: '请填写猫眼投资成本',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[5].money){
-    //   Taro.showToast({
-    //     title: '请填写投资方成本',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[6].money){
-    //   if(lists[6].money > 100 || lists[6].money < 0) {
-    //     toast("分数应在0-100之间");
-    //     Taro.showToast({
-    //       title: '请填写猫眼份额',
-    //       icon: 'none',
-    //       duration: 2000,
-    //     });
-    //   }
-    //   return;
-    // }
-    // if(!lists[7].money){
-    //   Taro.showToast({
-    //     title: '请填写猫眼份额转让费',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[8].money){
-    //   Taro.showToast({
-    //     title: '请填写宣发费用中猫眼票补收入',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[9].money){
-    //   Taro.showToast({
-    //     title: '请填写宣发费用中已花费片方票补',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[10].money){
-    //   Taro.showToast({
-    //     title: '请填写宣发费用中猫眼平台资源收入',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    // if(!lists[11].money){
-    //   Taro.showToast({
-    //     title: '请填写宣发费用中猫眼平台已获得资源收入',
-    //     icon: 'none',
-    //     duration: 2000,
-    //   });
-    //   return;
-    // }
-    postDataValue();
+    setIsSubmit(true);
   }
+
+  const bottomSubmit = () => {
+    judgeIsSubmit('hasToast');
+    if(isSubmit) {
+      postDataValue();
+    }
+  }
+
   const postDataValue = () => {
     console.log('getValue, lists', getValue, lists);
     const data = getValue || {};
     for(let item of lists) {
-      if (item.isChange) {
-        if(item.dataIndex !== 'myShare'){
-          data[item.dataIndex] = centChangeTenThousand(item.money);
-        }else{
-          data[item.dataIndex] = Number(item.money);
-        }
+      if(item.dataIndex !== 'myShare'){
+        data[item.dataIndex] = centChangeTenThousand(item.money);
       }
     }
     console.log('post合同参数', data);
@@ -272,17 +170,19 @@ export default  function realTime({}) {
 
 
   useEffect(()=>{
+    console.log('paramIndex', paramIndex);
     if(paramIndex == '0') {
       getContractData();
     } else {
       getValueData();
     }
     console.log('useEffect', calculate, paramIndex);
-  }, []);
+  }, [paramIndex]);
 
   useEffect(()=>{
     console.log(calculate);
   },[calculate])
+
   useEffect(()=>{
     getContractData();
   },[showProgress])
@@ -302,7 +202,7 @@ export default  function realTime({}) {
         let newData = Object.assign('', data);
         setGetValue(res.data);
         for(let key in newData) {
-          newData[key] = numberFormat(newData[key])
+          newData[key] = numberFormat(newData[key], true)
         }
         for(let key in lists) {
           lists[key].money = newData[lists[key].dataIndex];

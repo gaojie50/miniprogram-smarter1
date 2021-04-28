@@ -4,7 +4,6 @@ export const REALTIME_DATA_LISTS = [
         title: '宣发费用',
         money: '',
         dataIndex: 'advertisingCosts',
-        isChange: false,
         unit: '万',
       },
       {
@@ -13,7 +12,6 @@ export const REALTIME_DATA_LISTS = [
         money: '',
         dataIndex: 'distributionAgencyFee',
         toCalculate: '去计算',
-        isChange: false,
         unit: '万',
       },
       {
@@ -22,7 +20,6 @@ export const REALTIME_DATA_LISTS = [
         toCalculate: '去计算',
         money: '',
         dataIndex: 'myDistributionAgencyFee',
-        isChange: false,
         unit: '万',
       },
       {
@@ -31,7 +28,6 @@ export const REALTIME_DATA_LISTS = [
         toCalculate: '去计算',
         money: '',
         dataIndex: 'creatorDividend',
-        isChange: false,
         unit: '万',
       },
       {
@@ -39,7 +35,6 @@ export const REALTIME_DATA_LISTS = [
         remarks: '',
         money: '',
         dataIndex: 'myInvestment',
-        isChange: false,
         unit: '万',
       },
       {
@@ -47,7 +42,6 @@ export const REALTIME_DATA_LISTS = [
         remarks: '以合同为准',
         money: '',
         dataIndex: 'productionCosts',
-        isChange: false,
         unit: '万',
       },
       {
@@ -55,7 +49,6 @@ export const REALTIME_DATA_LISTS = [
         remarks: '',
         money: '',
         dataIndex: 'myShare',
-        isChange: false,
         unit: '%',
       },
       {
@@ -63,7 +56,6 @@ export const REALTIME_DATA_LISTS = [
         remarks: '',
         money: '',
         dataIndex: 'myShareTransferIncome',
-        isChange: false,
         unit: '万',
       },
       {
@@ -71,7 +63,6 @@ export const REALTIME_DATA_LISTS = [
         remarks: '',
         money: '',
         dataIndex: 'ticketAllowanceIncome',
-        isChange: false,
         unit: '万',
       },
       {
@@ -79,7 +70,6 @@ export const REALTIME_DATA_LISTS = [
         remarks: '',
         money: '',
         dataIndex: 'platformResourceIncome',
-        isChange: false,
         unit: '万',
       },
       {
@@ -87,7 +77,6 @@ export const REALTIME_DATA_LISTS = [
         remarks: '',
         money: '',
         dataIndex: 'otherIncome',
-        isChange: false,
         unit: '万',
       },
     ],
