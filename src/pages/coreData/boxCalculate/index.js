@@ -236,7 +236,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       }
     }
     if(lists[1][0].isOnclick) {
-      if(!coefficient){
+      if(coefficient = ''){
         hasToast && Taro.showToast({
           title: `请填写系数`,
           icon: 'none',
@@ -257,7 +257,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       }
     }
     if(lists[1][1].isOnclick) {
-      if(!amount){
+      if(amount = ''){
         hasToast && Taro.showToast({
           title: `请填写金额`,
           icon: 'none',
