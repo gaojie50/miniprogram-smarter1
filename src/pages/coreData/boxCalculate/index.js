@@ -73,14 +73,14 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
           ladderLists.map((item)=> {
             if(item.dataName.includes('boxLevel')) {
               console.log('123');
-              item.value = numberFormat(progressionValue[item.dataName], true);
+              item.value = numberFormat(progressionValue[item.dataName], false);
             } else{
               item.value = progressionValue[item.dataName];
             }
           })
         }
         
-        setAmount(numberFormat(fixedAmountValue, true));
+        setAmount(numberFormat(fixedAmountValue, false));
         setGetValue(res.data);
         // setGetProgressionValue(progressionValue);
         // setFixedAmountValue(fixedAmountValue);

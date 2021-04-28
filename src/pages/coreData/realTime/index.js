@@ -201,13 +201,13 @@ export default  function realTime({}) {
         let newData = Object.assign('', data);
         setGetValue(res.data);
         for(let key in newData) {
-          newData[key] = numberFormat(newData[key], true)
+          newData[key] = numberFormat(newData[key], false)
         }
         for(let key in lists) {
           lists[key].money = newData[lists[key].dataIndex];
         }
         setValueData(newData);
-        console.log('data', data, lists, newData);
+        // console.log('data', data, lists, newData);
         setLists(lists);
       } else {
         Taro.showToast({
