@@ -21,10 +21,10 @@ export default  function realTime({}) {
     'api/management/finance/defaultParameter/get',
   ]
   const url = Taro.getCurrentPages();
-  const paramIndex = url[0].options.paramIndex;
+  const paramIndex = url[url.length-1].options.paramIndex;
   const projectId = Number(url[0].options.projectId);
-  const name = url[0].options.name;
-  const isMovieScreening = url[0].options.isMovieScreening;
+  const name = url[url.length-1].options.name;
+  const isMovieScreening = url[url.length-1].options.isMovieScreening;
   const [showProgress, setShowProgress] = useState(false);
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState();
   const [lists, setLists] = useState(listsInfo[paramIndex]);
