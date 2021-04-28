@@ -159,7 +159,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       console.log('judge', judge);
       if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
         hasToast && Taro.showToast({
-          title: `小数点固定金额`,
+          title: `小数点后最多6位`,
           icon: 'none',
           duration: 2000,
         });
@@ -289,7 +289,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           }
         </View>
       } */}
-      <View className='prance'><Input placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value);}}></Input><Text className='unit1'>万</Text></View> 
+      <View className='prance'><Input type='digit' placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value);}}></Input><Text className='unit1'>万</Text></View> 
       <AtModal isOpened={showModal} closeOnClickOverlay={false}>
         <AtModalContent className='modal-box'>
           <View className='modal-title'>{incomeName}</View>
