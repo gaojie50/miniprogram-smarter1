@@ -50,7 +50,7 @@ export default function hotMovieList() {
       method: 'GET',
     }).then(res => {
         const { success, data = {}, error } = res;
-        console.log('多种收入数据', res);
+        console.log('多种收入数据', current, res);
         if (success) {
           setResponse(data)
         } else {
@@ -77,9 +77,9 @@ export default function hotMovieList() {
     fetchBoxOfficeValue();
   }, [isMovieScreening])
 
-  // useEffect(()=>{
-  //   fetchIncomeValue(1);
-  // }, [current])
+  useEffect(()=>{
+    fetchIncomeValue(0);
+  }, [])
 
   const handleBack = () => {
     if(Taro.getCurrentPages().length>1){

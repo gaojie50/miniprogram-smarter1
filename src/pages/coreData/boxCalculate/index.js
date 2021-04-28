@@ -53,7 +53,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       url: 'api/management/finance/contractData/computeRule/get',
       data: {
         projectId,
-        dataType: calculateIndex ? 1 : 2
+        dataType: calculateIndex
 
       }
     }).then((res)=>{
@@ -212,8 +212,13 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   
   useEffect(()=>{
     getComputeRule();
-    console.log('123', showProgress);
-  }, [showProgress])
+    console.log('123showProgress', showProgress, calculateIndex);
+  }, [showProgress, calculateIndex])
+
+  useEffect(()=>{
+    cleanAllValue();
+    console.log('123calculateIndex', calculateIndex);
+  }, [calculateIndex])
 
   // 计算按钮是否可以计算
   useEffect(()=>{
@@ -228,6 +233,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   useEffect(()=>{
     console.log('showModal', showModal);
   },[showModal])
+
   return(
     <View className='box-calculate'>
       <View className='calculate-title'>计算基数</View>

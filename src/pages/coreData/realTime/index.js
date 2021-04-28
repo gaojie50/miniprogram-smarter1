@@ -74,8 +74,141 @@ export default  function realTime({}) {
   }
 
   const bottomSubmit = () => {
-    postDataValue();
+    console.log(lists, lists);
+    for(let i = 0; i<11; i++) {
+      if(i != 3 || i != 2 || i!=1 ) {
+        if(!lists[i].money){
+          Taro.showToast({
+            title: `请填写${lists[i].title}`,
+            icon: 'none',
+            duration: 2000,
+          });
+          return;
+        } 
+      }
+    }
+    for(let i = 0; i<11; i++) {
+      if(lists[i].money){
+        console.log('lists[i].money', lists[i].money, i);
+        if(lists[i].money.toString().split(".")[1].length>6){
+          Taro.showToast({
+            title: `小数点${lists[i].title}`,
+            icon: 'none',
+            duration: 2000,
+          });
+        }
+      }
+    }
+
     
+    // if(!lists[6].money){
+    //   if(+lists[6].money > 100 || +lists[6].money < 0) {
+    //     Taro.showToast({
+    //       title: '请填写0-100直接的数字',
+    //       icon: 'none',
+    //       duration: 2000,
+    //     });
+    //   }
+    //   console.log('!!!!!!!!!!!!!!!!!1', lists[6].money);
+    //   Taro.showToast({
+    //     title: '请填写猫眼份额',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[0].money){
+    //   Taro.showToast({
+    //     title: '请填写票房费用',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[1].money){
+    //   Taro.showToast({
+    //     title: '请先去计算总发行代理费',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[2].money){
+    //   Taro.showToast({
+    //     title: '请先去计算猫眼总发行代理费',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[4].money){
+    //   Taro.showToast({
+    //     title: '请填写猫眼投资成本',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[5].money){
+    //   Taro.showToast({
+    //     title: '请填写投资方成本',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[6].money){
+    //   if(lists[6].money > 100 || lists[6].money < 0) {
+    //     toast("分数应在0-100之间");
+    //     Taro.showToast({
+    //       title: '请填写猫眼份额',
+    //       icon: 'none',
+    //       duration: 2000,
+    //     });
+    //   }
+    //   return;
+    // }
+    // if(!lists[7].money){
+    //   Taro.showToast({
+    //     title: '请填写猫眼份额转让费',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[8].money){
+    //   Taro.showToast({
+    //     title: '请填写宣发费用中猫眼票补收入',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[9].money){
+    //   Taro.showToast({
+    //     title: '请填写宣发费用中已花费片方票补',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[10].money){
+    //   Taro.showToast({
+    //     title: '请填写宣发费用中猫眼平台资源收入',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    // if(!lists[11].money){
+    //   Taro.showToast({
+    //     title: '请填写宣发费用中猫眼平台已获得资源收入',
+    //     icon: 'none',
+    //     duration: 2000,
+    //   });
+    //   return;
+    // }
+    postDataValue();
   }
   const postDataValue = () => {
     console.log('getValue, lists', getValue, lists);
@@ -139,10 +272,10 @@ export default  function realTime({}) {
 
 
   useEffect(()=>{
-    if(paramIndex !== '0') {
-      getValueData();
-    } else {
+    if(paramIndex == '0') {
       getContractData();
+    } else {
+      getValueData();
     }
     console.log('useEffect', calculate, paramIndex);
   }, []);
@@ -150,6 +283,9 @@ export default  function realTime({}) {
   useEffect(()=>{
     console.log(calculate);
   },[calculate])
+  useEffect(()=>{
+    getContractData();
+  },[showProgress])
 
   const getContractData = () => {
     reqPacking({
