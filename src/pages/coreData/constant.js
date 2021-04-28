@@ -114,7 +114,7 @@ export const REALTIME_DATA_LISTS = [
       {
         title: '猫眼选座交易额占比',
         remarks: '计算公式：实时猫眼选座交易额/已产生的票房',
-        dataIndex:'myOnlineGMVRatio',
+        dataIndex:'myGmvRatio',
         unit: '%',
       },
       {
@@ -126,7 +126,7 @@ export const REALTIME_DATA_LISTS = [
       {
         title: '宣发费用中已花费片方票补',
         remarks: '',
-        dataIndex: 'pianTicketallowanceExpended',
+        dataIndex: 'pianTicketAllowanceExpended',
         unit: '',
       },
       {
