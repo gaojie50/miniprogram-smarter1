@@ -23,7 +23,7 @@ export const lists = [
           unit: '万',
         },
         {
-          key: 'myOnlineGMV',
+          key: 'myGmv',
           title: '猫眼选座交易额',
           remarks: '',
           money: 0,
@@ -39,7 +39,7 @@ export const lists = [
       ],
       [
         {
-          key: 'futureBoxSplitIncome',
+          key: 'boxSplitIncome',
           title: '中国大陆境内地区未来分账票房空间',
           remarks: '计算公式：未来票房空间*（已产生分账票房/已产生累计票房)',
           money: 0,
@@ -379,7 +379,14 @@ export const lists = [
           unit: '万',
         },
         {
-          key: 'myOnlineGMV',
+          key: 'futureBox',
+          title: '未来票房空间',
+          remarks: '计算公式：中国大陆境内地区票房收入预测-已产生票房',
+          money: 0,
+          unit: '万',
+        },
+        {
+          key: 'myGmv',
           title: '猫眼选座交易额',
           remarks: '',
           money: 0,
@@ -552,7 +559,7 @@ export const listsAfter = [
       unit: '万',
     },
     {
-      key: 'myOnlineGMV',
+      key: 'myGmv',
       title: '猫眼选座交易额',
       remarks: '',
       money: 0,

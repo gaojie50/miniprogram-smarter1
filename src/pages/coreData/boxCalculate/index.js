@@ -56,16 +56,18 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       const { success, error, data } = res;
       console.log('发行代理', res);
       if (success && data) {
-        const {baseType, computeType, progressionType = 1, progressionValue, fixedRatioValue, fixedAmountValue} = data;
+        const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
         lists[0].map((item, index)=>{
           item.isOnclick = (baseType === index+1)
         })
         lists[1].map((item, index)=>{
           item.isOnclick = (computeType === index+1)
         })
-        lists[2].map((item, index)=>{
-          item.isOnclick = (progressionType === index+1)
-        })
+        if(progressionType){
+          lists[2].map((item, index)=>{
+            item.isOnclick = (progressionType === index+1)
+          })
+        }
         if(lists[1][2].isOnclick) {
           ladderLists.map((item)=> {
             if(item.dataName.includes('boxLevel')) {
