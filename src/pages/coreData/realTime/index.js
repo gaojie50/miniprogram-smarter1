@@ -68,7 +68,7 @@ export default  function realTime({}) {
   const judgeIsSubmit = (hasToast) => {
     for(let i = 0; i<11; i++) {
       if(i != 3) {
-        if(lists[i].money == ''){
+        if(lists[i].money === ''){
           hasToast && Taro.showToast({
             title: `请填写${lists[i].title}`,
             icon: 'none',
@@ -174,8 +174,16 @@ export default  function realTime({}) {
 
   // 合同参数数据请求
   useEffect(()=>{
+    console.log('showProgress1', showProgress);
     if (paramIndex === '0') {
-      getContractData('AgencyFee');
+      getContractData();
+    }
+  }, []);
+    // 合同参数数据请求
+  useEffect(()=>{
+    console.log('showProgress2', showProgress);
+    if (paramIndex === '0') {
+      getContractData('1');
     }
   }, [showProgress]);
 
@@ -204,11 +212,13 @@ export default  function realTime({}) {
         let newData = Object.assign('', data);
         setGetValue(res.data);
         for(let key in newData) {
-          newData[key] = numberFormat(newData[key], false)
+          if(key!=='myShare') {
+            newData[key] = numberFormat(newData[key], false)
+          }
         }
         if(AgencyFee) {
-          lists['distributionAgencyFee'].money = newData['distributionAgencyFee']
-          lists['myDistributionAgencyFee'].money = newData['myDistributionAgencyFee']
+          lists[1].money = newData['distributionAgencyFee']
+          lists[2].money = newData['myDistributionAgencyFee']
         } else{
           for(let key in lists) {
             lists[key].money = newData[lists[key].dataIndex];

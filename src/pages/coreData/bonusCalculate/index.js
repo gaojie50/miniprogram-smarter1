@@ -146,7 +146,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
 
 
   const judgeIsSubmit = (hasToast) => {
-    if(amount == ''){
+    if(amount === ''){
       hasToast && Taro.showToast({
         title: `请填写金额`,
         icon: 'none',
