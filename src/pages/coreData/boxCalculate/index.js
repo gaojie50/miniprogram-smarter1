@@ -56,6 +56,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       const { success, error, data } = res;
       console.log('发行代理', res);
       if (success && data) {
+        cleanAllValue();
         const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
         lists[0].map((item, index)=>{
           item.isOnclick = (baseType === index+1)
@@ -187,7 +188,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   const judgeIsSubmit = (hasToast) => {
     if(lists[1][2].isOnclick) {
       for(let i = 0; i<6; i++) {
-        if(!ladderLists[i].value){
+        if(ladderLists[i].value == ''){
           hasToast && Taro.showToast({
             title: `请填写${ladderLists[i].name}`,
             icon: 'none',
@@ -288,7 +289,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   }, [changeCalculate, calculate])
   
   useEffect(()=>{
-    cleanAllValue();
     if (showProgress && calculateIndex) {
       getComputeRule();
     }

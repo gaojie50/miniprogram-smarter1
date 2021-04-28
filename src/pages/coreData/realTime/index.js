@@ -68,7 +68,7 @@ export default  function realTime({}) {
   const judgeIsSubmit = (hasToast) => {
     for(let i = 0; i<11; i++) {
       if(i != 3) {
-        if(!lists[i].money){
+        if(lists[i].money == ''){
           hasToast && Taro.showToast({
             title: `请填写${lists[i].title}`,
             icon: 'none',
@@ -175,7 +175,7 @@ export default  function realTime({}) {
   // 合同参数数据请求
   useEffect(()=>{
     if (paramIndex === '0') {
-      getContractData();
+      getContractData('AgencyFee');
     }
   }, [showProgress]);
 
@@ -190,7 +190,7 @@ export default  function realTime({}) {
     console.log(calculate);
   },[calculate]);
 
-  const getContractData = () => {
+  const getContractData = (AgencyFee) => {
     reqPacking({
       url:`api/management/finance/contractData/get`,
       data: {
@@ -206,8 +206,13 @@ export default  function realTime({}) {
         for(let key in newData) {
           newData[key] = numberFormat(newData[key], false)
         }
-        for(let key in lists) {
-          lists[key].money = newData[lists[key].dataIndex];
+        if(AgencyFee) {
+          lists['distributionAgencyFee'].money = newData['distributionAgencyFee']
+          lists['myDistributionAgencyFee'].money = newData['myDistributionAgencyFee']
+        } else{
+          for(let key in lists) {
+            lists[key].money = newData[lists[key].dataIndex];
+          }
         }
         setValueData(newData);
         // console.log('data', data, lists, newData);
