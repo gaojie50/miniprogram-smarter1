@@ -9,7 +9,8 @@ import './index.scss';
 import {numberFormat, centChangeTenThousand} from '../common'
 import { get as getGlobalData } from '../../../global_data';
 
-export default function BonusCalculate({calculateIndex, incomeName, calculate, showProgress, changeCalculate, childChangeShowProgress, projectId}) {
+export default function BonusCalculate({calculateIndex, incomeName, calculate, showProgress, changeCalculate, childChangeShowProgress, projectId, paramIndex}) {
+  if (paramIndex !== '0') return null;
   const reqPacking = getGlobalData('reqPacking');
   // const butList = [
   //   [ {text: '固定比例', isOnclick: true}, {text: '固定金额', isOnclick: false}, {text: '阶梯', isOnclick: false} ],
