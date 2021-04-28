@@ -13,7 +13,7 @@ page image {
   .create-wrap {
     background: #FFFFFF;
     border-radius: 40px 40px 0 0;
-    padding: 40px 30px 180px 30px;
+    padding: 40px 30px 240px 30px;
     .title,.title-input {
       font-size: 38px;
       font-weight: 600;
@@ -82,7 +82,7 @@ page image {
       .method-list-wrap {
         margin-top: 30px;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         .method-item {
           width: 216px;
           height: 70px;
@@ -92,6 +92,7 @@ page image {
           border-radius: 10px;
           color: #333;
           font-size: 28px;
+          margin-right: 20px;
           &.active {
             background-color: rgba(39,111,240,0.10);
             color: #276FF0;
@@ -194,6 +195,29 @@ page image {
           color: #276FF0;
           font-weight: 600;
         }
+      }
+    }
+
+
+    .endtime-wrap {
+      margin-top: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      .title {
+        font-weight: 500;
+        font-size: 34px;
+        color: #333333;
+        line-height: 34px;
+      }
+      .time {
+        float: right;
+        font-weight: 400;
+        font-size: 28px;
+        color: #333333;
+        text-align: right;
+        line-height: 28px;
       }
     }
   
