@@ -12,9 +12,9 @@ import './index.scss'
 export default function hotMovieList() {
   const reqPacking = getGlobalData('reqPacking');
   const url = Taro.getCurrentPages();
-  const name = url[0].options.name;
-  const projectId = url[0].options.projectId;
-  const isMovieScreening = (url[0].options.isMovieScreening == 'true');
+  const options = url[url.length - 1].options;
+  const { name, projectId } = options;
+  const isMovieScreening = (options.isMovieScreening == 'true');
   const [current, setCurrent] = useState(isMovieScreening ? 0 : 3);
   const [boxOffice, setBoxOffice] = useState({});
   const [response, setResponse] = useState({});
