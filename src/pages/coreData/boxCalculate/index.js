@@ -176,7 +176,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     newLadderLists[index].value = val;
     console.log(newLadderLists);
     setladderLists(newLadderLists);
-    judgeIsSubmit();
+    // judgeIsSubmit();
     // let count1 = 0;
     // ladderLists.map((item)=>{
     //   if(item.value !== '') {
@@ -304,16 +304,14 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     cleanAllValue();
     console.log('123calculateIndex', calculateIndex);
   }, [calculateIndex])
+  // useEffect(()=>{
+  //   judgeIsSubmit();
+  // },[lists])
 
   // 计算按钮是否可以计算
-  // useEffect(()=>{
-  //   if((lists[1][2].isOnclick && count == 6) || (lists[1][0].isOnclick && coefficient) || (lists[1][1].isOnclick && amount) ) {
-  //     setIsSubmit(true);
-  //   }else{
-  //     setIsSubmit(false);
-  //   }
-  //   // setLists(lists);
-  // }, [ladderLists, coefficient, amount, lists]);
+  useEffect(()=>{
+    judgeIsSubmit();
+  }, [ladderLists, coefficient, amount, lists]);
   
   useEffect(()=>{
     console.log('showModal', showModal);

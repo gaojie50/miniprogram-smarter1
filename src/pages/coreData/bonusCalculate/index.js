@@ -40,7 +40,6 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   const [computeResults, setComputeResults] = useState('');
 
   const cleanAllValue =() => {
-    setAmountIsChange(false);
     // setLists(bonusButList);
     setCoefficient('');
     setAmount('');
@@ -76,7 +75,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         // ladderLists.map((item)=> {
         //   item.value = progressionValue[item.dataName]
         // })
-        setAmount(numberFormat(fixedAmountValue));
+        setAmount(numberFormat(fixedAmountValue, true));
         setGetValue(res.data);
         // setCoefficient(fixedRatioValue);
         // setProportionA(fixedRatioBoxValue);
@@ -94,7 +93,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     console.log(getValue);
     let postData = {
       computeType: 2,
-      fixedRatioValue: amountIsChange ? centChangeTenThousand(amount) : getValue.fixedRatioValue,
+      fixedRatioValue: centChangeTenThousand(amount)
     }
     reqPacking({
       url: 'api/management/finance/contractData/compute',
@@ -108,7 +107,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       console.log('提交规则', res)
       const {data, success} = res;
       if(success) {
-        setComputeResults(amountIsChange ? centChangeTenThousand(amount) : getValue.fixedRatioValue);
+        setComputeResults(centChangeTenThousand(amount));
       }
     });
   }
@@ -143,21 +142,41 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   //   setCount(count1);
   // }
 
-  const bottomSubmit = () => {
-    if(isSubmit){
-      postCompute();
-      setShowModal('提交成功');
-    }else{
-      Taro.showToast({
-        title: '请填写完全',
+
+  const judgeIsSubmit = (hasToast) => {
+    if(!amount){
+      hasToast && Taro.showToast({
+        title: `请填写金额`,
         icon: 'none',
         duration: 2000,
       });
+      setIsSubmit(false);
+      return;
+    } else{
+      let judge = amount.toString().split(".");
+      console.log('judge', judge);
+      if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
+        hasToast && Taro.showToast({
+          title: `小数点固定金额`,
+          icon: 'none',
+          duration: 2000,
+        });
+        setIsSubmit(false);
+        return;
+      }
+    }
+    setIsSubmit(true);
+  }
+
+  const bottomSubmit = () => {
+    judgeIsSubmit('hasToast');
+    if(isSubmit){
+      postCompute();
+      setShowModal('提交成功');
     }
   }
 
   const recalculate = useCallback(()=>{
-    setAmountIsChange(false);
     changeCalculate(1000);
     setShowModal(false);
     childChangeShowProgress(false);
@@ -165,19 +184,19 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   
 
   useEffect(()=>{
-    // if((lists[0][2].isOnclick && count == 6) || (lists[0][0].isOnclick && coefficient) || (lists[0][1].isOnclick && amount) ) {
-    if(amountIsChange){
-      setIsSubmit(true);
-    }else{
-      setIsSubmit(false);
-    }
-    // setLists(lists);
-  }, [amountIsChange]);
+    getComputeRule();
+    setIsSubmit(false);
+  }, []);
 
   useEffect(()=>{
-    getComputeRule()
-    console.log('lists, calculateIndex', lists, calculateIndex);
-  }, []);
+    judgeIsSubmit();
+  }, [amount])
+
+  useEffect(()=>{
+    if(!showProgress) {
+      setIsSubmit(false);
+    }
+  },[showProgress])
 
   return(
     <View className='box-calculate'>
@@ -269,7 +288,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           }
         </View>
       } */}
-      <View className='prance'><Input placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value); setAmountIsChange(true)}}></Input><Text className='unit1'>万</Text></View> 
+      <View className='prance'><Input placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value);}}></Input><Text className='unit1'>万</Text></View> 
       <AtModal isOpened={showModal} closeOnClickOverlay={false}>
         <AtModalContent className='modal-box'>
           <View className='modal-title'>{incomeName}</View>

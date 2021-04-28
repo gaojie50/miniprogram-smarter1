@@ -15,7 +15,7 @@ export default function hotMovieList() {
   const name = url[0].options.name;
   const projectId = url[0].options.projectId;
   const isMovieScreening = (url[0].options.isMovieScreening == 'true');
-  const [current, setCurrent] = useState(1);
+  const [current, setCurrent] = useState(isMovieScreening ? 0 : 3);
   const [boxOffice, setBoxOffice] = useState({});
   const [response, setResponse] = useState({});
 
@@ -73,9 +73,9 @@ export default function hotMovieList() {
   }, []);
 
 
-  // useEffect(()=>{
-  //   fetchIncomeValue(0);
-  // }, [])
+  useEffect(()=>{
+    fetchIncomeValue(current);
+  }, [current])
 
   const handleBack = () => {
     if(Taro.getCurrentPages().length>1){
