@@ -22,7 +22,7 @@ export default  function realTime({}) {
   ]
   const url = Taro.getCurrentPages();
   const paramIndex = url[url.length-1].options.paramIndex;
-  const projectId = Number(url[0].options.projectId);
+  const projectId = Number(url[url.length-1].options.projectId);
   const name = url[url.length-1].options.name;
   const isMovieScreening = url[url.length-1].options.isMovieScreening;
   const [showProgress, setShowProgress] = useState(false);
