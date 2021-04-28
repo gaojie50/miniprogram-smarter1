@@ -118,6 +118,8 @@ export default  function realTime({}) {
     for(let item of lists) {
       if(item.dataIndex !== 'myShare'){
         data[item.dataIndex] = centChangeTenThousand(item.money);
+      } else {
+        data[item.dataIndex] = item.money;
       }
     }
     console.log('post合同参数', data);

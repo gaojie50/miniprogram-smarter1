@@ -16,7 +16,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   const bonusButList = [
     [ {text: '票房分账收入', isOnclick: true}, {text: '净票房收入', isOnclick: false} ],
     [ {text: '固定比例', isOnclick: false}, {text: '固定金额', isOnclick: false}, {text: '阶梯', isOnclick: true} ],
-    [ {text: '超额累进', isOnclick: false}, {text: '全额累进', isOnclick: true} ]
+    [ {text: '超额累进', isOnclick: true}, {text: '全额累进', isOnclick: false} ]
   ]
   const ladderListsInfo = [
     {name:'A', unit:'万', value:'', dataName: 'boxLevelA'},
@@ -57,7 +57,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       const { success, error, data } = res;
       console.log('发行代理', res);
       if (success && data) {
-        const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
+        const {baseType, computeType, progressionType = 1, progressionValue, fixedRatioValue, fixedAmountValue} = data;
         lists[0].map((item, index)=>{
           item.isOnclick = (baseType === index+1)
         })
