@@ -114,11 +114,11 @@ const EndTimePicker = function(props) {
     return selectHourIndex === -1 ? 0 : selectHourIndex;
   };
 
-  const handleEndTimeChange = () => {
+  const handleEndTimeChange = e => {
     let newTime = dayList[value[0]] === -1 ? '' : dayjs(dayList[value[0]]).add(hourList[value[1]], 'hours').valueOf();
 
-    props.onEndTimeChange(newTime);
-    props.onClose();
+    props.onEndTimeChange(newTime,e);
+    props.onClose(e);
   };
 
 

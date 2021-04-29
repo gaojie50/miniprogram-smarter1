@@ -3,27 +3,30 @@ import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import dayjs from 'dayjs';
 import utils from '@utils';
+import reqPacking from '@utils/reqPacking.js';
 import EndTimePicker from '@components/endtime-picker';
 import './index.scss';
 
 const { calcWeek } = utils;
-export default function EvaluateTime({ deadLine }) {
-  deadLine = +new Date() + 65 * 1000;
+export default function EvaluateTime({ deadLine,projectId,roundId,setStopScroll }) {
   let now = +new Date();
   const [timing, setTiming] = useState(false);
   const [line, setLine] = useState(deadLine);
   const [seconds, setSeconds] = useState(Math.floor((line - now) / 1000));
-  const [modalSwitch,setModalSwitch] = useState(false);
+  const [modalSwitch, setModalSwitch] = useState(false);
   const noLimit = line == undefined;
   let [isEnd, setIsEnd] = useState(noLimit ? false : (now >= line));
 
   if (!noLimit && !isEnd && !timing) setTiming(true);
 
-  function modal() {
+  function modal(event) {
+    setStopScroll(true);
     setModalSwitch(true);
   };
 
-  function modalClose(){
+  function modalClose(e) {
+    e.stopPropagation();
+    setStopScroll(false);
     setModalSwitch(false);
   }
 
@@ -37,6 +40,10 @@ export default function EvaluateTime({ deadLine }) {
             setTiming(false);
             setIsEnd(true);
             clearInterval(interval)
+
+            Taro.redirectTo({
+              url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`
+            })
 
             return 0
           } else {
@@ -76,9 +83,22 @@ export default function EvaluateTime({ deadLine }) {
     <EndTimePicker
       onEndTimeChange={
         newLine => {
-          setTiming(false);
-          setLine(newLine);
-          setSeconds(Math.floor((newLine - new Date()) / 1000));
+          reqPacking({
+            url: '/api/applet/management/update',
+            data: {
+              deadline: newLine,
+              projectId,
+              roundId,
+            }
+          }).then(res => {
+            const { error } = res;
+
+            if (!error) {
+              setTiming(false);
+              setLine(newLine);
+              setSeconds(Math.floor((newLine - new Date()) / 1000));
+            }
+          })
         }
       }
       onClose={modalClose}

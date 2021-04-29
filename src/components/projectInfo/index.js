@@ -8,7 +8,7 @@ import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 const {getEvaluationLabel} = projectConfig
-export default function ProjectInfo({ deadLine, projectId, roundId, info, showParticipantNumber }) {
+export default function ProjectInfo({ deadLine, projectId, roundId, info, showParticipantNumber,setStopScroll,rollingDistance }) {
   const fillZero = num => num < 10 ? `0${num}` : num;
 
   const {
@@ -28,7 +28,11 @@ export default function ProjectInfo({ deadLine, projectId, roundId, info, showPa
     <View className="detail">第{round}轮 / {getEvaluationLabel(evaluationMethod)}{showParticipantNumber && (<Text> / {participantNumber}人参与</Text>)}</View>
     {
       userInfo.id === userId ? 
-        <EvaluateTime deadLine={deadLine}/> : 
+        <EvaluateTime 
+          roundId={roundId}
+          projectId={projectId}
+          setStopScroll={setStopScroll}
+          deadLine={deadLine}/> : 
         <View className="sign">{fillZero(round)}</View>
     }
   </View>

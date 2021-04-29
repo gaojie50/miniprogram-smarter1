@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
-import { View, Block } from '@tarojs/components';
+import { View,ScrollView,Block } from '@tarojs/components';
 import { get as getGlobalData } from '../../global_data';
 import ProjectInfo from '../../components/projectInfo';
 import CoreSection from '../../components/coreSection';
@@ -27,7 +27,7 @@ export default function Result() {
   const [info, setInfo] = useState({});
   const [projectEvaluationName, setProjectEvaluationName] = useState('');
   const isLogin = Taro.getStorageSync('token');
-
+  const [stopScroll,setStopScroll] = useState(false);
 
   const fetchJudgeRole = () => {
     reqPacking({
@@ -154,7 +154,13 @@ export default function Result() {
   } = result;
   const noEvalText = isLeader(projectRole) ? "还没有人发布过评估内容" : "自行填答后，才能看到其他人的评估内容";
   const showParticipantNumber = isDockingPerson(judgeRole);
-  return <View className="result">
+  const permissions = +new Date() >= deadLine && [1,2,3].includes(projectRole);
+
+  return <ScrollView 
+    enhanced bounces={false}
+    scrollY={!stopScroll}
+    className="result" 
+    style={stopScroll ? { position:'fixed', width:'100%' } : "" }>
     {!isLogin ? (
       <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
     ) : (
@@ -164,6 +170,7 @@ export default function Result() {
         info={info} 
         projectId={projectId} 
         roundId={roundId} 
+        setStopScroll={setStopScroll}
         showParticipantNumber={showParticipantNumber}/>
       <View className="result-cont">
         {
@@ -191,6 +198,7 @@ export default function Result() {
                       title={item.title}
                       questionNum={index + (coreExist ? 2 : 1)}
                       texts={item.texts || []}
+                      permissions={ /* permissions */true }
                     />;
                   }
   
@@ -252,7 +260,7 @@ export default function Result() {
         />
       </Block>
     )}
-    
+
     <FingerPrint />
-  </View>
+  </ScrollView>
 }
