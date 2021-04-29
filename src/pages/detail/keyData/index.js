@@ -39,7 +39,7 @@ export default class KeyData extends React.Component {
   }
 
   render() {
-    const { basicData, keyData, judgeRole } = this.props;
+    const { basicData, keyData, judgeRole, projectInfo } = this.props;
     const {totalIncome} = keyData;
     const newTotalIncome = totalIncome/100 || ''; // totalIncome返回的是以分为计算单位的值
     return (
@@ -166,8 +166,7 @@ export default class KeyData extends React.Component {
               </View>
             </ScrollView>
             {
-              judgeRole.role !== 1 ? ''  
-              : 
+              judgeRole.role === 1 && projectInfo && projectInfo.category === 3 && (
               <View>
                 <View className="keyData-bottom">
                   <View className="left">
@@ -204,6 +203,7 @@ export default class KeyData extends React.Component {
                   </View>
                 </View>
               </View>
+              )
             }
           </Block>
         }
