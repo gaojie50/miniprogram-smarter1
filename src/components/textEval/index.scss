@@ -53,18 +53,30 @@
       @include arrow;
     }
   }
+  .textarea-wrap{
+    position: relative;
 
-  .textarea{
-    background: #F8F8F8;
-    border-radius: 10px;
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    font-weight: 400;
-    font-family: PingFangSC-Regular;
-    font-size: 24px;
-    color: #333333;
-    line-height: 36px;
+    .textarea{
+      background: #F8F8F8;
+      border-radius: 10px;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #333333;
+      line-height: 36px;
+    }
+  
+    .editable{
+      width: 118px;
+      height: 103px;
+      position: absolute;
+      z-index: 1;
+      right: 0;
+      top: 0;
+    }
   }
 }
 

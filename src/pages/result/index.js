@@ -28,7 +28,7 @@ export default function Result() {
   const [projectEvaluationName, setProjectEvaluationName] = useState('');
   const isLogin = Taro.getStorageSync('token');
   const [stopScroll,setStopScroll] = useState(false);
-
+  const [resultPageTextTitleEditingGuideState,setResultPageTextTitleEditingGuideState] = useState(Taro.getStorageSync('ResultPageTextTitleEditingGuide'));
   const fetchJudgeRole = () => {
     reqPacking({
       url: 'api/management/judgeRole',
@@ -195,6 +195,8 @@ export default function Result() {
                   if (item.type == 1) {
                     return <TextEval
                       key={index}
+                      resultPageTextTitleEditingGuideState={resultPageTextTitleEditingGuideState}
+                      setResultPageTextTitleEditingGuideState={setResultPageTextTitleEditingGuideState}
                       title={item.title}
                       questionNum={index + (coreExist ? 2 : 1)}
                       texts={item.texts || []}
