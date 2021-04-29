@@ -66,7 +66,7 @@ export const REALTIME_DATA_LISTS = [
         unit: '万',
       },
       {
-        title: '宣发费用中猫眼平台资源收入',
+        title: '宣发费用中猫眼票补收入（含税）',
         remarks: '',
         money: '',
         dataIndex: 'platformResourceIncome',
