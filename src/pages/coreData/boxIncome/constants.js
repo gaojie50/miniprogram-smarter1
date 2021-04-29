@@ -125,7 +125,7 @@ export const lists = [
         {
           key: 'netIncome',
           title: '净收入',
-          remarks: '计算公式：片方应得收入—总扣除',
+          remarks: '计算公式：片方应得收入-总扣除',
           money: 0,
           unit: '万',
         },
@@ -192,7 +192,7 @@ export const lists = [
         {
           key: 'total',
           title: '宣发收入',
-          remarks: '计算公式：票补收入+平台资源收入+扣除：已花片方票补+扣除：已获得资源收入',
+          remarks: '计算公式：票补收入+平台资源收入+其它收入-扣除：已花片方票补-扣除：已获得资源收入-扣除：已获得其它收入',
           money: 0,
           unit: '万',
         },
@@ -310,7 +310,7 @@ export const lists = [
         {
           key: 'netIncome',
           title: '净收入',
-          remarks: '计算公式：片方应得收入+总扣除',
+          remarks: '计算公式：片方应得收入-总扣除',
           money: 0,
           unit: '万',
         },
@@ -488,7 +488,7 @@ export const lists = [
         {
           key: 'netIncome',
           title: '净收入',
-          remarks: '计算公式：片方应得收入+总扣除',
+          remarks: '计算公式：片方应得收入-总扣除',
           money: 0,
           unit: '万',
         },
@@ -661,7 +661,7 @@ export const listsAfter = [
     {
       key: 'netIncome',
       title: '净收入',
-      remarks: '计算公式：片方应得收入+总扣除',
+      remarks: '计算公式：片方应得收入-总扣除',
       money: 0,
       unit: '万',
     },
