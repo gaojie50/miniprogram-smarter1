@@ -144,7 +144,7 @@ export default  function realTime({}) {
           icon: 'none',
           duration: 2000,
         });
-      setTimeout(()=> handleBack(), 2000);
+      setTimeout(()=> handleBack(), 500);
       }else {
         Taro.showToast({
           title: error && error.message || '',
@@ -179,7 +179,6 @@ export default  function realTime({}) {
 
   // 合同参数数据请求
   useEffect(()=>{
-    console.log('showProgress1', showProgress);
     if (paramIndex === '0') {
       getContractData();
     }
@@ -198,10 +197,6 @@ export default  function realTime({}) {
       getValueData();
     }
   }, []);
-
-  useEffect(()=>{
-    console.log(calculate);
-  },[calculate]);
 
 
   const getContractData = (AgencyFee) => {
@@ -233,6 +228,7 @@ export default  function realTime({}) {
         setValueData(newData);
         // console.log('data', data, lists, newData);
         setLists(lists);
+        judgeIsSubmit();
       } else {
         Taro.showToast({
           title: error && error.message || '',
