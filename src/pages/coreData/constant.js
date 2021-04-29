@@ -134,6 +134,12 @@ export const REALTIME_DATA_LISTS = [
         remarks: '计算公式：(已产生票房/票房收入预测)*宣发费用中猫眼平台资源收入',
         dataIndex: 'platformResourceIncomeGot',
         unit: '',
+      },
+      {
+        title: '宣发费用中猫眼平台已获得的其它收入',
+        remarks: '计算公式：(已产生票房/票房收入预测)*其它收入',
+        dataIndex: 'otherIncomeGot',
+        unit: '',
       }
     ],
     [
