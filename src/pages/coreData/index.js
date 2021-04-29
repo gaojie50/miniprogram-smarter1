@@ -108,9 +108,8 @@ export default function hotMovieList() {
             <Text className='header-title'>{name||''}</Text>
           </View>
         </View>
-        <DateBar />
       </View>
-      {/* <DateBar /> */}
+      <DateBar />
       { isMovieScreening ?
         <View>
           {/* <View className='list-header'>
