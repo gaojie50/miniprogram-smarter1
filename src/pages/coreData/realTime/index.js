@@ -251,7 +251,7 @@ export default  function realTime({}) {
           </View>
         </View>
       </View>
-      <ScrollView className='detail' scrollY>
+      <ScrollView className={`${paramIndex=='0' ? 'detail-con' : 'detail'}`} scrollY>
         {lists.map((list, index)=>{
           return(
             (paramIndex !== '0' ?
