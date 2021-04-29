@@ -7,7 +7,7 @@ import '@components/m5/style/components/input.scss';
 import './index.scss'
 import BoxCalculate from '../boxCalculate';
 import BonusCalculate from '../bonusCalculate';
-import { numberFormat, centChangeTenThousand } from '../common'
+import { numberFormat, centChangeTenThousand, numberFormatCent } from '../common'
 import { get as getGlobalData } from '../../../global_data';
 import { REALTIME_DATA_LISTS as listsInfo } from '../constant';
 
@@ -198,6 +198,10 @@ export default  function realTime({}) {
     console.log(calculate);
   },[calculate]);
 
+  useEffect(()=>{
+    judgeIsSubmit();
+  },[])
+
   const getContractData = (AgencyFee) => {
     reqPacking({
       url:`api/management/finance/contractData/get`,
@@ -213,7 +217,7 @@ export default  function realTime({}) {
         setGetValue(res.data);
         for(let key in newData) {
           if(key!=='myShare') {
-            newData[key] = numberFormat(newData[key], false)
+            newData[key] = numberFormatCent(newData[key])
           }
         }
         if(AgencyFee) {
