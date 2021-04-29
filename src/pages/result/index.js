@@ -198,8 +198,12 @@ export default function Result() {
                       resultPageTextTitleEditingGuideState={resultPageTextTitleEditingGuideState}
                       setResultPageTextTitleEditingGuideState={setResultPageTextTitleEditingGuideState}
                       title={item.title}
+                      projectId={projectId}
+                      roundId={roundId}
                       questionNum={index + (coreExist ? 2 : 1)}
                       texts={item.texts || []}
+                      isAppendContent={!!item?.isAppendContent}
+                      summaryText={item?.summaryText||""}
                       permissions={ /* permissions */true }
                     />;
                   }

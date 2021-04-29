@@ -84,7 +84,7 @@ export default function EvaluateTime({ deadLine,projectId,roundId,setStopScroll 
       onEndTimeChange={
         newLine => {
           reqPacking({
-            url: '/api/applet/management/update',
+            url: 'api/applet/management/update',
             data: {
               deadline: newLine,
               projectId,

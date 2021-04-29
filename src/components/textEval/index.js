@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
 import { View, Image, Text, Textarea } from '@tarojs/components';
 import FloatLayout from '@components/m5/float-layout';
+import Taro from '@tarojs/taro';
+import reqPacking from '@utils/reqPacking.js';
 import './index.scss';
 
-export default function TextEval({ title, questionNum, texts, permissions,resultPageTextTitleEditingGuideState,setResultPageTextTitleEditingGuideState }) {
+export default function TextEval({ 
+  title, 
+  questionNum, 
+  texts, 
+  permissions,
+  resultPageTextTitleEditingGuideState,
+  setResultPageTextTitleEditingGuideState,
+  isAppendContent,
+  summaryText,
+}) {
   const [packUp, setPackUp] = useState(true);
-  const [describe, setDescribe] = useState('ewewewew');
+  const [describe, setDescribe] = useState(summaryText);
   const shrinkEvt = () => setPackUp(!packUp);
   const [showProgress, setShowProgress] = useState(false);
   const [itemLimit, setItemLimit] = useState(5);
@@ -35,6 +46,18 @@ export default function TextEval({ title, questionNum, texts, permissions,result
   const inputDescribe = ({ detail }) => setDescribe(detail.value);
 
   const blurEvent = () => {
+    reqPacking({
+      url: 'api/applet/management/update',
+      data: {
+        projectId,
+        roundId,
+        texts:describe,
+        isAppendContent,
+      }
+    }).then(res => {
+      const { error } = res;
+
+    })
 
   };
 
@@ -94,7 +117,7 @@ export default function TextEval({ title, questionNum, texts, permissions,result
           onFocus={focusEvent}
           value={describe}
           placeholderStyle={'color:#ccc;'}
-          placeholder="添加进展描述" />
+          placeholder="暂无汇总内容" />
       </View> : detailCont()
     }
 
