@@ -10,7 +10,7 @@ import './index.scss';
 
 let aInterval;
 export default function dateBar(props){
-  const { callBack, minDate, maxDate, needButtons, needInterval } = props;
+  const { callBack, minDate, maxDate, needButtons, needInterval, style } = props;
   const [time, setTime] = useState('');
   const [day, setDay] = useState('');
   const [now, setNow] = useState('');
@@ -74,7 +74,7 @@ export default function dateBar(props){
   }
 
   return (
-    <View className="date-bar-component">
+    <View className="date-bar-component" style={style} >
       <View className="left-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() => changeDay(-1)}>前一天</View>
       <View className="middle-block">
         <View className="date"  onClick={() => showSelect()}> 

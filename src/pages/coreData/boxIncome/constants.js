@@ -110,7 +110,7 @@ export const lists = [
         },
         {
           key: 'productionCosts',
-          title: '扣除：投资方回本',
+          title: '扣除：投资方成本',
           remarks: '比例以合同为准，计算公式：投资方成本*（1-影片已产生票房/票房收入预测）',
           money: 0,
           unit: '万',
@@ -125,7 +125,7 @@ export const lists = [
         {
           key: 'netIncome',
           title: '净收入',
-          remarks: '计算公式：片方应得收入+总扣除',
+          remarks: '计算公式：片方应得收入—总扣除',
           money: 0,
           unit: '万',
         },
@@ -295,7 +295,7 @@ export const lists = [
         },
         {
           key: 'productionCosts',
-          title: '扣除：投资方回本',
+          title: '扣除：投资方成本',
           remarks: '比例以合同为准，计算公式：投资方成本*（影片已产生票房/票房收入预测）',
           money: 0,
           unit: '万',
@@ -473,7 +473,7 @@ export const lists = [
         },
         {
           key: 'productionCosts',
-          title: '扣除：投资方回本',
+          title: '扣除：投资方成本',
           remarks: '比例以合同为准，计算公式：投资方成本*（影片已产生票房/票房收入预测）',
           money: 0,
           unit: '万',
@@ -646,7 +646,7 @@ export const listsAfter = [
     },
     {
       key: 'productionCosts',
-      title: '扣除：投资方回本',
+      title: '扣除：投资方成本',
       remarks: '以合同为准',
       money: 0,
       unit: '万',

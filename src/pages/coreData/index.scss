@@ -1,13 +1,14 @@
-page {
-  overflow: scroll !important;
+.scroll-box {
+  height: 100vh;
 }
+
 .detail-top {
   width: 100%;
   box-sizing: border-box;
   position: fixed;
-  background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
-  z-index: 0;
-  top: 105px;
+  background: white;
+  z-index: 10;
+  top: 0px;
   .header {
     position: relative;
     width: 100%;
@@ -29,10 +30,14 @@ page {
       vertical-align: middle;
     }
   }
-}
-
-.date-bar-component {
-  margin-top: 165rpx;
+  .top {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
+  }
 }
 
 .list-header {

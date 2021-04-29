@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'; 
-import { View, Image, Text } from '@tarojs/components';
+import { View, Image, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import ArrowLeft from '@static/detail/arrow-left.png';
 import BoxOfficeData from './boxOffice/index'
 import { get as getGlobalData } from '../../global_data';
 import DateBar from '@components/dateBar';
 import {numberFormat} from './common'
+import utils from '@utils/index.js'
 // const reqPacking = getGlobalData('reqPacking');
 import './index.scss'
 
 export default function hotMovieList() {
+  const { rpxTopx } = utils;
+  const capsuleLocation = getGlobalData('capsuleLocation');
+  const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
   const reqPacking = getGlobalData('reqPacking');
   const url = Taro.getCurrentPages();
   const options = url[url.length - 1].options;
@@ -98,77 +102,77 @@ export default function hotMovieList() {
   }
 
   return (
-    <View>
-      <View className='detail-top'>
-        <View className='top'>
-          <View className='header'>
-            <View className='backPage' onClick={handleBack}>
-              <Image src={ArrowLeft}></Image>
+      <ScrollView className='scroll-box' scrollY style={{ minHeight: `calc(100vh - ${headerBarHeight})px` }}>
+        <View className='detail-top' style={{ height: `${headerBarHeight}px` }}>
+          <View className='top'>
+            <View className='header'>
+              <View className='backPage' onClick={handleBack}>
+                <Image src={ArrowLeft}></Image>
+              </View>
+              <Text className='header-title'>{name||''}</Text>
             </View>
-            <Text className='header-title'>{name||''}</Text>
           </View>
         </View>
-      </View>
-      <DateBar />
-      { isMovieScreening ?
-        <View>
-          {/* <View className='list-header'>
-            <View className='list-header-left'>全国</View>
-            <View className='list-header-img'>
-              <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
-            </View>
-            <View className='list-header-right' onClick={()=>{gotoCityList()}} >各地区产生票房及占比</View>
-            <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
-          </View> */}
-          <View className='box-office'>
-            <View className='office'>
-              <View className='office-title'>预测日票房</View>
-              <View className='office-num'>{numberFormat(boxOffice.estimateBoxByDay)}<Text className='unit'>万</Text></View>
-            </View>
-            <View className='office'>
-              <View className='office-title'>预测总票房</View>
-              <View className='office-num'>{numberFormat(boxOffice.estimateBox)}<Text className='unit'>万</Text></View>
-            </View>
-            <View className='office'>
-              <View className='office-title'>已产生票房</View>
-              <View className='office-num'>{numberFormat(boxOffice.cumulateBox)}<Text className='unit'>万</Text></View>
-            </View>
-            <View className='office'>
-              <View className='office-title'>未来票房</View>
-              <View className='office-num'>{numberFormat(boxOffice.futureBox)}<Text className='unit'>万</Text></View>
-            </View>
-          </View> 
-        </View> : ''
-      }
-      { isMovieScreening ? 
-        <View className="detail-tabs" >
-          <View className="detail-tabs-header" id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
-            <View onClick={()=> switchTab(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>未来收入</View>
-            <View onClick={()=> switchTab(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>已实现收入</View>
-            <View onClick={()=> switchTab(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>总收入</View>
-          </View>
-          <View className="detail-tabs-body">
+        <DateBar style={{ marginTop: headerBarHeight }} />
+        { isMovieScreening ?
             <View>
-              <BoxOfficeData
-                response={response}
-                current={current}
-                projectId={projectId}
-                isMovieScreening={isMovieScreening}
-                name={name}
-              ></BoxOfficeData>
+              {/* <View className='list-header'>
+                <View className='list-header-left'>全国</View>
+                <View className='list-header-img'>
+                  <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
+                </View>
+                <View className='list-header-right' onClick={()=>{gotoCityList()}} >各地区产生票房及占比</View>
+                <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
+              </View> */}
+              <View className='box-office'>
+                <View className='office'>
+                  <View className='office-title'>预测日票房</View>
+                  <View className='office-num'>{numberFormat(boxOffice.estimateBoxByDay)}<Text className='unit'>万</Text></View>
+                </View>
+                <View className='office'>
+                  <View className='office-title'>预测总票房</View>
+                  <View className='office-num'>{numberFormat(boxOffice.estimateBox)}<Text className='unit'>万</Text></View>
+                </View>
+                <View className='office'>
+                  <View className='office-title'>已产生票房</View>
+                  <View className='office-num'>{numberFormat(boxOffice.cumulateBox)}<Text className='unit'>万</Text></View>
+                </View>
+                <View className='office'>
+                  <View className='office-title'>未来票房</View>
+                  <View className='office-num'>{numberFormat(boxOffice.futureBox)}<Text className='unit'>万</Text></View>
+                </View>
+              </View> 
+            </View> : ''
+        }
+        { isMovieScreening ? 
+          <View className="detail-tabs" >
+            <View className="detail-tabs-header" id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
+              <View onClick={()=> switchTab(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>未来收入</View>
+              <View onClick={()=> switchTab(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>已实现收入</View>
+              <View onClick={()=> switchTab(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>总收入</View>
             </View>
+            <View className="detail-tabs-body">
+              <View>
+                <BoxOfficeData
+                  response={response}
+                  current={current}
+                  projectId={projectId}
+                  isMovieScreening={isMovieScreening}
+                  name={name}
+                ></BoxOfficeData>
+              </View>
+            </View>
+          </View> :
+          <View className='screened-box'>
+            <BoxOfficeData
+              response={response}
+              current={current}
+              isMovieScreening={isMovieScreening}
+              projectId={projectId}
+              name={name}
+            ></BoxOfficeData>
           </View>
-        </View> :
-        <View className='screened-box'>
-          <BoxOfficeData
-            response={response}
-            current={current}
-            isMovieScreening={isMovieScreening}
-            projectId={projectId}
-            name={name}
-          ></BoxOfficeData>
-        </View>
-      }
-    </View>
+        }
+      </ScrollView>
   );
 }
