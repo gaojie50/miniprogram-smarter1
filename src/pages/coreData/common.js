@@ -1,6 +1,5 @@
 // 分换算成万，并保留两位小数, null的时候是‘-’
 export const numberFormat = (number) => {
-  console.log('number', number);
   if(number == null) {
     return '-'
   }
@@ -13,7 +12,6 @@ export const numberFormat = (number) => {
 
 // 分换算成万, null的时候是‘’
 export const numberFormatCent = (number) => {
-  console.log('number', number);
   if(number == null) {
     return ''
   }

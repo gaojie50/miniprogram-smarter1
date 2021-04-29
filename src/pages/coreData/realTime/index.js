@@ -198,9 +198,6 @@ export default  function realTime({}) {
     console.log(calculate);
   },[calculate]);
 
-  useEffect(()=>{
-    judgeIsSubmit();
-  },[])
 
   const getContractData = (AgencyFee) => {
     reqPacking({

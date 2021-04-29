@@ -75,13 +75,9 @@ export default function hotMovieList() {
   }, [current])
 
   const handleBack = () => {
-    if(Taro.getCurrentPages().length>1){
-      Taro.navigateBack();
-    }else{
-      Taro.redirectTo({
-        url: `/pages/detail/index?projectId=${projectId}`
-      })
-    }
+    Taro.redirectTo({
+      url: `/pages/detail/index?projectId=${projectId}`
+    })
   }
 
   // const handleParam = () => {
