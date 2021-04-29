@@ -110,7 +110,6 @@ export default function hotMovieList() {
         </View>
         <DateBar />
       </View>
-      {/* <DateBar /> */}
       { isMovieScreening ?
         <View>
           {/* <View className='list-header'>
