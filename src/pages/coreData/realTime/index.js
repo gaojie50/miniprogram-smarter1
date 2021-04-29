@@ -139,7 +139,12 @@ export default  function realTime({}) {
       console.log(res);
       if(success) {
         console.log(res.data);
-        // wx.navigateBack()
+        Taro.showToast({
+          title: '提交成功',
+          icon: 'none',
+          duration: 2000,
+        });
+      setTimeout(()=> handleBack(), 2000);
       }else {
         Taro.showToast({
           title: error && error.message || '',
