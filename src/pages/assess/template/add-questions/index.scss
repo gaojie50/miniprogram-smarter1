@@ -113,14 +113,20 @@
         margin-top: 20px;
         .options-item-wrap {
           margin-bottom: 20px;
-          background: #F8F8F8;
           border-radius: 10px;
+          display: flex;
           .option-fill {
+            background: #F8F8F8;
             padding: 16px 20px;
             font-weight: 400;
             font-size: 28px;
             color: #333333;
             line-height: 40px;
+            flex-grow: 1;
+            border-radius: 10px;
+          }
+          .delete-btn {
+            color: #666;
           }
         }
       }

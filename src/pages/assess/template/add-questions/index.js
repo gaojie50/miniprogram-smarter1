@@ -1,11 +1,13 @@
 /* eslint-disable jsx-quotes */
 import React, { useState } from 'react';
+import Taro from '@tarojs/taro';
 import {
   View,
   Button,
   Textarea,
   Input
 } from '@tarojs/components';
+import _cloneDeep from 'lodash/cloneDeep';
 import AtFloatLayout from '@components/m5/float-layout';
 import FixedButton from '@components/fixedButton';
 import '@components/m5/style/components/float-layout.scss';
@@ -39,7 +41,7 @@ const AddQuestions = function(props) {
 
   const [ selectType, setSelectType ] = useState(DEFAULT_QUESTYPE);
   const [ selectUnit, setSelectUnit ] = useState();
-  const [ options, setOptions ] = useState([]);
+  const [ options, setOptions ] = useState(['']);
 
   const handleSave = ()=> {
     props.onAdd();
@@ -54,12 +56,23 @@ const AddQuestions = function(props) {
     setSelectUnit(unit)
   }
 
-  const handleDelete = index => {
-    let newOptions = options.slice(index, index+1);
-    setOptions(newOptions);
+  const handleDeleteOption = index => {
+    options.splice(index, 1);
+    console.log(options);
+    setOptions(_cloneDeep(options));
   }
 
-  console.log(selectUnit);
+  const handleAddOption = () => {
+    options.push('');
+    setOptions(_cloneDeep(options));
+  }
+
+  const handleInput = ({target}, index) => {
+    let innerValue = target.value.trim();
+    options[index] = innerValue;
+    setOptions(_cloneDeep)
+  }
+
   return (
     <AtFloatLayout
       className="add-questions-component"
@@ -115,14 +128,28 @@ const AddQuestions = function(props) {
             <View className="ques-select-wrap">
               <View className="title-wrap">
                 <View className="title">选项名称</View>
-                <View className="add-btn">+添加选型</View>
+                <View className="add-btn" onClick={handleAddOption}>+添加选项</View>
               </View>
               
               <View className="options-list">
-                <View className="options-item-wrap">
-                  <Input type="text" placeholder="请输入" className="option-fill" />
-                  <View className="delete-btn" onClick={()=>{handleDelete()}}>删除</View>
-                </View>
+                {options.map((item,index)=>{
+                  return (
+                    <View className="options-item-wrap" key={index}>
+                      <Input
+                        type="text"
+                        placeholder="请输入"
+                        className="option-fill"
+                        onInput={(e)=>{handleInput(e, index)}}
+                        value={item}
+                      />
+                      {options.length > 1 && (
+                        <View className="delete-btn" onClick={()=>{handleDeleteOption(index)}}>
+                          <View className="smarter-iconfont icon-delete" style={{ fontSize: '44rpx' }} />
+                        </View>
+                      )}
+                    </View>
+                  )
+                })}
               </View>
             </View>
           )
