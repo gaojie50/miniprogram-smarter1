@@ -1,14 +1,27 @@
-// 分换算成万，并保留两位小数
-export const numberFormat = (number, isFixed = true) => {
+// 分换算成万，并保留两位小数, null的时候是‘-’
+export const numberFormat = (number) => {
   console.log('number', number);
+  if(number == null) {
+    return '-'
+  }
   let resNumber = number/1000000;
+  if(!Number.isNaN(number) && !Number.isNaN(resNumber)) {
+    return parseFloat(resNumber.toFixed(2));
+  }
+  return '-'
+}
+
+// 分换算成万, null的时候是‘’
+export const numberFormatCent = (number) => {
+  console.log('number', number);
   if(number == null) {
     return ''
   }
+  let resNumber = number/1000000;
   if(!Number.isNaN(number) && !Number.isNaN(resNumber)) {
-    return isFixed ? parseFloat(resNumber.toFixed(2)) : parseFloat(resNumber) ;
+    return parseFloat(resNumber) ;
   }
-  return '-'
+  return ''
 }
 
 export const centChangeTenThousand = (number) => {

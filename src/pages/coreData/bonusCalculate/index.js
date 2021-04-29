@@ -6,7 +6,7 @@ import AtModalContent from '@components/m5/modal/content';
 import AtModalAction from '@components/m5/modal/action'
 import '@components/m5/style/components/modal.scss';
 import './index.scss';
-import {numberFormat, centChangeTenThousand} from '../common'
+import {numberFormat, centChangeTenThousand, numberFormatCent} from '../common'
 import { get as getGlobalData } from '../../../global_data';
 
 export default function BonusCalculate({calculateIndex, incomeName, calculate, showProgress, changeCalculate, childChangeShowProgress, projectId, paramIndex}) {
@@ -76,7 +76,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         // ladderLists.map((item)=> {
         //   item.value = progressionValue[item.dataName]
         // })
-        setAmount(numberFormat(fixedAmountValue, true));
+        setAmount(numberFormatCent(fixedAmountValue));
         setGetValue(res.data);
         // setCoefficient(fixedRatioValue);
         // setProportionA(fixedRatioBoxValue);

@@ -7,7 +7,7 @@ import AtModalContent from '@components/m5/modal/content';
 import AtModalAction from '@components/m5/modal/action'
 import '@components/m5/style/components/modal.scss';
 import './index.scss'
-import {numberFormat, centChangeTenThousand} from '../common'
+import {numberFormat, centChangeTenThousand, numberFormatCent} from '../common'
 import { get as getGlobalData } from '../../../global_data';
 
 export default function BoxCalculate({calculateIndex, incomeName, calculate, showProgress, changeCalculate, childChangeShowProgress, projectId, paramIndex}) {
@@ -72,14 +72,13 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         if(lists[1][2].isOnclick) {
           ladderLists.map((item)=> {
             if(item.dataName.includes('boxLevel')) {
-              item.value = numberFormat(progressionValue[item.dataName], false);
+              item.value = numberFormatCent(progressionValue[item.dataName]);
             } else{
               item.value = progressionValue[item.dataName];
             }
           })
         }
-        
-        setAmount(numberFormat(fixedAmountValue, false));
+        setAmount(numberFormatCent(fixedAmountValue));
         setGetValue(res.data);
         setCoefficient(fixedRatioValue);
       } else {
