@@ -79,7 +79,7 @@ export default function hotMovieList() {
       Taro.navigateBack();
     }else{
       Taro.redirectTo({
-        url: `/pages/board/index`
+        url: `/pages/detail/index?projectId=${projectId}`
       })
     }
   }
