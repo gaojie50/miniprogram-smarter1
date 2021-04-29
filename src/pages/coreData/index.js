@@ -11,6 +11,8 @@ import utils from '@utils/index.js'
 import './index.scss'
 
 export default function hotMovieList() {
+  const systemInfo = Taro.getSystemInfoSync();
+  console.log(systemInfo);
   const { rpxTopx } = utils;
   const capsuleLocation = getGlobalData('capsuleLocation');
   const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
@@ -102,7 +104,7 @@ export default function hotMovieList() {
   }
 
   return (
-      <ScrollView className='scroll-box' scrollY style={{ minHeight: `calc(100vh - ${headerBarHeight})px` }}>
+      <View>
         <View className='detail-top' style={{ height: `${headerBarHeight}px` }}>
           <View className='top'>
             <View className='header'>
@@ -113,7 +115,8 @@ export default function hotMovieList() {
             </View>
           </View>
         </View>
-        <DateBar style={{ marginTop: headerBarHeight }} />
+        <ScrollView scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, marginTop: headerBarHeight}}>
+        <DateBar />
         { isMovieScreening ?
             <View>
               {/* <View className='list-header'>
@@ -173,6 +176,7 @@ export default function hotMovieList() {
             ></BoxOfficeData>
           </View>
         }
-      </ScrollView>
+        </ScrollView>
+      </View>
   );
 }
