@@ -556,7 +556,7 @@ export const listsAfter = [
       title: '猫眼票务收入占比',
       remarks: '',
       money: 0,
-      unit: '万',
+      unit: '%',
     },
     {
       key: 'myGmv',
