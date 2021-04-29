@@ -59,7 +59,8 @@ export default class Detail extends React.Component {
       evaluation: [],
       history: [],
       releaseDataList: {},
-      showCompetePanel: false
+      showCompetePanel: false,
+      projectInfo: {},
     }
   }
 
@@ -168,7 +169,8 @@ export default class Detail extends React.Component {
           data.newMainRole = newMainRole;
           this.setState({
             basicData: data,
-            loading: false
+            loading: false,
+            projectInfo: data,
           }, () => {
             this.fetchJudgeRole();
             // this.fetchRole();
@@ -426,6 +428,7 @@ export default class Detail extends React.Component {
       setBgColor,
       releaseDataList,
       showCompetePanel,
+      projectInfo,
     } = this.state;
     const releaseTimeArry = keyData?.releaseTime?.time?.match(/-/g);
     const textFn = () => <View className='launch-text'><Image src="https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/eidt.png" />发起机器预测票房</View>;
@@ -480,6 +483,7 @@ export default class Detail extends React.Component {
             basicData={basicData}
             keyData={keyData}
             judgeRole={judgeRole}
+            projectInfo={projectInfo}
             changeKeyData={data => this.handleChangeKeyData(data)}
           /> 
           {basicData.category === 3 && judgeRole?.releaseStage === 1 && judgeRole?.role !== 2? (
