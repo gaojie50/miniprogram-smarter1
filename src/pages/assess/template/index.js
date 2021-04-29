@@ -2,11 +2,13 @@
 import { View, Button, Block } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
+import _cloneDeep from 'lodash/cloneDeep';
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';
 import '@components/m5/style/components/float-layout.scss';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
 import AddQuesionts from './add-questions';
+
 
 
 import './index.scss'
@@ -16,8 +18,10 @@ const { errorHandle } = utils;
 export default function PerviewTemplate(){
 
   const [ questions, setQuestions ] = useState([]);
+  const [ appendQuesList, setAppendQuesList ] = useState([]);
   const { tempId } = getCurrentInstance().router.params;
   const [ isAddOpen, setIsAddOpen ] = useState(false);
+  const [ curEditTemp, setCurEditTemp ] = useState();
 
   useEffect(() => {
     fetchTemp(tempId);
@@ -40,8 +44,8 @@ export default function PerviewTemplate(){
     ).then(res => {
         const { data, error } = res;
         if (!error) {
-          const { questions } = data;
-          setQuestions(questions);
+          const { questions: quesList } = data;
+          setQuestions(quesList);
           Taro.hideLoading();
           errorHandle(error);
           return;
@@ -49,7 +53,7 @@ export default function PerviewTemplate(){
         errorHandle(error);
         Taro.hideLoading();
 
-      }).catch(err=>{
+      }).catch(()=>{
         errorHandle({message: '加载失败'});
         Taro.hideLoading();
       })
@@ -65,42 +69,83 @@ export default function PerviewTemplate(){
   }
 
   const handleAdd = () => {
-    setIsAddOpen( true );
+    setIsAddOpen(true);
   }
 
   const handleAddClose = () => {
-    setIsAddOpen( false );
+    setCurEditTemp('');
+    setIsAddOpen(false);
   }
 
-  const handleAddQuestion = () => {
-    console.log('add');
+  const handleAddQuestion = ( quesItem ) => {
+    quesItem.isAdditional = true;
+    appendQuesList.push(quesItem);
+    setAppendQuesList(appendQuesList);
+    setIsAddOpen(false);
   }
 
+  const handleEditQuestion = ( quesItem ) => {
+    appendQuesList[quesItem.questionNum-questions.length-1] = quesItem;
+    setAppendQuesList(appendQuesList);
+    setIsAddOpen(false);
+  }
+
+  const handleEdit = (item)=> {
+    setIsAddOpen(true);
+    setCurEditTemp(item);
+  }
+
+  const handleDelete = (item, index)=>{
+    Taro.showModal({
+      title: '提示',
+      content: '是否删除该题目',
+      confirmText: '确定',
+      success: function (res) {
+        if (res.confirm) {
+          appendQuesList.splice(index-questions.length,1);
+          setAppendQuesList(_cloneDeep(appendQuesList));
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+   
+  }
+
+
+  const allQuestions = _cloneDeep(questions.concat(appendQuesList));
+  console.log(allQuestions.length);
   return (
     <View className="page-container">
       <View className="template-preview-wrap">
         <Block>
           {
-            questions.map((item,index)=>{
-              const { type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio } = item;
+            allQuestions.map((item,index)=>{
+              const { type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio, isAdditional } = item;
 
               if (type == 1) {
                 return <GapFillingText
                   key={index}
+                  isAdditional={isAdditional}
                   required={required}
                   title={title}
                   isPreview
                   questionNum={questionNum}
+                  onEdit={()=>{handleEdit(item, index)}}
+                  onDelete={()=>{handleDelete(item, index)}}
                 />;
               }
 
               if (type == 2) {
                 return <GapFillingNum
                   key={index}
+                  isAdditional={isAdditional}
                   required={required}
                   isPreview
                   gapFilling={gapFilling}
                   questionNum={questionNum}
+                  onEdit={()=>{handleEdit(item, index)}}
+                  onDelete={()=>{handleDelete(item, index)}}
                 />;
               }
 
@@ -118,11 +163,14 @@ export default function PerviewTemplate(){
               if (type == 4) {
                 return <Radio
                   key={index}
+                  isAdditional={isAdditional}
                   required={required}
                   isPreview
                   title={title}
                   questionNum={questionNum}
                   radioItems={radioItems}
+                  onEdit={()=>{handleEdit(item, index)}}
+                  onDelete={()=>{handleDelete(item, index)}}
                 />;
               }
 
@@ -155,10 +203,15 @@ export default function PerviewTemplate(){
         </Button>
       </View>
       </View>
+
       <AddQuesionts 
+        isEdit={curEditTemp?true:false}
+        lastQuesNum={allQuestions.length}
         isOpened={isAddOpen}
         onClose={handleAddClose}
         onAdd={handleAddQuestion}
+        onEdit={handleEditQuestion}
+        curEditTemp={curEditTemp}
       />
     </View>
   )
