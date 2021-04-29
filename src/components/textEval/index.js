@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
-import { View, Image,Text} from '@tarojs/components';
+import { View, Image, Text, Textarea } from '@tarojs/components';
+import FloatLayout from '@components/m5/float-layout';
+import Taro from '@tarojs/taro';
+import reqPacking from '@utils/reqPacking.js';
 import './index.scss';
 
-const ItemLimit = 5;
-export default function TextEval({ title, questionNum, texts }) {
-  const [ packUp, setPackUp ] = useState(true);
-
+export default function TextEval({ 
+  title, 
+  questionNum, 
+  texts, 
+  permissions,
+  resultPageTextTitleEditingGuideState,
+  setResultPageTextTitleEditingGuideState,
+  isAppendContent,
+  summaryText,
+}) {
+  const [packUp, setPackUp] = useState(true);
+  const [describe, setDescribe] = useState(summaryText);
   const shrinkEvt = () => setPackUp(!packUp);
+  const [showProgress, setShowProgress] = useState(false);
+  const [itemLimit, setItemLimit] = useState(5);
+
   const total = texts.reduce((acc, val) => {
     acc += val.memberList.length;
     return acc;
@@ -17,11 +31,11 @@ export default function TextEval({ title, questionNum, texts }) {
     let num = 0;
 
     return texts.reduce((acc, item) => {
-      if (num >= ItemLimit) return acc;
+      if (num >= itemLimit) return acc;
 
-      acc.push(num + item.memberList.length <= ItemLimit ? item : {
+      acc.push(num + item.memberList.length <= itemLimit ? item : {
         groupName: item.groupName,
-        memberList: item.memberList.filter((v, i) => i < ItemLimit - num)
+        memberList: item.memberList.filter((v, i) => i < itemLimit - num)
       });
 
       num += item.memberList.length;
@@ -29,10 +43,38 @@ export default function TextEval({ title, questionNum, texts }) {
     }, []);
   };
 
-  return <View className="textEval-wrap">
-    <View className="h5">{questionNum}、{title}</View>
+  const inputDescribe = ({ detail }) => setDescribe(detail.value);
 
-    <View className="table-wrap">
+  const blurEvent = () => {
+    reqPacking({
+      url: 'api/applet/management/update',
+      data: {
+        projectId,
+        roundId,
+        texts:describe,
+        isAppendContent,
+      }
+    }).then(res => {
+      const { error } = res;
+
+    })
+
+  };
+
+  const focusEvent= ()=>{
+    if(!resultPageTextTitleEditingGuideState){
+      setResultPageTextTitleEditingGuideState(true);
+      Taro.setStorageSync('ResultPageTextTitleEditingGuide',true);
+    } 
+  }
+
+  const toDetails = () => {
+    if (permissions) setItemLimit(1000);
+    setShowProgress(true);
+  }
+
+  const detailCont = () => {
+    return <View className="table-wrap">
       <View className="table">
         <View className="thead">
           <View className="tr">
@@ -42,17 +84,53 @@ export default function TextEval({ title, questionNum, texts }) {
         </View>
         <View className="tbody">
           {textsHandle(packUp).map(({ groupName, memberList }, turn) =>
-            <React.Fragment key={ turn }>
+            <React.Fragment key={turn}>
               <View className="tr groupName">{groupName}</View>
               {memberList.map(({ name, content }, index) =>
-                <View key={ index } className={ `tr tr-line ${memberList.length == index + 1 ? "no-line" : ""}` }>
+                <View key={index} className={`tr tr-line ${memberList.length == index + 1 ? "no-line" : ""}`}>
                   <Text className="td">{name}</Text>
                   <Text className="td">{content}</Text>
                 </View>)}
             </React.Fragment>)}
-          {total > ItemLimit ? <View className="tr shrink" onClick={ shrinkEvt }>{packUp ? `展开剩余${total - ItemLimit}条` : "收起"}<Image className="arrow" src="../../static/arrow-down.png" /></View> : null}
+          {total > itemLimit ? <View className="tr shrink" onClick={shrinkEvt}>{packUp ? `展开剩余${total - itemLimit}条` : "收起"}<Image className="arrow" src="../../static/arrow-down.png" /></View> : null}
         </View>
       </View>
+    </View>;
+  }
+  return <View className="textEval-wrap">
+    <View className="h5">
+      {questionNum}、{title}
+      {
+        permissions ?
+          <Text className="detail" onClick={toDetails}>评估详情 <Text className="arrow" /></Text> : ''
+      }
     </View>
+    {permissions ?
+      <View className="textarea-wrap">
+        {
+          !resultPageTextTitleEditingGuideState ? <Image className="editable" src="https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/editable.svg"/> : ""
+        }
+        <Textarea
+          className="textarea"
+          onInput={inputDescribe}
+          onBlur={blurEvent}
+          onFocus={focusEvent}
+          value={describe}
+          placeholderStyle={'color:#ccc;'}
+          placeholder="暂无汇总内容" />
+      </View> : detailCont()
+    }
+
+    <FloatLayout
+      isOpened={showProgress}
+      title={title}
+      className='layout-process'
+      onClose={() => {
+        setShowProgress(false);
+      }
+      }
+    >
+      {detailCont()}
+    </FloatLayout>
   </View>;
 }

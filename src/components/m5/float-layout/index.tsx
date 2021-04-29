@@ -40,21 +40,21 @@ export default class AtFloatLayout extends React.Component<
     }
   }
 
-  private handleClose = (): void => {
+  private handleClose = (e): void => {
     if (typeof this.props.onClose === 'function') {
       // TODO: Fix typings
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
-      this.props.onClose()
+      this.props.onClose(e)
     }
   }
 
-  private close = (): void => {
+  private close = (e): void => {
     this.setState(
       {
         _isOpened: false
       },
-      this.handleClose
+      this.handleClose.bind(this,e)
     )
   }
 

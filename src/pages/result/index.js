@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
-import { View, Block } from '@tarojs/components';
+import { View,ScrollView,Block } from '@tarojs/components';
 import { get as getGlobalData } from '../../global_data';
 import ProjectInfo from '../../components/projectInfo';
 import CoreSection from '../../components/coreSection';
@@ -27,8 +27,8 @@ export default function Result() {
   const [info, setInfo] = useState({});
   const [projectEvaluationName, setProjectEvaluationName] = useState('');
   const isLogin = Taro.getStorageSync('token');
-
-
+  const [stopScroll,setStopScroll] = useState(false);
+  const [resultPageTextTitleEditingGuideState,setResultPageTextTitleEditingGuideState] = useState(Taro.getStorageSync('ResultPageTextTitleEditingGuide'));
   const fetchJudgeRole = () => {
     reqPacking({
       url: 'api/management/judgeRole',
@@ -105,7 +105,8 @@ export default function Result() {
       })
     ]).then(resList => {
       const { success, data = {}, error } = resList[0];
-      const { pic } = resList[1].data;
+      //fakeData: userId 
+      const { pic,userId=132 } = resList[1].data;
 
       if(success){
         const {evaluationList =[],name} = data;
@@ -117,6 +118,7 @@ export default function Result() {
           round,
           participantNumber,
           evaluationMethod,
+          userId,
           pic: pic ? picFn(pic) : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/cover.png',
         });
       }
@@ -148,15 +150,28 @@ export default function Result() {
     coreExist,
     categoryType,
     core = {},
+    deadLine,
   } = result;
   const noEvalText = isLeader(projectRole) ? "还没有人发布过评估内容" : "自行填答后，才能看到其他人的评估内容";
   const showParticipantNumber = isDockingPerson(judgeRole);
-  return <View className="result">
+  const permissions = +new Date() >= deadLine && [1,2,3].includes(projectRole);
+
+  return <ScrollView 
+    enhanced bounces={false}
+    scrollY={!stopScroll}
+    className="result" 
+    style={stopScroll ? { position:'fixed', width:'100%' } : "" }>
     {!isLogin ? (
       <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
     ) : (
       <Block>
-      <ProjectInfo info={info} projectId={projectId} roundId={roundId} showParticipantNumber={showParticipantNumber}/>
+      <ProjectInfo 
+        deadLine={deadLine}
+        info={info} 
+        projectId={projectId} 
+        roundId={roundId} 
+        setStopScroll={setStopScroll}
+        showParticipantNumber={showParticipantNumber}/>
       <View className="result-cont">
         {
           !evaluated && !isLeader(projectRole) ? <View className="tip">为了保证评估客观公正，您需填答后才能看到他人的评估内容</View> : ""
@@ -180,9 +195,16 @@ export default function Result() {
                   if (item.type == 1) {
                     return <TextEval
                       key={index}
+                      resultPageTextTitleEditingGuideState={resultPageTextTitleEditingGuideState}
+                      setResultPageTextTitleEditingGuideState={setResultPageTextTitleEditingGuideState}
                       title={item.title}
+                      projectId={projectId}
+                      roundId={roundId}
                       questionNum={index + (coreExist ? 2 : 1)}
                       texts={item.texts || []}
+                      isAppendContent={!!item?.isAppendContent}
+                      summaryText={item?.summaryText||""}
+                      permissions={ /* permissions */true }
                     />;
                   }
   
@@ -244,7 +266,7 @@ export default function Result() {
         />
       </Block>
     )}
-    
+
     <FingerPrint />
-  </View>
+  </ScrollView>
 }

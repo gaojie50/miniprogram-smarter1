@@ -1,10 +1,14 @@
-import { View } from '@tarojs/components';
+/* eslint-disable jsx-quotes */
+import { View, Button, Block } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';
-import FixedButton from '@components/fixedButton';
-import reqPacking from '../../../utils/reqPacking.js'
-import utils from '../../../utils/index';
+import '@components/m5/style/components/float-layout.scss';
+import reqPacking from '@utils/reqPacking.js';
+import utils from '@utils/index';
+import AddQuesionts from './add-questions';
+
+
 import './index.scss'
 
 const { errorHandle } = utils;
@@ -13,6 +17,7 @@ export default function PerviewTemplate(){
 
   const [ questions, setQuestions ] = useState([]);
   const { tempId } = getCurrentInstance().router.params;
+  const [ isAddOpen, setIsAddOpen ] = useState(false);
 
   useEffect(() => {
     fetchTemp(tempId);
@@ -50,87 +55,111 @@ export default function PerviewTemplate(){
       })
   };
 
-  const handleSelect = () =>{
-    const { tempId } = Taro.getCurrentInstance().router.params;
+  const handleUse = () =>{
+    const { tempId:curTempId } = Taro.getCurrentInstance().router.params;
     const pages = Taro.getCurrentPages(); // 获取当前的页面栈
     const current = pages[pages.length - 1];
     const eventChannel = current.getOpenerEventChannel();
-    eventChannel.emit('selectTempId', tempId);
+    eventChannel.emit('selectTempId', curTempId);
     Taro.navigateBack();
   }
 
+  const handleAdd = () => {
+    setIsAddOpen( true );
+  }
+
+  const handleAddClose = () => {
+    setIsAddOpen( false );
+  }
+
+  const handleAddQuestion = () => {
+    console.log('add');
+  }
 
   return (
     <View className="page-container">
       <View className="template-preview-wrap">
-      <View className="">
-        {
-          questions.map((item,index)=>{
-            const { type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio } = item;
+        <Block>
+          {
+            questions.map((item,index)=>{
+              const { type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio } = item;
 
-            if (type == 1) {
-              return <GapFillingText
-                key={ index }
-                required={ required }
-                title={ title }
-                isPreview={ true }
-                questionNum={ questionNum }
-              />;
-            }
+              if (type == 1) {
+                return <GapFillingText
+                  key={index}
+                  required={required}
+                  title={title}
+                  isPreview
+                  questionNum={questionNum}
+                />;
+              }
 
-            if (type == 2) {
-              return <GapFillingNum
-                key={ index }
-                required={ required }
-                isPreview={ true }
-                gapFilling={ gapFilling }
-                questionNum={ questionNum }
-              />;
-            }
+              if (type == 2) {
+                return <GapFillingNum
+                  key={index}
+                  required={required}
+                  isPreview
+                  gapFilling={gapFilling}
+                  questionNum={questionNum}
+                />;
+              }
 
-            if (type == 3) {
-              return <MatrixRadio
-                key={ index }
-                required={ required }
-                isPreview={ true }
-                title={ title }
-                matrixRadio={ matrixRadio }
-                questionNum={ questionNum }
-              />;
-            }
+              if (type == 3) {
+                return <MatrixRadio
+                  key={index}
+                  required={required}
+                  isPreview
+                  title={title}
+                  matrixRadio={matrixRadio}
+                  questionNum={questionNum}
+                />;
+              }
 
-            if (type == 4) {
-              return <Radio
-                key={ index }
-                required={ required }
-                isPreview={ true }
-                title={ title }
-                questionNum={ questionNum }
-                radioItems={ radioItems }
-              />;
-            }
+              if (type == 4) {
+                return <Radio
+                  key={index}
+                  required={required}
+                  isPreview
+                  title={title}
+                  questionNum={questionNum}
+                  radioItems={radioItems}
+                />;
+              }
 
-            if (type == 5) {
-              return <MatrixScale
-                key={ index }
-                required={ required }
-                isPreview={ true }
-                title={ title }
-                questionNum={ questionNum }
-                matrixScale={ matrixScale || {} }
-              />;
-            }
+              if (type == 5) {
+                return <MatrixScale
+                  key={index}
+                  required={required}
+                  isPreview
+                  title={title}
+                  questionNum={questionNum}
+                  matrixScale={matrixScale || {}}
+                />;
+              }
 
-          })
-        }
+            })
+          }
+        </Block>
+        <View className="btn-wrap">
+        <Button
+          className="use_btn btn"
+          onClick={handleUse}
+        >
+            直接使用
+        </Button>
+        <Button
+          className="add_btn btn"
+          onClick={handleAdd}
+        >
+            添加题目
+        </Button>
       </View>
-      <FixedButton 
-        className="select-btn" 
-        onClick={handleSelect}
-      >
-          选择该模板
-      </FixedButton>
-    </View>
+      </View>
+      <AddQuesionts 
+        isOpened={isAddOpen}
+        onClose={handleAddClose}
+        onAdd={handleAddQuestion}
+      />
     </View>
   )
 }
