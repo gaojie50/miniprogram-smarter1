@@ -1,16 +1,13 @@
 /* eslint-disable jsx-quotes */
 import { View, Button, Block } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
-import Taro, { getCurrentInstance } from '@tarojs/taro';
+import Taro, { getCurrentInstance, useDidHide, useDidShow } from '@tarojs/taro';
 import _cloneDeep from 'lodash/cloneDeep';
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';
 import '@components/m5/style/components/float-layout.scss';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
 import AddQuesionts from './add-questions';
-
-
-
 import './index.scss'
 
 const { errorHandle } = utils;
@@ -22,6 +19,21 @@ export default function PerviewTemplate(){
   const { tempId } = getCurrentInstance().router.params;
   const [ isAddOpen, setIsAddOpen ] = useState(false);
   const [ curEditTemp, setCurEditTemp ] = useState();
+
+  const { tempId:curTempId } = Taro.getCurrentInstance().router.params;
+  const pages = Taro.getCurrentPages(); // 获取当前的页面栈
+  const current = pages[pages.length - 1];
+  const eventChannel = current.getOpenerEventChannel();
+
+  useDidShow(()=>{
+    eventChannel.on('previewTemp', data=>{
+      setAppendQuesList(data.appendQuesList);
+    })
+  })
+
+  useDidHide(()=>{
+    eventChannel.off('previewTemp');
+  })
 
   useEffect(() => {
     fetchTemp(tempId);
@@ -60,11 +72,10 @@ export default function PerviewTemplate(){
   };
 
   const handleUse = () =>{
-    const { tempId:curTempId } = Taro.getCurrentInstance().router.params;
-    const pages = Taro.getCurrentPages(); // 获取当前的页面栈
-    const current = pages[pages.length - 1];
-    const eventChannel = current.getOpenerEventChannel();
-    eventChannel.emit('selectTempId', curTempId);
+    eventChannel.emit('selectTemp', {
+      tempId: curTempId,
+      appendQuesList
+    });
     Taro.navigateBack();
   }
 
@@ -77,17 +88,19 @@ export default function PerviewTemplate(){
     setIsAddOpen(false);
   }
 
-  const handleAddQuestion = ( quesItem ) => {
-    quesItem.isAdditional = true;
-    appendQuesList.push(quesItem);
+  const handleQuestion = (type, quesItem)=>{
+    if( type === 'edit' ){
+      appendQuesList[quesItem.questionNum-questions.length-1] = quesItem;
+    }else{
+      quesItem.isAdditional = true;
+      appendQuesList.push(quesItem);
+    }
     setAppendQuesList(appendQuesList);
     setIsAddOpen(false);
-  }
-
-  const handleEditQuestion = ( quesItem ) => {
-    appendQuesList[quesItem.questionNum-questions.length-1] = quesItem;
-    setAppendQuesList(appendQuesList);
-    setIsAddOpen(false);
+    eventChannel.emit('selectTemp', {
+      tempId: curTempId,
+      appendQuesList
+    });
   }
 
   const handleEdit = (item)=> {
@@ -103,7 +116,12 @@ export default function PerviewTemplate(){
       success: function (res) {
         if (res.confirm) {
           appendQuesList.splice(index-questions.length,1);
-          setAppendQuesList(_cloneDeep(appendQuesList));
+          // 重新整理题号
+          let newAppendQuesList = _cloneDeep(appendQuesList).map((qItem, qIndex)=>{
+            qItem.questionNum = qItem.questionId = questions.length + qIndex + 1;
+            return qItem;
+          })
+          setAppendQuesList(newAppendQuesList);
         } else if (res.cancel) {
           console.log('用户点击取消')
         }
@@ -114,7 +132,6 @@ export default function PerviewTemplate(){
 
 
   const allQuestions = _cloneDeep(questions.concat(appendQuesList));
-  console.log(allQuestions.length);
   return (
     <View className="page-container">
       <View className="template-preview-wrap">
@@ -209,8 +226,8 @@ export default function PerviewTemplate(){
         lastQuesNum={allQuestions.length}
         isOpened={isAddOpen}
         onClose={handleAddClose}
-        onAdd={handleAddQuestion}
-        onEdit={handleEditQuestion}
+        onAdd={quesItem=>handleQuestion('add', quesItem)}
+        onEdit={quesItem=>handleQuestion('edit', quesItem)}
         curEditTemp={curEditTemp}
       />
     </View>

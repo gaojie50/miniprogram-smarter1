@@ -1,4 +1,7 @@
 .add-questions-component {
+  .fixed-button-component {
+    z-index: 99;
+  }
   .at-float-layout__container {
     padding: 40px 30px;
   }

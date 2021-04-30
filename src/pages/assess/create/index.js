@@ -22,7 +22,6 @@ import './index.scss';
 
 dayjs.extend(isToday);
 
-
 const { errorHandle, getDefaultEndTime, formatEndTime } = utils;
 
 const METHOD_LIST = [
@@ -52,6 +51,9 @@ export default class AC extends React.Component {
     editorEvaluationName: false,
     evaluationMethod: '',
     tempId: '',
+    appendQuesList: [],  // 附加题
+    // eslint-disable-next-line react/no-unused-state
+    appendMap: {},  // 附加题和原题关系
     titleErrorTip: false,
     despErrorTip: false,
     projectProfile: [],
@@ -296,7 +298,6 @@ export default class AC extends React.Component {
 
     if (sign === 'profile') {
       let valueArr = filesChecked.filter(file => file !== uid);
-
       return this.setState({
         primaryFilesChecked: valueArr,
         filesChecked: valueArr,
@@ -316,12 +317,22 @@ export default class AC extends React.Component {
     Taro.navigateTo({
       url: `/pages/assess/template/index?tempId=${tempId}`,
       events: {
-        selectTempId(data) {
+        selectTemp(data) {
           if (data) {
-            that.setState({ tempId: Number(data) });
+            const { appendMap } = that.state;
+            appendMap[tempId] = data.appendQuesList;
+            that.setState({ 
+              tempId: Number(data.tempId),
+              appendQuesList: data.appendQuesList,
+              appendMap,
+            });
           }
         },
       },
+      success: (res) => {
+        // 通过eventChannel向被打开页面传送数据
+        res.eventChannel.emit('previewTemp', { tempId, appendQuesList: that.state.appendMap[tempId] || [] })
+      }
     });
   }
 
@@ -419,6 +430,7 @@ export default class AC extends React.Component {
       editorEvaluationName,
       evaluationMethod,
       tempId,
+      appendQuesList,
       titleErrorTip,
       despErrorTip,
       projectProfile,
@@ -431,6 +443,7 @@ export default class AC extends React.Component {
       endTime,
       endtimePickerOpen,
     } = this.state;
+
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
     const { templateList = [] } = briefInfo;
     const [curTemplateType] = templateList.filter(tempType => tempType.medium == evaluationMethod);
@@ -532,8 +545,11 @@ export default class AC extends React.Component {
                   {
                     curTempList.length > 0 ?
                       curTempList.map((item, index) => (
-                        <View className={`template-item ${tempId === item.tempId ? 'active' : ''}`} key={item.tempId} onClick={() => { this.handleChangeTemp(item.tempId); }}>
-                          <View className="template-name">{index + 1}、{item.title}</View>
+                        <View className={`template-item ${tempId == item.tempId ? 'active' : ''}`} key={item.tempId} onClick={() => { this.handleChangeTemp(item.tempId); }}>
+                          <View className="template-name">
+                            {index + 1}、{item.title}
+                            {tempId==item.tempId && appendQuesList.length> 0 && <View className="append-num">（已添加{appendQuesList.length}题）</View>}
+                          </View>
                           <View className="preview-btn" onClick={event => { this.handlePreview(event, item.tempId); }}>预览</View>
                         </View>
                       ))

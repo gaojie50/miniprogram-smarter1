@@ -57,11 +57,9 @@ const AddQuestions = function(props) {
   const [ tempQuesObj, setTempQuesObj ] = useState(_cloneDeep(quesObj));
   const [ selectUnit, setSelectUnit ] = useState();
   const [ options, setOptions ] = useState(['']);
-  const { lastQuesNum } = props;
+  const { lastQuesNum, curEditTemp } = props;
 
   useEffect(()=>{
-    const { curEditTemp } = props;
-    
     if(props.isEdit){
       const { type, gapFilling={}, radioItems=[] } = curEditTemp;
       
@@ -74,7 +72,7 @@ const AddQuestions = function(props) {
         setOptions(radioItems);
       }
     }
-  }, [props.curEditTemp])
+  }, [curEditTemp])
 
 
   const handleSave = ()=> {
@@ -85,6 +83,7 @@ const AddQuestions = function(props) {
     };
 
     if(props.isEdit){
+      tempQuesObj.questionNum = tempQuesObj.questionId = props.curEditTemp.questionNum;
       props.onEdit(tempQuesObj);
     }else{
       tempQuesObj.questionNum = lastQuesNum +1;
@@ -103,7 +102,7 @@ const AddQuestions = function(props) {
     setSelectType(TYPE_FILL);
     setTempQuesObj(newTempQuesObj)
     setOptions(['']);
-    setSelectUnit();
+    setSelectUnit('');
   }
 
   const validate = ()=>{
@@ -135,13 +134,14 @@ const AddQuestions = function(props) {
   }
 
   const handleTypeChange = type => {
+    
     let newTempQuesObj = {
-      ..._cloneDeep(quesObj),
+      ..._cloneDeep(props.isEdit ? curEditTemp: quesObj),
       type
     }
     switch(type){
       case TYPE_NUM:
-        newTempQuesObj.gapFilling = { leftText: null, rightText: null };
+        newTempQuesObj.gapFilling = { leftText: props.isEdit ? curEditTemp.title: null, rightText: null };
         break;
       case TYPE_RADIO:
         newTempQuesObj.radioItems = [];
@@ -150,6 +150,7 @@ const AddQuestions = function(props) {
     }
     setTempQuesObj(newTempQuesObj);
     setSelectType(type);
+    setSelectUnit('');
   }
 
   const handleTitleInput = ({target}) => {
@@ -168,7 +169,6 @@ const AddQuestions = function(props) {
   }
 
   const handleDeleteOption = index => {
-    console.log(options);
     options.splice(index, 1);
     tempQuesObj.radioItems=options;
     setOptions(_cloneDeep(options));
@@ -193,7 +193,7 @@ const AddQuestions = function(props) {
     <AtFloatLayout
       className="add-questions-component"
       isOpened={props.isOpened}
-      title="添加题目"
+      title={props.isEdit ? '编辑题目':'添加题目'}
       onClose={props.onClose}
     >
       <View className="question-wap">
