@@ -101,7 +101,7 @@ export const REALTIME_DATA_LISTS = [
       },
       {
         title: '中国大陆境内地区未来分账票房空间',
-        remarks: '去除约9%的手续费',
+        remarks: '未来票房空间*（已产生分账票房/已产生累计票房）',
         dataIndex: 'futureBoxSplitIncome',
         unit: '',
       },
