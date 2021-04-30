@@ -12,7 +12,6 @@ import './index.scss'
 
 export default function hotMovieList() {
   const systemInfo = Taro.getSystemInfoSync();
-  console.log(systemInfo);
   const { rpxTopx } = utils;
   const capsuleLocation = getGlobalData('capsuleLocation');
   const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);

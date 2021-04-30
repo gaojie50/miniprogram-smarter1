@@ -378,13 +378,13 @@ export const lists = [
           money: 0,
           unit: '万',
         },
-        {
-          key: 'futureBox',
-          title: '未来票房空间',
-          remarks: '计算公式：中国大陆境内地区票房收入预测-已产生票房',
-          money: 0,
-          unit: '万',
-        },
+        // {
+        //   key: 'futureBox',
+        //   title: '未来票房空间',
+        //   remarks: '计算公式：中国大陆境内地区票房收入预测-已产生票房',
+        //   money: 0,
+        //   unit: '万',
+        // },
         {
           key: 'myGmv',
           title: '猫眼选座交易额',

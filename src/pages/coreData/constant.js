@@ -124,7 +124,7 @@ export const REALTIME_DATA_LISTS = [
         unit: '%',
       },
       {
-        title: '宣发费用中已花费片方票补',
+        title: '宣发费用中已花费片方票补（含税）',
         remarks: '',
         dataIndex: 'pianTicketAllowanceExpended',
         unit: '',
