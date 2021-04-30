@@ -83,7 +83,7 @@ export const lists = [
         {
           key: 'cfgcAgencyFee',
           title: '扣除：华夏/中影代理费',
-          remarks: '默认1%的片方应得收入，200万封顶',
+          remarks: '默认1%的净票房，200万封顶',
           money: 0,
           unit: '万',
         },
@@ -268,7 +268,7 @@ export const lists = [
         {
           key: 'cfgcAgencyFee',
           title: '扣除：华夏/中影代理费',
-          remarks: '默认1%的片方应得收入，200万封顶',
+          remarks: '默认1%的净票房，200万封顶',
           money: 0,
           unit: '万',
         },
@@ -342,14 +342,14 @@ export const lists = [
         {
           key: 'platformResourceIncomeGot',
           title: '已获得资源收入',
-          remarks: '',
+          remarks: '计算公式：平台资源收入*（影片已产生票房/票房收入预测）',
           money: 0,
           unit: '万',
         },
         {
           key: 'otherIncomeGot',
           title: '已获得其它收入',
-          remarks: '',
+          remarks: '计算公式：其它资源收入*（影片已产生票房/票房收入预测）',
           money: 0,
           unit: '万',
         },
@@ -446,7 +446,7 @@ export const lists = [
         {
           key: 'cfgcAgencyFee',
           title: '扣除：中影/华夏代理费',
-          remarks: '默认1%的片方应得收入，200万封顶',
+          remarks: '默认1%的净票房，200万封顶',
           money: 0,
           unit: '万',
         },
