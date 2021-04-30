@@ -151,13 +151,13 @@ export const REALTIME_DATA_LISTS = [
       },
       {
         title: '增值税税金及附加',
-        remarks: '默认3.3%的票房',
+        remarks: '默认3.36%的票房',
         dataIndex: 'addedValueTax',
         unit: '%',
       },
       {
-        title: '中影代理费/片方应得收入',
-        remarks: '默认1%的片方应得收入，200万元封顶',
+        title: '中影华夏代理费/净票房',
+        remarks: '默认1%的净票房，200万元封顶',
         dataIndex: 'cfgcAgencyFeeDividePianDueIncome',
         unit: '%',
       },
