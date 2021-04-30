@@ -1,6 +1,6 @@
 /* eslint-disable jsx-quotes */
 import React from 'react';
-import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components';
+import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
@@ -17,6 +17,7 @@ import AtFloatLayout from '@components/m5/float-layout';
 import EndTimePicker from '@components/endtime-picker';
 import '@components/m5/style/components/action-sheet.scss';
 import '@components/m5/style/components/float-layout.scss';
+import { arrowIcon } from '@utils/imageUrl';
 import envConfig from '../../../constant/env-config';
 import TempList from './temp-list';
 import './index.scss';
@@ -567,6 +568,12 @@ export default class AC extends React.Component {
                   <View className="title">评估结束时间</View>
                   <View className="time" onClick={this.handleEndTime}>
                     {formatEndTime(endTime).text || '不限时'}
+                    <View className='arrow-wrap'>
+                      <Image
+                        className="arrow-icon"
+                        src={arrowIcon}
+                      />
+                    </View>
                   </View>
                 </View>
 
