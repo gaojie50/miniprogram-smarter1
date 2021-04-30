@@ -7,6 +7,7 @@ import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '
 import '@components/m5/style/components/float-layout.scss';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
+import lx from '@analytics/wechat-sdk';
 import AddQuesionts from './add-questions';
 import './index.scss'
 
@@ -16,18 +17,32 @@ export default function PerviewTemplate(){
 
   const [ questions, setQuestions ] = useState([]);
   const [ appendQuesList, setAppendQuesList ] = useState([]);
-  const { tempId } = getCurrentInstance().router.params;
+  const [ tempId, setTempId ] = useState();
+  const [ projectId, setProjectId ] = useState();
+  const [ tempName, setTempName ] = useState('');
   const [ isAddOpen, setIsAddOpen ] = useState(false);
   const [ curEditTemp, setCurEditTemp ] = useState();
-
-  const { tempId:curTempId } = Taro.getCurrentInstance().router.params;
   const pages = Taro.getCurrentPages(); // 获取当前的页面栈
   const current = pages[pages.length - 1];
   const eventChannel = current.getOpenerEventChannel();
 
   useDidShow(()=>{
+    const { tempId:cId, projectId:pId } = getCurrentInstance().router.params;
+    setTempId(cId);
+    setProjectId(pId);
+
     eventChannel.on('previewTemp', data=>{
       setAppendQuesList(data.appendQuesList);
+      setTempName( data.tempName );
+
+      console.log('data', data);
+      // pv埋点
+      lx.pageView('c_movie_b_2dbfeaf7', {
+        custom: {
+          template_name: data.tempName,
+          project_id: data.projectId,
+        }
+      })
     })
   })
 
@@ -36,8 +51,10 @@ export default function PerviewTemplate(){
   })
 
   useEffect(() => {
-    fetchTemp(tempId);
-  }, []);
+    if(tempId){
+      fetchTemp(tempId);
+    }
+  }, [tempId]);
 
   const fetchTemp = value => {
     if (!value){
@@ -57,9 +74,11 @@ export default function PerviewTemplate(){
         const { data, error } = res;
         if (!error) {
           const { questions: quesList } = data;
+          
           setQuestions(quesList);
           Taro.hideLoading();
           errorHandle(error);
+          
           return;
         }
         errorHandle(error);
@@ -73,14 +92,25 @@ export default function PerviewTemplate(){
 
   const handleUse = () =>{
     eventChannel.emit('selectTemp', {
-      tempId: curTempId,
+      tempId,
       appendQuesList
     });
     Taro.navigateBack();
   }
 
+  // 点击添加题目按钮
   const handleAdd = () => {
     setIsAddOpen(true);
+
+    // 埋点上报点击添加题目行为
+    lx.moduleClick(
+      // 事件bid
+      'b_movie_b_4dd4j55g_mc',
+      {
+        template_name: tempName,
+        project_id: projectId,
+      }
+    )
   }
 
   const handleAddClose = () => {
@@ -98,7 +128,7 @@ export default function PerviewTemplate(){
     setAppendQuesList(appendQuesList);
     setIsAddOpen(false);
     eventChannel.emit('selectTemp', {
-      tempId: curTempId,
+      tempId,
       appendQuesList
     });
   }
@@ -222,6 +252,8 @@ export default function PerviewTemplate(){
       </View>
 
       <AddQuesionts 
+        projectId={projectId}
+        tempName={tempId}
         isEdit={curEditTemp?true:false}
         lastQuesNum={allQuestions.length}
         isOpened={isAddOpen}

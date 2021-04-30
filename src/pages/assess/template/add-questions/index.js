@@ -10,6 +10,7 @@ import {
 import _cloneDeep from 'lodash/cloneDeep';
 import AtFloatLayout from '@components/m5/float-layout';
 import FixedButton from '@components/fixedButton';
+import lx from '@analytics/wechat-sdk';
 import '@components/m5/style/components/float-layout.scss';
 import './index.scss';
 
@@ -91,7 +92,17 @@ const AddQuestions = function(props) {
       props.onAdd(tempQuesObj);
     }
 
-    console.log(tempQuesObj);    
+    // 埋点上报点击保存行为
+    lx.moduleClick(
+      // 事件bid
+      'b_movie_b_4dd4j55g_mc',
+      {
+        template_name: props.tempName,
+        project_id: props.projectId,
+        template: JSON.stringify(tempQuesObj)
+      }
+    )
+   
     props.onClose();
     // 重置表单
     reset();

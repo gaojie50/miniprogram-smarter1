@@ -70,6 +70,7 @@ export default class AC extends React.Component {
 
 
   componentDidMount() {
+    
     const { projectId } = getCurrentInstance().router.params;
 
     this.setState({ projectId });
@@ -310,12 +311,13 @@ export default class AC extends React.Component {
   }
 
 
-  handlePreview=(e, tempId) => {
+  handlePreview=(e, tempId, tempName) => {
     e.stopPropagation();
     const that = this;
+    const { projectId } = this.state;
 
     Taro.navigateTo({
-      url: `/pages/assess/template/index?tempId=${tempId}`,
+      url: `/pages/assess/template/index?tempId=${tempId}&projectId=${projectId}`,
       events: {
         selectTemp(data) {
           if (data) {
@@ -331,7 +333,12 @@ export default class AC extends React.Component {
       },
       success: (res) => {
         // 通过eventChannel向被打开页面传送数据
-        res.eventChannel.emit('previewTemp', { tempId, appendQuesList: that.state.appendMap[tempId] || [] })
+        res.eventChannel.emit('previewTemp', { 
+          projectId: projectId,
+          tempId, 
+          tempName,
+          appendQuesList: that.state.appendMap[tempId] || [] 
+        })
       }
     });
   }
@@ -345,6 +352,8 @@ export default class AC extends React.Component {
       titleErrorTip,
       despErrorTip,
       filesChecked,
+      appendQuesList,
+      endTime
     } = this.state;
     const { description, projectEvaluationName } = briefInfo;
     const params = {
@@ -354,10 +363,11 @@ export default class AC extends React.Component {
       tempId,
       fileIdArr: filesChecked || [],
       description,
+      appendTemplate: appendQuesList,
+      deadline: endTime
     };
 
     if (titleErrorTip || despErrorTip) return;
-    return;
     this.setState({ isSubmitting: true });
     reqPacking(
       {
@@ -550,7 +560,7 @@ export default class AC extends React.Component {
                             {index + 1}、{item.title}
                             {tempId==item.tempId && appendQuesList.length> 0 && <View className="append-num">（已添加{appendQuesList.length}题）</View>}
                           </View>
-                          <View className="preview-btn" onClick={event => { this.handlePreview(event, item.tempId); }}>预览</View>
+                          <View className="preview-btn" onClick={event => { this.handlePreview(event, item.tempId, item.title); }}>预览</View>
                         </View>
                       ))
                       : (
