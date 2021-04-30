@@ -404,7 +404,7 @@ export const lists = [
         {
           key: 'boxSplitIncome',
           title: '总票房收入预测（不含服务费）',
-          remarks: '计算公式：总票房收入预测*（已产生分账票房/已产生累计票房）',
+          remarks: '',
           money: 0,
           unit: '万',
         },
