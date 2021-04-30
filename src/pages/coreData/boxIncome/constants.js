@@ -82,7 +82,7 @@ export const lists = [
         },
         {
           key: 'cfgcAgencyFee',
-          title: '扣除：中影代理费',
+          title: '扣除：华夏/中影代理费',
           remarks: '默认1%的片方应得收入，200万封顶',
           money: 0,
           unit: '万',
@@ -267,7 +267,7 @@ export const lists = [
         },
         {
           key: 'cfgcAgencyFee',
-          title: '扣除：中影代理费',
+          title: '扣除：华夏/中影代理费',
           remarks: '默认1%的片方应得收入，200万封顶',
           money: 0,
           unit: '万',
