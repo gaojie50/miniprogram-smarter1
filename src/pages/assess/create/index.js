@@ -18,6 +18,7 @@ import EndTimePicker from '@components/endtime-picker';
 import '@components/m5/style/components/action-sheet.scss';
 import '@components/m5/style/components/float-layout.scss';
 import envConfig from '../../../constant/env-config';
+import TempList from './temp-list';
 import './index.scss';
 
 dayjs.extend(isToday);
@@ -474,15 +475,16 @@ export default class AC extends React.Component {
                 roundNum={roundNum}
                 text={`第${roundNum || '-'}轮`}
               />
+
               <View className="create-wrap">
                 <View className="title-wrap">
                   {!editorEvaluationName &&
-            <View className="title">
-              {briefInfo.projectEvaluationName}
-              <View className="edit-btn-wrap" onClick={this.editorTitle}>
-                <View className="smarter-iconfont icon-edit" style={{ fontSize: '44rpx' }} />
-              </View>
-            </View>}
+                  <View className="title">
+                    {briefInfo.projectEvaluationName}
+                    <View className="edit-btn-wrap" onClick={this.editorTitle}>
+                      <View className="smarter-iconfont icon-edit" style={{ fontSize: '44rpx' }} />
+                    </View>
+                  </View>}
                   {editorEvaluationName && <Input
                     className={`title-input ${titleErrorTip ? 'error' : ''}`}
                     type="text"
@@ -552,23 +554,13 @@ export default class AC extends React.Component {
 
                 <View className="template-select-wrap">
                   <View className="title">选择评估模板</View>
-                  {
-                    curTempList.length > 0 ?
-                      curTempList.map((item, index) => (
-                        <View className={`template-item ${tempId == item.tempId ? 'active' : ''}`} key={item.tempId} onClick={() => { this.handleChangeTemp(item.tempId); }}>
-                          <View className="template-name">
-                            {index + 1}、{item.title}
-                            {tempId==item.tempId && appendQuesList.length> 0 && <View className="append-num">（已添加{appendQuesList.length}题）</View>}
-                          </View>
-                          <View className="preview-btn" onClick={event => { this.handlePreview(event, item.tempId, item.title); }}>预览</View>
-                        </View>
-                      ))
-                      : (
-                        <View className="no-template-note">
-                          <Nodata text="暂无模板可选" />
-                        </View>
-                      )
-                  }
+                  <TempList 
+                    tempList={curTempList}
+                    selectTempId={tempId}
+                    appendQuesList={appendQuesList}
+                    onPreview={this.handlePreview}
+                    onChangeTemp={this.handleChangeTemp}
+                  />
                 </View>
 
                 <View className="endtime-wrap">

@@ -201,6 +201,37 @@ page image {
           padding: 20px 0;
           color: #276FF0;
           font-weight: 600;
+          position: relative;
+        }
+        .tip {
+          position: absolute;
+          left: 50%;
+          top: -80px;
+          width: 118px;
+          height: 80px;
+          transform: translateX(-50%);
+          background: rgba(0,0,0,0.8);
+          font-size: 28px;
+          font-weight: 400;
+          color: #fff;
+          text-align: center;
+          border-radius: 4px;
+          line-height: 80px;
+          &::after{
+            position: absolute;
+            left: 50%;
+            margin-left: -16px;
+            bottom: -32px;
+            content: '.';
+            font-size: 0;
+            width: 0px;
+            height: 0px;
+            border: 16px solid rgba(0,0,0,0.8);
+            border-left-color: transparent;
+            border-bottom-color: transparent;
+            border-right-color: transparent;
+            border-top-left-radius: 3px;
+          }
         }
       }
     }
