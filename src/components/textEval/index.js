@@ -3,26 +3,37 @@ import { View, Image, Text, Textarea } from '@tarojs/components';
 import FloatLayout from '@components/m5/float-layout';
 import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
+import utils from '@utils/index';
 import './index.scss';
 
-export default function TextEval({ 
-  title, 
-  questionNum, 
-  texts, 
+const {formatNumber} = utils;
+export default function TextEval({
+  title,
+  questionNum,
+  texts,
   permissions,
   resultPageTextTitleEditingGuideState,
   setResultPageTextTitleEditingGuideState,
   isAppendContent,
   summaryText,
+  isTopic,
 }) {
   const [packUp, setPackUp] = useState(true);
   const [describe, setDescribe] = useState(summaryText);
   const shrinkEvt = () => setPackUp(!packUp);
   const [showProgress, setShowProgress] = useState(false);
   const [itemLimit, setItemLimit] = useState(5);
-
+  let joinNum = 0;
+  let summary = 0;
   const total = texts.reduce((acc, val) => {
     acc += val.memberList.length;
+    val?.memberList?.map(item => {
+      if(item.content || item.content === 0) {
+        if(isTopic) summary = item.content;
+        joinNum += 1;
+      };
+    });
+
     return acc;
   }, 0);
 
@@ -51,7 +62,7 @@ export default function TextEval({
       data: {
         projectId,
         roundId,
-        texts:describe,
+        texts: describe,
         isAppendContent,
       }
     }).then(res => {
@@ -61,15 +72,15 @@ export default function TextEval({
 
   };
 
-  const focusEvent= ()=>{
-    if(!resultPageTextTitleEditingGuideState){
+  const focusEvent = () => {
+    if (!resultPageTextTitleEditingGuideState) {
       setResultPageTextTitleEditingGuideState(true);
-      Taro.setStorageSync('ResultPageTextTitleEditingGuide',true);
-    } 
+      Taro.setStorageSync('ResultPageTextTitleEditingGuide', true);
+    }
   }
 
   const toDetails = () => {
-    if (permissions) setItemLimit(1000);
+    if (permissions || isTopic) setItemLimit(9999);
     setShowProgress(true);
   }
 
@@ -98,27 +109,32 @@ export default function TextEval({
     </View>;
   }
   return <View className="textEval-wrap">
-    <View className="h5">
+    <View className={`h5 ${(permissions || isTopic) ? "rich" : ""}`}>
       {questionNum}、{title}
       {
-        permissions ?
+        (permissions || isTopic) ?
           <Text className="detail" onClick={toDetails}>评估详情 <Text className="arrow" /></Text> : ''
       }
     </View>
-    {permissions ?
-      <View className="textarea-wrap">
-        {
-          !resultPageTextTitleEditingGuideState ? <Image className="editable" src="https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/editable.svg"/> : ""
-        }
-        <Textarea
-          className="textarea"
-          onInput={inputDescribe}
-          onBlur={blurEvent}
-          onFocus={focusEvent}
-          value={describe}
-          placeholderStyle={'color:#ccc;'}
-          placeholder="暂无汇总内容" />
-      </View> : detailCont()
+    {isTopic ? 
+     <View className="filling">
+       评估均值 <Text className="join">(共{joinNum}人参与)</Text>
+       <Text className="val">{formatNumber(summary/joinNum).text}</Text>
+     </View>:
+      (permissions ?
+        <View className="textarea-wrap">
+          {
+            !resultPageTextTitleEditingGuideState ? <Image className="editable" src="https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/editable.svg" /> : ""
+          }
+          <Textarea
+            className="textarea"
+            onInput={inputDescribe}
+            onBlur={blurEvent}
+            onFocus={focusEvent}
+            value={describe}
+            placeholderStyle={'color:#ccc;'}
+            placeholder="暂无汇总内容" />
+        </View> : detailCont())
     }
 
     <FloatLayout

@@ -81,7 +81,8 @@ const formatNumber = (value, sign) => {
       decimals: 0,
     };
   }
-  if (value == null || value == '') {
+
+  if (!value) {
     return {
       posNum: '-',
       num: '-',

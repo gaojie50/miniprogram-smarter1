@@ -192,7 +192,7 @@ export default function Result() {
   
               {
                 resultList.map((item, index) => {
-                  if (item.type == 1) {
+                  if (item.type == 1 || item.type == 2) {
                     return <TextEval
                       key={index}
                       resultPageTextTitleEditingGuideState={resultPageTextTitleEditingGuideState}
@@ -204,6 +204,7 @@ export default function Result() {
                       texts={item.texts || []}
                       isAppendContent={!!item?.isAppendContent}
                       summaryText={item?.summaryText||""}
+                      isTopic={/* item.type == 2 */true }
                       permissions={ /* permissions */true }
                     />;
                   }
