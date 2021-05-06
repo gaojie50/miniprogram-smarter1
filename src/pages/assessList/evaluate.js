@@ -123,7 +123,7 @@ export function EvaluationList({type}) {
 }
 
 function EvalutaionCard(props) {
-
+  console.log(props, 22222)
   const [realName, setRealName] = useState('');
 
   const {
@@ -136,7 +136,7 @@ function EvalutaionCard(props) {
     role,
     imageUrl,
     name,
-    deadline
+    deadline = 124345
   } = props;
 
   const timeStr = useMemo(() => {
@@ -263,7 +263,7 @@ function EvalutaionCard(props) {
   return (
     <View className='assess-list-evaluation-card'>
       <View onClick={handleJump} >
-        <Image className='assess-list-evaluation-card-image' src={imageUrl.replace('/w.h', '')}></Image>
+        <Image className='assess-list-evaluation-card-image' src={imageUrl && imageUrl.replace('/w.h', '')}></Image>
         <View className='assess-list-evaluation-card-title'>
           <View className='assess-list-evaluation-card-title-left' onClick={jumpDetail}>
             <View className='assess-list-evaluation-card-title-left-name'>{name}</View>

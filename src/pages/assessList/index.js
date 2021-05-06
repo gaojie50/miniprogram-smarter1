@@ -60,7 +60,7 @@ export default function AssessList() {
                 className={index === current ? 'assess-list-content-title-item active' : 'assess-list-content-title-item'} 
                 key={index} 
                 style={{width: `${100/HEADER_LIST.length}%`}}
-                onClick={() => setCurrent(index)}
+                onClick={() => {console.log(index);setCurrent(index)}}
               >
                   {item.value}
                 </View>
