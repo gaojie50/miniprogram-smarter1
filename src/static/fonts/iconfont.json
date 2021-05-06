@@ -6,6 +6,13 @@
   "description": "smarter小程序图标",
   "glyphs": [
     {
+      "icon_id": "21409640",
+      "name": "operate",
+      "font_class": "operate",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
       "icon_id": "20381466",
       "name": "delete",
       "font_class": "delete",

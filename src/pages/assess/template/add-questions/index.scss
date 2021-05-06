@@ -3,7 +3,7 @@
     z-index: 99;
   }
   .at-float-layout__container {
-    padding: 40px 30px;
+    padding: 40px 0px;
   }
   .question-wap {
     padding-bottom: 180px;
@@ -13,6 +13,11 @@
       color: #333333;
       line-height: 36px;
     }
+    .type-wrap, .ques-title-wrap, .ques-unit-wrap{
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+
     .btn-wrap {
       display: flex;
       align-items: center;
@@ -108,6 +113,7 @@
       .title-wrap {
         display: flex;
         justify-content: space-between;
+        padding: 0 30px;
         .add-btn {
           color: #276FF0;
         }
@@ -117,19 +123,60 @@
         .options-item-wrap {
           margin-bottom: 20px;
           border-radius: 10px;
-          display: flex;
+          position: relative;
+          padding: 0 30px;
+          &.operating {
+            padding-left: 0;
+            padding-right: 0;
+          }
           .option-fill {
+            box-sizing: border-box;
             background: #F8F8F8;
             padding: 16px 20px;
             font-weight: 400;
             font-size: 28px;
             color: #333333;
             line-height: 40px;
-            flex-grow: 1;
             border-radius: 10px;
+            width: 636px;
+            height: auto;
+            display: inline-block;
+            vertical-align: middle;
           }
-          .delete-btn {
-            color: #666;
+          &.operating .option-fill {
+            width: calc(100% - 240px - 10px);
+          }
+
+          .operate-btn {
+            width: 44px;
+            height: 44px;
+            display: inline-block;
+            vertical-align: middle;
+            .icon-operate {
+              line-height: 44px;
+            }
+          }
+          .operate-btn-list {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            color: #FFFFFF;
+            font-size: 24px;
+            line-height: 72px;
+            .delete-btn, .cancel-btn {
+              width: 120px;
+              display: inline-block;
+            }
+            .delete-btn {
+              background: #F1303D;
+              border-radius: 10px 0 0 10px;
+              text-align: center;
+            }
+            .cancel-btn {
+              background: #FD9C00;
+              text-align: center;
+            }
           }
         }
       }

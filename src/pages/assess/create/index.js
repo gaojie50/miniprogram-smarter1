@@ -114,9 +114,7 @@ export default class AC extends React.Component {
         url: 'api/applet/management/briefInfo',
         data: { projectId },
       },
-
-      // 'server',
-      'mock'
+      'server',
     ).then(res => {
       const { error, data } = res;
 

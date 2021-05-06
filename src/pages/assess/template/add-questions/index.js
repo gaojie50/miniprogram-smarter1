@@ -58,6 +58,7 @@ const AddQuestions = function(props) {
   const [ tempQuesObj, setTempQuesObj ] = useState(_cloneDeep(quesObj));
   const [ selectUnit, setSelectUnit ] = useState();
   const [ options, setOptions ] = useState(['']);
+  const [ operateNum, setOperateNum ] = useState('');
   const { lastQuesNum, curEditTemp } = props;
 
   useEffect(()=>{
@@ -162,6 +163,7 @@ const AddQuestions = function(props) {
     setTempQuesObj(newTempQuesObj);
     setSelectType(type);
     setSelectUnit('');
+    setOptions(['']);
   }
 
   const handleTitleInput = ({target}) => {
@@ -179,11 +181,17 @@ const AddQuestions = function(props) {
     setSelectUnit(unit)
   }
 
+  const handleOperate = index => {
+    setOperateNum(index);
+  }
+
   const handleDeleteOption = index => {
+    
     options.splice(index, 1);
     tempQuesObj.radioItems=options;
     setOptions(_cloneDeep(options));
     setTempQuesObj(tempQuesObj);
+    setOperateNum(-1);
   }
 
   const handleAddOption = () => {
@@ -263,7 +271,7 @@ const AddQuestions = function(props) {
               <View className="options-list">
                 {options.map((item,index)=>{
                   return (
-                    <View className="options-item-wrap" key={index}>
+                    <View className={`options-item-wrap ${operateNum===index ? 'operating':''} `} key={index}>
                       <Input
                         type="text"
                         placeholder="请输入"
@@ -271,11 +279,15 @@ const AddQuestions = function(props) {
                         onInput={(e)=>{handleOptionInput(e, index)}}
                         value={item}
                       />
-                      {options.length > 1 && (
-                        <View className="delete-btn" onClick={()=>{handleDeleteOption(index)}}>
-                          <View className="smarter-iconfont icon-delete" style={{ fontSize: '44rpx' }} />
+                      {options.length > 1 && operateNum !== index && (
+                        <View className="operate-btn" onClick={()=>{handleOperate(index)}}>
+                          <View className="smarter-iconfont icon-operate" style={{ fontSize: '44rpx', color: '#666' }} />
                         </View>
                       )}
+                      {operateNum === index && <View className="operate-btn-list">
+                        <View className="delete-btn" onClick={()=>{handleDeleteOption(index)}}>删除</View>
+                        <View className="cancel-btn" onClick={()=>{handleOperate(-1)}}>取消</View>
+                      </View>}
                     </View>
                   )
                 })}
