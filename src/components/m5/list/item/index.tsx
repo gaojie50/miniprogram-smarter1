@@ -5,7 +5,6 @@ import { Image, Switch, Text, View } from '@tarojs/components'
 import { CommonEvent, ITouchEvent } from '@tarojs/components/types/common'
 import { AtListItemProps } from '../../types/list'
 import { mergeStyle } from '../../common/utils'
-import { arrowIcon } from '@utils/imageUrl';
 
 export default class AtListItem extends React.Component<AtListItemProps> {
   public static defaultProps: AtListItemProps
