@@ -88,12 +88,12 @@ export function EvaluationList({type}) {
     const { userInfo } = Taro.getStorageSync('authinfo');
     setData(test)
     reqPacking({
-      url: '/api/applet/management/allEvaluationList',
+      url: 'api/applet/management/allEvaluationList',
       data: {
         type: type + 1,
         userId: userInfo.id
       }
-    }).then(res => {
+    }, 'server').then(res => {
       console.log(res, 123)
       const { success } = res;
       if(success) {
