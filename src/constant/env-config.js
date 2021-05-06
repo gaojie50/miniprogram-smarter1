@@ -5,14 +5,15 @@ const ApiBaseSet = {
   dev: {
     server: 'http://10.59.74.226:8080',
     passport: 'http://10.59.86.166:8080',
-    keeper: 'http://keeper.movie.st.sankuai.com'
+    keeper: 'http://keeper.movie.st.sankuai.com',
   },
 
   //测试环境
   staging: {
     server: 'https://starcloud.movie.st.sankuai.com',
     passport: 'https://starcloud-user.movie.st.sankuai.com',
-    keeper: 'https://keeper.maoyan.com'
+    keeper: 'https://keeper.maoyan.com',
+    mock: 'https://mapi.maoyan.com/app/mock/69'
   },
 
   //生产环境
