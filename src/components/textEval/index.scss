@@ -1,14 +1,3 @@
-@mixin arrow() {
-  width: 10px;
-  height: 20px;
-  display: inline-block;
-  background-image: url('../../static/detail/gray.png');
-  background-size: 10px 20px;
-  // position: absolute;
-  // right: 0;
-  // top: 42px;
-}
-
 .textEval-wrap{
   .table {
     .th, .td{
@@ -36,22 +25,6 @@
   .h5.rich{
     position: relative;
     padding-right: 170px;
-  }
-  
-  .detail{
-    font-weight: 400;
-    font-family: PingFangSC-Regular;
-    font-size: 28px;
-    color: #666666;
-    text-align: right;
-    line-height: 50px;
-    position: absolute;
-    right: 0;
-    top: 0;
-
-    .arrow{
-      @include arrow;
-    }
   }
 
   .filling{
@@ -101,31 +74,6 @@
       z-index: 1;
       right: 0;
       top: 0;
-    }
-  }
-}
-
-.layout-process .at-float-layout__container{
-  padding: 40px 0;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  overflow: hidden;
-
-  .table{
-    background: #FFF;
-    border-radius: none;
-    width: 100%;
-  }
-  .thead{
-    padding: 0 30px;
-  }
-
-  .tbody .tr{
-    padding-left: 30px;
-
-    &.groupName{
-      background: #f8f8f8;
     }
   }
 }

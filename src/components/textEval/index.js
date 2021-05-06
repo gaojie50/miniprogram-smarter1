@@ -141,11 +141,7 @@ export default function TextEval({
       isOpened={showProgress}
       title={title}
       className='layout-process'
-      onClose={() => {
-        setShowProgress(false);
-      }
-      }
-    >
+      onClose={ () => setShowProgress(false) }>
       {detailCont()}
     </FloatLayout>
   </View>;

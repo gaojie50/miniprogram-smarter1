@@ -187,6 +187,9 @@ export default function Result() {
               {coreExist ?
                 <CoreSection
                   core={core}
+                  projectId={projectId}
+                  roundId={roundId} 
+                  permissions={ /* permissions */true }
                   categoryType={categoryType} /> :
                 ""}
   
@@ -204,8 +207,8 @@ export default function Result() {
                       texts={item.texts || []}
                       isAppendContent={!!item?.isAppendContent}
                       summaryText={item?.summaryText||""}
-                      isTopic={/* item.type == 2 */true }
-                      permissions={ /* permissions */true }
+                      isTopic={ item.type == 2 }
+                      permissions={ /*permissions*/true }
                     />;
                   }
   
