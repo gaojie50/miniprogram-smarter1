@@ -71,7 +71,7 @@ export default function Result() {
 
   const fetchResult = () => {
     reqPacking({
-      url: 'api/management/result',
+      url: 'api/applet/management/result',
       data: {
         projectId,
         roundId,
@@ -99,14 +99,13 @@ export default function Result() {
         method: 'GET',
       }),
       reqPacking({
-        url: 'api/management/briefInfo',
+        url: 'api/applet/management/briefInfo',
         data: { projectId,roundId },
         method: 'GET',
       })
     ]).then(resList => {
-      const { success, data = {}, error } = resList[0];
-      //fakeData: userId 
-      const { pic,userId=132 } = resList[1].data;
+      const { success, data = {}, error } = resList[0]; 
+      const { pic,userId } = resList[1].data;
 
       if(success){
         const {evaluationList =[],name} = data;

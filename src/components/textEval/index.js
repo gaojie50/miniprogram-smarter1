@@ -68,6 +68,13 @@ export default function TextEval({
     }).then(res => {
       const { error } = res;
 
+      if(error){
+        Taro.showToast({
+          title: error.message||'请求失败',
+          icon: 'none',
+          duration: 2000
+        });
+      }
     })
 
   };
