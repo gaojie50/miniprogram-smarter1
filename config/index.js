@@ -30,6 +30,7 @@ const config = {
 
   },
   mini: {
+    baseLevel:160,
     imageUrlLoaderOption: {
       limit: 1024,
       mimetype: 'image/png',
