@@ -28,7 +28,7 @@ export default function AssessPage(){
   const [ openModal, setOpenModal ] = useState(false);
   const [ deadline, setDeadline ] = useState();
 
-  const { projectId = 12345, roundId = 416 } = getCurrentInstance().router.params;
+  const { projectId, roundId } = getCurrentInstance().router.params;
 
   const { component: deadlineShow, over } = useDeadline(deadline, () => {setOpenModal(true)});
 

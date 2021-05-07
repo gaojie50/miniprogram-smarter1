@@ -11,7 +11,6 @@ import utils from '@utils/index.js';
 import { fourTextLabel, threeTextLabel, twoTextLabel, defaultMovieCover as DefaultPic } from '@utils/imageUrl';
 import { picFn } from '@utils/pic';
 import { useFilterPanel } from './filterPanel';
-import { data as testData } from './lib';
 import './index.scss';
 
 const {
@@ -58,7 +57,7 @@ export default function Excavate() {
   const [hasPagePermission, setHasPagePermission] = useState(false);
   const [noData, setNoData] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(testData);
+  const [data, setData] = useState([]);
   const [offset, setOffset] = useState(0);
   const [havemore, setHavemore] = useState(true);
 
@@ -141,6 +140,7 @@ export default function Excavate() {
         const { projectDeepList } = data;
         if (projectDeepList.length === 0) {
           setNoData(true);
+          setHavemore(false);
         } else {
           setNoData(false);
         }
