@@ -53,7 +53,6 @@ export default class AC extends React.Component {
     editorEvaluationName: false,
     evaluationMethod: '',
     tempId: '',
-    appendQuesList: [],  // 附加题
     // eslint-disable-next-line react/no-unused-state
     appendMap: {},  // 附加题和原题关系
     titleErrorTip: false,
@@ -72,7 +71,6 @@ export default class AC extends React.Component {
 
 
   componentDidMount() {
-    
     const { projectId } = getCurrentInstance().router.params;
 
     this.setState({ projectId });
@@ -355,7 +353,7 @@ export default class AC extends React.Component {
       appendMap,
       endTime
     } = this.state;
-    const { description, projectEvaluationName } = briefInfo;
+    const { description, projectEvaluationName, roundNum } = briefInfo;
     const params = {
       projectId,
       projectEvaluationName,
