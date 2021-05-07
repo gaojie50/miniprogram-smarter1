@@ -13,6 +13,7 @@ const ApiBaseSet = {
     server: 'https://starcloud.movie.st.sankuai.com',
     passport: 'https://starcloud-user.movie.st.sankuai.com',
     keeper: 'https://keeper.maoyan.com',
+    mock: 'https://mapi.maoyan.com/app/mock/69'
   },
 
   // 生产环境
