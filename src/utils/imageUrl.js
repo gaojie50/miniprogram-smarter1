@@ -30,6 +30,8 @@ export const welcomeSlogan = 'https://obj.pipi.cn/festatic/common/image/85143f24
 export const beforeIcon = 'https://obj.pipi.cn/festatic/common/image/266cd33df47acb2603879e4e8328cd1d.png';
 export const afterIcon = 'https://obj.pipi.cn/festatic/common/image/066776d38ea3df9088d640259fb5785a.png';
 
+export const arrowIcon = 'https://p0.meituan.net/ingee/32c7ff07dff44f9b40ee0199c286bf721106.png';
+
 export default {
   defaultMovieCover,
   fourTextLabel,

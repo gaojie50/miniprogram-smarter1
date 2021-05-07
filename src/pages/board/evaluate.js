@@ -2,9 +2,10 @@ import Taro from '@tarojs/taro';
 import { View, Image, Text, Button } from '@tarojs/components';
 import React, { useEffect, useMemo, useState } from 'react';
 import { noDataPic } from '@utils/imageUrl';
+import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
-import reqPacking from '../../utils/reqPacking'
+import reqPacking from '../../utils/reqPacking';
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -84,7 +85,8 @@ function EvalutaionCard(props) {
     estimateBox, estimateScore, initiator = '-', projectId, roundId,
     hasAssess, invitees,
     projectRole,
-    judgeRole
+    judgeRole,
+    deadline
   } = props;
 
   const timeStr = useMemo(() => {
@@ -179,25 +181,32 @@ function EvalutaionCard(props) {
 
   const [statusType, statusText] = useMemo(() => {
     if (hasAssess) {
-      let prefix = '';
-      if (initiator === realName) prefix = '自己发起 ';
-      if (typeof invitees === 'string' && invitees.includes(realName)) {
-        prefix = `${initiator}邀评 `;
-      }
-      return [0, `${prefix}已评估`]
+      return [0, '已评估']
     } else {
       let prefix = '';
-      if (initiator === realName) prefix = '自己发起 ';
-      if (typeof invitees === 'string' && invitees.includes(realName)) {
-        prefix = `${initiator}邀评 `;
+      if (judgeInvitee(invitees, realName)) {
+        if(deadline && dayjs().valueOf() > deadline) {
+          prefix = '未参与'
+        } else {
+          prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
+        }
+        
+        return [1, prefix]
       }
-      if (invitees) {
-        return [1, `${prefix}未评估`]
-      } else {
-        return [2, `${prefix}未评估`]
+
+      if (isDockingPerson(judgeRole.role)) {
+        if(deadline && dayjs().valueOf() > deadline) {
+          prefix = '未参与'
+        } else {
+          if(initiator === realName) {
+            prefix = '自己发起 ';
+          }
+        }
+        
+        return [2, prefix]
       }
     }
-  }, [hasAssess, initiator, realName]);
+  }, [deadline, hasAssess, initiator, invitees, realName]);
 
   return (
     <View className="evaluation-card">
@@ -251,12 +260,13 @@ function EvalutaionCard(props) {
       </View>
       </View>
       <View className="evaluation-card-action">
-        {isDockingPerson(judgeRole.role) && <Button
-          data-roundTitle={roundTitle}
-          data-roundId={roundId}
-          data-sign="invite"
-          openType="share"
-          className="evaluation-card-action-btn">
+      {isDockingPerson(judgeRole.role) && judgeDeadLine(deadline) && <Button
+        data-roundTitle={roundTitle}
+        data-roundId={roundId}
+        data-sign='invite'
+        openType='share'
+        className='evaluation-card-action-btn'
+      >
           邀请参与
         </Button>}
         <Button
@@ -268,15 +278,15 @@ function EvalutaionCard(props) {
           分享结果
         </Button>
         {
-          statusType !== 0 && <Button
-            className="evaluation-card-action-btn evaluation-card-action-btn-eval"
+          (isDockingPerson(judgeRole.role) || judgeInvitee(invitees, realName)) && judgeDeadLine(deadline) && <Button
+            className='evaluation-card-action-btn evaluation-card-action-btn-eval'
             onClick={() => {
               Taro.navigateTo({
-                url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
+                url: statusType === 0 ? `/pages/assess/detail/index?projectId=${projectId}&roundId=${roundId}` : `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
               })
             }}
-            >
-             去评估
+          >
+             {statusType === 0 ? '修改评估' : '去评估' }
         </Button>
         }
       </View>
@@ -301,4 +311,14 @@ function PureReq_ProjectRole({ projectId }) {
     },
     'server',
   ).then((res) => res)
+}
+
+function judgeDeadLine(time) {
+
+  return !(time && dayjs().valueOf() > time)
+}
+
+function judgeInvitee(invitees, realName) {
+
+  return typeof invitees === 'string' && invitees.includes(realName)
 }

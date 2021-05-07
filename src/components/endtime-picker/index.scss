@@ -1,0 +1,24 @@
+.endtime-picker-component {
+  .time-picker-wap {
+    picker-view-column:first-child {
+      text-align: right;
+      flex: 390;
+    }
+    picker-view-column:nth-child(2) {
+      text-align: left;
+      flex: 250;
+    }
+    .line-item {
+      font-size: 38px;
+      line-height: 60px;
+      color: #333;
+      padding-right: 68px;
+      .nature-day, .week-day {
+        display: inline-block;
+      }
+      .week-day {
+        padding-left: 28px;
+      }
+    }
+  }
+}

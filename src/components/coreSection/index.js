@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Image, Text } from '@tarojs/components';
+import FloatLayout from '@components/m5/float-layout';
+import reqPacking from '@utils/reqPacking.js';
 import './index.scss';
 
-const ItemLimit = 5;
 const toFixed = (num, precision) => (+(`${Math.round(+(`${num}e${precision}`))}e${-precision}`)).toFixed(precision);
 
-export default function CoreSection({ categoryType, core }) {
-  const clacScore = (arrOut=[], digits = 1) => {
+export default function CoreSection({ categoryType, core, permissions,projectId,roundId }) {
+  const [showProgress, setShowProgress] = useState(false);
+  const [itemLimit, setItemLimit] = useState(5);
+  const clacScore = (arrOut = [], digits = 1) => {
     const arr = arrOut.filter(item => item);
 
     if (!arr || arr.length == 0) return;
@@ -61,36 +64,74 @@ export default function CoreSection({ categoryType, core }) {
   let recommendedList = core.recommendedList || [];
   let commentList = core.commentList || [];
 
-  let scoreArr = [];
-  let totalScoreArr = [];
-  let boxArr = [];
-  let commentArr = [];
-  let recommendedArr = [];
-  let groupSetObj = {};
+  let [scoreArr,setScoreArr] = useState([]);
+  let [totalScoreArr,setTotalScoreArr] = useState([]);
+  let [boxArr,setBoxArr]= useState([]);
+  let [recommendedArr,setRecommendedArr]= useState([]);
+  let [commentArr,setCommentArr]= useState([]);
+  let [groupSetObj,setGroupSetObj] = useState({});
   const total = evaluationList.length;
 
-  evaluationList.map(item => {
-    const {
-      score, totalScore, box, comment, evaluation, groupName,scoreFinished,
-    } = item;
+  useEffect(function(){
+    let innerGroupSetObj = {};
+    let innerScoreArr = [];
+    let innerTotalScoreArr=[];
+    let innnerBoxArr = [];
+    let innerRecommendedArr = [];
+    let innerCommentArr = [];
 
-    scoreArr.push(score);
-
-    if (scoreFinished !== false) totalScoreArr.push(totalScore);
-
-    boxArr.push(box);
-    commentArr.push(evaluation);
-    recommendedArr.push(comment);
-
-    if (!groupSetObj[groupName]) {
-      groupSetObj[groupName] = [item];
-
+    evaluationList.map(item => {
+      const {
+        score, totalScore, box, comment, evaluation, groupName, scoreFinished,isHidden
+      } = item;
+  
+      if(!isHidden) innerScoreArr.push(score);
+  
+      if (!isHidden && scoreFinished !== false) innerTotalScoreArr.push(totalScore);
+  
+      if(!isHidden) innnerBoxArr.push(box);
+      innerCommentArr.push(evaluation);
+      innerRecommendedArr.push(comment);
+  
+      if (!innerGroupSetObj[groupName]) {
+        innerGroupSetObj[groupName] = [item];
+  
+        return item;
+      }
+      innerGroupSetObj[groupName].push(item);
+  
       return item;
-    }
-    groupSetObj[groupName].push(item);
+    });
 
-    return item;
-  });
+    setScoreArr(innerScoreArr);
+    setTotalScoreArr(innerTotalScoreArr);
+    setBoxArr(innnerBoxArr);
+    setRecommendedArr(innerRecommendedArr);
+    setCommentArr(innerCommentArr);
+
+    setGroupSetObj(innerGroupSetObj);
+  },[core])
+
+  useEffect(function(){
+    let arr = [];
+    let innerScoreArr = [];
+    let innerTotalScoreArr=[];
+    let innnerBoxArr = [];
+
+    Object.values(groupSetObj).map(item => arr.push(...item));
+    
+    arr.map(({score,isHidden,totalScore,box,scoreFinished}) =>{
+      if(!isHidden) innerScoreArr.push(score);
+  
+      if (!isHidden && scoreFinished !== false) innerTotalScoreArr.push(totalScore);
+  
+      if(!isHidden) innnerBoxArr.push(box);
+    });
+    
+    setScoreArr(innerScoreArr);
+    setTotalScoreArr(innerTotalScoreArr);
+    setBoxArr(innnerBoxArr);
+  },[groupSetObj])
 
   const recommendedNumList = recommendedList.map(item => {
     const num = clacFieldNumObj(recommendedArr)[item] || 0;
@@ -109,11 +150,11 @@ export default function CoreSection({ categoryType, core }) {
     let num = 0;
 
     return Object.keys(groupSetObj).reduce((acc, item) => {
-      if (num >= ItemLimit) return acc;
+      if (num >= itemLimit) return acc;
 
       acc.push({
         groupName: item,
-        list: num + groupSetObj[item].length <= ItemLimit ? groupSetObj[item] : groupSetObj[item].filter((v, i) => i < ItemLimit - num),
+        list: num + groupSetObj[item].length <= itemLimit ? groupSetObj[item] : groupSetObj[item].filter((v, i) => i < itemLimit - num),
       });
 
       num += groupSetObj[item].length;
@@ -121,12 +162,141 @@ export default function CoreSection({ categoryType, core }) {
     }, []);
   };
 
+  const toDetails = () => {
+    if (permissions) setItemLimit(9999);
+    setShowProgress(true);
+  }
+
   const shrinkEvt = () => setPackUp(!packUp);
   const scoreExistSign = scoreArr.some(item => item);
   const commentExistSign = commentNumList.length != 0;
+  const controlData = (isHidden,userId,groupName) => {
+    reqPacking({
+      url: 'api/applet/management/hiddenScore',
+      data: {
+        projectId,
+        roundId,
+        isHidden,
+        userId
+      }
+    }).then(res => {
+      const { error } = res;
+      if(!error){
+        let innnerGroup = {};
+        innnerGroup[groupName] = groupSetObj[groupName].map(item => {
+          if(item.userId == userId) item.isHidden = isHidden;
+          return item;
+        });
+
+        setGroupSetObj(Object.assign({},groupSetObj,innnerGroup));
+      }
+    })
+  }
+  const detailCont = () => {
+    if (categoryType == 1 || categoryType == 2) {
+      return <View className="table-wrap">
+        <View className="table column2">
+          <View className="thead">
+            <View className="tr">
+              <Text className="th">评估人</Text>
+              <Text className="th">总得分</Text>
+              {permissions ? <Text className="th">推荐程度</Text> : ""}
+            </View>
+          </View>
+          <View className="tbody">
+            {groupSetArr(packUp).map(({ groupName, list }, index) =>
+              <React.Fragment key={index}>
+                <View className="tr groupName">{groupName}</View>
+                {list.map(({
+                  name, totalScore, scoreFinished, score, isHidden, userId,
+                }, turn) => <View key={turn} className={`tr ${isHidden ? "hidden-color" : ""} ${list.length == turn + 1 ? "no-line" : ""}`}>
+                    <Text className="td">{name}</Text>
+                    <Text className="td">
+                      {
+                        scoreExistSign ? (
+                          score || score === 0 ? score : '-'
+                        ) :
+                          (
+                            scoreFinished === false ? '未完成' : totalScore
+                          )
+                      }
+                    </Text>
+                    {
+                      permissions ? <View className="td control-btn" onClick={() => controlData(!isHidden,userId,groupName)}>{
+                        isHidden ? <Image className="control-icon" src="https://p0.meituan.net/ingee/89bb33cbda2a92c06d24395f402555aa700.png" /> :
+                          <Image className="control-icon" src="https://p0.meituan.net/ingee/0e9248e47bdc5311effa23a0f2953594797.png" />
+                      }</View> : ""
+                    }
+                  </View>)}
+
+              </React.Fragment>)}
+            {total > itemLimit ? <View className="tr shrink" onClick={shrinkEvt}>{packUp ? `展开剩余${total - itemLimit}条` : "收起"}<Image className="arrow" src="../../static/arrow-down.png" /></View> : null}
+          </View>
+        </View>
+      </View>;
+    };
+
+    return <View className="table-wrap">
+      <View className={`table ${commentExistSign ? `column5` : `column3`}`}>
+        <View className="thead">
+          <View className="tr">
+            <Text className="th">评估人</Text>
+            <Text className="th">{scoreExistSign ? "预估评分" : "总得分"}</Text>
+            <Text className="th">预估票房</Text>
+            {
+              permissions ? <Text className="th">推荐程度</Text> :
+                commentExistSign ? <React.Fragment>
+                  <Text className="th">整体评价</Text>
+                  <Text className="th">推荐程度</Text>
+                </React.Fragment> : null
+            }
+          </View>
+        </View>
+        <View className="tbody">
+          {groupSetArr(packUp).map(({ groupName, list }, index) =>
+            <React.Fragment key={index}>
+              <View className="tr groupName">{groupName}</View>
+              {list.map(({
+                name, score, box, comment, evaluation, totalScore, scoreFinished, isHidden, userId,
+              }, turn) => <View key={turn} className={`tr ${isHidden ? "hidden-color" : ""} ${list.length == turn + 1 ? "no-line" : ""}`}>
+                  <Text className="td">{name}</Text>
+                  <Text className="td">
+                    {
+                      scoreExistSign ? (
+                        score || score === 0 ? score : '-'
+                      ) :
+                        (
+                          scoreFinished === false ? '未完成' : totalScore
+                        )
+                    }
+                  </Text>
+                  <Text className="td">{box === null ? "-" : `${box}亿`}</Text>
+                  {
+                    permissions ?
+                      <View className="td control-btn" onClick={() => controlData(!isHidden,userId,groupName)}>{
+                        isHidden ? <Image className="control-icon" src="https://p0.meituan.net/ingee/89bb33cbda2a92c06d24395f402555aa700.png" /> :
+                          <Image className="control-icon" src="https://p0.meituan.net/ingee/0e9248e47bdc5311effa23a0f2953594797.png" />
+                      }</View> :
+                      commentExistSign ? <React.Fragment>
+                        <Text className="td">{comment}</Text>
+                        <Text className="td">{evaluation}</Text>
+                      </React.Fragment> : null
+                  }
+                </View>)}
+
+            </React.Fragment>)}
+          {total > itemLimit ? <View className="tr shrink" onClick={shrinkEvt}>{packUp ? `展开剩余${total - itemLimit}条` : "收起"}<Image className="arrow" src="../../static/arrow-down.png" /></View> : null}
+        </View>
+      </View>
+    </View>
+  }
 
   return <View className="coreSection-wrap">
-    <View className="h5">1、核心数据</View>
+    <View className="h5">1、核心数据
+      {
+        permissions ? <Text className="detail" onClick={toDetails}>评估详情 <Text className="arrow" /></Text> : ''
+      }
+    </View>
     {categoryType == 1 || categoryType == 2 ?
       <View>
         <Box
@@ -134,39 +304,17 @@ export default function CoreSection({ categoryType, core }) {
           width="100%"
           headTitle="总得分"
           scoreObj={clacScore(totalScoreArr, 1)} />
-        <View className="table-wrap">
-          <View className="table column2">
-            <View className="thead">
-              <View className="tr">
-                <Text className="th">评估人</Text>
-                <Text className="th">总得分</Text>
-              </View>
-            </View>
-            <View className="tbody">
-              {groupSetArr(packUp).map(({ groupName, list }, index) =>
-                <React.Fragment key={index}>
-                  <View className="tr groupName">{groupName}</View>
-                  {list.map(({
-                    name, totalScore,scoreFinished,score,
-                  }, turn) => <View key={turn} className={`tr ${list.length == turn + 1 ? "no-line" : ""}`}>
-                      <Text className="td">{name}</Text>
-                      <Text className="td">
-                        {
-                          scoreExistSign ? (
-                            score || score === 0 ? score : '-'
-                          ) :
-                            (
-                              scoreFinished === false ? '未完成所有题目' : totalScore
-                            )
-                        }
-                        </Text>
-                    </View>)}
-
-                </React.Fragment>)}
-              {total > ItemLimit ? <View className="tr shrink" onClick={shrinkEvt}>{packUp ? `展开剩余${total - ItemLimit}条` : "收起"}<Image className="arrow" src="../../static/arrow-down.png" /></View> : null}
-            </View>
-          </View>
-        </View>
+        {
+          permissions ?
+            <FloatLayout
+              isOpened={showProgress}
+              title="核心数据"
+              className='layout-process core-process'
+              onClose={() => setShowProgress(false)}>
+              <View className="core-tip">评估信息隐藏后仅自己可见，且不计入总平均值</View>
+              {detailCont()}
+            </FloatLayout> : detailCont()
+        }
       </View> :
       <View>
         <View className="box-wrap">
@@ -187,53 +335,17 @@ export default function CoreSection({ categoryType, core }) {
           <ProcessBox colorArr={[72, 195, 29]} list={recommendedNumList} headTitle="整体评价" />
           <ProcessBox colorArr={[24, 144, 255]} list={commentNumList} headTitle="推荐程度" />
         </React.Fragment> : ""}
-        <View className="table-wrap">
-          <View className={`table ${commentExistSign ? `column5` : `column3`}`}>
-            <View className="thead">
-              <View className="tr">
-                <Text className="th">评估人</Text>
-                <Text className="th">{scoreExistSign ? "预估评分" : "总得分"}</Text>
-                <Text className="th">预估票房</Text>
-                {
-                  commentExistSign ? <React.Fragment>
-                    <Text className="th">整体评价</Text>
-                    <Text className="th">推荐程度</Text>
-                  </React.Fragment> : null
-                }
-              </View>
-            </View>
-            <View className="tbody">
-              {groupSetArr(packUp).map(({ groupName, list }, index) =>
-                <React.Fragment key={index}>
-                  <View className="tr groupName">{groupName}</View>
-                  {list.map(({
-                    name, score, box, comment, evaluation, totalScore, scoreFinished,
-                  }, turn) => <View key={turn} className={`tr ${list.length == turn + 1 ? "no-line" : ""}`}>
-                      <Text className="td">{name}</Text>
-                      <Text className="td">
-                        {
-                            scoreExistSign ? (
-                              score || score === 0 ? score : '-'
-                            ) :
-                              (
-                                scoreFinished === false ? '未完成所有题目' : totalScore
-                              )
-                          }
-                        </Text>
-                      <Text className="td">{box === null ? "-" : `${box}亿`}</Text>
-                      {
-                        commentExistSign ? <React.Fragment>
-                          <Text className="td">{comment}</Text>
-                          <Text className="td">{evaluation}</Text>
-                        </React.Fragment> : null
-                      }
-                    </View>)}
-
-                </React.Fragment>)}
-              {total > ItemLimit ? <View className="tr shrink" onClick={shrinkEvt}>{packUp ? `展开剩余${total - ItemLimit}条` : "收起"}<Image className="arrow" src="../../static/arrow-down.png" /></View> : null}
-            </View>
-          </View>
-        </View>
+        {
+          permissions ?
+            <FloatLayout
+              isOpened={showProgress}
+              title="核心数据"
+              className='layout-process core-process'
+              onClose={() => setShowProgress(false)}>
+              <View className="core-tip">评估信息隐藏后仅自己可见，且不计入总平均值</View>
+              {detailCont()}
+            </FloatLayout> : detailCont()
+        }
       </View>
     }
   </View>
@@ -254,7 +366,7 @@ function Box({
     }}>
     <View className="h5">{headTitle}</View>
     <View className="dl">
-      <View className="dt" style={{ color: `${colorCalc(colorArr)}` }}>{!average && average!== 0 ? '-': average}</View>
+      <View className="dt" style={{ color: `${colorCalc(colorArr)}` }}>{!average && average !== 0 ? '-' : average}</View>
       <View className="dt">
         {limitValHidden ? "" : <Text className="dd">最高{max}</Text>}
         {limitValHidden ? "" : <Text className="dd">最低{min}</Text>}

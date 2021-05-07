@@ -168,7 +168,7 @@ export default class Detail extends React.Component {
           data.newMainRole = newMainRole;
           this.setState({
             basicData: data,
-            loading: false
+            loading: false,
           }, () => {
             this.fetchJudgeRole();
             // this.fetchRole();
@@ -432,6 +432,7 @@ export default class Detail extends React.Component {
     const {updateTime, estimateNum} = keyData?.estimateBox?.machineEstimateBoxDetail || {};
     
     return (
+      loading ? <mpLoading show type='circle' tips='加载中' extClass='detail-loading'></mpLoading> :
       <View>
         <View className='detail-top'>
           <View className={top ? "fixed" : ""} id='top' style={{ height: `${headerBarHeight}px`, paddingTop: `${titleBarPadding}px`, backgroundColor: top ? '#FFFFFF' : '' }} >
