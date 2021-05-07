@@ -1,4 +1,4 @@
-import { View, Image, Text, ScrollView, } from '@tarojs/components';
+import { View, Image, Text, ScrollView, Label, Input } from '@tarojs/components';
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Taro, { useDidShow } from '@tarojs/taro';
 import lx from '@analytics/wechat-sdk';
@@ -116,7 +116,13 @@ export default function Board() {
 
 
   useDidShow(() => {
-    lx.pageView('c_movie_b_u8nui5w0');
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    lx.pageView('c_movie_b_u8nui5w0', {
+      custom: {
+        user_id: userInfo.id,
+        keeper_user_id: userInfo.keeperUserId
+      }
+    });
   })
   
   
@@ -396,6 +402,20 @@ export default function Board() {
     }).exec();
   }, 0), [])
 
+  const jumpDig = () => {
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    lx.moduleClick('b_movie_b_pk9ptbhe_mc', {
+      custom: {
+        user_id: userInfo.id,
+        keeper_user_id: userInfo.keeperUserId
+      }
+    }, { cid: 'c_movie_b_u8nui5w0'})
+    
+    Taro.navigateTo({
+      url: '/pages/searchProject/index',
+    });
+  }
+
   return (
     <>
       <Tab />
@@ -407,15 +427,15 @@ export default function Board() {
             className="board-header-title"
             style={BOARD_HEAD_TITLE_STYLE}
           >
-            {hasPagePermission &&  <Image
-              className="board-header-search"
-              src="https://p0.meituan.net/ingee/84c53e3349601b84eb743089196457d52891.png"
-              onClick={() => {
-                Taro.navigateTo({
-                  url: "/pages/searchProject/index",
-                });
-              }}
+            {hasPagePermission && <Image
+              className='board-header-search'
+              src='https://obj.pipi.cn/festatic/common/image/983789fd24e8d39069daa427331b8d05.png'
+              onClick={jumpDig}
             />}
+            <Text className='board-header-text' onClick={jumpDig}
+            >
+              挖掘新项目
+            </Text>
             <Text className="board-header-title-text">项目看板</Text>
           </View>
         </View>
@@ -432,6 +452,18 @@ export default function Board() {
             checkIfStickAfterAll();
           }}
         >
+          <View className='board-search-box'>
+            <View className='board-search-bar'>
+              <Label onClick={() => Taro.navigateTo({url: '/pages/addProject/index'})}>
+                <Image
+                  className='board-searchIco'
+                  src='../../static/icon/search.png'
+                ></Image> 
+                <Input placeholder='搜索项目'></Input>
+            </Label>
+            </View>
+          </View>
+
           <View
             style={{
               opacity: sticky ? "0" : "initial",

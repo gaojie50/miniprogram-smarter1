@@ -137,7 +137,7 @@ const CompeteMarket=(props)=>{
 
   return (
     <FilmComparePanel
-      showWeekType={true}
+      showWeekType
       weekType={weekType}
       onWeekTypeChange={handleWeekTypeChange}
       show={show}
