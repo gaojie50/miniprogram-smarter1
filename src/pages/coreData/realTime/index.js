@@ -36,7 +36,7 @@ export default  function realTime({}) {
   const [getValue, setGetValue] =useState('');
   const changeCalculate = useCallback((calculateValue)=>setCalculate(calculateValue), []);
   const childChangeShowProgress = useCallback((childShowProgress)=>setShowProgress(childShowProgress),[]);
-  // const isChangeCalculate =  useCallback((isChangeCalculate) => {console.log(123, isChangeCalculate)}, [])
+  const isChangeCalculate =  useCallback((isChangeCalculate) => {console.log(123, isChangeCalculate)}, [])
 
   const handleBack = () => {
     Taro.redirectTo({
