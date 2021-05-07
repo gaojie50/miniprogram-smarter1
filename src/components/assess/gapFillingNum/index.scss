@@ -1,4 +1,7 @@
+@import '../common.scss';
+
 .gapFilling-num{
+  @include title();
   .ques-title {
     font-weight: 500;
     font-family: PingFangSC-Medium;

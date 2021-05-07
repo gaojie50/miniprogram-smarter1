@@ -1,6 +1,6 @@
 /* eslint-disable jsx-quotes */
 import React from 'react';
-import { View, Button, Input, Textarea, Text, Block } from '@tarojs/components';
+import { View, Button, Input, Textarea, Text, Block, Image } from '@tarojs/components';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
@@ -17,11 +17,12 @@ import AtFloatLayout from '@components/m5/float-layout';
 import EndTimePicker from '@components/endtime-picker';
 import '@components/m5/style/components/action-sheet.scss';
 import '@components/m5/style/components/float-layout.scss';
+import { arrowIcon } from '@utils/imageUrl';
 import envConfig from '../../../constant/env-config';
+import TempList from './temp-list';
 import './index.scss';
 
 dayjs.extend(isToday);
-
 
 const { errorHandle, getDefaultEndTime, formatEndTime } = utils;
 
@@ -52,6 +53,9 @@ export default class AC extends React.Component {
     editorEvaluationName: false,
     evaluationMethod: '',
     tempId: '',
+    appendQuesList: [],  // 附加题
+    // eslint-disable-next-line react/no-unused-state
+    appendMap: {},  // 附加题和原题关系
     titleErrorTip: false,
     despErrorTip: false,
     projectProfile: [],
@@ -68,6 +72,7 @@ export default class AC extends React.Component {
 
 
   componentDidMount() {
+    
     const { projectId } = getCurrentInstance().router.params;
 
     this.setState({ projectId });
@@ -109,9 +114,7 @@ export default class AC extends React.Component {
         url: 'api/applet/management/briefInfo',
         data: { projectId },
       },
-
-      // 'server',
-      'mock'
+      'server',
     ).then(res => {
       const { error, data } = res;
 
@@ -296,7 +299,6 @@ export default class AC extends React.Component {
 
     if (sign === 'profile') {
       let valueArr = filesChecked.filter(file => file !== uid);
-
       return this.setState({
         primaryFilesChecked: valueArr,
         filesChecked: valueArr,
@@ -309,19 +311,35 @@ export default class AC extends React.Component {
   }
 
 
-  handlePreview=(e, tempId) => {
+  handlePreview=(e, tempId, tempName) => {
     e.stopPropagation();
     const that = this;
+    const { projectId } = this.state;
 
     Taro.navigateTo({
-      url: `/pages/assess/template/index?tempId=${tempId}`,
+      url: `/pages/assess/template/index?tempId=${tempId}&projectId=${projectId}`,
       events: {
-        selectTempId(data) {
+        selectTemp(data) {
           if (data) {
-            that.setState({ tempId: Number(data) });
+            const { appendMap } = that.state;
+            appendMap[tempId] = data.appendQuesList;
+            that.setState({ 
+              tempId: Number(data.tempId),
+              appendQuesList: data.appendQuesList,
+              appendMap,
+            });
           }
         },
       },
+      success: (res) => {
+        // 通过eventChannel向被打开页面传送数据
+        res.eventChannel.emit('previewTemp', { 
+          projectId: projectId,
+          tempId, 
+          tempName,
+          appendQuesList: that.state.appendMap[tempId] || [] 
+        })
+      }
     });
   }
 
@@ -334,6 +352,8 @@ export default class AC extends React.Component {
       titleErrorTip,
       despErrorTip,
       filesChecked,
+      appendQuesList,
+      endTime
     } = this.state;
     const { description, projectEvaluationName } = briefInfo;
     const params = {
@@ -343,10 +363,11 @@ export default class AC extends React.Component {
       tempId,
       fileIdArr: filesChecked || [],
       description,
+      appendTemplate: appendQuesList,
+      deadline: endTime
     };
 
     if (titleErrorTip || despErrorTip) return;
-    return;
     this.setState({ isSubmitting: true });
     reqPacking(
       {
@@ -419,6 +440,7 @@ export default class AC extends React.Component {
       editorEvaluationName,
       evaluationMethod,
       tempId,
+      appendQuesList,
       titleErrorTip,
       despErrorTip,
       projectProfile,
@@ -431,6 +453,7 @@ export default class AC extends React.Component {
       endTime,
       endtimePickerOpen,
     } = this.state;
+
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
     const { templateList = [] } = briefInfo;
     const [curTemplateType] = templateList.filter(tempType => tempType.medium == evaluationMethod);
@@ -451,15 +474,16 @@ export default class AC extends React.Component {
                 roundNum={roundNum}
                 text={`第${roundNum || '-'}轮`}
               />
+
               <View className="create-wrap">
                 <View className="title-wrap">
                   {!editorEvaluationName &&
-            <View className="title">
-              {briefInfo.projectEvaluationName}
-              <View className="edit-btn-wrap" onClick={this.editorTitle}>
-                <View className="smarter-iconfont icon-edit" style={{ fontSize: '44rpx' }} />
-              </View>
-            </View>}
+                  <View className="title">
+                    {briefInfo.projectEvaluationName}
+                    <View className="edit-btn-wrap" onClick={this.editorTitle}>
+                      <View className="smarter-iconfont icon-edit" style={{ fontSize: '44rpx' }} />
+                    </View>
+                  </View>}
                   {editorEvaluationName && <Input
                     className={`title-input ${titleErrorTip ? 'error' : ''}`}
                     type="text"
@@ -529,26 +553,25 @@ export default class AC extends React.Component {
 
                 <View className="template-select-wrap">
                   <View className="title">选择评估模板</View>
-                  {
-                    curTempList.length > 0 ?
-                      curTempList.map((item, index) => (
-                        <View className={`template-item ${tempId === item.tempId ? 'active' : ''}`} key={item.tempId} onClick={() => { this.handleChangeTemp(item.tempId); }}>
-                          <View className="template-name">{index + 1}、{item.title}</View>
-                          <View className="preview-btn" onClick={event => { this.handlePreview(event, item.tempId); }}>预览</View>
-                        </View>
-                      ))
-                      : (
-                        <View className="no-template-note">
-                          <Nodata text="暂无模板可选" />
-                        </View>
-                      )
-                  }
+                  <TempList 
+                    tempList={curTempList}
+                    selectTempId={tempId}
+                    appendQuesList={appendQuesList}
+                    onPreview={this.handlePreview}
+                    onChangeTemp={this.handleChangeTemp}
+                  />
                 </View>
 
                 <View className="endtime-wrap">
                   <View className="title">评估结束时间</View>
                   <View className="time" onClick={this.handleEndTime}>
                     {formatEndTime(endTime).text || '不限时'}
+                    <View className='arrow-wrap'>
+                      <Image
+                        className="arrow-icon"
+                        src={arrowIcon}
+                      />
+                    </View>
                   </View>
                 </View>
 

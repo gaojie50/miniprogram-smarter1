@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from '@tarojs/components'
+import Title from '../title'
 import './index.scss';
 
 export default class Radio extends React.Component {
@@ -18,22 +19,23 @@ export default class Radio extends React.Component {
 
   render() {
     const {
-      id, required, title, questionNum, radioItems, isPreview, showError
+      id, required, radioItems, isPreview, showError,
     } = this.props;
     const { selected } = this.state;
 
-    return <View id={id} className={ `radio-wrap ${required ? "required" : ""}` }>
-      <View className="ques-title">{questionNum}、{title}</View>
-      <View className="list-wrap">
+    return <View id={id} className={`radio-wrap ${required ? "required" : ""}`}>
+      <Title {...this.props} />
+      <View className='list-wrap'>
         {radioItems.map((item, index) => <View
-          key={ index }
-          className={ `list-item ${isPreview ? 'preview' : selected === index ? 'active' : ''}` }
-          onClick={ this.selectChange }
-          data-item={ index }><View className="dot" />
-          <View className="text">{item}</View>
+          key={index}
+          className={`list-item ${isPreview ? 'preview' : selected === index ? 'active' : ''}`}
+          onClick={this.selectChange}
+          data-item={index}
+        ><View className='dot' />
+          <View className='text'>{item}</View>
         </View>)}
       </View>
-      { required && showError ? <View className="error-tip">请选择</View> : "" }
+      { required && showError ? <View className='error-tip'>请选择</View> : "" }
     </View >;
   }
 }
