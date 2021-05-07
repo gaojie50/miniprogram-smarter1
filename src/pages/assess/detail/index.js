@@ -1,19 +1,23 @@
-import { View, ScrollView } from '@tarojs/components'
+import { View, ScrollView, Button } from '@tarojs/components'
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance } from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import utils from '@utils/index';
 import _merge from 'lodash/merge';
+import AtModal from '@components/m5/modal';
+import '@components/m5/style/components/modal.scss';
 import { Radio, MatrixRadio, MatrixScale, GapFillingText, GapFillingNum } from '@components/assess';
 import FixedButton from '@components/fixedButton';
 import Indexes from '@components/indexes';
 import FingerPrint from '@utils/fingerprint';
+import useDeadline from './useDeadline';
 import './index.scss'
 
 const { errorHandle } = utils;
 
 export default function AssessPage(){
   const [ questions, setQuestions ] = useState([]);
+  const [ basicQueslen, setBasicQueslen ] = useState(0);
   const [ finishNum, setFinishNum ] = useState(0);
   const [ rate, setRate ] = useState(0);
   const [ contentHeight, setContentHeight ] = useState();
@@ -21,85 +25,89 @@ export default function AssessPage(){
   const [ quesScrollTopList, setQuesScrollTopList ] = useState([]);
   const [ activeIndex, setActiveIndex ] = useState(1)
   const [ scrollTop, setScrollTop ] = useState(0);
+  const [ openModal, setOpenModal ] = useState(false);
+  const [ deadline, setDeadline ] = useState();
 
-  const { projectId, roundId } = getCurrentInstance().router.params;
+  const { projectId = 12345, roundId = 416 } = getCurrentInstance().router.params;
+
+  const { component: deadlineShow, over } = useDeadline(deadline, () => {setOpenModal(true)});
 
   useEffect(()=>{
     Taro.showLoading({title: '加载中'});
-    fetchBrifInfo();
+    fetchQuestion();
   }, [])
 
-  function fetchBrifInfo(){
+  function fetchQuestion(){
     reqPacking(
       {
-        url: 'api/management/briefInfo',
+        url: 'api/applet/management/modifyEvaluate',
         data: { projectId, roundId },
       },
       'server',
     ).then(res => {
-        const { error, data } = res;
-        if (!error) {
-          const briefInfo = data;
-          const { chooseTempId } = briefInfo;
-          fetchTemp(chooseTempId);
-          return;
+      const { error, data } = res;
+      if (!error) {
+        const { questions, appendTemplate, deadline } = data;
+        setDeadline(deadline);
+        let ques = questions;
+        if (appendTemplate) {
+          ques = questions.concat(appendTemplate);
         }
+        ques.map((item) => {
+          item.showError = false;
+          item.finished = false;
+          item.complete = false;
+          switch (item.type) {
+            case 1:
+            case 2:
+            case 4:
+              if (item.answerContent) {
+                item.complete = true;
+                item.finished = true;
+              }
+            default: 
+              if (item.matrixSelectList) {
+                item.complete = item.matrixSelectList.some(c => c !== -1)
+                item.finished = item.matrixSelectList.every(c => c !== -1)
+              }
+          }
+          return item;
+        })
 
-        errorHandle(error);
-      });
-  }
+        let leng = ques.filter(item => item.finished).length;
+        setFinishNum(leng);
+        setRate(`${Math.round(leng / ques.length * 1000) / 10}%`);
 
-  function fetchTemp(value){
-    if (!value) return;
-    reqPacking(
-      {
-        url: 'api/management/tempQuestion',
-        data: { tempId: value },
-      },
-      'server',
-    ).then(res => {
-        const { data, error } = res;
-        const { questions } = data;
+        setQuestions(ques);
+        setBasicQueslen(questions.length);
+        setActiveIndex('1');
 
-        if (!error) {
-          let ques = questions.map(item => {
-            item.showError = false;
-            item.finished = false;
-            item.complete = false;
-            return item;
-          });
+        Taro.nextTick(() => {
+          const query = Taro.createSelectorQuery();
+          // 一次获取所有题的位置信息
+          query.selectAll('.que-item').boundingClientRect(rect=>{
+            const topList = rect.map(item=>parseInt(item.top));
+            setQuesScrollTopList(topList.map(item=>item-topList[0]));
+          }).exec();
 
-          setQuestions(ques);
-          setActiveIndex('1');
-
-          Taro.nextTick(() => {
-            const query = Taro.createSelectorQuery();
-            // 一次获取所有题的位置信息
-            query.selectAll('.que-item').boundingClientRect(rect=>{
-              const topList = rect.map(item=>parseInt(item.top));
-              setQuesScrollTopList(topList.map(item=>item-topList[0]));
-            }).exec();
-
-            // 获取展示高度和滚动高度
-            query.select('.assess-content-wrap').boundingClientRect(rect=>{
-              setContentHeight(rect.height);
-            }).exec();
+          // 获取展示高度和滚动高度
+          query.select('.assess-content-wrap').boundingClientRect(rect=>{
+            setContentHeight(rect.height);
+          }).exec();
       
-            query.select('.assess-content-wrap .content').boundingClientRect(rect=>{
-              setScrollHeight(rect.height);
-            }).exec();
+          query.select('.assess-content-wrap .content').boundingClientRect(rect=>{
+            setScrollHeight(rect.height);
+          }).exec();
 
-          });
-          return;
-        }
+        });
+        return;
+      }
 
-        error.message && errorHandle(error);
-        setQuestions([]);
+      errorHandle(error);
     }).finally(()=>{
       Taro.hideLoading();
     })
-  };
-
+  }
   
   function updateQues (obj, questionId, itemObj) {
     let innerQues = questions.map(item => {
@@ -153,6 +161,7 @@ export default function AssessPage(){
 
       return obj;
     });
+    const appendTemplate = finalQuestions.slice(basicQueslen).length === 0 ? null : finalQuestions.slice(basicQueslen);
 
     reqPacking(
       {
@@ -161,7 +170,8 @@ export default function AssessPage(){
         data: {
           projectId,
           roundId,
-          questions: finalQuestions,
+          questions: finalQuestions.slice(0,basicQueslen),
+          appendTemplate,
           scoreFinished: allScoreFinished
         },
       },
@@ -192,7 +202,7 @@ export default function AssessPage(){
     const { scrollTop } = e.detail;
     for( let i=0; i<quesLen; i++){
       let curTop = quesScrollTopList[i];
-      let nextTop = quesScrollTopList[i+1];
+      let nextTop = quesScrollTopList[i+1] || 99999;
       if( scrollTop >= curTop && scrollTop < nextTop){
         setActiveIndex(`${i+1}`);
         break;
@@ -202,8 +212,14 @@ export default function AssessPage(){
 
 
   function jumpTarget(target){
-    setActiveIndex(target);
-    const targetTop = quesScrollTopList[target-1];
+    let realTarget = target;
+    if (target <= 1) {
+      realTarget = 1;
+    } else if (target >= questions.length) {
+      realTarget = questions.length
+    }
+    setActiveIndex(realTarget);
+    const targetTop = quesScrollTopList[realTarget-1];
     // 解决被手动滚动后，再次点击上次点击过的index定位不生效的问题
     setScrollTop(targetTop+0.001);
     Taro.nextTick(()=>{
@@ -221,10 +237,19 @@ export default function AssessPage(){
   return (
     <View className="assess-page">
       <FingerPrint />
-      
-      <View className="process-wrap">
-        <View className="inner-bar" style={{width:`${rate}`}} />
+
+      <View className="deadline">
+        {deadlineShow}
       </View>
+
+      <AtModal isOpened={openModal} >
+        <View className="modal">
+          <View className="modal-title">评估时间已结束</View>
+          <View className="modal-content">感谢您的关注，本次评估已结束。如需添加评估内容，请联系评估发起人</View>
+          <Button className="modal-button" onClick={() => { setOpenModal(false) }}>我知道了</Button>
+        </View>
+      </AtModal>
+
 
       {showIndexes && <Indexes 
         list={IndexList} 
@@ -241,7 +266,8 @@ export default function AssessPage(){
         <View className="content">
         {
           questions.map(({
-            type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio, showError, questionId,
+            type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio,
+            showError, questionId, answerContent, matrixSelectList
           }, index, arr) => {
             let qId = `que-num-${index+1}`;
             if (type == 1) {
@@ -253,6 +279,7 @@ export default function AssessPage(){
                 isPreview={ false }
                 questionNum={ questionNum }
                 showError={ showError }
+                defaultValue={ answerContent }
                 cb={ obj => updateQues(obj, questionId, arr[ index ]) }
               /></View>;
             }
@@ -266,6 +293,7 @@ export default function AssessPage(){
                 gapFilling={ gapFilling }
                 questionNum={ questionNum }
                 showError={ showError }
+                defaultValue={ answerContent }
                 cb={ obj => updateQues(obj, questionId, arr[ index ]) }
               /></View>;
             }
@@ -280,6 +308,7 @@ export default function AssessPage(){
                 matrixRadio={ matrixRadio }
                 questionNum={ questionNum }
                 showError={ showError }
+                defaultValue={ matrixSelectList }
                 cb={ obj => updateQues(obj, questionId, arr[ index ]) }
               /></View>;
             }
@@ -294,6 +323,7 @@ export default function AssessPage(){
                 questionNum={ questionNum }
                 radioItems={ radioItems }
                 showError={ showError }
+                defaultValue={ answerContent }
                 cb={ obj => updateQues(obj, questionId, arr[ index ]) }
               /></View>;
             }
@@ -308,6 +338,7 @@ export default function AssessPage(){
                 questionNum={ questionNum }
                 matrixScale={ matrixScale || {} }
                 showError={ showError }
+                defaultValue={ matrixSelectList }
                 cb={ obj => updateQues(obj, questionId, arr[ index ]) }
               /></View>;
             }
@@ -317,8 +348,9 @@ export default function AssessPage(){
         }
       </View>
       </ScrollView>
-      <FixedButton className="submit-btn" onClick={handleSubmit}>
-        {finishNum>0?`已完成${finishNum}题，`:''}提交评估
+      <FixedButton className="submit-btn" onClick={handleSubmit} disabled={over}>
+        <View className="inner-text">{over ? '评估已结束, 不能继续参与' : `${finishNum>0?`已完成${finishNum}题，`:''}提交评估`}</View>
+        <View className="inner-bar" style={{width:`${rate}`}} />
       </FixedButton>
     </View>
   );
