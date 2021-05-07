@@ -412,7 +412,7 @@ export default function Board() {
     }, { cid: 'c_movie_b_u8nui5w0'})
     
     Taro.navigateTo({
-      url: '/pages/searchProject/index',
+      url: '/pages/excavate/index',
     });
   }
 
