@@ -13,8 +13,9 @@ class _C extends React.Component {
   };
 
   state = {
-    finished: false,
-    matrixSelectList: this.props.matrixScale.innerTitle && this.props.matrixScale.innerTitle.map(() => -1),
+    complete: this.props.defaultValue && this.props.defaultValue.some(item => item !== -1),
+    finished: this.props.defaultValue && this.props.defaultValue.every(item => item === -1),
+    matrixSelectList: this.props.defaultValue || (this.props.matrixScale.innerTitle && this.props.matrixScale.innerTitle.map(() => -1)),
   };
 
   handleClick = e => {

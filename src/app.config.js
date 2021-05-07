@@ -96,5 +96,9 @@ export default {
       root:"pages/searchActor",
       pages:["index"]
     },
+    {
+      root: "pages/excavate",
+      pages: ["index"]
+    }
   ]
 }
