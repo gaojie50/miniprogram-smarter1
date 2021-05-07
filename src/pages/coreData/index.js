@@ -96,7 +96,7 @@ export default function hotMovieList() {
   //     url: `/pages/hotMovieSortingList/city/index`
   //   })
   // }
-
+  //
   const switchTab = tab => {
     setCurrent(tab)
     fetchIncomeValue(tab);
