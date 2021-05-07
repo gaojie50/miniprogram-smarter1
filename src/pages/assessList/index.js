@@ -52,21 +52,29 @@ export default function AssessList() {
         ></Image>
         <Text className='assess-list-title-text'>评估列表</Text>
       </View>
-      <ScrollView className='assess-list-content'>
-        <View className='assess-list-content-title'>
+      <ScrollView 
+        className='assess-list-content' 
+        scrollY
+        id={`start${current}`}
+        style={{height: `calc(100vh - ${height}px - ${top}px)`,marginBottom: '56px'}}
+        scrollIntoView={`start${current}`}
+        scrollWithAnimation
+      >
+        <View className='assess-list-content-title' style={{top: `calc(${height}px + ${top}px)`}}  >
           {
             HEADER_LIST.map((item, index) => {
               return <View 
                 className={index === current ? 'assess-list-content-title-item active' : 'assess-list-content-title-item'} 
                 key={index} 
                 style={{width: `${100/HEADER_LIST.length}%`}}
-                onClick={() => {console.log(index);setCurrent(index)}}
+                onClick={() => setCurrent(index)}
               >
                   {item.value}
                 </View>
             })
           }
         </View>
+        
         <View className='assess-list-content-body'>
           <EvaluationList type={current} />
         </View>

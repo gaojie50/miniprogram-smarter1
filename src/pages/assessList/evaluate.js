@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro';
 import { View, Image, Text, Button } from '@tarojs/components';
 import React, { useEffect, useMemo, useState } from 'react';
-import { noDataPic } from '@utils/imageUrl';
+import { noDataPic, defaultMovieCover as Cover } from '@utils/imageUrl';
 import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
@@ -15,78 +15,17 @@ const TYPE = {
   3: '成片评估',
 }
 
-const test = {evaluationList: [
-  {
-    "roundId": 6,
-    "round": 4,
-    "roundTitle": "《离天空这么近》项目第4轮评估",
-    "roundDesc": "《离天空这么近》项目第4轮评估",
-    "estimateBox": 1325000000,
-    "estimateScore": 5,
-    "evaluationTotalScore": 33,
-    "participantNumber": 2,
-    "invitees": "刘娟",
-    "hasAssess": false,
-    "evaluationMethod": 1,
-    "projectFileTitle": [
-      "测试.csv",
-      "测试.csv",
-      "7508.mp4"
-    ],
-    "startDate": 1614686114000,
-    "initiator": "兰厅",
-    "projectId": 12345,
-    "name": "离天空这么近离天空这么近离天空这么近",
-    "evaluationRole": 1,
-    "category": 3,
-    "evaluationTimes": 4,
-    "imageUrl": "http://p0.meituan.net/w.h/movie/2691e395bb04c937cdfc9dd20d2dfcb436337.jpg",
-    "deadline": 1622189490000,
-    "role": 1,
-    "projectRole": 1
-  },
-  {
-    "roundId": 6,
-    "round": 4,
-    "roundTitle": "《离天空这么近》项目第4轮评估",
-    "roundDesc": "《离天空这么近》项目第4轮评估",
-    "estimateBox": 1325000000,
-    "estimateScore": 5,
-    "evaluationTotalScore": 33,
-    "participantNumber": 2,
-    "invitees": "兰厅",
-    "hasAssess": true,
-    "evaluationMethod": 1,
-    "projectFileTitle": [
-      "测试.csv",
-      "测试.csv",
-      "7508.mp4"
-    ],
-    "startDate": 1614686114000,
-    "initiator": "刘娟",
-    "projectId": 12345,
-    "name": "离天空这么近",
-    "evaluationRole": 1,
-    "category": 6,
-    "evaluationTimes": 4,
-    "imageUrl": "http://p0.meituan.net/w.h/movie/2691e395bb04c937cdfc9dd20d2dfcb436337.jpg",
-    "deadline": 1622189490000,
-    "role": 1,
-    "projectRole": 1
-  }
-]}
-
-// const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 const TYPE_MOVIE = 3 || 4;
 // const DEFAULT_PROJECT_ROLE = 6;
 
 
 export function EvaluationList({type}) {
   const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const { userInfo } = Taro.getStorageSync('authinfo');
-    setData(test)
+    setLoading(true)
     reqPacking({
       url: 'api/applet/management/allEvaluationList',
       data: {
@@ -94,10 +33,10 @@ export function EvaluationList({type}) {
         userId: userInfo.id
       }
     }, 'server').then(res => {
-      console.log(res, 123)
       const { success } = res;
       if(success) {
         setData(res.data)
+        setLoading(false)
       }
     })
   }, [type])
@@ -107,23 +46,23 @@ export function EvaluationList({type}) {
     return [__evaluationList];
   }, [data])
 
-  return <View>
-      {
-        evaluationList.length ? evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />) : (
+  return loading ? <mpLoading show type='circle' tips=''></mpLoading> :
+          evaluationList.length ? <>
+          {
+            evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />)
+          }
+          <View className='assess-list-content-body-noMore'>没有更多了</View>
+          </> : (
           <>
             <View className='no-eval-data'>
               <Image src={noDataPic} alt=''></Image>
               <View className='text'>暂无评估记录</View>
             </View>
           </>
-        )
-      }
-    </View>
-    
+          )
 }
 
 function EvalutaionCard(props) {
-  console.log(props, 22222)
   const [realName, setRealName] = useState('');
 
   const {
@@ -136,19 +75,23 @@ function EvalutaionCard(props) {
     role,
     imageUrl,
     name,
-    deadline = 124345
+    deadline
   } = props;
 
-  const timeStr = useMemo(() => {
-    if (!startDate) return '-'
-    const time = new Date(startDate);
-    const d = time.getDate();
-    const h = time.getHours();
-    const m = time.getMinutes();
-    const s = time.getSeconds();
-    const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
-    return str;
-  }, [startDate])
+  if(deadline === 0) {
+    deadline = null;
+  }
+
+  // const timeStr = useMemo(() => {
+  //   if (!startDate) return '-'
+  //   const time = new Date(startDate);
+  //   const d = time.getDate();
+  //   const h = time.getHours();
+  //   const m = time.getMinutes();
+  //   const s = time.getSeconds();
+  //   const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
+  //   return str;
+  // }, [startDate])
   
 
   const arr = useMemo(() => {
@@ -245,7 +188,7 @@ function EvalutaionCard(props) {
         
         return [1, prefix]
       }
-
+      console.log(isDockingPerson(role), role)
       if (isDockingPerson(role)) {
         if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
@@ -257,13 +200,14 @@ function EvalutaionCard(props) {
         
         return [2, prefix]
       }
+      return [3, prefix]
     }
   }, [deadline, hasAssess, initiator, invitees, realName]);
 
   return (
     <View className='assess-list-evaluation-card'>
       <View onClick={handleJump} >
-        <Image className='assess-list-evaluation-card-image' src={imageUrl && imageUrl.replace('/w.h', '')}></Image>
+        <Image className='assess-list-evaluation-card-image' src={imageUrl ? imageUrl.replace('/w.h', '') : Cover}></Image>
         <View className='assess-list-evaluation-card-title'>
           <View className='assess-list-evaluation-card-title-left' onClick={jumpDetail}>
             <View className='assess-list-evaluation-card-title-left-name'>{name}</View>
@@ -277,9 +221,9 @@ function EvalutaionCard(props) {
           <View className='assess-list-evaluation-card-status-left'>
             第{round}轮 / {TYPE[evaluationMethod]}
           </View>
-          <View className='assess-list-evaluation-card-status-right'>
+          {/* <View className='assess-list-evaluation-card-status-right'>
             {timeStr}
-          </View>
+          </View> */}
         </View>
         <View className='assess-list-evaluation-card-info'>
         <View className='assess-list-evaluation-card-info-title'>

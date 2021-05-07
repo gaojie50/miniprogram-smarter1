@@ -178,7 +178,7 @@ function EvalutaionCard(props) {
       Taro.navigateTo({ url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`})
     }
   }
-console.log(hasAssess,deadline)
+
   const [statusType, statusText] = useMemo(() => {
     if (hasAssess) {
       return [0, '已评估']
