@@ -11,7 +11,7 @@ import { numberFormat, centChangeTenThousand, numberFormatCent } from '../common
 import { get as getGlobalData } from '../../../global_data';
 import { REALTIME_DATA_LISTS as listsInfo } from '../constant';
 
-export default  function realTime({}) {
+export default function realTime({}) {
   const reqPacking = getGlobalData('reqPacking');
   const incomeName = ['', '总发行代理费', '猫眼发行代理费', '主创分红']
   const paramTitle = ['合同参数', '实时参数', '假定条件']

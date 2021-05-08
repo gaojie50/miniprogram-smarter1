@@ -91,11 +91,11 @@ export default function hotMovieList() {
   //   })
   // }
 
-  // const gotoCityList = () => {
-  //   Taro.redirectTo({
-  //     url: `/pages/hotMovieSortingList/city/index`
-  //   })
-  // }
+  const gotoCityList = () => {
+    Taro.redirectTo({
+      url: `/pages/hotMovieSortingList/city/index`
+    })
+  }
 
   const switchTab = tab => {
     setCurrent(tab)
@@ -115,17 +115,17 @@ export default function hotMovieList() {
           </View>
         </View>
         <ScrollView scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, marginTop: headerBarHeight}}>
-        <DateBar />
+        <DateBar needButtons />
         { isMovieScreening ?
             <View>
-              {/* <View className='list-header'>
+              <View className='list-header'>
                 <View className='list-header-left'>全国</View>
                 <View className='list-header-img'>
                   <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
                 </View>
                 <View className='list-header-right' onClick={()=>{gotoCityList()}} >各地区产生票房及占比</View>
                 <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
-              </View> */}
+              </View>
               <View className='box-office'>
                 <View className='office'>
                   <View className='office-title'>预测日票房</View>
