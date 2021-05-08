@@ -90,6 +90,10 @@ export default {
     {
       root: "pages/coreData",
       pages: ["index", "realTime/index"]
+    },
+    {
+      root: "pages/checkCity",
+      pages: ["index"]
     }
   ]
 }
