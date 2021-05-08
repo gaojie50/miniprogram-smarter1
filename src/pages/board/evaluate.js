@@ -90,16 +90,16 @@ function EvalutaionCard(props) {
     deadline
   } = props;
 
-  const timeStr = useMemo(() => {
-    if (!startDate) return '-'
-    const time = new Date(startDate);
-    const d = time.getDate();
-    const h = time.getHours();
-    const m = time.getMinutes();
-    const s = time.getSeconds();
-    const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
-    return str;
-  }, [startDate])
+  // const timeStr = useMemo(() => {
+  //   if (!startDate) return '-'
+  //   const time = new Date(startDate);
+  //   const d = time.getDate();
+  //   const h = time.getHours();
+  //   const m = time.getMinutes();
+  //   const s = time.getSeconds();
+  //   const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
+  //   return str;
+  // }, [startDate])
   
 
   const arr = useMemo(() => {
