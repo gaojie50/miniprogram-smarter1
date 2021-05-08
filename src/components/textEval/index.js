@@ -23,23 +23,32 @@ export default function TextEval({
   questionId,
 }) {
   const [packUp, setPackUp] = useState(true);
-  const [describe, setDescribe] = useState(summaryText);
   const shrinkEvt = () => setPackUp(!packUp);
   const [showProgress, setShowProgress] = useState(false);
   const [itemLimit, setItemLimit] = useState(5);
   let joinNum = 0;
   let summary = 0;
+  let  allMemberList = [];
   const total = texts.reduce((acc, val) => {
     acc += val.memberList.length;
+    
+    if(val.memberList?.length) allMemberList.push(...val.memberList);
+
     val?.memberList?.map(item => {
       if(item.content || item.content === 0) {
-        if(isTopic) summary = item.content;
+        if(isTopic) summary += Number(item.content);
         joinNum += 1;
       };
     });
 
     return acc;
   }, 0);
+  const [describe, setDescribe] = useState(summaryText || allMemberList.reduce((acc,val) =>{
+    const {name,content} = val;
+    
+    if(content) acc += `- ${content}\n`;
+    return acc;
+  },""));
 
   const textsHandle = up => {
     if (!up) return texts;
