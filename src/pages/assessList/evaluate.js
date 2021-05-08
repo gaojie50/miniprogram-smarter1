@@ -33,11 +33,22 @@ export function EvaluationList({type}) {
         userId: userInfo.id
       }
     }, 'server').then(res => {
-      const { success } = res;
+      const { success, error } = res;
       if(success) {
-        setData(res.data)
-        setLoading(false)
+        setData(res.data || {})
+      } else {
+        Taro.showToast({
+          title: error.message,
+          icon: 'none'
+        })
       }
+      setLoading(false)
+    })
+    .catch(err => {
+      Taro.showToast({
+        title: err,
+        icon: 'none'
+      })
     })
   }, [type])
 

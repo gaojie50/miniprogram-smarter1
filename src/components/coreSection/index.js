@@ -378,6 +378,8 @@ function Box({
 function ProcessBox({ colorArr, list = [], headTitle }) {
   const innerList = list.filter(item => item.num);
 
+  if(innerList.length == 0) return '';
+  
   return <View className="process-box"
     style={{ backgroundColor: `${colorCalc(colorArr, 0.1)}` }}>
     <View className="h5">{headTitle}</View>
