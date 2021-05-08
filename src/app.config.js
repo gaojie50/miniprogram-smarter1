@@ -2,6 +2,7 @@ export default {
   pages: [
     'pages/list/index',
     'pages/board/index',
+    'pages/assessList/index',
   ],
   tabBar: {
     list: [{
@@ -9,7 +10,19 @@ export default {
       'selectedIconPath': 'static/tab/market_active.png',
       pagePath: 'pages/list/index',
       text: '市场情报'
-    }, {
+    },
+    // {
+    //   'iconPath': 'static/tab/income.png',
+    //   'selectedIconPath': 'static/tab/income_active.png',
+    //   pagePath: 'pages/list/index',
+    //   text: '收入测算'
+    // },
+    {
+      'iconPath': 'static/tab/assessment.png',
+      'selectedIconPath': 'static/tab/assessment_active.png',
+      pagePath: 'pages/assessList/index',
+      text: '评估列表'
+    },{
       'iconPath': 'static/tab/board.png',
       'selectedIconPath': 'static/tab/board_active.png',
       pagePath: 'pages/board/index',
@@ -83,5 +96,9 @@ export default {
       root:"pages/searchActor",
       pages:["index"]
     },
+    {
+      root: "pages/excavate",
+      pages: ["index"]
+    }
   ]
 }

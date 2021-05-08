@@ -6,7 +6,7 @@ import './index.scss';
 
 export default class GapFillingText extends React.Component {
   state = {
-    value: '',
+    value: this.props.defaultValue || '',
   };
 
   valueChange = ({ target }) => {

@@ -5,7 +5,7 @@ import './index.scss';
 
 export default class GapFillingNum extends React.Component {
   state = {
-    value: '',
+    value: this.props.defaultValue || '',
   };
 
   valueChange = ({ target }) => {

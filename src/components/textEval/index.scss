@@ -21,4 +21,59 @@
       }
     }
   } 
+
+  .h5.rich{
+    position: relative;
+    padding-right: 170px;
+  }
+
+  .filling{
+    background: #F8F8F8;
+    border-radius: 10px;
+    padding: 28px 20px;
+    height: 86px;
+    font-weight: 400;
+    font-family: PingFangSC-Regular;
+    font-size: 28px;
+    color: #333333;
+    line-height: 30px;
+    box-sizing: border-box;
+
+    .join{
+      color: #999999;
+    }
+
+    .val{
+      display: inline-block;
+      float: right;
+      color: #333;
+      font-family: MaoYanHeiTi-Light;
+    }
+  }
+
+  .textarea-wrap{
+    position: relative;
+
+    .textarea{
+      background: #F8F8F8;
+      border-radius: 10px;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #333333;
+      line-height: 36px;
+    }
+  
+    .editable{
+      width: 118px;
+      height: 103px;
+      position: absolute;
+      z-index: 1;
+      right: 0;
+      top: 0;
+    }
+  }
 }
