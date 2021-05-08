@@ -20,7 +20,10 @@ export default function useDeadline(t, cb ) {
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
-    if (!t) return
+    if (!t) {
+      setMessage('不限时评估');
+      return;
+    }
     const nowTime = new Date();
     const endTime = new Date(t);
     const month = endTime.getMonth() + 1;
