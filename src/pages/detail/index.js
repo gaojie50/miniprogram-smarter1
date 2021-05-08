@@ -311,7 +311,18 @@ export default class Detail extends React.Component {
 
   bottomClick(value) {
     const { projectId } = this.state.basicData;
+    const { evaluation } = this.state;
+    const { userInfo } = Taro.getStorageSync('authinfo');
     if (value === 'assess') {
+      const round_id = evaluation.length === 0 ? 1 : (evaluation[0].round + 1);
+      lx.moduleClick('b_movie_b_t5is3kn1_mc', {
+        custom: {
+          user_id: userInfo.keeperUserId,
+          project_id: projectId,
+          round_id
+        }
+      }, { cid: 'c_movie_b_z5wvew69'});
+
       wx.navigateTo({
         url: `/pages/assess/create/index?projectId=${projectId}`,
       })
