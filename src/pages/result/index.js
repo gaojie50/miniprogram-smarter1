@@ -188,7 +188,7 @@ export default function Result() {
                   core={core}
                   projectId={projectId}
                   roundId={roundId} 
-                  permissions={ /* permissions */true }
+                  permissions={ permissions }
                   categoryType={categoryType} /> :
                 ""}
   
@@ -207,7 +207,9 @@ export default function Result() {
                       isAppendContent={!!item?.isAppendContent}
                       summaryText={item?.summaryText||""}
                       isTopic={ item.type == 2 }
-                      permissions={ /*permissions*/true }
+                      permissions={ permissions }
+                      type={ item.type }
+                      questionId={item.id}
                     />;
                   }
   

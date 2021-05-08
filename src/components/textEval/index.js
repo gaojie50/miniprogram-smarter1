@@ -17,6 +17,10 @@ export default function TextEval({
   isAppendContent,
   summaryText,
   isTopic,
+  projectId,
+  roundId,
+  type,
+  questionId,
 }) {
   const [packUp, setPackUp] = useState(true);
   const [describe, setDescribe] = useState(summaryText);
@@ -57,12 +61,18 @@ export default function TextEval({
   const inputDescribe = ({ detail }) => setDescribe(detail.value);
 
   const blurEvent = () => {
+    const texts = {
+      type,
+      questionId,
+      'content':describe
+    };
+    
     reqPacking({
       url: 'api/applet/management/update',
       data: {
         projectId,
         roundId,
-        texts: describe,
+        texts,
         isAppendContent,
       }
     }).then(res => {
