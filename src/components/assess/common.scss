@@ -1,0 +1,9 @@
+@mixin title {
+  .ques-title-wrap {
+    display: flex;
+    align-content: space-around;
+    .ques-title {
+      flex: 1;
+    }
+  }
+}

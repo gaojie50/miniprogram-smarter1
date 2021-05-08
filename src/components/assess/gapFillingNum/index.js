@@ -1,10 +1,11 @@
 import { View, Input } from '@tarojs/components'
 import React from 'react';
+import Title from '../title'
 import './index.scss';
 
 export default class GapFillingNum extends React.Component {
   state = {
-    value: '',
+    value: this.props.defaultValue || '',
   };
 
   valueChange = ({ target }) => {
@@ -30,23 +31,24 @@ export default class GapFillingNum extends React.Component {
 
   render() {
     const {
-      id, required, gapFilling, questionNum, isPreview, showError
+      id, required, gapFilling, isPreview, showError
     } = this.props;
     const { leftText, rightText } = gapFilling;
 
-    return <View id={id}  className={ `gapFilling-num ${required ? "required" : ""} ${isPreview ? 'preview' : ''}` }>
-      <View className="ques-title">{questionNum}、{leftText}</View>
-      <View className="input-line">
-        <View className="input-label">{leftText}</View>
-        <View className="num-input-wrapper">
+    return <View id={id}  className={`gapFilling-num ${required ? "required" : ""} ${isPreview ? 'preview' : ''}`}>
+      <Title {...this.props} title={leftText} />
+      <View className='input-line'>
+        <View className='input-label'>{leftText}</View>
+        <View className='num-input-wrapper'>
           <Input
-            placeholder="请填写"
-            value={ this.state.value }
-            disabled={ isPreview }
-            className={ `num-input ${isPreview ? 'preview' : ''} ` }
-            onInput={ this.valueChange } />
+            placeholder='请填写'
+            value={this.state.value}
+            disabled={isPreview}
+            className={`num-input ${isPreview ? 'preview' : ''} `}
+            onInput={this.valueChange}
+          />
           {rightText}
-          { required && showError ? <View className="error-tip">请填写</View> : "" }
+          { required && showError ? <View className='error-tip'>请填写</View> : "" }
         </View>
       </View>
      

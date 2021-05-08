@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import Taro, { connectSocket } from '@tarojs/taro';
+/* eslint-disable jsx-quotes */
+import React from 'react';
+import Taro from '@tarojs/taro';
 import {
   View,
-  Image,
-  Text
 } from '@tarojs/components';
 import './index.scss';
 
@@ -20,10 +19,10 @@ const Indexes = function(props){
       <View className='indexes-component'>
         <View className="indexes-menu">
           {showTop && <View
-            className={`indexes-menu-item-wrapper`}
+            className="indexes-menu-item-wrapper"
             onClick={()=>{handleItemClick(topKey)}}
           >
-            <View className={`indexes-menu-item top`}>
+            <View className="indexes-menu-item top">
               Top
             </View>
           </View>}
@@ -31,10 +30,10 @@ const Indexes = function(props){
             list.map(item=>{
               return (
                 <View
-                    className={`indexes-menu-item-wrapper`}
-                    key={item.key}
-                    onClick={()=>{handleItemClick(item.key)}}
-                  >
+                  className="indexes-menu-item-wrapper"
+                  key={item.key}
+                  onClick={()=>{handleItemClick(item.key)}}
+                >
                   <View className={`indexes-menu-item ${activeKey===item.key ? 'active': ''}`}>
                     {item.title}
                   </View>
