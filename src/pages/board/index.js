@@ -119,8 +119,7 @@ export default function Board() {
     const { userInfo } = Taro.getStorageSync('authinfo');
     lx.pageView('c_movie_b_u8nui5w0', {
       custom: {
-        user_id: userInfo.id,
-        keeper_user_id: userInfo.keeperUserId
+        user_id: userInfo.keeperUserId,
       }
     });
   })

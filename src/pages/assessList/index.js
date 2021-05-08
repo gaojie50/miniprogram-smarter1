@@ -35,8 +35,7 @@ export default function AssessList() {
     const { userInfo } = Taro.getStorageSync('authinfo');
     lx.pageView('c_movie_b_8gwiwttn', {
       custom: {
-        user_id: userInfo.id,
-        keeper_user_id: userInfo.keeperUserId
+        user_id: userInfo.keeperUserId,
       }
     });
   })
@@ -56,7 +55,7 @@ export default function AssessList() {
         className='assess-list-content' 
         scrollY
         id={`start${current}`}
-        style={{height: `calc(100vh - ${height}px - ${top}px)`,marginBottom: '56px'}}
+        style={{height: `calc(100vh - ${height}px - ${top}px - 56px)`,marginBottom: '56px'}}
         scrollIntoView={`start${current}`}
         scrollWithAnimation
       >

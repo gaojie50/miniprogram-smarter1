@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import Taro from '@tarojs/taro';
 import { View, Image, Text, Textarea, ScrollView, } from '@tarojs/components';
+import lx from '@analytics/wechat-sdk';
 import { get as getGlobalData } from '../../global_data';
 import projectConfig from '../../constant/project-config';
 import './index.scss';
@@ -59,6 +60,16 @@ export default function AddingProcess({projectId,closeEvt,submitEvt}){
   
   const goSubmit = () =>{
     if(!submit) return;
+
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    lx.moduleClick('b_movie_b_rsoself0_mc', {
+      custom: {
+        user_id: userInfo.keeperUserId,
+        project_id: projectId,
+        project_stage: stage,
+        stage_status: statusArr
+      }
+    }, { cid: 'c_movie_b_z5wvew69'});
 
     reqPacking({
       url:'api/management/stage/save',
