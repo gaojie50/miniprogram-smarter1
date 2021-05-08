@@ -13,6 +13,12 @@ class App extends React.Component {
     if([ 'develop', 'trial'].includes(accountInfo.miniProgram.envVersion)){
       lx.dev(true);
     }
+    // 埋点验证
+    // let validCode = Math.random().toString().slice(2, 8);
+    // lx.debug(true, {  
+    //     code: validCode
+    // });
+    // console.log(validCode)
     this.initReport()
     lx.setLch();
     lx.start(); // 应用启动

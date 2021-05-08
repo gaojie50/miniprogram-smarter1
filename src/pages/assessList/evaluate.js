@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro';
 import { View, Image, Text, Button } from '@tarojs/components';
 import React, { useEffect, useMemo, useState } from 'react';
-import { noDataPic } from '@utils/imageUrl';
+import { noDataPic, defaultMovieCover as Cover } from '@utils/imageUrl';
 import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
@@ -15,67 +15,54 @@ const TYPE = {
   3: '成片评估',
 }
 
-const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 const TYPE_MOVIE = 3 || 4;
-const DEFAULT_PROJECT_ROLE = 6;
+// const DEFAULT_PROJECT_ROLE = 6;
 
-export function EvaluationList(props) {
+
+export function EvaluationList({type}) {
   const [data, setData] = useState({});
-  const [auth, setAuth] = useState(false);
-  const [projectRole, setProjectRole] = useState(DEFAULT_PROJECT_ROLE);
-  const { projectId, keyData, judgeRole, judgeData } = props;
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (projectId) {
-      PureReq_EvaluationList({
-        projectId
-      }).then((res) => {
-        const { success, data, error } = res;
-        if (success) {
-          setData(data);
-          setAuth(true);
-          judgeData(data, 'evaluation');
-        } else {
-          if (error && error.message === NO_AUTH_MESSAGE) {
-            setAuth(false);
-          }
-        }
-      })
-
-      PureReq_ProjectRole({
-        projectId,
-      }).then((res) => {
-        const { success, data, error } = res;
-        if (success) {
-          setProjectRole(data?.projectRole || DEFAULT_PROJECT_ROLE);
-        }
-      })
-    }
-  }, [projectId, keyData])
+    const { userInfo } = Taro.getStorageSync('authinfo');
+    setLoading(true)
+    reqPacking({
+      url: 'api/applet/management/allEvaluationList',
+      data: {
+        type: type + 1,
+        userId: userInfo.id
+      }
+    }, 'server').then(res => {
+      const { success } = res;
+      if(success) {
+        setData(res.data)
+        setLoading(false)
+      }
+    })
+  }, [type])
 
   const [evaluationList] = useMemo(() => {
     const { evaluationList: __evaluationList = [] } = data;
     return [__evaluationList];
   }, [data])
 
-  return  projectId ? (auth ? (
-    <View>
-      {
-        evaluationList.length ? evaluationList.map((item) => <EvalutaionCard {...item} projectRole={projectRole} judgeRole={judgeRole} projectId={data.projectId} category={data.category}/>) : (
+  return loading ? <mpLoading show type='circle' tips=''></mpLoading> :
+          evaluationList.length ? <>
+          {
+            evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />)
+          }
+          <View className='assess-list-content-body-noMore'>没有更多了</View>
+          </> : (
           <>
-            <View className="no-eval-data" style={{backgroundColor: '#ffffff'}}>
-              <Image src={noDataPic} alt=""></Image>
-              <View className="text">暂无评估记录</View>
+            <View className='no-eval-data'>
+              <Image src={noDataPic} alt=''></Image>
+              <View className='text'>暂无评估记录</View>
             </View>
           </>
-        )
-      }
-    </View>
-  ) : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
+          )
 }
 
 function EvalutaionCard(props) {
-  
   const [realName, setRealName] = useState('');
 
   const {
@@ -85,20 +72,26 @@ function EvalutaionCard(props) {
     estimateBox, estimateScore, initiator = '-', projectId, roundId,
     hasAssess, invitees,
     projectRole,
-    judgeRole,
+    role,
+    imageUrl,
+    name,
     deadline
   } = props;
 
-  const timeStr = useMemo(() => {
-    if (!startDate) return '-'
-    const time = new Date(startDate);
-    const d = time.getDate();
-    const h = time.getHours();
-    const m = time.getMinutes();
-    const s = time.getSeconds();
-    const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
-    return str;
-  }, [startDate])
+  if(deadline === 0) {
+    deadline = null;
+  }
+
+  // const timeStr = useMemo(() => {
+  //   if (!startDate) return '-'
+  //   const time = new Date(startDate);
+  //   const d = time.getDate();
+  //   const h = time.getHours();
+  //   const m = time.getMinutes();
+  //   const s = time.getSeconds();
+  //   const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
+  //   return str;
+  // }, [startDate])
   
 
   const arr = useMemo(() => {
@@ -107,7 +100,8 @@ function EvalutaionCard(props) {
     let value = '-';
     let unit = '';
 
-    if( isDockingPerson(judgeRole.role) ){ // 是对接人
+    if( isDockingPerson(role) ){ // 是对接人
+
       let list = [{
         title: '参与人数',
         value,
@@ -119,10 +113,8 @@ function EvalutaionCard(props) {
       }
       __arr = __arr.concat(list);
     }
-   
-    
-    
-    if( category === TYPE_MOVIE ) {
+
+    if(category === TYPE_MOVIE) {
       let list = [
         {
           title: '预估票房',
@@ -170,13 +162,16 @@ function EvalutaionCard(props) {
   }, [])
 
 
-
-  const handleJump=(e)=>{
-    if( hasAssess || projectRole === 1){
+  const handleJump = () => {
+    if( hasAssess || projectRole === 1) {
       Taro.navigateTo({ url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`})
-    }else{
+    } else {
       Taro.navigateTo({ url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`})
     }
+  }
+
+  const jumpDetail = () => {
+    Taro.navigateTo( {url: `/pages/detail/index?projectId=${projectId}`})
   }
 
   const [statusType, statusText] = useMemo(() => {
@@ -193,8 +188,8 @@ function EvalutaionCard(props) {
         
         return [1, prefix]
       }
-
-      if (isDockingPerson(judgeRole.role)) {
+      console.log(isDockingPerson(role), role)
+      if (isDockingPerson(role)) {
         if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
         } else {
@@ -205,49 +200,44 @@ function EvalutaionCard(props) {
         
         return [2, prefix]
       }
+      return [3, prefix]
     }
   }, [deadline, hasAssess, initiator, invitees, realName]);
 
   return (
-    <View className="evaluation-card">
+    <View className='assess-list-evaluation-card'>
       <View onClick={handleJump} >
-        <View className="evaluation-card-title">
-          <View className="evaluation-card-title-left">
-            第{round}轮
+        <Image className='assess-list-evaluation-card-image' src={imageUrl ? imageUrl.replace('/w.h', '') : Cover}></Image>
+        <View className='assess-list-evaluation-card-title'>
+          <View className='assess-list-evaluation-card-title-left' onClick={jumpDetail}>
+            <View className='assess-list-evaluation-card-title-left-name'>{name}</View>
+            <Image className='name-arrow' src='../../static/detail/gray.png' alt='' />
           </View>
-          <View className="evaluation-card-title-right">
+          <View className='assess-list-evaluation-card-title-right'>
             {statusText}
           </View>
         </View>
-        <View className="evaluation-card-status">
-          <View className="evaluation-card-status-left">
-            <View className="evaluation-card-status-left-initiator">
-              {initiator}
-            </View>
-            <View className="evaluation-card-status-left-span">
-              发起
-            </View>
-            <View className="evaluation-card-status-left-type">
-              {TYPE[evaluationMethod]}
-            </View>
+        <View className='assess-list-evaluation-card-status'>
+          <View className='assess-list-evaluation-card-status-left'>
+            第{round}轮 / {TYPE[evaluationMethod]}
           </View>
-          <View className="evaluation-card-status-right">
+          {/* <View className='assess-list-evaluation-card-status-right'>
             {timeStr}
-          </View>
+          </View> */}
         </View>
-        <View className="evaluation-card-info">
-        <View className="evaluation-card-info-title">
+        <View className='assess-list-evaluation-card-info'>
+        <View className='assess-list-evaluation-card-info-title'>
           {roundTitle}
         </View>
-        <View className="evaluation-card-info-detail">
+        <View className='assess-list-evaluation-card-info-detail'>
           {
-            arr.map(({ title, value, unit }) => (
-              <View className="evaluation-card-info-detail-grid">
-                <View className="evaluation-card-info-detail-grid-title">
+            arr.map(({ title, value, unit }, index) => (
+              <View key={index} className='assess-list-evaluation-card-info-detail-grid'>
+                <View className='assess-list-evaluation-card-info-detail-grid-title'>
                   {title}
                 </View>
-                <View className="evaluation-card-info-detail-grid-content">
-                  <Text className="evaluation-card-info-detail-grid-content-value">
+                <View className='assess-list-evaluation-card-info-detail-grid-content'>
+                  <Text className='assess-list-evaluation-card-info-detail-grid-content-value'>
                     {value}
                   </Text>
                   &nbsp;
@@ -259,27 +249,28 @@ function EvalutaionCard(props) {
         </View>
       </View>
       </View>
-      <View className="evaluation-card-action">
-      {isDockingPerson(judgeRole.role) && judgeDeadLine(deadline) && <Button
-        data-roundTitle={roundTitle}
-        data-roundId={roundId}
-        data-sign='invite'
-        openType='share'
-        className='evaluation-card-action-btn'
-      >
+      <View className='assess-list-evaluation-card-action'>
+        {isDockingPerson(role) && judgeDeadLine(deadline) && <Button
+          data-roundTitle={roundTitle}
+          data-roundId={roundId}
+          data-sign='invite'
+          openType='share'
+          className='assess-list-evaluation-card-action-btn'
+        >
           邀请参与
         </Button>}
         <Button
           data-roundTitle={roundTitle}
           data-roundId={roundId}
-          data-sign="attend"
-          openType="share"
-          className="evaluation-card-action-btn">
+          data-sign='attend' 
+          openType='share'
+          className='assess-list-evaluation-card-action-btn'
+        >
           分享结果
         </Button>
         {
-          (isDockingPerson(judgeRole.role) || judgeInvitee(invitees, realName)) && judgeDeadLine(deadline) && <Button
-            className='evaluation-card-action-btn evaluation-card-action-btn-eval'
+          (isDockingPerson(role) || judgeInvitee(invitees, realName)) && judgeDeadLine(deadline) && <Button
+            className='assess-list-evaluation-card-action-btn assess-list-evaluation-card-action-btn-eval'
             onClick={() => {
               Taro.navigateTo({
                 url: statusType === 0 ? `/pages/assess/detail/index?projectId=${projectId}&roundId=${roundId}` : `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`,
@@ -291,27 +282,7 @@ function EvalutaionCard(props) {
         }
       </View>
     </View>
-  )
-}
-
-
-function PureReq_EvaluationList({ projectId }) {
-  return reqPacking(
-    {
-      url: `api/management/evaluationList?projectId=${projectId}`,
-    },
-    'server',
-  ).then((res) => res)
-}
-
-function PureReq_ProjectRole({ projectId }) {
-  return reqPacking(
-    {
-      url: `api/management/projectRole?projectId=${projectId}`,
-    },
-    'server',
-  ).then((res) => res)
-}
+)}
 
 function judgeDeadLine(time) {
 

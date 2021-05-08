@@ -13,9 +13,9 @@ export default class MatrixRadio extends React.Component {
   };
 
   state = {
-    complete: false,
-    finished: false,
-    matrixSelectList: this.props.matrixRadio.axisY.map(() => -1),
+    complete: this.props.defaultValue && this.props.defaultValue.some(item => item !== -1),
+    finished: this.props.defaultValue && this.props.defaultValue.every(item => item !== -1),
+    matrixSelectList: this.props.defaultValue || this.props.matrixRadio.axisY.map(() => -1),
   };
 
 
