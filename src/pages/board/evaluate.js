@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking';
+import useDeadline from '../assess/detail/useDeadline';
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -232,7 +233,7 @@ function EvalutaionCard(props) {
             </View>
           </View>
           <View className="evaluation-card-status-right">
-            {timeStr}
+            {useDeadline(deadline).component}
           </View>
         </View>
         <View className="evaluation-card-info">
