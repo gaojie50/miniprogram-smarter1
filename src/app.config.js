@@ -9,7 +9,7 @@ export default {
       'iconPath': 'static/tab/market.png',
       'selectedIconPath': 'static/tab/market_active.png',
       pagePath: 'pages/list/index',
-      text: '市场情报'
+      text: '影片情报'
     },
     // {
     //   'iconPath': 'static/tab/income.png',
