@@ -78,7 +78,6 @@ const AddQuestions = function(props) {
 
 
   const handleSave = ()=> {
-    console.log(tempQuesObj);
      // 校验题目是否填写完成
      if(!validate()){
       return;
@@ -149,11 +148,12 @@ const AddQuestions = function(props) {
     
     let newTempQuesObj = {
       ..._cloneDeep(props.isEdit ? curEditTemp: quesObj),
-      type
+      type,
+      title: tempQuesObj.title,
     }
     switch(type){
       case TYPE_NUM:
-        newTempQuesObj.gapFilling = { leftText: props.isEdit ? curEditTemp.title: null, rightText: null };
+        newTempQuesObj.gapFilling = { leftText: props.isEdit ? curEditTemp.title: tempQuesObj.title, rightText: null };
         break;
       case TYPE_RADIO:
         newTempQuesObj.radioItems = [];
