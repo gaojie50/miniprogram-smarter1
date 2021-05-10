@@ -89,7 +89,7 @@ export default {
     },
     {
       root: "pages/coreData",
-      pages: ["index", "realTime/index"]
+      pages: ["index", "realTime/index", "fixHistory/index"]
     },
     {
       root: "pages/checkCity",
