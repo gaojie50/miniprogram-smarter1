@@ -165,7 +165,7 @@ export default function AssessPage(){
 
     reqPacking(
       {
-        url: 'api/management/submit',
+        url: 'api/applet/management/submit',
         method: 'POST',
         data: {
           projectId,
