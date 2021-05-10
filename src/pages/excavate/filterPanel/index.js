@@ -488,8 +488,9 @@ export default class FilterPanel extends React.Component {
 
   tapSourceType = (e) => {
     const num = e.target.dataset.num
-    this.props.sourceType[num].active = !this.props.sourceType[num].active
-    this.props.setSourceType([...this.props.sourceType])
+    const newSourceType = SOURCE_TYPE_INIT();
+    newSourceType[num].active = true;
+    this.props.setSourceType(newSourceType);
   }
 
   tapMovieType = (e) => {
