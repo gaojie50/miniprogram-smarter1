@@ -183,6 +183,9 @@ page image {
           color: #276FF0;
           font-weight: 600;
           border: 1px solid #276FF0;
+          .append-num {
+            color: rgba(39,111,240,0.7);
+          }
         }
         .template-name {
           padding: 20px 0;
@@ -194,8 +197,8 @@ page image {
         .append-num {
           font-weight: 400;
           font-size: 24px;
-          color: rgba(39,111,240,0.7);
           line-height: 28px;
+          display: inline;
         }
         .preview-btn {
           padding: 20px 0;

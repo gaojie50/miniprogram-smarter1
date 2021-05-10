@@ -10,8 +10,9 @@ import Nodata from '@components/noData';
 
 
 const TempList = function(props) {
-  const { tempList, selectTempId, appendQuesList, onPreview, onChangeTemp } = props;
+  const { tempList, selectTempId, appendMap, onPreview, onChangeTemp } = props;
   const [ isFirst, setIsfirst ] = useState(false);
+  
 
   const handlePreview = (...args) => {
     Taro.setStorageSync('notFirstPrevieTemp', true);
@@ -25,18 +26,21 @@ const TempList = function(props) {
   }, []);
 
   if(tempList.length>0){
-    return tempList.map((item, index) => (
-      <View className={`template-item ${selectTempId == item.tempId ? 'active' : ''}`} key={item.tempId} onClick={() => { onChangeTemp(item.tempId); }}>
-        <View className="template-name">
-          {index + 1}、{item.title}
-          {selectTempId==item.tempId && appendQuesList.length> 0 && <View className="append-num">（已添加{appendQuesList.length}题）</View>}
+    return tempList.map((item, index) => {
+      const appendQuesList = appendMap[item.id] || [];
+      return (
+        <View className={`template-item ${selectTempId == item.id ? 'active' : ''}`} key={item.id} onClick={() => { onChangeTemp(item.id); }}>
+          <View className="template-name">
+            {index + 1}、{item.name}
+            {appendQuesList.length> 0 && <View className="append-num">（已添加{appendQuesList.length}题）</View>}
+          </View>
+          <View className="preview-btn" onClick={event => { handlePreview(event, item.id, item.name); }}>
+            预览
+            {isFirst && index === 0 && <View className="tip">可加题</View>}
+          </View>
         </View>
-        <View className="preview-btn" onClick={event => { handlePreview(event, item.tempId, item.title); }}>
-          预览
-          {isFirst && index === 0 && <View className="tip">可加题</View>}
-        </View>
-      </View>
-    ))
+      )
+    })
   }else{
     return (
       <View className="no-template-note">
