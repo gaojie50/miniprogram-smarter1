@@ -4,7 +4,7 @@
   // height: 176px;
   position: fixed;
   background: white;
-  z-index: 20;
+  z-index: 100;
   top: 0;
   .header {
     height: 70rpx;
@@ -44,7 +44,7 @@
   line-height: 64px;
   display: flex;
   align-items: center;
-  border-bottom: 1px #CFCFCF solid;
+  border-bottom: 1px #E9E9E9 solid;
   .list-header-left {
     font-weight: 40;
     font-family: PingFangSC-Regular;

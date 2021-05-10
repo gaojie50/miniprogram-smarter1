@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useEffect, useState } from 'react'; 
 import { View, Image, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import utils from '@utils/index.js';
@@ -21,6 +21,8 @@ export default function hotMovieList() {
       })
     }
   }
+  
+  const [cityId, setCityId] = useState(0);
   const lists =[1,2,3,4,5,6,7,8,9,10];
   const { rpxTopx } = utils;
   const capsuleLocation = getGlobalData('capsuleLocation');
@@ -39,7 +41,7 @@ export default function hotMovieList() {
           </View>
         </View>
       </View>
-      <View style={{ marginTop: `${headerBarHeight}px` }}>
+      <View style={{ marginTop: `${headerBarHeight}px`, position: 'relative' }}>
         <DateBar />
         <View className='list-header'>
           <View className='list-header-left'>全国</View>
