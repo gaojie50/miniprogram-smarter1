@@ -115,9 +115,9 @@ export default function hotMovieList() {
           </View>
         </View>
         <ScrollView scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, marginTop: headerBarHeight}}>
-        <DateBar needButtons />
         { isMovieScreening ?
             <View>
+              <DateBar needButtons />
               <View className='list-header'>
                 <View className='list-header-left'>全国</View>
                 <View className='list-header-img'>

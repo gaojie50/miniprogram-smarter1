@@ -5,6 +5,7 @@ import FloatLayout from '@components/m5/float-layout';
 import BoxIncome from '../boxIncome/index'
 import {numberFormat} from '../common'
 import './index.scss'
+import { handleActive } from '@components/m5/calendar/common/plugins';
 
 export default function BoxOfficeData({current, isMovieScreening, projectId, name, response}) {
   const listsInfo =[
@@ -52,6 +53,11 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
       url: `/pages/coreData/realTime/index?paramIndex=${index}&projectId=${projectId}&isMovieScreening=${isMovieScreening}&name=${name}`
     })
   }
+  const handlePageHistory = () => {
+    Taro.redirectTo({
+      url: `/pages/coreData/fixHistory/index?projectId=${projectId}`
+    })
+  }
 
   return (
     <View>
@@ -72,7 +78,7 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
       </View>
       <View className='param-header'>
         <View className='param-left'>参数与条件</View>
-        {/* <View className='param-right'>变更记录</View> */}
+        <View className='param-right' onClick={()=>handlePageHistory()}>变更记录</View>
       </View>
       <View className='param' onClick={()=>{gotoParam(0)}}>
         <View className='param-header-left'>合同参数</View>

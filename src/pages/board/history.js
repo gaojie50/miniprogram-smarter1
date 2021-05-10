@@ -29,12 +29,13 @@ const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 export function UseHistory(props) {
   const [data, setData] = useState([]);
   const [auth, setAuth] = useState(false);
-  const { projectId, keyData, judgeData } = props;
+  const { projectId, keyData, judgeData, queryType } = props;
 
   useEffect(() => {
     if (projectId) {
       PureReq_Projectoperatelog({
-        projectId
+        projectId,
+        queryType
       }).then((res) => {
         const { success, data, error } = res;
         if (success) {
@@ -187,12 +188,13 @@ export function ChangeCard(props) {
   )
 }
 
-function PureReq_Projectoperatelog({ projectId }) {
+function PureReq_Projectoperatelog({ projectId, queryType }) {
   return reqPacking(
     {
       url: 'api/management/projectoperatelog',
       data: {
-        projectId
+        projectId,
+        queryType
       }
     },
     'server',
