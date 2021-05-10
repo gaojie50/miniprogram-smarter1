@@ -2,10 +2,13 @@
   width: 100%;
   box-sizing: border-box;
   // height: 176px;
-  background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
-  z-index: -1;
-  padding-top: 6vh;
+  position: fixed;
+  background: white;
+  z-index: 20;
+  top: 0;
   .header {
+    height: 70rpx;
+    line-height: 70rpx;
     position: relative;
     width: 100%;
     text-align: center;
@@ -25,6 +28,14 @@
       height: 44px;
       vertical-align: middle;
     }
+  }
+  .top {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
   }
 }
 .list-header {
