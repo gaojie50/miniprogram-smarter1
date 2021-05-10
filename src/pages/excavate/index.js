@@ -10,6 +10,7 @@ import '@components/m5/style/components/float-layout.scss';
 import utils from '@utils/index.js';
 import { fourTextLabel, threeTextLabel, twoTextLabel, defaultMovieCover as DefaultPic } from '@utils/imageUrl';
 import { picFn } from '@utils/pic';
+import lx from '@analytics/wechat-sdk';
 import { useFilterPanel } from './filterPanel';
 import './index.scss';
 
@@ -52,6 +53,7 @@ const FILTER_ITEMS_INIT = () => (
 );
 
 const AUTH_ID = 95120;
+const { userInfo } = Taro.getStorageSync('authinfo');
 
 export default function Excavate() {
   const [hasPagePermission, setHasPagePermission] = useState(false);
@@ -60,6 +62,14 @@ export default function Excavate() {
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(0);
   const [havemore, setHavemore] = useState(true);
+
+  useDidShow(() => {
+    lx.pageView('c_movie_b_or62fuh3', {
+      custom: {
+        user_id: userInfo.keeperUserId,
+      }
+    });
+  })
 
   useEffect(()=>{
     const authInfo = Taro.getStorageSync('authinfo');
@@ -430,7 +440,17 @@ function ProjectItem(props) {
                 })
               }
             </View>
-            <View className="project-item-info-right" onClick={(e) => {setShowMore(true); e.stopPropagation()}}>更多信息&gt;</View>
+            <View className="project-item-info-right" onClick={(e) => {
+              lx.moduleClick('b_movie_b_go3e8ims_mc', {
+                custom: {
+                  user_id: userInfo.keeperUserId,
+                  project_id: projectId,
+                }
+              }, { cid: 'c_movie_b_or62fuh3'});
+              setShowMore(true); 
+              e.stopPropagation()
+              }}
+            >更多信息&gt;</View>
           </View>
         </View>
       </View>
