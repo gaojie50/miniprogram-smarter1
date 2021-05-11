@@ -20,14 +20,17 @@ export default function useDeadline(t, cb ) {
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
-    if (!t) return
+    if (!t) {
+      setMessage('不限时评估');
+      return;
+    }
     const nowTime = new Date();
     const endTime = new Date(t);
     const month = endTime.getMonth() + 1;
     const day = endTime.getDate();
     const week = weekMap[endTime.getDay()];
-    const hour = endTime.getHours();
-    const minute = endTime.getMinutes();
+    const hour = addzero(endTime.getHours());
+    const minute = addzero(endTime.getMinutes());
     const cost = endTime.valueOf() - nowTime.valueOf();
     if (cost < 1000) {
       setMessage(`${month}月${day}日/周${week} ${hour}:${minute} 评估已结束`);
@@ -80,4 +83,8 @@ function CountDown({ num, cb }) {
       if(cb) cb();
     }
   }
+}
+
+function addzero(num) {
+  return (Array(2).join(0) + num).slice(-2);
 }

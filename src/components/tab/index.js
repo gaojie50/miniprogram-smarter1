@@ -24,7 +24,7 @@ Object.keys(TAB_ACTIVE).forEach((url) => {
 })
 
 const TAB_LIST = [
-  { title: '市场情报', image: 'https://p0.meituan.net/ingee/618771a1bcebae82663a09ee4bdca3291948.png', selectedImage: MarketActive },
+  { title: '影片情报', image: 'https://p0.meituan.net/ingee/618771a1bcebae82663a09ee4bdca3291948.png', selectedImage: MarketActive },
   // { title: '收入测算', image: Income, selectedImage: IncomeActive },
   { title: '评估列表', image: Assessment, selectedImage: AssessmentActive },
   { title: '项目看板', image: Board, selectedImage: BoardActive },

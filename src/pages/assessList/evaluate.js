@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking';
+import useDeadline from '../assess/detail/useDeadline';
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -199,7 +200,6 @@ function EvalutaionCard(props) {
         
         return [1, prefix]
       }
-      console.log(isDockingPerson(role), role)
       if (isDockingPerson(role)) {
         if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
@@ -232,9 +232,9 @@ function EvalutaionCard(props) {
           <View className='assess-list-evaluation-card-status-left'>
             第{round}轮 / {TYPE[evaluationMethod]}
           </View>
-          {/* <View className='assess-list-evaluation-card-status-right'>
-            {timeStr}
-          </View> */}
+          <View className='assess-list-evaluation-card-status-right'>
+            {useDeadline(deadline).component}
+          </View>
         </View>
         <View className='assess-list-evaluation-card-info'>
         <View className='assess-list-evaluation-card-info-title'>

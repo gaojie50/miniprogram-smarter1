@@ -10,6 +10,7 @@ import '@components/m5/style/components/float-layout.scss';
 import utils from '@utils/index.js';
 import { fourTextLabel, threeTextLabel, twoTextLabel, defaultMovieCover as DefaultPic } from '@utils/imageUrl';
 import { picFn } from '@utils/pic';
+import lx from '@analytics/wechat-sdk';
 import { useFilterPanel } from './filterPanel';
 import './index.scss';
 
@@ -52,6 +53,7 @@ const FILTER_ITEMS_INIT = () => (
 );
 
 const AUTH_ID = 95120;
+const { userInfo } = Taro.getStorageSync('authinfo');
 
 export default function Excavate() {
   const [hasPagePermission, setHasPagePermission] = useState(false);
@@ -60,6 +62,14 @@ export default function Excavate() {
   const [data, setData] = useState([]);
   const [offset, setOffset] = useState(0);
   const [havemore, setHavemore] = useState(true);
+
+  useDidShow(() => {
+    lx.pageView('c_movie_b_or62fuh3', {
+      custom: {
+        user_id: userInfo.keeperUserId,
+      }
+    });
+  })
 
   useEffect(()=>{
     const authInfo = Taro.getStorageSync('authinfo');
@@ -109,7 +119,6 @@ export default function Excavate() {
       info.types = chooseTypes.join(',');
     }
     const chooseDate = dateSet.filter((item) => item.checked === 'checked')[0].label;
-    console.log(chooseDate);
     if (chooseDate === '全部') {
       return info;
     } else if (chooseDate === '未定档') {
@@ -137,7 +146,7 @@ export default function Excavate() {
     ).then(res => {
       const { error, data } = res;
       if (!error) {
-        const { projectDeepList } = data;
+        const { projectDeepList = [] } = data || {};
         if (projectDeepList.length === 0) {
           setNoData(true);
           setHavemore(false);
@@ -149,12 +158,14 @@ export default function Excavate() {
         return;
       }
       errorHandle(error);
+      setData([]);
+      setNoData(true);
       setLoading(false);
     })
   }, [filterInfo]);
 
   const loadMore = useCallback(() => {
-    if (!havemore) return;
+    if (!havemore || loading) return;
     setLoading(true);
     reqPacking(
       {
@@ -182,7 +193,7 @@ export default function Excavate() {
       errorHandle(error);
       setLoading(false);
     })
-  }, [filterInfo, offset, havemore]);
+  }, [filterInfo, offset, havemore, loading]);
 
   return(
     <>
@@ -222,9 +233,9 @@ export default function Excavate() {
               {data.map((item) => (<ProjectItem key={item.name} {...item} />))}
             </View>
           )}
-          <View>
-            <mpLoading show={loading} type="circle" />
-          </View>
+          {
+            loading&&!noData&&(<View><mpLoading show type="circle" /></View>)
+          }
         </ScrollView>
       )}
     </>
@@ -369,7 +380,7 @@ function ProjectItem(props) {
     types,
     pic,
     mainProduct,
-    releaseTime,
+    releaseDateAndAddress,
     director,
     mainRole,
     movieSource,
@@ -382,7 +393,7 @@ function ProjectItem(props) {
     const info = [];
     if (types) info.push({ name: '类型:', value: types.join('/') });
     if (mainProduct && mainProduct.length > 0) info.push({ name: '出品:', value: mainProduct.join('/') });
-    if (releaseTime) info.push({ name: '上映:', value: releaseTime });
+    if (releaseDateAndAddress) info.push({ name: '上映:', value: `${releaseDateAndAddress}上映` });
     if (director && director.length > 0) {
       const n = director.map((item) => item.name);
       info.push({ name: '导演:', value: n.join('/') });
@@ -394,7 +405,7 @@ function ProjectItem(props) {
     if (movieSource && movieSource.length > 0) info.push({ name: '片源:', value: movieSource.join('/') });
 
     return info;
-  }, [types, mainProduct, releaseTime, director, mainRole, movieSource]);
+  }, [types, mainProduct, releaseDateAndAddress, director, mainRole, movieSource]);
 
   return (
     <>
@@ -430,7 +441,17 @@ function ProjectItem(props) {
                 })
               }
             </View>
-            <View className="project-item-info-right" onClick={(e) => {setShowMore(true); e.stopPropagation()}}>更多信息&gt;</View>
+            <View className="project-item-info-right" onClick={(e) => {
+              lx.moduleClick('b_movie_b_go3e8ims_mc', {
+                custom: {
+                  user_id: userInfo.keeperUserId,
+                  project_id: projectId,
+                }
+              }, { cid: 'c_movie_b_or62fuh3'});
+              setShowMore(true); 
+              e.stopPropagation()
+              }}
+            >更多信息&gt;</View>
           </View>
         </View>
       </View>
