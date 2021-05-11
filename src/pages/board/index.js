@@ -453,7 +453,7 @@ export default function Board() {
         >
           <View className='board-search-box'>
             <View className='board-search-bar'>
-              <Label onClick={() => Taro.navigateTo({url: '/pages/addProject/index'})}>
+              <Label onClick={() => Taro.navigateTo({url: '/pages/searchProject/index'})}>
                 <Image
                   className='board-searchIco'
                   src='../../static/icon/search.png'
