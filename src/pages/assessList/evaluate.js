@@ -57,9 +57,9 @@ export function EvaluationList({type}) {
     const { evaluationList: __evaluationList = [] } = data;
     return [__evaluationList];
   }, [data])
-
+console.log(evaluationList,2222)
   return loading ? <mpLoading show type='circle' tips=''></mpLoading> :
-          evaluationList.length ? <>
+          evaluationList?.length > 0 ? <>
           {
             evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />)
           }
