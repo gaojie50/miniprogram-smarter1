@@ -9,6 +9,7 @@ import reqPacking from '../../../utils/reqPacking.js';
 import utils from '../../../utils/index';
 import { get as getGlobalData } from '../../../global_data';
 import projectConfig from '../../../constant/project-config';
+import useDeadline from '../detail/useDeadline';
 import '../../../components/m5/style/components/icon.scss';
 import './index.scss';
 
@@ -26,7 +27,10 @@ export default function assessPage(){
   const [ canEvaluate, setCanEvaluate ] = useState(false);
   const [ hasPermission, setHasPermission ] = useState(false);
   const [ briefContentHeight, setBriefContentHeight ] = useState(0);
-  const briefNodeRef = useRef( null ); 
+  const [ deadline, setDeadline ] = useState(null);
+  const briefNodeRef = useRef( null );
+  
+  const { over, component: deadlineShow } = useDeadline(deadline);
 
   const isLogin = Taro.getStorageSync('token');
   const { projectId, roundId, inviteId, participationCode } = getCurrentInstance().router.params;
@@ -203,12 +207,14 @@ export default function assessPage(){
         const { evaluationList } = data;
         if (!error) {
           const evalObj = evaluationList.filter(item => item.roundId == roundId)[ 0 ] || {};
+          const { deadline } = evalObj;
           if( !evalObj.round ){
             errorHandle({ message: '该评估轮次不存在' });
             setCanEvaluate(false);
           }else{
             setCanEvaluate(true);
           }
+          setDeadline(deadline);
           setCurEvalObj(evalObj);
           return;
         }
@@ -303,7 +309,8 @@ export default function assessPage(){
               </View>
               </View>
             </View>
-            {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? '开始评估': '您已填写，查看结果'}</Button>}
+            <View className="deadline">{deadlineShow}</View>
+            {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? `${over ? '查看评估问题' : '开始评估'}`: '您已填写，查看结果'}</Button>}
         </View>
       </View>
       )}
