@@ -29,7 +29,7 @@ export default function realTime({}) {
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState();
   const [lists, setLists] = useState(listsInfo[paramIndex]);
   const [isSubmit, setIsSubmit] = useState(false);
-  const [calculate, setCalculate] =useState(1);
+  const [calculate, setCalculate] =useState('');
   const [valueData, setValueData] = useState(0);
   const [clickIndex, setClickIndex] = useState('');
   const [isBonusCalculate, setIsBonusCalculate] = useState(false)
@@ -66,6 +66,7 @@ export default function realTime({}) {
   }
 
   const judgeIsSubmit = (hasToast) => {
+    console.log('judgeIsSubmit', lists);
     for(let i = 0; i<11; i++) {
       if(i != 3) {
         if(lists[i].money === ''){
@@ -186,10 +187,11 @@ export default function realTime({}) {
     // 合同参数数据请求
   useEffect(()=>{
     console.log('showProgress2', showProgress);
-    if (paramIndex === '0') {
+    console.log('paramIndex', paramIndex, calculate)
+    if (calculate !== '') {
       getContractData('1');
     }
-  }, [showProgress]);
+  }, [showProgress, calculate]);
 
   // 实时参数 & 假定参数tab 数据请求 
   useEffect(()=>{
@@ -208,7 +210,7 @@ export default function realTime({}) {
     }).then(res => {
       const { success, error } = res;
       console.log('合同参数', res);
-      if (success) {
+      if (success && res.data) {
         const { data } = res;
         let newData = Object.assign('', data);
         setGetValue(res.data);
@@ -218,13 +220,14 @@ export default function realTime({}) {
           }
         }
         if(AgencyFee) {
-          lists[1].money = newData['distributionAgencyFee']
+          lists[1].money = newData['distributionAgencyFee'] === undefined ? '' : newData['distributionAgencyFee']
           lists[2].money = newData['myDistributionAgencyFee']
         } else{
           for(let key in lists) {
             lists[key].money = newData[lists[key].dataIndex];
           }
         }
+        console.log('newData', newData);
         setValueData(newData);
         // console.log('data', data, lists, newData);
         setLists(lists);
@@ -273,7 +276,7 @@ export default function realTime({}) {
                   {list.toCalculate ? 
                     <View className='param-to' onClick={()=>{changeShowProgress(index)}}>
                       <View>
-                        {list.money ? <View className='param-money'>{list.money}万</View> : ''}
+                        {list.money!=='' ? <View className='param-money'>{list.money}万</View> : ''}
                         <View className='param-header-right'>{list.toCalculate}</View>
                       </View>
                       <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png' />

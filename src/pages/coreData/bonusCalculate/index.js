@@ -34,9 +34,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   const [getValue, setGetValue] = useState('');
   const [coefficient, setCoefficient] = useState(''); // 系数
   const [amount, setAmount] = useState(''); // 金额
-  const [amountIsChange, setAmountIsChange] = useState(false);
   const [proportionA, setProportionA] = useState('');
-  const [count, setCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [computeResults, setComputeResults] = useState('');
 
@@ -55,7 +53,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         dataType: 3
 
       }
-    }).then((res)=>{
+    }, 'mapi').then((res)=>{
       const { success, error } = res;
       console.log('规则数据get', res);
       if (success) {
@@ -74,7 +72,11 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           item.isOnclick = (fixedRatioType === index+1)
         })
         progressionValue && ladderLists.map((item)=> {
-          item.value = progressionValue[item.dataName]
+          if(item.dataName.includes('boxLevel')) {
+            item.value = numberFormatCent(progressionValue[item.dataName]);
+          } else{
+            item.value = progressionValue[item.dataName];
+          }
         })
         setAmount(numberFormatCent(fixedAmountValue));
         setGetValue(res.data);
@@ -95,7 +97,8 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     console.log(calculateIndex, getValue, ladderLists);
     let computeType = lists[0].findIndex((item)=>item.isOnclick) + 1;
     let progressionType = lists[1].findIndex((item)=>item.isOnclick) + 1;
-    let fixedRatioType = lists[2].findIndex((item)=>item.isOnclick) + 1;
+    let progressionBase = lists[2].findIndex((item)=>item.isOnclick) + 1;
+    let fixedRatioType = lists[3].findIndex((item)=>item.isOnclick) + 1;
     let progressionValue = {};
     if(lists[0][2].isOnclick) {
       ladderLists.map((item)=>{
@@ -116,6 +119,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         computeType,
         fixedRatioType,
         fixedRatioValue: Number(coefficient),
+        fixedRatioBoxValue: lists[3][0].isOnclick ? '' : centChangeTenThousand(proportionA),
       }
     } else if(lists[0][1].isOnclick){ // 固定金额
       postData = {
@@ -126,11 +130,12 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       postData = {
         computeType,
         progressionType,
+        progressionBase,
         progressionValue
       }
     }
 
-    console.log('baseType', baseType, computeType, progressionType, postData);
+    console.log('baseType', computeType, progressionType, postData);
     reqPacking({
       url: 'api/management/finance/contractData/compute',
       data: {
@@ -165,48 +170,89 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   }
   const changeLadderValue = (e, index) => {
     const val = e.detail.value;
-    console.log(index, val, ladderLists, count);
     var NewLadderLists = ladderLists.concat();
     NewLadderLists[index].value = val;
     console.log(NewLadderLists);
     setladderLists(NewLadderLists);
-    let count1 = 0;
-    ladderLists.map((item)=>{
-      if(item.value !== '') {
-        count1 = count1 + 1;
-      }
-    })
-    setCount(count1);
   }
 
-
-  // const judgeIsSubmit = (hasToast) => {
-  //   if(amount === ''){
-  //     hasToast && Taro.showToast({
-  //       title: `请填写金额`,
-  //       icon: 'none',
-  //       duration: 2000,
-  //     });
-  //     setIsSubmit(false);
-  //     return;
-  //   } else{
-  //     let judge = amount.toString().split(".");
-  //     console.log('judge', judge);
-  //     if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
-  //       hasToast && Taro.showToast({
-  //         title: `小数点后最多6位`,
-  //         icon: 'none',
-  //         duration: 2000,
-  //       });
-  //       setIsSubmit(false);
-  //       return;
-  //     }
-  //   }
-  //   setIsSubmit(true);
-  // }
-
-
   const judgeIsSubmit = (hasToast) => {
+    if(lists[0][0].isOnclick && lists[3][0].isOnclick) {
+      if(coefficient === ''){
+        hasToast && Taro.showToast({
+          title: `请填写系数`,
+          icon: 'none',
+          duration: 2000,
+        });
+        setIsSubmit(false);
+        return;
+      } else{
+        if(Number(coefficient)< 0 || Number(coefficient)>100 ){
+          hasToast && Taro.showToast({
+            title: `系数填写0~100数值`,
+            icon: 'none',
+            duration: 2000,
+          });
+          setIsSubmit(false);
+          return;
+        }
+      }
+    }
+    if(lists[0][0].isOnclick && (lists[3][1].isOnclick||lists[3][2].isOnclick)) {
+      if(coefficient === '' && proportionA === ''){
+        hasToast && Taro.showToast({
+          title: `请填写系数`,
+          icon: 'none',
+          duration: 2000,
+        });
+        setIsSubmit(false);
+        return;
+      } else{
+        if(Number(coefficient)< 0 || Number(coefficient)>100 ){
+          hasToast && Taro.showToast({
+            title: `系数填写0~100数值`,
+            icon: 'none',
+            duration: 2000,
+          });
+          setIsSubmit(false);
+          return;
+        }
+        let judge =proportionA.toString().split(".");
+        if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
+          hasToast && Taro.showToast({
+            title: `小数点固定金额`,
+            icon: 'none',
+            duration: 2000,
+          });
+          setIsSubmit(false);
+          return;
+        }
+      }
+    }
+
+    if(lists[0][1].isOnclick) {
+      if(amount === ''){
+        hasToast && Taro.showToast({
+          title: `请填写金额`,
+          icon: 'none',
+          duration: 2000,
+        });
+        setIsSubmit(false);
+        return;
+      } else{
+        let judge = amount.toString().split(".");
+        if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
+          hasToast && Taro.showToast({
+            title: `小数点固定金额`,
+            icon: 'none',
+            duration: 2000,
+          });
+          setIsSubmit(false);
+          return;
+        }
+      }
+    }
+
     if(lists[0][2].isOnclick ) {
       for(let i = 0; i<6; i++) {
         if(ladderLists[i].value === ''){
@@ -217,7 +263,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           });
           setIsSubmit(false);
           return;
-        } 
+        }
       }
       for(let i = 0; i<6; i++) {
         if(ladderLists[i].value){
@@ -256,49 +302,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         }
       }
     }
-    if(lists[0][0].isOnclick) {
-      if(coefficient === ''){
-        hasToast && Taro.showToast({
-          title: `请填写系数`,
-          icon: 'none',
-          duration: 2000,
-        });
-        setIsSubmit(false);
-        return;
-      } else{
-        if(Number(coefficient)< 0 || Number(coefficient)>100 ){
-          hasToast && Taro.showToast({
-            title: `系数填写0~100数值`,
-            icon: 'none',
-            duration: 2000,
-          });
-          setIsSubmit(false);
-          return;
-        }
-      }
-    }
-    if(lists[0][1].isOnclick) {
-      if(amount === ''){
-        hasToast && Taro.showToast({
-          title: `请填写金额`,
-          icon: 'none',
-          duration: 2000,
-        });
-        setIsSubmit(false);
-        return;
-      } else{
-        let judge = amount.toString().split(".");
-        if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
-          hasToast && Taro.showToast({
-            title: `小数点固定金额`,
-            icon: 'none',
-            duration: 2000,
-          });
-          setIsSubmit(false);
-          return;
-        }
-      }
-    }
+
     setIsSubmit(true);
   }
 
@@ -322,8 +326,9 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   }, []);
 
   useEffect(()=>{
+    console.log('judgeIsSubmit');
     judgeIsSubmit();
-  }, [amount])
+  }, [ladderLists, coefficient, amount, lists])
 
   useEffect(()=>{
     if(!showProgress) {

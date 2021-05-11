@@ -3,12 +3,14 @@ import { View, Image, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import ArrowLeft from '@static/detail/arrow-left.png';
 import BoxOfficeData from './boxOffice/index'
+import dayjs from 'dayjs';
 import { get as getGlobalData } from '../../global_data';
 import DateBar from '@components/dateBar';
 import {numberFormat} from './common'
 import utils from '@utils/index.js'
 // const reqPacking = getGlobalData('reqPacking');
 import './index.scss'
+import { handleActive } from '@components/m5/calendar/common/plugins';
 
 export default function hotMovieList() {
   const systemInfo = Taro.getSystemInfoSync();
@@ -18,11 +20,14 @@ export default function hotMovieList() {
   const reqPacking = getGlobalData('reqPacking');
   const url = Taro.getCurrentPages();
   const options = url[url.length - 1].options;
-  const { name, projectId } = options;
+  const { name, projectId, cityId = '', cityName } = options;
   const isMovieScreening = (options.isMovieScreening == 'true');
   const [current, setCurrent] = useState(isMovieScreening ? 0 : 3);
   const [boxOffice, setBoxOffice] = useState({});
   const [response, setResponse] = useState({});
+  const [cityBoxOfficeRateValue, setCityBoxOfficeRateValue] = useState([]);
+  const [showDay, setShowDay] = useState('');
+  const [startDateBar, setsStartDateBar] = useState('');
 
 
   const fetchBoxOfficeValue = () => {
@@ -45,10 +50,15 @@ export default function hotMovieList() {
         } 
       });
   }
-  const fetchIncomeValue = (current) => {
+  const fetchIncomeValue = (current, showDate, cityId) => {
     reqPacking({
       url:'api/management/finance/various/income',
-      data:{ projectId, type: (current + 1) },
+      data:{ 
+        projectId,
+        type: (current + 1),
+        showDate: showDate || dayjs(new Date()).format('YYYYMMDD'),
+        cityId
+      },
       method: 'GET',
     }).then(res => {
         const { success, data = {}, error } = res;
@@ -74,10 +84,11 @@ export default function hotMovieList() {
     fetchBoxOfficeValue();
   }, []);
 
-
   useEffect(()=>{
-    fetchIncomeValue(current);
-  }, [current])
+    console.log(cityId, current, showDay);
+    getCityValue(cityId);
+    fetchIncomeValue(current, showDay, cityId);
+  }, [cityId, current, showDay])
 
   const handleBack = () => {
     Taro.redirectTo({
@@ -97,9 +108,82 @@ export default function hotMovieList() {
     })
   }
 
+  const gotoCheckCity = () => {
+    Taro.redirectTo({
+      url: `/pages/checkCity/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`
+    })
+  }
+
   const switchTab = tab => {
     setCurrent(tab)
     fetchIncomeValue(tab);
+  }
+  const handleCheckCity = () => {
+    getCityValue('');
+    if(cityBoxOfficeRateValue && cityBoxOfficeRateValue>10) {
+      Taro.showToast({
+        title: '城市占比超过10%，无法选择城市',
+        icon: 'none',
+        duration: 1000
+      });
+    }else {
+      gotoCheckCity();
+    }
+  }
+
+  const handleGotoCityList = () => {
+    getCityValue('');
+    if(cityBoxOfficeRateValue && cityBoxOfficeRateValue>10) {
+      Taro.showToast({
+        title: '城市占比超过10%，无法查看占比',
+        icon: 'none',
+        duration: 1000
+      });
+    }else {
+      gotoCityList();
+    }
+  }
+
+  const getCityValue = (cityId) => {
+    reqPacking({
+      url:'api/management/finance/boxOfficeRate/list',
+      data:{ cityId, showDate : dayjs(new Date()).format('YYYYMMDD'), projectId },
+      method: 'GET',
+    }, 'mapi').then(res => {
+        const { success, data = {}, error } = res;
+        console.log('城市接口', res);
+        if (success && res.data) {
+          setCityBoxOfficeRateValue(res.data[0].boxOfficeRate);
+        } else {
+          Taro.showToast({
+            title: error ? error.message : '',
+            icon: 'none',
+            duration: 1000
+          });
+        }
+      });
+  }
+
+  const getProjectData = () => {
+    reqPacking({
+      url: 'api/applet/management/projectDetail',
+      data: { projectId: projectId },
+      method: 'GET',
+    }).then((res) => {
+      console.log(res, 'res!!!!!!!!1')
+      console.log(res.data.productInfo.releaseDate.endDate);
+      setsStartDateBar(res.data.productInfo.releaseDate.endDate);
+    })
+  }
+
+  useEffect(()=>{
+    getProjectData();
+  }, [])
+
+  
+  const callback = (res) => {
+    setShowDay(res);
+    console.log('data',res)
   }
 
   return (
@@ -117,14 +201,20 @@ export default function hotMovieList() {
         <ScrollView scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, marginTop: headerBarHeight}}>
         { isMovieScreening ?
             <View>
-              <DateBar needButtons />
+              <DateBar needButtons callBack={callback.bind(this)} startDateBar={startDateBar} />
               <View className='list-header'>
-                <View className='list-header-left'>全国</View>
-                <View className='list-header-img'>
-                  <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
+                <View className='list-header-left' onClick={()=>handleCheckCity()}>
+                  {`${cityId ? cityName : '全国'}`}
+                  <View className='list-header-img'>
+                    <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
+                  </View>
                 </View>
-                <View className='list-header-right' onClick={()=>{gotoCityList()}} >各地区产生票房及占比</View>
-                <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
+                <View className='list-header-right' onClick={()=>handleGotoCityList()} >
+                  {`${cityId ? `票房占比：${cityBoxOfficeRateValue}%` :'各地区产生票房及占比'}`}
+                  <View className='list-header-img'>
+                    <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
+                  </View>
+                </View>
               </View>
               <View className='box-office'>
                 <View className='office'>

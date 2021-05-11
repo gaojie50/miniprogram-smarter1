@@ -1,17 +1,29 @@
 import React from 'react';
-import { View } from '@tarojs/components';
+import { View, Image, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
+import utils from '@utils/index.js';
+import ArrowLeft from '@static/detail/arrow-left.png';
 import M5Indexes from '@components/m5/indexes';
 import '@components/m5/style/components/indexes.scss';
 import '@components/m5/style/components/search-bar.scss';
 import '@components/m5/style/components/list.scss';
 import '@components/m5/style/components/toast.scss';
+import { get as getGlobalData } from '../../global_data';
 import cities from './cities.json'
+import './index.scss'
 
 
 export default class checkCity extends React.Component {
-  state = {
-    list: [],
+  constructor(props){
+    super(props);
+    const url = Taro.getCurrentPages();
+    const options = url[url.length - 1].options;
+    this.state = {
+      list: [],
+      name: options.name,
+      projectId: options.projectId,
+      isMovieScreening: (options.isMovieScreening == 'true'),
+    }
   }
 
   componentWillMount() {
@@ -56,12 +68,40 @@ export default class checkCity extends React.Component {
       letterMap,
     };
   }
+  handleBack = () => {
+    Taro.redirectTo({
+      url: `/pages/coreData/index?name=${this.state.name}&projectId=${this.state.projectId}&isMovieScreening=${this.state.isMovieScreening}`
+    })
+  }
+
+  handleCity = (item) => {
+    console.log(item, `/pages/coreData/index?name=${this.state.name}&projectId=${this.state.projectId}&isMovieScreening=${this.state.isMovieScreening}&cityId=${item.id}&cityName=${item.name}`)
+    Taro.redirectTo({
+      url: `/pages/coreData/index?name=${this.state.name}&projectId=${this.state.projectId}&isMovieScreening=${this.state.isMovieScreening}&cityId=${item.id}&cityName=${item.name}`
+    })
+  }
 
   render() {
     const {list} = this.state;
+    const systemInfo = Taro.getSystemInfoSync();
+    const { rpxTopx } = utils;
+    const capsuleLocation = getGlobalData('capsuleLocation');
+    const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
     return (
       <View>
-        <M5Indexes list={list}></M5Indexes>
+        <View className='detail-top' style={{ height: `${headerBarHeight}px` }}>
+          <View className='top'>
+            <View className='header'>
+              <View className='backPage' onClick={()=>this.handleBack()}>
+                <Image src={ArrowLeft}></Image>
+              </View>
+              <Text className='header-title'>选择城市</Text>
+            </View>
+          </View>
+        </View>
+        <ScrollView scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, marginTop: headerBarHeight}}>
+          <M5Indexes list={list} onClick={this.handleCity.bind(this)}></M5Indexes>
+        </ScrollView>
       </View>
     )
   }

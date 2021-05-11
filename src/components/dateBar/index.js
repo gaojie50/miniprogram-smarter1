@@ -10,7 +10,7 @@ import './index.scss';
 
 let aInterval;
 export default function dateBar(props){
-  const { callBack, minDate, maxDate, needButtons, needInterval, style } = props;
+  const { callBack, minDate, maxDate, needButtons, needInterval, style, startDateBar } = props;
   const [time, setTime] = useState('');
   const [day, setDay] = useState('');
   const [now, setNow] = useState('');
@@ -18,6 +18,8 @@ export default function dateBar(props){
   const [isShowSelect, setIsShowSelect] = useState(false);
   const [isShowButton, setIsShowButton] = useState(false);
   const [dateRange, setDateRange] = useState([]);
+  const [startDate, setStartDate] = useState('');
+  const today = dayjs(new Date()).format('YYYYMMDD');
 
   useEffect(() => {
     clearInterval(aInterval);
@@ -43,14 +45,15 @@ export default function dateBar(props){
   const changeDay = (passDay) => {
     const originTime = thatTime || new Date();
     const changeTime = originTime.setTime(originTime.getTime()+passDay*24*60*60*1000);
-    const selectDate = dayjs(changeTime).format('YYYY-MM-DD');
-    if(dayjs(now).format('YYYY-MM-DD') === selectDate) {
+    const selectDate = dayjs(changeTime).format('YYYYMMDD');
+    if(dayjs(now).format('YYYYMMDD') === selectDate) {
       setThatTime(null)
     } else {
       calculateTime(now, new Date(changeTime))
       setThatTime(new Date(changeTime))
     }
     if(callBack) {
+      console.log(callBack)
       callBack(selectDate)
     }
   }
@@ -61,7 +64,9 @@ export default function dateBar(props){
   }
 
   const selectedDate = (e) => {
-    setDateRange(e.value)
+    setDateRange(e.value);
+    console.log(e.value);
+    calculateTime(e.value);
     setIsShowButton(true);
   }
 
@@ -72,10 +77,39 @@ export default function dateBar(props){
   const cancel = () => {
     showSelect()
   }
+  const beforeDay = () => {
+    let showDay = dayjs(thatTime||now).format('YYYYMMDD');
+    if(showDay && showDay - startDateBar > 0){
+      changeDay(-1)
+    }else{
+      Taro.showToast({
+        title: '无法点击前一天',
+        icon: 'none',
+        duration: 1000
+      });
+    }
+  }
+  const nextDay = () => {
+    let showDay = dayjs(thatTime).format('YYYYMMDD');
+    if(showDay && showDay - today < 0){
+      changeDay(+1)
+    }else{
+      Taro.showToast({
+        title: '无法点击后一天',
+        icon: 'none',
+        duration: 1000
+      });
+    }
+  }
+
+  useEffect(()=>{
+    let newStartDateBar = startDateBar.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1/$2/$3");
+    setStartDate(newStartDateBar);
+  }, [startDateBar])
 
   return (
     <View className="date-bar-component" style={style} >
-      <View className="left-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() => changeDay(-1)}>前一天</View>
+      <View className="left-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() => beforeDay()}>前一天</View>
       <View className="middle-block">
         <View className="date"  onClick={() => showSelect()}> 
           {day}
@@ -85,11 +119,10 @@ export default function dateBar(props){
           <Text className="tips">更新时间</Text>{time}
         </View>
       </View>
-      <View className="right-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() => changeDay(+1)}>后一天</View>
+      <View className="right-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() =>nextDay()}>后一天</View>
       {isShowSelect && (
         <View className="time-selector">
-          <Calendar minDate={minDate} maxDate={maxDate} isVertical onDayClick={(e) => selectedDate(e)}/>
-          
+          <Calendar minDate={startDate} maxDate={dayjs(new Date()).format('YYYY/MM/DD')} isVertical onDayClick={(e) => selectedDate(e)} />
             <View>
             {isShowButton && (
               <Button className="button" onClick={() => confirm()}>确认时间</Button>

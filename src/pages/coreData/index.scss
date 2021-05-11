@@ -48,24 +48,26 @@
   line-height: 64px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-bottom: 1px #CFCFCF solid;
   .list-header-left {
     font-weight: 40;
     font-family: PingFangSC-Regular;
     font-size: 24px;
     color: #666666;
-    width: 48px;
     height: 24px;
     line-height: 24px;
     margin-left: 30px;
-  }
-  .list-header-img {
-    margin-left: 8px;
     display: flex;
-    align-items: center; 
-    image {
-      width: 12px;
-      height: 8px;
+    justify-content: center;
+    .list-header-img {
+      margin-left: 8px;
+      display: flex;
+      align-items: center; 
+      image {
+        width: 12px;
+        height: 8px;
+      }
     }
   }
   .list-header-right {
@@ -73,15 +75,20 @@
     font-family: PingFangSC-Regular;
     font-size: 24px;
     color: #999999;
-    width: 240px;
     height: 24px;
     line-height: 24px;
-    margin-left: 362px;
     margin-right: 8px;
-  }
-  image {
-    width: 12px;
-    height: 24px;
+    display: flex;
+    justify-content: center;
+    .list-header-img {
+      margin-left: 8px;
+      display: flex;
+      align-items: center; 
+      image {
+        width: 12px;
+        height: 24px;
+      }
+    }
   }
 }
 
