@@ -35,6 +35,7 @@ export default function keepLogin(params) {
             if (success) {
               let { accessToken, hasBindMobile } = data
               if( accessToken ){
+                console.log(accessToken);
                 Taro.setStorageSync('token', accessToken);
               }
               if (hasBindMobile) {
