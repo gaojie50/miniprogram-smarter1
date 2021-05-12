@@ -200,6 +200,7 @@ export default function Result() {
                       resultPageTextTitleEditingGuideState={resultPageTextTitleEditingGuideState}
                       setResultPageTextTitleEditingGuideState={setResultPageTextTitleEditingGuideState}
                       title={item.title}
+                      rightText={item?.rightText}
                       projectId={projectId}
                       roundId={roundId}
                       questionNum={index + (coreExist ? 2 : 1)}
