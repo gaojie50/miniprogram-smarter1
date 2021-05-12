@@ -41,7 +41,7 @@ const FILTER_ITEMS_INIT = () => (
       type: '2'
     },
     {
-      name: '近7天',
+      name: '全部',
       type: '3'
     },
     {
@@ -251,20 +251,27 @@ function useExcavateFilter() {
     const hasCategoryType = option.categoryType.find((item) => item.active === true);
     const hasSourceType = option.sourceType.find((item) => item.active === true);
     const dateOption = option.dateSet.find((item) => item.checked === 'checked');
-    const hasMovieType = option.movieType.find((item) => item.active === true);
-
+    const hasMovieType = option.movieType.filter((item) => item.active === true);
     if (hasCategoryType) {
       arr[0].changed = true;
+      arr[0].name = hasCategoryType.value;
     }
     if (hasSourceType) {
       arr[1].changed = true;
+      arr[1].name = hasSourceType.value;
     }
     if (dateOption) {
       arr[2].changed = true;
       arr[2].name = dateOption.label;
     }
-    if (hasMovieType) {
+    if (hasMovieType.length !== 0) {
+      console.log(hasMovieType);
       arr[3].changed = true;
+      let name = hasMovieType.map((item) => item.value).join(' ');
+      if (name.length > 5) {
+        name = name.slice(0,5) + '...';
+      }
+      arr[3].name = name;
     }
 
     if (option.filterShow === '1' ) {
