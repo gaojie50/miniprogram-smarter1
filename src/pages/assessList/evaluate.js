@@ -59,7 +59,7 @@ export function EvaluationList({type}) {
   }, [data])
 
   return loading ? <mpLoading show type='circle' tips=''></mpLoading> :
-          evaluationList.length ? <>
+          evaluationList?.length > 0 ? <>
           {
             evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />)
           }
