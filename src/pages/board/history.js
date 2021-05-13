@@ -194,7 +194,7 @@ function PureReq_Projectoperatelog({ projectId, queryType }) {
       url: 'api/management/projectoperatelog',
       data: {
         projectId,
-        queryType
+        queryType: queryType || null
       }
     },
     'server',
