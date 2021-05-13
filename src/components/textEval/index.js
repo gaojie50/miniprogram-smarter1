@@ -134,10 +134,10 @@ export default function TextEval({
     </View>;
   }
   return <View className="textEval-wrap">
-    <View className={`h5 ${(permissions || isTopic) ? "rich" : ""}`}>
+    <View className={`h5 ${(permissions) ? "rich" : ""}`}>
       {questionNum}、{title}
       {
-        (permissions || isTopic) ?
+        permissions ?
           <Text className="detail" onClick={toDetails}>评估详情 <Text className="arrow" /></Text> : ''
       }
     </View>
