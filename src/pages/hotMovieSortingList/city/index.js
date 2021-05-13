@@ -46,7 +46,8 @@ export default function hotMovieList() {
   }
 
   const onSelectDate = (date) => {
-    setShowDate(date.replaceAll('-', ''));
+    console.log(date);
+    // setShowDate(date.replaceAll('-', ''));
     // console.log(date);
   }
 

@@ -18,11 +18,12 @@ export default class checkCity extends React.Component {
     super(props);
     const url = Taro.getCurrentPages();
     const options = url[url.length - 1].options;
+    this.fromUrl = decodeURIComponent(options.fromUrl);
     this.state = {
       list: [],
-      name: options.name,
-      projectId: options.projectId,
-      isMovieScreening: (options.isMovieScreening == 'true'),
+      // name: options.name,
+      // projectId: options.projectId,
+      // isMovieScreening: (options.isMovieScreening == 'true'),
     }
   }
 
@@ -70,14 +71,15 @@ export default class checkCity extends React.Component {
   }
   handleBack = () => {
     Taro.redirectTo({
-      url: `/pages/coreData/index?name=${this.state.name}&projectId=${this.state.projectId}&isMovieScreening=${this.state.isMovieScreening}`
+      url: this.fromUrl,
     })
   }
 
   handleCity = (item) => {
-    console.log(item, `/pages/coreData/index?name=${this.state.name}&projectId=${this.state.projectId}&isMovieScreening=${this.state.isMovieScreening}&cityId=${item.id}&cityName=${item.name}`)
+    // console.log(this.fromUrl);
+    // console.log(this.fromUrl.replace(/cityName=\p{Unified_Ideograph}/u, `cityName=${item.name}`));
     Taro.redirectTo({
-      url: `/pages/coreData/index?name=${this.state.name}&projectId=${this.state.projectId}&isMovieScreening=${this.state.isMovieScreening}&cityId=${item.id}&cityName=${item.name}`
+      url: this.fromUrl.replace(/cityId=(\d*)/, `cityId=${item.id}`).replace(/cityName=(\p{Unified_Ideograph}*)/u, `cityName=${item.name}`),
     })
   }
 

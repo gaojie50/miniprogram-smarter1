@@ -6,15 +6,17 @@ import  Calendar from '@components/calendar'
 import  AtTag from '@components/m5/tag';
 import '@components/m5/style/components/tag.scss';
 import ArrowLeft from '@static/detail/arrow-left.png';
+import dayjs from 'dayjs';
 import DateBar from '../../../components/dateBar';
 import { get as getGlobalData } from '../../../global_data';
 import './index.scss'
 
 export default function hotMovieList() {
-
-  const [cityId, setCityId] = useState(0);
+  const url = Taro.getCurrentPages();
+  const options = url[url.length - 1].options;
+  const { cityId, cityName } = options;
+  const [showDate, setShowDate] = useState(() => dayjs(new Date()).format('YYYYMMDD'));
   const [ranking, setRanking] = useState([]);
-  const lists =[1,2,3,4,5,6,7,8,9,10];
   const { rpxTopx } = utils;
   const capsuleLocation = getGlobalData('capsuleLocation');
   const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
@@ -32,22 +34,44 @@ export default function hotMovieList() {
   }
 
   const getMovieRanking = () => {
+    let data = { 
+      showDate,
+    };
+    if (cityId) {
+      data = Object.assign(data, { cityId });
+    }
     reqPacking({
       url: 'api/management/finance/hotMovie/incomeScore/list',
       method: 'GET',
+      data,
     },).then(res => {
-      console.log(res);
       if (res.success && res.data && res.data.length > 0) {
         setRanking(res.data);
       }
     })
   }
 
-  const onselectDate = (date) => {
-    console.log(date);
+  const onSelectDate = (date) => {
+    setShowDate(date.replaceAll('-', ''));
   }
 
-  useEffect(getMovieRanking, [cityId]);
+  const gotoCheckCity = () => {
+    let path = Taro.getCurrentInstance().router.path;
+    let params = Taro.getCurrentInstance().router.params;
+    let paramsStr = '';
+    if (Object.keys(params).length > 0) {
+      paramsStr += '?';
+      for (const key of Object.keys(params)) {
+        paramsStr += `${key}=${params[key]}&`;
+      }
+    }
+    // console.log(path + paramsStr.slice(-1));
+    Taro.redirectTo({
+      url: `/pages/checkCity/index?fromUrl=${encodeURIComponent(path + paramsStr)}`
+    });
+  }
+
+  useEffect(getMovieRanking, [cityId, showDate]);
 
   return (
     <View>
@@ -63,9 +87,9 @@ export default function hotMovieList() {
         </View>
       </View>
       <View style={{ marginTop: `${headerBarHeight}px`, position: 'relative' }}>
-        <DateBar callBack={onselectDate} />
+        <DateBar callBack={onSelectDate.bind(this)} needButtons startDateBar='20210106' />
         <View className='list-header'>
-          <View className='list-header-left'>全国</View>
+          <View className='list-header-left' onClick={gotoCheckCity}>{ cityId ? cityName : '全国' }</View>
           <View className='list-header-img'>
             <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
           </View>
@@ -76,7 +100,7 @@ export default function hotMovieList() {
             return (
               <View className='list' key={index}>
                 <View className='list-film'>
-                  <Image src={item.pic ||'https://p0.meituan.net/movie/e2ecb7beb8dadc9f07f2fad9820459f92275588.jpg@464w_644h_1e_1c'}></Image>
+                  <Image src={item.pic.replace('/w.h/', '/')}></Image>
                   <View className={`film-index index-${index}`} >{index+1}</View>
                 </View>
                 <View className='list-middle'>
@@ -92,7 +116,7 @@ export default function hotMovieList() {
                       ))
                     }
                   </View>
-                  <View className='list-film-time'>{item.startDate}上映</View>
+                  <View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View>
                 </View>
                 <View className='film-recommend'>{item.score}</View>
               </View>
