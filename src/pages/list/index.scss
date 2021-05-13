@@ -399,3 +399,27 @@ page {
   height: 100vh;
   z-index: 89;
 }
+
+.develop-jump {
+  position: absolute;
+  left: 80px;
+  color:rgba(247, 247, 247, 1);
+  font-size: 12px;
+}
+.develop-link {
+  width: 100%;
+  position: absolute;
+  top: 50px;
+  left: -50px;
+  height: 400px;
+  // background-color: rgb(161, 181, 204);
+
+  &-input {
+    width: 60%;
+    background-color: rgb(236, 239, 241);
+    height: 50px;
+    margin: 0 auto;
+    padding-left: 20px;
+    border-radius: 20px;
+  }
+}

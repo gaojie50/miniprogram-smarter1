@@ -191,15 +191,7 @@ function EvalutaionCard(props) {
       return [0, '已评估']
     } else {
       let prefix = '';
-      if (judgeInvitee(invitees, realName)) {
-        if(deadline && dayjs().valueOf() > deadline) {
-          prefix = '未参与'
-        } else {
-          prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
-        }
-        
-        return [1, prefix]
-      }
+      console.log(isDockingPerson(role),111)
       if (isDockingPerson(role)) {
         if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
@@ -211,6 +203,17 @@ function EvalutaionCard(props) {
         
         return [2, prefix]
       }
+
+      if (judgeInvitee(invitees, realName)) {
+        if(deadline && dayjs().valueOf() > deadline) {
+          prefix = '未参与'
+        } else {
+          prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
+        }
+        
+        return [1, prefix]
+      }
+
       return [3, prefix]
     }
   }, [deadline, hasAssess, initiator, invitees, realName]);

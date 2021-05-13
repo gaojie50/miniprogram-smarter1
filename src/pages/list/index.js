@@ -1,4 +1,4 @@
-import { Block, View, Image, Text, ScrollView } from '@tarojs/components'
+import { Block, View, Image, Text, ScrollView, Input } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
 import utils from '../../utils/index.js'
@@ -108,7 +108,8 @@ class _C extends React.Component {
     isLogin: false,
     reqUrl: noPermissionReqUrl, // 没有登录时看到的
     noPermission: true,
-    loginUrl: `/pages/welcome/index?target=${encodeURIComponent(`/pages/list/index`)}`
+    loginUrl: `/pages/welcome/index?target=${encodeURIComponent(`/pages/list/index`)}`,
+    linkShow: false
   }
 
   onLoad = ({ token, target, needLogin }) => {
@@ -797,7 +798,8 @@ class _C extends React.Component {
       curPagePermission,
       isScroll,
       yMaxLength,
-      isLogin
+      isLogin,
+      linkShow
     } = this.state;
 
     const yMaxLengthArr = ["","","","","",""].map((item,index)=>strip(formatNumber(yMaxLength * (1 - index/5)).posNum));
@@ -853,8 +855,37 @@ class _C extends React.Component {
                       src="../../static/icon/search-white.png"
                     ></Image>
                   </View>
+                  {
+                    Taro.getAccountInfoSync().miniProgram.envVersion === 'develop' ?
+                    <Text 
+                      style={
+                        'top:calc( ' +
+                        (titleHeight + statusBarHeight) / 2 +
+                        'px -  40rpx)'
+                      } 
+                      className='develop-jump' 
+                      onClick={() => this.setState({linkShow: !linkShow})}
+                    >
+                      跳转
+                    </Text> : null
+                  }
+                  
                   <Text onClick={this.goTop}>影片市场情报</Text>
                 </View>
+                {
+                  linkShow ?
+                    <View className='develop-link' >
+                      <Input 
+                        className='develop-link-input' 
+                        onConfirm={e => {
+                          Taro.navigateTo({
+                            url: e.detail.value
+                          })
+                        }}
+                      >
+                      </Input>
+                    </View> : null
+                }
               </View>
               <ScrollView
                 scrollY={isScroll}
