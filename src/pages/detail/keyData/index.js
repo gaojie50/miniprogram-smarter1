@@ -194,7 +194,9 @@ export default class KeyData extends React.Component {
                   <View className="detail-box">
                     <View className="detail-box-left">
                       <View className="detail-left">总收入</View>
-                      <View className="detail-middle">{`${formatNumber(newTotalIncome, 'floor').num} ${formatNumber(newTotalIncome, 'floor').unit}`}</View>
+                      <View className="detail-middle">
+                        {`${newTotalIncome < 0 ? '-' : ''}${newTotalIncome < 0 ? formatNumber(newTotalIncome*-1, 'floor').num : formatNumber(newTotalIncome, 'floor').num} ${newTotalIncome < 0 ? formatNumber(newTotalIncome*-1, 'floor').unit : formatNumber(newTotalIncome, 'floor').unit}`}
+                        </View>
                     </View>
                     <View className="detail-box-right">
                       <View className="detail-right">查看详情</View>

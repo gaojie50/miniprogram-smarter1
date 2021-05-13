@@ -55,7 +55,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     }).then((res)=>{
       const { success, error, data } = res;
       console.log('发行代理', res);
-      if (success && data) {
+      if (success) {
         cleanAllValue();
         const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
         lists[0].map((item, index)=>{

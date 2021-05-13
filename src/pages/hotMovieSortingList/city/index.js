@@ -83,7 +83,7 @@ export default function hotMovieList() {
               <View className='list' key={index}>
                 <View className={`list-index index-${index}`}>{index + 1}</View>
                 <View className='list-city'>{cityMap[item.cityId] && cityMap[item.cityId].name}</View>
-                <View className='list-money'>{numberFormat(item.boxOffice)}万</View>
+                <View className='list-money'>{`${numberFormat(item.boxOffice).num}${numberFormat(item.boxOffice).unit}`}</View>
                 <View className='list-percentage'>{item.boxOfficeRate}%</View>
               </View>
             );

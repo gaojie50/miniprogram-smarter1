@@ -240,19 +240,19 @@ export default function hotMovieList() {
               <View className='box-office'>
                 <View className='office'>
                   <View className='office-title'>预测日票房</View>
-                  <View className='office-num'>{numberFormat(boxOffice.estimateBoxByDay)}<Text className='unit'>万</Text></View>
+                  <View className='office-num'>{numberFormat(boxOffice.estimateBoxByDay).num}<Text className='unit'>{numberFormat(boxOffice.estimateBoxByDay).unit}</Text></View>
                 </View>
                 <View className='office'>
                   <View className='office-title'>预测总票房</View>
-                  <View className='office-num'>{numberFormat(boxOffice.estimateBox)}<Text className='unit'>万</Text></View>
+                  <View className='office-num'>{numberFormat(boxOffice.estimateBox).num}<Text className='unit'>{numberFormat(boxOffice.estimateBox).unit}</Text></View>
                 </View>
                 <View className='office'>
                   <View className='office-title'>已产生票房</View>
-                  <View className='office-num'>{numberFormat(boxOffice.cumulateBox)}<Text className='unit'>万</Text></View>
+                  <View className='office-num'>{numberFormat(boxOffice.cumulateBox).num}<Text className='unit'>{numberFormat(boxOffice.cumulateBox).unit}</Text></View>
                 </View>
                 <View className='office'>
                   <View className='office-title'>未来票房</View>
-                  <View className='office-num'>{numberFormat(boxOffice.futureBox)}<Text className='unit'>万</Text></View>
+                  <View className='office-num'>{numberFormat(boxOffice.futureBox).num}<Text className='unit'>{numberFormat(boxOffice.futureBox).unit}</Text></View>
                 </View>
               </View> 
             </View> : ''
@@ -272,6 +272,7 @@ export default function hotMovieList() {
                   projectId={projectId}
                   isMovieScreening={isMovieScreening}
                   name={name}
+                  showDate={Number(showDay || dayjs(new Date()).format('YYYYMMDD'))}
                 ></BoxOfficeData>
               </View>
             </View>
@@ -283,6 +284,7 @@ export default function hotMovieList() {
               isMovieScreening={isMovieScreening}
               projectId={projectId}
               name={name}
+              showDate={Number(showDay || dayjs(new Date()).format('YYYYMMDD'))}
             ></BoxOfficeData>
           </View>
         }

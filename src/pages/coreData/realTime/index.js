@@ -25,6 +25,7 @@ export default function realTime({}) {
   const projectId = Number(url[url.length-1].options.projectId);
   const name = url[url.length-1].options.name;
   const isMovieScreening = url[url.length-1].options.isMovieScreening;
+  const showDate = url[url.length-1].options.showDate;
   const [showProgress, setShowProgress] = useState(false);
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState();
   const [lists, setLists] = useState(listsInfo[paramIndex]);
@@ -161,6 +162,7 @@ export default function realTime({}) {
       url: requestUrls[paramIndex],
       data: {
         projectId,
+        showDate: paramIndex==1 ? Number(showDate) : ''
       }
     }).then(res => {
       const { success, error } = res;
@@ -210,7 +212,7 @@ export default function realTime({}) {
     }).then(res => {
       const { success, error } = res;
       console.log('合同参数', res);
-      if (success && res.data) {
+      if (success) {
         const { data } = res;
         let newData = Object.assign('', data);
         setGetValue(res.data);
@@ -224,7 +226,7 @@ export default function realTime({}) {
           lists[2].money = newData['myDistributionAgencyFee']
         } else{
           for(let key in lists) {
-            lists[key].money = newData[lists[key].dataIndex];
+            lists[key].money = newData[lists[key].dataIndex] || '';
           }
         }
         console.log('newData', newData);
@@ -264,7 +266,7 @@ export default function realTime({}) {
                     <View className='param-remarks'>{list.remarks}</View>
                   </View>
                   <View className='param-money'>
-                    { list.unit ? `${valueData[list.dataIndex] || '-'}${list.unit}` : `${numberFormat(valueData[list.dataIndex])}万` }
+                    { list.unit ? `${valueData[list.dataIndex] || '-'}${list.unit}` : `${numberFormat(valueData[list.dataIndex]).num}${numberFormat(valueData[list.dataIndex]).unit}` }
                   </View>
                 </View>
                 :

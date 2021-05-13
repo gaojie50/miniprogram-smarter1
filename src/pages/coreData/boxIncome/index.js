@@ -51,7 +51,7 @@ export default function BoxIncome({current, officeIncomeIndex, isMovieScreening,
               <View className='income-title'>{list.title}</View>
               <View className='income-remarks'>{list.remarks}</View>
             </View>
-            <View className='income-money'>{numberFormat(list.money)}<Text className='unit'>{list.unit}</Text></View>
+            <View className='income-money'>{numberFormat(list.money).num}<Text className='unit'>{numberFormat(list.money).unit}</Text></View>
           </View>
         )
       })}

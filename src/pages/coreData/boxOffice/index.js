@@ -7,7 +7,7 @@ import {numberFormat} from '../common'
 import './index.scss'
 import { handleActive } from '@components/m5/calendar/common/plugins';
 
-export default function BoxOfficeData({current, isMovieScreening, projectId, name, response}) {
+export default function BoxOfficeData({current, isMovieScreening, projectId, name, response, showDate}) {
   const listsInfo =[
     {
       name: '票务收入',
@@ -35,6 +35,10 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
   const [lists, setLists] = useState(listsInfo);
   const [showProgress, setShowProgress] = useState(false);
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState(0);
+
+  useEffect(()=>{
+    console.log(showDate, 'showDate!!!!!!!!');
+  }, [showDate])
   
   useEffect(()=>{
     lists.map((item)=>{
@@ -50,7 +54,7 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
 
   const gotoParam = (index) => {
     Taro.redirectTo({
-      url: `/pages/coreData/realTime/index?paramIndex=${index}&projectId=${projectId}&isMovieScreening=${isMovieScreening}&name=${name}`
+      url: `/pages/coreData/realTime/index?paramIndex=${index}&projectId=${projectId}&isMovieScreening=${isMovieScreening}&name=${name}&showDate=${showDate}`
     })
   }
   const handlePageHistory = () => {
@@ -62,14 +66,14 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
   return (
     <View>
       <View className='pre-income'>{isMovieScreening ? preIncome[current] : '总收入'}</View>
-      <View className='income-num'>{numberFormat(response.totalIncome)}<Text className='unit'>万</Text></View>
+      <View className='income-num'>{numberFormat(response.totalIncome).num}<Text className='unit'>{numberFormat(response.totalIncome).unit}</Text></View>
       <View className='office-income-box'>
         {lists.map((list, index)=>{
           return (
             <View className='office-income' key={index} onClick={()=>{changeShowProgress(index)}}>
               <View className='office-income-left'>
                 <View className='office-income-name'>{list.name}</View>
-                <View className='office-income-num'>{numberFormat(list.num)}<Text className='unit'>万</Text></View>
+                <View className='office-income-num'>{numberFormat(list.num).num}<Text className='unit'>{numberFormat(list.num).unit}</Text></View>
               </View>
               <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
             </View>
