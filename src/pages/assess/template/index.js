@@ -66,7 +66,7 @@ export default function PerviewTemplate(){
     });
     reqPacking(
       {
-        url: '/api/management/tempQuestion',
+        url: 'api/management/tempQuestion',
         data: { tempId },
       },
       'server',
