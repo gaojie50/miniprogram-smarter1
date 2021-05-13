@@ -25,15 +25,17 @@ export default function hotMovieList() {
   const [current, setCurrent] = useState(isMovieScreening ? 0 : 3);
   const [boxOffice, setBoxOffice] = useState({});
   const [response, setResponse] = useState({});
-  const [cityBoxOfficeRateValue, setCityBoxOfficeRateValue] = useState([]);
+  const [cityValue, setCityValue] = useState([]);
   const [showDay, setShowDay] = useState('');
   const [startDateBar, setsStartDateBar] = useState('');
-
 
   const fetchBoxOfficeValue = () => {
     reqPacking({
       url:'api/management/finance/various/boxOffice',
-      data: { projectId },
+      data: { 
+        projectId,
+        showDate : Number(dayjs(new Date()).format('YYYYMMDD'))
+      },
       method: 'GET',
     }, ).then(res => {
         const { success, data = {}, error } = res;
@@ -120,22 +122,35 @@ export default function hotMovieList() {
   }
   const handleCheckCity = () => {
     // getCityValue('');
-    if(cityBoxOfficeRateValue && cityBoxOfficeRateValue>10) {
+    if(cityValue.length > 0 && cityValue[0].boxOfficeRate > 10) {
       Taro.showToast({
         title: '城市占比超过10%，无法选择城市',
         icon: 'none',
         duration: 1000
       });
-    }else {
+    } else if (cityValue.length == 0 ) {
+      Taro.showToast({
+        title: '当前暂无占比，无法选择城市',
+        icon: 'none',
+        duration: 1000
+      });
+    } else {
       gotoCheckCity();
     }
   }
 
   const handleGotoCityList = () => {
+    console.log(cityValue, cityValue.length);
     // getCityValue('');
-    if(cityBoxOfficeRateValue && cityBoxOfficeRateValue>10) {
+    if(cityValue.length > 0 && cityValue[0].boxOfficeRate > 10) {
       Taro.showToast({
         title: '城市占比超过10%，无法查看占比',
+        icon: 'none',
+        duration: 1000
+      });
+    }else if (cityValue.length == 0 ) {
+      Taro.showToast({
+        title: '当前暂无占比，无法查看占比',
         icon: 'none',
         duration: 1000
       });
@@ -148,8 +163,8 @@ export default function hotMovieList() {
     reqPacking({
       url:'api/management/finance/boxOfficeRate/list',
       data:{ 
-        cityId, 
-        showDate : Number(dayjs(new Date()).format('YYYYMMDD')), 
+        cityId,
+        showDate : Number(dayjs(new Date()).format('YYYYMMDD')),
         projectId
       },
       method: 'GET',
@@ -157,7 +172,7 @@ export default function hotMovieList() {
         const { success, data = {}, error } = res;
         console.log('城市接口', res);
         if (success && res.data) {
-          setCityBoxOfficeRateValue(res.data[0].boxOfficeRate);
+          setCityValue(res.data);
         } else {
           Taro.showToast({
             title: error ? error.message : '',
@@ -174,9 +189,11 @@ export default function hotMovieList() {
       data: { projectId: projectId },
       method: 'GET',
     }).then((res) => {
-      console.log(res, 'res!!!!!!!!1')
-      console.log(res.data.productInfo.releaseDate.endDate);
-      setsStartDateBar(res.data.productInfo.releaseDate.endDate);
+      if(res.success && res.data) {
+        console.log(res, 'res!!!!!!!!1')
+        console.log(res.data.productInfo.releaseDate.endDate);
+        setsStartDateBar(res.data.productInfo.releaseDate.endDate);
+      }
     })
   }
 
@@ -214,7 +231,7 @@ export default function hotMovieList() {
                   </View>
                 </View>
                 <View className='list-header-right' onClick={()=>handleGotoCityList()} >
-                  {`${cityId ? `票房占比：${cityBoxOfficeRateValue}%` :'各地区产生票房及占比'}`}
+                  {`${cityId ? `票房占比：${cityValue[0].boxOfficeRate}%` :'各地区产生票房及占比'}`}
                   <View className='list-header-img'>
                     <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
                   </View>

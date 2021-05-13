@@ -41,7 +41,7 @@ export function UseHistory(props) {
         if (success) {
           setData(data);
           setAuth(true);
-          judgeData(data, 'history');
+          judgeData && judgeData(data, 'history');
         } else {
           if (error && error.message === NO_AUTH_MESSAGE) {
             setAuth(false);
