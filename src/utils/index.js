@@ -459,6 +459,15 @@ const formatPercent = (value, decimals = 0) => {
   return +value == 0 ? '-' : `${value}%`;
 };
 
+const arrayToMap = (arr, indexName) => {
+  if (!Array.isArray(arr) || arr.length <= 0) return {};
+  const map = {};
+  for (const item of arr) {
+    map[item[indexName]] = item;
+  }
+  return map;
+}
+
 export default {
   errorHandle,
   debounce,
@@ -483,4 +492,5 @@ export default {
   previewFile,
   isDockingPerson,
   formatPercent,
+  arrayToMap,
 }

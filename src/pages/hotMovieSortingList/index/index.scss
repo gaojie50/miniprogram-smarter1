@@ -126,9 +126,8 @@
     height: 122px;
     flex: 1, 1, auto;
     display: flex;
-    // align-items: center;
-    flex-direction: column;
     justify-content: center;
+    flex-direction: column;
     width: 384px;
     margin-right: 145px;
     // overflow: hidden;
@@ -157,18 +156,8 @@
         font-size: 22px;
         line-height: 36px;
         text-align: center;
-      }
-      .one {
-        color: #FD9C00;
-        border: 1px solid #FD9C00;
-      }
-      .two {
         color: #F1303D;
         border: 1px solid #F1303D;
-      }
-      .three {
-        color: #276FF0;
-        border: 1px solid #276FF0;
       }
     }
     .list-film-time {
