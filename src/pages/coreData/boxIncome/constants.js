@@ -425,7 +425,7 @@ export const lists = [
         {
           key: 'pureBox',
           title: '净票房',
-          remarks: '计算公式：已产生的分账票房+扣除：国家电影专项基金+扣除：增值税税金及附加',
+          remarks: '计算公式：总票房收入预测（不含服务费）+扣除：国家电影专项基金+扣除：增值税税金及附加',
           money: 0,
           unit: '万',
         },
@@ -545,8 +545,8 @@ export const lists = [
 export const listsAfter = [
   [
     {
-      key: 'estimateBoxIncome',
-      title: '中国大陆境内地区票房收入预测',
+      key: 'cumulateBox',
+      title: '中国大陆境内地区票房收入',
       remarks: '含服务费',
       money: 0,
       unit: '万',

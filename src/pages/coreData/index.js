@@ -56,8 +56,8 @@ export default function hotMovieList() {
       data:{ 
         projectId,
         type: (current + 1),
-        showDate: showDate || dayjs(new Date()).format('YYYYMMDD'),
-        cityId
+        showDate: Number(showDate || dayjs(new Date()).format('YYYYMMDD')),
+        cityId: cityId || ''
       },
       method: 'GET',
     }).then(res => {
@@ -119,7 +119,7 @@ export default function hotMovieList() {
     fetchIncomeValue(tab);
   }
   const handleCheckCity = () => {
-    getCityValue('');
+    // getCityValue('');
     if(cityBoxOfficeRateValue && cityBoxOfficeRateValue>10) {
       Taro.showToast({
         title: '城市占比超过10%，无法选择城市',
@@ -132,7 +132,7 @@ export default function hotMovieList() {
   }
 
   const handleGotoCityList = () => {
-    getCityValue('');
+    // getCityValue('');
     if(cityBoxOfficeRateValue && cityBoxOfficeRateValue>10) {
       Taro.showToast({
         title: '城市占比超过10%，无法查看占比',
@@ -147,9 +147,13 @@ export default function hotMovieList() {
   const getCityValue = (cityId) => {
     reqPacking({
       url:'api/management/finance/boxOfficeRate/list',
-      data:{ cityId, showDate : dayjs(new Date()).format('YYYYMMDD'), projectId },
+      data:{ 
+        cityId, 
+        showDate : Number(dayjs(new Date()).format('YYYYMMDD')), 
+        projectId
+      },
       method: 'GET',
-    }, 'mapi').then(res => {
+    }).then(res => {
         const { success, data = {}, error } = res;
         console.log('城市接口', res);
         if (success && res.data) {

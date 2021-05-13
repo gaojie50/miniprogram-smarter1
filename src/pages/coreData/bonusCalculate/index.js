@@ -53,7 +53,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         dataType: 3
 
       }
-    }, 'mapi').then((res)=>{
+    }).then((res)=>{
       const { success, error } = res;
       console.log('规则数据get', res);
       if (success) {
