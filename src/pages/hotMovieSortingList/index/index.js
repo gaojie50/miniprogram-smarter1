@@ -76,6 +76,12 @@ export default function hotMovieList() {
     });
   }
 
+  const gotoCoreDataPage = (projectId) => {
+    Taro.redirectTo({
+      url: `/pages/detail/index?projectId=${projectId}`
+    });
+  }
+
   useEffect(getMovieRanking, [cityId, showDate]);
 
   return (
@@ -105,27 +111,29 @@ export default function hotMovieList() {
             {
               ranking.map((item, index) => {
                 return (
-                  <View className='list' key={index}>
-                    <View className='list-film'>
-                      <Image src={item.pic.replace('/w.h/', '/')}></Image>
-                      <View className={`film-index index-${index}`} >{index+1}</View>
-                    </View>
-                    <View className='list-middle'>
-                      <View className='list-film-name'>
-                        {item.movieName}
+                  <View className='list' key={index} onClick={()=>gotoCoreDataPage(item.projectId)}>
+                    <View className='list-left'>
+                      <View className='list-film'>
+                        <Image src={item.pic.replace('/w.h/', '/')}></Image>
+                        <View className={`film-index index-${index}`} >{index+1}</View>
                       </View>
-                      <View className='list-film-label'>
-                        {
-                          item.maoyanSign.map((sign) => (
-                            <View className='film-lable' key={sign}>
-                              {signText[sign]}
-                            </View>
-                          ))
-                        }
+                      <View className='list-middle'>
+                        <View className='list-film-name'>
+                          {item.movieName}
+                        </View>
+                        <View className='list-film-label'>
+                          {
+                            item.maoyanSign.map((sign) => (
+                              <View className='film-lable' key={sign}>
+                                {signText[sign]}
+                              </View>
+                            ))
+                          }
+                        </View>
+                        <View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View>
                       </View>
-                      <View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View>
                     </View>
-                    <View className='film-recommend'>{item.score}</View>
+                    <View className='film-recommend'>{parseFloat(item.score.toFixed(2))}</View>
                   </View>
                 )
               })

@@ -78,96 +78,99 @@
 .list {
   margin: 30px 30px 60px 30px;
   display: flex;
-  // justify-content: space-between;
+  justify-content: space-between;
   flex-wrap: nowrap;
-  align-items: center;
-  .list-film {
-    width: 98px;
-    height: 122px;
-    margin-right: 16px;
-    position: relative;
-    flex: 0, 0, 98px;
-    image {
-      width: 89px;
-      height: 122px;
-      border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 10px;
-    }
-    .film-index {
-      z-index: 10;
-      position: absolute;
-      top: 0px;
-      // left: 1px;
-      width: 38px;
-      height: 40px;
-      background: rgba(0,0,0,0.6);
-      border-radius: 10px 0 10px 0;
-      font-weight: 400;
-      font-family: MaoYanHeiTi-Regular;
-      font-size: 24px;
-      color: #FFFFFF;
-      text-align: center;
-      line-height: 40px;
-    }
-    .index-0 {
-      background: #F1303D;
-      border-radius: 10px 0 10px 0;
-    }
-    .index-1 {
-      background: #FD9C00;
-      border-radius: 10px 0 10px 0;
-    }
-    .index-2 {
-      background: #88A6DA;
-      border-radius: 10px 0 10px 0;
-    }
-  }
-  .list-middle {
-    height: 122px;
-    flex: 1, 1, auto;
+  // align-items: center;
+  .list-left {
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-    width: 384px;
-    margin-right: 145px;
-    // overflow: hidden;
-    .list-film-name {
-      display: block;
-      font-weight: 500;
-      font-family: PingFangSC-Medium;
-      font-size: 32px;
-      color: #333333;
-      line-height: 32px;
-      width: 384px;
-      height: 32px;
-      text-overflow: ellipsis;
-      white-space:nowrap;
-      overflow: hidden;
-    }
-    .list-film-label {
-      .film-lable {
-        margin-right: 8px;
-        display: inline-block;
-        width: 64px;
-        height: 36px;
-        border-radius: 4px;
+    align-items: center;
+    .list-film {
+      width: 98px;
+      height: 122px;
+      margin-right: 16px;
+      position: relative;
+      flex: 0, 0, 98px;
+      image {
+        width: 89px;
+        height: 122px;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 10px;
+      }
+      .film-index {
+        z-index: 10;
+        position: absolute;
+        top: 0px;
+        // left: 1px;
+        width: 38px;
+        height: 40px;
+        background: rgba(0,0,0,0.6);
+        border-radius: 10px 0 10px 0;
         font-weight: 400;
-        font-family: PingFangSC-Regular;
-        font-size: 22px;
-        line-height: 36px;
+        font-family: MaoYanHeiTi-Regular;
+        font-size: 24px;
+        color: #FFFFFF;
         text-align: center;
-        color: #F1303D;
-        border: 1px solid #F1303D;
+        line-height: 40px;
+      }
+      .index-0 {
+        background: #F1303D;
+        border-radius: 10px 0 10px 0;
+      }
+      .index-1 {
+        background: #FD9C00;
+        border-radius: 10px 0 10px 0;
+      }
+      .index-2 {
+        background: #88A6DA;
+        border-radius: 10px 0 10px 0;
       }
     }
-    .list-film-time {
-      margin-top: 18px;
-      font-weight: 400;
-      font-family: PingFangSC-Regular;
-      font-size: 24px;
-      color: #999999;
-      line-height: 24px;
-      bottom: 0px;
+    .list-middle {
+      height: 122px;
+      flex: 1, 1, auto;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      width: 384px;
+      // overflow: hidden;
+      .list-film-name {
+        display: block;
+        font-weight: 500;
+        font-family: PingFangSC-Medium;
+        font-size: 32px;
+        color: #333333;
+        line-height: 32px;
+        width: 384px;
+        height: 32px;
+        text-overflow: ellipsis;
+        white-space:nowrap;
+        overflow: hidden;
+      }
+      .list-film-label {
+        .film-lable {
+          margin-right: 8px;
+          display: inline-block;
+          width: 64px;
+          height: 36px;
+          border-radius: 4px;
+          font-weight: 400;
+          font-family: PingFangSC-Regular;
+          font-size: 22px;
+          line-height: 36px;
+          text-align: center;
+          color: #F1303D;
+          border: 1px solid #F1303D;
+        }
+      }
+      .list-film-time {
+        margin-top: 18px;
+        font-weight: 400;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        color: #999999;
+        line-height: 24px;
+        bottom: 0px;
+      }
     }
   }
   .film-recommend {
