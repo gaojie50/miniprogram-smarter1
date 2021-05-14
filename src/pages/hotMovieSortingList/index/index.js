@@ -49,6 +49,7 @@ export default function hotMovieList() {
       } else if (res.error && res.error.code === 12110003) {
         setAccess(false);
       }
+      // setAccess(false);
     })
   }
 
