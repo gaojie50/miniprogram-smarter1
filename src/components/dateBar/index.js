@@ -53,6 +53,7 @@ export default function dateBar(props){
       setThatTime(new Date(changeTime))
     }
     if(callBack) {
+      // console.log(callBack)
       callBack(selectDate)
     }
   }

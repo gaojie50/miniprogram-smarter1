@@ -27,8 +27,6 @@ const TAB_LIST = [
   // { title: '项目评估', image: Assessment, selectedImage: AssessmentActive }
 ];
 
-
-
 export default (props) => {
   const currentPath = Taro.getCurrentInstance().router.path;
   const current = TAB_ACTIVE[currentPath];
@@ -55,7 +53,6 @@ export default (props) => {
               url: `/pages/welcome/index?target=${encodeURIComponent(ROUTER[val])}`
             })
           }
-          
         }
       }}
     />

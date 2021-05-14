@@ -49,7 +49,6 @@ export default function hotMovieList() {
       } else if (res.error && res.error.code === 12110003) {
         setAccess(false);
       }
-      // setAccess(false);
     })
   }
 
@@ -67,7 +66,6 @@ export default function hotMovieList() {
         paramsStr += `${key}=${params[key]}&`;
       }
     }
-    // console.log(path + paramsStr.slice(-1));
     Taro.redirectTo({
       url: `/pages/checkCity/index?fromUrl=${encodeURIComponent(path + paramsStr)}`
     });
@@ -146,7 +144,7 @@ export default function hotMovieList() {
             }
           </View>
         ) : (
-          <NoAccess title="暂无评估权限" />
+          <NoAccess title="暂无评估权限" backgroundColor="#4D5A71" height="100vh" position="absolute" />
         )
       }
     </View>

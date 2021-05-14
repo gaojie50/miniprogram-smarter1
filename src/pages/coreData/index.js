@@ -109,9 +109,10 @@ export default function hotMovieList() {
   // }
 
   const gotoCityList = () => {
+    let params = Taro.getCurrentInstance().router.params;
     Taro.redirectTo({
-      url: `/pages/hotMovieSortingList/city/index`
-    })
+      url: `/pages/hotMovieSortingList/city/index?name=${params.name}&projectId=${params.projectId}`
+    });
   }
 
   const gotoCheckCity = () => {

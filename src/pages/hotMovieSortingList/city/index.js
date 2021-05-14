@@ -13,6 +13,9 @@ import { numberFormat } from '../../coreData/common';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
 
 export default function hotMovieList() {
+  const url = Taro.getCurrentPages();
+  const options = url[url.length - 1].options;
+  const { name, projectId, cityId = '', cityName } = options;
   const reqPacking = getGlobalData('reqPacking');
   const { rpxTopx } = utils;
   const capsuleLocation = getGlobalData('capsuleLocation');
@@ -36,7 +39,7 @@ export default function hotMovieList() {
       url: 'api/management/finance/boxOfficeRate/list',
       data: {
         showDate,
-        projectId: 7019, // TODO
+        projectId,
       }
     }).then(res => {
       if (res.success && res.data && res.data.length > 0) {
@@ -46,9 +49,7 @@ export default function hotMovieList() {
   }
 
   const onSelectDate = (date) => {
-    console.log(date);
-    // setShowDate(date.replaceAll('-', ''));
-    // console.log(date);
+    setShowDate(date.replaceAll('-', ''));
   }
 
   useEffect(() => {
@@ -67,7 +68,7 @@ export default function hotMovieList() {
             <View className='backPage' onClick={handleBack}>
               <Image src={ArrowLeft}></Image>
             </View>
-            <Text className='header-title'>你好，李焕英</Text>
+            <Text className='header-title'>{name}</Text>
           </View>
         </View>
       </View>
