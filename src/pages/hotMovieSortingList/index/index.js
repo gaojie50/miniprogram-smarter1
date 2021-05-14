@@ -27,13 +27,9 @@ export default function hotMovieList() {
   const signText = ['', '主出', '主发', '联出', '联发', '出品', '发行'];
 
   const handleBack = () => {
-    if(Taro.getCurrentPages().length>1){
-      Taro.navigateBack();
-    }else{
-      Taro.redirectTo({
-        url: `/pages/board/index`
-      })
-    }
+    Taro.switchTab({
+      url: '/pages/list/index',
+    });
   }
 
   const getMovieRanking = () => {
