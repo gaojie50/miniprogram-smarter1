@@ -21,10 +21,19 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   // const butList = [[{text: '固定金额', isOnclick: true}]];
   const ladderListsInfo = [
     {name:'A', unit:'万', value:'', dataName: 'boxLevelA'},
-    {name:'B', unit:'万', value:'', dataName: 'boxLevelB'}, 
+    {name:'B', unit:'万', value:'', dataName: 'boxLevelB'},
     {name:'C', unit:'万', value:'', dataName: 'boxLevelC'},
     {name:'a', unit:'%', value:'', dataName: 'ratioLevelA'},
-    {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'}, 
+    {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'},
+    {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
+  ];
+
+  const ladderListsInfo2 = [
+    {name:'A', unit:'%', value:'', dataName: 'boxLevelA'},
+    {name:'B', unit:'%', value:'', dataName: 'boxLevelB'},
+    {name:'C', unit:'%', value:'', dataName: 'boxLevelC'},
+    {name:'a', unit:'%', value:'', dataName: 'ratioLevelA'},
+    {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'},
     {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
   ];
 

@@ -9,7 +9,7 @@ import '@components/m5/style/components/search-bar.scss';
 import '@components/m5/style/components/list.scss';
 import '@components/m5/style/components/toast.scss';
 import { get as getGlobalData } from '../../global_data';
-import cities from './cities.json'
+import cities from './commonCity.json'
 import './index.scss'
 
 

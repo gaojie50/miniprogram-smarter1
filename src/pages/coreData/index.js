@@ -111,9 +111,21 @@ export default function hotMovieList() {
   }
 
   const gotoCheckCity = () => {
+    let path = Taro.getCurrentInstance().router.path;
+    let params = Taro.getCurrentInstance().router.params;
+    let paramsStr = `?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}&`;
+    if (Object.keys(params).length > 0) {
+      for (const key of Object.keys(params)) {
+        paramsStr += `${key}=${params[key]}&`;
+      }
+    }
+    console.log(path + paramsStr.slice(-1), params, path);
     Taro.redirectTo({
-      url: `/pages/checkCity/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`
-    })
+      url: `/pages/checkCity/index?fromUrl=${encodeURIComponent(path + paramsStr)}`
+    });
+    // Taro.redirectTo({
+    //   url: `/pages/checkCity/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`
+    // })
   }
 
   const switchTab = tab => {
