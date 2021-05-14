@@ -21,7 +21,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   const ladderListsInfo = [
     {name:'A', unit:'万', value:'', dataName: 'boxLevelA'},
     {name:'B', unit:'万', value:'', dataName: 'boxLevelB'},
-    {name:'C', unit:'万', value:'', dataName: 'boxLevelC'},
+    // {name:'C', unit:'万', value:'', dataName: 'boxLevelC'},
     {name:'a', unit:'%', value:'', dataName: 'ratioLevelA'},
     {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'},
     {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}

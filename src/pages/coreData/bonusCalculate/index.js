@@ -18,7 +18,6 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     [ {text: '制作成本', isOnclick: false}, {text: '票房', isOnclick: true} ],
     [ {text: '比例1', isOnclick: false}, {text: '比例2', isOnclick: true}, {text: '比例3', isOnclick: false} ]
   ]
-  // const butList = [[{text: '固定金额', isOnclick: true}]];
   const ladderListsInfo = [
     {name:'A', unit:'万', value:'', dataName: 'boxLevelA'},
     {name:'B', unit:'万', value:'', dataName: 'boxLevelB'},
@@ -28,28 +27,23 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
   ];
 
-  const ladderListsInfo2 = [
-    {name:'A', unit:'%', value:'', dataName: 'boxLevelA'},
-    {name:'B', unit:'%', value:'', dataName: 'boxLevelB'},
-    {name:'C', unit:'%', value:'', dataName: 'boxLevelC'},
-    {name:'a', unit:'%', value:'', dataName: 'ratioLevelA'},
-    {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'},
-    {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
-  ];
-
   const [lists, setLists] = useState(butList);
   const [isSubmit, setIsSubmit] = useState(false);
   const [ladderLists, setladderLists] = useState(ladderListsInfo);
   const [getValue, setGetValue] = useState('');
-  const [coefficient, setCoefficient] = useState(''); // 系数
-  const [amount, setAmount] = useState(''); // 金额
-  const [proportionA, setProportionA] = useState('');
+  const [coefficient, setCoefficient] = useState(''); // 系数a
+  const [coefficientA, setCoefficientA] = useState(''); // 系数A
+  const [amount, setAmount] = useState(''); // 金额a
+  const [proportiona, setProportiona] = useState(''); // a
+  const [proportionA, setProportionA] = useState(''); // A
   const [showModal, setShowModal] = useState(false);
   const [computeResults, setComputeResults] = useState('');
 
   const cleanAllValue =() => {
-    // setLists(bonusButList);
     setCoefficient('');
+    setCoefficientA('');
+    setProportiona('');
+    setProportionA('');
     setAmount('');
     setladderLists(ladderListsInfo);
     setShowModal(false);
@@ -80,17 +74,32 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         fixedRatioType && lists[3].map((item, index)=>{
           item.isOnclick = (fixedRatioType === index+1)
         })
-        progressionValue && ladderLists.map((item)=> {
+        progressionValue && progressionBase == '2' && ladderLists.map((item)=> {
           if(item.dataName.includes('boxLevel')) {
             item.value = numberFormatCent(progressionValue[item.dataName]);
           } else{
             item.value = progressionValue[item.dataName];
           }
         })
-        setAmount(numberFormatCent(fixedAmountValue));
+        progressionValue && progressionBase == '1' && ladderLists.map((item)=> {
+          item.value = progressionValue[item.dataName];
+        })
+        if(computeType == '1' && fixedRatioType == '1') {
+          setCoefficient(fixedRatioValue);
+        }
+        if(computeType == '1' && fixedRatioType == '2') {
+          setProportiona(fixedRatioValue);
+          setProportionA(fixedRatioBoxValue);
+        }
+        if(computeType == '1' && fixedRatioType == '3') {
+          setCoefficient(numberFormatCent(fixedRatioValue));
+          setCoefficientA(numberFormatCent(fixedRatioBoxValue));
+        }
+        if(computeType == '2') {
+          setAmount(numberFormatCent(fixedAmountValue));
+        }
         setGetValue(res.data);
-        setCoefficient(fixedRatioValue);
-        setProportionA(fixedRatioBoxValue);
+        judgeIsSubmit();
       } else {
         Taro.showToast({
           title: error && error.message || '',
@@ -109,33 +118,58 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     let progressionBase = lists[2].findIndex((item)=>item.isOnclick) + 1;
     let fixedRatioType = lists[3].findIndex((item)=>item.isOnclick) + 1;
     let progressionValue = {};
-    if(lists[0][2].isOnclick) {
+    if(lists[2][1].isOnclick) {
       ladderLists.map((item)=>{
         if(item.dataName.includes('boxLevel')) {
           progressionValue[item.dataName] = centChangeTenThousand(item.value);
         }else{
-          progressionValue[item.dataName] = item.value
+          progressionValue[item.dataName] = Number(item.value)
         }
+      })
+    }
+    if(lists[2][0].isOnclick) {
+      ladderLists.map((item)=>{
+        progressionValue[item.dataName] = Number(item.value)
       })
     }
     
     console.log('progressionValue', progressionValue);
 
     let postData = {};
-    // 固定比例
-    if(lists[0][0].isOnclick) {
+    // 固定比例 比例1
+    if(lists[0][0].isOnclick && lists[3][0].isOnclick) {
       postData = {
         computeType,
         fixedRatioType,
         fixedRatioValue: Number(coefficient),
-        fixedRatioBoxValue: lists[3][0].isOnclick ? '' : centChangeTenThousand(proportionA),
       }
-    } else if(lists[0][1].isOnclick){ // 固定金额
+    }
+    // 固定比例 比例2
+    if(lists[0][0].isOnclick && lists[3][1].isOnclick) {
+      postData = {
+        computeType,
+        fixedRatioType,
+        fixedRatioValue: centChangeTenThousand(proportiona),
+        fixedRatioBoxValue: centChangeTenThousand(proportionA),
+      }
+    }
+    // 固定比例 比例3
+    if(lists[0][0].isOnclick && lists[3][2].isOnclick) {
+      postData = {
+        computeType,
+        fixedRatioType,
+        fixedRatioValue: Number(coefficient),
+        fixedRatioBoxValue: Number(coefficientA),
+      }
+    }
+    if(lists[0][1].isOnclick){ // 固定金额
       postData = {
         computeType,
         fixedAmountValue: centChangeTenThousand(amount)
       }
-    } else if(lists[0][2].isOnclick){ // 阶梯
+    }
+
+    if(lists[0][2].isOnclick){ // 阶梯
       postData = {
         computeType,
         progressionType,
@@ -186,6 +220,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   }
 
   const judgeIsSubmit = (hasToast) => {
+    console.log(lists, 'lists');
     if(lists[0][0].isOnclick && lists[3][0].isOnclick) {
       if(coefficient === ''){
         hasToast && Taro.showToast({
@@ -195,20 +230,22 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         });
         setIsSubmit(false);
         return;
-      } else{
-        if(Number(coefficient)< 0 || Number(coefficient)>100 ){
-          hasToast && Taro.showToast({
-            title: `系数填写0~100数值`,
-            icon: 'none',
-            duration: 2000,
-          });
-          setIsSubmit(false);
-          return;
-        }
       }
     }
-    if(lists[0][0].isOnclick && (lists[3][1].isOnclick||lists[3][2].isOnclick)) {
-      if(coefficient === '' && proportionA === ''){
+    if(lists[0][0].isOnclick && lists[3][1].isOnclick) {
+      if(proportiona === '' && proportionA === ''){
+        hasToast && Taro.showToast({
+          title: `请填写系数`,
+          icon: 'none',
+          duration: 2000,
+        });
+        setIsSubmit(false);
+        return;
+      } 
+    }
+
+    if(lists[0][0].isOnclick && lists[3][2].isOnclick) {
+      if(coefficient === '' && coefficientA === ''){
         hasToast && Taro.showToast({
           title: `请填写系数`,
           icon: 'none',
@@ -217,19 +254,9 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         setIsSubmit(false);
         return;
       } else{
-        if(Number(coefficient)< 0 || Number(coefficient)>100 ){
+        if(Number(coefficient)< 0 || Number(coefficient)>100 || Number(coefficientA)< 0 || Number(coefficientA) > 100){
           hasToast && Taro.showToast({
             title: `系数填写0~100数值`,
-            icon: 'none',
-            duration: 2000,
-          });
-          setIsSubmit(false);
-          return;
-        }
-        let judge =proportionA.toString().split(".");
-        if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
-          hasToast && Taro.showToast({
-            title: `小数点固定金额`,
             icon: 'none',
             duration: 2000,
           });
@@ -263,6 +290,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     }
 
     if(lists[0][2].isOnclick ) {
+      console.log(ladderLists, 'ladderLists');
       for(let i = 0; i<6; i++) {
         if(ladderLists[i].value === ''){
           hasToast && Taro.showToast({
@@ -287,17 +315,6 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
               setIsSubmit(false);
               return;
             }
-          }else{
-            let judge = ladderLists[i].value.toString().split(".");
-            if(Number(ladderLists[i].value)< 0 || Number(ladderLists[i].value)>100 || (judge[1] && judge[1].length > 2)){
-              hasToast && Taro.showToast({
-                title: `${ladderLists[i].name}填写0~100数值`,
-                icon: 'none',
-                duration: 2000,
-              });
-              setIsSubmit(false);
-              return;
-            }
           }
           if(Number(ladderLists[0].value)-Number(ladderLists[1].value) > 0 || Number(ladderLists[1].value)-Number(ladderLists[2].value) > 0){
             hasToast && Taro.showToast({
@@ -311,7 +328,6 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         }
       }
     }
-
     setIsSubmit(true);
   }
 
@@ -341,6 +357,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
 
   useEffect(()=>{
     if(!showProgress) {
+      cleanAllValue();
       setIsSubmit(false);
     }
   },[showProgress])
@@ -397,14 +414,22 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           </View>
           <View className='ladder-lists'>
             {ladderLists.map((item, index)=>{
+              console.log(lists[2][1].isOnclick, 'lists[2][1].isOnclick')
+              if(lists[2][0].isOnclick && item.dataName.includes('boxLevel')) {
+                item.unit = '%'
+              }
+              if(lists[2][1].isOnclick && item.dataName.includes('boxLevel')) {
+                item.unit = '万'
+              }
               return(
-              <View className='param-list' key={index}>
-                <View className='param-left'>
-                <View className='param-title'>{item.name}</View>
+                <View className='param-list' key={index}>
+                  <View className='param-left'>
+                  <View className='param-title'>{item.name}</View>
+                  </View>
+                  <View className='param-money'><Input type='number' placeholder='请输入'  value={item.value} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
                 </View>
-                <View className='param-money'><Input type='number' placeholder='请输入'  value={item.value} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
-              </View>
-            )})}
+              )
+              })}
           </View>
         </View> :
         <View>
@@ -415,20 +440,46 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
               : (lists[3][1].isOnclick ?'净利润>0时对应票房，此后票房每增长A，分红增加a' : '票房>制作成本*(100+A)%，(票房-制作成本*(100+A)%)*a%')}
               </View>
               <View className='ladder-lists'>
-                {!lists[3][0].isOnclick &&
+                {lists[3][0].isOnclick && 
+                  <View className='param-list'>
+                    <View className='param-left'>
+                    <View className='param-title'>a</View>
+                    </View>
+                    <View className='param-money'><Input type='number' placeholder='请输入'  value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}} /><Text className='unit1'>%</Text></View>
+                  </View>
+                }
+                {lists[3][1].isOnclick &&
+                <View>
                   <View className='param-list'>
                     <View className='param-left'>
                     <View className='param-title'>A</View>
                     </View>
-                    <View className='param-money'><Input type='number' placeholder='请输入'  value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}} /><Text className='unit1'></Text></View>
+                    <View className='param-money'><Input type='number' placeholder='请输入'  value={proportionA} onInput={(e)=>{setProportionA(e.detail.value)}} /><Text className='unit1'>万</Text></View>
                   </View>
-                }
-                <View className='param-list'>
-                  <View className='param-left'>
-                  <View className='param-title'>a</View>
+                  <View className='param-list'>
+                    <View className='param-left'>
+                    <View className='param-title'>a</View>
+                    </View>
+                    <View className='param-money'><Input type='number' placeholder='请输入'  value={proportiona} onInput={(e)=>{setProportiona(e.detail.value)}} /><Text className='unit1'>万</Text></View>
                   </View>
-                  <View className='param-money'><Input type='number' placeholder='请输入'  value={proportionA} onInput={(e)=>{setProportionA(e.detail.value)}} /><Text className='unit1'>%</Text></View>
                 </View>
+                }
+                {lists[3][2].isOnclick &&
+                <View>
+                  <View className='param-list'>
+                    <View className='param-left'>
+                    <View className='param-title'>A</View>
+                    </View>
+                    <View className='param-money'><Input type='number' placeholder='请输入'  value={coefficientA} onInput={(e)=>{setCoefficientA(e.detail.value)}} /><Text className='unit1'>%</Text></View>
+                  </View>
+                  <View className='param-list'>
+                    <View className='param-left'>
+                    <View className='param-title'>a</View>
+                    </View>
+                    <View className='param-money'><Input type='number' placeholder='请输入'  value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}} /><Text className='unit1'>%</Text></View>
+                  </View>
+                </View>
+                }
               </View>
             </View>
             : <View className='prance'><Input placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value)}}></Input><Text className='unit1'>万</Text></View> 
