@@ -53,25 +53,25 @@ export default function dateBar(props){
       setThatTime(new Date(changeTime))
     }
     if(callBack) {
-      console.log(callBack)
       callBack(selectDate)
     }
   }
 
   const showSelect = () => {
-    console.log(!isShowSelect)
     setIsShowSelect(!isShowSelect)
   }
 
   const selectedDate = (e) => {
+    console.log('select', e.value);
     setDateRange(e.value);
-    console.log(e.value);
-    calculateTime(e.value);
     setIsShowButton(true);
   }
 
   const confirm = () => {
+    console.log('confirm', dateRange);
+    setThatTime(null);
     callBack(dateRange);
+    calculateTime(dateRange);
     showSelect()
   }
   const cancel = () => {
@@ -81,7 +81,7 @@ export default function dateBar(props){
     let showDay = dayjs(thatTime||now).format('YYYYMMDD');
     if(showDay && showDay - startDateBar > 0){
       changeDay(-1)
-    }else{
+    } else {
       Taro.showToast({
         title: '无法点击前一天',
         icon: 'none',

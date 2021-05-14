@@ -219,7 +219,7 @@ export default function hotMovieList() {
 
   
   const callback = (res) => {
-    setShowDay(res);
+    setShowDay(res.replaceAll('-', ''));
     console.log('data',res)
   }
 
