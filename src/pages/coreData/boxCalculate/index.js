@@ -222,9 +222,9 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
               return;
             }
           }
-          if(Number(ladderLists[0].value)-Number(ladderLists[1].value) > 0 || Number(ladderLists[1].value)-Number(ladderLists[2].value) > 0){
+          if(Number(ladderLists[0].value)-Number(ladderLists[1].value) > 0 ){
             hasToast && Taro.showToast({
-              title: `请填写A<=B<=C的值`,
+              title: `请填写A<=B的值`,
               icon: 'none',
               duration: 2000,
             });

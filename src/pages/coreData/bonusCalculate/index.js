@@ -346,18 +346,13 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   
 
   useEffect(()=>{
-    getComputeRule();
-    setIsSubmit(false);
-  }, []);
-
-  useEffect(()=>{
     console.log('judgeIsSubmit');
     judgeIsSubmit();
   }, [ladderLists, coefficient, amount, lists])
 
   useEffect(()=>{
-    if(!showProgress) {
-      cleanAllValue();
+    if(showProgress) {
+      getComputeRule();
       setIsSubmit(false);
     }
   },[showProgress])
@@ -414,7 +409,6 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           </View>
           <View className='ladder-lists'>
             {ladderLists.map((item, index)=>{
-              console.log(lists[2][1].isOnclick, 'lists[2][1].isOnclick')
               if(lists[2][0].isOnclick && item.dataName.includes('boxLevel')) {
                 item.unit = '%'
               }
@@ -489,7 +483,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       <AtModal isOpened={showModal} closeOnClickOverlay={false}>
         <AtModalContent className='modal-box'>
           <View className='modal-title'>{incomeName}</View>
-          <View className='modal-text'>计算值为:{computeResults}</View>
+          <View className='modal-text'>计算完成</View>
         </AtModalContent>
         <AtModalAction><Button onClick={cleanAllValue}>重新计算</Button> <Button onClick={recalculate}>确定</Button> </AtModalAction>
       </AtModal>

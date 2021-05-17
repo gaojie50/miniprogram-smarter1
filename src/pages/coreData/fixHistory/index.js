@@ -14,12 +14,17 @@ export default function fixHistory() {
   const capsuleLocation = getGlobalData('capsuleLocation');
   const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
   const url = Taro.getCurrentPages();
-  const projectId = Number(url[url.length-1].options.projectId);
+  const options  = url[url.length-1].options;
+  const {projectId, name, isMovieScreening} = options
 
   const handleBack = () => {
-    Taro.redirectTo({
-      url: `/pages/detail/index?projectId=${projectId}`
-    })
+    if(Taro.getCurrentPages().length>1){
+      Taro.navigateBack();
+    }else {
+      Taro.redirectTo({
+        url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`,
+      })
+    }
   }
   return(
     <View>

@@ -7,8 +7,6 @@ import './index.scss';
 
 export default function BoxIncome({current, officeIncomeIndex, isMovieScreening, response}) {
   useEffect(()=>{
-    console.log('current, officeIncomeIndex, isMovieScreening', current, officeIncomeIndex, isMovieScreening)
-    console.log('current', current)
     if(isMovieScreening) {
       lists[current][0].forEach((i) => {
         i.money = response.ticketIncome && response.ticketIncome[i.key];

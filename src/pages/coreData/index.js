@@ -93,20 +93,14 @@ export default function hotMovieList() {
   }, [cityId, current, showDay])
 
   const handleBack = () => {
-    if (Taro.getCurrentPages().length > 1) {
+    if(Taro.getCurrentPages().length>1){
       Taro.navigateBack();
-    } else {
+    }else {
       Taro.redirectTo({
-        url: `/pages/detail/index?projectId=${projectId}`,
-      });
+        url: `/pages/detail/index?projectId=${projectId}`
+      })
     }
   }
-
-  // const handleParam = () => {
-  //   Taro.redirectTo({
-  //     url: `/pages/coreData/realTime/index?paramIndex=1`
-  //   })
-  // }
 
   const gotoCityList = () => {
     let params = Taro.getCurrentInstance().router.params;
@@ -128,9 +122,6 @@ export default function hotMovieList() {
     Taro.redirectTo({
       url: `/pages/checkCity/index?fromUrl=${encodeURIComponent(path + paramsStr)}`
     });
-    // Taro.redirectTo({
-    //   url: `/pages/checkCity/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`
-    // })
   }
 
   const switchTab = tab => {
