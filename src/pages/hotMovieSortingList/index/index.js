@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'; 
-import { View, Image, Text } from '@tarojs/components';
+import { View, Image, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import utils from '@utils/index.js';
 import  Calendar from '@components/calendar'
@@ -7,10 +7,10 @@ import  AtTag from '@components/m5/tag';
 import '@components/m5/style/components/tag.scss';
 import NoAccess from '@components/noAccess';
 import ArrowLeft from '@static/detail/arrow-left.png';
+import Tab from '@components/tab';
 import dayjs from 'dayjs';
 import DateBar from '../../../components/dateBar';
 import { get as getGlobalData } from '../../../global_data';
-import Tab from '@components/tab';
 import './index.scss'
 
 export default function hotMovieList() {
@@ -51,7 +51,7 @@ export default function hotMovieList() {
         setAccess(false);
       } else {
         Taro.showToast({
-          title: res.error ? res.error.message : '',
+          title: res.error ? res.error.message : '网络请求出错，请稍后再试',
           icon: 'none',
           duration: 2000
         });
@@ -113,49 +113,65 @@ export default function hotMovieList() {
         access ? (
           <View style={{ marginTop: `${headerBarHeight}px`, marginBottom: '100px', position: 'relative' }}>
             <DateBar callBack={onSelectDate.bind(this)} startDateBar='20210106' />
-            <View className='list-header'>
-              <View className='list-header-left' onClick={gotoCheckCity}>{ cityId ? cityName : '全国' }</View>
-              <View className='list-header-img'>
-                <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
+            <ScrollView className='movie-ranking-list' scrollX showScrollbar={false}>
+              <View className='list-header'>
+                <View className='list-header-left'>
+                  <View className='city-name' onClick={gotoCheckCity}>{ cityId ? cityName : '全国' }</View>
+                  <View className='list-header-img'>
+                    <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
+                  </View>
+                </View>
+                <View className='film-futer-income title'>
+                  <View>未来收入</View>
+                  <View>(万)</View>
+                </View>
+                <View className='film-income title'>
+                  <View>总收入</View>
+                  <View>(万)</View>
+                </View>
+                <View className='film-recommend title'>
+                  排序指数
+                </View>
               </View>
-              <View className='list-header-right'>排序推荐指数</View>
-            </View>
-            {
-              isGetList && ranking && ranking.length > 0 && (
-                ranking.map((item, index) => {
-                  return (
-                    <View className='list' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
-                      <View className='list-left'>
-                        <View className='list-film'>
-                          <Image src={item.pic.replace('/w.h/', '/')}></Image>
-                          <View className={`film-index index-${index}`} >{index+1}</View>
-                        </View>
-                        <View className='list-middle'>
-                          <View className='list-film-name'>
-                            {item.movieName}
+              {
+                isGetList && ranking && ranking.length > 0 && (
+                  ranking.map((item, index) => {
+                    return (
+                      <View scroll className='list' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
+                        <View className='list-left'>
+                          <View className='list-film'>
+                            <Image src={item.pic.replace('/w.h/', '/')}></Image>
+                            <View className={`film-index index-${index}`} >{index+1}</View>
                           </View>
-                          <View className='list-film-label'>
-                            {
-                              item.maoyanSign.map((sign) => (
-                                <View className='film-lable' key={sign}>
-                                  {signText[sign]}
-                                </View>
-                              ))
-                            }
+                          <View className='list-middle'>
+                            <View className='list-film-name'>
+                              {item.movieName}
+                            </View>
+                            <View className='list-film-label'>
+                              {
+                                item.maoyanSign.map((sign) => (
+                                  <View className='film-lable' key={sign}>
+                                    {signText[sign]}
+                                  </View>
+                                ))
+                              }
+                            </View>
+                            { item.startDate !== 0  &&<View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View> }
                           </View>
-                          <View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View>
                         </View>
+                        <View className='film-futer-income'>{ item.expectFutureIncome === null ? '' : parseFloat(item.expectFutureIncome / 1000000).toFixed(2) }</View>
+                        <View className='film-income'>{ item.expectTotalIncome === null ? '' : parseFloat(item.expectTotalIncome / 1000000).toFixed(2) }</View>
+                        <View className='film-recommend'>{item.score > 0 ? parseFloat(item.score ? item.score.toFixed(2) : '') : item.score }</View>
                       </View>
-                      <View className='film-recommend'>{item.score ? parseFloat( item.score.toFixed(2)): ''}</View>
-                    </View>
-                  )
-                })
-              )
-            }
-            { isGetList && ranking && ranking.length <= 0 && <View className="empty-list">暂无数据</View> }
+                    )
+                  })
+                )
+              }
+            </ScrollView>
+            { isGetList && ranking && ranking.length <= 0 && <View className='empty-list'>暂无数据</View> }
           </View>
         ) : (
-          <NoAccess title="暂无评估权限" backgroundColor="#4D5A71" height="100vh" position="absolute" />
+          <NoAccess title='暂无评估权限' backgroundColor='#4D5A71' height='100vh' position='absolute' />
         )
       }
     </View>

@@ -38,22 +38,65 @@
     background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
   }
 }
-.list-header {
+.movie-ranking-list {
+  white-space: nowrap;
+  padding-right: 30rpx;
   width: 100%;
+}
+
+.film-income, .film-futer-income {
+  display: inline-block;
+  width: 128rpx;
+  font-weight: 400;
+  font-family: 'MaoYanHeiTi-H1';
+  font-size: 28rpx;
+  color: #333333;
+  text-align: right;
+  line-height: 122rpx;
+  margin-right: 16rpx;
+  overflow: hidden;
+}
+.film-futer-income {
+  color: #F1303D;
+}
+.film-recommend {
+  display: inline-block;
+  width: 140rpx;
+  font-weight: 400;
+  font-family: 'MaoYanHeiTi-H1';
+  font-size: 28rpx;
+  color: #333333;
+  text-align: right;
+  line-height: 122px;
+  overflow: hidden;
+  margin-right: 30rpx;
+}
+
+.title {
+  font-weight: 400;
+  font-family: PingFangSC-Regular;
+  font-size: 24rpx;
+  color: #999999;
+  text-align: right;
+  line-height: 24rpx;
+}
+
+.list-header {
+  width: fit-content;
+  padding-left: 30rpx;
   height: 64px;
   line-height: 64px;
   display: flex;
-  align-items: center;
   border-bottom: 1px #E9E9E9 solid;
   .list-header-left {
+    display: inline-flex;
+    width: 365rpx;
     font-weight: 40;
     font-family: PingFangSC-Regular;
     font-size: 24px;
     color: #666666;
-    width: 48px;
     height: 24px;
     line-height: 24px;
-    margin-left: 30px;
   }
   .list-header-img {
     margin-left: 8px;
@@ -64,25 +107,13 @@
       height: 8px;
     }
   }
-  .list-header-right {
-    font-weight: 400;
-    font-family: PingFangSC-Regular;
-    font-size: 24px;
-    color: #999999;
-    width: 144px;
-    height: 24px;
-    line-height: 24px;
-    margin-left: 478px;
-  }
 }
 .list {
   margin: 30px 30px 60px 30px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  // align-items: center;
   .list-left {
-    display: flex;
+    width: 365rpx;
+    height: 122rpx;
+    display: inline-flex;
     align-items: center;
     .list-film {
       width: 98px;
@@ -131,7 +162,7 @@
       display: flex;
       justify-content: center;
       flex-direction: column;
-      width: 384px;
+      width: 260rpx;
       // overflow: hidden;
       .list-film-name {
         display: block;
@@ -140,7 +171,7 @@
         font-size: 32px;
         color: #333333;
         line-height: 32px;
-        width: 384px;
+        width: 240rpx;
         height: 32px;
         text-overflow: ellipsis;
         white-space:nowrap;
@@ -174,15 +205,6 @@
         bottom: 0px;
       }
     }
-  }
-  .film-recommend {
-    flex: 0, 0, 66px;
-    font-weight: 400;
-    font-family: MaoYanHeiTi-Regular;
-    font-size: 36px;
-    color: #F1303D;
-    text-align: right;
-    line-height: 32px;
   }
 }
 

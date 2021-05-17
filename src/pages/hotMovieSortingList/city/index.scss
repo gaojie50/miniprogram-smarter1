@@ -80,6 +80,7 @@
     padding: 30px;
     display: flex;
     flex-wrap: nowrap;
+    align-items: center;
     justify-content: space-around;
     .list-index {
       width: 10px;
@@ -132,5 +133,11 @@
       line-height: 30px;
       margin-left: 60px;
     }
+  }
+
+  .empty-list {
+    width: fit-content;
+    margin: auto;
+    margin-top: 20rpx;
   }
 }
