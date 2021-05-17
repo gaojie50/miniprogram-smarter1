@@ -100,7 +100,6 @@ export default function Excavate() {
       sourceType,
       movieType,
       dateSet,
-      dtPickerOption,
     } = params;
     setOffset(0);
     setHavemore(true);
@@ -127,7 +126,7 @@ export default function Excavate() {
       const {
         customStartDate,
         customEndDate,
-      } = dtPickerOption;
+      } = params;
       info.startDate = +new Date(+handleNewDate(customStartDate.value)).setHours(0,0,0,0);
       info.endDate = +new Date(+handleNewDate(customEndDate.value)).setHours(23, 59, 59, 999);
     }
