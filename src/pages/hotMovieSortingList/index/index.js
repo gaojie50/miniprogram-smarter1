@@ -138,7 +138,7 @@ export default function hotMovieList() {
                         <View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View>
                       </View>
                     </View>
-                    <View className='film-recommend'>{parseFloat(item.score.toFixed(2))}</View>
+                    <View className='film-recommend'>{item.score ? parseFloat(item.score.toFixed(2)) : ''}</View>
                   </View>
                 )
               })
