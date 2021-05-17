@@ -37,6 +37,9 @@ export const numberFormatCent = (number) => {
   if(number == null) {
     return ''
   }
+  if(number == '0') {
+    return 0;
+  }
   let resNumber = number/1000000;
   if(!Number.isNaN(number) && !Number.isNaN(resNumber)) {
     return parseFloat(resNumber) ;

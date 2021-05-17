@@ -40,16 +40,16 @@ export default function realTime({}) {
   const isChangeCalculate =  useCallback((isChangeCalculate) => {console.log(123, isChangeCalculate)}, [])
 
   const handleBack = () => {
-    Taro.redirectTo({
-      url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`,
-    })
-    // if(Taro.getCurrentPages().length>1){
-    //   Taro.navigateBack();
-    // }else{
-    //   Taro.redirectTo({
-    //     url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`,
-    //   })
-    // }
+    // Taro.redirectTo({
+    //   url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`,
+    // })
+    if(Taro.getCurrentPages().length>1){
+      Taro.navigateBack();
+    }else{
+      Taro.redirectTo({
+        url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${isMovieScreening}`,
+      })
+    }
   }
 
   const changeShowProgress =(index)=> {
@@ -118,7 +118,6 @@ export default function realTime({}) {
   }
 
   const postDataValue = () => {
-    console.log('getValue, lists', getValue, lists);
     const data = getValue || {};
     for(let item of lists) {
       if(item.dataIndex !== 'myShare'){
@@ -184,23 +183,23 @@ export default function realTime({}) {
   useEffect(()=>{
     if (paramIndex === '0') {
       getContractData();
+    }else{
+      getValueData();
     }
   }, []);
     // 合同参数数据请求
   useEffect(()=>{
-    console.log('showProgress2', showProgress);
-    console.log('paramIndex', paramIndex, calculate)
-    if (calculate !== '') {
+    if (paramIndex === '0') {
       getContractData('1');
     }
   }, [showProgress, calculate]);
 
   // 实时参数 & 假定参数tab 数据请求 
-  useEffect(()=>{
-    if (paramIndex !== '0') {
-      getValueData();
-    }
-  }, []);
+  // useEffect(()=>{
+  //   if (paramIndex !== '0') {
+      
+  //   }
+  // }, []);
 
 
   const getContractData = (AgencyFee) => {
@@ -221,15 +220,17 @@ export default function realTime({}) {
             newData[key] = numberFormatCent(newData[key])
           }
         }
+        console.log(AgencyFee, 'AgencyFee');
         if(AgencyFee) {
           lists[1].money = newData['distributionAgencyFee'] === undefined ? '' : newData['distributionAgencyFee']
           lists[2].money = newData['myDistributionAgencyFee']
+          lists[3].money = newData['creatorDividend']
         } else{
           for(let key in lists) {
-            lists[key].money = newData[lists[key].dataIndex] || '';
+            lists[key].money = newData[lists[key].dataIndex];
           }
         }
-        console.log('newData', newData);
+        console.log('newData', newData, lists, 'lists');
         setValueData(newData);
         // console.log('data', data, lists, newData);
         setLists(lists);
@@ -266,7 +267,10 @@ export default function realTime({}) {
                     <View className='param-remarks'>{list.remarks}</View>
                   </View>
                   <View className='param-money'>
-                    { list.unit ? `${valueData[list.dataIndex] || '-'}${list.unit}` : `${numberFormat(valueData[list.dataIndex]).num}${numberFormat(valueData[list.dataIndex]).unit}` }
+                    { list.unit ?
+                    `${valueData[list.dataIndex] == undefined ? '-' : valueData[list.dataIndex]}${list.unit}` 
+                    : `${numberFormat(valueData[list.dataIndex]).num}${numberFormat(valueData[list.dataIndex]).unit}`
+                    }
                   </View>
                 </View>
                 :

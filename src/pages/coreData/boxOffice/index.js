@@ -53,13 +53,13 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
   }
 
   const gotoParam = (index) => {
-    Taro.redirectTo({
+    Taro.navigateTo({
       url: `/pages/coreData/realTime/index?paramIndex=${index}&projectId=${projectId}&isMovieScreening=${isMovieScreening}&name=${name}&showDate=${showDate}`
     })
   }
   const handlePageHistory = () => {
-    Taro.redirectTo({
-      url: `/pages/coreData/fixHistory/index?projectId=${projectId}`
+    Taro.navigateTo({
+      url: `/pages/coreData/fixHistory/index?projectId=${projectId}&isMovieScreening=${isMovieScreening}&name=${name}`
     })
   }
 
