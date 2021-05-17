@@ -109,7 +109,6 @@ class _C extends React.Component {
     reqUrl: noPermissionReqUrl, // 没有登录时看到的
     noPermission: true,
     loginUrl: `/pages/welcome/index?target=${encodeURIComponent(`/pages/list/index`)}`,
-    linkShow: false
   }
 
   onLoad = ({ token, target, needLogin }) => {
@@ -799,7 +798,6 @@ class _C extends React.Component {
       isScroll,
       yMaxLength,
       isLogin,
-      linkShow
     } = this.state;
 
     const yMaxLengthArr = ["","","","","",""].map((item,index)=>strip(formatNumber(yMaxLength * (1 - index/5)).posNum));
@@ -864,7 +862,12 @@ class _C extends React.Component {
                         'px -  40rpx)'
                       } 
                       className='develop-jump' 
-                      onClick={() => this.setState({linkShow: !linkShow})}
+                      onClick={() => {
+                        this.handleCheckLoginClick();
+                        Taro.navigateTo({
+                          url: '/pages/jumpCustom/index',
+                        })
+                      }}
                     >
                       跳转
                     </Text> : null
@@ -872,20 +875,6 @@ class _C extends React.Component {
                   
                   <Text onClick={this.goTop}>影片市场情报</Text>
                 </View>
-                {
-                  linkShow ?
-                    <View className='develop-link' >
-                      <Input 
-                        className='develop-link-input' 
-                        onConfirm={e => {
-                          Taro.navigateTo({
-                            url: e.detail.value
-                          })
-                        }}
-                      >
-                      </Input>
-                    </View> : null
-                }
               </View>
               <ScrollView
                 scrollY={isScroll}
