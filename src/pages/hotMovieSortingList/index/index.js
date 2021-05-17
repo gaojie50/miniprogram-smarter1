@@ -81,7 +81,7 @@ export default function hotMovieList() {
     }).then((res) => {
       const { afterShowing } = res.data;
       Taro.navigateTo({
-        url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${afterShowing}`
+        url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${!afterShowing}`
       });
     });
   }
