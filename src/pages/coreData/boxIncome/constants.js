@@ -55,7 +55,7 @@ export const lists = [
         {
           key: 'addedValueTax',
           title: '扣除：增值税税金及附加',
-          remarks: '3.3%票房',
+          remarks: '3.36%票房',
           money: 0,
           unit: '万',
         },
@@ -240,7 +240,7 @@ export const lists = [
         {
           key: 'addedValueTax',
           title: '扣除：增值税税金及附加',
-          remarks: '3.3%票房',
+          remarks: '3.36%票房',
           money: 0,
           unit: '万',
         },
@@ -418,7 +418,7 @@ export const lists = [
         {
           key: 'addedValueTax',
           title: '扣除：增值税税金及附加',
-          remarks: '3.3%票房',
+          remarks: '3.36%票房',
           money: 0,
           unit: '万',
         },
@@ -591,7 +591,7 @@ export const listsAfter = [
     {
       key: 'addedValueTax',
       title: '扣除：增值税税金及附加',
-      remarks: '3.3%票房',
+      remarks: '3.36%票房',
       money: 0,
       unit: '万',
     },

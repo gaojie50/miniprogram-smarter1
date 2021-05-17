@@ -88,12 +88,12 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           setCoefficient(fixedRatioValue);
         }
         if(computeType == '1' && fixedRatioType == '2') {
-          setProportiona(fixedRatioValue);
-          setProportionA(fixedRatioBoxValue);
+          setProportiona(numberFormatCent(fixedRatioValue));
+          setProportionA(numberFormatCent(fixedRatioBoxValue));
         }
         if(computeType == '1' && fixedRatioType == '3') {
-          setCoefficient(numberFormatCent(fixedRatioValue));
-          setCoefficientA(numberFormatCent(fixedRatioBoxValue));
+          setCoefficient(fixedRatioValue);
+          setCoefficientA(fixedRatioBoxValue);
         }
         if(computeType == '2') {
           setAmount(numberFormatCent(fixedAmountValue));
@@ -476,8 +476,8 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         </AtModalContent>
         <AtModalAction><Button onClick={cleanAllValue}>重新计算</Button> <Button onClick={recalculate}>确定</Button> </AtModalAction>
       </AtModal>
-      <View className='float-bottom-box' onClick={()=>{bottomSubmit()}}>
-          <View className='button' style={{opacity: `${isSubmit ? '1 !important': '0.4 !important'}`}} >计算</View>
+      <View className='cal-bottom-bonus' onClick={()=>{bottomSubmit()}}>
+        <View className='cal-button-bouns' style={`${isSubmit ? 'opacity: 1 !important' : ''}`} >计算</View>
       </View>
     </View>
   )
