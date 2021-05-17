@@ -191,7 +191,7 @@ function EvalutaionCard(props) {
       return [0, '已评估']
     } else {
       let prefix = '';
-      console.log(isDockingPerson(role),111)
+  
       if (isDockingPerson(role)) {
         if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
