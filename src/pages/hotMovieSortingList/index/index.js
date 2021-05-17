@@ -10,6 +10,7 @@ import ArrowLeft from '@static/detail/arrow-left.png';
 import dayjs from 'dayjs';
 import DateBar from '../../../components/dateBar';
 import { get as getGlobalData } from '../../../global_data';
+import Tab from '@components/tab';
 import './index.scss'
 
 export default function hotMovieList() {
@@ -76,9 +77,17 @@ export default function hotMovieList() {
     });
   }
 
-  const gotoCoreDataPage = (projectId) => {
-    Taro.redirectTo({
-      url: `/pages/detail/index?projectId=${projectId}`
+  const gotoCoreDataPage = (name, projectId) => {
+    reqPacking({
+      url: 'api/management/keyData',
+      data: {
+        projectId: projectId,
+      }
+    }).then((res) => {
+      const { afterShowing } = res.data;
+      Taro.navigateTo({
+        url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${afterShowing}`
+      });
     });
   }
 
@@ -87,6 +96,7 @@ export default function hotMovieList() {
   return (
     <View>
       {/* <Calendar /> */}
+      <Tab />
       <View className='detail-top' style={{ height: `${headerBarHeight}px` }}>
         <View className='top'>
           <View className='header'>
@@ -99,8 +109,8 @@ export default function hotMovieList() {
       </View>
       {
         access ? (
-          <View style={{ marginTop: `${headerBarHeight}px`, position: 'relative' }}>
-            <DateBar callBack={onSelectDate.bind(this)} needButtons startDateBar='20210106' />
+          <View style={{ marginTop: `${headerBarHeight}px`, marginBottom: '100px', position: 'relative' }}>
+            <DateBar callBack={onSelectDate.bind(this)} startDateBar='20210106' />
             <View className='list-header'>
               <View className='list-header-left' onClick={gotoCheckCity}>{ cityId ? cityName : '全国' }</View>
               <View className='list-header-img'>
@@ -111,7 +121,7 @@ export default function hotMovieList() {
             {
               ranking.map((item, index) => {
                 return (
-                  <View className='list' key={index} onClick={()=>gotoCoreDataPage(item.projectId)}>
+                  <View className='list' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
                     <View className='list-left'>
                       <View className='list-film'>
                         <Image src={item.pic.replace('/w.h/', '/')}></Image>
