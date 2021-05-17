@@ -10,9 +10,9 @@ import '../m5/style/components/tab-bar.scss';
 
 const TAB_ACTIVE = {
   '/pages/list/index': 0,
-  '/pages/hotMovieSortingList/index/index': 1,
-  '/pages/assessList/index': 2,
-  '/pages/board/index': 3,
+  // '/pages/hotMovieSortingList/index/index': 1,
+  // '/pages/assessList/index': 2,
+  '/pages/board/index': 1,
 };
 
 const ROUTER = {};
@@ -39,15 +39,9 @@ export default (props) => {
       onClick={(val) => {
         if (val !== current) {
           if( isLogin ){
-            if (val === 1) {
-              Taro.redirectTo({
-                url: `${ROUTER[val]}?cityId=0&cityName=全国`,
-              })
-            } else {
-              Taro.switchTab({
-                url: `${ROUTER[val]}`
-              });
-            }
+            Taro.switchTab({
+              url: `${ROUTER[val]}`
+            });
           }else{
             Taro.redirectTo({
               url: `/pages/welcome/index?target=${encodeURIComponent(ROUTER[val])}`

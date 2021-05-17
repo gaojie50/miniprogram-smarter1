@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, Text, ScrollView } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Taro, { redirectTo } from '@tarojs/taro';
 import utils from '@utils/index.js';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import M5Indexes from '@components/m5/indexes';
@@ -76,11 +76,16 @@ export default class checkCity extends React.Component {
   }
 
   handleCity = (item) => {
-    // console.log(this.fromUrl);
-    // console.log(this.fromUrl.replace(/cityName=\p{Unified_Ideograph}/u, `cityName=${item.name}`));
+    let redirectUrl = "";
+    if (/cityId=(\d*)/.test(this.fromUrl) && (/cityName=(\p{Unified_Ideograph}*)/u).test(this.fromUrl)) {
+      redirectUrl = this.fromUrl.replace(/cityId=(\d*)/, `cityId=${item.id}`).replace(/cityName=(\p{Unified_Ideograph}*)/u, `cityName=${item.name}`);
+    } else {
+      let concat = this.fromUrl.indexOf('?') > -1 ? `&` : '?';
+      redirectUrl = this.fromUrl + concat + `cityId=${item.id}&cityName=${item.name}`;
+    }
     Taro.redirectTo({
-      url: this.fromUrl.replace(/cityId=(\d*)/, `cityId=${item.id}`).replace(/cityName=(\p{Unified_Ideograph}*)/u, `cityName=${item.name}`),
-    })
+      url: redirectUrl,
+    });
   }
 
   render() {
