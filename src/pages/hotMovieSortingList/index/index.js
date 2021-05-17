@@ -113,7 +113,7 @@ export default function hotMovieList() {
         access ? (
           <View style={{ marginTop: `${headerBarHeight}px`, marginBottom: '100px', position: 'relative' }}>
             <DateBar callBack={onSelectDate.bind(this)} startDateBar='20210106' />
-            <ScrollView className='movie-ranking-list' scrollX>
+            <ScrollView className='movie-ranking-list' scrollX showScrollbar={false}>
               <View className='list-header'>
                 <View className='list-header-left'>
                   <View className='city-name' onClick={gotoCheckCity}>{ cityId ? cityName : '全国' }</View>
