@@ -352,6 +352,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
           }
         </View>
       }
+      <View>计算</View>
       <AtModal isOpened={showModal} closeOnClickOverlay={false}>
         <AtModalContent className='modal-box'>
           <View className='modal-title'>{incomeName}</View>
@@ -359,8 +360,8 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         </AtModalContent>
         <AtModalAction><Button onClick={cleanAllValue}>重新计算</Button> <Button onClick={recalculate}>确定</Button> </AtModalAction>
       </AtModal>
-      <View className='float-bottom-box' onClick={()=>{bottomSubmit()}}>
-          <View className='button' style={{opacity: `${isSubmit ? '1 !important':''}`}} >计算</View>
+      <View className='cal-bottom-box' onClick={()=>{bottomSubmit()}}>
+        <View className='cal-button'>计算</View>
       </View>
     </View>
   )

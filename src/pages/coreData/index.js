@@ -126,10 +126,8 @@ export default function hotMovieList() {
 
   const switchTab = tab => {
     setCurrent(tab)
-    fetchIncomeValue(tab);
   }
   const handleCheckCity = () => {
-    // getCityValue('');
     if(cityValue.length > 0 && cityValue[0].boxOfficeRate > 10) {
       Taro.showToast({
         title: '城市占比超过10%，无法选择城市',
@@ -146,26 +144,6 @@ export default function hotMovieList() {
       gotoCheckCity();
     }
   }
-
-  // const handleGotoCityList = () => {
-  //   console.log(cityValue, cityValue.length);
-  //   // getCityValue('');
-  //   if(cityValue.length > 0 && cityValue[0].boxOfficeRate > 10) {
-  //     Taro.showToast({
-  //       title: '城市占比超过10%，无法查看占比',
-  //       icon: 'none',
-  //       duration: 1000
-  //     });
-  //   }else if (cityValue.length == 0 ) {
-  //     Taro.showToast({
-  //       title: '当前暂无占比，无法查看占比',
-  //       icon: 'none',
-  //       duration: 1000
-  //     });
-  //   }else {
-  //     gotoCityList();
-  //   }
-  // }
 
   const getCityValue = (cityId) => {
     reqPacking({
