@@ -4,8 +4,8 @@
 
 "@analytics/wechat-sdk@^3.1.2":
   version "3.1.2"
-  resolved "http://r.npm.sankuai.com/@analytics/wechat-sdk/download/@analytics/wechat-sdk-3.1.2.tgz#18a92080b94c50725523b9f98d9785b68e87a476"
-  integrity sha1-GKkggLlMUHJVI7n5jZeFto6HpHY=
+  resolved "http://r.npm.sankuai.com/@analytics/wechat-sdk/download/@analytics/wechat-sdk-3.1.2.tgz#782d4f34b3a992cc563d2de1479f58032f73597b"
+  integrity sha1-eC1PNLOpksxWPS3hR59YAy9zWXs=
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.12.13":
   version "7.12.13"

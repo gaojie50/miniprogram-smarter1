@@ -745,7 +745,37 @@ export default class FilterPanel extends React.Component {
   }
 
   filterReset = () => {
-    const a = this.props.reset();
+    const { filterShow, setProjectType, setCooperateType, setProjectStage, setMovieLocation, setJobType, setMember, setDepartment } = this.props;
+    if (filterShow === '1') {
+      setProjectType(PROJECT_TYPE_INIT());
+    } else if (filterShow === '2') {
+      setCooperateType(COOPERATE_TYPE_INIT());
+    } else if (filterShow === '3') {
+      setProjectStage(PROJECT_STAGE_INIT());
+      setMovieLocation(MOVIE_LOCATION_INIT());
+      setJobType(JOB_TYPE_INIT());
+      setMember((v) => {
+        v.forEach((item, i) => {
+          if (i === 0) {
+            item.active = true;
+          } else {
+            item.active = false;
+          }
+        })
+        return v;
+      })
+      setDepartment((v) => {
+        v.forEach((item, i) => {
+          if (i === 0) {
+            item.active = true;
+          } else {
+            item.active = false;
+          }
+        })
+        return v;
+      })
+    }
+    // const a = this.props.reset();
     // this.props.ongetFilterShow(a);
   }
 

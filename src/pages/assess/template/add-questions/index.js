@@ -208,12 +208,17 @@ const AddQuestions = function(props) {
     setOptions(options);
   }
 
+
+
   return (
     <AtFloatLayout
       className="add-questions-component"
       isOpened={props.isOpened}
       title={props.isEdit ? '编辑题目':'添加题目'}
-      onClose={props.onClose}
+      onClose={()=>{
+        props.onClose(); 
+        reset();
+      }}
     >
       <View className="question-wap">
         <View className="type-wrap">

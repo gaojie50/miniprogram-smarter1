@@ -42,7 +42,7 @@ const FILTER_ITEMS_INIT = () => (
       type: '2'
     },
     {
-      name: '近7天',
+      name: '全部',
       type: '3'
     },
     {
@@ -119,7 +119,6 @@ export default function Excavate() {
       info.types = chooseTypes.join(',');
     }
     const chooseDate = dateSet.filter((item) => item.checked === 'checked')[0].label;
-    console.log(chooseDate);
     if (chooseDate === '全部') {
       return info;
     } else if (chooseDate === '未定档') {
@@ -147,7 +146,7 @@ export default function Excavate() {
     ).then(res => {
       const { error, data } = res;
       if (!error) {
-        const { projectDeepList } = data;
+        const { projectDeepList = [] } = data || {};
         if (projectDeepList.length === 0) {
           setNoData(true);
           setHavemore(false);
@@ -159,12 +158,14 @@ export default function Excavate() {
         return;
       }
       errorHandle(error);
+      setData([]);
+      setNoData(true);
       setLoading(false);
     })
   }, [filterInfo]);
 
   const loadMore = useCallback(() => {
-    if (!havemore) return;
+    if (!havemore || loading) return;
     setLoading(true);
     reqPacking(
       {
@@ -192,7 +193,7 @@ export default function Excavate() {
       errorHandle(error);
       setLoading(false);
     })
-  }, [filterInfo, offset, havemore]);
+  }, [filterInfo, offset, havemore, loading]);
 
   return(
     <>
@@ -232,9 +233,9 @@ export default function Excavate() {
               {data.map((item) => (<ProjectItem key={item.name} {...item} />))}
             </View>
           )}
-          <View>
-            <mpLoading show={loading} type="circle" />
-          </View>
+          {
+            loading&&!noData&&(<View><mpLoading show type="circle" /></View>)
+          }
         </ScrollView>
       )}
     </>
@@ -260,20 +261,27 @@ function useExcavateFilter() {
     const hasCategoryType = option.categoryType.find((item) => item.active === true);
     const hasSourceType = option.sourceType.find((item) => item.active === true);
     const dateOption = option.dateSet.find((item) => item.checked === 'checked');
-    const hasMovieType = option.movieType.find((item) => item.active === true);
-
+    const hasMovieType = option.movieType.filter((item) => item.active === true);
     if (hasCategoryType) {
       arr[0].changed = true;
+      arr[0].name = hasCategoryType.value;
     }
     if (hasSourceType) {
       arr[1].changed = true;
+      arr[1].name = hasSourceType.value;
     }
     if (dateOption) {
       arr[2].changed = true;
       arr[2].name = dateOption.label;
     }
-    if (hasMovieType) {
+    if (hasMovieType.length !== 0) {
+      console.log(hasMovieType);
       arr[3].changed = true;
+      let name = hasMovieType.map((item) => item.value).join(' ');
+      if (name.length > 5) {
+        name = name.slice(0,5) + '...';
+      }
+      arr[3].name = name;
     }
 
     if (option.filterShow === '1' ) {
@@ -379,7 +387,7 @@ function ProjectItem(props) {
     types,
     pic,
     mainProduct,
-    releaseTime,
+    releaseDateAndAddress,
     director,
     mainRole,
     movieSource,
@@ -392,7 +400,7 @@ function ProjectItem(props) {
     const info = [];
     if (types) info.push({ name: '类型:', value: types.join('/') });
     if (mainProduct && mainProduct.length > 0) info.push({ name: '出品:', value: mainProduct.join('/') });
-    if (releaseTime) info.push({ name: '上映:', value: releaseTime });
+    if (releaseDateAndAddress) info.push({ name: '上映:', value: `${releaseDateAndAddress}上映` });
     if (director && director.length > 0) {
       const n = director.map((item) => item.name);
       info.push({ name: '导演:', value: n.join('/') });
@@ -404,7 +412,7 @@ function ProjectItem(props) {
     if (movieSource && movieSource.length > 0) info.push({ name: '片源:', value: movieSource.join('/') });
 
     return info;
-  }, [types, mainProduct, releaseTime, director, mainRole, movieSource]);
+  }, [types, mainProduct, releaseDateAndAddress, director, mainRole, movieSource]);
 
   return (
     <>

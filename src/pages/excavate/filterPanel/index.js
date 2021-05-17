@@ -195,15 +195,15 @@ function useDatePicker() {
         });
       }
       //一年时间限制 限制开始日期
-      const minimumTimeStamp = +handleDays(customEndDate.value, 180, 'subtract')
+      // const minimumTimeStamp = +handleDays(customEndDate.value, 180, 'subtract')
 
-      if (timeStamp < minimumTimeStamp) {
-        const endStamp = +handleDays(timeStamp, 180)
-        setCustomEndDate({
-          value: formartDate(endStamp),
-          week: calcWeek(endStamp),
-        })
-      }
+      // if (timeStamp < minimumTimeStamp) {
+      //   const endStamp = +handleDays(timeStamp, 180)
+      //   setCustomEndDate({
+      //     value: formartDate(endStamp),
+      //     week: calcWeek(endStamp),
+      //   })
+      // }
       setCustomStartDate({
         value: formartDate(timeStamp),
         week: calcWeek(timeStamp),
@@ -221,14 +221,14 @@ function useDatePicker() {
     }
 
     //一年时间限制 限制结束日期
-    const maxTimeStamp = +handleDays(customStartDate.value, 180)
-    if (timeStamp > maxTimeStamp) {
-      const startStamp = +handleDays(timeStamp, 180, 'subtract')
-      setCustomStartDate({
-        value: formartDate(startStamp),
-        week: calcWeek(startStamp),
-      })
-    }
+    // const maxTimeStamp = +handleDays(customStartDate.value, 180)
+    // if (timeStamp > maxTimeStamp) {
+    //   const startStamp = +handleDays(timeStamp, 180, 'subtract')
+    //   setCustomStartDate({
+    //     value: formartDate(startStamp),
+    //     week: calcWeek(startStamp),
+    //   })
+    // }
 
     setCustomEndDate({
       value: formartDate(timeStamp),
@@ -488,8 +488,9 @@ export default class FilterPanel extends React.Component {
 
   tapSourceType = (e) => {
     const num = e.target.dataset.num
-    this.props.sourceType[num].active = !this.props.sourceType[num].active
-    this.props.setSourceType([...this.props.sourceType])
+    const newSourceType = SOURCE_TYPE_INIT();
+    newSourceType[num].active = true;
+    this.props.setSourceType(newSourceType);
   }
 
   tapMovieType = (e) => {
@@ -499,7 +500,15 @@ export default class FilterPanel extends React.Component {
   }
 
   filterReset = () => {
-    const a = this.props.reset();
+    const { filterShow, setCategoryType, setSourceType, setMovieType } = this.props;
+    if (filterShow === '1') {
+      setCategoryType(CATEGORY_TYPE_INIT());
+    } else if (filterShow === '2') {
+      setSourceType(SOURCE_TYPE_INIT());
+    } else if (filterShow === '4') {
+      setMovieType(MOVIE_TYPE_INIT());
+    }
+    // const a = this.props.reset();
     // this.props.ongetFilterShow(a);
   }
 
