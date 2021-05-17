@@ -29,6 +29,7 @@ const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 export function UseHistory(props) {
   const [data, setData] = useState([]);
   const [auth, setAuth] = useState(false);
+  const [hasData, setHasData] = useState(false);
   const { projectId, keyData, judgeData, queryType } = props;
 
   useEffect(() => {
@@ -37,9 +38,11 @@ export function UseHistory(props) {
         projectId,
         queryType
       }).then((res) => {
+        setHasData(true);
         const { success, data, error } = res;
         if (success) {
           setData(data);
+          console.log(data);
           setAuth(true);
           judgeData && judgeData(data, 'history');
         } else {
@@ -56,7 +59,7 @@ export function UseHistory(props) {
       <Image src={noDataPic} alt=""></Image>
       <View className="text">暂无变更历史</View>
     </View>
-  ) : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
+  ) : <Text className="no-auth-text">{hasData ? NO_AUTH_MESSAGE :''}</Text>) : null
 }
 
 export function useChangeHistory(projectId) {
