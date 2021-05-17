@@ -103,7 +103,7 @@ class _C extends React.Component {
                 className="searchIco"
                 src="../../static/icon/search.png"
               ></Image>
-              <Input autoFocus onInput={this.bindKeyInput}></Input>
+              <Input focus onInput={this.bindKeyInput}></Input>
             </Label>
           </View>
         </View>

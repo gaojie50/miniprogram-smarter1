@@ -135,7 +135,7 @@ export default function AddProject(props, ref) {
       const t2 = CATAGORY.find(item2 => item2.value === props.projectData.category)
       setCategory(t2.label)
     }
-  },[props])
+  },[props.movieData.movieName, props.projectData.name])
 
   const typeStr = useMemo(() => {
     const keys = Object.keys(types);
