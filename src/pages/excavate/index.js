@@ -200,7 +200,7 @@ export default function Excavate() {
               className="search-bar"
               onClick={() => {
                 Taro.navigateTo({
-                  url: "/pages/searchProject/index",
+                  url: "/pages/searchProject/index?excavate=true",
                 });
               }}
             >
