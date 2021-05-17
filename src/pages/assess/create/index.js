@@ -53,7 +53,6 @@ export default class AC extends React.Component {
     editorEvaluationName: false,
     evaluationMethod: '',
     tempId: '',
-    appendQuesList: [],  // 附加题
     // eslint-disable-next-line react/no-unused-state
     appendMap: {},  // 附加题和原题关系
     titleErrorTip: false,
@@ -72,7 +71,6 @@ export default class AC extends React.Component {
 
 
   componentDidMount() {
-    
     const { projectId } = getCurrentInstance().router.params;
 
     this.setState({ projectId });
@@ -127,7 +125,7 @@ export default class AC extends React.Component {
         }
 
         let evaluationMethod = templateList[0]?.medium;
-        let curTempId = templateList[0]?.templateNode[0].tempId;
+        let curTempId = templateList[0]?.templateNode[0].id;
 
         return this.setState({
           briefInfo,
@@ -192,7 +190,7 @@ export default class AC extends React.Component {
     const { templateList } = this.state.briefInfo;
 
     if (methodType == this.state.evaluationMethod) return;
-    let curTempId = templateList.filter(item => item.type == methodType)[0].templateNode[0].tempId;
+    let curTempId = templateList.filter(item => item.medium == methodType)[0].templateNode[0].id;
 
     this.setState({
       evaluationMethod: methodType,
@@ -352,10 +350,10 @@ export default class AC extends React.Component {
       titleErrorTip,
       despErrorTip,
       filesChecked,
-      appendQuesList,
+      appendMap,
       endTime
     } = this.state;
-    const { description, projectEvaluationName } = briefInfo;
+    const { description, projectEvaluationName, roundNum } = briefInfo;
     const params = {
       projectId,
       projectEvaluationName,
@@ -363,7 +361,7 @@ export default class AC extends React.Component {
       tempId,
       fileIdArr: filesChecked || [],
       description,
-      appendTemplate: appendQuesList,
+      appendTemplate: appendMap[tempId] || [],
       deadline: endTime
     };
 
@@ -371,7 +369,7 @@ export default class AC extends React.Component {
     this.setState({ isSubmitting: true });
     reqPacking(
       {
-        url: 'api/management/appletevaluation',
+        url: 'api/applet/management/evaluation',
         data: params,
         method: 'POST',
       },
@@ -440,7 +438,6 @@ export default class AC extends React.Component {
       editorEvaluationName,
       evaluationMethod,
       tempId,
-      appendQuesList,
       titleErrorTip,
       despErrorTip,
       projectProfile,
@@ -452,6 +449,7 @@ export default class AC extends React.Component {
       hasPermission,
       endTime,
       endtimePickerOpen,
+      appendMap
     } = this.state;
 
     const filesCheckedInfoArr = projectProfile.filter(({ profileId }) => filesChecked.includes(profileId));
@@ -515,9 +513,9 @@ export default class AC extends React.Component {
 
                         return (
                           <View
-                            key={item.type}
+                            key={item.medium}
                             className={`method-item ${item.medium === evaluationMethod ? 'active' : ''}`}
-                            onClick={() => { this.evalMethodChange(item.type); }}
+                            onClick={() => { this.evalMethodChange(item.medium); }}
                           >
                             <View className={`smarter-iconfont ${icon}`} style={{ fontSize: '28rpx' }} />
                             {typeName}
@@ -556,7 +554,7 @@ export default class AC extends React.Component {
                   <TempList 
                     tempList={curTempList}
                     selectTempId={tempId}
-                    appendQuesList={appendQuesList}
+                    appendMap={appendMap}
                     onPreview={this.handlePreview}
                     onChangeTemp={this.handleChangeTemp}
                   />

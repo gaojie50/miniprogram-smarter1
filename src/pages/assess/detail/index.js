@@ -142,11 +142,12 @@ export default function AssessPage(){
     
     let finalQuestions = questions.map(item => {
       const {
-        type, questionId, content, matrixSelectList=[], finished
+        type, questionId, content, matrixSelectList=[], finished, questionNum
       } = item;
       let obj = {
         type,
         questionId,
+        questionNum
       };
       // 只有矩阵量表题算分
       if(type===5 && !finished){

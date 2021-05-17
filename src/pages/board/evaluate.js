@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking';
+import useDeadline from '../assess/detail/useDeadline';
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -89,16 +90,16 @@ function EvalutaionCard(props) {
     deadline
   } = props;
 
-  const timeStr = useMemo(() => {
-    if (!startDate) return '-'
-    const time = new Date(startDate);
-    const d = time.getDate();
-    const h = time.getHours();
-    const m = time.getMinutes();
-    const s = time.getSeconds();
-    const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
-    return str;
-  }, [startDate])
+  // const timeStr = useMemo(() => {
+  //   if (!startDate) return '-'
+  //   const time = new Date(startDate);
+  //   const d = time.getDate();
+  //   const h = time.getHours();
+  //   const m = time.getMinutes();
+  //   const s = time.getSeconds();
+  //   const str = `${time.getFullYear()}-${time.getMonth() + 1}-${d < 10 ? `0${d}` : d} ${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`
+  //   return str;
+  // }, [startDate])
   
 
   const arr = useMemo(() => {
@@ -184,15 +185,6 @@ function EvalutaionCard(props) {
       return [0, '已评估']
     } else {
       let prefix = '';
-      if (judgeInvitee(invitees, realName)) {
-        if(deadline && dayjs().valueOf() > deadline) {
-          prefix = '未参与'
-        } else {
-          prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
-        }
-        
-        return [1, prefix]
-      }
 
       if (isDockingPerson(judgeRole.role)) {
         if(deadline && dayjs().valueOf() > deadline) {
@@ -205,6 +197,18 @@ function EvalutaionCard(props) {
         
         return [2, prefix]
       }
+
+      if (judgeInvitee(invitees, realName)) {
+        if(deadline && dayjs().valueOf() > deadline) {
+          prefix = '未参与'
+        } else {
+          prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
+        }
+        
+        return [1, prefix]
+      }
+
+      return [3, prefix]
     }
   }, [deadline, hasAssess, initiator, invitees, realName]);
 
@@ -232,7 +236,7 @@ function EvalutaionCard(props) {
             </View>
           </View>
           <View className="evaluation-card-status-right">
-            {timeStr}
+            {useDeadline(deadline).component}
           </View>
         </View>
         <View className="evaluation-card-info">

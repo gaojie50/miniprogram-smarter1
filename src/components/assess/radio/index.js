@@ -5,7 +5,7 @@ import './index.scss';
 
 export default class Radio extends React.Component {
   state = {
-    selected: this.props.defaultValue || '',
+    selected: Number(this.props.defaultValue) || '',
   };
 
   selectChange = ({ currentTarget }) => {

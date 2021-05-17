@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking';
+import useDeadline from '../assess/detail/useDeadline';
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -58,7 +59,7 @@ export function EvaluationList({type}) {
   }, [data])
 
   return loading ? <mpLoading show type='circle' tips=''></mpLoading> :
-          evaluationList.length ? <>
+          evaluationList?.length > 0 ? <>
           {
             evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />)
           }
@@ -190,16 +191,7 @@ function EvalutaionCard(props) {
       return [0, '已评估']
     } else {
       let prefix = '';
-      if (judgeInvitee(invitees, realName)) {
-        if(deadline && dayjs().valueOf() > deadline) {
-          prefix = '未参与'
-        } else {
-          prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
-        }
-        
-        return [1, prefix]
-      }
-      console.log(isDockingPerson(role), role)
+      console.log(isDockingPerson(role),111)
       if (isDockingPerson(role)) {
         if(deadline && dayjs().valueOf() > deadline) {
           prefix = '未参与'
@@ -211,6 +203,17 @@ function EvalutaionCard(props) {
         
         return [2, prefix]
       }
+
+      if (judgeInvitee(invitees, realName)) {
+        if(deadline && dayjs().valueOf() > deadline) {
+          prefix = '未参与'
+        } else {
+          prefix = <Text style={{color: '#F1303D'}}>邀您评估</Text>;
+        }
+        
+        return [1, prefix]
+      }
+
       return [3, prefix]
     }
   }, [deadline, hasAssess, initiator, invitees, realName]);
@@ -232,9 +235,9 @@ function EvalutaionCard(props) {
           <View className='assess-list-evaluation-card-status-left'>
             第{round}轮 / {TYPE[evaluationMethod]}
           </View>
-          {/* <View className='assess-list-evaluation-card-status-right'>
-            {timeStr}
-          </View> */}
+          <View className='assess-list-evaluation-card-status-right'>
+            {useDeadline(deadline).component}
+          </View>
         </View>
         <View className='assess-list-evaluation-card-info'>
         <View className='assess-list-evaluation-card-info-title'>

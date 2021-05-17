@@ -21,6 +21,7 @@ export default function TextEval({
   roundId,
   type,
   questionId,
+  rightText,
 }) {
   const [packUp, setPackUp] = useState(true);
   const shrinkEvt = () => setPackUp(!packUp);
@@ -70,18 +71,17 @@ export default function TextEval({
   const inputDescribe = ({ detail }) => setDescribe(detail.value);
 
   const blurEvent = () => {
-    const texts = {
-      type,
-      questionId,
-      'content':describe
-    };
-    
     reqPacking({
       url: 'api/applet/management/update',
       data: {
         projectId,
         roundId,
-        texts,
+        modifyDate:1,
+        texts:{
+          type,
+          questionId,
+          'content':describe
+        },
         isAppendContent,
       }
     }).then(res => {
@@ -135,17 +135,17 @@ export default function TextEval({
     </View>;
   }
   return <View className="textEval-wrap">
-    <View className={`h5 ${(permissions || isTopic) ? "rich" : ""}`}>
+    <View className={`h5 ${(permissions) ? "rich" : ""}`}>
       {questionNum}、{title}
       {
-        (permissions || isTopic) ?
+        permissions ?
           <Text className="detail" onClick={toDetails}>评估详情 <Text className="arrow" /></Text> : ''
       }
     </View>
     {isTopic ? 
      <View className="filling">
        评估均值 <Text className="join">(共{joinNum}人参与)</Text>
-       <Text className="val">{formatNumber(summary/joinNum).text}</Text>
+       <Text className="val">{formatNumber(summary/joinNum).text} {rightText}</Text>
      </View>:
       (permissions ?
         <View className="textarea-wrap">

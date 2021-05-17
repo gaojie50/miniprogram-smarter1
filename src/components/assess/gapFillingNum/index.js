@@ -11,7 +11,7 @@ export default class GapFillingNum extends React.Component {
   valueChange = ({ target }) => {
     const { limit } = this.props.gapFilling;
     let innerValue = target.value.trim();
-    let value = '';
+    let value = innerValue;
 
     if (limit == 1) {
       // 数字 10以内 保留一位小数
@@ -23,7 +23,9 @@ export default class GapFillingNum extends React.Component {
       value = innerValue.replace(/^\D*(\d*(?:\.\d{0,2})?).*$/g, '$1');
     }
 
+    
     let obj = { content: value, finished: !!value, complete: !!value };
+
 
     if (obj.finished) obj.showError = false;
     this.setState({ value }, () => this.props.cb(obj));
