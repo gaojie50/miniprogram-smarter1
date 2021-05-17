@@ -153,7 +153,9 @@ export default function Result() {
   } = result;
   const noEvalText = isLeader(projectRole) ? "还没有人发布过评估内容" : "自行填答后，才能看到其他人的评估内容";
   const showParticipantNumber = isDockingPerson(judgeRole);
-  const permissions = +new Date() >= deadLine && [1,2,3].includes(projectRole);
+  const hadFreeTime= +new Date() >= deadLine;
+  const permissions = hadFreeTime && [1,2,3].includes(projectRole);
+  const [evalEnd,setEvalEnd] = useState(hadFreeTime);
 
   return <ScrollView 
     enhanced bounces={false}
@@ -170,6 +172,7 @@ export default function Result() {
         projectId={projectId} 
         roundId={roundId} 
         setStopScroll={setStopScroll}
+        setEvalEnd={setEvalEnd}
         showParticipantNumber={showParticipantNumber}/>
       <View className="result-cont">
         {
@@ -268,6 +271,7 @@ export default function Result() {
         projectId={projectId}
         roundId={roundId}
         evaluated={evaluated}
+        evalEnd={evalEnd}
         canInvite={isDockingPerson(judgeRole)}
         />
       </Block>

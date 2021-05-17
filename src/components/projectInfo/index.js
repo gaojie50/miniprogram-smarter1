@@ -8,7 +8,15 @@ import './index.scss';
 
 const reqPacking = getGlobalData('reqPacking');
 const {getEvaluationLabel} = projectConfig
-export default function ProjectInfo({ deadLine, projectId, roundId, info, showParticipantNumber,setStopScroll,rollingDistance }) {
+export default function ProjectInfo({ 
+  deadLine, 
+  projectId, 
+  roundId, 
+  info, 
+  showParticipantNumber,
+  setStopScroll,
+  setEvalEnd,
+  }) {
   const fillZero = num => num < 10 ? `0${num}` : num;
 
   const {
@@ -32,6 +40,7 @@ export default function ProjectInfo({ deadLine, projectId, roundId, info, showPa
           roundId={roundId}
           projectId={projectId}
           setStopScroll={setStopScroll}
+          setEvalEnd={setEvalEnd}
           deadLine={deadLine}/> : 
         <View className="sign">{fillZero(round)}</View>
     }
