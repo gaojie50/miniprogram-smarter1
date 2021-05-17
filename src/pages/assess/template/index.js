@@ -35,7 +35,6 @@ export default function PerviewTemplate(){
       setAppendQuesList(data.appendQuesList);
       setTempName( data.tempName );
 
-      console.log('data', data);
       // pv埋点
       lx.pageView('c_movie_b_2dbfeaf7', {
         custom: {
@@ -152,6 +151,10 @@ export default function PerviewTemplate(){
             return qItem;
           })
           setAppendQuesList(newAppendQuesList);
+          eventChannel.emit('selectTemp', {
+            tempId,
+            appendQuesList
+          });
         } else if (res.cancel) {
           console.log('用户点击取消')
         }
