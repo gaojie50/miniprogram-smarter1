@@ -147,25 +147,25 @@ export default function hotMovieList() {
     }
   }
 
-  const handleGotoCityList = () => {
-    console.log(cityValue, cityValue.length);
-    // getCityValue('');
-    if(cityValue.length > 0 && cityValue[0].boxOfficeRate > 10) {
-      Taro.showToast({
-        title: '城市占比超过10%，无法查看占比',
-        icon: 'none',
-        duration: 1000
-      });
-    }else if (cityValue.length == 0 ) {
-      Taro.showToast({
-        title: '当前暂无占比，无法查看占比',
-        icon: 'none',
-        duration: 1000
-      });
-    }else {
-      gotoCityList();
-    }
-  }
+  // const handleGotoCityList = () => {
+  //   console.log(cityValue, cityValue.length);
+  //   // getCityValue('');
+  //   if(cityValue.length > 0 && cityValue[0].boxOfficeRate > 10) {
+  //     Taro.showToast({
+  //       title: '城市占比超过10%，无法查看占比',
+  //       icon: 'none',
+  //       duration: 1000
+  //     });
+  //   }else if (cityValue.length == 0 ) {
+  //     Taro.showToast({
+  //       title: '当前暂无占比，无法查看占比',
+  //       icon: 'none',
+  //       duration: 1000
+  //     });
+  //   }else {
+  //     gotoCityList();
+  //   }
+  // }
 
   const getCityValue = (cityId) => {
     reqPacking({
@@ -238,7 +238,7 @@ export default function hotMovieList() {
                     <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
                   </View>
                 </View>
-                <View className='list-header-right' onClick={()=>handleGotoCityList()} >
+                <View className='list-header-right' onClick={()=> gotoCityList()} >
                   {`${cityId ? `票房占比：${cityValue[0] ? cityValue[0].boxOfficeRate : ''}%` :'各地区产生票房及占比'}`}
                   <View className='list-header-img'>
                     <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
