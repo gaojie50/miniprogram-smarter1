@@ -29,12 +29,13 @@ export default function hotMovieList() {
   const [showDay, setShowDay] = useState('');
   const [startDateBar, setsStartDateBar] = useState('');
 
-  const fetchBoxOfficeValue = () => {
+  const fetchBoxOfficeValue = (showDate, cityId) => {
     reqPacking({
       url:'api/management/finance/various/boxOffice',
       data: { 
         projectId,
-        showDate : Number(dayjs(new Date()).format('YYYYMMDD'))
+        showDate :  Number(showDate || dayjs(new Date()).format('YYYYMMDD')),
+        cityId: Number(cityId) || ''
       },
       method: 'GET',
     }, ).then(res => {
@@ -90,6 +91,8 @@ export default function hotMovieList() {
     console.log(cityId, current, showDay);
     getCityValue(cityId);
     fetchIncomeValue(current, showDay, cityId);
+    fetchIncomeValue(current, showDay, cityId);
+    fetchBoxOfficeValue(showDay, cityId);
   }, [cityId, current, showDay])
 
   const handleBack = () => {

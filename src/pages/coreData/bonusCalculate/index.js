@@ -477,7 +477,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         <AtModalAction><Button onClick={cleanAllValue}>重新计算</Button> <Button onClick={recalculate}>确定</Button> </AtModalAction>
       </AtModal>
       <View className='cal-bottom-bonus' onClick={()=>{bottomSubmit()}}>
-        <View className='cal-button-bouns' >计算</View>
+        <View className='cal-button-bouns' style={`${isSubmit ? 'opacity: 1 !important' : ''}`} >计算</View>
       </View>
     </View>
   )
