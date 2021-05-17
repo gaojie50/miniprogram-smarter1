@@ -20,6 +20,7 @@ export default function hotMovieList() {
   const [access, setAccess] = useState(true);
   const [showDate, setShowDate] = useState(() => dayjs(new Date()).format('YYYYMMDD'));
   const [ranking, setRanking] = useState([]);
+  const [isGetList, setIsGetList] = useState(false);
   const { rpxTopx } = utils;
   const capsuleLocation = getGlobalData('capsuleLocation');
   const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
@@ -48,9 +49,15 @@ export default function hotMovieList() {
         setRanking(res.data);
       } else if (res.error && res.error.code === 12110003) {
         setAccess(false);
+      } else {
+        Taro.showToast({
+          title: res.error ? res.error.message : '',
+          icon: 'none',
+          duration: 2000
+        });
       }
-      // setAccess(false);
-    })
+      setIsGetList(true);
+    });
   }
 
   const onSelectDate = (date) => {
@@ -114,35 +121,38 @@ export default function hotMovieList() {
               <View className='list-header-right'>排序推荐指数</View>
             </View>
             {
-              ranking.map((item, index) => {
-                return (
-                  <View className='list' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
-                    <View className='list-left'>
-                      <View className='list-film'>
-                        <Image src={item.pic.replace('/w.h/', '/')}></Image>
-                        <View className={`film-index index-${index}`} >{index+1}</View>
-                      </View>
-                      <View className='list-middle'>
-                        <View className='list-film-name'>
-                          {item.movieName}
+              isGetList && ranking && ranking.length > 0 && (
+                ranking.map((item, index) => {
+                  return (
+                    <View className='list' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
+                      <View className='list-left'>
+                        <View className='list-film'>
+                          <Image src={item.pic.replace('/w.h/', '/')}></Image>
+                          <View className={`film-index index-${index}`} >{index+1}</View>
                         </View>
-                        <View className='list-film-label'>
-                          {
-                            item.maoyanSign.map((sign) => (
-                              <View className='film-lable' key={sign}>
-                                {signText[sign]}
-                              </View>
-                            ))
-                          }
+                        <View className='list-middle'>
+                          <View className='list-film-name'>
+                            {item.movieName}
+                          </View>
+                          <View className='list-film-label'>
+                            {
+                              item.maoyanSign.map((sign) => (
+                                <View className='film-lable' key={sign}>
+                                  {signText[sign]}
+                                </View>
+                              ))
+                            }
+                          </View>
+                          <View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View>
                         </View>
-                        <View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View>
                       </View>
+                      <View className='film-recommend'>{item.score ? parseFloat( item.score.toFixed(2)): ''}</View>
                     </View>
-                    <View className='film-recommend'>{item.score ? parseFloat(item.score.toFixed(2)) : ''}</View>
-                  </View>
-                )
-              })
+                  )
+                })
+              )
             }
+            { isGetList && ranking && ranking.length <= 0 && <View className="empty-list">暂无数据</View> }
           </View>
         ) : (
           <NoAccess title="暂无评估权限" backgroundColor="#4D5A71" height="100vh" position="absolute" />
