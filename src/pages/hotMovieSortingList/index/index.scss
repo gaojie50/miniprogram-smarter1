@@ -147,9 +147,11 @@
         overflow: hidden;
       }
       .list-film-label {
+        display: flex;
+        margin-top: 12rpx;
+
         .film-lable {
           margin-right: 8px;
-          display: inline-block;
           width: 64px;
           height: 36px;
           border-radius: 4px;

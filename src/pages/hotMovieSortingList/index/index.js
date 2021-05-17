@@ -77,9 +77,17 @@ export default function hotMovieList() {
     });
   }
 
-  const gotoCoreDataPage = (projectId) => {
-    Taro.redirectTo({
-      url: `/pages/detail/index?projectId=${projectId}`
+  const gotoCoreDataPage = (name, projectId) => {
+    reqPacking({
+      url: 'api/management/keyData',
+      data: {
+        projectId: projectId,
+      }
+    }).then((res) => {
+      const { afterShowing } = res.data;
+      Taro.navigateTo({
+        url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${afterShowing}`
+      });
     });
   }
 
@@ -113,7 +121,7 @@ export default function hotMovieList() {
             {
               ranking.map((item, index) => {
                 return (
-                  <View className='list' key={index} onClick={()=>gotoCoreDataPage(item.projectId)}>
+                  <View className='list' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
                     <View className='list-left'>
                       <View className='list-film'>
                         <Image src={item.pic.replace('/w.h/', '/')}></Image>

@@ -93,9 +93,13 @@ export default function hotMovieList() {
   }, [cityId, current, showDay])
 
   const handleBack = () => {
-    Taro.redirectTo({
-      url: `/pages/detail/index?projectId=${projectId}`
-    })
+    if (Taro.getCurrentPages().length > 1) {
+      Taro.navigateBack();
+    } else {
+      Taro.redirectTo({
+        url: `/pages/detail/index?projectId=${projectId}`,
+      });
+    }
   }
 
   // const handleParam = () => {
