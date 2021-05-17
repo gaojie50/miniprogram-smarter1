@@ -8,7 +8,7 @@ import ArrowLeft from '@static/detail/arrow-left.png';
 import dayjs from 'dayjs';
 import DateBar from '../../../components/dateBar';
 import './index.scss';
-import cityList from '../../checkCity/cities.json';
+import { cityMap } from './city';
 import { numberFormat } from '../../coreData/common';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
 
@@ -21,7 +21,6 @@ export default function hotMovieList() {
   const capsuleLocation = getGlobalData('capsuleLocation');
   const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
   const [cityRanking, setCityRanking] = useState([]);
-  const [cityMap, setCityMap] = useState({});
   const [showDate, setShowDate] = useState(() => dayjs(new Date()).format('YYYYMMDD'));
 
   const handleBack = () => {
@@ -43,7 +42,14 @@ export default function hotMovieList() {
       }
     }).then(res => {
       if (res.success && res.data && res.data.length > 0) {
-        setCityRanking(res.data);
+        let ranking = [];
+        for (const item of res.data) {
+          if (cityMap[item.cityId] && cityMap[item.cityId].name) {
+            item.name = cityMap[item.cityId].name;
+            ranking.push(item);
+          }
+        }
+        setCityRanking(ranking);
       }
     })
   }
@@ -51,12 +57,6 @@ export default function hotMovieList() {
   const onSelectDate = (date) => {
     setShowDate(date.replaceAll('-', ''));
   }
-
-  useEffect(() => {
-    // console.log(showDate);
-    let x = utils.arrayToMap(cityList.cts, 'id');
-    setCityMap(x);
-  }, []);
 
   useEffect(getCityRanking, [showDate]);
 
@@ -84,7 +84,7 @@ export default function hotMovieList() {
             return (
               <View className='list' key={index}>
                 <View className={`list-index index-${index}`}>{index + 1}</View>
-                <View className='list-city'>{cityMap[item.cityId] && cityMap[item.cityId].name}</View>
+                <View className='list-city'>{item.name}</View>
                 <View className='list-money'>{`${numberFormat(item.boxOffice).num}${numberFormat(item.boxOffice).unit}`}</View>
                 <View className='list-percentage'>{item.boxOfficeRate}%</View>
               </View>
