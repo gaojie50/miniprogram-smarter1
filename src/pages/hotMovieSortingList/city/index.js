@@ -22,6 +22,7 @@ export default function hotMovieList() {
   const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
   const [cityRanking, setCityRanking] = useState([]);
   const [showDate, setShowDate] = useState(() => dayjs(new Date()).format('YYYYMMDD'));
+  const [isGetList, setIsGetList] = useState(false);
 
   const handleBack = () => {
     Taro.navigateBack();
@@ -51,8 +52,15 @@ export default function hotMovieList() {
           }
         }
         setCityRanking(ranking);
+      } else {
+        Taro.showToast({
+          title: res.error ? res.error.message : '网络请求出错，请稍后再试',
+          icon: 'none',
+          duration: 2000
+        });
       }
-    })
+      setIsGetList(true);
+    });
   }
 
   const onSelectDate = (date) => {
@@ -81,7 +89,7 @@ export default function hotMovieList() {
           <View className='list-header-right'>票房占比</View>
         </View>
         {
-          cityRanking.map((item, index) => {
+          isGetList && cityRanking.length > 0 && cityRanking.map((item, index) => {
             return (
               <View className='list' key={index}>
                 <View className={`list-index index-${index}`}>{index + 1}</View>
@@ -91,6 +99,11 @@ export default function hotMovieList() {
               </View>
             );
           })
+        }
+        {
+          isGetList && cityRanking.length <= 0 && (
+            <View className='empty-list'>暂无数据</View>
+          )
         }
       </View>
     </View>
