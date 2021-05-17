@@ -96,7 +96,7 @@ export default function hotMovieList() {
   useEffect(getMovieRanking, [cityId, showDate]);
 
   return (
-    <View>
+    <View className='hot-movie-page'>
       {/* <Calendar /> */}
       <Tab />
       <View className='detail-top' style={{ height: `${headerBarHeight}px` }}>
@@ -113,7 +113,7 @@ export default function hotMovieList() {
         access ? (
           <View style={{ marginTop: `${headerBarHeight}px`, marginBottom: '100px', position: 'relative' }}>
             <DateBar callBack={onSelectDate.bind(this)} startDateBar='20210106' />
-            <ScrollView className='movie-ranking-list' scrollX showScrollbar={false}>
+            <ScrollView className='movie-ranking-list' scrollX>
               <View className='list-header'>
                 <View className='list-header-left'>
                   <View className='city-name' onClick={gotoCheckCity}>{ cityId ? cityName : '全国' }</View>
