@@ -59,7 +59,7 @@ export default function hotMovieList() {
         projectId,
         type: (current + 1),
         showDate: Number(showDate || dayjs(new Date()).format('YYYYMMDD')),
-        cityId: cityId || ''
+        cityId: Number(cityId) || ''
       },
       method: 'GET',
     }).then(res => {
@@ -104,7 +104,7 @@ export default function hotMovieList() {
 
   const gotoCityList = () => {
     let params = Taro.getCurrentInstance().router.params;
-    Taro.redirectTo({
+    Taro.navigateTo({
       url: `/pages/hotMovieSortingList/city/index?name=${params.name}&projectId=${params.projectId}`
     });
   }
@@ -239,7 +239,7 @@ export default function hotMovieList() {
                   </View>
                 </View>
                 <View className='list-header-right' onClick={()=>handleGotoCityList()} >
-                  {`${cityId ? `票房占比：${cityValue[0].boxOfficeRate}%` :'各地区产生票房及占比'}`}
+                  {`${cityId ? `票房占比：${cityValue[0] ? cityValue[0].boxOfficeRate : ''}%` :'各地区产生票房及占比'}`}
                   <View className='list-header-img'>
                     <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
                   </View>

@@ -156,9 +156,9 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     });
   }
   const changeCalculateButton = (index, param) => {
+    cleanAllValue();
     var newList = lists.concat();
     newList[index].forEach((item, i)=>{
-      console.log('item', item);
       if(i===param) {
         item.isOnclick = true;
       }else{
@@ -171,7 +171,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     const val = e.detail.value;
     var newLadderLists = ladderLists.concat();
     newLadderLists[index].value = val;
-    console.log(newLadderLists);
     setladderLists(newLadderLists);
 
   }
@@ -222,9 +221,9 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
               return;
             }
           }
-          if(Number(ladderLists[0].value)-Number(ladderLists[1].value) > 0 ){
+          if(Number(ladderLists[0].value)-Number(ladderLists[1].value) > 0 || Number(ladderLists[1].value)-Number(ladderLists[2].value) > 0){
             hasToast && Taro.showToast({
-              title: `请填写A<=B的值`,
+              title: `请填写A<=B<=C的值`,
               icon: 'none',
               duration: 2000,
             });

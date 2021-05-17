@@ -198,7 +198,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   }
 
   const changeCalculateButton = (index, param) => {
-    console.log(index, param, lists[index][param]);
+    cleanAllValue();
     var newList = lists.concat();
     newList[index].forEach((item, i)=>{
       console.log('item', item);
@@ -208,19 +208,17 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         item.isOnclick = false;
       }
     })
-    console.log(newList);
     setLists(newList);
   }
   const changeLadderValue = (e, index) => {
     const val = e.detail.value;
     var NewLadderLists = ladderLists.concat();
     NewLadderLists[index].value = val;
-    console.log(NewLadderLists);
     setladderLists(NewLadderLists);
   }
 
   const judgeIsSubmit = (hasToast) => {
-    console.log(lists, 'lists');
+    // 比例1
     if(lists[0][0].isOnclick && lists[3][0].isOnclick) {
       if(coefficient === ''){
         hasToast && Taro.showToast({
@@ -232,8 +230,9 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         return;
       }
     }
+    // 比例2
     if(lists[0][0].isOnclick && lists[3][1].isOnclick) {
-      if(proportiona === '' && proportionA === ''){
+      if(proportiona === '' || proportiona === ''){
         hasToast && Taro.showToast({
           title: `请填写系数`,
           icon: 'none',
@@ -243,9 +242,9 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         return;
       } 
     }
-
+    // 比例3
     if(lists[0][0].isOnclick && lists[3][2].isOnclick) {
-      if(coefficient === '' && coefficientA === ''){
+      if(coefficient === '' || coefficientA === ''){
         hasToast && Taro.showToast({
           title: `请填写系数`,
           icon: 'none',
@@ -253,19 +252,9 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         });
         setIsSubmit(false);
         return;
-      } else{
-        if(Number(coefficient)< 0 || Number(coefficient)>100 || Number(coefficientA)< 0 || Number(coefficientA) > 100){
-          hasToast && Taro.showToast({
-            title: `系数填写0~100数值`,
-            icon: 'none',
-            duration: 2000,
-          });
-          setIsSubmit(false);
-          return;
-        }
       }
     }
-
+// 固定金额
     if(lists[0][1].isOnclick) {
       if(amount === ''){
         hasToast && Taro.showToast({
@@ -288,7 +277,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         }
       }
     }
-
+// 阶梯
     if(lists[0][2].isOnclick ) {
       console.log(ladderLists, 'ladderLists');
       for(let i = 0; i<6; i++) {
@@ -348,7 +337,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
   useEffect(()=>{
     console.log('judgeIsSubmit');
     judgeIsSubmit();
-  }, [ladderLists, coefficient, amount, lists])
+  }, [ladderLists, coefficient, amount, lists, coefficientA, proportionA, proportiona])
 
   useEffect(()=>{
     if(showProgress) {

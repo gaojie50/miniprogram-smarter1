@@ -25,13 +25,14 @@ export default function hotMovieList() {
   const [showDate, setShowDate] = useState(() => dayjs(new Date()).format('YYYYMMDD'));
 
   const handleBack = () => {
-    if(Taro.getCurrentPages().length>1){
-      Taro.navigateBack();
-    }else{
-      Taro.redirectTo({
-        url: `/pages/board/index`
-      })
-    }
+    Taro.navigateBack();
+    // if(Taro.getCurrentPages().length>1){
+    //   Taro.navigateBack();
+    // }else{
+    //   Taro.redirectTo({
+    //     url: `/pages/board/index`
+    //   })
+    // }
   }
 
   const getCityRanking = () => {

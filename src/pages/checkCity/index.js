@@ -21,17 +21,12 @@ export default class checkCity extends React.Component {
     this.fromUrl = decodeURIComponent(options.fromUrl);
     this.state = {
       list: [],
-      // name: options.name,
-      // projectId: options.projectId,
-      // isMovieScreening: (options.isMovieScreening == 'true'),
     }
   }
 
   componentWillMount() {
     let letterCities =  this.transformCities(cities.cts).letterMap
-    console.log(cities)
-    console.log(this.transformCities(cities.cts))
-    let lists = [];
+    let lists = [{key: "全国", title: "全国", items: [{id: '', name: "全国", py: "qunguo"}]}];
     for(let key in letterCities){
       let obj={};
       obj.title = key
@@ -40,7 +35,6 @@ export default class checkCity extends React.Component {
       lists.push(obj)
     }
     this.setState({list: lists});
-    console.log(lists);
   }
 
   transformCities = (cities)=> {
