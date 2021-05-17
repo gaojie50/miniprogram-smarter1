@@ -8,7 +8,7 @@ import EndTimePicker from '@components/endtime-picker';
 import './index.scss';
 
 const { calcWeek } = utils;
-export default function EvaluateTime({ deadLine,projectId,roundId,setStopScroll }) {
+export default function EvaluateTime({ deadLine,projectId,roundId,setStopScroll,setEvalEnd }) {
   let now = +new Date();
   const [timing, setTiming] = useState(false);
   const [line, setLine] = useState(deadLine);
@@ -40,6 +40,7 @@ export default function EvaluateTime({ deadLine,projectId,roundId,setStopScroll 
             setTiming(false);
             setIsEnd(true);
             clearInterval(interval)
+            setEvalEnd(true);
 
             Taro.redirectTo({
               url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`
@@ -98,7 +99,14 @@ export default function EvaluateTime({ deadLine,projectId,roundId,setStopScroll 
               setTiming(false);
               setLine(newLine);
               setSeconds(Math.floor((newLine - new Date()) / 1000));
+              return;
             }
+
+            Taro.showToast({
+              title: error.message,
+              icon: 'none',
+              duration: 2000
+            });
           })
         }
       }
