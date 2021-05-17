@@ -76,6 +76,7 @@ export default function TextEval({
       data: {
         projectId,
         roundId,
+        modifyDate:1,
         texts:{
           type,
           questionId,
