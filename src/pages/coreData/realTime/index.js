@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'; 
 import { View, Image, Text, ScrollView, Input } from '@tarojs/components';
 import Taro from '@tarojs/taro'
+import lx from '@analytics/wechat-sdk';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import FloatLayout from '@components/m5/float-layout';
 import '@components/m5/style/components/input.scss';
@@ -113,6 +114,14 @@ export default function realTime({}) {
   const bottomSubmit = () => {
     judgeIsSubmit('hasToast');
     if(isSubmit) {
+      const { userInfo } = Taro.getStorageSync('authinfo') || {};
+      lx.moduleClick('movie_b_ynjn6dpx', {
+        custom: {
+          user_id: userInfo.mis,
+          project_id: projectId,
+          keep_user_id: userInfo.keeperUserId
+        }
+      }, { cid: 'c_movie_b_28xvqisf'});
       postDataValue();
     }
   }
@@ -183,6 +192,14 @@ export default function realTime({}) {
   useEffect(()=>{
     if (paramIndex === '0') {
       getContractData();
+      const { userInfo } = Taro.getStorageSync('authinfo') || {};
+      lx.pageView('c_movie_b_28xvqisf', {
+        custom: {
+          user_id: userInfo.mis,
+            project_id: projectId,
+            keep_user_id: userInfo.keeperUserId
+        }
+      });
     }else{
       getValueData();
     }
