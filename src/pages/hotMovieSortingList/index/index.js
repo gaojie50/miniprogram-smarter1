@@ -121,7 +121,7 @@ export default function hotMovieList() {
                     <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
                   </View>
                 </View>
-                <View className='film-futer-income title'>
+                <View className='film-future-income title'>
                   <View>未来收入</View>
                   <View>(万)</View>
                 </View>
@@ -159,7 +159,7 @@ export default function hotMovieList() {
                             { item.startDate !== 0  &&<View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View> }
                           </View>
                         </View>
-                        <View className='film-futer-income'>{ item.expectFutureIncome === null ? '' : parseFloat(item.expectFutureIncome / 1000000).toFixed(2) }</View>
+                        <View className='film-future-income'>{ item.expectFutureIncome === null ? '' : parseFloat(item.expectFutureIncome / 1000000).toFixed(2) }</View>
                         <View className='film-income'>{ item.expectTotalIncome === null ? '' : parseFloat(item.expectTotalIncome / 1000000).toFixed(2) }</View>
                         <View className='film-recommend'>{item.score > 0 ? parseFloat(item.score ? item.score.toFixed(2) : '') : item.score }</View>
                       </View>
