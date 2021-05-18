@@ -77,7 +77,8 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         })
         setAmount(numberFormatCent(fixedAmountValue));
         setGetValue(res.data);
-        setCoefficient(fixedRatioValue);
+        setCoefficient(fixedRatioValue == null ? '' : fixedRatioValue);
+        setIsSubmit(true);
       } else {
         Taro.showToast({
           title: error && error.message || '',
@@ -231,6 +232,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       }
     }
     if(lists[1][0].isOnclick) {
+      console.log(coefficient, 'coefficient');
       if(coefficient === ''){
         hasToast && Taro.showToast({
           title: `请填写系数`,
@@ -288,6 +290,12 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       getComputeRule();
     }
   }, [showProgress, calculateIndex])
+  
+  useEffect(()=>{
+    if(!showProgress) {
+      cleanAllValue();
+    }
+  }, [showProgress])
 
 
   // 计算按钮是否可以计算
