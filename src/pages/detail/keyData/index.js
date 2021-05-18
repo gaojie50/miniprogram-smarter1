@@ -1,6 +1,7 @@
 import { View, Image, Text, ScrollView, Block } from '@tarojs/components';
 import React from 'react';
 import Taro from '@tarojs/taro'
+import lx from '@analytics/wechat-sdk';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
 import utils from '@utils/index.js';
 import './index.scss';
@@ -33,6 +34,12 @@ export default class KeyData extends React.Component {
   goCoreData = () =>{
     const { basicData, keyData } = this.props;
     console.log(this.props, basicData, this.state.keyData, keyData.afterShowing, !keyData.afterShowing);
+    lx.moduleClick('b_movie_b_t5is3kn1_mc', {
+      custom: {
+        // user_id: userInfo.keeperUserId,
+        project_id: basicData.projectId,
+      }
+    }, { cid: 'c_movie_b_z5wvew69'});
     Taro.navigateTo({
       url: `/pages/coreData/index?name=${basicData.name}&projectId=${basicData.projectId}&isMovieScreening=${!keyData.afterShowing}`,
     })
