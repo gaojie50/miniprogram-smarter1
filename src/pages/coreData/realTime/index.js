@@ -70,7 +70,7 @@ export default function realTime({}) {
   const judgeIsSubmit = (hasToast) => {
     console.log('judgeIsSubmit', lists);
     for(let i = 0; i<11; i++) {
-      if(i != 3) {
+      if(i != 1 && i != 2 && i != 3) {
         if(lists[i].money === ''){
           hasToast && Taro.showToast({
             title: `请填写${lists[i].title}`,
