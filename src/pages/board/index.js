@@ -458,7 +458,7 @@ export default function Board() {
                   className='board-searchIco'
                   src='../../static/icon/search.png'
                 ></Image> 
-                <Input placeholder='搜索项目'></Input>
+                <Input placeholder='搜索项目' disabled></Input>
             </Label>
             </View>
           </View>
