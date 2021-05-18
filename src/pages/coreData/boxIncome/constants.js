@@ -90,7 +90,7 @@ export const lists = [
         {
           key: 'advertisingCosts',
           title: '扣除：宣发费用',
-          remarks: '片方应得收入*相应比例，计算公式为宣发你费用*(1-影片已产生票房/票房收入预测)',
+          remarks: '片方应得收入*相应比例，计算公式为宣发费用*(1-影片已产生票房/票房收入预测)',
           money: 0,
           unit: '万',
         },
@@ -275,7 +275,7 @@ export const lists = [
         {
           key: 'advertisingCosts',
           title: '扣除：宣发费用',
-          remarks: '片方应得收入*相应比例，计算公式为宣发你费用*(影片已产生票房/票房收入预测)',
+          remarks: '片方应得收入*相应比例，计算公式为宣发费用*(影片已产生票房/票房收入预测)',
           money: 0,
           unit: '万',
         },
