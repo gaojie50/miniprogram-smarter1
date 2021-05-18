@@ -153,9 +153,12 @@ export default function Result() {
   } = result;
   const noEvalText = isLeader(projectRole) ? "还没有人发布过评估内容" : "自行填答后，才能看到其他人的评估内容";
   const showParticipantNumber = isDockingPerson(judgeRole);
-  const hadFreeTime= +new Date() >= deadLine;
+
+  const hadFreeTime= deadLine ? +new Date() >= deadLine : true;
   const permissions = hadFreeTime && [1,2,3].includes(projectRole);
   const [evalEnd,setEvalEnd] = useState(hadFreeTime);
+
+  useEffect(()=>setEvalEnd(hadFreeTime),[hadFreeTime]);
 
   return <ScrollView 
     enhanced bounces={false}

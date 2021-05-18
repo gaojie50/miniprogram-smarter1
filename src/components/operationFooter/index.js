@@ -69,9 +69,9 @@ export default function OperationFooter({ projectId, roundId, evaluated, evalEnd
 
 
   return <View className="operation-footer">
-    {canInvite && <Button
+    {canInvite && !evalEnd ?<Button
       data-sign="invite"
-      openType="share">邀请参与</Button>}
+      openType="share">邀请参与</Button> : ""}
     {evaluated || evalEnd ?
       <Button
         className="attend"
