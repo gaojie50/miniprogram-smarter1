@@ -99,7 +99,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           setAmount(numberFormatCent(fixedAmountValue));
         }
         setGetValue(res.data);
-        judgeIsSubmit();
+        setIsSubmit(true);
       } else {
         Taro.showToast({
           title: error && error.message || '',
@@ -244,6 +244,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     }
     // 比例3
     if(lists[0][0].isOnclick && lists[3][2].isOnclick) {
+      console.log(coefficient, coefficientA)
       if(coefficient === '' || coefficientA === ''){
         hasToast && Taro.showToast({
           title: `请填写系数`,
