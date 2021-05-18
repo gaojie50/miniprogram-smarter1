@@ -161,7 +161,7 @@ export default function Result() {
   useEffect(() => setEvalEnd(hadFreeTime), [hadFreeTime]);
 
   return <Block>
-    {/* <FingerPrint /> */}
+    <FingerPrint />
     <ScrollView
       enhanced bounces={false}
       scrollY={!stopScroll}
@@ -170,7 +170,7 @@ export default function Result() {
       {!isLogin ? (
         <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
       ) : (
-        <Block>
+        <View style={{'position':'relative','z-index':'2'}}>
           <ProjectInfo
             deadLine={deadLine}
             info={info}
@@ -213,7 +213,7 @@ export default function Result() {
                           roundId={roundId}
                           questionNum={index + (coreExist ? 2 : 1)}
                           texts={item.texts || []}
-                          isAppendContent={!!item?.isAppendContent}
+                          appendContent={!!item?.appendContent}
                           summaryText={item?.summaryText || ""}
                           isTopic={item.type == 2}
                           permissions={permissions}
@@ -279,7 +279,7 @@ export default function Result() {
             evalEnd={evalEnd}
             canInvite={isDockingPerson(judgeRole)}
           />
-        </Block>
+        </View>
       )}
 
     </ScrollView>

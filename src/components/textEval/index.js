@@ -14,7 +14,7 @@ export default function TextEval({
   permissions,
   resultPageTextTitleEditingGuideState,
   setResultPageTextTitleEditingGuideState,
-  isAppendContent,
+  appendContent,
   summaryText,
   isTopic,
   projectId,
@@ -82,7 +82,7 @@ export default function TextEval({
           questionId,
           'content':describe
         },
-        isAppendContent,
+        appendContent,
       }
     }).then(res => {
       const { error } = res;
