@@ -6,6 +6,7 @@ import  Calendar from '@components/calendar'
 import  AtTag from '@components/m5/tag';
 import '@components/m5/style/components/tag.scss';
 import NoAccess from '@components/noAccess';
+import lx from '@analytics/wechat-sdk';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import Tab from '@components/tab';
 import dayjs from 'dayjs';
@@ -80,6 +81,15 @@ export default function hotMovieList() {
   }
 
   const gotoCoreDataPage = (name, projectId) => {
+    const { userInfo } = Taro.getStorageSync('authinfo') || {};
+    lx.moduleClick('movie_b_2usoy2ef', {
+      custom: {
+        project_id: projectId,
+        user_id: userInfo.mis,
+        keep_user_id: userInfo.keeperUserId,
+      }
+    });
+
     reqPacking({
       url: 'api/management/keyData',
       data: {
@@ -93,7 +103,10 @@ export default function hotMovieList() {
     });
   }
 
-  useEffect(getMovieRanking, [cityId, showDate]);
+  useEffect(() => {
+    getMovieRanking();
+    lx.pageView('c_movie_b_dexmmi8t');
+  }, [cityId, showDate]);
 
   return (
     <View className='hot-movie-page'>

@@ -4,6 +4,7 @@ import Taro from '@tarojs/taro'
 import utils from '@utils/index.js'
 import  Calendar from '@components/calendar'
 import '@components/m5/style/components/tag.scss'
+import lx from '@analytics/wechat-sdk';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import dayjs from 'dayjs';
 import DateBar from '../../../components/dateBar';
@@ -26,13 +27,6 @@ export default function hotMovieList() {
 
   const handleBack = () => {
     Taro.navigateBack();
-    // if(Taro.getCurrentPages().length>1){
-    //   Taro.navigateBack();
-    // }else{
-    //   Taro.redirectTo({
-    //     url: `/pages/board/index`
-    //   })
-    // }
   }
 
   const getCityRanking = () => {
