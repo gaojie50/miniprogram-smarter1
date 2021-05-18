@@ -161,7 +161,9 @@ export default function Result() {
 
   useEffect(()=>setEvalEnd(hadFreeTime),[hadFreeTime]);
 
-  return <ScrollView 
+  return <Block>
+    <FingerPrint />
+  <ScrollView 
     enhanced bounces={false}
     scrollY={!stopScroll}
     className="result" 
@@ -170,8 +172,6 @@ export default function Result() {
       <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
     ) : (
       <Block>
-      
-      <FingerPrint />
       
       <ProjectInfo 
         deadLine={deadLine}
@@ -285,4 +285,5 @@ export default function Result() {
     )}
 
   </ScrollView>
+  </Block>  
 }
