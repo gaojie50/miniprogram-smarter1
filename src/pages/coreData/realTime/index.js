@@ -279,10 +279,10 @@ export default function realTime({}) {
             (paramIndex !== '0' ?
                 <View className='param-list' key={index}>
                   <View className='param-left'>
-                    <View className='param-title'>{list.title}</View>
+                    <View className='param-title-rel'>{list.title}</View>
                     <View className='param-remarks'>{list.remarks}</View>
                   </View>
-                  <View className='param-money'>
+                  <View className='param-money-rel'>
                     { list.unit ?
                     `${valueData[list.dataIndex] == undefined ? '-' : valueData[list.dataIndex]}${list.unit}` 
                     : `${numberFormat(valueData[list.dataIndex]).num}${numberFormat(valueData[list.dataIndex]).unit}`
@@ -292,19 +292,19 @@ export default function realTime({}) {
                 :
                 <View className='param-list' key={index}>
                   <View className='param-left'>
-                    <View className='param-title'>{list.title}</View>
+                    <View className='param-title-rel'>{list.title}</View>
                     <View className='param-remarks'>{list.remarks}</View>
                   </View>
                   {list.toCalculate ? 
                     <View className='param-to' onClick={()=>{changeShowProgress(index)}}>
                       <View>
-                        {list.money!=='' ? <View className='param-money'>{list.money}万</View> : ''}
-                        <View className='param-header-right'>{list.toCalculate}</View>
+                        {list.money!=='' ? <View className='param-money'>{list.money}万</View> 
+                        : <View className='param-header-right'>{list.toCalculate}</View>}
                       </View>
                       <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png' />
                     </View> 
                     :
-                    <View className='param-money'><Input type='digit' placeholder='请输入' value={list.money} onInput={(e)=>{ChangeValue(e, index)}} />
+                    <View className='param-money-rel'><Input type='digit' placeholder='请输入' value={list.money} onInput={(e)=>{ChangeValue(e, index)}} />
                     <Text className='unit'>{list.unit}</Text></View>
                   }
                 </View>

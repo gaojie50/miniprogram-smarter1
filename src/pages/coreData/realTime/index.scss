@@ -54,7 +54,7 @@
   .param-left {
     width: 614px;
     margin-right: 31px;
-    .param-title {
+    .param-title-rel {
       font-weight: 600;
       font-family: PingFangSC-Semibold;
       font-size: 28px;
@@ -70,9 +70,9 @@
       line-height: 32px;
     }
   }
-  .param-money {
+  .param-money-rel {
     font-weight: 400;
-    font-family: MaoYanHeiTi-H1;
+    font-family: MaoYanHeiTi-Light;
     font-size: 28px;
     color: #333333;
     line-height: 28px;
@@ -88,7 +88,7 @@
       font-size: 28px !important;
       line-height: 28px !important;
       margin-right: 12px;
-      font-family: MaoYanHeiTi-H1 !important;
+      font-family: MaoYanHeiTi-Light !important;
       color: #333333 !important;
     }
     .at-input__input {
