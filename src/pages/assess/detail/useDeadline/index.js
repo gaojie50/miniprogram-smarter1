@@ -33,7 +33,7 @@ export default function useDeadline(t, cb ) {
     const minute = addzero(endTime.getMinutes());
     const cost = endTime.valueOf() - nowTime.valueOf();
     if (cost < 1000) {
-      setMessage(`${month}月${day}日/周${week} ${hour}:${minute} 评估已结束`);
+      setMessage(`${month}月${day}日/周${week} ${hour}:${minute} 已结束`);
       setCountNum();
       setOver(true);
     } else if (cost <= 1000 * 60) {
@@ -41,7 +41,7 @@ export default function useDeadline(t, cb ) {
     } else if (nowTime.getDate() === day) {
       setMessage(`今天 ${hour}:${minute} 评估结束`);
     }else {
-      setMessage(`${month}月${day}日/周${week} ${hour}:${minute} 评估结束`);
+      setMessage(`${month}月${day}日/周${week} ${hour}:${minute} 结束`);
     }
   }, [t, update]);
 
