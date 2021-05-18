@@ -154,7 +154,8 @@ export default function Result() {
   const noEvalText = isLeader(projectRole) ? "还没有人发布过评估内容" : "自行填答后，才能看到其他人的评估内容";
   const showParticipantNumber = isDockingPerson(judgeRole);
 
-  const hadFreeTime= deadLine ? +new Date() >= deadLine : true;
+  const hadFreeTime= deadLine ? +new Date() >= deadLine : false;
+  console.log(hadFreeTime);
   const permissions = hadFreeTime && [1,2,3].includes(projectRole);
   const [evalEnd,setEvalEnd] = useState(hadFreeTime);
 
