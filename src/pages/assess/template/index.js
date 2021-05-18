@@ -171,99 +171,99 @@ export default function PerviewTemplate(){
   const allQuestions = _cloneDeep(questions.concat(appendQuesList));
   return (
     <View className="page-container">
-      <ScrollView
-        scrollY
-        className="template-preview-wrap"
-        style={{ height: '100%'}} 
-        scrollTop={pageScrollTop}
-      >
-        <Block>
-          {
-            allQuestions.map((item,index)=>{
-              const { type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio, isAdditional } = item;
+      <View className="template-preview-wrap">
+        <ScrollView
+          className="template-content"
+          scrollY
+          style={{ height: '100%'}} 
+          scrollTop={pageScrollTop}
+        >
+          <View className="template-content-inner">
+            {
+              allQuestions.map((item,index)=>{
+                const { type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio, isAdditional } = item;
 
-              if (type == 1) {
-                return <GapFillingText
-                  key={index}
-                  isAdditional={isAdditional}
-                  required={required}
-                  title={title}
-                  isPreview
-                  questionNum={questionNum}
-                  onEdit={()=>{handleEdit(item, index)}}
-                  onDelete={()=>{handleDelete(item, index)}}
-                />;
-              }
+                if (type == 1) {
+                  return <GapFillingText
+                    key={index}
+                    isAdditional={isAdditional}
+                    required={required}
+                    title={title}
+                    isPreview
+                    questionNum={questionNum}
+                    onEdit={()=>{handleEdit(item, index)}}
+                    onDelete={()=>{handleDelete(item, index)}}
+                  />;
+                }
 
-              if (type == 2) {
-                return <GapFillingNum
-                  key={index}
-                  isAdditional={isAdditional}
-                  required={required}
-                  isPreview
-                  gapFilling={gapFilling}
-                  questionNum={questionNum}
-                  onEdit={()=>{handleEdit(item, index)}}
-                  onDelete={()=>{handleDelete(item, index)}}
-                />;
-              }
+                if (type == 2) {
+                  return <GapFillingNum
+                    key={index}
+                    isAdditional={isAdditional}
+                    required={required}
+                    isPreview
+                    gapFilling={gapFilling}
+                    questionNum={questionNum}
+                    onEdit={()=>{handleEdit(item, index)}}
+                    onDelete={()=>{handleDelete(item, index)}}
+                  />;
+                }
 
-              if (type == 3) {
-                return <MatrixRadio
-                  key={index}
-                  required={required}
-                  isPreview
-                  title={title}
-                  matrixRadio={matrixRadio}
-                  questionNum={questionNum}
-                />;
-              }
+                if (type == 3) {
+                  return <MatrixRadio
+                    key={index}
+                    required={required}
+                    isPreview
+                    title={title}
+                    matrixRadio={matrixRadio}
+                    questionNum={questionNum}
+                  />;
+                }
 
-              if (type == 4) {
-                return <Radio
-                  key={index}
-                  isAdditional={isAdditional}
-                  required={required}
-                  isPreview
-                  title={title}
-                  questionNum={questionNum}
-                  radioItems={radioItems}
-                  onEdit={()=>{handleEdit(item, index)}}
-                  onDelete={()=>{handleDelete(item, index)}}
-                />;
-              }
+                if (type == 4) {
+                  return <Radio
+                    key={index}
+                    isAdditional={isAdditional}
+                    required={required}
+                    isPreview
+                    title={title}
+                    questionNum={questionNum}
+                    radioItems={radioItems}
+                    onEdit={()=>{handleEdit(item, index)}}
+                    onDelete={()=>{handleDelete(item, index)}}
+                  />;
+                }
 
-              if (type == 5) {
-                return <MatrixScale
-                  key={index}
-                  required={required}
-                  isPreview
-                  title={title}
-                  questionNum={questionNum}
-                  matrixScale={matrixScale || {}}
-                />;
-              }
+                if (type == 5) {
+                  return <MatrixScale
+                    key={index}
+                    required={required}
+                    isPreview
+                    title={title}
+                    questionNum={questionNum}
+                    matrixScale={matrixScale || {}}
+                  />;
+                }
 
-            })
-          }
-        </Block>
+              })
+            }
+          </View>
+        </ScrollView>
         <View className="btn-wrap">
-        <Button
-          className="use_btn btn"
-          onClick={handleUse}
-        >
-            直接使用
-        </Button>
-        <Button
-          className="add_btn btn"
-          onClick={handleAdd}
-        >
-            添加题目
-        </Button>
+          <Button
+            className="use_btn btn"
+            onClick={handleUse}
+          >
+              直接使用
+          </Button>
+          <Button
+            className="add_btn btn"
+            onClick={handleAdd}
+          >
+              添加题目
+          </Button>
+        </View>
       </View>
-      
-      </ScrollView>
-
       <AddQuesionts 
         projectId={projectId}
         tempName={tempId}
