@@ -56,7 +56,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       const { success, error, data } = res;
       console.log('发行代理', res);
       if (success) {
-        cleanAllValue();
         const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
         lists[0].map((item, index)=>{
           item.isOnclick = (baseType === index+1)
@@ -69,15 +68,13 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
             item.isOnclick = (progressionType === index+1)
           })
         }
-        if(lists[1][2].isOnclick) {
-          ladderLists.map((item)=> {
-            if(item.dataName.includes('boxLevel')) {
-              item.value = numberFormatCent(progressionValue[item.dataName]);
-            } else{
-              item.value = progressionValue[item.dataName];
-            }
-          })
-        }
+        progressionValue && computeType == '3' && ladderLists.map((item)=> {
+          if(item.dataName.includes('boxLevel')) {
+            item.value = numberFormatCent(progressionValue[item.dataName]);
+          } else{
+            item.value = progressionValue[item.dataName];
+          }
+        })
         setAmount(numberFormatCent(fixedAmountValue));
         setGetValue(res.data);
         setCoefficient(fixedRatioValue);
@@ -156,7 +153,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     });
   }
   const changeCalculateButton = (index, param) => {
-    cleanAllValue();
+    // cleanAllValue();
     var newList = lists.concat();
     newList[index].forEach((item, i)=>{
       if(i===param) {
@@ -185,7 +182,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
 
   const judgeIsSubmit = (hasToast) => {
     if(lists[1][2].isOnclick) {
-      for(let i = 0; i<6; i++) {
+      for(let i = 0; i<5; i++) {
         if(ladderLists[i].value === ''){
           hasToast && Taro.showToast({
             title: `请填写${ladderLists[i].name}`,
@@ -196,9 +193,9 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
           return;
         } 
       }
-      for(let i = 0; i<6; i++) {
+      for(let i = 0; i<5; i++) {
         if(ladderLists[i].value){
-          if(i<3) {
+          if(i<2) {
             let judge = ladderLists[i].value.toString().split(".");
             if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
               hasToast && Taro.showToast({
@@ -221,9 +218,9 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
               return;
             }
           }
-          if(Number(ladderLists[0].value)-Number(ladderLists[1].value) > 0 || Number(ladderLists[1].value)-Number(ladderLists[2].value) > 0){
+          if(Number(ladderLists[0].value)-Number(ladderLists[1].value) > 0){
             hasToast && Taro.showToast({
-              title: `请填写A<=B<=C的值`,
+              title: `请填写A<=B的值`,
               icon: 'none',
               duration: 2000,
             });

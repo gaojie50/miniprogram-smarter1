@@ -29,13 +29,12 @@ export default function hotMovieList() {
   const [showDay, setShowDay] = useState('');
   const [startDateBar, setsStartDateBar] = useState('');
 
-  const fetchBoxOfficeValue = (showDate, cityId) => {
+  const fetchBoxOfficeValue = (showDate) => {
     reqPacking({
       url:'api/management/finance/various/boxOffice',
       data: { 
         projectId,
         showDate :  Number(showDate || dayjs(new Date()).format('YYYYMMDD')),
-        cityId: Number(cityId) || ''
       },
       method: 'GET',
     }, ).then(res => {
@@ -88,12 +87,14 @@ export default function hotMovieList() {
   }, []);
 
   useEffect(()=>{
-    console.log(cityId, current, showDay);
     getCityValue(cityId);
     fetchIncomeValue(current, showDay, cityId);
     fetchIncomeValue(current, showDay, cityId);
-    fetchBoxOfficeValue(showDay, cityId);
   }, [cityId, current, showDay])
+
+  useEffect(()=>{
+    fetchBoxOfficeValue(showDay);
+  }, [showDay])
 
   const handleBack = () => {
     if(Taro.getCurrentPages().length>1){
