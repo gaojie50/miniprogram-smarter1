@@ -5,21 +5,18 @@ page {
 }
 
 .page-container {
+  height: 100%;
   box-sizing: border-box;
   background: #fff;
   padding: 0 30px 40px 30px;
   border-radius: 40px 40px 0 0;
-  height: 100%;
   overflow: hidden;
 }
 
 .template-preview-wrap {
-  height: 100%;
   padding-bottom: 150px;
   padding-top: 40px;
   box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
 
   .gapFilling-text, .gapFilling-num, .matrix-scale, .radio-wrap, .matrix-radio{
     margin-bottom: 80px;

@@ -179,6 +179,11 @@ export default function EditProject() {
     .then(res => {
       if(res.success) {
         wx.navigateBack()
+      } else {
+        Taro.showToast({
+          title: res.error.message,
+          icon: 'none'
+        })
       }
     })
   }, [keyDataRef, basicDateRef, projectId, makeDataRef])
