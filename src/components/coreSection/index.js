@@ -6,7 +6,7 @@ import './index.scss';
 
 const toFixed = (num, precision) => (+(`${Math.round(+(`${num}e${precision}`))}e${-precision}`)).toFixed(precision);
 
-export default function CoreSection({ categoryType, core, permissions,projectId,roundId }) {
+export default function CoreSection({ categoryType, core, permissions,projectId,roundId,setStopScroll }) {
   const [showProgress, setShowProgress] = useState(false);
   const [itemLimit, setItemLimit] = useState(5);
   const clacScore = (arrOut = [], digits = 1) => {
@@ -165,6 +165,7 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
   const toDetails = () => {
     if (permissions) setItemLimit(9999);
     setShowProgress(true);
+    setStopScroll(true);
   }
 
   const shrinkEvt = () => setPackUp(!packUp);
@@ -310,7 +311,10 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
               isOpened={showProgress}
               title="核心数据"
               className='layout-process core-process'
-              onClose={() => setShowProgress(false)}>
+              onClose={() => {
+                setStopScroll(false);
+                setShowProgress(false);
+              }}>
               <View className="core-tip">评估信息隐藏后仅自己可见，且不计入总平均值</View>
               {detailCont()}
             </FloatLayout> : detailCont()
@@ -341,7 +345,10 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
               isOpened={showProgress}
               title="核心数据"
               className='layout-process core-process'
-              onClose={() => setShowProgress(false)}>
+              onClose={() => {
+                setShowProgress(false);
+                setStopScroll(false);
+              }}>
               <View className="core-tip">评估信息隐藏后仅自己可见，且不计入总平均值</View>
               {detailCont()}
             </FloatLayout> : detailCont()
