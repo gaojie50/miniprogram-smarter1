@@ -56,7 +56,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       const { success, error, data } = res;
       console.log('发行代理', res);
       if (success) {
-        cleanAllValue();
         const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
         lists[0].map((item, index)=>{
           item.isOnclick = (baseType === index+1)
@@ -69,15 +68,13 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
             item.isOnclick = (progressionType === index+1)
           })
         }
-        if(lists[1][2].isOnclick) {
-          ladderLists.map((item)=> {
-            if(item.dataName.includes('boxLevel')) {
-              item.value = numberFormatCent(progressionValue[item.dataName]);
-            } else{
-              item.value = progressionValue[item.dataName];
-            }
-          })
-        }
+        progressionValue && computeType == '3' && ladderLists.map((item)=> {
+          if(item.dataName.includes('boxLevel')) {
+            item.value = numberFormatCent(progressionValue[item.dataName]);
+          } else{
+            item.value = progressionValue[item.dataName];
+          }
+        })
         setAmount(numberFormatCent(fixedAmountValue));
         setGetValue(res.data);
         setCoefficient(fixedRatioValue);
