@@ -30,9 +30,10 @@
             text-align: center;
             position: relative;
             top: 45px;
-            font-family: 'MaoYanHeiTi-DemiBold';
+            font-family: 'MaoYanHeiTi-Regular';
             color: #333333;
             font-size: 28px;
+            line-height: 28px;
             .tap {
                 width: 12px;
                 height: 7.5px;
@@ -42,6 +43,8 @@
             }
         }
         .time {
+            display: flex;
+            align-items: center;
             text-align: center;
             position: relative;
             top: 57px;
@@ -50,6 +53,11 @@
                 font-family: PingFangSC-Regular;
                 color: #999999;
                 font-weight: 400;
+            }
+            .tip-icon {
+                margin-left: 8px;
+                width: 22px;
+                height: 22px;
             }
             font-family: 'MaoYanHeiTi-Light';
             color: #999999;
