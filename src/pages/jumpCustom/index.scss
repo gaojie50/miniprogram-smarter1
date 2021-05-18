@@ -1,0 +1,29 @@
+.jump-custom {
+    padding: 30px;
+    box-sizing: border-box;
+
+    &-text {
+        width: 100%;
+        margin-top: 10px;
+        min-height: 200px;
+        border: 1px solid #6b6a6a;
+        border-radius: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        box-sizing: border-box;
+    }
+
+    .place-text {
+        margin-top: 10px;
+        border: 1px solid red;
+    }
+
+    &-btn {
+        background-color: #276FF0;
+        color: #ffffff;
+        margin-top: 10px;
+        margin-top: 20px;
+        width: 220px !important;
+        font-weight: 400;
+    }
+}

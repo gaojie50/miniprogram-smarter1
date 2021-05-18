@@ -99,6 +99,10 @@ export default {
     {
       root: "pages/excavate",
       pages: ["index"]
+    },
+    {
+      root: "pages/jumpCustom",
+      pages: ["index"]
     }
   ]
 }
