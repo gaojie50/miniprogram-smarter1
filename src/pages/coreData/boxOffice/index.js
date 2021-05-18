@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import FloatLayout from '@components/m5/float-layout';
+import lx from '@analytics/wechat-sdk';
 import BoxIncome from '../boxIncome/index'
 import {numberFormat} from '../common'
 import './index.scss'
@@ -53,6 +54,16 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
   }
 
   const gotoParam = (index) => {
+    if(index == '0') {
+      const { userInfo } = Taro.getStorageSync('authinfo') || {};
+    lx.moduleClick('b_movie_b_rumi8b0d_mc', {
+      custom: {
+        user_id: userInfo.mis,
+        project_id: projectId,
+        keep_user_id: userInfo.keeperUserId
+      }
+    }, { cid: 'c_movie_b_u55jfr38'});
+    }
     Taro.navigateTo({
       url: `/pages/coreData/realTime/index?paramIndex=${index}&projectId=${projectId}&isMovieScreening=${isMovieScreening}&name=${name}&showDate=${showDate}`
     })

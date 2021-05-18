@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'; 
 import { View, Image, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro'
+import lx from '@analytics/wechat-sdk';
 import ArrowLeft from '@static/detail/arrow-left.png';
 import BoxOfficeData from './boxOffice/index'
 import dayjs from 'dayjs';
@@ -189,6 +190,14 @@ export default function hotMovieList() {
 
   useEffect(()=>{
     getProjectData();
+    const { userInfo } = Taro.getStorageSync('authinfo') || {};
+    lx.pageView('c_movie_b_u55jfr38', {
+      custom: {
+        user_id: userInfo.mis,
+          project_id: projectId,
+          keep_user_id: userInfo.keeperUserId
+      }
+    });
   }, [])
 
   
