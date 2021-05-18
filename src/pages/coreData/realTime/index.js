@@ -189,7 +189,7 @@ export default function realTime({}) {
   }, []);
     // 合同参数数据请求
   useEffect(()=>{
-    if (paramIndex === '0') {
+    if (paramIndex === '0' && !showProgress) {
       getContractData('1');
     }
   }, [showProgress, calculate]);
@@ -223,11 +223,10 @@ export default function realTime({}) {
         console.log(AgencyFee, 'AgencyFee');
         if(AgencyFee) {
           lists[1].money = newData['distributionAgencyFee'] === undefined ? '' : newData['distributionAgencyFee']
-          lists[2].money = newData['myDistributionAgencyFee']
-          lists[3].money = newData['creatorDividend']
+          lists[2].money = newData['myDistributionAgencyFee'] === undefined ? '' :newData['myDistributionAgencyFee']
         } else{
           for(let key in lists) {
-            lists[key].money = newData[lists[key].dataIndex];
+            lists[key].money = newData[lists[key].dataIndex] === undefined ? '' : newData[lists[key].dataIndex];
           }
         }
         console.log('newData', newData, lists, 'lists');
