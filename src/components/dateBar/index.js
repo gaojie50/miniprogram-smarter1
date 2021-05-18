@@ -114,10 +114,11 @@ export default function dateBar(props){
       <View className="middle-block">
         <View className="date"  onClick={() => showSelect()}> 
           {day}
-          <Image className="tap" style={{visibility: needButtons ? '' : 'hidden'}} src={'https://obj.pipi.cn/festatic/common/media/1618902553455-arrow-down%403x.png'}></Image>
+          <Image className="tap" src={'https://obj.pipi.cn/festatic/common/media/1618902553455-arrow-down%403x.png'}></Image>
         </View>
         <View className="time" >
           <Text className="tips">更新时间</Text>{time}
+          <Image className="tip-icon" src="http://p0.meituan.net/scarlett/27df10a3087031c48bfc183953b3514b1287.png" />
         </View>
       </View>
       <View className="right-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() =>nextDay()}>后一天</View>
