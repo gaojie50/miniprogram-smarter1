@@ -170,6 +170,9 @@ export default function Result() {
       <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
     ) : (
       <Block>
+      
+      <FingerPrint />
+      
       <ProjectInfo 
         deadLine={deadLine}
         info={info} 
@@ -281,6 +284,5 @@ export default function Result() {
       </Block>
     )}
 
-    <FingerPrint />
   </ScrollView>
 }
