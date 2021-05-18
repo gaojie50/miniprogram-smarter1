@@ -1,5 +1,5 @@
 /* eslint-disable jsx-quotes */
-import { View, Button, Block } from '@tarojs/components';
+import { View, Button, Block, ScrollView } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance, useDidHide, useDidShow } from '@tarojs/taro';
 import _cloneDeep from 'lodash/cloneDeep';
@@ -12,6 +12,7 @@ import AddQuesionts from './add-questions';
 import './index.scss'
 
 const { errorHandle } = utils;
+const REACH_BOTTOM_TOP = 10000;  // 使页面到达底部的移动常量
 
 export default function PerviewTemplate(){
 
@@ -22,6 +23,7 @@ export default function PerviewTemplate(){
   const [ tempName, setTempName ] = useState('');
   const [ isAddOpen, setIsAddOpen ] = useState(false);
   const [ curEditTemp, setCurEditTemp ] = useState();
+  const [ pageScrollTop, setPageScrollTop ] =  useState(0);
   const pages = Taro.getCurrentPages(); // 获取当前的页面栈
   const current = pages[pages.length - 1];
   const eventChannel = current.getOpenerEventChannel();
@@ -123,9 +125,11 @@ export default function PerviewTemplate(){
     }else{
       quesItem.isAdditional = true;
       appendQuesList.push(quesItem);
+      setPageScrollTop(pageScrollTop==REACH_BOTTOM_TOP ? REACH_BOTTOM_TOP-1: REACH_BOTTOM_TOP);
     }
     setAppendQuesList(appendQuesList);
     setIsAddOpen(false);
+    setCurEditTemp('');
     eventChannel.emit('selectTemp', {
       tempId,
       appendQuesList
@@ -167,7 +171,12 @@ export default function PerviewTemplate(){
   const allQuestions = _cloneDeep(questions.concat(appendQuesList));
   return (
     <View className="page-container">
-      <View className="template-preview-wrap">
+      <ScrollView
+        scrollY
+        className="template-preview-wrap"
+        style={{ height: '100%'}} 
+        scrollTop={pageScrollTop}
+      >
         <Block>
           {
             allQuestions.map((item,index)=>{
@@ -252,7 +261,8 @@ export default function PerviewTemplate(){
             添加题目
         </Button>
       </View>
-      </View>
+      
+      </ScrollView>
 
       <AddQuesionts 
         projectId={projectId}
