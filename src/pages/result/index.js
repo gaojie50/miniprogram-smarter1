@@ -28,7 +28,6 @@ export default function Result() {
   const [projectEvaluationName, setProjectEvaluationName] = useState('');
   const isLogin = Taro.getStorageSync('token');
   const [stopScroll, setStopScroll] = useState(false);
-  const [resultPageTextTitleEditingGuideState, setResultPageTextTitleEditingGuideState] = useState(Taro.getStorageSync('ResultPageTextTitleEditingGuide'));
   const fetchJudgeRole = () => {
     reqPacking({
       url: 'api/management/judgeRole',
@@ -161,7 +160,6 @@ export default function Result() {
   useEffect(() => setEvalEnd(hadFreeTime), [hadFreeTime]);
 
   return <Block>
-    <FingerPrint />
     <ScrollView
       enhanced bounces={false}
       scrollY={!stopScroll}
@@ -205,8 +203,6 @@ export default function Result() {
                       if (item.type == 1 || item.type == 2) {
                         return <TextEval
                           key={index}
-                          resultPageTextTitleEditingGuideState={resultPageTextTitleEditingGuideState}
-                          setResultPageTextTitleEditingGuideState={setResultPageTextTitleEditingGuideState}
                           title={item.title}
                           rightText={item?.rightText}
                           projectId={projectId}
@@ -219,6 +215,7 @@ export default function Result() {
                           permissions={permissions}
                           type={item.type}
                           questionId={item.id}
+                          setStopScroll={setStopScroll}
                         />;
                       }
 
@@ -283,5 +280,7 @@ export default function Result() {
       )}
 
     </ScrollView>
+
+    <FingerPrint />
   </Block>
 }
