@@ -12,8 +12,6 @@ export default function TextEval({
   questionNum,
   texts,
   permissions,
-  resultPageTextTitleEditingGuideState,
-  setResultPageTextTitleEditingGuideState,
   appendContent,
   summaryText,
   isTopic,
@@ -22,7 +20,10 @@ export default function TextEval({
   type,
   questionId,
   rightText,
+  setStopScroll,
 }) {
+  const [resultPageTextTitleEditingGuideState, setResultPageTextTitleEditingGuideState] = useState(Taro.getStorageSync('ResultPageTextTitleEditingGuide'));
+  if(!resultPageTextTitleEditingGuideState && !isTopic) Taro.setStorageSync('ResultPageTextTitleEditingGuide', true);
   const [packUp, setPackUp] = useState(true);
   const shrinkEvt = () => setPackUp(!packUp);
   const [showProgress, setShowProgress] = useState(false);
@@ -99,15 +100,13 @@ export default function TextEval({
   };
 
   const focusEvent = () => {
-    if (!resultPageTextTitleEditingGuideState) {
-      setResultPageTextTitleEditingGuideState(true);
-      Taro.setStorageSync('ResultPageTextTitleEditingGuide', true);
-    }
+    if (!resultPageTextTitleEditingGuideState) setResultPageTextTitleEditingGuideState(true);
   }
 
   const toDetails = () => {
     if (permissions || isTopic) setItemLimit(9999);
     setShowProgress(true);
+    setStopScroll(true);
   }
 
   const detailCont = () => {
@@ -167,7 +166,10 @@ export default function TextEval({
       isOpened={showProgress}
       title={title}
       className='layout-process'
-      onClose={ () => setShowProgress(false) }>
+      onClose={ () => {
+        setShowProgress(false);
+        setShowProgress(false);
+      } }>
       {detailCont()}
     </FloatLayout>
   </View>;
