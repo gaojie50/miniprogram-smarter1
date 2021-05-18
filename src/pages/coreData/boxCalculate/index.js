@@ -142,7 +142,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       const {data, success, error} = res;
       if(success) {
         setShowModal(true);
-        setComputeResults(data);
+        setComputeResults(`${numberFormat(data).num}${numberFormat(data).unit}`);
       }else {
         Taro.showToast({
           title: error && error.message || '',
