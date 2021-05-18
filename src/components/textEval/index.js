@@ -168,7 +168,7 @@ export default function TextEval({
       className='layout-process'
       onClose={ () => {
         setShowProgress(false);
-        setShowProgress(false);
+        setStopScroll(false);
       } }>
       {detailCont()}
     </FloatLayout>

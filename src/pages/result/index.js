@@ -195,6 +195,7 @@ export default function Result() {
                       projectId={projectId}
                       roundId={roundId}
                       permissions={permissions}
+                      setStopScroll={setStopScroll}
                       categoryType={categoryType} /> :
                     ""}
 
