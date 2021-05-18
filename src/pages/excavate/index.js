@@ -134,7 +134,7 @@ export default function Excavate() {
   }, [params]);
 
   useEffect(() => {
-    setLoading(true);
+    Taro.showLoading({title: '加载中'});
     reqPacking(
       {
         method: 'GET',
@@ -153,13 +153,13 @@ export default function Excavate() {
           setNoData(false);
         }
         setData(projectDeepList);
-        setLoading(false);
+        Taro.hideLoading();
         return;
       }
       errorHandle(error);
       setData([]);
       setNoData(true);
-      setLoading(false);
+      Taro.hideLoading();
     })
   }, [filterInfo]);
 
