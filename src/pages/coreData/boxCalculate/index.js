@@ -198,7 +198,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       }
       for(let i = 0; i<5; i++) {
         if(ladderLists[i].value){
-          if(i<3) {
+          if(i<2) {
             let judge = ladderLists[i].value.toString().split(".");
             if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
               hasToast && Taro.showToast({
