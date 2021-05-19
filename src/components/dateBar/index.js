@@ -42,10 +42,16 @@ export default function dateBar(props){
     setNow(now);
   }
   
-  const changeDay = (passDay) => {
+  const changeDay = (passDay, changeT) => {
     const originTime = thatTime || new Date();
-    const changeTime = originTime.setTime(originTime.getTime()+passDay*24*60*60*1000);
+    let changeTime =''
+    if(!changeT) {
+      changeTime = originTime.setTime(originTime.getTime()+passDay*24*60*60*1000);
+    } else {
+      changeTime = changeT;
+    }
     const selectDate = dayjs(changeTime).format('YYYYMMDD');
+    console.log(selectDate, changeTime, passDay, 'changeTime!!!');
     if(dayjs(now).format('YYYYMMDD') === selectDate) {
       setThatTime(null)
     } else {
@@ -69,11 +75,12 @@ export default function dateBar(props){
   }
 
   const confirm = () => {
-    console.log('confirm', dateRange);
+    console.log('confirm!!!!1', dateRange);
     setThatTime(null);
     callBack(dateRange);
     calculateTime(dateRange);
     showSelect()
+    changeDay('', new Date(dateRange).getTime());
   }
   const cancel = () => {
     showSelect()
