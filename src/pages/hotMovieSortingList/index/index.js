@@ -101,10 +101,24 @@ export default function hotMovieList() {
         projectId: projectId,
       }
     }).then((res) => {
-      const { afterShowing } = res.data;
-      Taro.navigateTo({
-        url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${!afterShowing}`
-      });
+      const { success, data = {} } = res; 
+      if(success) {
+        const { afterShowing } = data;
+        reqPacking({
+          url: 'api/management/judgeRole',
+          data: {
+            projectId
+          }
+        }).then(res => {
+          const { success, data = {} } = res;
+          console.log(res);
+          if (success && data.role === 1) {
+            Taro.navigateTo({
+              url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${!afterShowing}`
+            });
+          }
+        });
+      }
     });
   }
 
