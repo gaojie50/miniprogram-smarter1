@@ -15,9 +15,11 @@ import { get as getGlobalData } from '../../../global_data';
 import './index.scss'
 
 export default function hotMovieList() {
+  const systemInfo = Taro.getSystemInfoSync();
   const url = Taro.getCurrentPages();
   const options = url[url.length - 1].options;
   const { cityId, cityName } = options;
+  const [scrollLeft, setScrollLeft] = useState(0);
   const [access, setAccess] = useState(true);
   const [showDate, setShowDate] = useState(() => dayjs(new Date()).format('YYYYMMDD'));
   const [ranking, setRanking] = useState([]);
@@ -57,6 +59,9 @@ export default function hotMovieList() {
           duration: 2000
         });
       }
+      setIsGetList(true);
+    }).catch(err => {
+      console.log(err);
       setIsGetList(true);
     });
   }
@@ -103,6 +108,10 @@ export default function hotMovieList() {
     });
   }
 
+  const handleScroll = (e) => {
+    setScrollLeft(e.detail.scrollLeft);
+  }
+
   useEffect(() => {
     getMovieRanking();
     lx.pageView('c_movie_b_dexmmi8t');
@@ -124,34 +133,30 @@ export default function hotMovieList() {
       </View>
       {
         access ? (
-          <View style={{ marginTop: `${headerBarHeight}px`, marginBottom: '100px', position: 'relative' }}>
-            <DateBar callBack={onSelectDate.bind(this)} startDateBar='20210106' />
-            <ScrollView className='movie-ranking-list' scrollX>
+          <View style={{ marginTop: `${headerBarHeight}px`}}>
+            <DateBar
+              isSelectDate={false}
+              style={{ position: 'fixed', top: `${headerBarHeight}px`, backgroundColor: '#FFF', zIndex: 10, marginTop: 0, }}  
+              // callBack={onSelectDate.bind(this)}
+              // startDateBar='20210106'
+            />
+            <ScrollView
+              scrollY
+              className='movie-ranking-list'
+              style={{ marginTop: `${headerBarHeight + 76}px`, height: `${systemInfo.windowHeight - headerBarHeight - 136}px` }}
+            >
               <View className='list-header'>
-                <View className='list-header-left'>
+                <View className='list-header-left' style={{ top: `${headerBarHeight + 76}px` }}>
                   <View className='city-name' onClick={gotoCheckCity}>{ cityId ? cityName : '全国' }</View>
                   <View className='list-header-img'>
                     <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
                   </View>
                 </View>
-                <View className='film-future-income title'>
-                  <View>未来收入</View>
-                  <View>(万)</View>
-                </View>
-                <View className='film-income title'>
-                  <View>总收入</View>
-                  <View>(万)</View>
-                </View>
-                <View className='film-recommend title'>
-                  排序指数
-                </View>
-              </View>
-              {
-                isGetList && ranking && ranking.length > 0 && (
-                  ranking.map((item, index) => {
-                    return (
-                      <View scroll className='list' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
-                        <View className='list-left'>
+                {
+                  isGetList && ranking && ranking.length > 0 && (
+                    ranking.map((item, index) => {
+                      return(
+                        <View className='list-left' key={index}>
                           <View className='list-film'>
                             <Image src={item.pic.replace('/w.h/', '/')}></Image>
                             <View className={`film-index index-${index}`} >{index+1}</View>
@@ -172,19 +177,53 @@ export default function hotMovieList() {
                             { item.startDate !== 0  &&<View className='list-film-time'>{item.startDate.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1-$2-$3")}上映</View> }
                           </View>
                         </View>
-                        <View className='film-future-income'>{ item.expectFutureIncome === null ? '' : parseFloat(item.expectFutureIncome / 1000000).toFixed(2) }</View>
-                        <View className='film-income'>{ item.expectTotalIncome === null ? '' : parseFloat(item.expectTotalIncome / 1000000).toFixed(2) }</View>
-                        <View className='film-recommend'>{item.score > 0 ? parseFloat(item.score ? item.score.toFixed(2) : '') : item.score }</View>
-                      </View>
+                      )
+                    })
+                  )
+                }
+              </View>
+              <ScrollView
+                className='list-data'
+                scrollX
+                onScroll={(e) => handleScroll(e)}
+                style={{ width: `${systemInfo.windowWidth - 197}px`}}
+              >
+                <View className='data-header-container' style={{ position: `fixed`, top: `${headerBarHeight + 76}px` }}>
+                  <ScrollView className='data-header' style={{ width: `${systemInfo.windowWidth - 197}px`}} scrollX scrollLeft={scrollLeft}>
+                    <View className='film-future-income title'>
+                      <View>未来收入</View>
+                      <View>(万)</View>
+                    </View>
+                    <View className='film-income title'>
+                      <View>总收入</View>
+                      <View>(万)</View>
+                    </View>
+                    <View className='film-recommend title'>
+                      排序指数
+                    </View>
+                  </ScrollView>
+                </View>
+                <View className='data'>
+                  {
+                    isGetList && ranking && ranking.length > 0 && (
+                      ranking.map((item, index) => {
+                        return (
+                          <View scroll className='data-item' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
+                            <View className='film-future-income'>{ item.expectFutureIncome === null ? '' : parseFloat(item.expectFutureIncome / 1000000).toFixed(2) }</View>
+                            <View className='film-income'>{ item.expectTotalIncome === null ? '' : parseFloat(item.expectTotalIncome / 1000000).toFixed(2) }</View>
+                            <View className='film-recommend'>{item.score > 0 ? parseFloat(item.score ? item.score.toFixed(2) : '') : item.score }</View>
+                          </View>
+                        )
+                      })
                     )
-                  })
-                )
-              }
+                  }
+                </View>
+              </ScrollView>
             </ScrollView>
             { isGetList && ranking && ranking.length <= 0 && <View className='empty-list'>暂无数据</View> }
           </View>
         ) : (
-          <NoAccess title='暂无评估权限' backgroundColor='#4D5A71' height='100vh' position='absolute' />
+          <NoAccess title='暂无权限' backgroundColor='#4D5A71' height='100vh' position='absolute' />
         )
       }
     </View>
