@@ -8,7 +8,7 @@ import '@components/m5/style/components/indexes.scss';
 import '@components/m5/style/components/search-bar.scss';
 import '@components/m5/style/components/list.scss';
 import '@components/m5/style/components/toast.scss';
-import { get as getGlobalData } from '../../global_data';
+import { set as setGlobalData, get as getGlobalData } from '../../global_data';
 import cities from './commonCity.json'
 import './index.scss'
 
@@ -77,9 +77,18 @@ export default class checkCity extends React.Component {
       let concat = this.fromUrl.indexOf('?') > -1 ? `&` : '?';
       redirectUrl = this.fromUrl + concat + `cityId=${item.id}&cityName=${item.name}`;
     }
-    Taro.redirectTo({
-      url: redirectUrl,
-    });
+    console.log(/^\/pages\/hotMovieSortingList\/index\/index/.test(redirectUrl), redirectUrl);
+    if (/^\/pages\/hotMovieSortingList\/index\/index/.test(this.fromUrl)) {
+      // 热映影片排序页属于tabbar页 需使用switchTab
+      setGlobalData('hotMovieSortingListQuery', { cityId: item.id, cityName: item.name });
+      Taro.switchTab({
+        url: this.fromUrl,
+      })
+    } else {
+      Taro.redirectTo({
+        url: redirectUrl,
+      });
+    }
   }
 
   render() {

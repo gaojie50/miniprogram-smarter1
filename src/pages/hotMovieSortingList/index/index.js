@@ -16,9 +16,7 @@ import './index.scss'
 
 export default function hotMovieList() {
   const systemInfo = Taro.getSystemInfoSync();
-  const url = Taro.getCurrentPages();
-  const options = url[url.length - 1].options;
-  const { cityId, cityName } = options;
+  const {cityId = 0, cityName = '全国' } = getGlobalData('hotMovieSortingListQuery') || {};
   const [scrollLeft, setScrollLeft] = useState(0);
   const [access, setAccess] = useState(true);
   const [showDate, setShowDate] = useState(() => dayjs(new Date()).format('YYYYMMDD'));
@@ -72,16 +70,8 @@ export default function hotMovieList() {
 
   const gotoCheckCity = () => {
     let path = Taro.getCurrentInstance().router.path;
-    let params = Taro.getCurrentInstance().router.params;
-    let paramsStr = '';
-    if (Object.keys(params).length > 0) {
-      paramsStr += '?';
-      for (const key of Object.keys(params)) {
-        paramsStr += `${key}=${params[key]}&`;
-      }
-    }
     Taro.redirectTo({
-      url: `/pages/checkCity/index?fromUrl=${encodeURIComponent(path + paramsStr)}`
+      url: `/pages/checkCity/index?fromUrl=${encodeURIComponent(path)}`
     });
   }
 
@@ -170,7 +160,7 @@ export default function hotMovieList() {
                   isGetList && ranking && ranking.length > 0 && (
                     ranking.map((item, index) => {
                       return(
-                        <View className='list-left' key={index}>
+                        <View className='list-left' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
                           <View className='list-film'>
                             <Image src={item.pic.replace('/w.h/', '/')}></Image>
                             <View className={`film-index index-${index}`} >{index+1}</View>
@@ -222,7 +212,7 @@ export default function hotMovieList() {
                     isGetList && ranking && ranking.length > 0 && (
                       ranking.map((item, index) => {
                         return (
-                          <View scroll className='data-item' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
+                          <View scroll className='data-item' key={index}>
                             <View className='film-future-income'>{ item.expectFutureIncome === null ? '' : parseFloat(item.expectFutureIncome / 1000000).toFixed(2) }</View>
                             <View className='film-income'>{ item.expectTotalIncome === null ? '' : parseFloat(item.expectTotalIncome / 1000000).toFixed(2) }</View>
                             <View className='film-recommend'>{item.score > 0 ? parseFloat(item.score ? item.score.toFixed(2) : '') : item.score }</View>
