@@ -277,7 +277,7 @@ export default function realTime({}) {
         {lists.map((list, index)=>{
           return(
             (paramIndex !== '0' ?
-                <View className='param-list' key={index}>
+                <View className='param-list-rel' key={index}>
                   <View className='param-left'>
                     <View className='param-title-rel'>{list.title}</View>
                     <View className='param-remarks'>{list.remarks}</View>
@@ -290,7 +290,7 @@ export default function realTime({}) {
                   </View>
                 </View>
                 :
-                <View className='param-list' key={index}>
+                <View className='param-list-rel' key={index}>
                   <View className='param-left'>
                     <View className='param-title-rel'>{list.title}</View>
                     <View className='param-remarks'>{list.remarks}</View>
@@ -298,13 +298,13 @@ export default function realTime({}) {
                   {list.toCalculate ? 
                     <View className='param-to' onClick={()=>{changeShowProgress(index)}}>
                       <View>
-                        {list.money!=='' ? <View className='param-money'>{list.money}万</View> 
+                        {list.money!=='' ? <View className='param-money-rel'>{list.money}万</View> 
                         : <View className='param-header-right'>{list.toCalculate}</View>}
                       </View>
                       <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png' />
                     </View> 
                     :
-                    <View className='param-money-rel'><Input type='digit' placeholder='请输入' value={list.money} onInput={(e)=>{ChangeValue(e, index)}} />
+                    <View className='param-money-rel'><Input  style={{fontFamily:'MaoYanHeiTi-H1'}} type='digit' placeholder='请输入' value={list.money} onInput={(e)=>{ChangeValue(e, index)}} />
                     <Text className='unit'>{list.unit}</Text></View>
                   }
                 </View>

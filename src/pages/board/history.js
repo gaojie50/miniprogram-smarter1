@@ -17,6 +17,14 @@ const UNITS = {
   '宣发费用': formatNumber,
   '猫眼投资成本': formatNumber,
   '预估票房': formatNumber,
+  '猫眼发行代理费' : formatNumber,
+  '总发行代理费': formatNumber,
+  '猫眼发行代理费': formatNumber,
+  '主创分红': formatNumber,
+  '猫眼份额转让收入': formatNumber,
+  '宣发费用中猫眼票补收入': formatNumber,
+  '宣发费用中猫眼平台资源收入': formatNumber,
+  '其它收入': formatNumber,
 }
 const HAS_YUAN = {
   '制作成本': true,

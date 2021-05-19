@@ -73,7 +73,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 30px 20px;
+  padding: 22px 20px;
   .at-input {
     padding: 0px;
   }
@@ -85,7 +85,7 @@
     color: #CCCCCC !important;
     line-height: 24px !important;
     margin-right: 12px !important;
-    font-family: MaoYanHeiTi-H1 !important;
+    font-family: MaoYanHeiTi-Light !important;
     color: #333333 !important;
   }
 }
@@ -129,7 +129,7 @@
 // }
 
 .cal-bottom-box {
-  z-index: 1;
+  z-index: 999;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -164,7 +164,12 @@
   border-radius: 10px;
 }
 .param-list {
-  padding: 30px 0px;
+  padding: 22px 0px;
+  margin: 0px 30px;
+  display: flex;
+  border-bottom: 1px solid #E5E5E5;
+  align-items: center;
+  justify-content: space-between;
 }
 .param-title {
   font-weight: 400 !important;
@@ -175,24 +180,22 @@
 }
 .param-money {
   font-weight: 300 !important;
-  font-family: PingFangSC-Light;
   font-size: 24px !important;
   color: #333333;
   line-height: 24px !important;
-  font-family: MaoYanHeiTi-H1;
+  font-family: MaoYanHeiTi-Light;
   input {
-    width: 72px !important;
     height: 24px !important;
     font-weight: 300 !important;
     font-size: 24px !important;
-    color: #CCCCCC !important;
     line-height: 24px !important;
     margin-right: 12px !important;
-    font-family: MaoYanHeiTi-H1;
-    color: #333333;
+    font-family: MaoYanHeiTi-Light;
+    color: #333333 !important;
+    text-align: right;
   }
   .unit1{
-    width: 50px !important;
+    // width: 50px !important;
     height: 24px !important;
     font-weight: 300 !important;
     // font-family: PingFangSC-Light;

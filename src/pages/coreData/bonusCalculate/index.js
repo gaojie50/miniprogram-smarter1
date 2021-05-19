@@ -410,7 +410,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
                   <View className='param-left'>
                   <View className='param-title'>{item.name}</View>
                   </View>
-                  <View className='param-money'><Input type='number' placeholder='请输入'  value={item.value} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
+                  <View className='param-money'><Input style="font-family:'MaoYanHeiTi-Light;' " type='number' placeholder='请输入'  value={item.value} onInput={(e)=>{changeLadderValue(e, index)}} /><Text className='unit1'>{item.unit}</Text></View>
                 </View>
               )
               })}
@@ -429,7 +429,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
                     <View className='param-left'>
                     <View className='param-title'>a</View>
                     </View>
-                    <View className='param-money'><Input type='number' placeholder='请输入'  value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}} /><Text className='unit1'>%</Text></View>
+                    <View className='param-money'><Input style="font-family:'MaoYanHeiTi-Light;' "  type='digit' placeholder='请输入'  value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}} /><Text className='unit1'>%</Text></View>
                   </View>
                 }
                 {lists[3][1].isOnclick &&
@@ -438,13 +438,13 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
                     <View className='param-left'>
                     <View className='param-title'>A</View>
                     </View>
-                    <View className='param-money'><Input type='number' placeholder='请输入'  value={proportionA} onInput={(e)=>{setProportionA(e.detail.value)}} /><Text className='unit1'>万</Text></View>
+                    <View className='param-money'><Input style="font-family:'MaoYanHeiTi-Light;' " type='digit' placeholder='请输入'  value={proportionA} onInput={(e)=>{setProportionA(e.detail.value)}} /><Text className='unit1'>万</Text></View>
                   </View>
                   <View className='param-list'>
                     <View className='param-left'>
                     <View className='param-title'>a</View>
                     </View>
-                    <View className='param-money'><Input type='number' placeholder='请输入'  value={proportiona} onInput={(e)=>{setProportiona(e.detail.value)}} /><Text className='unit1'>万</Text></View>
+                    <View className='param-money'><Input style="font-family:'MaoYanHeiTi-Light;' " type='digit' placeholder='请输入'  value={proportiona} onInput={(e)=>{setProportiona(e.detail.value)}} /><Text className='unit1'>万</Text></View>
                   </View>
                 </View>
                 }
@@ -454,19 +454,19 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
                     <View className='param-left'>
                     <View className='param-title'>A</View>
                     </View>
-                    <View className='param-money'><Input type='number' placeholder='请输入'  value={coefficientA} onInput={(e)=>{setCoefficientA(e.detail.value)}} /><Text className='unit1'>%</Text></View>
+                    <View className='param-money'><Input style="font-family:'MaoYanHeiTi-Light;' " type='digit' placeholder='请输入'  value={coefficientA} onInput={(e)=>{setCoefficientA(e.detail.value)}} /><Text className='unit1'>%</Text></View>
                   </View>
                   <View className='param-list'>
                     <View className='param-left'>
                     <View className='param-title'>a</View>
                     </View>
-                    <View className='param-money'><Input type='number' placeholder='请输入'  value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}} /><Text className='unit1'>%</Text></View>
+                    <View className='param-money'><Input style="font-family:'MaoYanHeiTi-Light;' " type='digit' placeholder='请输入'  value={coefficient} onInput={(e)=>{setCoefficient(e.detail.value)}} /><Text className='unit1'>%</Text></View>
                   </View>
                 </View>
                 }
               </View>
             </View>
-            : <View className='prance'><Input placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value)}}></Input><Text className='unit1'>万</Text></View> 
+            : <View className='prance'><Input style="font-family:'MaoYanHeiTi-Light;' " type='digit' placeholder='请输入固定金额' value={amount} onInput={(e)=>{setAmount(e.detail.value)}}></Input><Text className='unit1'>万</Text></View> 
           }
         </View>
       }

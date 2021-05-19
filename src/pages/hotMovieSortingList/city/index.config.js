@@ -4,4 +4,5 @@ export default {
   },
   disableScroll: false,
   enableShareAppMessage: true,
+  navigationBarTextStyle: "black"
 }
