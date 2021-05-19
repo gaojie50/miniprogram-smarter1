@@ -1,5 +1,5 @@
 export default {
-  navigationStyle: 'custom',
+  navigationStyle: 'default',
   usingComponents: {
   },
   disableScroll: false,
