@@ -2,7 +2,7 @@ export default {
   navigationStyle: 'custom',
   usingComponents: {
   },
-  disableScroll: false,
+  disableScroll: true,
   enableShareAppMessage: true,
   navigationBarTextStyle: "black"
 }

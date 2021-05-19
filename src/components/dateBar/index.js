@@ -10,7 +10,7 @@ import './index.scss';
 
 let aInterval;
 export default function dateBar(props){
-  const { callBack, minDate, maxDate, needButtons, needInterval, style, startDateBar } = props;
+  const { callBack, minDate, maxDate, needButtons, needInterval, style, startDateBar, isSelectDate = true } = props;
   const [time, setTime] = useState('');
   const [day, setDay] = useState('');
   const [now, setNow] = useState('');
@@ -119,13 +119,12 @@ export default function dateBar(props){
     <View className="date-bar-component" style={style} >
       <View className="left-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() => beforeDay()}>前一天</View>
       <View className="middle-block">
-        <View className="date"  onClick={() => showSelect()}> 
+        <View className="date"  onClick={() => { isSelectDate ? showSelect() : ''}}> 
           {day}
-          <Image className="tap" src={'https://obj.pipi.cn/festatic/common/media/1618902553455-arrow-down%403x.png'}></Image>
+          { isSelectDate && <Image className="tap" src={'https://obj.pipi.cn/festatic/common/media/1618902553455-arrow-down%403x.png'}></Image> }
         </View>
         <View className="time" >
           <Text className="tips">更新时间</Text>{time}
-          <Image className="tip-icon" src="http://p0.meituan.net/scarlett/27df10a3087031c48bfc183953b3514b1287.png" />
         </View>
       </View>
       <View className="right-button" style={{visibility: needButtons ? '' : 'hidden'}} onClick={() =>nextDay()}>后一天</View>
