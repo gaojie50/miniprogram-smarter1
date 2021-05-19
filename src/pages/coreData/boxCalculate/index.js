@@ -57,10 +57,10 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       console.log('发行代理', res);
       if (success) {
         const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
-        lists[0].map((item, index)=>{
+        baseType && lists[0].map((item, index)=>{
           item.isOnclick = (baseType === index+1)
         })
-        lists[1].map((item, index)=>{
+        computeType && lists[1].map((item, index)=>{
           item.isOnclick = (computeType === index+1)
         })
         if(progressionType){
