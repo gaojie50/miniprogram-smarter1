@@ -112,6 +112,12 @@ export default function hotMovieList() {
     });
   }
 
+  const gotoDetailPage = (projectId) => {
+    Taro.navigateTo({
+      url: `/pages/detail/index?projectId=${projectId}`,
+    });
+  }
+
   const handleScroll = (e) => {
     setScrollLeft(e.detail.scrollLeft);
   }
@@ -160,7 +166,7 @@ export default function hotMovieList() {
                   isGetList && ranking && ranking.length > 0 && (
                     ranking.map((item, index) => {
                       return(
-                        <View className='list-left' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
+                        <View className='list-left' key={index} onClick={()=>gotoDetailPage(item.projectId)}>
                           <View className='list-film'>
                             <Image src={item.pic.replace('/w.h/', '/')}></Image>
                             <View className={`film-index index-${index}`} >{index+1}</View>
@@ -190,20 +196,17 @@ export default function hotMovieList() {
                 className='list-data'
                 scrollX
                 onScroll={(e) => handleScroll(e)}
-                style={{ width: `${systemInfo.windowWidth - 197}px`}}
               >
-                <View className='data-header-container' style={{ position: `fixed`, top: `${headerBarHeight + 76}px` }}>
-                  <ScrollView className='data-header' style={{ width: `${systemInfo.windowWidth - 197}px`}} scrollX scrollLeft={scrollLeft}>
+                <View className='data-header-container' style={{ top: `${headerBarHeight + 76}px` }}>
+                  <ScrollView className='data-header' scrollX scrollLeft={scrollLeft}>
                     <View className='film-future-income title'>
-                      <View>未来收入</View>
-                      <View>(万)</View>
+                      <View className='title-name'>未来收入<View>(万)</View></View>
                     </View>
                     <View className='film-income title'>
-                      <View>总收入</View>
-                      <View>(万)</View>
+                      <View className='title-name'>总收入<View>(万)</View></View>
                     </View>
                     <View className='film-recommend title'>
-                      排序指数
+                    <View className='title-name'>排序指数</View>
                     </View>
                   </ScrollView>
                 </View>
@@ -212,7 +215,7 @@ export default function hotMovieList() {
                     isGetList && ranking && ranking.length > 0 && (
                       ranking.map((item, index) => {
                         return (
-                          <View scroll className='data-item' key={index}>
+                          <View scroll className='data-item' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
                             <View className='film-future-income'>{ item.expectFutureIncome === null ? '' : parseFloat(item.expectFutureIncome / 1000000).toFixed(2) }</View>
                             <View className='film-income'>{ item.expectTotalIncome === null ? '' : parseFloat(item.expectTotalIncome / 1000000).toFixed(2) }</View>
                             <View className='film-recommend'>{item.score > 0 ? parseFloat(item.score ? item.score.toFixed(2) : '') : item.score }</View>
