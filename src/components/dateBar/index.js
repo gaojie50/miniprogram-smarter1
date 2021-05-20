@@ -51,7 +51,6 @@ export default function dateBar(props){
       changeTime = changeT;
     }
     const selectDate = dayjs(changeTime).format('YYYYMMDD');
-    console.log(selectDate, changeTime, passDay, 'changeTime!!!');
     if(dayjs(now).format('YYYYMMDD') === selectDate) {
       setThatTime(null)
     } else {
@@ -59,7 +58,6 @@ export default function dateBar(props){
       setThatTime(new Date(changeTime))
     }
     if(callBack) {
-      // console.log(callBack)
       callBack(selectDate)
     }
   }
@@ -69,13 +67,11 @@ export default function dateBar(props){
   }
 
   const selectedDate = (e) => {
-    console.log('select', e.value);
     setDateRange(e.value);
     setIsShowButton(true);
   }
 
   const confirm = () => {
-    console.log('confirm!!!!1', dateRange);
     setThatTime(null);
     callBack(dateRange);
     calculateTime(dateRange);

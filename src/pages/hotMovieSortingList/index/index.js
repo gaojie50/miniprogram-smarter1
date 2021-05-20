@@ -59,7 +59,6 @@ export default function hotMovieList() {
       }
       setIsGetList(true);
     }).catch(err => {
-      console.log(err);
       setIsGetList(true);
     });
   }
@@ -101,7 +100,6 @@ export default function hotMovieList() {
           }
         }).then(res => {
           const { success, data = {} } = res;
-          console.log(res);
           if (success && data.role === 1) {
             Taro.navigateTo({
               url: `/pages/coreData/index?name=${name}&projectId=${projectId}&isMovieScreening=${!afterShowing}`

@@ -50,7 +50,6 @@ export function UseHistory(props) {
         const { success, data, error } = res;
         if (success) {
           setData(data);
-          console.log(data);
           setAuth(true);
           judgeData && judgeData(data, 'history');
         } else {

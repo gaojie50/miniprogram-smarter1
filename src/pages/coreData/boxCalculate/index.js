@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'; 
 import { View, Text, Input, Button } from '@tarojs/components';
 import Taro from '@tarojs/taro'
+import FloatLayout from '@components/m5/float-layout';
 import '@components/m5/style/components/input.scss';
 import AtModal from '@components/m5/modal';
 import AtModalContent from '@components/m5/modal/content';
@@ -54,7 +55,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       }
     }).then((res)=>{
       const { success, error, data } = res;
-      console.log('发行代理', res);
       if (success) {
         if(res.data) {
           const {baseType = null, computeType = null, progressionType = null, progressionValue = null, fixedRatioValue = null, fixedAmountValue = null} = data;
@@ -91,7 +91,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     })
   }
   const postCompute = () => {
-    console.log(calculateIndex, getValue, ladderLists);
     let baseType = lists[0].findIndex((item)=>item.isOnclick) + 1;
     let computeType = lists[1].findIndex((item)=>item.isOnclick) + 1;
     let progressionType = lists[2].findIndex((item)=>item.isOnclick) + 1;
@@ -106,7 +105,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       })
     }
     
-    console.log('progressionValue', progressionValue);
 
     let postData = {};
     // 固定比例
@@ -131,7 +129,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       }
     }
 
-    console.log('baseType', baseType, computeType, progressionType, postData);
     reqPacking({
       url: 'api/management/finance/contractData/compute',
       data: {
@@ -141,7 +138,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       },
       method: 'POST',
     }).then((res)=>{
-      console.log('post发行代理', res)
       const {data, success, error} = res;
       if(success) {
         setShowModal(true);
@@ -234,7 +230,6 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       }
     }
     if(lists[1][0].isOnclick) {
-      console.log(coefficient, 'coefficient');
       if(coefficient === ''){
         hasToast && Taro.showToast({
           title: `请填写系数`,
@@ -286,6 +281,14 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     setShowModal(false);
     childChangeShowProgress(false);
   }, [changeCalculate, calculate])
+
+  const footerBut = () => {
+    return (
+      <View className='cal-bottom-box' onClick={()=>{bottomSubmit()}}>
+        <View className='cal-button' style={`${isSubmit ? 'opacity: 1 !important' : ''}`}>计算</View>
+      </View>
+    )
+  }
   
   useEffect(()=>{
     if (showProgress && calculateIndex) {
@@ -307,6 +310,14 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
   
 
   return(
+
+    <FloatLayout 
+      isOpened={showProgress}
+      className='layout-process'
+      onClose={() => childChangeShowProgress(false)}
+      title={incomeName}
+      footer={footerBut()}
+    >
     <View className='box-calculate'>
       <View className='calculate-title'>计算基数</View>
       <View className='calculate-btn'>
@@ -366,9 +377,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         </AtModalContent>
         <AtModalAction><Button onClick={cleanAllValue}>重新计算</Button> <Button onClick={recalculate}>确定</Button> </AtModalAction>
       </AtModal>
-      <View className='cal-bottom-box' onClick={()=>{bottomSubmit()}}>
-        <View className='cal-button' style={`${isSubmit ? 'opacity: 1 !important' : ''}`}>计算</View>
-      </View>
     </View>
-  )
+    </FloatLayout>
+    )
 }

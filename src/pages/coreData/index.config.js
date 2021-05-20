@@ -1,5 +1,5 @@
 export default {
-  disableScroll: true,
+  disableScroll: false,
   navigationStyle: 'custom',
   usingComponents: {
     mpLoading: 'weui-miniprogram/loading/loading',
