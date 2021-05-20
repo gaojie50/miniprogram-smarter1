@@ -61,45 +61,47 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       console.log('规则数据get', res);
       if (success) {
         const { data } = res;
-        const {progressionBase, computeType, progressionType, progressionValue, fixedRatioValue, fixedRatioBoxValue, fixedAmountValue, fixedRatioType} = data;
-        computeType && lists[0].map((item, index)=>{
-          item.isOnclick = (computeType === index+1)
-        })
-        progressionType && lists[1].map((item, index)=>{
-          item.isOnclick = (progressionType === index+1)
-        })
-        progressionBase && lists[2].map((item, index)=>{
-          item.isOnclick = (progressionBase === index+1)
-        })
-        fixedRatioType && lists[3].map((item, index)=>{
-          item.isOnclick = (fixedRatioType === index+1)
-        })
-        progressionValue && progressionBase == '2' && ladderLists.map((item)=> {
-          if(item.dataName.includes('boxLevel')) {
-            item.value = numberFormatCent(progressionValue[item.dataName]);
-          } else{
+        if(res.data){
+          const {progressionBase = null, computeType = null, progressionType = null, progressionValue = null, fixedRatioValue = null, fixedRatioBoxValue = null, fixedAmountValue = null, fixedRatioType = null} = data;
+          computeType && lists[0].map((item, index)=>{
+            item.isOnclick = (computeType === index+1)
+          })
+          progressionType && lists[1].map((item, index)=>{
+            item.isOnclick = (progressionType === index+1)
+          })
+          progressionBase && lists[2].map((item, index)=>{
+            item.isOnclick = (progressionBase === index+1)
+          })
+          fixedRatioType && lists[3].map((item, index)=>{
+            item.isOnclick = (fixedRatioType === index+1)
+          })
+          progressionValue && progressionBase == '2' && ladderLists.map((item)=> {
+            if(item.dataName.includes('boxLevel')) {
+              item.value = numberFormatCent(progressionValue[item.dataName]);
+            } else{
+              item.value = progressionValue[item.dataName];
+            }
+          })
+          progressionValue && progressionBase == '1' && ladderLists.map((item)=> {
             item.value = progressionValue[item.dataName];
+          })
+          if(computeType == '1' && fixedRatioType == '1') {
+            setCoefficient(fixedRatioValue);
           }
-        })
-        progressionValue && progressionBase == '1' && ladderLists.map((item)=> {
-          item.value = progressionValue[item.dataName];
-        })
-        if(computeType == '1' && fixedRatioType == '1') {
-          setCoefficient(fixedRatioValue);
+          if(computeType == '1' && fixedRatioType == '2') {
+            setProportiona(numberFormatCent(fixedRatioValue));
+            setProportionA(numberFormatCent(fixedRatioBoxValue));
+          }
+          if(computeType == '1' && fixedRatioType == '3') {
+            setCoefficient(fixedRatioValue);
+            setCoefficientA(fixedRatioBoxValue);
+          }
+          if(computeType == '2') {
+            setAmount(numberFormatCent(fixedAmountValue));
+          }
+          setGetValue(res.data);
+          setIsSubmit(true);
         }
-        if(computeType == '1' && fixedRatioType == '2') {
-          setProportiona(numberFormatCent(fixedRatioValue));
-          setProportionA(numberFormatCent(fixedRatioBoxValue));
-        }
-        if(computeType == '1' && fixedRatioType == '3') {
-          setCoefficient(fixedRatioValue);
-          setCoefficientA(fixedRatioBoxValue);
-        }
-        if(computeType == '2') {
-          setAmount(numberFormatCent(fixedAmountValue));
-        }
-        setGetValue(res.data);
-        setIsSubmit(true);
       } else {
         Taro.showToast({
           title: error && error.message || '',

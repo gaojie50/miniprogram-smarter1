@@ -56,29 +56,31 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       const { success, error, data } = res;
       console.log('发行代理', res);
       if (success) {
-        const {baseType, computeType, progressionType, progressionValue, fixedRatioValue, fixedAmountValue} = data;
-        baseType && lists[0].map((item, index)=>{
-          item.isOnclick = (baseType === index+1)
-        })
-        computeType && lists[1].map((item, index)=>{
-          item.isOnclick = (computeType === index+1)
-        })
-        if(progressionType){
-          lists[2].map((item, index)=>{
-            item.isOnclick = (progressionType === index+1)
+        if(res.data) {
+          const {baseType = null, computeType = null, progressionType = null, progressionValue = null, fixedRatioValue = null, fixedAmountValue = null} = data;
+          baseType && lists[0].map((item, index)=>{
+            item.isOnclick = (baseType === index+1)
           })
-        }
-        progressionValue && computeType == '3' && ladderLists.map((item)=> {
-          if(item.dataName.includes('boxLevel')) {
-            item.value = numberFormatCent(progressionValue[item.dataName]);
-          } else{
-            item.value = progressionValue[item.dataName];
+          computeType && lists[1].map((item, index)=>{
+            item.isOnclick = (computeType === index+1)
+          })
+          if(progressionType){
+            lists[2].map((item, index)=>{
+              item.isOnclick = (progressionType === index+1)
+            })
           }
-        })
-        setAmount(numberFormatCent(fixedAmountValue));
-        setGetValue(res.data);
-        setCoefficient(fixedRatioValue == null ? '' : fixedRatioValue);
-        setIsSubmit(true);
+          progressionValue && computeType == '3' && ladderLists.map((item)=> {
+            if(item.dataName.includes('boxLevel')) {
+              item.value = numberFormatCent(progressionValue[item.dataName]);
+            } else{
+              item.value = progressionValue[item.dataName];
+            }
+          })
+          setAmount(numberFormatCent(fixedAmountValue));
+          setGetValue(res.data);
+          setCoefficient(fixedRatioValue == null ? '' : fixedRatioValue);
+          setIsSubmit(true);
+        }
       } else {
         Taro.showToast({
           title: error && error.message || '',
