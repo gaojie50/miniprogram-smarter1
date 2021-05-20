@@ -182,7 +182,7 @@
     vertical-align: top;
     .data-header-container {
       position: fixed;
-      z-index: 10;
+      z-index: 1000;
       width: 50%;
     }
     .data-header {
@@ -254,7 +254,8 @@
 }
 
 .empty-list {
-  width: fit-content;
-  margin: auto;
-  margin-top: 20px;
+  position: absolute;
+  top: 400px;
+  left: 50%;
+  transform: translateX(-50%);
 }
