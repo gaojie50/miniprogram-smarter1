@@ -510,6 +510,10 @@ class _C extends React.Component {
     }
   }
 
+  onFilmMarketClose = () => {
+    this.setState({ isShowFilmMarket: false });
+  }
+
   fetchFilterShow = () => {
     const dataList = this.state
     dataList.filterItemHidden.map((item, index) => {
@@ -700,7 +704,6 @@ class _C extends React.Component {
     filmDistributionItem &&
       this.setState({
         filmDistributionItem,
-        backdropShow: 'costom',
         isShowFilmMarket: true,
       })
   }
@@ -799,38 +802,38 @@ class _C extends React.Component {
       yMaxLength,
       isLogin,
     } = this.state;
-
     const yMaxLengthArr = ["","","","","",""].map((item,index)=>strip(formatNumber(yMaxLength * (1 - index/5)).posNum));
-    
     return (
       <Block>
         {initLoading && (
-          <View className="init-loading">
+          <View className='init-loading'>
             <mpLoading
-              type="circle"
-              show={true}
-              animated={true}
+              type='circle'
+              show
+              animated
               duration={900}
-              tips=""
+              tips=''
             ></mpLoading>
           </View>
         )}
-        {backdropShow === 'costom' && (
-          <Backdrop
-            onTouchMove={true}
+        {/* table列字段展示蒙层 */}
+        <View>
+          {backdropShow==='costom' && (<Backdrop
             ongetBackDrop={this.ongetBackDrop}
-            backdropShow={backdropShow}
-          ></Backdrop>
-        )}
+            backdropShow='costom'
+          />)}
+        </View>
+        
+
         {!initLoading && (
           <View>
-            <View className="header" style={`height:${titleHeight + rpxTopx(115)}px`}>
+            <View className='header' style={`height:${titleHeight + rpxTopx(115)}px`}>
               <View
-                className="header-bar"
+                className='header-bar'
                 style={'height:' + titleHeight + 'px;'}
               >
                 <View
-                  className="header-inner"
+                  className='header-inner'
                   style={
                     'line-height:' +
                     (titleHeight - statusBarHeight) +
@@ -840,7 +843,7 @@ class _C extends React.Component {
                   }
                 >
                   <View
-                    className="search-wrap"
+                    className='search-wrap'
                     style={
                       'top:calc( ' +
                       (titleHeight + statusBarHeight) / 2 +
@@ -849,8 +852,8 @@ class _C extends React.Component {
                     onClick={this.jumpToSearch}
                   >
                     <Image
-                      className="search"
-                      src="../../static/icon/search-white.png"
+                      className='search'
+                      src='../../static/icon/search-white.png'
                     ></Image>
                   </View>
                   {
@@ -879,7 +882,7 @@ class _C extends React.Component {
               <ScrollView
                 scrollY={isScroll}
                 scrollIntoView={toView}
-                className="main"
+                className='main'
                 style={'height:calc(100vh - ' + titleHeight + 'px)'}
                 onScroll={() => {
                   toView !== '' &&
@@ -888,35 +891,35 @@ class _C extends React.Component {
                     })
                 }}
               >
-                <View id="scroll-cont" onClickCapture={this.handleCheckLoginClick}>
+                <View id='scroll-cont' onClickCapture={this.handleCheckLoginClick}>
 
                 {isLogin && curPagePermission && 
-                  <View className="filmDistribution">
-                    <View className="title">
+                  <View className='filmDistribution'>
+                    <View className='title'>
                       <Text>待映影片及预估大盘</Text>
                       <Image
                         onClick={this.tapRedPrompt}
-                        className="redText"
-                        src="../../static/list/redText.png"
+                        className='redText'
+                        src='../../static/list/redText.png'
                         alt
                       ></Image>
                       {redTextShow && (
                         <Image
-                          src="https://obj.pipi.cn/festatic/common/image/a7c6a672912136b5d28bd6353ee029b0.png"
-                          className="redPrompt"
+                          src='https://obj.pipi.cn/festatic/common/image/a7c6a672912136b5d28bd6353ee029b0.png'
+                          className='redPrompt'
                         ></Image>
                       )}
-                      <View className="toolTipSign">
+                      <View className='toolTipSign'>
                         <View>已定档</View>
                         <View>
                           <Image
-                            src="../../static/list/dash.svg"
+                            src='../../static/list/dash.svg'
                           ></Image>
                           含可能定档</View>
                       </View>
                     </View>
                     {
-                      filmDistributionList.length !== 0 && <View className="yAxis">{ yMaxLengthArr.map((item,index)=> <Text key={index}>{item}亿</Text> )}</View>
+                      filmDistributionList.length !== 0 && <View className='yAxis'>{ yMaxLengthArr.map((item,index)=> <Text key={index}>{item}亿</Text> )}</View>
                     }
                     {filmDistributionList.length !== 0 && (
                       <FilmDistribution
@@ -927,55 +930,56 @@ class _C extends React.Component {
                           filmLoading,
                           topFilmLoading,
                         }}
-                        setMaxLengthY = {this.setMaxLengthY}
+                        setMaxLengthY={this.setMaxLengthY}
                         onTapfilmBox={this.tapfilmBox}
-                        onFilmScroll={this.filmScroll}/>
+                        onFilmScroll={this.filmScroll}
+                      />
                     )}
                     {topFilmLoading && (
-                      <View className="list-loading">
+                      <View className='list-loading'>
                         <mpLoading
-                          type="circle"
-                          show={true}
-                          tips=""
+                          type='circle'
+                          show
+                          tips=''
                         ></mpLoading>
                       </View>
                     )}
                     {!topFilmLoading && filmDistributionList.length === 0 && (
-                      <View className="film-nodata">暂无数据</View>
+                      <View className='film-nodata'>暂无数据</View>
                     )}
                   </View>
                   }
 
                   <View
                     onClick={this.redTextClose}
-                    className="redMessageClose"
+                    className='redMessageClose'
                     style={{ display: redTextShow ? 'block' : 'none' }}
                   ></View>
 
                   <View
-                    id="filter"
-                    className="list"
+                    id='filter'
+                    className='list'
                     style={'min-height: calc(100vh - ' + titleHeight + 'px)'}
                   >
                     <View
-                      className="listFilter"
+                      className='listFilter'
                       onTouchMove={this.privateStopNoop}
-                      id="box"
+                      id='box'
                     >
                       <View
-                        className="listFilter-item"
-                        style="width: 189rpx"
-                        data-num="4"
+                        className='listFilter-item'
+                        style='width: 189rpx'
+                        data-num='4'
                         onClick={this.tapFilterItem}
                       >
                         <Text
-                          data-num="4"
-                          className="listFilter-item-text filterActive}}"
+                          data-num='4'
+                          className='listFilter-item-text filterActive}}'
                         >
                           {dateText}
                         </Text>
                         <Image
-                          data-num="4"
+                          data-num='4'
                           src={
                             '../../static/' +
                             (filterActive == 4
@@ -986,12 +990,12 @@ class _C extends React.Component {
                         ></Image>
                       </View>
                       <View
-                        className="listFilter-item"
-                        data-num="1"
+                        className='listFilter-item'
+                        data-num='1'
                         onClick={this.tapFilterItem}
                       >
                         <Text
-                          data-num="1"
+                          data-num='1'
                           className={
                             'listFilter-item-text ' +
                             (filterActive == 1 || estimateBoxStr !== ''
@@ -1002,7 +1006,7 @@ class _C extends React.Component {
                           {estimateBoxStr === '' ? '预估票房' : estimateBoxStr}
                         </Text>
                         <Image
-                          data-num="1"
+                          data-num='1'
                           src={
                             '../../static/' +
                             (filterActive == 1
@@ -1013,12 +1017,12 @@ class _C extends React.Component {
                         ></Image>
                       </View>
                       <View
-                        className="listFilter-item"
-                        data-num="3"
+                        className='listFilter-item'
+                        data-num='3'
                         onClick={this.tapFilterItem}
                       >
                         <Text
-                          data-num="3"
+                          data-num='3'
                           className={
                             'listFilter-item-text ' +
                             (filterActive == 3 || lastFilterLength > 0
@@ -1029,10 +1033,10 @@ class _C extends React.Component {
                           筛选
                         </Text>
                         {lastFilterLength > 0 && (
-                          <Text data-num="3">{lastFilterLength}</Text>
+                          <Text data-num='3'>{lastFilterLength}</Text>
                         )}
                         <Image
-                          data-num="3"
+                          data-num='3'
                           src={
                             '../../static/' +
                             (filterActive == 3
@@ -1042,13 +1046,14 @@ class _C extends React.Component {
                           }
                         ></Image>
                       </View>
-                      {backdropShow === 'filter' && (
-                        <Backdrop
-                          onTouchMove={this.privateStopNoop}
+                      {/* 筛选蒙层 */}
+                      <View>
+                        {backdropShow==='filter' && (<Backdrop
                           ongetBackDrop={this.ongetBackDrop}
-                          backdropShow={backdropShow}
-                        ></Backdrop>
-                      )}
+                          backdropShow='filter'
+                        />)}
+                      </View>
+                      
                       <FilterPanel
                         titleHeight={titleHeight}
                         ongetFilterShow={this.ongetFilterShow}
@@ -1057,19 +1062,19 @@ class _C extends React.Component {
                         {filterActive}
                       </FilterPanel>
                       {!loading && (
-                        <View className="extends" onClick={this.tapExtend}>
+                        <View className='extends' onClick={this.tapExtend}>
                           <Image
-                            src="../../static/defined.png"
-                            style="width: 20rpx; height: 20rpx; margin-left: 72rpx;"
+                            src='../../static/defined.png'
+                            style='width: 20rpx; height: 20rpx; margin-left: 72rpx;'
                             alt
                           ></Image>
                         </View>
                       )}
                     </View>
-                    <ScrollView className="derictFilter" scrollX>
-                      <View className="listDerict">
+                    <ScrollView className='derictFilter' scrollX>
+                      <View className='listDerict'>
                         <View
-                          data-num="1"
+                          data-num='1'
                           onClick={this.tapDerictFilter}
                           className={
                             'listDerict-item ' +
@@ -1079,7 +1084,7 @@ class _C extends React.Component {
                           猫眼参与
                         </View>
                         <View
-                          data-num="2"
+                          data-num='2'
                           onClick={this.tapDerictFilter}
                           className={
                             'listDerict-item ' +
@@ -1090,7 +1095,7 @@ class _C extends React.Component {
                         </View>
                         {latestSchedule.name && (
                           <View
-                            data-num="3"
+                            data-num='3'
                             onClick={this.tapDerictFilter}
                             className={
                               'listDerict-item ' +
@@ -1101,7 +1106,7 @@ class _C extends React.Component {
                           </View>
                         )}
                         <View
-                          data-num="4"
+                          data-num='4'
                           onClick={this.tapDerictFilter}
                           className={
                             'listDerict-item ' +
@@ -1113,17 +1118,17 @@ class _C extends React.Component {
                       </View>
                     </ScrollView>
                     {loading && (
-                      <View className="list-loading">
+                      <View className='list-loading'>
                         <mpLoading
-                          type="circle"
-                          show={true}
-                          tips=""
+                          type='circle'
+                          show
+                          tips=''
                         ></mpLoading>
                       </View>
                     )}
 
                     {!loading && (
-                      <View className="listTable">
+                      <View className='listTable'>
                         <movielist
                           isLogin={isLogin}
                           curPagePermission={curPagePermission}
@@ -1151,7 +1156,7 @@ class _C extends React.Component {
                 </View>
               </ScrollView>
             </View>
-            <View className="customListItem">
+            <View className='customListItem'>
               <CostumListItem
                 ongetCostom={this.ongetCostom}
                 costomShow={costomShow}
@@ -1159,7 +1164,7 @@ class _C extends React.Component {
             </View>
             <FilmMarket
               data={filmDistributionItem}
-              closeFn={this.ongetCostom}
+              closeFn={this.onFilmMarketClose}
               show={isShowFilmMarket}
               titleHeight={titleHeight}
             />

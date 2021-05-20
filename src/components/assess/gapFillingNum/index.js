@@ -43,7 +43,7 @@ export default class GapFillingNum extends React.Component {
         <View className='input-label'>{leftText}</View>
         <View className='num-input-wrapper'>
           <Input
-            type='number'
+            type='digit'
             placeholder='请填写'
             value={this.state.value}
             disabled={isPreview}
