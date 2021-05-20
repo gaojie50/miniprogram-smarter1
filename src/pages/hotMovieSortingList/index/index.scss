@@ -175,11 +175,12 @@
     }
   }
 
-  .list-data {
+  .list-data-container {
     width: 50%;
     margin-top: 64px;
     display: inline-block;
     vertical-align: top;
+
     .data-header-container {
       position: fixed;
       z-index: 1000;
@@ -191,17 +192,12 @@
       background: #FFFFFF;
     }
     
-    .data {
-      .data-item {
-        height: 122px;
-        margin: 30px 0 60px 0;
-
-        // &:first-child {
-        //   margin-top: 94px;
-        // }
-      }
+    .data-item {
+      height: 122px;
+      margin: 30px 0 60px 0;
     }
   }
+
 }
 
 .film-income, .film-future-income {

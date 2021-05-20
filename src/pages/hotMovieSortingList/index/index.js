@@ -192,40 +192,42 @@ export default function hotMovieList() {
                   )
                 }
               </View>
-              <ScrollView
-                className='list-data'
-                scrollX
-                onScroll={(e) => handleScroll(e)}
-              >
-                <View className='data-header-container' style={{ top: `${headerBarHeight + 76}px` }}>
-                  <ScrollView className='data-header' scrollX scrollLeft={scrollLeft}>
-                    <View className='film-future-income title'>
-                      <View className='title-name'>未来收入<View>(万)</View></View>
-                    </View>
-                    <View className='film-income title'>
-                      <View className='title-name'>总收入<View>(万)</View></View>
-                    </View>
-                    <View className='film-recommend title'>
-                    <View className='title-name'>排序指数</View>
-                    </View>
-                  </ScrollView>
+              <View className='list-data-container'>
+              <View className='data-header-container' style={{ top: `${headerBarHeight + 76}px` }}>
+                    <ScrollView className='data-header' scrollX scrollLeft={scrollLeft}>
+                      <View className='film-future-income title'>
+                        <View className='title-name'>未来收入<View>(万)</View></View>
+                      </View>
+                      <View className='film-income title'>
+                        <View className='title-name'>总收入<View>(万)</View></View>
+                      </View>
+                      <View className='film-recommend title'>
+                      <View className='title-name'>排序指数</View>
+                      </View>
+                    </ScrollView>
                 </View>
-                <View className='data'>
-                  {
-                    isGetList && ranking && ranking.length > 0 && (
-                      ranking.map((item, index) => {
-                        return (
-                          <View scroll className='data-item' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
-                            <View className='film-future-income'>{ item.expectFutureIncome === null ? '' : parseFloat(item.expectFutureIncome / 1000000).toFixed(2) }</View>
-                            <View className='film-income'>{ item.expectTotalIncome === null ? '' : parseFloat(item.expectTotalIncome / 1000000).toFixed(2) }</View>
-                            <View className='film-recommend'>{item.score > 0 ? parseFloat(item.score ? item.score.toFixed(2) : '') : item.score }</View>
-                          </View>
-                        )
-                      })
-                    )
-                  }
-                </View>
-              </ScrollView>
+                <ScrollView
+                  className='list-data'
+                  scrollX
+                  onScroll={(e) => handleScroll(e)}
+                >
+                  <View className='data'>
+                    {
+                      isGetList && ranking && ranking.length > 0 && (
+                        ranking.map((item, index) => {
+                          return (
+                            <View scroll className='data-item' key={index} onClick={()=>gotoCoreDataPage(item.movieName, item.projectId)}>
+                              <View className='film-future-income'>{ item.expectFutureIncome === null ? '' : parseFloat(item.expectFutureIncome / 1000000).toFixed(2) }</View>
+                              <View className='film-income'>{ item.expectTotalIncome === null ? '' : parseFloat(item.expectTotalIncome / 1000000).toFixed(2) }</View>
+                              <View className='film-recommend'>{item.score > 0 ? parseFloat(item.score ? item.score.toFixed(2) : '') : item.score }</View>
+                            </View>
+                          )
+                        })
+                      )
+                    }
+                  </View>
+                </ScrollView>
+              </View>
             </ScrollView>
             { isGetList && ranking && ranking.length <= 0 && <View className='empty-list'>暂无数据</View> }
           </View>
