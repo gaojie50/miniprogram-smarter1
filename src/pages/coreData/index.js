@@ -207,8 +207,8 @@ export default function hotMovieList() {
   }
 
   return (
-      <View>
-        <View className='detail-top' style={{ height: `${headerBarHeight}px` }}>
+      <View className='core-page'>
+        <View className='detail-top-core' style={{ height: `${headerBarHeight}px` }}>
           <View className='top'>
             <View className='header'>
               <View className='backPage' onClick={handleBack}>
@@ -218,9 +218,9 @@ export default function hotMovieList() {
             </View>
           </View>
         </View>
-        <ScrollView scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, marginTop: headerBarHeight}}>
+        <View scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, paddingTop: headerBarHeight}}>
         { isMovieScreening ?
-            <View>
+            <View className='core-page-box'>
               <DateBar needButtons callBack={callback.bind(this)} startDateBar={startDateBar} />
               <View className='list-header'>
                 <View className='list-header-left' onClick={()=>handleCheckCity()}>
@@ -258,13 +258,13 @@ export default function hotMovieList() {
         }
         { isMovieScreening ? 
           <View className="detail-tabs" >
-            <View className="detail-tabs-header" id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 9}}>
+            <View className="detail-tabs-header" id="tabs" style={{position: 'sticky', top: '-3rpx', zIndex: 0}}>
               <View onClick={()=> switchTab(0)} className={current === 0 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>未来收入</View>
               <View onClick={()=> switchTab(1)} className={current === 1 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>已实现收入</View>
               <View onClick={()=> switchTab(2)} className={current === 2 ? "detail-tabs-header-item active" : "detail-tabs-header-item"}>总收入</View>
             </View>
             <View className="detail-tabs-body">
-              <View>
+              <View style={{zIndex:'2'}}>
                 <BoxOfficeData
                   response={response}
                   current={current}
@@ -276,7 +276,7 @@ export default function hotMovieList() {
               </View>
             </View>
           </View> :
-          <View className='screened-box'>
+          <View className='screened-box' style={{zIndex:'2'}}>
             <BoxOfficeData
               response={response}
               current={current}
@@ -287,7 +287,7 @@ export default function hotMovieList() {
             ></BoxOfficeData>
           </View>
         }
-        </ScrollView>
+        </View>
       </View>
   );
 }

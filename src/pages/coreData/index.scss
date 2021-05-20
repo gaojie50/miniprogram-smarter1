@@ -1,14 +1,14 @@
-.scroll-box {
-  // height: 100vh;
+.core-page {
+  position: relative;
 }
-
-.detail-top {
+.detail-top-core {
   width: 100%;
   box-sizing: border-box;
   position: fixed;
+  top: 0;
+  left: 0;
   background: white;
-  z-index: 10;
-  top: 0px;
+  z-index: 0;
   .header {
     position: relative;
     height: 70rpx;
