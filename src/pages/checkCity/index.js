@@ -77,7 +77,6 @@ export default class checkCity extends React.Component {
       let concat = this.fromUrl.indexOf('?') > -1 ? `&` : '?';
       redirectUrl = this.fromUrl + concat + `cityId=${item.id}&cityName=${item.name}`;
     }
-    console.log(/^\/pages\/hotMovieSortingList\/index\/index/.test(redirectUrl), redirectUrl);
     if (/^\/pages\/hotMovieSortingList\/index\/index/.test(this.fromUrl)) {
       // 热映影片排序页属于tabbar页 需使用switchTab
       setGlobalData('hotMovieSortingListQuery', { cityId: item.id, cityName: item.name });

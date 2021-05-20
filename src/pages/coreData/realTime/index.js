@@ -3,7 +3,6 @@ import { View, Image, Text, ScrollView, Input } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import lx from '@analytics/wechat-sdk';
 import ArrowLeft from '@static/detail/arrow-left.png';
-import FloatLayout from '@components/m5/float-layout';
 import '@components/m5/style/components/input.scss';
 import './index.scss'
 import BoxCalculate from '../boxCalculate';
@@ -60,7 +59,6 @@ export default function realTime({}) {
 
   const ChangeValue = (e, index) => {
     const val = e.detail.value;
-    console.log(index, val, lists);
     var newList = lists.concat();
     newList[index].money = val;
     setLists(newList);
@@ -68,7 +66,6 @@ export default function realTime({}) {
   }
 
   const judgeIsSubmit = (hasToast) => {
-    console.log('judgeIsSubmit', lists);
     for(let i = 0; i<11; i++) {
       if(i != 1 && i != 2 && i != 3) {
         if(lists[i].money === ''){
@@ -135,7 +132,6 @@ export default function realTime({}) {
         data[item.dataIndex] = item.money;
       }
     }
-    console.log('post合同参数', data);
     reqPacking({
       url: 'api/management/finance/contractData/saveOrUpdate',
       data:{
@@ -146,9 +142,7 @@ export default function realTime({}) {
     })
     .then(res => {
       const { success, error } = res;
-      console.log(res);
       if(success) {
-        console.log(res.data);
         Taro.showToast({
           title: '提交成功',
           icon: 'none',
@@ -174,7 +168,6 @@ export default function realTime({}) {
       }
     }).then(res => {
       const { success, error } = res;
-      console.log('实时参数&假定参数', res);
       if (success) {
         const { data } = res;
         setValueData(data);
@@ -227,7 +220,6 @@ export default function realTime({}) {
       }
     }).then(res => {
       const { success, error } = res;
-      console.log('合同参数', res);
       if (success) {
         const { data } = res;
         let newData = Object.assign('', data);
@@ -237,7 +229,6 @@ export default function realTime({}) {
             newData[key] = numberFormatCent(newData[key])
           }
         }
-        console.log(AgencyFee, 'AgencyFee');
         if(AgencyFee) {
           lists[1].money = newData['distributionAgencyFee'] === undefined ? '' : newData['distributionAgencyFee']
           lists[2].money = newData['myDistributionAgencyFee'] === undefined ? '' :newData['myDistributionAgencyFee']
@@ -246,9 +237,7 @@ export default function realTime({}) {
             lists[key].money = newData[lists[key].dataIndex] === undefined ? '' : newData[lists[key].dataIndex];
           }
         }
-        console.log('newData', newData, lists, 'lists');
         setValueData(newData);
-        // console.log('data', data, lists, newData);
         setLists(lists);
         judgeIsSubmit();
       } else {
@@ -318,12 +307,6 @@ export default function realTime({}) {
           <View className='button' style={{opacity: `${isSubmit ? '1 !important':''}`}}>提交</View>
         </View> : ''
       }
-      <FloatLayout 
-        isOpened={showProgress}
-        className='layout-process'
-        onClose={() => setShowProgress(false)}
-        title={incomeName[officeIncomeIndex]}
-      >
         {
           officeIncomeIndex == 3 ? 
           <BonusCalculate
@@ -351,7 +334,6 @@ export default function realTime({}) {
             paramIndex={paramIndex}
           ></BoxCalculate>
         }
-      </FloatLayout>
     </View>
   )
 }

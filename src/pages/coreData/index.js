@@ -40,8 +40,6 @@ export default function hotMovieList() {
       method: 'GET',
     }, ).then(res => {
         const { success, data = {}, error } = res;
-        console.log('票房数据', res);
-
         if (success){
           setBoxOffice(data);
         } else {
@@ -65,7 +63,6 @@ export default function hotMovieList() {
       method: 'GET',
     }).then(res => {
         const { success, data = {}, error } = res;
-        console.log('多种收入数据', current, res);
         if (success) {
           setResponse(data)
         } else {
@@ -123,7 +120,6 @@ export default function hotMovieList() {
         paramsStr += `${key}=${params[key]}&`;
       }
     }
-    console.log(path + paramsStr.slice(-1), params, path);
     Taro.redirectTo({
       url: `/pages/checkCity/index?fromUrl=${encodeURIComponent(path + paramsStr)}`
     });
@@ -161,7 +157,6 @@ export default function hotMovieList() {
       method: 'GET',
     }).then(res => {
         const { success, data = {}, error } = res;
-        console.log('城市接口', res);
         if (success && res.data) {
           setCityValue(res.data);
         } else {
@@ -181,8 +176,6 @@ export default function hotMovieList() {
       method: 'GET',
     }).then((res) => {
       if(res.success && res.data) {
-        console.log(res, 'res!!!!!!!!1')
-        console.log(res.data.productInfo.releaseDate.endDate);
         setsStartDateBar(res.data.productInfo.releaseDate.endDate);
       }
     })
@@ -203,7 +196,6 @@ export default function hotMovieList() {
   
   const callback = (res) => {
     setShowDay(res.replaceAll('-', ''));
-    console.log('data',res)
   }
 
   return (

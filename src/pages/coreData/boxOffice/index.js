@@ -50,7 +50,6 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
   const changeShowProgress =(index)=> {
     setShowProgress(true);
     setOfficeIncomeIndex(index);
-    console.log(index);
   }
 
   const gotoParam = (index) => {

@@ -22,7 +22,6 @@ export default class KeyData extends React.Component {
       }
     }).then(res => {
         const { success, data = {} } = res;
-        console.log(res);
         if (success) {
           changeKeyData(data);
           this.setState({
@@ -33,7 +32,6 @@ export default class KeyData extends React.Component {
   }
   goCoreData = () =>{
     const { basicData, keyData } = this.props;
-    console.log(this.props, basicData, this.state.keyData, keyData.afterShowing, !keyData.afterShowing);
     const { userInfo } = Taro.getStorageSync('authinfo') || {};
     lx.moduleClick('b_movie_b_6jm91lxa_mc', {
       custom: {
