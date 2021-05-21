@@ -287,7 +287,7 @@ export default function realTime({}) {
                   {list.toCalculate ? 
                     <View className='param-to' onClick={()=>{changeShowProgress(index)}}>
                       <View>
-                        {list.money!=='' ? <View className='param-money-rel'>{list.money}万</View> 
+                        {list.money!=='' ? <View className='param-money-rel' style={{fontFamily:'PingFangSC-Regular'}} >{list.money}万</View> 
                         : <View className='param-header-right'>{list.toCalculate}</View>}
                       </View>
                       <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png' />
