@@ -206,7 +206,7 @@ export default function hotMovieList() {
               <View className='backPage' onClick={handleBack}>
                 <Image src={ArrowLeft}></Image>
               </View>
-              <Text className='header-title'>{name.length > 10 ? `${name.slice(0, 10)}...` : name}</Text>
+              <Text className='header-title'>{name||''}</Text>
             </View>
           </View>
         </View>
