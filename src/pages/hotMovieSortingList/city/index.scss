@@ -39,11 +39,21 @@
       background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
     }
   }
+  .list-bar-header {
+    width: 100%;
+    // position: 'fixed';
+    // z-index: 8;
+    // border-radius: '20px 20px 0 0';
+  }
   .list-header {
+    padding-top: 20px;
     height: 24px;
+    width: 100%;
     display: flex;
     padding: 30px;
     border-bottom: 1px #E9E9E9 solid;
+    position: fixed;
+    background: white;
     .list-header-left {
       width: 48px;
       height: 24px;
@@ -82,6 +92,7 @@
     flex-wrap: nowrap;
     align-items: center;
     justify-content: space-around;
+    background-color: white;
     .list-index {
       width: 10px;
       height: 24px;
@@ -140,4 +151,7 @@
     margin: auto;
     margin-top: 20rpx;
   }
+}
+.list-box {
+  margin-top: 54px;
 }

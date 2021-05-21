@@ -1,6 +1,9 @@
 .core-page {
   position: relative;
 }
+.core-page-box {
+  background: rgba(0, 0, 0, 0.06);
+}
 .detail-top-core {
   width: 100%;
   box-sizing: border-box;
@@ -11,7 +14,7 @@
   z-index: 1;
   .header {
     position: relative;
-    height: 70rpx;
+    height: 80rpx;
     line-height: 70rpx;
     width: 100%;
     text-align: center;
@@ -50,6 +53,7 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px #E9E9E9 solid;
+  background-color: white;
   .list-header-left {
     font-weight: 40;
     font-family: PingFangSC-Regular;

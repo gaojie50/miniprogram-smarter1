@@ -75,13 +75,16 @@ export default function hotMovieList() {
           </View>
         </View>
       </View>
-      <View style={{ marginTop: `${headerBarHeight}px` }}>
-        <DateBar callBack={onSelectDate.bind(this)} needButtons startDateBar='20210106' />
-        <View className='list-header'>
-          <View className='list-header-left'>城市</View>
-          <View className='list-header-middle'>当日票房</View>
-          <View className='list-header-right'>票房占比</View>
+      <View style={{ background: 'rgba(0, 0, 0, 0.06)' }}>
+        <View className='list-bar-header' style={{top: `${headerBarHeight}px`,  position: 'fixed', zIndex: 8, borderRadius: '20px 20px 0 0'}} >
+          <DateBar callBack={onSelectDate.bind(this)} needButtons startDateBar='20210106' />
+          <View className='list-header' >
+            <View className='list-header-left'>城市</View>
+            <View className='list-header-middle'>当日票房</View>
+            <View className='list-header-right'>票房占比</View>
+          </View>
         </View>
+        <View className='list-box' style={{paddingTop: `${headerBarHeight + 88}px` }}>
         {
           isGetList && cityRanking.length > 0 && cityRanking.map((item, index) => {
             return (
@@ -94,6 +97,7 @@ export default function hotMovieList() {
             );
           })
         }
+        </View>
         {
           isGetList && cityRanking.length <= 0 && (
             <View className='empty-list'>暂无数据</View>
