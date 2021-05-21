@@ -30,7 +30,7 @@ export default function dateBar(props){
   },[thatTime])
 
   const calculateTime = (now) => {
-    const weeks = ['周天', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const weeks = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
     const showTime = dayjs(now).format('HH:mm:ss');
     const showDay = dayjs(thatTime || now).format(`YYYY年M月D日/周d`);
     setTime(showTime);
