@@ -125,6 +125,12 @@ export default function hotMovieList() {
     lx.pageView('c_movie_b_dexmmi8t');
   }, [cityId, showDate]);
 
+  useEffect(() => {
+    getMovieRanking();
+    lx.pageView('c_movie_b_dexmmi8t');
+  }, []);
+
+
   return (
     <View className='hot-movie-page'>
       {/* <Calendar /> */}
