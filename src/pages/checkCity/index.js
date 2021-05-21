@@ -64,9 +64,16 @@ export default class checkCity extends React.Component {
     };
   }
   handleBack = () => {
-    Taro.redirectTo({
-      url: this.fromUrl,
-    })
+    if (/^\/pages\/hotMovieSortingList\/index\/index/.test(this.fromUrl)) {
+      // 热映影片排序页属于tabbar页 需使用switchTab
+      Taro.switchTab({
+        url: this.fromUrl,
+      })
+    } else {
+      Taro.redirectTo({
+        url: this.fromUrl,
+      });
+    }
   }
 
   handleCity = (item) => {
