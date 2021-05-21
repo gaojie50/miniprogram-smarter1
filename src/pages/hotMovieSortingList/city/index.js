@@ -37,7 +37,7 @@ export default function hotMovieList() {
         projectId,
       }
     }).then(res => {
-      if (res.success && res.data && res.data.length > 0) {
+      if (res.success && res.data && res.data.length >= 0) {
         let ranking = [];
         for (const item of res.data) {
           if (cityMap[item.cityId] && cityMap[item.cityId].name) {
