@@ -144,17 +144,17 @@ export default function hotMovieList() {
           <View style={{ marginTop: `${headerBarHeight}px`}}>
             <DateBar
               isSelectDate={false}
-              style={{ position: 'fixed', top: `${headerBarHeight}px`, zIndex: 8, marginTop: 0, borderRadius: '20px 20px 0 0'}} 
+              style={{ position: 'fixed', top: `${Math.floor(headerBarHeight)}px`, zIndex: 8, marginTop: 0, borderRadius: '20px 20px 0 0'}}
               // callBack={onSelectDate.bind(this)}
               // startDateBar='20210106'
             />
             <ScrollView
               scrollY
               className='movie-ranking-list'
-              style={{ marginTop: `${headerBarHeight + 76}px`, height: `${systemInfo.windowHeight - headerBarHeight - 136}px` }}
+              style={{ marginTop: `${Math.floor(headerBarHeight) + rpxTopx(152)}px`, height: `${systemInfo.windowHeight - headerBarHeight - 136}px` }}
             >
               <View className='list-header'>
-                <View className='list-header-left' style={{ top: `${headerBarHeight + 76}px` }}>
+                <View className='list-header-left' style={{ top: `${Math.floor(headerBarHeight) + rpxTopx(152)}px` }}>
                   <View className='city-name' onClick={gotoCheckCity}>{ cityId ? cityName : '全国' }</View>
                   <View className='list-header-img'>
                     <Image src='http://p0.meituan.net/scarlett/40fccb6a0295cf33d8c7737a55883a1f398.png'></Image>
@@ -191,7 +191,7 @@ export default function hotMovieList() {
                 }
               </View>
               <View className='list-data-container'>
-              <View className='data-header-container' style={{ top: `${headerBarHeight + 76}px` }}>
+              <View className='data-header-container' style={{ top: `${Math.floor(headerBarHeight) + rpxTopx(152)}px` }}>
                     <ScrollView className='data-header' scrollX scrollLeft={scrollLeft}>
                       <View className='film-future-income title'>
                         <View className='title-name'>未来收入<View>(万)</View></View>
