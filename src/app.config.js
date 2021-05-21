@@ -1,15 +1,30 @@
 export default {
   pages: [
     'pages/list/index',
+    'pages/hotMovieSortingList/index/index',
     'pages/board/index',
+    // 'pages/assessList/index',
   ],
   tabBar: {
     list: [{
       'iconPath': 'static/tab/market.png',
       'selectedIconPath': 'static/tab/market_active.png',
       pagePath: 'pages/list/index',
-      text: '市场情报'
-    }, {
+      text: '影片情报'
+    },
+    {
+      'iconPath': 'static/tab/income.png',
+      'selectedIconPath': 'static/tab/income_active.png',
+      pagePath: 'pages/hotMovieSortingList/index/index',
+      text: '收入测算'
+    },
+    // {
+    //   'iconPath': 'static/tab/assessment.png',
+    //   'selectedIconPath': 'static/tab/assessment_active.png',
+    //   pagePath: 'pages/assessList/index',
+    //   text: '评估列表'
+    // },
+    {
       'iconPath': 'static/tab/board.png',
       'selectedIconPath': 'static/tab/board_active.png',
       pagePath: 'pages/board/index',
@@ -83,5 +98,17 @@ export default {
       root:"pages/searchActor",
       pages:["index"]
     },
+    {
+      root: "pages/hotMovieSortingList/city",
+      pages: ["index"]
+    },
+    {
+      root: "pages/coreData",
+      pages: ["index", "realTime/index", "fixHistory/index"]
+    },
+    {
+      root: "pages/checkCity",
+      pages: ["index"]
+    }
   ]
 }
