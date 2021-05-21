@@ -144,7 +144,7 @@ export default function hotMovieList() {
           <View style={{ marginTop: `${headerBarHeight}px`}}>
             <DateBar
               isSelectDate={false}
-              style={{ position: 'fixed', top: `${headerBarHeight}px`, backgroundColor: '#FFF', zIndex: 10, marginTop: 0, }}  
+              style={{ position: 'fixed', top: `${headerBarHeight}px`, zIndex: 8, marginTop: 0, borderRadius: '20px 20px 0 0'}} 
               // callBack={onSelectDate.bind(this)}
               // startDateBar='20210106'
             />
