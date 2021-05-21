@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Taro, { chooseInvoiceTitle } from '@tarojs/taro';
-import { View, Button, Image } from '@tarojs/components';
-import { set as setGlobalData, get as getGlobalData } from '../../global_data';
-import backIcon from '../../static/detail/arrow-left.png';
-import backWhiteIcon from '../../static/detail/arrow-left.png';
+import React from 'react';
+import Taro from '@tarojs/taro';
+import { View, Image } from '@tarojs/components';
+import { get as getGlobalData } from '../../global_data';
+import backBlackIcon from '../../static/arrow-left-black.png';
+import backWhiteIcon from '../../static/arrow-left-white.png';
 import './index.scss';
 
 export default function TopBar(props){
@@ -40,7 +40,7 @@ export default function TopBar(props){
           <View className='back' onClick={back}>
             {whiteBack
               ? <Image src={backWhiteIcon} className='back-icon'></Image>
-              : <Image src={backIcon} className='back-icon'></Image>}
+              : <Image src={backBlackIcon} className='back-icon'></Image>}
             { hasBackText && <View className={`back-text ${whiteBack ? 'back-textwhite' : ''}`}>返回首页</View>}
           </View>
         }

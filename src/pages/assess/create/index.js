@@ -332,6 +332,7 @@ export default class AC extends React.Component {
       success: (res) => {
         // 通过eventChannel向被打开页面传送数据
         res.eventChannel.emit('previewTemp', { 
+          selected: tempId === this.state.tempId,
           projectId: projectId,
           tempId, 
           tempName,

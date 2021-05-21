@@ -1,5 +1,5 @@
 /* eslint-disable jsx-quotes */
-import { View, Button, Block, ScrollView } from '@tarojs/components';
+import { View, Button, ScrollView } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance, useDidHide, useDidShow } from '@tarojs/taro';
 import _cloneDeep from 'lodash/cloneDeep';
@@ -19,6 +19,7 @@ export default function PerviewTemplate(){
   const [ questions, setQuestions ] = useState([]);
   const [ appendQuesList, setAppendQuesList ] = useState([]);
   const [ tempId, setTempId ] = useState();
+  const [ selected, setSelected ] = useState();
   const [ projectId, setProjectId ] = useState();
   const [ tempName, setTempName ] = useState('');
   const [ isAddOpen, setIsAddOpen ] = useState(false);
@@ -36,7 +37,7 @@ export default function PerviewTemplate(){
     eventChannel.on('previewTemp', data=>{
       setAppendQuesList(data.appendQuesList);
       setTempName( data.tempName );
-
+      setSelected(data.selected);
       // pv埋点
       lx.pageView('c_movie_b_2dbfeaf7', {
         custom: {
@@ -174,7 +175,7 @@ export default function PerviewTemplate(){
       <View className="template-preview-wrap">
         <ScrollView
           className="template-content"
-          scrollY
+          scrollY={isAddOpen?false:true}
           style={{ height: '100%'}} 
           scrollTop={pageScrollTop}
         >
@@ -250,12 +251,17 @@ export default function PerviewTemplate(){
           </View>
         </ScrollView>
         <View className="btn-wrap">
-          <Button
-            className="use_btn btn"
-            onClick={handleUse}
-          >
-              直接使用
-          </Button>
+          {
+            !selected && (
+              <Button
+                className="use_btn btn"
+                onClick={handleUse}
+              >
+                  直接使用
+              </Button>
+            )
+          }
+         
           <Button
             className="add_btn btn"
             onClick={handleAdd}
