@@ -14,6 +14,7 @@
 .layout-header {
   margin: 0px !important;
   padding: 40px 30px !important;
+  box-shadow: 0 10px 10px 0 rgba(0,0,0,0.05);
 }
 .layout-header__btn-close {
   right: 12.3px !important;
@@ -79,7 +80,7 @@
   input {
     font-weight: 400;
     font-family: PingFangSC-Regular;
-    font-size: 28px !important;
+    font-size: 28px;
     color: #CCCCCC;
     line-height: 28px;
     width: 560px;
@@ -171,18 +172,18 @@
 }
 .param-money {
   font-weight: 300 !important;
-  font-size: 28px !important;
+  font-size: 24px !important;
   color: #333333;
-  line-height: 28px !important;
+  line-height: 24px !important;
   font-family: MaoYanHeiTi-Light;
   display: flex;
   justify-content: center;
   align-items: center;
   input {
-    height: 28px !important;
+    height: 24px !important;
     font-weight: 300 !important;
-    font-size: 28px !important;
-    line-height: 28px !important;
+    font-size: 24px !important;
+    line-height: 24px !important;
     margin-right: 12px !important;
     font-family: MaoYanHeiTi-Light;
     color: #333333 !important;
