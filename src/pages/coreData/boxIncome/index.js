@@ -37,7 +37,7 @@ export default function BoxIncome({current, officeIncomeIndex, isMovieScreening,
   })
 
   return(
-    <View>
+    <View catchtouchmove="true">
       {/* <View className='income-header'>
         <View className='income-header-title'>{incomeName[officeIncomeIndex]}</View>
         <Image src='http://p0.meituan.net/scarlett/758c0d7aaa2b996fa67f1b7a220ec561400.png' onClick={closeEvt}></Image>
