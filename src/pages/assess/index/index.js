@@ -266,7 +266,12 @@ export default function assessPage(){
   return (
     <View className="assess-page-welcome" style={{backgroundImage: `url(${projectPic})`}}>
       <View className="bg-color" style={{backgroundColor: `${rgbColor}`}} />
-      <TopBar background="transparent" hasBack={isLogin?true:false} onBack={ handleBack } />
+      <TopBar 
+        background="transparent" 
+        whiteBack
+        hasBack={isLogin?true:false} 
+        onBack={handleBack} 
+      />
       {!isLogin && (
         <LoginNotice target={`/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}&inviteId=${inviteId}&participationCode=${participationCode}`} />
       )}
