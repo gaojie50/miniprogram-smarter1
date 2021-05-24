@@ -175,7 +175,7 @@ export default function PerviewTemplate(){
       <View className="template-preview-wrap">
         <ScrollView
           className="template-content"
-          scrollY={isAddOpen?false:true}
+          scrollY={!isAddOpen}
           style={{ height: '100%'}} 
           scrollTop={pageScrollTop}
         >
