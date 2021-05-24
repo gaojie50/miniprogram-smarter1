@@ -1,12 +1,27 @@
-import Taro from '@tarojs/taro';
+import Taro, { useDidShow } from '@tarojs/taro';
 import { View, Image, Text, Button } from '@tarojs/components';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { noDataPic, defaultMovieCover as Cover } from '@utils/imageUrl';
 import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
 import reqPacking from '../../utils/reqPacking';
 import useDeadline from '../assess/detail/useDeadline';
+// import VirtualList from '@tarojs/components/virtual-list';
+
+// function buildData (offset = 0) {
+//   return Array(100).fill(0).map((_, i) => i + offset);
+// }
+
+// const Row = React.memo(({ id, index, style, data }) => {
+//   console.log(id, index, style, data, 1111)
+//   return (
+//     <View id={id} className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
+//       Row {index} : {data[index]}
+//     </View>
+//   );
+// })
+
 
 const { formatNumber, isDockingPerson } = utils;
 
@@ -23,17 +38,40 @@ const TYPE_MOVIE = 3 || 4;
 export function EvaluationList({type}) {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
+  const fetch = useRef(false);
+  // const [testData, setTestData] = useState(buildData(0));
+
+  useDidShow(() => {
+    setLoading(true)
+    fetchEvalutaionData(type)
+    .then(res => {
+      const { success, error } = res;
+      if(success) {
+        setData(res.data || {})
+      } else {
+        Taro.showToast({
+          title: error.message,
+          icon: 'none'
+        })
+      }
+      setLoading(false)
+    })
+    .catch(err => {
+      Taro.showToast({
+        title: err,
+        icon: 'none'
+      })
+    })
+  })
 
   useEffect(() => {
-    const { userInfo } = Taro.getStorageSync('authinfo');
+    if(!fetch.current) {
+      fetch.current = true;
+      return
+    }
     setLoading(true)
-    reqPacking({
-      url: 'api/applet/management/allEvaluationList',
-      data: {
-        type: type + 1,
-        userId: userInfo.id
-      }
-    }, 'server').then(res => {
+    fetchEvalutaionData(type)
+    .then(res => {
       const { success, error } = res;
       if(success) {
         setData(res.data || {})
@@ -60,6 +98,15 @@ export function EvaluationList({type}) {
 
   return loading ? <mpLoading show type='circle' tips=''></mpLoading> :
           evaluationList?.length > 0 ? <>
+          {/* <VirtualList
+            height={500} 
+            width='100%'
+            itemData={testData} 
+            itemCount={testData.length} 
+            itemSize={20} 
+          >
+            {Row} 
+          </VirtualList> */}
           {
             evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />)
           }
@@ -306,4 +353,20 @@ function judgeDeadLine(time) {
 function judgeInvitee(invitees, realName) {
 
   return typeof invitees === 'string' && invitees.includes(realName)
+}
+
+function fetchEvalutaionData(type) {
+  const { userInfo } = Taro.getStorageSync('authinfo');
+  return new Promise(resolve => {
+    reqPacking({
+      url: 'api/applet/management/allEvaluationList',
+      data: {
+        type: type + 1,
+        userId: userInfo.id
+      }
+    }, 'server').then(res => {
+      resolve(res)
+    
+    })
+  })
 }
