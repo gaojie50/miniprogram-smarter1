@@ -5,7 +5,7 @@ import {
   Input,
 } from '@tarojs/components'
 import React from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { defaultMovieCover } from '@utils/imageUrl';
 import reqPacking from '../../utils/reqPacking.js'
 import utils from '../../utils/index.js'
@@ -25,7 +25,7 @@ CATEGORY_LIST.map((item) => {
   CATEGORY_MAPPING[item.key] = item.name;
 })
 
-function fn(e, _this) {
+function fn(e, type, _this) {
   const { value } = e.detail
   const innerVal = value.trim()
 
@@ -41,7 +41,7 @@ function fn(e, _this) {
     () => {
       reqPacking({
         url: 'api/management/search',
-        data: { keyword: innerVal, onlyProject: true },
+        data: { keyword: innerVal, onlyProject: true, type },
       }).then(({ success, data }) => {
         if (success && data && data.length > 0) {
           return _this.setState({
@@ -71,11 +71,17 @@ class _C extends React.Component {
   state = {
     inputVal: '',
     list: [],
-    loading: false
+    loading: false,
+    type: 0,
+  }
+
+  componentDidMount() {
+    const { excavate } = getCurrentInstance().router.params;
+    if (excavate) this.setState({ type: 1 });
   }
 
   bindKeyInput = (e) => {
-    return debounce(fn(e, this), 800);
+    return debounce(fn(e, this.state.type, this), 800);
   };
 
   jumpDetail = (e) => {

@@ -5,7 +5,7 @@ import reqPacking from '@utils/reqPacking';
 import './index.scss';
 
 
-export default function OperationFooter({ projectId, roundId, evaluated, info, canInvite }) {
+export default function OperationFooter({ projectId, roundId, evaluated, evalEnd,info, canInvite }) {
   let { name,pic } = info;
 
   const [ inviteId, setInviteId ] = useState('');
@@ -69,10 +69,10 @@ export default function OperationFooter({ projectId, roundId, evaluated, info, c
 
 
   return <View className="operation-footer">
-    {canInvite && <Button
+    {canInvite && !evalEnd ?<Button
       data-sign="invite"
-      openType="share">邀请参与</Button>}
-    {evaluated ?
+      openType="share">邀请参与</Button> : ""}
+    {evaluated || evalEnd ?
       <Button
         className="attend"
         data-sign="attend"

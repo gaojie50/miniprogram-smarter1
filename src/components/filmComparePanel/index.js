@@ -1,20 +1,20 @@
+/* eslint-disable jsx-quotes */
 import { View, Text, ScrollView } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
-import utils from '../../utils/index.js'
-import ListItem from './listItem';
 import AtFloatLayout from '@components/m5/float-layout';
 import '@components/m5/style/components/float-layout.scss';
 import dayjs from 'dayjs';
+import utils from '../../utils/index.js'
+import ListItem from './listItem';
 import History from './history';
 import './index.scss'
 
 const { formatNumber, calcWeek } = utils;
 
-class _C extends React.Component {
+class _C extends React.PureComponent {
   static defaultProps = {
     show: false,
-    filmDistributionItem: {},
   }
 
   closeFn = () =>{
@@ -57,11 +57,10 @@ class _C extends React.Component {
       return b.wishNum-a.wishNum
     })
 
-
     return (
       <AtFloatLayout 
         className='film-compare-panel-component'
-        isOpened={ show }
+        isOpened={show}
         scrollY={false}
         title='预估大盘'
         onClose={this.closeFn}
@@ -78,7 +77,7 @@ class _C extends React.Component {
             {dayjs(startDate).format('YYYY.MM.DD')}&nbsp;({calcWeek(startDate)}) - {dayjs(endDate).format('YYYY.MM.DD')}&nbsp;({calcWeek(endDate)})
             </Text>
             <View 
-              className={'schedule-btn-wrap'}
+              className='schedule-btn-wrap'
               onClick={this.props.onChangeScheduleType}
             >
               <View className={`radio-btn ${isSetSchedule ? 'checked' : ''}`} />
@@ -121,15 +120,15 @@ class _C extends React.Component {
             <Text className='title-text'>以下{hasEstimateBoxList.length}部影片有预估票房</Text>
             {hasEstimateBoxList.map((item, index) => {
               return (
-                <ListItem item={item} key={index} orderNum={index+1} showNumber totalBox={isSetSchedule ? hasFixEstimateBox : estimateBox} />
+                <ListItem item={item} key={item.maoyanId} orderNum={index+1} showNumber totalBox={isSetSchedule ? hasFixEstimateBox : estimateBox} />
               )
             })}
           </View>}
           {noEstimateBoxList.length > 0 && <View className='no-estimate-box-list list-item'>
             <Text className='title-text'>以下{noEstimateBoxList.length}部影片暂无预估票房</Text>
-            {noEstimateBoxList.map((item, index) => {
+            {noEstimateBoxList.map((item) => {
               return (
-                <ListItem item={item} key={index} totalBox={isSetSchedule ? hasFixEstimateBox : estimateBox} />
+                <ListItem item={item} key={item.maoyanId} totalBox={isSetSchedule ? hasFixEstimateBox : estimateBox} />
               )
             })}
           </View>}

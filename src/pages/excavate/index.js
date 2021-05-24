@@ -100,7 +100,6 @@ export default function Excavate() {
       sourceType,
       movieType,
       dateSet,
-      dtPickerOption,
     } = params;
     setOffset(0);
     setHavemore(true);
@@ -127,7 +126,7 @@ export default function Excavate() {
       const {
         customStartDate,
         customEndDate,
-      } = dtPickerOption;
+      } = params;
       info.startDate = +new Date(+handleNewDate(customStartDate.value)).setHours(0,0,0,0);
       info.endDate = +new Date(+handleNewDate(customEndDate.value)).setHours(23, 59, 59, 999);
     }
@@ -135,7 +134,7 @@ export default function Excavate() {
   }, [params]);
 
   useEffect(() => {
-    setLoading(true);
+    Taro.showLoading({title: '加载中'});
     reqPacking(
       {
         method: 'GET',
@@ -154,13 +153,13 @@ export default function Excavate() {
           setNoData(false);
         }
         setData(projectDeepList);
-        setLoading(false);
+        Taro.hideLoading();
         return;
       }
       errorHandle(error);
       setData([]);
       setNoData(true);
-      setLoading(false);
+      Taro.hideLoading();
     })
   }, [filterInfo]);
 
@@ -210,7 +209,7 @@ export default function Excavate() {
               className="search-bar"
               onClick={() => {
                 Taro.navigateTo({
-                  url: "/pages/searchProject/index",
+                  url: "/pages/searchProject/index?excavate=true",
                 });
               }}
             >

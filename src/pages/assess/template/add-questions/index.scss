@@ -1,9 +1,15 @@
 .add-questions-component {
+  //placeholder颜色
+  .input-placeholder, .textarea-placeholder {
+    color: #ccc;
+  }
   .fixed-button-component {
     z-index: 99;
   }
   .at-float-layout__container {
     padding: 40px 0px;
+    height: 92% !important;
+    max-height: 92%;
   }
   .question-wap {
     padding-bottom: 180px;
@@ -62,6 +68,9 @@
         font-size: 28px;
         color: #333333;
         line-height: 40px;
+        .input-placeholder {
+          color: #ccc;
+        }
       }
     }
 
@@ -139,7 +148,7 @@
             line-height: 40px;
             border-radius: 10px;
             width: 636px;
-            height: auto;
+            height: 72px;
             display: inline-block;
             vertical-align: middle;
           }
