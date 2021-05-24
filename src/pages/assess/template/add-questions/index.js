@@ -37,7 +37,7 @@ const QUES_TYPE_LIST = [
 
 
 const UNIT_LIST = ['亿', '千万', '万', '分'];
-
+const defaultOptions = ['', ''];  // 默认新建两个选项
 
 const AddQuestions = function(props) {
 
@@ -57,7 +57,7 @@ const AddQuestions = function(props) {
   const [ selectType, setSelectType ] = useState(DEFAULT_QUESTYPE);
   const [ tempQuesObj, setTempQuesObj ] = useState(_cloneDeep(quesObj));
   const [ selectUnit, setSelectUnit ] = useState();
-  const [ options, setOptions ] = useState(['']);
+  const [ options, setOptions ] = useState(defaultOptions);
   const [ operateNum, setOperateNum ] = useState('');
   const { lastQuesNum, curEditTemp } = props;
 
@@ -102,7 +102,7 @@ const AddQuestions = function(props) {
         template: JSON.stringify(tempQuesObj)
       }
     )
-   
+
     props.onClose();
     // 重置表单
     reset();
@@ -112,7 +112,7 @@ const AddQuestions = function(props) {
     let newTempQuesObj = _cloneDeep(quesObj);
     setSelectType(TYPE_FILL);
     setTempQuesObj(newTempQuesObj)
-    setOptions(['']);
+    setOptions(_cloneDeep(defaultOptions));
     setSelectUnit('');
   }
 
@@ -163,7 +163,7 @@ const AddQuestions = function(props) {
     setTempQuesObj(newTempQuesObj);
     setSelectType(type);
     setSelectUnit('');
-    setOptions(['']);
+    setOptions(_cloneDeep(defaultOptions));
   }
 
   const handleTitleInput = ({target}) => {

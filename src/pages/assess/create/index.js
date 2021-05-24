@@ -60,6 +60,7 @@ export default class AC extends React.Component {
     projectProfile: [],
     primaryFilesChecked: [],
     filesChecked: [],
+    newFileMap: {},
     isSubmitting: false,
     uploadSelectorIsOpen: false,
     fileSelectorIsOpen: false,
@@ -244,6 +245,8 @@ export default class AC extends React.Component {
           success(uploadRes) {
             if (uploadRes.statusCode === 200) {
               const { success, data, error } = JSON.parse(uploadRes.data);
+              const { newFileMap } = that.state;
+              newFileMap[data] = true;
 
               if (success) {
                 Taro.hideLoading();
@@ -258,6 +261,7 @@ export default class AC extends React.Component {
                 return that.setState({
                   filesChecked,
                   primaryFilesChecked,
+                  newFileMap
                 }, () => that.fetchProjectProfile(projectId));
               }
               Taro.hideLoading();
@@ -291,17 +295,45 @@ export default class AC extends React.Component {
     this.setState({ fileSelectorIsOpen: true, uploadSelectorIsOpen: false });
   }
 
+  deleteRemote = (projectId, profileId) => {
+    return new Promise((resolve)=>{
+      reqPacking(
+        {
+          url: 'api/management/file/delete',
+          data: { 
+            projectId,
+            profileId
+            },
+        },
+        'server',
+      ).then(res => {
+        const { error } = res;
+        if (!error) {
+          resolve(true);
+        }else{
+          resolve(false);
+        }
+      })
+    })
+  }
 
-  handleDelete = (uid, sign) => {
-    let { filesChecked } = this.state;
 
-    if (sign === 'profile') {
-      let valueArr = filesChecked.filter(file => file !== uid);
-      return this.setState({
-        primaryFilesChecked: valueArr,
-        filesChecked: valueArr,
-      });
+  handleDelete = async (file) => {
+    let { filesChecked, projectId, newFileMap } = this.state;
+    const { profileId } = file;
+    if( newFileMap[file.profileId] ){
+      const dStatus = await this.deleteRemote(projectId, profileId);
+      if(dStatus){
+        delete newFileMap[profileId];
+      }else{
+        errorHandle({ message: '删除失败' });
+      }
     }
+    let valueArr = filesChecked.filter(curfile => curfile !== profileId);
+    this.setState({
+      primaryFilesChecked: valueArr,
+      filesChecked: valueArr,
+    });
   };
 
   handleChangeTemp=tempId => {
@@ -332,6 +364,7 @@ export default class AC extends React.Component {
       success: (res) => {
         // 通过eventChannel向被打开页面传送数据
         res.eventChannel.emit('previewTemp', { 
+          selected: tempId === this.state.tempId,
           projectId: projectId,
           tempId, 
           tempName,
@@ -353,7 +386,7 @@ export default class AC extends React.Component {
       appendMap,
       endTime
     } = this.state;
-    const { description, projectEvaluationName, roundNum } = briefInfo;
+    const { description, projectEvaluationName } = briefInfo;
     const params = {
       projectId,
       projectEvaluationName,
@@ -534,7 +567,7 @@ export default class AC extends React.Component {
                           <Text className="file-name">{file.profileName}</Text>
                           <Text className="file-size">{file.profileSize}</Text>
                         </View>
-                        <View className="delete-btn" onClick={() => this.handleDelete(file.profileId, 'profile')}>
+                        <View className="delete-btn" onClick={() => this.handleDelete(file)}>
                           <View className="smarter-iconfont icon-delete" style={{ fontSize: '44rpx' }} />
                         </View>
                       </View>

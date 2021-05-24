@@ -6,10 +6,11 @@ export default function KeyInput(props, ref) {
 
   const { name, text, type } = props;
   const [inputValue, setInputValue] = useState();
-  if(inputValue) {
+
+  useEffect(() => {
     ref.current[type] = inputValue;
     props.updateRef();
-  }
+  }, [inputValue])
 
   useEffect(() => {
     if(props.data.movieName) {

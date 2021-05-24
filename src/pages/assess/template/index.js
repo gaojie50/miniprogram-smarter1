@@ -1,5 +1,5 @@
 /* eslint-disable jsx-quotes */
-import { View, Button, Block } from '@tarojs/components';
+import { View, Button, ScrollView } from '@tarojs/components';
 import React, { useState, useEffect } from 'react';
 import Taro, { getCurrentInstance, useDidHide, useDidShow } from '@tarojs/taro';
 import _cloneDeep from 'lodash/cloneDeep';
@@ -12,16 +12,19 @@ import AddQuesionts from './add-questions';
 import './index.scss'
 
 const { errorHandle } = utils;
+const REACH_BOTTOM_TOP = 10000;  // 使页面到达底部的移动常量
 
 export default function PerviewTemplate(){
 
   const [ questions, setQuestions ] = useState([]);
   const [ appendQuesList, setAppendQuesList ] = useState([]);
   const [ tempId, setTempId ] = useState();
+  const [ selected, setSelected ] = useState();
   const [ projectId, setProjectId ] = useState();
   const [ tempName, setTempName ] = useState('');
   const [ isAddOpen, setIsAddOpen ] = useState(false);
   const [ curEditTemp, setCurEditTemp ] = useState();
+  const [ pageScrollTop, setPageScrollTop ] =  useState(0);
   const pages = Taro.getCurrentPages(); // 获取当前的页面栈
   const current = pages[pages.length - 1];
   const eventChannel = current.getOpenerEventChannel();
@@ -34,8 +37,7 @@ export default function PerviewTemplate(){
     eventChannel.on('previewTemp', data=>{
       setAppendQuesList(data.appendQuesList);
       setTempName( data.tempName );
-
-      console.log('data', data);
+      setSelected(data.selected);
       // pv埋点
       lx.pageView('c_movie_b_2dbfeaf7', {
         custom: {
@@ -124,9 +126,11 @@ export default function PerviewTemplate(){
     }else{
       quesItem.isAdditional = true;
       appendQuesList.push(quesItem);
+      setPageScrollTop(pageScrollTop==REACH_BOTTOM_TOP ? REACH_BOTTOM_TOP-1: REACH_BOTTOM_TOP);
     }
     setAppendQuesList(appendQuesList);
     setIsAddOpen(false);
+    setCurEditTemp('');
     eventChannel.emit('selectTemp', {
       tempId,
       appendQuesList
@@ -152,6 +156,10 @@ export default function PerviewTemplate(){
             return qItem;
           })
           setAppendQuesList(newAppendQuesList);
+          eventChannel.emit('selectTemp', {
+            tempId,
+            appendQuesList
+          });
         } else if (res.cancel) {
           console.log('用户点击取消')
         }
@@ -165,92 +173,103 @@ export default function PerviewTemplate(){
   return (
     <View className="page-container">
       <View className="template-preview-wrap">
-        <Block>
-          {
-            allQuestions.map((item,index)=>{
-              const { type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio, isAdditional } = item;
+        <ScrollView
+          className="template-content"
+          scrollY={!isAddOpen}
+          style={{ height: '100%'}} 
+          scrollTop={pageScrollTop}
+        >
+          <View className="template-content-inner">
+            {
+              allQuestions.map((item,index)=>{
+                const { type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio, isAdditional } = item;
 
-              if (type == 1) {
-                return <GapFillingText
-                  key={index}
-                  isAdditional={isAdditional}
-                  required={required}
-                  title={title}
-                  isPreview
-                  questionNum={questionNum}
-                  onEdit={()=>{handleEdit(item, index)}}
-                  onDelete={()=>{handleDelete(item, index)}}
-                />;
-              }
+                if (type == 1) {
+                  return <GapFillingText
+                    key={index}
+                    isAdditional={isAdditional}
+                    required={required}
+                    title={title}
+                    isPreview
+                    questionNum={questionNum}
+                    onEdit={()=>{handleEdit(item, index)}}
+                    onDelete={()=>{handleDelete(item, index)}}
+                  />;
+                }
 
-              if (type == 2) {
-                return <GapFillingNum
-                  key={index}
-                  isAdditional={isAdditional}
-                  required={required}
-                  isPreview
-                  gapFilling={gapFilling}
-                  questionNum={questionNum}
-                  onEdit={()=>{handleEdit(item, index)}}
-                  onDelete={()=>{handleDelete(item, index)}}
-                />;
-              }
+                if (type == 2) {
+                  return <GapFillingNum
+                    key={index}
+                    isAdditional={isAdditional}
+                    required={required}
+                    isPreview
+                    gapFilling={gapFilling}
+                    questionNum={questionNum}
+                    onEdit={()=>{handleEdit(item, index)}}
+                    onDelete={()=>{handleDelete(item, index)}}
+                  />;
+                }
 
-              if (type == 3) {
-                return <MatrixRadio
-                  key={index}
-                  required={required}
-                  isPreview
-                  title={title}
-                  matrixRadio={matrixRadio}
-                  questionNum={questionNum}
-                />;
-              }
+                if (type == 3) {
+                  return <MatrixRadio
+                    key={index}
+                    required={required}
+                    isPreview
+                    title={title}
+                    matrixRadio={matrixRadio}
+                    questionNum={questionNum}
+                  />;
+                }
 
-              if (type == 4) {
-                return <Radio
-                  key={index}
-                  isAdditional={isAdditional}
-                  required={required}
-                  isPreview
-                  title={title}
-                  questionNum={questionNum}
-                  radioItems={radioItems}
-                  onEdit={()=>{handleEdit(item, index)}}
-                  onDelete={()=>{handleDelete(item, index)}}
-                />;
-              }
+                if (type == 4) {
+                  return <Radio
+                    key={index}
+                    isAdditional={isAdditional}
+                    required={required}
+                    isPreview
+                    title={title}
+                    questionNum={questionNum}
+                    radioItems={radioItems}
+                    onEdit={()=>{handleEdit(item, index)}}
+                    onDelete={()=>{handleDelete(item, index)}}
+                  />;
+                }
 
-              if (type == 5) {
-                return <MatrixScale
-                  key={index}
-                  required={required}
-                  isPreview
-                  title={title}
-                  questionNum={questionNum}
-                  matrixScale={matrixScale || {}}
-                />;
-              }
+                if (type == 5) {
+                  return <MatrixScale
+                    key={index}
+                    required={required}
+                    isPreview
+                    title={title}
+                    questionNum={questionNum}
+                    matrixScale={matrixScale || {}}
+                  />;
+                }
 
-            })
-          }
-        </Block>
+              })
+            }
+          </View>
+        </ScrollView>
         <View className="btn-wrap">
-        <Button
-          className="use_btn btn"
-          onClick={handleUse}
-        >
-            直接使用
-        </Button>
-        <Button
-          className="add_btn btn"
-          onClick={handleAdd}
-        >
-            添加题目
-        </Button>
+          {
+            !selected && (
+              <Button
+                className="use_btn btn"
+                onClick={handleUse}
+              >
+                  直接使用
+              </Button>
+            )
+          }
+         
+          <Button
+            className="add_btn btn"
+            onClick={handleAdd}
+          >
+              添加题目
+          </Button>
+        </View>
       </View>
-      </View>
-
       <AddQuesionts 
         projectId={projectId}
         tempName={tempId}

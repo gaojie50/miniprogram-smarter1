@@ -12,9 +12,7 @@ export default function TextEval({
   questionNum,
   texts,
   permissions,
-  resultPageTextTitleEditingGuideState,
-  setResultPageTextTitleEditingGuideState,
-  isAppendContent,
+  appendContent,
   summaryText,
   isTopic,
   projectId,
@@ -22,7 +20,10 @@ export default function TextEval({
   type,
   questionId,
   rightText,
+  setStopScroll,
 }) {
+  const [resultPageTextTitleEditingGuideState, setResultPageTextTitleEditingGuideState] = useState(Taro.getStorageSync('ResultPageTextTitleEditingGuide'));
+  if(!resultPageTextTitleEditingGuideState && !isTopic) Taro.setStorageSync('ResultPageTextTitleEditingGuide', true);
   const [packUp, setPackUp] = useState(true);
   const shrinkEvt = () => setPackUp(!packUp);
   const [showProgress, setShowProgress] = useState(false);
@@ -82,7 +83,7 @@ export default function TextEval({
           questionId,
           'content':describe
         },
-        isAppendContent,
+        appendContent,
       }
     }).then(res => {
       const { error } = res;
@@ -99,15 +100,13 @@ export default function TextEval({
   };
 
   const focusEvent = () => {
-    if (!resultPageTextTitleEditingGuideState) {
-      setResultPageTextTitleEditingGuideState(true);
-      Taro.setStorageSync('ResultPageTextTitleEditingGuide', true);
-    }
+    if (!resultPageTextTitleEditingGuideState) setResultPageTextTitleEditingGuideState(true);
   }
 
   const toDetails = () => {
     if (permissions || isTopic) setItemLimit(9999);
     setShowProgress(true);
+    setStopScroll(true);
   }
 
   const detailCont = () => {
@@ -138,7 +137,7 @@ export default function TextEval({
     <View className={`h5 ${(permissions) ? "rich" : ""}`}>
       {questionNum}、{title}
       {
-        permissions ?
+        permissions || isTopic ?
           <Text className="detail" onClick={toDetails}>评估详情 <Text className="arrow" /></Text> : ''
       }
     </View>
@@ -167,7 +166,10 @@ export default function TextEval({
       isOpened={showProgress}
       title={title}
       className='layout-process'
-      onClose={ () => setShowProgress(false) }>
+      onClose={ () => {
+        setShowProgress(false);
+        setStopScroll(false);
+      } }>
       {detailCont()}
     </FloatLayout>
   </View>;

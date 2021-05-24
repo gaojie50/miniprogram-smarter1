@@ -16,6 +16,7 @@ const textVoid = <Text style={{ color: '#CCCCCC' }}>请选择</Text>;
 const divider = <Divider />
 
 export default function KeyInfo(props, ref) {
+  console.log(ref, 123)
   const keyRef = useRef({});
   const releaseTimeRef = useRef({});
 
