@@ -137,7 +137,7 @@ export default function TextEval({
     <View className={`h5 ${(permissions) ? "rich" : ""}`}>
       {questionNum}、{title}
       {
-        permissions || isTopic ?
+        !permissions || isTopic ?
           <Text className="detail" onClick={toDetails}>评估详情 <Text className="arrow" /></Text> : ''
       }
     </View>
