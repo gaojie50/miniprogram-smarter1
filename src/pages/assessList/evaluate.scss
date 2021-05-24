@@ -92,6 +92,9 @@
       color: #CCCCCC;
       text-align: right;
       line-height: 24px;
+      .normal-text {
+        color: #333333 !important;
+      }
     }
   }
 
@@ -154,14 +157,14 @@
       text-align: center;
       line-height: 24px;
 
-      border: 1PX solid #CCCCCC;
+      border: 0.6PX solid #CCCCCC;
       border-radius: 40px;
       padding: 21px 24px 19px 24px;
     }
 
     &-btn-eval {
       color: #276FF0;
-      border: 1PX solid #276FF0;
+      border: 0.6PX solid #276FF0;
     }
   }
 }
