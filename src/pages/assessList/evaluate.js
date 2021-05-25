@@ -1,6 +1,6 @@
 import Taro, { useDidShow } from '@tarojs/taro';
 import { View, Image, Text, Button } from '@tarojs/components';
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useState, useRef, forwardRef } from 'react';
 import { noDataPic, defaultMovieCover as Cover } from '@utils/imageUrl';
 import dayjs from 'dayjs';
 import './evaluate.scss';
@@ -33,9 +33,9 @@ const TYPE = {
 
 const TYPE_MOVIE = 3 || 4;
 // const DEFAULT_PROJECT_ROLE = 6;
+const EvalutaionCard = forwardRef(_EvalutaionCard);
 
-
-export function EvaluationList({type}) {
+export function EvaluationList({type}, ref) {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const fetch = useRef(false);
@@ -108,7 +108,7 @@ export function EvaluationList({type}) {
             {Row} 
           </VirtualList> */}
           {
-            evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />)
+            evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} ref={ref} />)
           }
           <View className='assess-list-content-body-noMore'>没有更多了</View>
           </> : (
@@ -121,7 +121,7 @@ export function EvaluationList({type}) {
           )
 }
 
-function EvalutaionCard(props) {
+function _EvalutaionCard(props, ref) {
   const [realName, setRealName] = useState('');
 
   const {
@@ -317,6 +317,7 @@ function EvalutaionCard(props) {
           data-sign='invite'
           openType='share'
           className='assess-list-evaluation-card-action-btn'
+          onClick={() => ref.current = props}
         >
           邀请参与
         </Button>}
@@ -326,6 +327,7 @@ function EvalutaionCard(props) {
           data-sign='attend' 
           openType='share'
           className='assess-list-evaluation-card-action-btn'
+          onClick={() => ref.current = props}
         >
           分享结果
         </Button>
@@ -355,14 +357,16 @@ function judgeInvitee(invitees, realName) {
   return typeof invitees === 'string' && invitees.includes(realName)
 }
 
-function fetchEvalutaionData(type) {
+export function fetchEvalutaionData(type) {
   const { userInfo } = Taro.getStorageSync('authinfo');
   return new Promise(resolve => {
     reqPacking({
       url: 'api/applet/management/allEvaluationList',
       data: {
         type: type + 1,
-        userId: userInfo.id
+        userId: userInfo.id,
+        // offset: 0,
+        // limit: 10
       }
     }, 'server').then(res => {
       resolve(res)
