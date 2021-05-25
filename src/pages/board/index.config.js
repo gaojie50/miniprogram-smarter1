@@ -1,4 +1,5 @@
 export default {
+  navigationBarTextStyle: "black",
   navigationStyle: 'custom',
   disableScroll: true,
   usingComponents: {
