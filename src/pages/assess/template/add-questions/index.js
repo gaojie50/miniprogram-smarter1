@@ -219,6 +219,7 @@ const AddQuestions = function(props) {
         props.onClose(); 
         reset();
       }}
+      footer={<FixedButton onClick={handleSave}>保存并预览</FixedButton>}
     >
       <View className="question-wap">
         <View className="type-wrap">
@@ -301,7 +302,6 @@ const AddQuestions = function(props) {
           )
         }
       </View>
-      <FixedButton onClick={handleSave}>保存并预览</FixedButton>
     </AtFloatLayout>
   );
 };
