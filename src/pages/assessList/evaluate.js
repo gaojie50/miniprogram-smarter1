@@ -253,6 +253,8 @@ function EvalutaionCard(props) {
         } else {
           if(initiator === realName) {
             prefix = '自己发起 ';
+          } else {
+            prefix = `${initiator}发起`;
           }
         }
         
