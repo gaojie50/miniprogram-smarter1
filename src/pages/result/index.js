@@ -167,7 +167,7 @@ export default function Result() {
     {!isLogin ? (
       <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
     ) : (
-      <View /* style={{'position':'relative','z-index':'2'}} */>
+      <View style={{'position':'relative','z-index':'2'}}>
         <ProjectInfo
           deadLine={deadLine}
           info={info}
