@@ -159,129 +159,125 @@ export default function Result() {
 
   useEffect(() => setEvalEnd(hadFreeTime), [hadFreeTime]);
 
-  return <Block>
-    <ScrollView
-      enhanced bounces={false}
-      scrollY={!stopScroll}
-      className="result"
-      style={stopScroll ? { position: 'fixed', width: '100%' } : ""}>
-      {!isLogin ? (
-        <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
-      ) : (
-        <View style={{'position':'relative','z-index':'2'}}>
-          <ProjectInfo
-            deadLine={deadLine}
-            info={info}
-            projectId={projectId}
-            roundId={roundId}
-            setStopScroll={setStopScroll}
-            setEvalEnd={setEvalEnd}
-            showParticipantNumber={showParticipantNumber} />
-          <View className="result-cont">
-            {
-              !evaluated && !isLeader(projectRole) ? <View className="tip">为了保证评估客观公正，您需填答后才能看到他人的评估内容</View> : ""
-            }
-            {
-              evaluated && projectRole == 4 ? <View className="tip">当前仅展示您自己的评估内容</View> : ""
-            }
-            <View className="h2">{projectEvaluationName}</View>
+  return <ScrollView
+    enhanced bounces={false}
+    scrollY={!stopScroll}
+    className="result"
+    style={stopScroll ? { position: 'fixed', width: '100%' } : ""}>
+    {!isLogin ? (
+      <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
+    ) : (
+      <View>
+        <ProjectInfo
+          deadLine={deadLine}
+          info={info}
+          projectId={projectId}
+          roundId={roundId}
+          setStopScroll={setStopScroll}
+          setEvalEnd={setEvalEnd}
+          showParticipantNumber={showParticipantNumber} />
+        <View className="result-cont">
+          {
+            !evaluated && !isLeader(projectRole) ? <View className="tip">为了保证评估客观公正，您需填答后才能看到他人的评估内容</View> : ""
+          }
+          {
+            evaluated && projectRole == 4 ? <View className="tip">当前仅展示您自己的评估内容</View> : ""
+          }
+          <View className="h2">{projectEvaluationName}</View>
 
-            {
-              evaluated || (isLeader(projectRole) && participantNumber != 0) ?
-                <View className="result-comp-box">
-                  {coreExist ?
-                    <CoreSection
-                      core={core}
-                      projectId={projectId}
-                      roundId={roundId}
-                      permissions={permissions}
-                      setStopScroll={setStopScroll}
-                      categoryType={categoryType} /> :
-                    ""}
+          {
+            evaluated || (isLeader(projectRole) && participantNumber != 0) ?
+              <View className="result-comp-box">
+                {coreExist ?
+                  <CoreSection
+                    core={core}
+                    projectId={projectId}
+                    roundId={roundId}
+                    permissions={permissions}
+                    setStopScroll={setStopScroll}
+                    categoryType={categoryType} /> :
+                  ""}
 
-                  {
-                    resultList.map((item, index) => {
-                      if (item.type == 1 || item.type == 2) {
-                        return <TextEval
-                          key={index}
-                          title={item.title}
-                          rightText={item?.rightText}
-                          projectId={projectId}
-                          roundId={roundId}
-                          questionNum={index + (coreExist ? 2 : 1)}
-                          texts={item.texts || []}
-                          appendContent={!!item?.appendContent}
-                          summaryText={item?.summaryText || ""}
-                          isTopic={item.type == 2}
-                          permissions={permissions}
-                          type={item.type}
-                          questionId={item.id}
-                          setStopScroll={setStopScroll}
-                        />;
-                      }
+                {
+                  resultList.map((item, index) => {
+                    if (item.type == 1 || item.type == 2) {
+                      return <TextEval
+                        key={index}
+                        title={item.title}
+                        rightText={item?.rightText}
+                        projectId={projectId}
+                        roundId={roundId}
+                        questionNum={index + (coreExist ? 2 : 1)}
+                        texts={item.texts || []}
+                        appendContent={!!item?.appendContent}
+                        summaryText={item?.summaryText || ""}
+                        isTopic={item.type == 2}
+                        permissions={permissions}
+                        type={item.type}
+                        questionId={item.id}
+                        setStopScroll={setStopScroll}
+                      />;
+                    }
 
-                      if (item.type == 3) {
-                        return <MatrixRadioEval
-                          key={index}
-                          title={item.title}
-                          questionNum={index + (coreExist ? 2 : 1)}
-                          matrixRadios={item.matrixRadios}
-                        />;
-                      }
+                    if (item.type == 3) {
+                      return <MatrixRadioEval
+                        key={index}
+                        title={item.title}
+                        questionNum={index + (coreExist ? 2 : 1)}
+                        matrixRadios={item.matrixRadios}
+                      />;
+                    }
 
-                      if (item.type == 4) {
-                        return <RadioEval
-                          key={index}
-                          title={item.title}
-                          questionNum={index + (coreExist ? 2 : 1)}
-                          radios={item.radios}
-                        />;
-                      }
+                    if (item.type == 4) {
+                      return <RadioEval
+                        key={index}
+                        title={item.title}
+                        questionNum={index + (coreExist ? 2 : 1)}
+                        radios={item.radios}
+                      />;
+                    }
 
-                      if (item.type == 5) {
-                        return <MatrixScaleEval
-                          key={index}
-                          title={item.title}
-                          questionNum={index + (coreExist ? 2 : 1)}
-                          matrixScales={item.matrixScales}
-                        />;
-                      }
+                    if (item.type == 5) {
+                      return <MatrixScaleEval
+                        key={index}
+                        title={item.title}
+                        questionNum={index + (coreExist ? 2 : 1)}
+                        matrixScales={item.matrixScales}
+                      />;
+                    }
 
-                      return null;
-                    })
-                  }
-                </View> :
-                <View>
-                  {
-                    coreExist && <View>
-                      <View className="h5">1、核心数据</View>
-                      <View className="p">{noEvalText}</View>
-                    </View>
-                  }
-                  {
-                    resultList.map((item, index) => <View key={index}>
-                      <View className="h5">{index + (coreExist ? 2 : 1)}、{item.title}</View>
-                      <View className="p">{noEvalText}</View>
-                    </View>)
-                  }
-                </View>
-            }
-
-          </View>
-
-          <OperationFooter
-            info={info}
-            projectId={projectId}
-            roundId={roundId}
-            evaluated={evaluated}
-            evalEnd={evalEnd}
-            canInvite={isDockingPerson(judgeRole)}
-          />
+                    return null;
+                  })
+                }
+              </View> :
+              <View>
+                {
+                  coreExist && <View>
+                    <View className="h5">1、核心数据</View>
+                    <View className="p">{noEvalText}</View>
+                  </View>
+                }
+                {
+                  resultList.map((item, index) => <View key={index}>
+                    <View className="h5">{index + (coreExist ? 2 : 1)}、{item.title}</View>
+                    <View className="p">{noEvalText}</View>
+                  </View>)
+                }
+              </View>
+          }
+          
+          <FingerPrint />
         </View>
-      )}
 
-    </ScrollView>
-
-    <FingerPrint />
-  </Block>
+        <OperationFooter
+          info={info}
+          projectId={projectId}
+          roundId={roundId}
+          evaluated={evaluated}
+          evalEnd={evalEnd}
+          canInvite={isDockingPerson(judgeRole)}
+        />
+      </View>
+    )}
+  </ScrollView>
 }

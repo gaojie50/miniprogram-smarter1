@@ -3,10 +3,13 @@ import { View, Image, Text, Textarea } from '@tarojs/components';
 import FloatLayout from '@components/m5/float-layout';
 import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
-import utils from '@utils/index';
 import './index.scss';
 
-const {formatNumber} = utils;
+const MathRound = (v,d=2) => {
+  const digits = 10 ** d;
+  return Math.round(v * digits) / digits ?? '-';
+};
+
 export default function TextEval({
   title,
   questionNum,
@@ -133,6 +136,7 @@ export default function TextEval({
       </View>
     </View>;
   }
+  
   return <View className="textEval-wrap">
     <View className={`h5 ${(permissions) ? "rich" : ""}`}>
       {questionNum}、{title}
@@ -144,7 +148,7 @@ export default function TextEval({
     {isTopic ? 
      <View className="filling">
        评估均值 <Text className="join">(共{joinNum}人参与)</Text>
-       <Text className="val">{formatNumber(summary/joinNum).text} {rightText}</Text>
+       <Text className="val">{MathRound(summary/joinNum)} {rightText}</Text>
      </View>:
       (permissions ?
         <View className="textarea-wrap">
