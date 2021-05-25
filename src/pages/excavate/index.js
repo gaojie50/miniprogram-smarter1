@@ -104,7 +104,7 @@ export default function Excavate() {
     setOffset(0);
     setHavemore(true);
     info.offset = 0;
-    info.limit = 20;
+    info.limit = 10;
     const chooseCategory = categoryType.filter((item) => item.active).map((item) =>item.code);
     if (chooseCategory.length) {
       info.category = chooseCategory[0];
@@ -172,7 +172,7 @@ export default function Excavate() {
         url: 'api/applet/management/deep',
         data: {
           ...filterInfo,
-          offset: offset + 20,
+          offset: offset + 10,
         },
       },
       'server',
@@ -184,7 +184,7 @@ export default function Excavate() {
           setHavemore(false);
         } else {
           setData((v) => [...v, ...projectDeepList]);
-          setOffset(v => v + 20);
+          setOffset(v => v + 10);
         }
         setLoading(false);
         return;
