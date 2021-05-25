@@ -27,6 +27,9 @@
     padding: 10px 30px 120px;
 
     .result-comp-box{
+      position: relative;
+      z-index: 1;
+
       & > view{
         margin-bottom: 80px;
       }

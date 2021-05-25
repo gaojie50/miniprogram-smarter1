@@ -167,7 +167,7 @@ export default function Result() {
     {!isLogin ? (
       <LoginNotice target={`/pages/result/index?projectId=${projectId}&roundId=${roundId}`} />
     ) : (
-      <View style={{'position':'relative','z-index':'2'}}>
+      <View>
         <ProjectInfo
           deadLine={deadLine}
           info={info}
@@ -265,7 +265,8 @@ export default function Result() {
                 }
               </View>
           }
-
+          
+          <FingerPrint />
         </View>
 
         <OperationFooter
@@ -278,6 +279,5 @@ export default function Result() {
         />
       </View>
     )}
-    <FingerPrint />
   </ScrollView>
 }
