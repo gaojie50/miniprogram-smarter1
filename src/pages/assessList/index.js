@@ -4,7 +4,7 @@ import {
     Text,
     Image
   } from '@tarojs/components';
-import React, { useState, Fragment, useRef, forwardRef } from 'react';
+import React, { useState, Fragment } from 'react';
 import Taro, { useDidShow, useShareAppMessage } from '@tarojs/taro';
 import Tab from '@components/tab';
 import lx from '@analytics/wechat-sdk';
@@ -13,7 +13,6 @@ import { EvaluationList } from './evaluate';
 import reqPacking from '../../utils/reqPacking';
 import './index.scss';
 
-const EvaluationListWrap = forwardRef(EvaluationList)
 const { height, top } = getGlobalData('capsuleLocation');
 const HEADER_LIST = [
   {
@@ -32,8 +31,7 @@ const HEADER_LIST = [
 
 export default function AssessList() {
   const [current, setCurrent] = useState(0);
-  const shareData = useRef({});
-  
+  const [offset, setOffset] = useState(0);
 
   useDidShow(() => {
     const { userInfo } = Taro.getStorageSync('authinfo');
@@ -46,12 +44,13 @@ export default function AssessList() {
 
 
   useShareAppMessage(res => {
-    const { projectId, imageUrl } = shareData.current;
     const { target, from } = res;
     if (from != 'button') return;
     const { userInfo } = Taro.getStorageSync('authinfo');
     const { dataset } = target;
     const { realName = "" } = userInfo;
+    const { projectId, pic } = dataset;
+    console.log(dataset,666)
     return new Promise((resolve, reject) => {
       let shareMessage = {}
       switch (dataset.sign) {
@@ -72,7 +71,7 @@ export default function AssessList() {
               const { inviteId, participationCode } = data;
               shareMessage = {
                 title: `${realName} 邀请您参与《${dataset.roundTitle}》项目评估`,
-                imageUrl: imageUrl ? imageUrl.replace('/w.h', '') : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+                imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
                 path: `/pages/assess/index/index?projectId=${projectId}&roundId=${dataset.roundId}&inviteId=${inviteId}&participationCode=${participationCode}`
               };
               resolve(shareMessage)
@@ -91,7 +90,7 @@ export default function AssessList() {
         case 'attend': {
           shareMessage = {
             title: `${realName} 分享给您关于《${dataset.roundTitle}》项目的报告`,
-            imageUrl: imageUrl ? imageUrl.replace('/w.h', '') : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
+            imageUrl: pic ? pic : 'https://s3plus.meituan.net/v1/mss_e2821d7f0cfe4ac1bf9202ecf9590e67/cdn-prod/file:96011a7c/logo.png',
             path: `/pages/result/index?projectId=${projectId}&roundId=${dataset.roundId}`
           }
           resolve(shareMessage)
@@ -105,7 +104,6 @@ export default function AssessList() {
           resolve(shareMessage);
         }
       }
-
     })
   })
 
@@ -129,9 +127,9 @@ export default function AssessList() {
         style={{height: `calc(100vh - ${height}px - ${top}px)`,marginBottom: '56px'}}
         scrollIntoView={`start${current}`}
         scrollWithAnimation
-        // onScrollToLower={() => {
-        //   console.log(fetchEvalutaionData(type),123467)
-        // }}
+        onScrollToLower={() => {
+          setOffset(offset + 10);
+        }}
       >
         <View className='assess-list-content-title' style={{top: `calc(${height}px + ${top}px)`}}  >
           {
@@ -140,7 +138,7 @@ export default function AssessList() {
                 className={index === current ? 'assess-list-content-title-item active' : 'assess-list-content-title-item'} 
                 key={index} 
                 style={{width: `${100/HEADER_LIST.length}%`}}
-                onClick={() => setCurrent(index)}
+                onClick={() => {setCurrent(index); setOffset(0)}}
               >
                   {item.value}
                 </View>
@@ -149,7 +147,7 @@ export default function AssessList() {
         </View>
         
         <View className='assess-list-content-body'>
-          <EvaluationListWrap type={current} ref={shareData} />
+          <EvaluationList type={current} offset={offset} />
         </View>
       </ScrollView>
       <Tab />
