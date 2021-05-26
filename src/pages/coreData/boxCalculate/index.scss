@@ -1,0 +1,227 @@
+.at-float-layout__overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+.at-float-layout__container {
+  padding: 0px !important;
+}
+.at-float-layout__container {
+  min-height: 85vh;
+}
+.layout-body__content {
+  max-height: 76vh!important;
+  min-height: 0 !important;
+}
+.layout-header {
+  margin: 0px !important;
+  padding: 40px 30px !important;
+}
+.layout-header__btn-close {
+  right: 12.3px !important;
+}
+.calculate-button1 {
+  width: 223px;
+  height: 80px;
+  background: rgba(39,111,240,0.10);
+  border: 1px solid #276FF0;
+  border-radius: 10px;
+  font-weight: 600;
+  font-family: PingFangSC-Semibold;
+  font-size: 26px;
+  color: #276FF0;
+  // text-align: center;
+  line-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 10px 10px 0px;
+}
+
+.calculate-button2 {
+  width: 223px;
+  height: 80px;
+  background: #F8F8F8;
+  border-radius: 10px;
+  font-weight: 400;
+  font-family: PingFangSC-Regular;
+  font-size: 26px;
+  color: #333333;
+  line-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+.box-calculate {
+  padding: 30px 30px 200px 30px;
+  .calculate-title {
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 26px;
+    color: #333333;
+    line-height: 36px;
+  }
+  .calculate-btn {
+    display: flex;
+    justify-content: start;
+    margin: 20px 0px 40px 0px;
+  }
+}
+.prance {
+  background: #F8F8F8;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 20px;
+  .at-input {
+    padding: 0px;
+  }
+  input {
+    width: 560px !important;
+    height: 28px !important;
+    font-weight: 400 !important;
+    font-size: 24px !important;
+    color: #CCCCCC !important;
+    line-height: 24px !important;
+    margin-right: 12px !important;
+    font-family: MaoYanHeiTi-Light !important;
+    color: #333333 !important;
+  }
+}
+.remark-text {
+  font-weight: 400;
+  font-family: PingFangSC-Regular;
+  font-size: 24px;
+  color: #999999;
+  line-height: 32px;
+  margin: -20px 0px 20px 0px;
+}
+
+// .bottom-box {
+//   position: absolute;
+//   bottom: 0;
+//   padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+//   padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+//   height: 8%;
+//   display: flex;
+//   // align-items: center;
+//   justify-content: center;
+//   background: #FFFFFF;
+//   box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
+//   .button {
+//     opacity: 0.4;
+//     background: #276FF0;
+//     border-radius: 40px;
+//     height: 80px;
+//     width: 690px;
+//     font-weight: 600;
+//     font-family: PingFangSC-Semibold;
+//     font-size: 30px;
+//     color: #FFFFFF;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     text-align: center;
+//     line-height: 24px;
+//     margin: 16px 30px 0px 30px;
+//   }
+// }
+
+.cal-bottom-box {
+  z-index: 999;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+  height: 8%;
+  display: flex;
+  // align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
+  .cal-button {
+    opacity: 0.4;
+    background: #276FF0;
+    border-radius: 40px;
+    height: 80px;
+    width: 690px;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 30px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 24px;
+    margin: 16px 30px 0px 30px;
+  }
+}
+.ladder-lists {
+  background: #F8F8F8;
+  border-radius: 10px;
+}
+.param-list {
+  padding: 22px 0px;
+  margin: 0px 30px;
+  display: flex;
+  border-bottom: 1px solid #E5E5E5;
+  align-items: center;
+  justify-content: space-between;
+}
+.param-title {
+  font-weight: 400 !important;
+  font-family: PingFangSC-Regular;
+  font-size: 24px !important;
+  color: #333333;
+  line-height: 24px !important;
+}
+.param-money {
+  font-weight: 300 !important;
+  font-size: 24px !important;
+  color: #333333;
+  line-height: 24px !important;
+  font-family: MaoYanHeiTi-Light;
+  input {
+    height: 24px !important;
+    font-weight: 300 !important;
+    font-size: 24px !important;
+    line-height: 24px !important;
+    margin-right: 12px !important;
+    font-family: MaoYanHeiTi-Light;
+    color: #333333 !important;
+    text-align: right;
+  }
+  .unit1{
+    // width: 50px !important;
+    height: 24px !important;
+    font-weight: 300 !important;
+    // font-family: PingFangSC-Light;
+    font-size: 24px !important;
+    color: #333333;
+    text-align: right !important;
+    line-height: 24px !important;
+  }
+}
+
+.modal-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .modal-title {
+    text-align: center;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 38px;
+    color: #333333;
+    line-height: 50px;
+  }
+  .modal-text {
+    text-align: center;
+  }
+}
+
+.at-modal__footer .at-modal__action > button {
+  line-height: 60px !important;
+}

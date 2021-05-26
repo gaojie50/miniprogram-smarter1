@@ -14,9 +14,9 @@ const copyMail = () => {
 }
 
 const noAccess = function(props){
-  const { title, content, showEmailBtn=true, titleColor="white", contentColor="white" } = props;
+  const { title, content, showEmailBtn=true, titleColor="white", contentColor="white", backgroundColor="white", height="", position="relative" } = props;
   return (
-    <View className='no-access-component'>
+    <View className='no-access-component' style={{ backgroundColor: backgroundColor, position: position, height: height }}>
       <Image src={noAccessPic}></Image>
       <View className="title" style={{color: titleColor}}>{title || '暂无权限查看相关数据'}</View>
       <View className="content" style={{color: contentColor}}>

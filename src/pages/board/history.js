@@ -17,6 +17,14 @@ const UNITS = {
   '宣发费用': formatNumber,
   '猫眼投资成本': formatNumber,
   '预估票房': formatNumber,
+  '猫眼发行代理费' : formatNumber,
+  '总发行代理费': formatNumber,
+  '猫眼发行代理费': formatNumber,
+  '主创分红': formatNumber,
+  '猫眼份额转让收入': formatNumber,
+  '宣发费用中猫眼票补收入': formatNumber,
+  '宣发费用中猫眼平台资源收入': formatNumber,
+  '其它收入': formatNumber,
 }
 const HAS_YUAN = {
   '制作成本': true,
@@ -29,18 +37,21 @@ const NO_AUTH_MESSAGE = '您没有该项目管理权限';
 export function UseHistory(props) {
   const [data, setData] = useState([]);
   const [auth, setAuth] = useState(false);
-  const { projectId, keyData, judgeData } = props;
+  const [hasData, setHasData] = useState(false);
+  const { projectId, keyData, judgeData, queryType } = props;
 
   useEffect(() => {
     if (projectId) {
       PureReq_Projectoperatelog({
-        projectId
+        projectId,
+        queryType
       }).then((res) => {
+        setHasData(true);
         const { success, data, error } = res;
         if (success) {
           setData(data);
           setAuth(true);
-          judgeData(data, 'history');
+          judgeData && judgeData(data, 'history');
         } else {
           if (error && error.message === NO_AUTH_MESSAGE) {
             setAuth(false);
@@ -55,7 +66,7 @@ export function UseHistory(props) {
       <Image src={noDataPic} alt=""></Image>
       <View className="text">暂无变更历史</View>
     </View>
-  ) : <Text className="no-auth-text">{NO_AUTH_MESSAGE}</Text>) : null
+  ) : <Text className="no-auth-text">{hasData ? NO_AUTH_MESSAGE :''}</Text>) : null
 }
 
 export function useChangeHistory(projectId) {
@@ -187,12 +198,13 @@ export function ChangeCard(props) {
   )
 }
 
-function PureReq_Projectoperatelog({ projectId }) {
+function PureReq_Projectoperatelog({ projectId, queryType }) {
   return reqPacking(
     {
       url: 'api/management/projectoperatelog',
       data: {
-        projectId
+        projectId,
+        queryType: queryType || ''
       }
     },
     'server',
