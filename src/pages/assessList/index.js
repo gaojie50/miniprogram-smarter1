@@ -51,7 +51,6 @@ export default function AssessList() {
     const { dataset } = target;
     const { realName = "" } = userInfo;
     const { projectId, pic } = dataset;
-    console.log(dataset,666)
     return new Promise((resolve, reject) => {
       let shareMessage = {}
       switch (dataset.sign) {
