@@ -54,6 +54,7 @@ const EndTimePicker = function(props) {
 
     setHourList(newHourList);
     setValue([selectDayIndex, selectHourIndex]);
+
   }, [props.endTime]);
 
 
@@ -116,7 +117,6 @@ const EndTimePicker = function(props) {
 
   const handleEndTimeChange = e => {
     let newTime = dayList[value[0]] === -1 ? '' : dayjs(dayList[value[0]]).add(hourList[value[1]], 'hours').valueOf();
-
     props.onEndTimeChange(newTime,e);
     props.onClose(e);
   };
@@ -131,12 +131,12 @@ const EndTimePicker = function(props) {
     >
       <View className="time-picker-wap">
         <PickerView
-          indicatorStyle={`height: ${rpxTopx(62)}px`}
           style="width: 100%; height: 384rpx;"
           onChange={onChange}
           value={value}
+          indicatorStyle={`height:${parseInt(rpxTopx(60))}px;`}
         >
-          <PickerViewColumn indicator-class="picker-line">
+          <PickerViewColumn>
             {dayList.map(item => {
               if (item === -1) {
                 return (
