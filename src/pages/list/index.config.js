@@ -1,5 +1,7 @@
 export default {
+  navigationBarTextStyle: "white",
   navigationStyle: 'custom',
+  disableScroll: true,
   usingComponents: {
     mpLoading: 'weui-miniprogram/loading/loading',
     scheduletype: '../../components/scheduleType/index',

@@ -14,7 +14,7 @@ export default function EvaluateTime({ deadLine,projectId,roundId,setStopScroll,
   const [line, setLine] = useState(deadLine);
   const [seconds, setSeconds] = useState(Math.floor((line - now) / 1000));
   const [modalSwitch, setModalSwitch] = useState(false);
-  const noLimit = line == undefined;
+  const noLimit = !line;
   let [isEnd, setIsEnd] = useState(noLimit ? false : (now >= line));
 
   if (!noLimit && !isEnd && !timing) setTiming(true);

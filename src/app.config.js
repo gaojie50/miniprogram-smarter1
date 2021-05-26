@@ -33,9 +33,7 @@ export default {
     custom: true
   },
   window: {
-    navigationBarBackgroundColor: '#798CBA',
     backgroundTextStyle: 'light',
-    navigationBarTitleText: ' ',
     navigationBarTextStyle: 'white',
   },
   style: 'v2',

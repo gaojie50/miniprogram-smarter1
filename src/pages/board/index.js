@@ -31,15 +31,6 @@ const {
 const reqPacking = getGlobalData('reqPacking')
 const capsuleLocation = getGlobalData('capsuleLocation')
 
-function strip(num, precision = 12) {
-  return +parseFloat(num.toPrecision(precision));
-}
-
-Taro.setNavigationBarColor({
-  frontColor: '#000000',
-  backgroundColor: '#ffffff',
-})
-
 const SYSTEM_INFO = Taro.getSystemInfoSync();
 
 const bottomBarHeight = SYSTEM_INFO.safeArea.bottom - SYSTEM_INFO.safeArea.height;
@@ -194,11 +185,6 @@ export default function Board() {
 
 
   useEffect(() => {
-    Taro.setNavigationBarColor({
-      frontColor: '#000000',
-      backgroundColor: '#ffffff',
-    })
-
     PureReq_Permission().then((d1) => {
       setPermission(d1);
       if (d1 !== 2) {
