@@ -321,7 +321,7 @@ function EvalutaionCard(props) {
       </View>
       </View>
       <View className='assess-list-evaluation-card-action'>
-        {isDockingPerson(role) && judgeDeadLine(deadline) && <Button
+        {judgeDeadLine(deadline) && <Button
           data-roundTitle={roundTitle}
           data-roundId={roundId}
           data-projectId={projectId}
