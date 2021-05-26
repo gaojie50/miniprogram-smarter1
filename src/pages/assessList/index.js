@@ -34,6 +34,7 @@ export default function AssessList() {
   const [offset, setOffset] = useState(0);
 
   useDidShow(() => {
+    setOffset(0)
     const { userInfo } = Taro.getStorageSync('authinfo');
     lx.pageView('c_movie_b_8gwiwttn', {
       custom: {
