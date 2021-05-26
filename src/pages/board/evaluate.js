@@ -282,7 +282,7 @@ function EvalutaionCard(props) {
           分享结果
         </Button>
         {
-          (isDockingPerson(judgeRole.role) || judgeInvitee(invitees, realName)) && judgeDeadLine(deadline) && <Button
+          judgeDeadLine(deadline) && <Button
             className='evaluation-card-action-btn evaluation-card-action-btn-eval'
             onClick={() => {
               Taro.navigateTo({
