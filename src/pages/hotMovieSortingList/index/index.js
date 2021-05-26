@@ -22,6 +22,7 @@ export default function hotMovieList() {
   const [showDate, setShowDate] = useState(() => dayjs(new Date()).format('YYYYMMDD'));
   const [ranking, setRanking] = useState([]);
   const [isGetList, setIsGetList] = useState(false);
+  const [now, setNow] = useState('');
   const { rpxTopx } = utils;
   const capsuleLocation = getGlobalData('capsuleLocation');
   const headerBarHeight = capsuleLocation.bottom + rpxTopx(15);
@@ -125,9 +126,14 @@ export default function hotMovieList() {
     lx.pageView('c_movie_b_dexmmi8t');
   }, [cityId, showDate]);
 
+  Taro.useDidShow(() => {
+    getMovieRanking();
+    lx.pageView('c_movie_b_dexmmi8t');
+    setNow(new Date);
+  });
+
   return (
     <View className='hot-movie-page'>
-      {/* <Calendar /> */}
       <Tab />
       <View className='detail-top' style={{ height: `${headerBarHeight}px` }}>
         <View className='top'>
@@ -143,10 +149,9 @@ export default function hotMovieList() {
         access ? (
           <View style={{ marginTop: `${headerBarHeight}px`}}>
             <DateBar
+              resetTime={now}
               isSelectDate={false}
               style={{ position: 'fixed', top: `${Math.ceil(headerBarHeight)}px`, zIndex: 8, marginTop: 0, borderRadius: '20px 20px 0 0'}}
-              // callBack={onSelectDate.bind(this)}
-              // startDateBar='20210106'
             />
             <ScrollView
               scrollY

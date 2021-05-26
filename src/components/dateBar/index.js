@@ -10,7 +10,7 @@ import './index.scss';
 
 let aInterval;
 export default function dateBar(props){
-  const { callBack, minDate, maxDate, needButtons, needInterval, style, startDateBar, isSelectDate = true } = props;
+  const { callBack, minDate, maxDate, needButtons, needInterval, style, startDateBar, isSelectDate = true, resetTime } = props;
   const [time, setTime] = useState('');
   const [day, setDay] = useState('');
   const [now, setNow] = useState('');
@@ -110,6 +110,10 @@ export default function dateBar(props){
     let newStartDateBar = startDateBar && startDateBar.toString().replace(/^(\d{4})(\d{2})(\d{2})$/,"$1/$2/$3");
     setStartDate(newStartDateBar);
   }, [startDateBar])
+
+  useEffect(()=>{
+    calculateTime(new Date())
+  }, [resetTime])
 
   return (
     <View className="date-bar-component" style={style} >
