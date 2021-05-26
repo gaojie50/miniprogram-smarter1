@@ -127,8 +127,8 @@ export default function TextEval({
               <View className="tr groupName">{groupName}</View>
               {memberList.map(({ name, content }, index) =>
                 <View key={index} className={`tr tr-line ${memberList.length == index + 1 ? "no-line" : ""}`}>
-                  <Text className="td">{name}</Text>
-                  <Text className="td">{content}</Text>
+                  <Text className="td ">{name}</Text>
+                  <Text className="td regular-font">{content}</Text>
                 </View>)}
             </React.Fragment>)}
           {total > itemLimit ? <View className="tr shrink" onClick={shrinkEvt}>{packUp ? `展开剩余${total - itemLimit}条` : "收起"}<Image className="arrow" src="../../static/arrow-down.png" /></View> : null}
