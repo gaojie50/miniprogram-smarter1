@@ -220,12 +220,12 @@ export default class AtIndexes extends React.Component<
 
     return (
       <View className={rootCls} style={customStyle}>
-        <AtToast
+        {/* <AtToast
           customStyle={toastStyle}
           isOpened={_isShowToast}
           text={_tipText}
           duration={2000}
-        />
+        /> */}
         <View
           className='at-indexes__menu'
           onTouchMove={this.handleTouchMove}

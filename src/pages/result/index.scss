@@ -15,6 +15,8 @@
 
 .result{
   height: 100vh;
+  position: relative;
+  z-index: 1;
 
   .result-cont{
     background: #FFFFFF;
@@ -25,6 +27,9 @@
     padding: 10px 30px 120px;
 
     .result-comp-box{
+      position: relative;
+      z-index: 2;
+
       & > view{
         margin-bottom: 80px;
       }
@@ -127,7 +132,7 @@
     &.column5,&.column3,&.column2{
       .th,.td{
         width: 136px;
-        font-family: MaoYanHeiTi-Light;
+        // font-family: MaoYanHeiTi-Light;
       }
 
       .tr.hidden-color .td{

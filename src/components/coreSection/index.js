@@ -6,7 +6,7 @@ import './index.scss';
 
 const toFixed = (num, precision) => (+(`${Math.round(+(`${num}e${precision}`))}e${-precision}`)).toFixed(precision);
 
-export default function CoreSection({ categoryType, core, permissions,projectId,roundId }) {
+export default function CoreSection({ categoryType, core, permissions,projectId,roundId,setStopScroll }) {
   const [showProgress, setShowProgress] = useState(false);
   const [itemLimit, setItemLimit] = useState(5);
   const clacScore = (arrOut = [], digits = 1) => {
@@ -82,14 +82,14 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
 
     evaluationList.map(item => {
       const {
-        score, totalScore, box, comment, evaluation, groupName, scoreFinished,isHidden
+        score, totalScore, box, comment, evaluation, groupName, scoreFinished,hidden
       } = item;
   
-      if(!isHidden) innerScoreArr.push(score);
+      if(!hidden) innerScoreArr.push(score);
   
-      if (!isHidden && scoreFinished !== false) innerTotalScoreArr.push(totalScore);
+      if (!hidden && scoreFinished !== false) innerTotalScoreArr.push(totalScore);
   
-      if(!isHidden) innnerBoxArr.push(box);
+      if(!hidden) innnerBoxArr.push(box);
       innerCommentArr.push(evaluation);
       innerRecommendedArr.push(comment);
   
@@ -120,12 +120,12 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
 
     Object.values(groupSetObj).map(item => arr.push(...item));
     
-    arr.map(({score,isHidden,totalScore,box,scoreFinished}) =>{
-      if(!isHidden) innerScoreArr.push(score);
+    arr.map(({score,hidden,totalScore,box,scoreFinished}) =>{
+      if(!hidden) innerScoreArr.push(score);
   
-      if (!isHidden && scoreFinished !== false) innerTotalScoreArr.push(totalScore);
+      if (!hidden && scoreFinished !== false) innerTotalScoreArr.push(totalScore);
   
-      if(!isHidden) innnerBoxArr.push(box);
+      if(!hidden) innnerBoxArr.push(box);
     });
     
     setScoreArr(innerScoreArr);
@@ -165,18 +165,19 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
   const toDetails = () => {
     if (permissions) setItemLimit(9999);
     setShowProgress(true);
+    setStopScroll(true);
   }
 
   const shrinkEvt = () => setPackUp(!packUp);
   const scoreExistSign = scoreArr.some(item => item);
   const commentExistSign = commentNumList.length != 0;
-  const controlData = (isHidden,userId,groupName) => {
+  const controlData = (hidden,userId,groupName) => {
     reqPacking({
       url: 'api/applet/management/hiddenScore',
       data: {
         projectId,
         roundId,
-        isHidden,
+        hidden,
         userId
       }
     }).then(res => {
@@ -184,7 +185,7 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
       if(!error){
         let innnerGroup = {};
         innnerGroup[groupName] = groupSetObj[groupName].map(item => {
-          if(item.userId == userId) item.isHidden = isHidden;
+          if(item.userId == userId) item.hidden = hidden;
           return item;
         });
 
@@ -208,8 +209,8 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
               <React.Fragment key={index}>
                 <View className="tr groupName">{groupName}</View>
                 {list.map(({
-                  name, totalScore, scoreFinished, score, isHidden, userId,
-                }, turn) => <View key={turn} className={`tr ${isHidden ? "hidden-color" : ""} ${list.length == turn + 1 ? "no-line" : ""}`}>
+                  name, totalScore, scoreFinished, score, hidden, userId,
+                }, turn) => <View key={turn} className={`tr ${hidden ? "hidden-color" : ""} ${list.length == turn + 1 ? "no-line" : ""}`}>
                     <Text className="td">{name}</Text>
                     <Text className="td">
                       {
@@ -222,8 +223,8 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
                       }
                     </Text>
                     {
-                      permissions ? <View className="td control-btn" onClick={() => controlData(!isHidden,userId,groupName)}>{
-                        isHidden ? <Image className="control-icon" src="https://p0.meituan.net/ingee/89bb33cbda2a92c06d24395f402555aa700.png" /> :
+                      permissions ? <View className="td control-btn" onClick={() => controlData(!hidden,userId,groupName)}>{
+                        hidden ? <Image className="control-icon" src="https://p0.meituan.net/ingee/89bb33cbda2a92c06d24395f402555aa700.png" /> :
                           <Image className="control-icon" src="https://p0.meituan.net/ingee/0e9248e47bdc5311effa23a0f2953594797.png" />
                       }</View> : ""
                     }
@@ -244,7 +245,7 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
             <Text className="th">{scoreExistSign ? "预估评分" : "总得分"}</Text>
             <Text className="th">预估票房</Text>
             {
-              permissions ? <Text className="th">推荐程度</Text> :
+              permissions ? <Text className="th">展示状态</Text> :
                 commentExistSign ? <React.Fragment>
                   <Text className="th">整体评价</Text>
                   <Text className="th">推荐程度</Text>
@@ -257,8 +258,8 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
             <React.Fragment key={index}>
               <View className="tr groupName">{groupName}</View>
               {list.map(({
-                name, score, box, comment, evaluation, totalScore, scoreFinished, isHidden, userId,
-              }, turn) => <View key={turn} className={`tr ${isHidden ? "hidden-color" : ""} ${list.length == turn + 1 ? "no-line" : ""}`}>
+                name, score, box, comment, evaluation, totalScore, scoreFinished, hidden, userId,
+              }, turn) => <View key={turn} className={`tr ${hidden ? "hidden-color" : ""} ${list.length == turn + 1 ? "no-line" : ""}`}>
                   <Text className="td">{name}</Text>
                   <Text className="td">
                     {
@@ -273,8 +274,8 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
                   <Text className="td">{box === null ? "-" : `${box}亿`}</Text>
                   {
                     permissions ?
-                      <View className="td control-btn" onClick={() => controlData(!isHidden,userId,groupName)}>{
-                        isHidden ? <Image className="control-icon" src="https://p0.meituan.net/ingee/89bb33cbda2a92c06d24395f402555aa700.png" /> :
+                      <View className="td control-btn" onClick={() => controlData(!hidden,userId,groupName)}>{
+                        hidden ? <Image className="control-icon" src="https://p0.meituan.net/ingee/89bb33cbda2a92c06d24395f402555aa700.png" /> :
                           <Image className="control-icon" src="https://p0.meituan.net/ingee/0e9248e47bdc5311effa23a0f2953594797.png" />
                       }</View> :
                       commentExistSign ? <React.Fragment>
@@ -310,7 +311,10 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
               isOpened={showProgress}
               title="核心数据"
               className='layout-process core-process'
-              onClose={() => setShowProgress(false)}>
+              onClose={() => {
+                setStopScroll(false);
+                setShowProgress(false);
+              }}>
               <View className="core-tip">评估信息隐藏后仅自己可见，且不计入总平均值</View>
               {detailCont()}
             </FloatLayout> : detailCont()
@@ -341,7 +345,10 @@ export default function CoreSection({ categoryType, core, permissions,projectId,
               isOpened={showProgress}
               title="核心数据"
               className='layout-process core-process'
-              onClose={() => setShowProgress(false)}>
+              onClose={() => {
+                setShowProgress(false);
+                setStopScroll(false);
+              }}>
               <View className="core-tip">评估信息隐藏后仅自己可见，且不计入总平均值</View>
               {detailCont()}
             </FloatLayout> : detailCont()

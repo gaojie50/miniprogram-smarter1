@@ -490,6 +490,7 @@ const formatPercent = (value, decimals = 0) => {
   return +value == 0 ? '-' : `${value}%`;
 };
 
+
 // 设置DEFAULT_HOURS后的第一个整点
 function getDefaultEndTime(futureHours = 48) {
   const now = dayjs();
@@ -536,6 +537,15 @@ function formatEndTime(endTime) {
   };
 }
 
+const arrayToMap = (arr, indexName) => {
+  if (!Array.isArray(arr) || arr.length <= 0) return {};
+  const map = {};
+  for (const item of arr) {
+    map[item[indexName]] = item;
+  }
+  return map;
+}
+
 export default {
   errorHandle,
   debounce,
@@ -562,4 +572,5 @@ export default {
   formatPercent,
   getDefaultEndTime,
   formatEndTime,
-};
+  arrayToMap,
+}

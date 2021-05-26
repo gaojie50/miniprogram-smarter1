@@ -3,25 +3,30 @@ import { View, Image, Text, Textarea } from '@tarojs/components';
 import FloatLayout from '@components/m5/float-layout';
 import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
-import utils from '@utils/index';
 import './index.scss';
 
-const {formatNumber} = utils;
+const MathRound = (v,d=2) => {
+  const digits = 10 ** d;
+  return Math.round(v * digits) / digits ?? '-';
+};
+
 export default function TextEval({
   title,
   questionNum,
   texts,
   permissions,
-  resultPageTextTitleEditingGuideState,
-  setResultPageTextTitleEditingGuideState,
-  isAppendContent,
+  appendContent,
   summaryText,
   isTopic,
   projectId,
   roundId,
   type,
   questionId,
+  rightText,
+  setStopScroll,
 }) {
+  const [resultPageTextTitleEditingGuideState, setResultPageTextTitleEditingGuideState] = useState(Taro.getStorageSync('ResultPageTextTitleEditingGuide'));
+  if(!resultPageTextTitleEditingGuideState && !isTopic) Taro.setStorageSync('ResultPageTextTitleEditingGuide', true);
   const [packUp, setPackUp] = useState(true);
   const shrinkEvt = () => setPackUp(!packUp);
   const [showProgress, setShowProgress] = useState(false);
@@ -70,19 +75,18 @@ export default function TextEval({
   const inputDescribe = ({ detail }) => setDescribe(detail.value);
 
   const blurEvent = () => {
-    const texts = {
-      type,
-      questionId,
-      'content':describe
-    };
-    
     reqPacking({
       url: 'api/applet/management/update',
       data: {
         projectId,
         roundId,
-        texts,
-        isAppendContent,
+        modifyDate:1,
+        texts:{
+          type,
+          questionId,
+          'content':describe
+        },
+        appendContent,
       }
     }).then(res => {
       const { error } = res;
@@ -99,15 +103,13 @@ export default function TextEval({
   };
 
   const focusEvent = () => {
-    if (!resultPageTextTitleEditingGuideState) {
-      setResultPageTextTitleEditingGuideState(true);
-      Taro.setStorageSync('ResultPageTextTitleEditingGuide', true);
-    }
+    if (!resultPageTextTitleEditingGuideState) setResultPageTextTitleEditingGuideState(true);
   }
 
   const toDetails = () => {
     if (permissions || isTopic) setItemLimit(9999);
     setShowProgress(true);
+    setStopScroll(true);
   }
 
   const detailCont = () => {
@@ -134,18 +136,19 @@ export default function TextEval({
       </View>
     </View>;
   }
+  
   return <View className="textEval-wrap">
-    <View className={`h5 ${(permissions || isTopic) ? "rich" : ""}`}>
+    <View className={`h5 ${(permissions) ? "rich" : ""}`}>
       {questionNum}、{title}
       {
-        (permissions || isTopic) ?
+        permissions || isTopic ?
           <Text className="detail" onClick={toDetails}>评估详情 <Text className="arrow" /></Text> : ''
       }
     </View>
     {isTopic ? 
      <View className="filling">
        评估均值 <Text className="join">(共{joinNum}人参与)</Text>
-       <Text className="val">{formatNumber(summary/joinNum).text}</Text>
+       <Text className="val">{MathRound(summary/joinNum)} {rightText}</Text>
      </View>:
       (permissions ?
         <View className="textarea-wrap">
@@ -167,7 +170,10 @@ export default function TextEval({
       isOpened={showProgress}
       title={title}
       className='layout-process'
-      onClose={ () => setShowProgress(false) }>
+      onClose={ () => {
+        setShowProgress(false);
+        setStopScroll(false);
+      } }>
       {detailCont()}
     </FloatLayout>
   </View>;

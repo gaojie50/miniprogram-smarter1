@@ -100,12 +100,11 @@ export default function Excavate() {
       sourceType,
       movieType,
       dateSet,
-      dtPickerOption,
     } = params;
     setOffset(0);
     setHavemore(true);
     info.offset = 0;
-    info.limit = 20;
+    info.limit = 10;
     const chooseCategory = categoryType.filter((item) => item.active).map((item) =>item.code);
     if (chooseCategory.length) {
       info.category = chooseCategory[0];
@@ -127,7 +126,7 @@ export default function Excavate() {
       const {
         customStartDate,
         customEndDate,
-      } = dtPickerOption;
+      } = params;
       info.startDate = +new Date(+handleNewDate(customStartDate.value)).setHours(0,0,0,0);
       info.endDate = +new Date(+handleNewDate(customEndDate.value)).setHours(23, 59, 59, 999);
     }
@@ -135,7 +134,7 @@ export default function Excavate() {
   }, [params]);
 
   useEffect(() => {
-    setLoading(true);
+    Taro.showLoading({title: '加载中'});
     reqPacking(
       {
         method: 'GET',
@@ -154,13 +153,13 @@ export default function Excavate() {
           setNoData(false);
         }
         setData(projectDeepList);
-        setLoading(false);
+        Taro.hideLoading();
         return;
       }
       errorHandle(error);
       setData([]);
       setNoData(true);
-      setLoading(false);
+      Taro.hideLoading();
     })
   }, [filterInfo]);
 
@@ -173,7 +172,7 @@ export default function Excavate() {
         url: 'api/applet/management/deep',
         data: {
           ...filterInfo,
-          offset: offset + 20,
+          offset: offset + 10,
         },
       },
       'server',
@@ -185,7 +184,7 @@ export default function Excavate() {
           setHavemore(false);
         } else {
           setData((v) => [...v, ...projectDeepList]);
-          setOffset(v => v + 20);
+          setOffset(v => v + 10);
         }
         setLoading(false);
         return;
@@ -210,7 +209,7 @@ export default function Excavate() {
               className="search-bar"
               onClick={() => {
                 Taro.navigateTo({
-                  url: "/pages/searchProject/index",
+                  url: "/pages/searchProject/index?excavate=true",
                 });
               }}
             >

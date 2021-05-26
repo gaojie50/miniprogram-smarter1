@@ -4,7 +4,6 @@ export default {
   disableScroll: true,
   usingComponents: {
     mpLoading: 'weui-miniprogram/loading/loading',
-
   },
-  }
+}
   

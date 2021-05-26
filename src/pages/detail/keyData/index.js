@@ -1,5 +1,7 @@
 import { View, Image, Text, ScrollView, Block } from '@tarojs/components';
 import React from 'react';
+import Taro from '@tarojs/taro'
+import lx from '@analytics/wechat-sdk';
 import { set as setGlobalData, get as getGlobalData } from '../../../global_data';
 import utils from '@utils/index.js';
 import './index.scss';
@@ -28,9 +30,25 @@ export default class KeyData extends React.Component {
         } 
       });
   }
+  goCoreData = () =>{
+    const { basicData, keyData } = this.props;
+    const { userInfo } = Taro.getStorageSync('authinfo') || {};
+    lx.moduleClick('b_movie_b_6jm91lxa_mc', {
+      custom: {
+        user_id: userInfo.mis,
+        project_id: basicData.projectId,
+        keep_user_id: userInfo.keeperUserId
+      }
+    }, { cid: 'c_movie_b_z5wvew69'});
+    Taro.navigateTo({
+      url: `/pages/coreData/index?name=${basicData.name}&projectId=${basicData.projectId}&isMovieScreening=${!keyData.afterShowing}`,
+    })
+  }
 
   render() {
-    const { basicData, keyData, judgeRole } = this.props;
+    const { basicData, keyData, judgeRole, projectInfo } = this.props;
+    const {totalIncome} = keyData;
+    const newTotalIncome = totalIncome/100 || ''; // totalIncome返回的是以分为计算单位的值
     return (
       <View className="keyData">
         {
@@ -155,29 +173,46 @@ export default class KeyData extends React.Component {
               </View>
             </ScrollView>
             {
-              judgeRole.role !== 1 ? ''  
-              :<View className="keyData-bottom">
-                <View className="left">
-                  <View className="first-line">
-                    <Text className="left-label">制作成本</Text>
-                    <Text><Text className='num'>{formatNumber(keyData.cost, 'floor').num}</Text>{formatNumber(keyData.cost, 'floor').unit}</Text>
+              judgeRole.role === 1 && projectInfo && projectInfo.category === 3 && (
+              <View>
+                <View className="keyData-bottom">
+                  <View className="left">
+                    <View className="first-line">
+                      <Text className="left-label">制作成本</Text>
+                      <Text><Text className='num'>{formatNumber(keyData.cost, 'floor').num}</Text>{formatNumber(keyData.cost, 'floor').unit}</Text>
+                    </View>
+                    <View className="second-line">
+                      <Text className="left-label">猫眼投资成本</Text>
+                      <Text><Text className='num'>{formatNumber(keyData.investingCost, 'floor').num}</Text>{formatNumber(keyData.investingCost, 'floor').unit}</Text>
+                    </View>
                   </View>
-                  <View className="second-line">
-                    <Text className="left-label">猫眼投资成本</Text>
-                    <Text><Text className='num'>{formatNumber(keyData.investingCost, 'floor').num}</Text>{formatNumber(keyData.investingCost, 'floor').unit}</Text>
+                  <View className="right">
+                    <View className="first-line">
+                      <Text className="right-label">宣发费用</Text>
+                      <Text><Text className='num'>{formatNumber(keyData.advertisingCost, 'floor').num}</Text>{formatNumber(keyData.advertisingCost, 'floor').unit}</Text>
+                    </View>
+                    <View className="second-line">
+                      <Text className="right-label">猫眼份额</Text>
+                      <Text className='num'>{keyData.share || '-'}{keyData.share ? '%' : ''}</Text>
+                    </View>
                   </View>
                 </View>
-                <View className="right">
-                  <View className="first-line">
-                    <Text className="right-label">宣发费用</Text>
-                    <Text><Text className='num'>{formatNumber(keyData.advertisingCost, 'floor').num}</Text>{formatNumber(keyData.advertisingCost, 'floor').unit}</Text>
-                  </View>
-                  <View className="second-line">
-                    <Text className="right-label">猫眼份额</Text>
-                    <Text className='num'>{keyData.share || '-'}{keyData.share ? '%' : ''}</Text>
+                <View className="keyData-detail" onClick={this.goCoreData}>
+                  <View className="detail-box">
+                    <View className="detail-box-left">
+                      <View className="detail-left">总收入</View>
+                      <View className="detail-middle">
+                        {`${newTotalIncome < 0 ? '-' : ''}${newTotalIncome < 0 ? formatNumber(newTotalIncome*-1, 'floor').num : formatNumber(newTotalIncome, 'floor').num} ${newTotalIncome < 0 ? formatNumber(newTotalIncome*-1, 'floor').unit : formatNumber(newTotalIncome, 'floor').unit}`}
+                        </View>
+                    </View>
+                    <View className="detail-box-right">
+                      <View className="detail-right">查看详情</View>
+                      <Image src='http://p0.meituan.net/scarlett/82284f5ad86be73bf51bad206bead653595.png'></Image>
+                    </View>
                   </View>
                 </View>
               </View>
+              )
             }
           </Block>
         }

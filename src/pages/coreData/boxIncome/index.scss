@@ -1,0 +1,85 @@
+.at-float-layout__overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+.at-float-layout__container {
+  padding: 0px !important;
+}
+.at-float-layout__container {
+  min-height: 85vh;
+}
+.layout-body__content {
+  max-height: 76vh !important;
+  min-height: 0 !important;
+}
+.layout-header {
+  margin: 0px !important;
+  padding: 40px 30px !important;
+}
+.layout-header__btn-close {
+  right: 12.3px !important;
+}
+.income-header {
+  height: 50px;
+  position: fixed;
+  left: -30px;
+  top: 240px;
+  background: #FFFFFF;
+  padding: 0px 0px 40px 60px;
+  width: 100%;
+  border-radius: 20rpx 20rpx 0 0;
+  z-index: 999;
+  .income-header-title {
+    height: 50px;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 38px;
+    color: #333333;
+    line-height: 50px;
+  }
+  Image{
+    position: fixed;
+    width: 28.4px;
+    height: 28.4px;
+    position: absolute;
+    top: 0px;
+    right: 79.3px;
+  }
+}
+
+.income-list {
+  padding: 40px 0px;
+  margin: 0px 30px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #E5E5E5;
+  align-items: center;
+  .income-left {
+    width: 480px;
+    margin-right: 31px;
+    .income-title {
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 28px;
+      color: #333333;
+      line-height: 28px;
+    }
+    .income-remarks{
+      margin-top: 6px;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #999999;
+      line-height: 32px;
+    }
+  }
+  .income-money {
+    font-weight: 400;
+    font-family: MaoYanHeiTi-Light;
+    font-size: 28px;
+    color: #333333;
+    line-height: 28px;
+    .unit {
+      font-family: PingFangSC-Regular;
+    }
+  }
+}

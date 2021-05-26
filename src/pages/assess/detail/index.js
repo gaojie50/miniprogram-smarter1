@@ -35,7 +35,7 @@ export default function AssessPage(){
   useEffect(()=>{
     Taro.showLoading({title: '加载中'});
     fetchQuestion();
-  }, [])
+  }, []);
 
   function fetchQuestion(){
     reqPacking(
@@ -62,6 +62,7 @@ export default function AssessPage(){
             case 2:
             case 4:
               if (item.answerContent) {
+                item.content = item.answerContent;
                 item.complete = true;
                 item.finished = true;
               }
@@ -268,7 +269,7 @@ export default function AssessPage(){
         {
           questions.map(({
             type, required, title, questionNum, gapFilling, radioItems, matrixScale, matrixRadio,
-            showError, questionId, answerContent, matrixSelectList
+            showError, questionId, content, matrixSelectList
           }, index, arr) => {
             let qId = `que-num-${index+1}`;
             if (type == 1) {
@@ -280,7 +281,7 @@ export default function AssessPage(){
                 isPreview={ false }
                 questionNum={ questionNum }
                 showError={ showError }
-                defaultValue={ answerContent }
+                defaultValue={ content }
                 cb={ obj => updateQues(obj, questionId, arr[ index ]) }
               /></View>;
             }
@@ -294,7 +295,7 @@ export default function AssessPage(){
                 gapFilling={ gapFilling }
                 questionNum={ questionNum }
                 showError={ showError }
-                defaultValue={ answerContent }
+                defaultValue={ content }
                 cb={ obj => updateQues(obj, questionId, arr[ index ]) }
               /></View>;
             }
@@ -324,7 +325,7 @@ export default function AssessPage(){
                 questionNum={ questionNum }
                 radioItems={ radioItems }
                 showError={ showError }
-                defaultValue={ answerContent }
+                defaultValue={ content }
                 cb={ obj => updateQues(obj, questionId, arr[ index ]) }
               /></View>;
             }
@@ -349,7 +350,7 @@ export default function AssessPage(){
         }
       </View>
       </ScrollView>
-      <FixedButton className="submit-btn" onClick={handleSubmit} disabled={over}>
+      <FixedButton className="submit-btn" onClick={handleSubmit} disabled={(over)}>
         <View className="inner-text">{over ? '评估已结束, 不能继续参与' : `${finishNum>0?`已完成${finishNum}题，`:''}提交评估`}</View>
         <View className="inner-bar" style={{width:`${rate}`}} />
       </FixedButton>

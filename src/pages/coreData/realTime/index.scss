@@ -1,0 +1,196 @@
+.detail-top {
+  width: 100%;
+  box-sizing: border-box;
+  background-image: linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.06) 100%);
+  z-index: -1;
+  padding: 6.3vh 0;
+  .header {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    .header-title {
+      font-weight: 500;
+      font-family: PingFangSC-Medium;
+      font-size: 36px;
+      color: #19233B;
+    }
+  }
+  .backPage {
+    position: absolute;
+    left: 28px;
+    width: 80px;
+    image {
+      width: 44px;
+      height: 44px;
+      vertical-align: middle;
+    }
+  }
+}
+
+.detail-con {
+  background: #FFFFFF;
+  border-radius: 40px 40px 0 0;
+  top: 11%;
+  position: absolute;
+  height: 79%;
+  margin-bottom: 167px;
+}
+.detail {
+  background: #FFFFFF;
+  border-radius: 40px 40px 0 0;
+  top: 11%;
+  position: absolute;
+  height: 87%;
+  margin-bottom: 167px;
+}
+
+.param-list-rel {
+  padding: 30px 0px;
+  margin: 0px 30px;
+  display: flex;
+  border-bottom: 1px solid #E5E5E5;
+  align-items: center;
+  justify-content: space-between;
+  .param-left {
+    width: 614px;
+    margin-right: 31px;
+    .param-title-rel {
+      font-weight: 600;
+      font-family: PingFangSC-Semibold;
+      font-size: 28px;
+      color: #333333;
+      line-height: 28px;
+    }
+    .param-remarks{
+      margin-top: 6px;
+      font-weight: 400;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #999999;
+      line-height: 32px;
+    }
+  }
+  .param-money-rel {
+    font-weight: 400;
+    font-family: MaoYanHeiTi-Light;
+    font-size: 28px;
+    color: #333333;
+    line-height: 28px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 220rpx;
+    text-align: right;
+    input {
+      width: 156px !important;
+      height: 28px !important;
+      font-weight: 400 !important;
+      font-size: 28px !important;
+      line-height: 28px !important;
+      margin-right: 12px;
+      font-family: MaoYanHeiTi-Light !important;
+      color: #333333 !important;
+    }
+    .at-input__input {
+      padding: 0px;
+    }
+    .unit {
+      font-family: PingFangSC-Regular;
+    }
+    .unit1{
+      // width: 56px;
+      height: 28px;
+      font-weight: 300;
+      // font-family: PingFangSC-Light;
+      font-size: 28px;
+      color: #333333;
+      text-align: right;
+      line-height: 28px;
+    }
+    .at-input {
+      padding: 0px;
+    }
+  }
+  .param-to {
+    display: flex;
+    align-items: center;
+    .param-header-right {
+      font-weight: 400;
+      width: 78px;
+      height: 26px;
+      margin-right: 10px;
+      font-family: PingFangSC-Regular;
+      font-size: 26px;
+      color: #999999;
+      text-align: right;
+      line-height: 26px;
+      float: right;
+    }
+    Image {
+      width: 12px;
+      height: 24px;
+    }
+  }
+}
+.bottom-box {
+  position: absolute;
+  bottom: 0;
+  padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+  height: 8%;
+  display: flex;
+  // align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
+  .button {
+    opacity: 0.4;
+    background: #276FF0;
+    border-radius: 40px;
+    height: 80px;
+    width: 690px;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 30px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 24px;
+    margin: 16px 30px 0px 30px;
+  }
+}
+
+.float-bottom-box {
+  z-index: 999;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+  height: 8%;
+  display: flex;
+  // align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  box-shadow: 0 -2px 20px 0 rgba(0,0,0,0.05);
+  .button {
+    opacity: 0.4;
+    background: #276FF0;
+    border-radius: 40px;
+    height: 80px;
+    width: 690px;
+    font-weight: 600;
+    font-family: PingFangSC-Semibold;
+    font-size: 30px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 24px;
+    margin: 16px 30px 0px 30px;
+  }
+}
+
