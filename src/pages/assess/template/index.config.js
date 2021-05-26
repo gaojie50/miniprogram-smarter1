@@ -3,5 +3,6 @@ export default {
   navigationStyle: 'default',
   navigationBarBackgroundColor: '#f5f5f5',
   navigationBarTextStyle: 'black',
+  disableScroll: true,
   usingComponents: {}
 }
