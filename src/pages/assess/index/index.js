@@ -235,7 +235,7 @@ export default function assessPage(){
       return;
     }
 
-    if(didAssessed){
+    if(didAssessed && over){
       Taro.navigateTo({
         url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`,
       })
@@ -315,7 +315,7 @@ export default function assessPage(){
               </View>
             </View>
             <View className="deadline">{deadlineShow}</View>
-            {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{!didAssessed? `${over ? '查看评估问题' : '开始评估'}`: '您已填写，查看结果'}</Button>}
+            {canEvaluate && <Button className="start-btn" onClick={handleStartAssess}>{over ? `${didAssessed ? '您已填写，查看结果' : '查看评估问题'}`: '开始评估'}</Button>}
         </View>
       </View>
       )}
