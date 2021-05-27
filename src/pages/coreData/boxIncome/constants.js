@@ -545,7 +545,7 @@ export const lists = [
 export const listsAfter = [
   [
     {
-      key: 'estimateBoxIncome',
+      key: 'cumulateBox',
       title: '中国大陆境内地区票房收入',
       remarks: '含服务费',
       money: 0,

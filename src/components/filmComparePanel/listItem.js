@@ -8,7 +8,7 @@ import { picFn } from '@utils/pic';
 import { defaultMovieCover } from '@utils/imageUrl';
 import './listItem.scss';
 
-const { formatNumber } = utils;
+const { formatNumber, rpxTopx } = utils;
 
 export default function ListItem(props){
   const { item, orderNum, showNumber, totalBox } = props;
@@ -31,7 +31,7 @@ export default function ListItem(props){
       key={item.maoyanId}
     >
     {showNumber && <NumberLabel number={orderNum} />}
-    <Image src={item.pic ? picFn(item.pic) : defaultMovieCover} alt></Image>
+    <Image src={item.pic ? picFn(item.pic, parseInt(rpxTopx(100*2)), parseInt(rpxTopx(140*2))): defaultMovieCover} alt lazyLoad></Image>
     <View className='content-wrap'>
       <View className="main-info-wrap flex-item">
         <View className='movie-name'>{item.movieName}</View>

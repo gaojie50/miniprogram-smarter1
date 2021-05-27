@@ -15,7 +15,7 @@ export default function FingerPrint({ text = Taro.getStorageSync('authinfo')?.us
       position:fixed;
       top:0;
       left:0;
-      zIndex:10;
+      zIndex:1;
     `
   };
 

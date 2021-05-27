@@ -182,6 +182,19 @@ page image {
     }
   }
 
+  .deadline {
+    position: absolute;
+    margin: auto;
+    width: 100%;
+    padding: 0;
+    bottom: 190px;
+    text-align: center;
+  }
+
+  .normal-text {
+    color: #fff;
+  }
+
   .start-btn {
     position: absolute;
     margin: auto;

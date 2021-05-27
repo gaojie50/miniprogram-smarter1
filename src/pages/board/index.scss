@@ -19,11 +19,20 @@
   }
 
   &-search {
-    height: 44px;
-    width: 44px;
+    height: 28px;
+    width: 28px;
   
     position: absolute;
     left: 28px;
+  }
+
+  &-text {
+    position: absolute;
+    left: 58px;
+    font-weight: 500;
+    font-family: PingFangSC-Medium;
+    font-size: 28px;
+    color: #333333;
   }
 
   position: fixed;
@@ -415,6 +424,46 @@
       fill: #fff;
     }
   }
+}
+
+.board-search-box {
+  width: 100%;
+  height: 70px;
+  padding-top: 10px;
+  background-color: #fff;
+}
+
+.board-search-bar {
+  width: 690px;
+  height: 100%;
+  border-radius: 35px;
+  background-color: #f7f7f7;
+  margin: 0 auto;
+  position: relative;
+
+}
+.board-search-bar image.board-searchIco{
+  width: 30px;
+  height: 30px;
+  top: 20px;
+  left: 30px;
+  position: absolute;
+}
+
+.board-search-bar input {
+  display: block;
+  padding-right: 30px;
+  height: 100%;
+  padding-left: 70px;
+  font-weight: 400;
+  font-size: 28px;
+  color: #BBBBBB;
+}
+
+.board-search-bar icon {
+  padding-top: 15px;
+  position: absolute;
+  margin-left: 30px;
 }
 
 

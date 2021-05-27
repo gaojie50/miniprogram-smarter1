@@ -3,7 +3,7 @@ export default {
     'pages/list/index',
     'pages/hotMovieSortingList/index/index',
     'pages/board/index',
-    // 'pages/assessList/index',
+    'pages/assessList/index',
   ],
   tabBar: {
     list: [{
@@ -18,12 +18,12 @@ export default {
       pagePath: 'pages/hotMovieSortingList/index/index',
       text: '收入测算'
     },
-    // {
-    //   'iconPath': 'static/tab/assessment.png',
-    //   'selectedIconPath': 'static/tab/assessment_active.png',
-    //   pagePath: 'pages/assessList/index',
-    //   text: '评估列表'
-    // },
+    {
+      'iconPath': 'static/tab/assessment.png',
+      'selectedIconPath': 'static/tab/assessment_active.png',
+      pagePath: 'pages/assessList/index',
+      text: '评估列表'
+    },
     {
       'iconPath': 'static/tab/board.png',
       'selectedIconPath': 'static/tab/board_active.png',
@@ -33,9 +33,7 @@ export default {
     custom: true
   },
   window: {
-    navigationBarBackgroundColor: '#798CBA',
     backgroundTextStyle: 'light',
-    navigationBarTitleText: ' ',
     navigationBarTextStyle: 'white',
   },
   style: 'v2',
@@ -99,6 +97,11 @@ export default {
       pages:["index"]
     },
     {
+      root: "pages/excavate",
+      pages: ["index"]
+    },
+    {
+      root: "pages/jumpCustom",
       root: "pages/hotMovieSortingList/city",
       pages: ["index"]
     },
