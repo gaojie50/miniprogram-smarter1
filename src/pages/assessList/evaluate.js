@@ -277,8 +277,8 @@ function EvalutaionCard(props) {
 
   return (
     <View className='assess-list-evaluation-card'>
-      <View onClick={handleJump} >
-        <Image className='assess-list-evaluation-card-image' src={imageUrl ? imageUrl.replace('/w.h', '') : Cover}></Image>
+      <View>
+        <Image onClick={jumpDetail} className='assess-list-evaluation-card-image' src={imageUrl ? imageUrl.replace('/w.h', '') : Cover}></Image>
         <View className='assess-list-evaluation-card-title'>
           <View className='assess-list-evaluation-card-title-left' onClick={jumpDetail}>
             <View className='assess-list-evaluation-card-title-left-name'>{name}</View>
@@ -300,7 +300,7 @@ function EvalutaionCard(props) {
         <View className='assess-list-evaluation-card-info-title'>
           {roundTitle}
         </View>
-        <View className='assess-list-evaluation-card-info-detail'>
+        <View className='assess-list-evaluation-card-info-detail' onClick={handleJump} >
           {
             arr.map(({ title, value, unit }, index) => (
               <View key={index} className='assess-list-evaluation-card-info-detail-grid'>
