@@ -1,4 +1,4 @@
-const ENV = 'staging'; // 手动切换环境服务地址 (提交审核时，务必将此处改为prod)
+const ENV = 'prod'; // 手动切换环境服务地址 (提交审核时，务必将此处改为prod)
 
 
 const ApiBaseSet = {
