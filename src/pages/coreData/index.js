@@ -210,7 +210,7 @@ export default function hotMovieList() {
             </View>
           </View>
         </View>
-        <View scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, paddingTop: headerBarHeight}}>
+        <ScrollView scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, marginTop: headerBarHeight}}>
         { isMovieScreening ?
             <View className='core-page-box'>
               <DateBar needButtons callBack={callback.bind(this)} startDateBar={startDateBar} />
@@ -279,7 +279,7 @@ export default function hotMovieList() {
             ></BoxOfficeData>
           </View>
         }
-        </View>
+        </ScrollView>
       </View>
   );
 }
