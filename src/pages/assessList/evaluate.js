@@ -2,6 +2,8 @@ import Taro, { useDidShow } from '@tarojs/taro';
 import { View, Image, Text, Button } from '@tarojs/components';
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { noDataPic, defaultMovieCover as Cover } from '@utils/imageUrl';
+import AtButton from '@components/m5/button';
+import '@components/m5/style/components/button.scss';
 import dayjs from 'dayjs';
 import './evaluate.scss';
 import utils from '../../utils';
@@ -19,22 +21,56 @@ const TYPE = {
 
 const TYPE_MOVIE = 3 || 4;
 
-export function EvaluationList({type, offset}) {
+export function EvaluationList({type, offset, changeStatus, status}) {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [fetchLoading, setFetchLoading] = useState(false);
   const [noData, setNodata] = useState(false);
-  const fetch = useRef(false);
+  const [topLoading, setTopLoading] = useState(false);
+  // const fetch = useRef(false);
 
-  useDidShow(() => {
+  // useDidShow(() => {
+    // setLoading(true);
+    // setNodata(false);
+    // setData({});
+    // fetchEvalutaionData(type, 0)
+    // .then(res => {
+    //   const { success, error } = res;
+    //   if(success) {
+    //     setData(res.data || {})
+    //   } else {
+    //     Taro.showToast({
+    //       title: error.message,
+    //       icon: 'none'
+    //     })
+    //   }
+    //   setLoading(false)
+    // })
+    // .catch(err => {
+    //   Taro.showToast({
+    //     title: err,
+    //     icon: 'none'
+    //   })
+    // })
+  // })
+
+  useEffect(() => {
     setLoading(true);
-    setNodata(false);
     setData({});
+    setNodata(false);
     fetchEvalutaionData(type, 0)
     .then(res => {
       const { success, error } = res;
       if(success) {
-        setData(res.data || {})
+        setData(res.data || {});
+        if(status) {
+          changeStatus();
+          setTopLoading(false);
+          Taro.showToast({
+            title: '刷新成功',
+            icon: 'none'
+          })
+        }
       } else {
         Taro.showToast({
           title: error.message,
@@ -49,47 +85,14 @@ export function EvaluationList({type, offset}) {
         icon: 'none'
       })
     })
-  })
+  }, [type, status])
 
   useEffect(() => {
-    if(!fetch.current) {
-      fetch.current = true;
-      return
-    }
-    setData({});
-    setNodata(false);
-    setLoading(true);
-    fetchEvalutaionData(type, 0)
-    .then(res => {
-      const { success, error } = res;
-      if(success) {
-        setData(res.data || {})
-      } else {
-        Taro.showToast({
-          title: error.message,
-          icon: 'none'
-        })
-      }
-      setLoading(false)
-    })
-    .catch(err => {
-      Taro.showToast({
-        title: err,
-        icon: 'none'
-      })
-    })
-  }, [type])
-
-  useEffect(() => {
-    if(!fetch.current) {
-      fetch.current = true;
-      return
-    }
-
     if(offset === 0 || noData) {
       return
     }
     setFetchLoading(true)
+
     fetchEvalutaionData(type, offset)
     .then(res => {
       const { success, error } = res;
@@ -125,6 +128,7 @@ export function EvaluationList({type, offset}) {
 
   return loading ? <mpLoading show type='circle' tips=''></mpLoading> :
           evaluationList?.length > 0 ? <>
+          {/* <View className='button-brush'><AtButton size='small'>点击刷新列表</AtButton></View> */}
           {
             evaluationList.map((item, index) => <EvalutaionCard key={index} {...item} />)
           }
