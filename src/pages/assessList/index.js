@@ -32,10 +32,11 @@ const HEADER_LIST = [
 export default function AssessList() {
   const [current, setCurrent] = useState(0);
   const [offset, setOffset] = useState(0);
-  const [status, setStatus] = useState(false)
+  const [status, setStatus] = useState(false);
 
   useDidShow(() => {
-    setOffset(0)
+    setOffset(0);
+    setStatus(false);
     const { userInfo } = Taro.getStorageSync('authinfo');
     lx.pageView('c_movie_b_8gwiwttn', {
       custom: {
@@ -109,7 +110,6 @@ export default function AssessList() {
   })
 
   const changeStatus = () => {
-    console.log(111111)
     setStatus(false)
   }
   
@@ -157,9 +157,8 @@ export default function AssessList() {
         refresherDefaultStyle='none'
         refresherBackground='rgba(248, 248, 248, 1)'
         onRefresherRefresh={() => {
-          setOffset(0);
-          setCurrent(current);
           setStatus(true);
+          setOffset(0);
         }}
       >
         
