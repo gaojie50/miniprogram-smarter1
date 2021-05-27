@@ -161,7 +161,7 @@ export default function TextEval({
             onBlur={blurEvent}
             onFocus={focusEvent}
             value={describe}
-            cursor-spacing="15"
+            cursor-spacing="30"
             placeholderStyle={'color:#ccc;'}
             placeholder="暂无汇总内容" />
         </View> : detailCont())
