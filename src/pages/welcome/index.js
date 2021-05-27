@@ -51,29 +51,15 @@ class _C extends React.Component {
   getUserInfo = (e) => {
     this.setState({ loading: true });
     const that = this;
-
-    Taro.getSetting({
-      success: () => {
-        if (e.detail) {
-          const { iv, encryptedData } = e.detail
-          keepLogin({ 
-            iv, encryptedData, target: this.state.target || `/pages/list/index` 
-          }).catch(()=>{
-            that.setState({ loading: false});
-          })
-          return;
-        }
- 
-        this.setState({ loading: false });
-        Taro.showModal({
-          title: '提示',
-          content:
-            '您点击了拒绝授权，将无法正常使用智多星。请重新授权，或者删除小程序重新进入。',
-        })
-      },
-    })
-
-   
+    if (e.detail) {
+      const { iv, encryptedData } = e.detail
+      keepLogin({ 
+        iv, encryptedData, target: this.state.target || `/pages/list/index` 
+      }).catch(()=>{
+        that.setState({ loading: false});
+      })
+      return;
+    }
   }
 
 
@@ -81,6 +67,14 @@ class _C extends React.Component {
     const { titleHeight, isLogin, loading } = this.state
     return (
       <View className="welcome">
+        <View 
+          style={{position: 'fixed',top: capsuleLocation.top,left: '20rpx', width: '50px', height: '60px',color: '#ffffff'}}
+          onClick={() => {
+            Taro.navigateBack();
+          }}
+        >
+          返回
+        </View>
         <View style={'margin-top:' + titleHeight + 'px'}>
           <Image className="logo" src={smartLogo}></Image>
           <Image
