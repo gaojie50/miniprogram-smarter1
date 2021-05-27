@@ -10,7 +10,11 @@
     padding: 40px 0px;
     height: 92% !important;
     max-height: 92%;
+    .layout-body__content {
+      max-height: calc(92vh - 300px) !important;
+    }
   }
+  
   .question-wap {
     .title {
       font-weight: 600;
