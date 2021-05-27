@@ -32,6 +32,7 @@ const HEADER_LIST = [
 export default function AssessList() {
   const [current, setCurrent] = useState(0);
   const [offset, setOffset] = useState(0);
+  const [status, setStatus] = useState(false)
 
   useDidShow(() => {
     setOffset(0)
@@ -107,6 +108,10 @@ export default function AssessList() {
     })
   })
 
+  const changeStatus = () => {
+    console.log(111111)
+    setStatus(false)
+  }
   
 
   return <Fragment>
@@ -120,6 +125,23 @@ export default function AssessList() {
         ></Image>
         <Text className='assess-list-title-text'>评估列表</Text>
       </View>
+      <View 
+        className='assess-list-content-title' 
+        style={{top: `calc(${height}px + ${top}px)`}}  
+      >
+        {
+          HEADER_LIST.map((item, index) => {
+            return <View 
+              className={index === current ? 'assess-list-content-title-item active' : 'assess-list-content-title-item'} 
+              key={index} 
+              style={{width: `${100/HEADER_LIST.length}%`}}
+              onClick={() => {setCurrent(index); setOffset(0)}}
+            >
+                {item.value}
+              </View>
+          })
+        }
+      </View>
       <ScrollView 
         className='assess-list-content' 
         scrollY
@@ -130,24 +152,19 @@ export default function AssessList() {
         onScrollToLower={() => {
           setOffset(offset + 10);
         }}
+        refresherEnabled
+        refresherThreshold='0'
+        refresherDefaultStyle='none'
+        refresherBackground='rgba(248, 248, 248, 1)'
+        onRefresherRefresh={() => {
+          setOffset(0);
+          setCurrent(current);
+          setStatus(true);
+        }}
       >
-        <View className='assess-list-content-title' style={{top: `calc(${height}px + ${top}px)`}}  >
-          {
-            HEADER_LIST.map((item, index) => {
-              return <View 
-                className={index === current ? 'assess-list-content-title-item active' : 'assess-list-content-title-item'} 
-                key={index} 
-                style={{width: `${100/HEADER_LIST.length}%`}}
-                onClick={() => {setCurrent(index); setOffset(0)}}
-              >
-                  {item.value}
-                </View>
-            })
-          }
-        </View>
         
         <View className='assess-list-content-body'>
-          <EvaluationList type={current} offset={offset} />
+          <EvaluationList type={current} offset={offset} changeStatus={changeStatus} status={status} />
         </View>
       </ScrollView>
       <Tab />

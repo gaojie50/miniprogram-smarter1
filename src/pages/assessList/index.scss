@@ -26,12 +26,12 @@
     position: relative;
     &-title {
         width: 100%;
-        position: fixed;
+        // position: fixed;
         display: flex;
         height: 88px;
         background: #FFFFFF;
         box-shadow: 0 8px 4px 0 rgba(0, 0, 0, 0.02);
-        z-index: 2;
+        z-index: 100;
 
         &-item {
             height: 88px;
@@ -61,7 +61,8 @@
         }
     }
     &-body {
-        padding: 118px 30px 164px;
+        // padding: 118px 30px 164px;
+        padding: 30px 30px 164px;
         box-sizing: border-box;
         &-noMore {
             width: 100%;
