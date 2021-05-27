@@ -29,12 +29,6 @@ export default function hotMovieList() {
   const reqPacking = getGlobalData('reqPacking');
   const signText = ['', '主出', '主发', '联出', '联发', '出品', '发行'];
 
-  const handleBack = () => {
-    Taro.switchTab({
-      url: '/pages/list/index',
-    });
-  }
-
   const getMovieRanking = () => {
     let data = { 
       showDate,
@@ -138,9 +132,6 @@ export default function hotMovieList() {
       <View className='detail-top' style={{ height: `${headerBarHeight}px` }}>
         <View className='top'>
           <View className='header'>
-            <View className='backPage' onClick={handleBack}>
-              <Image src={ArrowLeft}></Image>
-            </View>
             <Text className='header-title'>热映影片排序</Text>
           </View>
         </View>
