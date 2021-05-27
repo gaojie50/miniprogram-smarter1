@@ -46,6 +46,7 @@
       justify-content: center;
       margin-right: 16px;
       background-size: contain;
+      background-color: #fff;
     }
 
     &-content {
@@ -81,9 +82,7 @@
       box-sizing: border-box;
       height: 32px;
       width: 32px;
-      border: 2px solid rgba(105, 191, 19, 0.3);
       background-color: #fff;
-      color: #69BF13;
       border-radius: 16px;
       align-items: center;
       justify-content: center;

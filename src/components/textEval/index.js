@@ -5,7 +5,7 @@ import Taro from '@tarojs/taro';
 import reqPacking from '@utils/reqPacking.js';
 import './index.scss';
 
-const MathRound = (v,d=2) => {
+const MathRound = (v, d = 2) => {
   const digits = 10 ** d;
   return Math.round(v * digits) / digits ?? '-';
 };
@@ -26,34 +26,34 @@ export default function TextEval({
   setStopScroll,
 }) {
   const [resultPageTextTitleEditingGuideState, setResultPageTextTitleEditingGuideState] = useState(Taro.getStorageSync('ResultPageTextTitleEditingGuide'));
-  if(!resultPageTextTitleEditingGuideState && !isTopic) Taro.setStorageSync('ResultPageTextTitleEditingGuide', true);
+  if (!resultPageTextTitleEditingGuideState && !isTopic) Taro.setStorageSync('ResultPageTextTitleEditingGuide', true);
   const [packUp, setPackUp] = useState(true);
   const shrinkEvt = () => setPackUp(!packUp);
   const [showProgress, setShowProgress] = useState(false);
   const [itemLimit, setItemLimit] = useState(5);
   let joinNum = 0;
   let summary = 0;
-  let  allMemberList = [];
+  let allMemberList = [];
   const total = texts.reduce((acc, val) => {
     acc += val.memberList.length;
-    
-    if(val.memberList?.length) allMemberList.push(...val.memberList);
+
+    if (val.memberList?.length) allMemberList.push(...val.memberList);
 
     val?.memberList?.map(item => {
-      if(item.content || item.content === 0) {
-        if(isTopic) summary += Number(item.content);
+      if (item.content || item.content === 0) {
+        if (isTopic) summary += Number(item.content);
         joinNum += 1;
       };
     });
 
     return acc;
   }, 0);
-  const [describe, setDescribe] = useState(summaryText || allMemberList.reduce((acc,val) =>{
-    const {name,content} = val;
-    
-    if(content) acc += `- ${content}\n`;
+  const [describe, setDescribe] = useState(summaryText || allMemberList.reduce((acc, val) => {
+    const { name, content } = val;
+
+    if (content) acc += `- ${content}\n`;
     return acc;
-  },""));
+  }, ""));
 
   const textsHandle = up => {
     if (!up) return texts;
@@ -80,20 +80,20 @@ export default function TextEval({
       data: {
         projectId,
         roundId,
-        modifyDate:1,
-        texts:{
+        modifyDate: 1,
+        texts: {
           type,
           questionId,
-          'content':describe
+          'content': describe
         },
         appendContent,
       }
     }).then(res => {
       const { error } = res;
 
-      if(error){
+      if (error) {
         Taro.showToast({
-          title: error.message||'请求失败',
+          title: error.message || '请求失败',
           icon: 'none',
           duration: 2000
         });
@@ -127,8 +127,8 @@ export default function TextEval({
               <View className="tr groupName">{groupName}</View>
               {memberList.map(({ name, content }, index) =>
                 <View key={index} className={`tr tr-line ${memberList.length == index + 1 ? "no-line" : ""}`}>
-                  <Text className="td">{name}</Text>
-                  <Text className="td">{content}</Text>
+                  <Text className="td ">{name}</Text>
+                  <Text className="td regular-font">{content}</Text>
                 </View>)}
             </React.Fragment>)}
           {total > itemLimit ? <View className="tr shrink" onClick={shrinkEvt}>{packUp ? `展开剩余${total - itemLimit}条` : "收起"}<Image className="arrow" src="../../static/arrow-down.png" /></View> : null}
@@ -136,7 +136,7 @@ export default function TextEval({
       </View>
     </View>;
   }
-  
+
   return <View className="textEval-wrap">
     <View className={`h5 ${(permissions) ? "rich" : ""}`}>
       {questionNum}、{title}
@@ -145,11 +145,11 @@ export default function TextEval({
           <Text className="detail" onClick={toDetails}>评估详情 <Text className="arrow" /></Text> : ''
       }
     </View>
-    {isTopic ? 
-     <View className="filling">
-       评估均值 <Text className="join">(共{joinNum}人参与)</Text>
-       <Text className="val">{MathRound(summary/joinNum)} {rightText}</Text>
-     </View>:
+    {isTopic ?
+      <View className="filling">
+        评估均值 <Text className="join">(共{joinNum}人参与)</Text>
+        {joinNum ? <Text className="val">{MathRound(summary / joinNum)} {rightText}</Text> : ''}
+      </View> :
       (permissions ?
         <View className="textarea-wrap">
           {
@@ -161,6 +161,7 @@ export default function TextEval({
             onBlur={blurEvent}
             onFocus={focusEvent}
             value={describe}
+            cursor-spacing="15"
             placeholderStyle={'color:#ccc;'}
             placeholder="暂无汇总内容" />
         </View> : detailCont())
@@ -170,10 +171,10 @@ export default function TextEval({
       isOpened={showProgress}
       title={title}
       className='layout-process'
-      onClose={ () => {
+      onClose={() => {
         setShowProgress(false);
         setStopScroll(false);
-      } }>
+      }}>
       {detailCont()}
     </FloatLayout>
   </View>;
