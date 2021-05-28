@@ -67,14 +67,6 @@ class _C extends React.Component {
     const { titleHeight, isLogin, loading } = this.state
     return (
       <View className="welcome">
-        <View 
-          style={{position: 'fixed',top: capsuleLocation.top,left: '20rpx', width: '50px', height: '60px',color: '#ffffff'}}
-          onClick={() => {
-            Taro.navigateBack();
-          }}
-        >
-          返回
-        </View>
         <View style={'margin-top:' + titleHeight + 'px'}>
           <Image className="logo" src={smartLogo}></Image>
           <Image
@@ -109,6 +101,17 @@ class _C extends React.Component {
             查看情报
           </Button>
         )}
+        <View 
+          className='stopLogin'
+          // style={{position: 'static',left: '20rpx', width: '110px', height: '60px',color: '#ffffff'}}
+          onClick={() => {
+            Taro.switchTab({
+              url: '/pages/list/index'
+            });
+          }}
+        >
+          暂不登录
+        </View>
       </View>
     )
   }
