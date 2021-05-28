@@ -1,4 +1,4 @@
-import { View, Image, Button } from '@tarojs/components'
+import { View, Image, Button, Block } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
 import { smartLogo, welcomeSlogan } from '@utils/imageUrl';
@@ -79,16 +79,28 @@ class _C extends React.Component {
           ></View>
         </View>
         {!isLogin && (
-          <Button
-            className="login-btn"
-            hoverClass="login-btn-hover"
-            openType="getUserInfo"
-            onGetuserinfo={this.getUserInfo}
-            disabled={loading}
-            loading={loading}
-          >
-            {loading ? '登录中' : '立即登录' }
-          </Button>
+          <Block>
+            <Button
+              className="login-btn"
+              hoverClass="login-btn-hover"
+              openType="getUserInfo"
+              onGetuserinfo={this.getUserInfo}
+              disabled={loading}
+              loading={loading}
+            >
+              {loading ? '登录中' : '立即登录' }
+            </Button>
+            <View 
+              className='stopLogin'
+              onClick={() => {
+                Taro.switchTab({
+                  url: '/pages/list/index'
+                });
+              }}
+            >
+              暂不登录
+            </View>
+          </Block>
         )}
         {isLogin && (
           <Button
@@ -101,17 +113,6 @@ class _C extends React.Component {
             查看情报
           </Button>
         )}
-        <View 
-          className='stopLogin'
-          // style={{position: 'static',left: '20rpx', width: '110px', height: '60px',color: '#ffffff'}}
-          onClick={() => {
-            Taro.switchTab({
-              url: '/pages/list/index'
-            });
-          }}
-        >
-          暂不登录
-        </View>
       </View>
     )
   }
