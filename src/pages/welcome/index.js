@@ -1,4 +1,4 @@
-import { View, Image, Button } from '@tarojs/components'
+import { View, Image, Button, Block } from '@tarojs/components'
 import React from 'react'
 import Taro from '@tarojs/taro'
 import { smartLogo, welcomeSlogan } from '@utils/imageUrl';
@@ -67,14 +67,6 @@ class _C extends React.Component {
     const { titleHeight, isLogin, loading } = this.state
     return (
       <View className="welcome">
-        <View 
-          style={{position: 'fixed',top: capsuleLocation.top,left: '20rpx', width: '50px', height: '60px',color: '#ffffff'}}
-          onClick={() => {
-            Taro.navigateBack();
-          }}
-        >
-          返回
-        </View>
         <View style={'margin-top:' + titleHeight + 'px'}>
           <Image className="logo" src={smartLogo}></Image>
           <Image
@@ -87,16 +79,28 @@ class _C extends React.Component {
           ></View>
         </View>
         {!isLogin && (
-          <Button
-            className="login-btn"
-            hoverClass="login-btn-hover"
-            openType="getUserInfo"
-            onGetuserinfo={this.getUserInfo}
-            disabled={loading}
-            loading={loading}
-          >
-            {loading ? '登录中' : '立即登录' }
-          </Button>
+          <Block>
+            <Button
+              className="login-btn"
+              hoverClass="login-btn-hover"
+              openType="getUserInfo"
+              onGetuserinfo={this.getUserInfo}
+              disabled={loading}
+              loading={loading}
+            >
+              {loading ? '登录中' : '立即登录' }
+            </Button>
+            <View 
+              className='stopLogin'
+              onClick={() => {
+                Taro.switchTab({
+                  url: '/pages/list/index'
+                });
+              }}
+            >
+              暂不登录
+            </View>
+          </Block>
         )}
         {isLogin && (
           <Button
