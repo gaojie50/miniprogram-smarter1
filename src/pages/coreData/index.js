@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect, useCallback } from 'react'; 
 import { View, Image, Text, ScrollView } from '@tarojs/components';
 import Taro from '@tarojs/taro'
 import lx from '@analytics/wechat-sdk';
@@ -29,6 +29,8 @@ export default function hotMovieList() {
   const [cityValue, setCityValue] = useState([]);
   const [showDay, setShowDay] = useState('');
   const [startDateBar, setsStartDateBar] = useState('');
+  const [showProgress, setShowProgress] = useState(false);
+  const childChangeShowProgress = useCallback((childShowProgress)=>setShowProgress(childShowProgress), []);
 
   const fetchBoxOfficeValue = (showDate) => {
     reqPacking({
@@ -210,7 +212,7 @@ export default function hotMovieList() {
             </View>
           </View>
         </View>
-        <ScrollView scrollY style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, marginTop: headerBarHeight}}>
+        <ScrollView scrollY={!showProgress} style={{ height: `${systemInfo.windowHeight - headerBarHeight}px`, marginTop: headerBarHeight}}>
         { isMovieScreening ?
             <View className='core-page-box'>
               <DateBar needButtons callBack={callback.bind(this)} startDateBar={startDateBar} />
@@ -264,6 +266,7 @@ export default function hotMovieList() {
                   isMovieScreening={isMovieScreening}
                   name={name}
                   showDate={Number(showDay || dayjs(new Date()).format('YYYYMMDD'))}
+                  childChangeShowProgress={childChangeShowProgress}
                 ></BoxOfficeData>
               </View>
             </View>
@@ -276,6 +279,7 @@ export default function hotMovieList() {
               projectId={projectId}
               name={name}
               showDate={Number(showDay || dayjs(new Date()).format('YYYYMMDD'))}
+              childChangeShowProgress={childChangeShowProgress}
             ></BoxOfficeData>
           </View>
         }
