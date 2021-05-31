@@ -43,6 +43,11 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
     })
     setLists(lists);
   }, [response])
+  
+  useEffect(()=>{
+    childChangeShowProgress(showProgress);
+  }, [showProgress])
+  
   const changeShowProgress =(index)=> {
     setShowProgress(true);
     setOfficeIncomeIndex(index);
