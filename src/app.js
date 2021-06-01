@@ -22,6 +22,33 @@ class App extends React.Component {
     this.initReport()
     lx.setLch();
     lx.start(); // 应用启动
+
+    // 监测小程序版本更新
+    const updateManager = Taro.getUpdateManager();
+    updateManager.onCheckForUpdate((res) => {    // 检查版本是否更新
+      if(res.hasUpdate) {
+        // 下载新版本
+        updateManager.onUpdateReady(() => {
+          Taro.showModal({
+            title: '更新提示',
+            content: '版本已更新，是否重启应用？',
+            success: (_res) => {
+              if(_res.confirm) {
+                // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
+                updateManager.applyUpdate();
+              }
+            }
+          })
+        })
+        // 新版本下载失败
+        updateManager.onUpdateFailed(() => {
+          Taro.showModal({
+            title: '更新提示',
+            content: '新版本已经上线啦，请您删除当前小程序，重新搜索打开哟~',
+          })
+        })
+      }
+    })
   }
 
   initReport() {
