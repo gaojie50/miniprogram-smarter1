@@ -68,7 +68,7 @@ export default function KeyInfo(props, ref) {
           : null
         }
         
-        {
+        {/* {
           props.judgeRole.role === 1 ? 
           <Block>
             <KeyInput updateRef={updateRef} data={props.movieData} ref={keyRef} type="productionCosts" name="制作成本" text="万"></KeyInput>
@@ -80,7 +80,7 @@ export default function KeyInfo(props, ref) {
             <KeyInput updateRef={updateRef} data={props.movieData} ref={keyRef} type="myInvestment" name="猫眼投资成本" text="万"></KeyInput>
           </Block>
           : null
-        }
+        } */}
       </View>
     </View>
   )

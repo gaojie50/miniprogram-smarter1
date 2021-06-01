@@ -226,7 +226,9 @@ export default function hotMovieList() {
             { isGetList && ranking && ranking.length <= 0 && <View className='empty-list'>暂无数据</View> }
           </View>
         ) : (
-          <NoAccess title='暂无权限' backgroundColor='#4D5A71' height='100vh' position='absolute' />
+          <View style={{position: 'absolute',width: '100%', marginTop: '120rpx'}}>
+            <NoAccess titleColor='#333' contentColor='#333' />
+          </View>
         )
       }
     </View>
