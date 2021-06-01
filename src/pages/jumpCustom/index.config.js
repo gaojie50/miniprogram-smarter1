@@ -3,4 +3,5 @@ export default {
   navigationBarBackgroundColor: '#ffffff',
   backgroundTextStyle: 'light',
   navigationBarTextStyle: 'black',
+  disableScroll: true
 }

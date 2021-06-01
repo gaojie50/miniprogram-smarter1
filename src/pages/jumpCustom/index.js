@@ -1,10 +1,16 @@
-import { View, Textarea, Button　 } from '@tarojs/components';
+import { View, Textarea, Button, RadioGroup, Radio, ScrollView, Text　 } from '@tarojs/components';
 import React, { useState } from 'react';
 import Taro from '@tarojs/taro';
+import { pagePath } from './constants';
+import { get as getGlobalData } from '../../global_data';
 import './index.scss';
 
+const capsuleLocation = getGlobalData('capsuleLocation');
+const titleBarHeight = capsuleLocation.bottom;
+
 export default function JumpCustom() {
-    const [value, setValue] = useState();
+    const [value, setValue] = useState(pagePath[0].path);
+    const [checked, setChecked] = useState(0);
 
     return (
         <View className='jump-custom'>
@@ -29,7 +35,26 @@ export default function JumpCustom() {
             >
                 跳转
             </Button>
-            <View style={{color: '#333333'}}>示例：/pages/detail/index?projectId=12345</View>
+            <ScrollView scrollY className="jump-path" style={{height: `calc(100vh - ${titleBarHeight}px - 165px)`}}>
+              <RadioGroup>
+                {
+                  pagePath.map((item, index) => {
+                    return <View className="path" >
+                      <Radio  
+                      className="path-radio" 
+                      key={index}
+                      checked={!!(index === checked)}
+                      onClick={() => {
+                        setValue(item.path);
+                        setChecked(index);
+                      }}
+                      />
+                      <Text className="path-text">{item.name} {item.path}</Text>
+                      </View>
+                  })
+                }
+              </RadioGroup>
+            </ScrollView>
         </View>
     )
 }

@@ -26,4 +26,26 @@
         width: 220px !important;
         font-weight: 400;
     }
+    
+    .jump-path {
+        margin-top: 20px;
+        color: #333;
+        font-size: 30px;
+
+        .path {
+            display: flex;
+            margin-top: 10px;
+            align-items: center;
+            &-radio {
+                display: block;
+                margin-right: 15px;
+                width: 50px;
+                height: 100%;
+            }
+            &-text {
+                display: block;
+                word-break: break-all;
+            }
+        }
+    }
 }
