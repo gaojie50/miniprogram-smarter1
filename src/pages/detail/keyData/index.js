@@ -35,7 +35,7 @@ export default class KeyData extends React.Component {
     const { userInfo } = Taro.getStorageSync('authinfo') || {};
     lx.moduleClick('b_movie_b_6jm91lxa_mc', {
       custom: {
-        user_id: userInfo.mis,
+        user_id: userInfo.keeperUserId,
         project_id: basicData.projectId,
         keep_user_id: userInfo.keeperUserId
       }

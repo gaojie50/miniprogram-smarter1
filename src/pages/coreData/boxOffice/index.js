@@ -57,7 +57,7 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
       const { userInfo } = Taro.getStorageSync('authinfo') || {};
     lx.moduleClick('b_movie_b_rumi8b0d_mc', {
       custom: {
-        user_id: userInfo.mis,
+        user_id: userInfo.keeperUserId,
         project_id: projectId,
         keep_user_id: userInfo.keeperUserId
       }

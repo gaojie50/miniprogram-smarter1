@@ -35,22 +35,17 @@ export default function JumpCustom() {
             >
                 跳转
             </Button>
-            <ScrollView scrollY className="jump-path" style={{height: `calc(100vh - ${titleBarHeight}px - 165px)`}}>
+            <ScrollView scrollY className='jump-path' style={{height: `calc(100vh - ${titleBarHeight}px - 165px)`}}>
               <RadioGroup>
                 {
                   pagePath.map((item, index) => {
-                    return <View className="path" >
-                      <Radio  
-                      className="path-radio" 
-                      key={index}
-                      checked={!!(index === checked)}
-                      onClick={() => {
-                        setValue(item.path);
-                        setChecked(index);
-                      }}
-                      />
-                      <Text className="path-text">{item.name} {item.path}</Text>
-                      </View>
+                    return <View className='path' key={index} onClick={() => {setValue(item.path);setChecked(index);}}>
+                            <Radio  
+                              className='path-radio'
+                              checked={!!(index === checked)} 
+                            />
+                              <Text className='path-text'>{item.name} {item.path}</Text>
+                          </View>
                   })
                 }
               </RadioGroup>

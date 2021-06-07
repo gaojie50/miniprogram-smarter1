@@ -23,23 +23,15 @@ class App extends React.Component {
     lx.setLch();
     lx.start(); // 应用启动
 
-    // 监测小程序版本更新
+    // 小程序版本更新
     const updateManager = Taro.getUpdateManager();
-    updateManager.onCheckForUpdate((res) => {    // 检查版本是否更新
+    updateManager.onCheckForUpdate((res) => {    // 检查是否有新版本
       if(res.hasUpdate) {
         // 下载新版本
         updateManager.onUpdateReady(() => {
-          Taro.showModal({
-            title: '更新提示',
-            content: '版本已更新，是否重启应用？',
-            success: (_res) => {
-              if(_res.confirm) {
-                // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
-                updateManager.applyUpdate();
-              }
-            }
-          })
+          updateManager.applyUpdate();  // 重启应用
         })
+
         // 新版本下载失败
         updateManager.onUpdateFailed(() => {
           Taro.showModal({
@@ -55,12 +47,12 @@ class App extends React.Component {
     lx.init("https://report.meituan.com/", {
       appnm: "zhiduoxing",
       category: 'movie_b',
-      rtnm: ''
+      rtnm: '',
     });
     const { userInfo } = Taro.getStorageSync('authinfo') || {};
     if(userInfo) {
       lx.set('wxid', userInfo.keeperUserId);
-      lx.set('user_id', userInfo.mis);
+      lx.set('user_id', userInfo.keeperUserId);
       lx.set('uid', userInfo.keeperUserId);
       lx.set('keep_user_id', userInfo.keeperUserId);
     }

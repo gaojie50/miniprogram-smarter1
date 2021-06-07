@@ -186,7 +186,7 @@ export default function hotMovieList() {
     const { userInfo } = Taro.getStorageSync('authinfo') || {};
     lx.pageView('c_movie_b_u55jfr38', {
       custom: {
-        user_id: userInfo.mis,
+        user_id: userInfo.keeperUserId,
           project_id: projectId,
           keep_user_id: userInfo.keeperUserId
       }

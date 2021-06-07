@@ -66,19 +66,19 @@ export default function realTime({}) {
   }
 
   const judgeIsSubmit = (hasToast) => {
-    for(let i = 0; i<11; i++) {
-      if(i != 1 && i != 2 && i != 3) {
-        if(lists[i].money === ''){
-          hasToast && Taro.showToast({
-            title: `请填写${lists[i].title}`,
-            icon: 'none',
-            duration: 2000,
-          });
-          setIsSubmit(false);
-          return;
-        } 
-      }
-    }
+    // for(let i = 0; i<11; i++) {
+    //   if(i != 1 && i != 2 && i != 3) {
+    //     if(lists[i].money === ''){
+    //       hasToast && Taro.showToast({
+    //         title: `请填写${lists[i].title}`,
+    //         icon: 'none',
+    //         duration: 2000,
+    //       });
+    //       setIsSubmit(false);
+    //       return;
+    //     } 
+    //   }
+    // }
     for(let i = 0; i<11; i++) {
       if(lists[i].money){
         if(i!=6) {
@@ -114,7 +114,7 @@ export default function realTime({}) {
       const { userInfo } = Taro.getStorageSync('authinfo') || {};
       lx.moduleClick('movie_b_ynjn6dpx', {
         custom: {
-          user_id: userInfo.mis,
+          user_id: userInfo.keeperUserId,
           project_id: projectId,
           keep_user_id: userInfo.keeperUserId
         }
@@ -125,6 +125,7 @@ export default function realTime({}) {
 
   const postDataValue = () => {
     const data = getValue || {};
+     console.log(data, 2222)
     for(let item of lists) {
       if(item.dataIndex !== 'myShare'){
         data[item.dataIndex] = centChangeTenThousand(item.money);
@@ -188,7 +189,7 @@ export default function realTime({}) {
       const { userInfo } = Taro.getStorageSync('authinfo') || {};
       lx.pageView('c_movie_b_28xvqisf', {
         custom: {
-          user_id: userInfo.mis,
+          user_id: userInfo.keeperUserId,
             project_id: projectId,
             keep_user_id: userInfo.keeperUserId
         }

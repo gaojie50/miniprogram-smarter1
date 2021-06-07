@@ -74,7 +74,7 @@ export default function hotMovieList() {
     lx.moduleClick('movie_b_2usoy2ef', {
       custom: {
         project_id: projectId,
-        user_id: userInfo.mis,
+        user_id: userInfo.keeperUserId,
         keep_user_id: userInfo.keeperUserId,
       }
     });
