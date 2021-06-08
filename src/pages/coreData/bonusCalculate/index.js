@@ -20,12 +20,12 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     [ {text: '比例1', isOnclick: false}, {text: '比例2', isOnclick: true}, {text: '比例3', isOnclick: false} ]
   ]
   const ladderListsInfo = [
-    {name:'A', unit:'万', value:'', dataName: 'boxLevelA'},
-    {name:'B', unit:'万', value:'', dataName: 'boxLevelB'},
-    {name:'C', unit:'万', value:'', dataName: 'boxLevelC'},
-    {name:'a', unit:'%', value:'', dataName: 'ratioLevelA'},
-    {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'},
-    {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
+    {name:'A', unit:'万', value:'', dataName: 'param1'},
+    {name:'B', unit:'万', value:'', dataName: 'param2'},
+    {name:'C', unit:'万', value:'', dataName: 'param3'},
+    {name:'a', unit:'%', value:'', dataName: 'param4'},
+    {name:'b', unit:'%', value:'', dataName: 'param5'},
+    {name:'c', unit:'%', value:'', dataName: 'param6'}
   ];
 
   const [lists, setLists] = useState(butList);
@@ -62,7 +62,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
       if (success) {
         const { data } = res;
         if(res.data){
-          const {progressionBase = null, computeType = null, progressionType = null, progressionValue = null, fixedRatioValue = null, fixedRatioBoxValue = null, fixedAmountValue = null, fixedRatioType = null} = data;
+          const {progressionBase = null, computeType = null, progressionType = null, paramValue = null, fixedRatioValue = null, fixedRatioBoxValue = null, fixedAmountValue = null, fixedRatioType = null} = data;
           computeType && lists[0].map((item, index)=>{
             item.isOnclick = (computeType === index+1)
           })
@@ -75,15 +75,15 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
           fixedRatioType && lists[3].map((item, index)=>{
             item.isOnclick = (fixedRatioType === index+1)
           })
-          progressionValue && progressionBase == '2' && ladderLists.map((item)=> {
-            if(item.dataName.includes('boxLevel')) {
-              item.value = numberFormatCent(progressionValue[item.dataName]);
+          paramValue && progressionBase == '2' && ladderLists.map((item)=> {
+            if(+item.dataName.charAt(5) < 4) {
+              item.value = numberFormatCent(paramValue[item.dataName]);
             } else{
-              item.value = progressionValue[item.dataName];
+              item.value = paramValue[item.dataName];
             }
           })
-          progressionValue && progressionBase == '1' && ladderLists.map((item)=> {
-            item.value = progressionValue[item.dataName];
+          paramValue && progressionBase == '1' && ladderLists.map((item)=> {
+            item.value = paramValue[item.dataName];
           })
           if(computeType == '1' && fixedRatioType == '1') {
             setCoefficient(fixedRatioValue);
@@ -117,19 +117,19 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
     let progressionType = lists[1].findIndex((item)=>item.isOnclick) + 1;
     let progressionBase = lists[2].findIndex((item)=>item.isOnclick) + 1;
     let fixedRatioType = lists[3].findIndex((item)=>item.isOnclick) + 1;
-    let progressionValue = {};
+    let paramValue = {};
     if(lists[2][1].isOnclick) {
       ladderLists.map((item)=>{
-        if(item.dataName.includes('boxLevel')) {
-          progressionValue[item.dataName] = centChangeTenThousand(item.value);
+        if(+item.dataName.charAt(5) < 4) {
+          paramValue[item.dataName] = centChangeTenThousand(item.value);
         }else{
-          progressionValue[item.dataName] = Number(item.value)
+          paramValue[item.dataName] = Number(item.value)
         }
       })
     }
     if(lists[2][0].isOnclick) {
       ladderLists.map((item)=>{
-        progressionValue[item.dataName] = Number(item.value)
+        paramValue[item.dataName] = Number(item.value)
       })
     }
     
@@ -173,7 +173,7 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         computeType,
         progressionType,
         progressionBase,
-        progressionValue
+        paramValue
       }
     }
 
@@ -407,10 +407,10 @@ export default function BonusCalculate({calculateIndex, incomeName, calculate, s
         </View>
         <View className='ladder-lists'>
           {ladderLists.map((item, index)=>{
-            if(lists[2][0].isOnclick && item.dataName.includes('boxLevel')) {
+            if(lists[2][0].isOnclick && +item.dataName.charAt(5) < 4) {
               item.unit = '%'
             }
-            if(lists[2][1].isOnclick && item.dataName.includes('boxLevel')) {
+            if(lists[2][1].isOnclick && +item.dataName.charAt(5) < 4) {
               item.unit = '万'
             }
             return(
