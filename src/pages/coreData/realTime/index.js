@@ -126,7 +126,7 @@ export default function realTime({}) {
   const postDataValue = () => {
     const data = getValue || {};
     for(let item of lists) {
-      if(item.dataIndex !== 'myShare'){
+      if(item.dataIndex !== 'vcOfMyShare' && item.dataIndex !== 'fiOfMyShare'){
         data[item.dataIndex] = centChangeTenThousand(item.money);
       } else {
         data[item.dataIndex] = item.money;
