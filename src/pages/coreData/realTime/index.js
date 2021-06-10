@@ -79,30 +79,30 @@ export default function realTime({}) {
     //     } 
     //   }
     // }
-    for(let i = 0; i<11; i++) {
+    for(let i = 0; i<15; i++) {
       if(lists[i].money){
-        if(i!=6) {
-          let judge = lists[i].money.toString().split(".");
-          if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
-            hasToast && Taro.showToast({
-              title: `小数点${lists[i].title}`,
-              icon: 'none',
-              duration: 2000,
-            });
-            setIsSubmit(false);
-            return;
-          }
-        }else{
-          if(Number(lists[i].money)< 0 || Number(lists[i].money)>100 ){
-            hasToast && Taro.showToast({
-              title: `${lists[i].title}填写0~100数值`,
-              icon: 'none',
-              duration: 2000,
-            });
-            setIsSubmit(false);
-            return;
-          }
+        // if(i!=6) {
+        //   let judge = lists[i].money.toString().split(".");
+        //   if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
+        //     hasToast && Taro.showToast({
+        //       title: `小数点${lists[i].title}`,
+        //       icon: 'none',
+        //       duration: 2000,
+        //     });
+        //     setIsSubmit(false);
+        //     return;
+        //   }
+        // }else{
+        if((Number(lists[i].money)< 0 || Number(lists[i].money)>100) && (lists[i].unit === '%') ){
+          hasToast && Taro.showToast({
+            title: `${lists[i].title}填写0~100数值`,
+            icon: 'none',
+            duration: 2000,
+          });
+          setIsSubmit(false);
+          return;
         }
+        // }
       }
     }
     setIsSubmit(true);
