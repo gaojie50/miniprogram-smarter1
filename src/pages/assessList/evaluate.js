@@ -234,11 +234,7 @@ function EvalutaionCard(props) {
 
 
   const handleJump = () => {
-    if( hasAssess || projectRole === 1) {
-      Taro.navigateTo({ url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`})
-    } else {
-      Taro.navigateTo({ url: `/pages/assess/index/index?projectId=${projectId}&roundId=${roundId}`})
-    }
+    Taro.navigateTo({ url: `/pages/result/index?projectId=${projectId}&roundId=${roundId}`});
   }
 
   const jumpDetail = () => {

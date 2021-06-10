@@ -125,7 +125,6 @@ export default function realTime({}) {
 
   const postDataValue = () => {
     const data = getValue || {};
-     console.log(data, 2222)
     for(let item of lists) {
       if(item.dataIndex !== 'myShare'){
         data[item.dataIndex] = centChangeTenThousand(item.money);

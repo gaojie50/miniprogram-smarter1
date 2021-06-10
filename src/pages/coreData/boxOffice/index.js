@@ -43,7 +43,7 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
   
   useEffect(()=>{
     lists.map((item)=>{
-      item.num = response[item.dataName] ? response[item.dataName].total : ''
+      item.num = response[item.dataName] ? (item.dataName === 'distributionAgencyIncome' ? response[item.dataName].myDistributionAgencyIncome : response[item.dataName].total) : ''
     })
     setLists(lists);
   }, [response])
