@@ -225,7 +225,7 @@ export default function realTime({}) {
         let newData = Object.assign('', data);
         setGetValue(res.data);
         for(let key in newData) {
-          if(key!=='myShare') {
+          if(key!=='vcOfMyShare' && key!=='fiOfMyShare') {
             newData[key] = numberFormatCent(newData[key])
           }
         }
