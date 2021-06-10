@@ -48,5 +48,9 @@ export const numberFormatCent = (number) => {
 }
 
 export const centChangeTenThousand = (number) => {
-  return Number(number) * 1000000;
+  if(number) {
+    return Number(number) * 1000000;
+  }
+  
+  return null
 }
