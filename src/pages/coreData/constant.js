@@ -55,14 +55,14 @@ export const REALTIME_DATA_LISTS = [
         title: '猫眼投资比例（风投）',
         remarks: '',
         money: '',
-        dataIndex: 'vcOfMyShare',
+        dataIndex: 'vcOfMyInvestmentRatio',
         unit: '%',
       },
       {
         title: '猫眼投资比例（固投）',
         remarks: '',
         money: '',
-        dataIndex: 'fiOfMyShare',
+        dataIndex: 'fiOfMyInvestmentRatio',
         unit: '%',
       },
       {

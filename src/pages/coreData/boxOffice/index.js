@@ -6,7 +6,7 @@ import lx from '@analytics/wechat-sdk';
 import BoxIncome from '../boxIncome/index'
 import {numberFormat} from '../common'
 import './index.scss'
-import { handleActive } from '@components/m5/calendar/common/plugins';
+// import { handleActive } from '@components/m5/calendar/common/plugins';
 
 export default function BoxOfficeData({current, isMovieScreening, projectId, name, response, showDate}) {
   const listsInfo =[
@@ -32,7 +32,7 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
     },
   ]
   const preIncome = ['未来收入预估', '已实现收入预估', '总收入预估']
-  const incomeName = ['票务收入(元)', '片方分账收入(元)', '发行代理收入(元)', '宣发收入(元)']
+  const incomeName = ['票务收入(元)', '猫眼投资收入(元)', '发行代理收入(元)', '宣发收入(元)']
   const [lists, setLists] = useState(listsInfo);
   const [showProgress, setShowProgress] = useState(false);
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState(0);
