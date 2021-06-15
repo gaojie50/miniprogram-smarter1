@@ -16,7 +16,7 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
       dataName: 'ticketIncome',
     },
     {
-      name: '片方分账收入',
+      name: '猫眼投资收入',
       num: '',
       dataName: 'splitIncome'
     },

@@ -154,6 +154,7 @@ export default function AssessList() {
         }}
         refresherEnabled
         refresherThreshold='0'
+        refresherTriggered={status}
         refresherDefaultStyle='none'
         refresherBackground='rgba(248, 248, 248, 1)'
         onRefresherRefresh={() => {
