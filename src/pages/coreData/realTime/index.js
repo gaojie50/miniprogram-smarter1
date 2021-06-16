@@ -126,7 +126,8 @@ export default function realTime({}) {
   const postDataValue = () => {
     const data = getValue || {};
     for(let item of lists) {
-      if(item.dataIndex !== 'vcOfMyShare' && item.dataIndex !== 'fiOfMyShare'){
+      console.log(item, 1123)
+      if(item.dataIndex !== 'vcOfMyInvestmentRatio' && item.dataIndex !== 'fiOfMyInvestmentRatio'){
         data[item.dataIndex] = centChangeTenThousand(item.money);
       } else {
         data[item.dataIndex] = item.money;
@@ -225,7 +226,7 @@ export default function realTime({}) {
         let newData = Object.assign('', data);
         setGetValue(res.data);
         for(let key in newData) {
-          if(key!=='vcOfMyShare' && key!=='fiOfMyShare') {
+          if(key!=='vcOfMyInvestmentRatio' && key!=='fiOfMyInvestmentRatio') {
             newData[key] = numberFormatCent(newData[key])
           }
         }
