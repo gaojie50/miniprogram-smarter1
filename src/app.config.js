@@ -102,6 +102,9 @@ export default {
     },
     {
       root: "pages/jumpCustom",
+      pages: ["index"]
+    },
+    {
       root: "pages/hotMovieSortingList/city",
       pages: ["index"]
     },

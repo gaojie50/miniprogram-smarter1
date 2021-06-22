@@ -20,12 +20,12 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     [ {text: '超额累进', isOnclick: true}, {text: '全额累进', isOnclick: false} ]
   ]
   const ladderListsInfo = [
-    {name:'A', unit:'万', value:'', dataName: 'boxLevelA'},
-    {name:'B', unit:'万', value:'', dataName: 'boxLevelB'},
-    // {name:'C', unit:'万', value:'', dataName: 'boxLevelC'},
-    {name:'a', unit:'%', value:'', dataName: 'ratioLevelA'},
-    {name:'b', unit:'%', value:'', dataName: 'ratioLevelB'},
-    {name:'c', unit:'%', value:'', dataName: 'ratioLevelC'}
+    {name:'A', unit:'万', value:'', dataName: 'param1'},
+    {name:'B', unit:'万', value:'', dataName: 'param2'},
+    // {name:'C', unit:'万', value:'', dataName: 'param3'},
+    {name:'a', unit:'%', value:'', dataName: 'param4'},
+    {name:'b', unit:'%', value:'', dataName: 'param5'},
+    {name:'c', unit:'%', value:'', dataName: 'param6'}
   ];
   const [lists, setLists] = useState(bonusButList);
   const [isSubmit, setIsSubmit] = useState(false);
@@ -57,7 +57,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
       const { success, error, data } = res;
       if (success) {
         if(res.data) {
-          const {baseType = null, computeType = null, progressionType = null, progressionValue = null, fixedRatioValue = null, fixedAmountValue = null} = data;
+          const {baseType = null, computeType = null, progressionType = null, paramValue = null, fixedRatioValue = null, fixedAmountValue = null} = data;
           baseType && lists[0].map((item, index)=>{
             item.isOnclick = (baseType === index+1)
           })
@@ -69,11 +69,11 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
               item.isOnclick = (progressionType === index+1)
             })
           }
-          progressionValue && computeType == '3' && ladderLists.map((item)=> {
-            if(item.dataName.includes('boxLevel')) {
-              item.value = numberFormatCent(progressionValue[item.dataName]);
+          paramValue && computeType == '3' && ladderLists.map((item)=> {
+            if(+item.dataName.charAt(5) < 4) {
+              item.value = numberFormatCent(paramValue[item.dataName]);
             } else{
-              item.value = progressionValue[item.dataName];
+              item.value = paramValue[item.dataName];
             }
           })
           setAmount(numberFormatCent(fixedAmountValue));
@@ -94,13 +94,13 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
     let baseType = lists[0].findIndex((item)=>item.isOnclick) + 1;
     let computeType = lists[1].findIndex((item)=>item.isOnclick) + 1;
     let progressionType = lists[2].findIndex((item)=>item.isOnclick) + 1;
-    let progressionValue = {};
+    let paramValue = {};
     if(lists[1][2].isOnclick) {
       ladderLists.map((item)=>{
-        if(item.dataName.includes('boxLevel')) {
-          progressionValue[item.dataName] = centChangeTenThousand(item.value);
+        if(+item.dataName.charAt(5) < 4) {
+          paramValue[item.dataName] = centChangeTenThousand(item.value);
         }else{
-          progressionValue[item.dataName] = item.value
+          paramValue[item.dataName] = item.value
         }
       })
     }
@@ -125,7 +125,7 @@ export default function BoxCalculate({calculateIndex, incomeName, calculate, sho
         baseType,
         computeType,
         progressionType,
-        progressionValue
+        paramValue
       }
     }
 

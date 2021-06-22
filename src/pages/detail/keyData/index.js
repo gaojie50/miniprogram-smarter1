@@ -35,7 +35,7 @@ export default class KeyData extends React.Component {
     const { userInfo } = Taro.getStorageSync('authinfo') || {};
     lx.moduleClick('b_movie_b_6jm91lxa_mc', {
       custom: {
-        user_id: userInfo.mis,
+        user_id: userInfo.keeperUserId,
         project_id: basicData.projectId,
         keep_user_id: userInfo.keeperUserId
       }
@@ -66,8 +66,8 @@ export default class KeyData extends React.Component {
                   }
                   {
                     keyData.estimateBox && keyData.estimateBox.compare && basicData.cooperStatus !== 2 ?
-                      <View>较上次
-                        <Text className="compare" style={ { color: keyData.estimateBox.compare >= 0 ? '#F1303D' : '#14CC14' } }>
+                      <View className="compare">较上次
+                        <Text style={ { color: keyData.estimateBox.compare >= 0 ? '#F1303D' : '#14CC14' } }>
                           {keyData.estimateBox.compare > 0 ? '+' : ''}{keyData.estimateBox.compare}亿
                         </Text>
                       </View> : ''
@@ -85,8 +85,8 @@ export default class KeyData extends React.Component {
                   }
                   {
                     keyData.estimateScore && keyData.estimateScore.compare && basicData.cooperStatus !== 2 ?
-                      <View>较上次
-                        <Text className="compare" style={ { color: keyData.estimateScore.compare >= 0 ? '#F1303D' : '#14CC14' } }>
+                      <View className="compare">较上次
+                        <Text style={ { color: keyData.estimateScore.compare >= 0 ? '#F1303D' : '#14CC14' } }>
                           {keyData.estimateScore.compare > 0 ? '+' : ''}{keyData.estimateScore.compare}分
                         </Text>
                       </View> : ''
@@ -108,8 +108,8 @@ export default class KeyData extends React.Component {
                     }
                     {
                       keyData.assessTotalScore && keyData.assessTotalScore.compare && basicData.cooperStatus !== 2 ?
-                        <View>较上次
-                          <Text className="compare" style={ { color: keyData.assessTotalScore.compare >= 0 ? '#F1303D' : '#14CC14' } }>
+                        <View className="compare">较上次
+                          <Text style={ { color: keyData.assessTotalScore.compare >= 0 ? '#F1303D' : '#14CC14' } }>
                           {keyData.assessTotalScore.compare > 0 ? '+' : ''}{keyData.assessTotalScore.compare}分
                           </Text>
                         </View> : ''

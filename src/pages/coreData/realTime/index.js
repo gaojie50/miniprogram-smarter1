@@ -66,43 +66,43 @@ export default function realTime({}) {
   }
 
   const judgeIsSubmit = (hasToast) => {
-    for(let i = 0; i<11; i++) {
-      if(i != 1 && i != 2 && i != 3) {
-        if(lists[i].money === ''){
+    // for(let i = 0; i<11; i++) {
+    //   if(i != 1 && i != 2 && i != 3) {
+    //     if(lists[i].money === ''){
+    //       hasToast && Taro.showToast({
+    //         title: `请填写${lists[i].title}`,
+    //         icon: 'none',
+    //         duration: 2000,
+    //       });
+    //       setIsSubmit(false);
+    //       return;
+    //     } 
+    //   }
+    // }
+    for(let i = 0; i<15; i++) {
+      if(lists[i].money){
+        // if(i!=6) {
+        //   let judge = lists[i].money.toString().split(".");
+        //   if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
+        //     hasToast && Taro.showToast({
+        //       title: `小数点${lists[i].title}`,
+        //       icon: 'none',
+        //       duration: 2000,
+        //     });
+        //     setIsSubmit(false);
+        //     return;
+        //   }
+        // }else{
+        if((Number(lists[i].money)< 0 || Number(lists[i].money)>100) && (lists[i].unit === '%') ){
           hasToast && Taro.showToast({
-            title: `请填写${lists[i].title}`,
+            title: `${lists[i].title}填写0~100数值`,
             icon: 'none',
             duration: 2000,
           });
           setIsSubmit(false);
           return;
-        } 
-      }
-    }
-    for(let i = 0; i<11; i++) {
-      if(lists[i].money){
-        if(i!=6) {
-          let judge = lists[i].money.toString().split(".");
-          if((judge[0] && judge[0].length > 10) || (judge[1] && judge[1].length > 6)){
-            hasToast && Taro.showToast({
-              title: `小数点${lists[i].title}`,
-              icon: 'none',
-              duration: 2000,
-            });
-            setIsSubmit(false);
-            return;
-          }
-        }else{
-          if(Number(lists[i].money)< 0 || Number(lists[i].money)>100 ){
-            hasToast && Taro.showToast({
-              title: `${lists[i].title}填写0~100数值`,
-              icon: 'none',
-              duration: 2000,
-            });
-            setIsSubmit(false);
-            return;
-          }
         }
+        // }
       }
     }
     setIsSubmit(true);
@@ -114,7 +114,7 @@ export default function realTime({}) {
       const { userInfo } = Taro.getStorageSync('authinfo') || {};
       lx.moduleClick('movie_b_ynjn6dpx', {
         custom: {
-          user_id: userInfo.mis,
+          user_id: userInfo.keeperUserId,
           project_id: projectId,
           keep_user_id: userInfo.keeperUserId
         }
@@ -126,7 +126,8 @@ export default function realTime({}) {
   const postDataValue = () => {
     const data = getValue || {};
     for(let item of lists) {
-      if(item.dataIndex !== 'myShare'){
+      console.log(item, 1123)
+      if(item.dataIndex !== 'vcOfMyInvestmentRatio' && item.dataIndex !== 'fiOfMyInvestmentRatio'){
         data[item.dataIndex] = centChangeTenThousand(item.money);
       } else {
         data[item.dataIndex] = item.money;
@@ -188,7 +189,7 @@ export default function realTime({}) {
       const { userInfo } = Taro.getStorageSync('authinfo') || {};
       lx.pageView('c_movie_b_28xvqisf', {
         custom: {
-          user_id: userInfo.mis,
+          user_id: userInfo.keeperUserId,
             project_id: projectId,
             keep_user_id: userInfo.keeperUserId
         }
@@ -225,7 +226,7 @@ export default function realTime({}) {
         let newData = Object.assign('', data);
         setGetValue(res.data);
         for(let key in newData) {
-          if(key!=='myShare') {
+          if(key!=='vcOfMyInvestmentRatio' && key!=='fiOfMyInvestmentRatio') {
             newData[key] = numberFormatCent(newData[key])
           }
         }

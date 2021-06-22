@@ -26,4 +26,24 @@
         width: 220px !important;
         font-weight: 400;
     }
+    
+    .jump-path {
+        margin-top: 20px;
+        color: #333;
+        font-size: 30px;
+
+        .ofen-used {
+            margin-top: 50px;
+
+            &-title {
+                font-size: 32px;
+            }
+            
+            &-item {
+                width: 100%;
+                padding-left: 100px;
+                color: #276FF0;
+            }
+        }
+    }
 }
