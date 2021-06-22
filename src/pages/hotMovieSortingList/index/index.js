@@ -163,7 +163,7 @@ export default function hotMovieList() {
                         <View className='list-left' key={index} onClick={()=>gotoDetailPage(item.projectId)}>
                           <View className='list-film'>
                             <Image src={item.pic.replace('/w.h/', '/')}></Image>
-                            <View className={`film-index index-${index}`} >{index+1}</View>
+                            <View className={`film-index index-${index} ${index>98? 'index-big' : ''}`} >{index+1}</View>
                           </View>
                           <View className='list-middle'>
                             <View className='list-film-name'>

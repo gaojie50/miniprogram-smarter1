@@ -104,7 +104,6 @@
           z-index: 0;
           position: absolute;
           top: 0px;
-          // left: 1px;
           width: 38px;
           height: 40px;
           background: rgba(0,0,0,0.6);
@@ -127,6 +126,9 @@
         .index-2 {
           background: #88A6DA;
           border-radius: 10px 0 10px 0;
+        }
+        .index-big {
+          width: 50px;
         }
       }
       .list-middle {
@@ -169,7 +171,7 @@
           }
         }
         .list-film-time {
-          margin-top: 16px;
+          margin-top: 15px;
           font-weight: 400;
           font-family: PingFangSC-Regular;
           font-size: 24px;

@@ -8,7 +8,7 @@ import {numberFormat} from '../common'
 import './index.scss'
 // import { handleActive } from '@components/m5/calendar/common/plugins';
 
-export default function BoxOfficeData({current, isMovieScreening, projectId, name, response, showDate}) {
+export default function BoxOfficeData({current, isMovieScreening, projectId, name, response, showDate,  childChangeShowProgress}) {
   const listsInfo =[
     {
       name: '票务收入',
@@ -36,10 +36,6 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
   const [lists, setLists] = useState(listsInfo);
   const [showProgress, setShowProgress] = useState(false);
   const [officeIncomeIndex, setOfficeIncomeIndex] = useState(0);
-
-  useEffect(()=>{
-    console.log(showDate, 'showDate!!!!!!!!');
-  }, [showDate])
   
   useEffect(()=>{
     lists.map((item)=>{
@@ -47,6 +43,11 @@ export default function BoxOfficeData({current, isMovieScreening, projectId, nam
     })
     setLists(lists);
   }, [response])
+  
+  useEffect(()=>{
+    childChangeShowProgress(showProgress);
+  }, [showProgress])
+  
   const changeShowProgress =(index)=> {
     setShowProgress(true);
     setOfficeIncomeIndex(index);
