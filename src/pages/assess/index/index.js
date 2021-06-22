@@ -277,7 +277,7 @@ export default function assessPage(){
       )}
       {
        isLogin && !hasPermission && (
-        <NoAccess title="暂无评估权限" />
+        <NoAccess title="暂无评估权限" backgroundColor='transparent' />
        )
       }
       { isLogin && hasPermission && (
